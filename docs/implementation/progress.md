@@ -420,3 +420,16 @@ full-suite rerun; latest full485PASS5FAIL remains. Cleanup/panic/launch equivale
 cold-cache and policy causation are unqualified. Next causal observation must
 separate first-read/EOF timing from exit-probe/parent observation gaps. PCTX01
 stays implementing, no next official task, Actions or rejected-push retry.
+
+## PCTX01 native read/exit observation timeline
+
+Read-only512-attempt balanced diagnostic adds independent parent reader first-byte/
+EOF and exit-probe/loop timestamps under original1s.510 within-budget/2expiry;
+late-unexpired0. Both expired rows have no observed bytes and parent loop gaps
+1609/1544us, last probes near999ms. These two rows do not exhibit a near1s parent
+exit-observation gap; exact child progress/policy cause remains unproven. Reader
+clock values are parent observations, zero means not observed, and post-cancel
+status does not prove cancellation causation. Cleanup/panic/launch-equivalence
+limits remain. [Evidence](evidence/pctx01-startup-timeline-verification.json).
+No product/original-test changes or unchanged full rerun; full485PASS5FAIL and
+prior3-expiry diagnostic remain. PCTX01 stays implementing, no next official task.

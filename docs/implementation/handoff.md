@@ -6,21 +6,19 @@
 
 ## Latest verified integration boundary
 
-PCTX01 only active (`implementing`); current baseb4e294c. Read-only counterbalanced
-startup diagnostic terminal16652/exit0 (driver completion, not test pass):512
-attempts8workers×16reps×4cells,509 within-budget/3expiry under unchanged1s. Perworker/
-group reuse paths and balanced Williams order, all rows present. Two cold reused/
-no-group expiries have no bytes and cleanupSIGKILL9; one fresh/group expiry has
-both11-byte streams/EOF and post-expiry root0, killEPERM1. Do not promote it.
-Exact paths/dev/inodes/PIDs/timing, cancel versus observation and source hashes
-are in evidence/pctx01-startup-counterbalanced-verification.json. No product or
-original tests changed; latest full17428 remains485PASS5FAIL. Initial metadata
-compile error retained; repaired build0. Independent review requires explicit
-unbounded cleanup/panic, inherited cwd/stdin, root mode not explicitly0700 and read-warmed
-filesystem limits. No proof of policy cause/startup-only failure or universal
-latency. All jobs terminal; no live heavy job. PCTX01/goal incomplete; native
-callback/remaining frontend/phase/LinuxWindows open. No next official task or
-Actions. Prior rejected main push still pending explicit approval, no retry.
+PCTX01 only active (`implementing`), baseef11dc7. New raw native read/exit timeline
+terminal12265/exit0:512 attempts8workers×16reps×4 balancedcells,510 within-budget/
+2expiry,0late-unexpired under original1s. Both expired prior-unexecuted paths have
+no observed bytes; reader EOF comes after cancellation. Parent exit-observer gaps
+1609/1544us, last probes999461/999162us, max probes18/9us. No near1s parent-loop
+gap in these rows; no exact child progress or OS cause established. First-byte/
+EOF timestamps are parent observations, not child events. Independent static
+review and manifest in evidence/pctx01-startup-timeline-verification.json.
+No product/original-test changes or full rerun; full17428 remains485PASS5FAIL and
+previous3-expiry diagnostic retained. Cleanup/panic/launch-equivalence limitations
+remain. All jobs terminal; no heavy job live. PCTX01/goal incomplete; no next
+official task, Actions, OS policy changes or rejected-push retry. Prior main push
+still pending explicit approval.
 
 ## Source, evidence and environment
 
@@ -68,20 +66,19 @@ Original ignored specification SHA256 8914faad57432f524aec0a06aa90c43c18c23f8c19
 
 ## Exact next action
 
-Stay on PCTX01. Read its completion audit and exact-source failure evidence.
-The counterbalanced diagnostic is complete but does not identify the cause.
-Record independent first-byte/EOF timestamps and exit-probe intervals alongside
-parent observation gaps and exact native identities to distinguish child progress
-from delayed parent observation under the original budgets. Do not rerun an
-unchanged full gate to seek passing status. Include newly retained adapter failure: expected native nonzero
-SOURCE_UNAVAILABLE6, actual TIMEOUT7; no cause established. Do not use warm-up
-retries, interpreter substitution, relaxed deadlines or OS-policy changes.
-Continue the remaining common frontend/producer/phase matrix, including registered
-post-spawn callback failure qualification; no independent runner feature or product
-fault hook authorized. Required native Linux/Windows executions remain unverified.
-Finish all PCTX01 conditions before selecting another official task. Rejected main
-push remains pending explicit approval, without retry or alternate mechanism.
-All current jobs terminal; no live heavy job.
+Stay on PCTX01. Do not repeat unchanged startup/full runs to seek green. New raw
+read/exit timing proves no near1s parent exit-observation gap for its two no-byte
+expiries, but cannot identify the child's exact delay or qualify production.
+Keep startup/platform failure conditions open. The next independent local gate
+is registered native post-spawn callback failure: read output::run_inner callback
+error cleanup and runner PID-before-publication/guardian callbacks, then build a
+native isolated failure fixture through an existing callable seam. No product
+fault hook, new runner feature or ownership-policy weakening. Verify original
+error code, native spawn attestation, no rerun and actual child/resource outcome;
+retain unknown state where evidence is insufficient. Complete remaining common
+frontend/producer/phase matrix and required native Linux/Windows within PCTX01
+before choosing another official task. Rejected main push remains pending explicit
+approval; no alternate mechanism or retry. All jobs terminal.
 
 ## Retained historical results and inactive backlog
 

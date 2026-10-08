@@ -1,0 +1,45 @@
+use std::{fs,io::Read,os::unix::{fs::{PermissionsExt,MetadataExt},process::{CommandExt,ExitStatusExt}},process::{Command,Stdio},sync::{Arc,Barrier,atomic::{AtomicUsize,AtomicBool,Ordering}},time::{Instant,SystemTime,UNIX_EPOCH},thread};
+unsafe extern "C" { fn kill(pid:i32,sig:i32)->i32; }
+const SCRIPT: &str = "#!/bin/sh\nprintf startup-out\nprintf startup-err >&2\nexit 0\n";
+fn millis()->u128 {SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_millis()}
+fn capture(mut r: impl Read+Send+'static, start:Instant)->(thread::JoinHandle<(Vec<u8>,u128,u128,u128)>,Arc<AtomicUsize>,Arc<AtomicBool>) {
+ let count=Arc::new(AtomicUsize::new(0));let eof=Arc::new(AtomicBool::new(false));let c=count.clone();let e=eof.clone();
+ let h=thread::spawn(move|| {let reader_started_us=start.elapsed().as_micros();let mut first_read_us=0;let mut eof_us=0;let mut all=Vec::new();let mut b=[0;512];loop {match r.read(&mut b){Ok(0)=>{eof_us=start.elapsed().as_micros();e.store(true,Ordering::SeqCst);break},Ok(n)=>{if first_read_us==0 {first_read_us=start.elapsed().as_micros();}c.fetch_add(n,Ordering::SeqCst);if all.len()+n>4096{break}all.extend_from_slice(&b[..n]);},Err(_)=>break}} (all,reader_started_us,first_read_us,eof_us)});(h,count,eof)
+}
+fn main(){
+ let root=std::env::temp_dir().join(format!("pctx-startup-timeline-{}-{}",std::process::id(),millis()));fs::create_dir(&root).unwrap();
+ let barrier=Arc::new(Barrier::new(8));let mut workers=Vec::new();
+ // Williams square: each condition precedes every other condition equally.
+ let orders=[[0,1,3,2],[1,2,0,3],[2,3,1,0],[3,0,2,1]];
+ for worker in 0..8 {let root=root.clone();let barrier=barrier.clone();let order=orders[worker%4];workers.push(thread::spawn(move||{
+  let mut reuse_count=[0;2];
+  for repetition in 0..16 {for (position,cell) in order.into_iter().enumerate(){
+   let fresh=cell<2;let group=cell%2==0;let group_index=usize::from(group);
+   let path=if fresh {root.join(format!("fresh-{worker}-{repetition}-{cell}"))} else {root.join(format!("reuse-{worker}-{group_index}"))};
+   let cold=fresh||reuse_count[group_index]==0;
+   if fresh||cold {fs::write(&path,SCRIPT).unwrap();fs::set_permissions(&path,fs::Permissions::from_mode(0o700)).unwrap();}
+   if !fresh{reuse_count[group_index]+=1;}
+   let md=fs::metadata(&path).unwrap();assert_eq!(fs::read(&path).unwrap(),SCRIPT.as_bytes());
+   let mut command=Command::new(&path);command.env_clear().stdout(Stdio::piped()).stderr(Stdio::piped());if group{command.process_group(0);}
+   barrier.wait();let start_wall=millis();let start=Instant::now();let mut child=command.spawn().unwrap();let spawn_us=start.elapsed().as_micros();let pid=child.id();
+   let (out,oc,oe)=capture(child.stdout.take().unwrap(),start);let (err,ec,ee)=capture(child.stderr.take().unwrap(),start);
+   let mut last_loop_us=spawn_us;let mut max_loop_gap_us=0;let mut max_probe_us=0;let mut probes=0;let mut last_probe_start_us=0;let mut last_probe_end_us=0;
+   let (expired,observed)=loop {
+    let loop_us=start.elapsed().as_micros();max_loop_gap_us=max_loop_gap_us.max(loop_us-last_loop_us);last_loop_us=loop_us;
+    // Deadline observation precedes exit probe, retaining the immutable one-second boundary.
+    if start.elapsed().as_millis()>=1000 {break (true,None)}
+    last_probe_start_us=start.elapsed().as_micros();let result=child.try_wait().unwrap();last_probe_end_us=start.elapsed().as_micros();max_probe_us=max_probe_us.max(last_probe_end_us-last_probe_start_us);probes+=1;
+    if let Some(status)=result{break (false,Some(status))}
+    thread::sleep(std::time::Duration::from_millis(1));
+   };
+   let observation_us=start.elapsed().as_micros();let pre_out=oc.load(Ordering::SeqCst);let pre_err=ec.load(Ordering::SeqCst);let pre_oe=oe.load(Ordering::SeqCst);let pre_ee=ee.load(Ordering::SeqCst);
+   let cleanup=Instant::now();let mut kill_rc=None;let mut kill_errno=None;
+   if expired{let target=if group{-(pid as i32)}else{pid as i32};let rc=unsafe{kill(target,9)};kill_rc=Some(rc);if rc!=0{kill_errno=std::io::Error::last_os_error().raw_os_error();}}
+   let status=observed.unwrap_or_else(||child.wait().unwrap());let reap_us=cleanup.elapsed().as_micros();let (stdout,out_reader_us,out_first_us,out_eof_us)=out.join().unwrap();let (stderr,err_reader_us,err_first_us,err_eof_us)=err.join().unwrap();let cleanup_us=cleanup.elapsed().as_micros();
+   let observed_code=if expired{None}else{status.code()};let observed_signal=if expired{None}else{status.signal()};
+   let ok=!expired&&status.success()&&stdout==b"startup-out"&&stderr==b"startup-err";
+   println!("{{\"worker\":{worker},\"order_row\":{},\"position\":{position},\"repetition\":{repetition},\"cell\":{cell},\"fresh\":{fresh},\"group\":{group},\"cold_path\":{cold},\"path\":{:?},\"dev\":{},\"inode\":{},\"creation_sec\":{},\"creation_nsec\":{},\"pid\":{pid},\"start_wall_ms\":{start_wall},\"spawn_us\":{spawn_us},\"observation_us\":{observation_us},\"out_reader_us\":{out_reader_us},\"out_first_us\":{out_first_us},\"out_eof_us\":{out_eof_us},\"err_reader_us\":{err_reader_us},\"err_first_us\":{err_first_us},\"err_eof_us\":{err_eof_us},\"max_loop_gap_us\":{max_loop_gap_us},\"max_probe_us\":{max_probe_us},\"probes\":{probes},\"last_probe_start_us\":{last_probe_start_us},\"last_probe_end_us\":{last_probe_end_us},\"expired\":{expired},\"ok\":{ok},\"pre_cancel_stdout_bytes\":{pre_out},\"pre_cancel_stderr_bytes\":{pre_err},\"pre_cancel_stdout_eof\":{pre_oe},\"pre_cancel_stderr_eof\":{pre_ee},\"observed_code\":{},\"observed_signal\":{},\"cancel_target\":{},\"kill_rc\":{},\"kill_errno\":{},\"reaped_code\":{},\"reaped_signal\":{},\"reap_us\":{reap_us},\"cleanup_us\":{cleanup_us},\"stdout_bytes\":{},\"stderr_bytes\":{},\"end_wall_ms\":{}}}",worker%4,path.to_str().unwrap(),md.dev(),md.ino(),md.created().unwrap().duration_since(UNIX_EPOCH).unwrap().as_secs(),md.created().unwrap().duration_since(UNIX_EPOCH).unwrap().subsec_nanos(),observed_code.map_or("null".into(),|x|x.to_string()),observed_signal.map_or("null".into(),|x|x.to_string()),if expired{(if group{-(pid as i32)}else{pid as i32}).to_string()}else{"null".into()},kill_rc.map_or("null".into(),|x|x.to_string()),kill_errno.map_or("null".into(),|x|x.to_string()),status.code().map_or("null".into(),|x|x.to_string()),status.signal().map_or("null".into(),|x|x.to_string()),stdout.len(),stderr.len(),millis());
+  }}
+ }));}
+ for worker in workers{worker.join().unwrap();}fs::remove_dir_all(root).unwrap();
+}
