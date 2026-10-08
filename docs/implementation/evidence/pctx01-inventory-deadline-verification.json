@@ -100,5 +100,6 @@
     "Unix FIFO proof only; native Linux/Windows remain required",
     "Original startup failures unresolved; no retry/deadline promotion",
     "No new Actions or operational/script/provider execution"
-  ]
+  ],
+  "runtime_commit": "c0dcd264aa38b3e297206cea4d0f327913ef0b95"
 }
