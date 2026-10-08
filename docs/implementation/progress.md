@@ -893,3 +893,9 @@ same-task boundary G05 adapter error classification against §14.
 
 
 Final native full98360 terminal101: 547 PASS / 3 FAIL. Failed tests: relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry, simultaneous_streams_are_collected_and_overflow_never_infers_success, concurrent_query_startup_preserves_group_streams_and_original_one_second_budget. Captured-command-path passed incidentally without a startup/resolution repair; all four historical conditions remain unresolved and original budgets unchanged. All jobs terminal; no heavy job live. PCTX01 remains incomplete0/10.
+
+
+Development runtime b4861db8ada0742b31b177533c8f6256c4308b75 normally published
+to origin/main by push35313 terminal0 (9315627..b4861db), [skip ci]. All jobs
+terminal, no Actions. Next local boundary PCTX01-G05 adapter stable errors; no
+next official task. Local residual12/12 is not whole-task completion0/10.

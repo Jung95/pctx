@@ -6,8 +6,10 @@
 
 ## Latest integration boundary
 
-PCTX01-G03-R11/G08 schedule admission, base
-9315627c104a5df6bf9f3718b32627d9ebd3be3a. Uncommitted: src/schedule.rs,
+PCTX01-G03-R11/G08 schedule admission, runtime
+b4861db8ada0742b31b177533c8f6256c4308b75, base
+9315627c104a5df6bf9f3718b32627d9ebd3be3a. Normal push35313 terminal0 published
+9315627..b4861db to origin/main. Runtime edits: src/schedule.rs,
 tests/schedule_preflight.rs and schedule-admission evidence/docs. Existing pure
 checks before discovery/owner/input/storage; original expiry first, private loop
 helper shared. Conditional namespace/purpose, unrestricted lookups and future
@@ -70,8 +72,8 @@ Original ignored specification SHA256 8914faad57432f524aec0a06aa90c43c18c23f8c19
 
 ## Exact next action
 
-Native full98360 is terminal, exact counts/failures/hashes recorded. Publish
-development integration with [skip ci], then remain on PCTX01. The fixed
+Native full98360 and normal push35313 are terminal, exact counts/failures/hashes
+recorded. Resume from published runtime b4861db and remain on PCTX01. The fixed
 R01–R12 local residual register has evidence12/12; whole gates remain0/10. Next
 same-task boundary is G05: reconcile adapter POLICY_DENIED9 and other error
 classifications with specification §14 policy5/stable statuses, using actual

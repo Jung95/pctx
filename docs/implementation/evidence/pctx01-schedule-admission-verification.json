@@ -173,5 +173,14 @@
       "failed": 0,
       "sha256": "8262278bc0f273e50a4b36fc6a5448c23de8f5c2d7c7b963aa2d2bea9baa6848"
     }
+  },
+  "development_publication": {
+    "runtime_revision": "b4861db8ada0742b31b177533c8f6256c4308b75",
+    "remote": "https://github.com/Jung95/pctx.git",
+    "branch": "main",
+    "session": 35313,
+    "exit": 0,
+    "range": "9315627..b4861db",
+    "actions_dispatched": false
   }
 }
