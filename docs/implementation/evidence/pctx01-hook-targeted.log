@@ -1,0 +1,61 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.58s
+     Running tests/adapter.rs (target/debug/deps/adapter-8bd8637316f7f388)
+
+running 10 tests
+test symlink_configuration_is_rejected ... ok
+test pretool_decisions_never_rewrite_or_execute_declared_commands ... ok
+test malformed_and_version_variation_are_rejected_without_mutation ... ok
+test stale_plans_do_not_change_config ... ok
+test permission_events_are_observation_only ... ok
+test edited_owned_hook_conflicts_without_partial_removal ... ok
+test plans_are_hash_bound_and_preserve_existing_settings ... ok
+test uninstall_preserves_user_changes_and_only_removes_new_entries ... ok
+test events_delegate_epoch_and_never_ack_or_store_dialogue ... ok
+test statusline_cost_is_estimate_context_is_snapshot_and_epoch_is_checked ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.20s
+
+     Running tests/adapter_deadline_cli.rs (target/debug/deps/adapter_deadline_cli-7e44093534f8bb63)
+
+running 2 tests
+test adapter_query_zero_budget_is_rejected_before_discovery_or_input ... ok
+test adapter_finite_reads_keep_envelope_and_do_not_install_configuration ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.87s
+
+     Running tests/cli_delivery.rs (target/debug/deps/cli_delivery-d6142b38e0664ae4)
+
+running 4 tests
+test undeliverable_stream_refusal_returns_io_exit_without_project_effects ... ok
+test failed_response_file_and_closed_diagnostic_are_io_error_without_overwrite ... ok
+test undeliverable_help_and_version_return_io_exit_without_project_effects ... ok
+test undeliverable_native_hook_output_is_io_error_without_repeating_import ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+
+     Running tests/cli_frontend.rs (target/debug/deps/cli_frontend-4948844b4d514170)
+
+running 19 tests
+test non_utf8_argument_returns_structured_error_without_panic_or_effect ... ok
+test parser_diagnostics_mask_secrets_and_escape_control_characters ... ok
+test help_and_version_are_successful_without_project_access ... ok
+test parser_errors_respect_actual_json_option_and_do_not_load_project ... ok
+test root_version_is_exact_and_ignores_project_output_and_query_options ... ok
+test no_color_suppresses_help_on_a_real_terminal_including_nested_help ... ok
+test native_hook_invalid_transports_refuse_before_project_or_output_access ... ok
+test plain_parser_diagnostics_escape_bidi_c1_and_line_controls ... ok
+test undeliverable_plain_parser_diagnostic_returns_io_exit_without_panic ... ok
+test undeliverable_parser_capacity_semantic_and_timeout_refusals_return_io_exit ... ok
+test semantic_refusals_are_one_safe_json_document_for_every_requested_format ... ok
+test unsupported_ndjson_is_rejected_before_project_discovery_or_init ... ok
+test singular_global_duplicates_are_rejected_before_project_and_output_effects ... ok
+test nested_global_positions_select_the_same_root_format_and_timeout ... ok
+test invalid_strict_queries_preserve_generation_database_sources_and_output_path ... ok
+test valid_minimum_capacity_bounds_semantic_and_timeout_refusals_without_writes ... ok
+test unsupported_markdown_refuses_before_response_files_and_stream_dispatch ... ok
+test pack_artifact_output_is_required_once_and_works_at_every_command_depth ... ok
+test every_visible_help_path_describes_schema_and_effects_without_project_access ... ok
+
+test result: ok. 19 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.94s
+

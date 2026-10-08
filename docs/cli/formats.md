@@ -103,3 +103,11 @@ Common `--root`, `--format`, `--output`, `--timeout-ms` and `--no-color` options
 Failed primary delivery returns I/O exit7 for help/version, native hook output, stream-error diagnostics and response-file failure diagnostics. Native hook and NDJSON use the same reversible JSON control escaping without adding a standard envelope to their protocol objects. Compact stream columns escape hidden controls and show newline/tab as literal escapes, preserving row boundaries.
 
 An accounting warning follows an already completed result write. Its delivery is best effort: a closed diagnostic stream cannot panic or change the established command outcome, and metering remains unconfirmed. The retained output and original child truth remain available; warning failure never reruns a command. Current pipe evidence is native Unix; Windows delivery remains unqualified.
+
+
+Native Claude hook transport requires stdin and stdout. Combining `--hook` with
+`--from-file` or `--output` returns `INVALID_ARGUMENT` (exit 2) before project,
+input-file or output-file access. Ordinary non-hook imports retain file input and
+standard response output. If hook output delivery fails after import, exit 7 does
+not imply rollback: replaying the same idempotency key delivers the recorded result
+without adding another receipt. These delivery tests use isolated native Unix pipes.

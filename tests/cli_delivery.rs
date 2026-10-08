@@ -83,7 +83,7 @@ fn undeliverable_native_hook_output_is_io_error_without_repeating_import() {
     assert!(agent.status.success(), "{agent:?}");
     let agent: Value = serde_json::from_slice(&agent.stdout).unwrap();
     let agent = agent["data"]["agent_id"].as_str().unwrap();
-    let invoke = |broken: bool| {
+    let invoke = |key: &str, broken: bool| {
         let mut c = f.command(&[
             "--root",
             "project",
@@ -94,7 +94,7 @@ fn undeliverable_native_hook_output_is_io_error_without_repeating_import() {
             agent,
             "--hook",
             "--idempotency-key",
-            "same-event",
+            key,
         ]);
         c.stdin(Stdio::piped())
             .stderr(Stdio::piped())
@@ -112,16 +112,22 @@ fn undeliverable_native_hook_output_is_io_error_without_repeating_import() {
             .unwrap();
         child.wait_with_output().unwrap()
     };
-    let normal = invoke(false);
+    let normal = invoke("same-event", false);
     assert_eq!(normal.status.code(), Some(0), "{normal:?}");
     assert_eq!(normal.stdout, b"{}\n");
     assert!(normal.stderr.is_empty());
-    let output = invoke(true);
+    let output = invoke("same-event", true);
     assert_eq!(output.status.code(), Some(7), "{output:?}");
     assert!(output.stderr.is_empty());
-    let repeated = invoke(false);
+    let repeated = invoke("same-event", false);
     assert_eq!(repeated.status.code(), Some(0));
     assert_eq!(repeated.stdout, b"{}\n");
+    let failed_first = invoke("failed-first", true);
+    assert_eq!(failed_first.status.code(), Some(7), "{failed_first:?}");
+    assert!(failed_first.stderr.is_empty());
+    let recovered = invoke("failed-first", false);
+    assert_eq!(recovered.status.code(), Some(0), "{recovered:?}");
+    assert_eq!(recovered.stdout, b"{}\n");
     let databases: Vec<_> = fs::read_dir(f.temp.path().join("data/controls"))
         .unwrap()
         .map(|entry| entry.unwrap().path().join("control.sqlite3"))
@@ -133,14 +139,19 @@ fn undeliverable_native_hook_output_is_io_error_without_repeating_import() {
         rusqlite::OpenFlags::SQLITE_OPEN_READ_ONLY,
     )
     .unwrap();
-    let count: i64 = db
-        .query_row(
-            "SELECT COUNT(*) FROM adapter_receipts WHERE key='same-event'",
-            [],
-            |row| row.get(0),
-        )
-        .unwrap();
-    assert_eq!(count, 1, "Delivery failure must not repeat event import");
+    for key in ["same-event", "failed-first"] {
+        let count: i64 = db
+            .query_row(
+                "SELECT COUNT(*) FROM adapter_receipts WHERE key=?1",
+                [key],
+                |row| row.get(0),
+            )
+            .unwrap();
+        assert_eq!(
+            count, 1,
+            "Delivery failure must not repeat import for {key}"
+        );
+    }
 }
 #[test]
 fn failed_response_file_and_closed_diagnostic_are_io_error_without_overwrite() {

@@ -856,3 +856,31 @@ fn pack_artifact_output_is_required_once_and_works_at_every_command_depth() {
             .contains("supply exactly one --output")
     );
 }
+
+#[test]
+fn native_hook_invalid_transports_refuse_before_project_or_output_access() {
+    for format in ["compact", "json"] {
+        for input in [false, true] {
+            for output in [false, true] {
+                if !input && !output {
+                    continue;
+                }
+                let f = Fixture::new();
+                let mut argv = args(&[
+                    "--root", "missing", "--format", format, "adapter", "claude", "event",
+                    "--agent", "fixture", "--hook",
+                ]);
+                if input {
+                    argv.extend(args(&["--from-file", "unread-input.json"]));
+                }
+                if output {
+                    argv.push("--output".into());
+                    argv.push(f.temp.path().join("response.json").into_os_string());
+                }
+                let result = f.run(&argv);
+                argument_error(&result);
+                f.unchanged();
+            }
+        }
+    }
+}

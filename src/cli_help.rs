@@ -138,7 +138,7 @@ fn effect(path: &str) -> Option<&'static str> {
         }
         "adapter claude statusline" => "write: imported observations",
         "adapter claude event" => {
-            "write: imported session events; --hook emits native hook output instead of the standard envelope"
+            "write: imported session events; --hook accepts stdin only and emits native hook output on stdout; --from-file and --output are unavailable with --hook"
         }
         "schedule plan" => "read: proposal/fingerprints; no saved plan or native registration",
         "schedule inspect" => {

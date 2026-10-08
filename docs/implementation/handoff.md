@@ -4,6 +4,21 @@
 
 **PCTX01 — CLI, envelope and stable errors** is the only active task (`implementing`). It is lowest incomplete with no prerequisites. The latest user goal supersedes historical next-action lists: finish all current-task mandatory implementation, validation, documentation and platform gates before choosing another task. Read docs/implementation/tasks/PCTX01.md, requirements.md and progress.md, then inspect actual Git/code/jobs. Other official items and D-series future slices are backlog. A subset/macOS pass is not task completion. No next official task is selected.
 
+## Latest verified integration boundary
+
+PCTX01 is the only active official task and remains implementing. Base
+f021f567579441889bd2a00bf75c5b1316518be6; this integration adds hook stdin/stdout
+preflight and first-import output-failure/replay coverage. Related35 PASS;
+format/locked all-target Clippy PASS. Final full46672 terminal101:
+466 PASS/3 original startup FAIL. All jobs terminal; no live heavy job.
+Initial zero-test selection and actual0PASS1FAIL retained. Source/log hashes and
+independent review: evidence/pctx01-hook-verification.json.
+Next action: continue PCTX01 actual frontend child exit/prelaunch/error matrix,
+then remaining phase/platform/startup gates. Do not choose another official task.
+Native Unix delivery is not live Claude/Linux/Windows qualification; the receipt
+count is inspected after replay, not at an instrumented import-commit instant.
+No Actions dispatched.
+
 ## Source, evidence and environment
 
 PCTX01 remains the only active official task (`implementing`). Checked primary output covers help/version print, stream-error stderr, native hook stdout and response-file-error diagnostic; failures returnIO7 without successful absence or panic. Initial actual closed pipes0PASS4FAIL (help0, NDJSON refusal2, hook/file diagnostic101) retained. Hook/NDJSON use shared reversible JSON escaping without added envelope; compact columns escape hidden controls/newline/tab and preserve row boundaries. Watch2unitPASS including value roundtrip/write/flush error7; related28PASS and final delivery/metering13PASS. Actual hook test qualifies replay of already imported PermissionDenied under broken stdout: same key remains one receipt, not first-import failure/rollback. Actual saved-output metrics-lock plus closed-stderr warning preserves completed stdout/exit0, unchanged artifact and one invocation/no rerun; warning is best effort and measurement remains unknown. Format/locked all-target Clippy PASS. Final native full84654 terminal101: 464PASS/4 retained original startup FAIL. Evidence: pctx01-delivery-verification.json. Independent scoped review no blocker. Unix-only pipe proof, first-import timing, hook input/output preflight, actual child-exit matrix and full remaining frontend/phase/platform/startup gates stay open. No next official task or Actions.

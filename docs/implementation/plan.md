@@ -2,6 +2,19 @@
 
 Baseline: all 45 sections of `docs/PCTX-implementation-spec-v0.6.md` and the user goal objective. `requirements.md` owns the item/AC mapping. This plan establishes dependencies and integration boundaries; it does not claim completed features. All groups start `not_started`; the main integration owner updates statuses from reviewed code and execution evidence.
 
+## Serial official-task rule
+
+The latest user instruction controls task selection. Activate exactly one official
+PCTX task, prioritizing an explicit user selection; otherwise choose the lowest
+incomplete task whose prerequisites are satisfied. Compare requirements, progress,
+handoff and actual code before implementation. Do not advance until every mandatory
+implementation, acceptance, documentation and platform gate is verified.
+Related common fixes are allowed; unrelated findings remain inactive backlog.
+A necessary unfinished prerequisite must be identified explicitly, completed alone,
+then return to the original task. An external blocker requires its exact condition
+and required action; it does not authorize starting another task. Current selection:
+PCTX01, implementing, no next official task.
+
 ## Ownership and common boundaries
 
 The integration owner alone edits Cargo configuration/lockfiles, common Domain types, shared schemas/migrations, CLI routing and publication metadata. Delegated work has exclusive file ownership and proposes shared contract changes before implementation. Current documentation analysis owns only `requirements.md`, `plan.md`, and `decisions.md`. Progress, handoff, source specification and product code are outside that assignment.
@@ -115,3 +128,17 @@ PCTX01 remains the only active official task (`implementing`). Singular root/for
 ## Current PCTX01 primary delivery and safe stream frames
 
 PCTX01 remains the only active official task (`implementing`). Checked primary output covers help/version print, stream-error stderr, native hook stdout and response-file-error diagnostic; failures returnIO7 without successful absence or panic. Initial actual closed pipes0PASS4FAIL (help0, NDJSON refusal2, hook/file diagnostic101) retained. Hook/NDJSON use shared reversible JSON escaping without added envelope; compact columns escape hidden controls/newline/tab and preserve row boundaries. Watch2unitPASS including value roundtrip/write/flush error7; related28PASS and final delivery/metering13PASS. Actual hook test qualifies replay of already imported PermissionDenied under broken stdout: same key remains one receipt, not first-import failure/rollback. Actual saved-output metrics-lock plus closed-stderr warning preserves completed stdout/exit0, unchanged artifact and one invocation/no rerun; warning is best effort and measurement remains unknown. Format/locked all-target Clippy PASS. Final native full84654 terminal101: 464PASS/4 retained original startup FAIL. Evidence: pctx01-delivery-verification.json. Independent scoped review no blocker. Unix-only pipe proof, first-import timing, hook input/output preflight, actual child-exit matrix and full remaining frontend/phase/platform/startup gates stay open. No next official task or Actions.
+
+
+## PCTX01 hook transport admission
+
+Only PCTX01 remains active and incomplete. Native hook transport rejects
+`--output` and `--from-file` before project/file access; shared input validation
+also remains in the producer. First-import broken stdout returns IO_ERROR7;
+same-key replay emits the recorded native object and retains one receipt.
+Delivery failure does not imply rollback. See
+[evidence manifest](evidence/pctx01-hook-verification.json) for initial failure,
+targeted/static/full results and source hashes. Independent scoped review found
+no blocker. Native Unix pipes are not live Claude or native Linux/Windows proof.
+The remaining PCTX01 frontend/phase/platform and original startup gates remain
+mandatory; no next official task is selected or Actions dispatched.

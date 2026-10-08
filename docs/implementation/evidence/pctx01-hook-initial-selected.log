@@ -1,0 +1,23 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.14s
+     Running tests/cli_frontend.rs (target/debug/deps/cli_frontend-4948844b4d514170)
+
+running 1 test
+test native_hook_invalid_transports_refuse_before_project_or_output_access ... FAILED
+
+failures:
+
+---- native_hook_invalid_transports_refuse_before_project_or_output_access stdout ----
+
+thread 'native_hook_invalid_transports_refuse_before_project_or_output_access' (8300313) panicked at tests/cli_frontend.rs:34:5:
+assertion `left == right` failed
+  left: Some(7)
+ right: Some(2)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    native_hook_invalid_transports_refuse_before_project_or_output_access
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 18 filtered out; finished in 0.78s
+
+error: test failed, to rerun pass `--test cli_frontend`

@@ -1,0 +1,79 @@
+{
+  "official_task": "PCTX01",
+  "status": "implementing_not_complete",
+  "base_commit": "f021f567579441889bd2a00bf75c5b1316518be6",
+  "platform": "native macOS arm64",
+  "source_sha256": {
+    "src/main.rs": "fadcec537c9357ebe4e0645690ce6a16d5972cdc5175eedbddb2409cc48d4825",
+    "src/adapter.rs": "83cd5d87834f0741e48b435c603983f4153c862716c23e2f1ff69bc1772f2098",
+    "src/cli_help.rs": "a73dc639251b58f468527f2a5e2cee0594a052597da9fb6ff73455b630b71151",
+    "tests/cli_frontend.rs": "045edc9a5948fd3c7ad0abc2dd6c6b686a3d9fbc576b042eb0cc93e72ba7a735",
+    "tests/cli_delivery.rs": "0ce80d84f5514d118ac944ccf65964a664e6e3d0da4de6bde8e72bc80f924b71"
+  },
+  "verification": {
+    "initial": {
+      "log": "pctx01-hook-initial.log",
+      "passed": 0,
+      "failed": 0,
+      "exit": 0,
+      "note": "Incorrect exact filter selected zero tests; not verification."
+    },
+    "initial-selected": {
+      "log": "pctx01-hook-initial-selected.log",
+      "passed": 0,
+      "failed": 1,
+      "exit": 101
+    },
+    "targeted": {
+      "log": "pctx01-hook-targeted.log",
+      "passed": 35,
+      "failed": 0,
+      "exit": 0
+    },
+    "format": {
+      "log": "pctx01-hook-format.log",
+      "exit": 0
+    },
+    "clippy": {
+      "log": "pctx01-hook-clippy.log",
+      "exit": 0
+    },
+    "final_full": {
+      "log": "pctx01-hook-full.log",
+      "handle": 46672,
+      "exit": 101,
+      "passed": 466,
+      "failed": 3,
+      "failed_tests": [
+        "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+        "simultaneous_streams_are_collected_and_overflow_never_infers_success",
+        "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget"
+      ]
+    }
+  },
+  "proofs": [
+    "Six invalid transport combinations across compact/json refuse INVALID_ARGUMENT2 with null project/workspace IDs and no root/data/input/output files, before project discovery.",
+    "First-import PermissionDenied with broken stdout exits7; replay of the same key emits native {} with exit0. Each replay/failure key has exactly one durable adapter receipt. Delivery failure is not rollback.",
+    "Existing successful native-hook protocol output and ordinary non-hook file import tests remain; no live provider/model calls or installation.",
+    "Initial selected test retains actual exit7 versus required2 failure; initial zero-test selection is explicitly unqualified."
+  ],
+  "independent_review": {
+    "agent": "requirements",
+    "result": "No scoped blocker; input/output admission precedes effects, producer defense remains, native protocol unchanged. First-import failure/replay qualifies durable single receipt, not rollback."
+  },
+  "remaining": [
+    "Full PCTX01 frontend child exit/error/phase matrix.",
+    "Original native startup failures with original one-second budgets.",
+    "Native Linux/Windows and live Claude are unqualified.",
+    "No next official task selected; no Actions dispatched.",
+    "Receipt count is inspected after replay; the exact intermediate import-commit instant is not instrumented."
+  ],
+  "artifact_sha256": {
+    "pctx01-hook-initial.log": "a1bed301f9310ae9d0015972d70252779ad1151621a42b57c3682e5ad1dee541",
+    "pctx01-hook-full.log": "ba9c736adcf15d1538e9d4fabd1f11d590d122a6e5f42daf2057353892e48d5b",
+    "pctx01-hook-targeted.log": "91d630cb43ee9d6f63c405645ec1016e487462ffe75c3fcdbfbe620b7aa2870f",
+    "pctx01-hook-format.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "pctx01-hook-clippy.log": "d63d023ff2ee20e4c83e0a48ff5b33f477b6741453c4f2889b89742a4b530696",
+    "pctx01-hook-initial-selected.log": "d9fbe16ee70eb72450b19b91995df98d8c2abac3390c65167a410c4c60951df4"
+  }
+}

@@ -749,6 +749,22 @@ fn minimum_error_budget(command: &str) -> Result<usize> {
 }
 
 fn validate_representation(cli: &Cli) -> Result<()> {
+    if cli.output.is_some()
+        && matches!(
+            &cli.command,
+            Command::Adapter {
+                command: adapter::AdapterCommand::Claude {
+                    command: adapter::ClaudeCommand::Event { hook: true, .. },
+                },
+            }
+        )
+    {
+        return Err(Error::new(
+            "INVALID_ARGUMENT",
+            "Hook transport requires stdout",
+            2,
+        ));
+    }
     if matches!(cli.format, Format::Markdown) && !pctx::render::supports(cli.command.name()) {
         return Err(Error::new(
             "INVALID_ARGUMENT",
@@ -872,6 +888,15 @@ fn main() {
     }
     // Pure argument checks precede project discovery, refresh and output paths.
     let preflight = match &cli.command {
+        Command::Adapter {
+            command:
+                adapter::AdapterCommand::Claude {
+                    command:
+                        adapter::ClaudeCommand::Event {
+                            hook, from_file, ..
+                        },
+                },
+        } => adapter::validate_event_input(*hook, from_file.as_deref()),
         Command::Find(request) => search::validate_find_request(request),
         Command::Query(request) => search::validate_structure_request(request),
         Command::Read {

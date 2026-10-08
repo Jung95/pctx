@@ -938,9 +938,7 @@ fn execute_inner(p: &Project, c: &AdapterCommand) -> Result<Value> {
             idempotency_key,
             hook,
         } => {
-            if *hook && from_file.is_some() {
-                return Err(err("INVALID_ARGUMENT", "Hook transport accepts stdin only"));
-            }
+            validate_event_input(*hook, from_file.as_deref())?;
             let mut value = import(p, agent, from_file.as_deref(), idempotency_key.as_deref())?;
             value["hook_transport"] = json!(hook);
             Ok(value)
@@ -1243,4 +1241,12 @@ fn statusline(
     result["token_counters_imported"] = json!(false);
     result["context_tokens_are_session_cumulative"] = json!(false);
     Ok(result)
+}
+
+// Pure transport admission shared by CLI preflight and the producer.
+pub fn validate_event_input(hook: bool, from_file: Option<&Path>) -> Result<()> {
+    if hook && from_file.is_some() {
+        return Err(err("INVALID_ARGUMENT", "Hook transport accepts stdin only"));
+    }
+    Ok(())
 }
