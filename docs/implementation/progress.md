@@ -580,3 +580,8 @@ keeping registered IDs/revisions/authorization/current-state rules in producers.
 No other official task is active and no Actions are dispatched.
 
 Final native full86052 terminal101: 503 PASS/4 FAIL; original captured-path resolution, relative resolution, concurrent startup and simultaneous-stream failures retained at unchanged budgets. All jobs terminal; PCTX01 incomplete.
+
+Pack integration969a5594b7933cf205a213d555ecc06bbf18f880 committed and published
+to Jung95/pctx main by normal push70370 terminal0 (bf3c1ea..969a559). No Actions.
+Current PCTX01 remains incomplete; whole gates0/10. Next bounded common admission
+matrix A07–A11 retains producer authorization/current state and adds no features.

@@ -4,9 +4,10 @@
 
 **PCTX01 — CLI, envelope and stable errors** is the only active task (`implementing`). It is lowest incomplete with no prerequisites. The latest user goal supersedes historical next-action lists: finish all current-task mandatory implementation, validation, documentation and platform gates before choosing another task. Read docs/implementation/tasks/PCTX01.md, requirements.md and progress.md, then inspect actual Git/code/jobs. Other official items and D-series future slices are backlog. A subset/macOS pass is not task completion. No next official task is selected.
 
-## Latest integration boundary
+## Latest verified integration boundary
 
-PCTX01-G03 only, basebf3c1ea. Pack exact pure Plan grammar/Create ID shared before
+PCTX01-G03 only; verified runtime revision
+969a5594b7933cf205a213d555ecc06bbf18f880, basebf3c1ea. Pack exact pure Plan grammar/Create ID shared before
 main discovery and producer effects. Native56 no-effects cases/direct errors/
 original expiry and metadata positive (512 part8, distinct64000 feasible) pass.
 Related15PASS including11 pack tests. Initial argument/wrong CLI fixture/item-size
@@ -19,7 +20,8 @@ Audit inventory6->11 groups due source-evidenced existing pure rule omissions,
 local evidence6/11, whole groups0/11; global gates remain10. Stable A01–A11 in
 admission audit. Next common five-family matrix Quota/Work-Agent/Schedule/Session
 Attach/Role, no independent features or another official task. No Actions/budget/
-policy changes. Development commits/pushes to Jung95/pctx approved.
+policy changes. Development commits/pushes to Jung95/pctx approved. Normal push70370 terminal0
+publishedbf3c1ea..969a559 to origin/main.
 
 ## Source, evidence and environment
 
@@ -67,7 +69,7 @@ Original ignored specification SHA256 8914faad57432f524aec0a06aa90c43c18c23f8c19
 
 ## Exact next action
 
-Pack full gate/evidence is terminal; preserve integration commit/push. Stay on PCTX01-G03;
+Pack integration969a559 is committed and normally pushed. Stay on PCTX01-G03;
 read fixed A07–A11 source references in tasks/PCTX01-admission-audit.md, then
 extract exact existing pure validators across Quota, Task transitions/Agent
 Register, Schedule, Session Attach, Role Pause/Resume into main and producers.
