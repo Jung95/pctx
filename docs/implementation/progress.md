@@ -310,3 +310,15 @@ arbitrary descendants. Native Linux/Windows, original startup failures and other
 PCTX01 gates remain open. No next official task or Actions selected.
 
 Final native full25288 terminal101: 478 PASS/3 retained original startup FAIL. All jobs terminal; no live heavy job. PCTX01 remains incomplete.
+
+
+## Push approval boundary
+
+Development commit d490e41 was created locally after the above verification.
+Automatic approval review rejected `git push origin main`: it treated main-branch
+mutation and export of repository contents as lacking exact trusted authorization
+for destination/payload. No alternate push mechanism or retry was attempted.
+Origin is https://github.com/Jung95/pctx.git; locally observed origin/main remains
+02979e1634a205fd2a54605da41d563dde08aeae. Explicit approval is needed to push the
+local delivery-fixture/evidence commit and this handoff-only record to that main.
+PCTX01 remains incomplete and no other task is started. All test jobs terminal.

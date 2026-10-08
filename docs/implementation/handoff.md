@@ -87,3 +87,15 @@ PCTX01 remains incomplete or expand unrelated functionality.
 Pre-existing M30 handle63324 terminal0; immutable clean-build source f81d55ebf64f58a461da14d0bb3249ff2f94a5bc/binary target/measurement-eleventh/pctx SHA256 e0bacfa558d6a81641d84c457d2c9efcea5d4da5d33f41f6bcaf251eb39e59b2. Evidence evaluation-m30-eleventh report/samples/mission/source/build logs: body30/30 errors0,p95 1739.805458ms; other observed timing targets met. Hardware equivalence/cold cache/model/task quality/provider cost/quota remain unqualified. Drained previous job only, no PCTX05/PCTX17 completion or active task. Older 2691.926416ms miss is retained. Current PCTX01 source is not measured by that historical binary.
 
 Package target-directory defect and task-linked approval snapshot omission are in backlog.md; package patch backlog/package-target-directory.patch is prepared, not applied. No new archive created. D047 source/report exceptions, D048 candidate admission, other historical scope and evidence are in decisions.md and source verification manifests; these do not complete whole-task AC77/platform/recovery/forward migration. Original native startup failures remain unexplained, no retry/deadline promotion.
+
+
+## Push approval boundary
+
+Development commit d490e41 was created locally after the above verification.
+Automatic approval review rejected `git push origin main`: it treated main-branch
+mutation and export of repository contents as lacking exact trusted authorization
+for destination/payload. No alternate push mechanism or retry was attempted.
+Origin is https://github.com/Jung95/pctx.git; locally observed origin/main remains
+02979e1634a205fd2a54605da41d563dde08aeae. Explicit approval is needed to push the
+local delivery-fixture/evidence commit and this handoff-only record to that main.
+PCTX01 remains incomplete and no other task is started. All test jobs terminal.
