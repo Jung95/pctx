@@ -1778,3 +1778,106 @@ fn managed_decision_topics_and_handoff_sources_are_not_packet_topic_overrides() 
         );
     }
 }
+
+#[test]
+fn task_file_inside_project_cannot_bypass_source_topic_delivery() {
+    let f = fixture();
+    let input = f.root.join("private-task.md");
+    fs::write(&input, "withheld-task-file-marker\n").unwrap();
+    let config = f.root.join(".pctx/config.toml");
+    let mut text = fs::read_to_string(&config).unwrap();
+    text.push_str("\n[[policy.source_topics]]\nscope = ['private-task.md']\ntopics = ['quiet']\n");
+    fs::write(config, text).unwrap();
+    f.ok(&[
+        "role",
+        "pause",
+        "implementer",
+        "--topic",
+        "quiet",
+        "--recipient",
+        "owner",
+        "--reason",
+        "task file boundary",
+    ]);
+    let (exit, bytes, refused) = f.run(&[
+        "build",
+        "--task-file",
+        input.to_str().unwrap(),
+        "--topic",
+        "public",
+        "--seed",
+        "auth.py",
+    ]);
+    assert_eq!(exit, 7, "{refused}");
+    assert_eq!(refused["errors"][0]["code"], "DELIVERY_POLICY_CONFLICT");
+    let text = String::from_utf8(bytes).unwrap();
+    assert!(!text.contains("withheld-task-file-marker") && !text.contains("private-task.md"));
+    #[cfg(unix)]
+    {
+        let alias = f._temp.path().join("external-alias.md");
+        std::os::unix::fs::symlink(&input, &alias).unwrap();
+        let (exit, bytes, refused) = f.run(&[
+            "build",
+            "--task-file",
+            alias.to_str().unwrap(),
+            "--topic",
+            "public",
+            "--seed",
+            "auth.py",
+        ]);
+        assert_eq!(exit, 7, "{refused}");
+        assert!(
+            !String::from_utf8(bytes)
+                .unwrap()
+                .contains("withheld-task-file-marker")
+        );
+    }
+}
+
+#[test]
+fn task_input_provenance_distinguishes_relative_project_external_and_stdin() {
+    let f = fixture();
+    let external = f._temp.path().join("explicit-task.txt");
+    let internal = f.root.join("explicit-task.txt");
+    fs::write(&external, "Inspect authentication\n").unwrap();
+    fs::write(&internal, "Inspect authentication\n").unwrap();
+    for (path, kind, replayable) in [
+        ("explicit-task.txt", "project_file", true),
+        (external.to_str().unwrap(), "external_file", true),
+        ("-", "stdin", false),
+    ] {
+        let output = Command::new(env!("CARGO_BIN_EXE_pctx"))
+            .current_dir(&f.root)
+            .arg("--root")
+            .arg(&f.root)
+            .args([
+                "--format",
+                "json",
+                "--timeout-ms",
+                "10000",
+                "build",
+                "--task-file",
+                path,
+                "--seed",
+                "auth.py",
+                "--budget-bytes",
+                "32768",
+            ])
+            .env("PCTX_DATA_DIR", &f.data)
+            .env("PCTX_ACTOR", "owner")
+            .env_remove("PCTX_RUN_CAPABILITY")
+            .env("GIT_CONFIG_GLOBAL", f._temp.path().join("empty.gitconfig"))
+            .env("GIT_CONFIG_NOSYSTEM", "1")
+            .stdin(Stdio::from(fs::File::open(&external).unwrap()))
+            .output()
+            .unwrap();
+        let value: Value = serde_json::from_slice(&output.stdout).unwrap();
+        assert!(output.status.success(), "{value}");
+        assert!(output.stdout.len() <= 32768);
+        let provenance = &value["data"]["task_input"];
+        assert_eq!(provenance["kind"], kind);
+        assert_eq!(provenance["replayable"], replayable);
+        assert_eq!(provenance["hash"], hash("Inspect authentication\n"));
+        assert!(!provenance.to_string().contains("explicit-task.txt"));
+    }
+}

@@ -1,0 +1,29 @@
+    Checking pctx v0.1.0-dev (/Users/dev/PCTX)
+error: this `if` statement can be collapsed
+   --> src/input.rs:252:13
+    |
+252 | /             if let TaskAuthority::Project { project, .. } = &proof.authority {
+253 | |                 if project.root != p.root
+254 | |                     || project.project_id != p.project_id
+255 | |                     || project.workspace_id != p.workspace_id
+...   |
+259 | |             }
+    | |_____________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#collapsible_if
+    = note: `-D clippy::collapsible-if` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::collapsible_if)]`
+help: collapse nested if block
+    |
+252 ~             if let TaskAuthority::Project { project, .. } = &proof.authority
+253 ~                 && (project.root != p.root
+254 |                     || project.project_id != p.project_id
+255 ~                     || project.workspace_id != p.workspace_id)
+256 |                 {
+257 |                     return Err(changed());
+258 ~                 }
+    |
+
+error: could not compile `pctx` (lib) due to 1 previous error
+warning: build failed, waiting for other jobs to finish...
+error: could not compile `pctx` (lib test) due to 1 previous error

@@ -1,0 +1,57 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 5.61s
+     Running tests/context_delivery_selection.rs (target/debug/deps/context_delivery_selection-2d942bfc32429490)
+
+running 8 tests
+test source_changed_during_delivery_preparation_cannot_publish_stale_spans ... ok
+test consumer_overhead_cannot_remove_mandatory_rules_or_fake_a_fitting_packet ... ok
+test owner_pause_during_delivery_preparation_cannot_publish_selected_bodies ... ok
+test changed_or_deleted_source_classification_during_measurement_prevents_delivery ... ok
+test task_file_source_change_during_measurement_never_emits_captured_body ... ok
+test consumer_envelope_and_escaped_overhead_drive_tiers_and_exact_capacity ... ok
+test omitted_replacement_changed_during_delivery_invalidates_unchanged_selected_decision ... ok
+test consumer_failure_and_original_deadline_cannot_publish_a_selection ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.07s
+
+     Running tests/context_input_deadline.rs (target/debug/deps/context_input_deadline-0de6c57f731310c2)
+
+running 5 tests
+test unix_stdin_flags_probe ... ok
+test task_file_reader_preserves_utf8_and_rejects_oversize_invalid_and_expired_inputs ... ok
+test stdin_flag_restoration_is_observed_in_a_separate_process ... ok
+test fifo_task_path_is_rejected_without_waiting_for_a_writer_or_publishing ... ok
+test held_open_task_stdin_times_out_without_index_publication ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.26s
+
+     Running tests/session_render_budget.rs (target/debug/deps/session_render_budget-2e37552a4a4fa12a)
+
+running 12 tests
+test task_file_inside_project_cannot_bypass_source_topic_delivery ... ok
+test managed_decision_topics_and_handoff_sources_are_not_packet_topic_overrides ... ok
+test source_topics_cannot_be_bypassed_by_public_packet_seed_or_pack_scope ... ok
+test exact_final_budget_and_representation_receipts_require_explicit_ack ... ok
+test terminal_escape_overflow_is_rejected_before_context_emission_or_event ... ok
+test original_cli_budget_bounds_writer_admission_without_context_or_epoch_writes ... ok
+test adaptive_delta_resends_unreceived_body_and_reuses_acknowledged_receipts ... ok
+test registered_role_and_topic_controls_precede_context_and_resume_requires_fresh_baseline ... ok
+test supersession_links_invalidate_unchanged_source_without_reviving_it_on_replacement_cancellation ... ok
+test unchanged_git_does_not_hide_decision_or_memory_change_retirement_and_deletion ... ok
+test pack_consumer_binding_uses_actual_agent_lease_and_cannot_survive_policy_or_epoch_change ... ok
+test omitted_sources_are_not_acknowledged_and_later_delivery_is_explicit ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.36s
+
+     Running tests/task_input_source.rs (target/debug/deps/task_input_source-58b95f4079975e1d)
+
+running 6 tests
+test fifo_is_rejected_without_waiting_for_a_writer ... ok
+test bounds_encoding_and_original_deadline_are_enforced ... ok
+test external_input_is_explicit_and_content_or_same_bytes_replacement_is_detected ... ok
+test original_external_ancestor_and_canonical_parent_remain_bound ... ok
+test external_alias_into_project_is_admitted_but_internal_aliases_and_escapes_are_denied ... ok
+test project_admission_precedes_body_and_provenance_has_no_path ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+

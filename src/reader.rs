@@ -164,6 +164,13 @@ pub fn authorize(p: &Project, path: &str) -> Result<PathBuf> {
     Ok(resolved)
 }
 pub fn read(p: &Project, path: &str) -> Result<VerifiedFile> {
+    read_with_identity(p, path).map(|(file, _)| file)
+}
+
+pub(crate) fn read_with_identity(
+    p: &Project,
+    path: &str,
+) -> Result<(VerifiedFile, same_file::Handle)> {
     p.check_deadline()?;
     for _ in 0..3 {
         p.check_deadline()?;
@@ -206,8 +213,8 @@ pub fn read(p: &Project, path: &str) -> Result<VerifiedFile> {
         authorize(p, path)?;
         let reopened_file = secure_open(p, path)?;
         let reopened = checked_fs(p, || reopened_file.metadata())?;
-        let same_instance = same_file::Handle::from_file(checked_fs(p, || f.try_clone())?)?
-            == same_file::Handle::from_file(reopened_file)?;
+        let identity = same_file::Handle::from_file(checked_fs(p, || f.try_clone())?)?;
+        let same_instance = identity == same_file::Handle::from_file(reopened_file)?;
         p.check_deadline()?;
         let stable = same_instance
             && before.len() == after.len()
@@ -252,12 +259,15 @@ pub fn read(p: &Project, path: &str) -> Result<VerifiedFile> {
         p.check_deadline()?;
         let text = text
             .map_err(|_| Error::new("UNSUPPORTED_ENCODING", "Only UTF-8 text is supported", 3))?;
-        return Ok(VerifiedFile {
-            path: path.into(),
-            size_bytes: text.len() as u64,
-            text,
-            hash: file_hash,
-        });
+        return Ok((
+            VerifiedFile {
+                path: path.into(),
+                size_bytes: text.len() as u64,
+                text,
+                hash: file_hash,
+            },
+            identity,
+        ));
     }
     Err(Error::new(
         "CONCURRENT_MODIFICATION",
@@ -624,7 +634,7 @@ pub(crate) fn anchored_open(
 ) -> Result<fs::File> {
     anchored_open_deadline(root, anchor, path, None)
 }
-fn anchored_open_deadline(
+pub(crate) fn anchored_open_deadline(
     root: &Path,
     anchor: &crate::project::RootAnchor,
     path: &str,

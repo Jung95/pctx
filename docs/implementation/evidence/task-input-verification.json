@@ -1,0 +1,100 @@
+{
+  "decision": "D045-task-input-authority",
+  "base_commit": "8820ff0c5b4b8baec6ae1e68fd3bdf7d1a1a17a2",
+  "platform": "native macOS arm64",
+  "source_sha256": {
+    "src/input.rs": "bb95507a03a1a20ebf76a78ed2c13af6d873343f4fab720180920b825c9eb5a4",
+    "src/reader.rs": "6315d3a4cbe9d929ecfa13aa88d3dab73956075a787a3b31a855349e75694808",
+    "src/context.rs": "0c6663ea19b589e45626a646c831f8aab419646a182cf659c94a939d935a9971",
+    "src/source_delivery.rs": "37c6aebaa939b8f57fcab298909a4ebbaf518c5ca923107598c9897082373690",
+    "src/documents.rs": "0ae1965d81a09cb5cd20c7dc33a7e5b287929d1d4424796b092ead36151ca953",
+    "tests/task_input_source.rs": "cdb0be205f6d62fd2b5b240d6489fef3addc5ef53291f00e54b44094554b6f60",
+    "tests/context_delivery_selection.rs": "807f164988018127001bae5fc8bb06dc2a481d93b88c240d6d08e09b8db61fe3",
+    "tests/session_render_budget.rs": "a25d0c474692811e512ccba9940664a3787103f5697cf8c87d83c6cd1bc8fdda",
+    "tests/context_input_deadline.rs": "03272478a5f7b4af43a271cf67b79a5b2021e00c15ccd9d37462758f0bdf0b1b"
+  },
+  "verification": {
+    "full": {
+      "handle": 97671,
+      "exit": 101,
+      "passed": 352,
+      "failed": 4,
+      "failed_target": "project_deadline",
+      "failures": [
+        "query_program_resolution_uses_captured_command_path",
+        "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget",
+        "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+        "simultaneous_streams_are_collected_and_overflow_never_infers_success"
+      ]
+    },
+    "scoped_final_full_counts": {
+      "task_input_source": 6,
+      "context_input_deadline": 5,
+      "context_delivery_selection": 8,
+      "session_render_budget": 13,
+      "controlled_identity_unit": 1,
+      "total": 33,
+      "failed": 0
+    },
+    "format_exit": 0,
+    "locked_all_target_clippy_exit": 0
+  },
+  "logs": {
+    "full-final": {
+      "path": "docs/implementation/evidence/task-input-full-final.log",
+      "sha256": "230b1f42a56185e248f5e0f2cb06654fb79355345f8a474f48d4e25da58a4783"
+    },
+    "full-before-identity-fix": {
+      "path": "docs/implementation/evidence/task-input-full-before-identity-fix.log",
+      "sha256": "f6477ae6f1271b45ca546894ecedeb32ad2f1d2cf5e30354d0b6ac9fe1ef04d7"
+    },
+    "targeted-before-identity-fix": {
+      "path": "docs/implementation/evidence/task-input-targeted-before-identity-fix.log",
+      "sha256": "6572629f85a5a86a7399cd8e67a457351bea1c0c70968b378dc23b4e3c6957f2"
+    },
+    "cli-provenance": {
+      "path": "docs/implementation/evidence/task-input-cli-provenance.log",
+      "sha256": "5987271c1b793794d13a29a134a81fd1a0b96ded1e13d98e3ba16ee9ae8dbd23"
+    },
+    "identity-race": {
+      "path": "docs/implementation/evidence/task-input-identity-race.log",
+      "sha256": "03a1c5819552463e406d4ef8d55e49db0f4309d8a1a4209449031827a9fbcabf"
+    },
+    "static-final": {
+      "path": "docs/implementation/evidence/task-input-static-final.log",
+      "sha256": "6f877398452e7d9b17d37dd362de1db4b4863542510f75b1ed8fc45da6d7144a"
+    },
+    "static-initial-failure": {
+      "path": "docs/implementation/evidence/task-input-static-initial-failure.log",
+      "sha256": "5bba2163a5cc0cc7bfed0a9edb18c3359652d8c4110ac6fc46ebaaec9d3cab75"
+    },
+    "format-final": {
+      "path": "docs/implementation/evidence/task-input-format-final.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "coverage": [
+    "Project source-topic admission before task body; external alias resolving inside project has same admission",
+    "Lexical in-project symlink/traversal refusal",
+    "Pinned canonical external parent, original alias/ancestor binding, file identity/content/metadata revalidation",
+    "Bounded regular UTF8 inputs, retained request deadline and FIFO refusal",
+    "Actual CLI relative-CWD project file, external file and one-shot stdin provenance with exact byte budget",
+    "Controlled differing/identical-byte A-to-B-to-A replacement around actual reader rejects handle mismatch",
+    "Mutation during measurement prevents captured task body emission"
+  ],
+  "independent_review": {
+    "agent": "requirements",
+    "finding": "Initial project pin and actual reader handle could differ across A-to-B-to-A restoration",
+    "resolution": "Shared reader returns actual body-read identity; input compares original pin; controlled race test and independent re-review",
+    "test_execution": "Main agent executed tests; independent reviewer did not execute tests"
+  },
+  "limitations": [
+    "Whole mandatory goal remains active",
+    "Full native gate failed at four query startup tests; underlying native cause unresolved",
+    "Filesystem/deadline checks are cooperative; no atomic final-output guarantee",
+    "Windows/Linux native task-input authority qualification missing",
+    "External/stdin/raw caller input topics are not inferred; original-policy-owner reporting exceptions and broader approval/memory delivery remain mandatory"
+  ],
+  "actions_dispatched": 0,
+  "spec_sha256": "8914faad57432f524aec0a06aa90c43c18c23f8c19e9f54fe69d9ad185db6523"
+}

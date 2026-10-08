@@ -324,3 +324,42 @@ fn changed_or_deleted_source_classification_during_measurement_prevents_delivery
         assert_eq!(emissions, 0, "Build never writes receipt authority");
     }
 }
+
+#[test]
+fn task_file_source_change_during_measurement_never_emits_captured_body() {
+    for external in [false, true] {
+        let (temp, p, mut r) = fixture();
+        let input = if external {
+            temp.path().join("external-task.md")
+        } else {
+            p.root.join("task-input.md")
+        };
+        fs::write(&input, "inspect calculate\n").unwrap();
+        r.task = None;
+        r.task_file = Some(input.to_str().unwrap().to_owned());
+        let mut observed = false;
+        let error = select_with_measurement(&p, &r, Format::Json, |data| {
+            if !observed {
+                observed = true;
+                assert_eq!(
+                    data["task_input"]["kind"],
+                    if external {
+                        "external_file"
+                    } else {
+                        "project_file"
+                    }
+                );
+                let provenance = serde_json::to_string(&data["task_input"]).unwrap();
+                assert!(!provenance.contains(input.to_str().unwrap()));
+                fs::write(&input, "changed task source\n").unwrap();
+            }
+            Ok(render(&packet(&p, data), Format::Json)?.len())
+        })
+        .unwrap_err();
+        assert!(observed, "mutation must follow task source capture");
+        assert_eq!(error.code, "CONCURRENT_MODIFICATION");
+        assert!(
+            !error.message.contains("task-input.md") && !error.message.contains("external-task.md")
+        );
+    }
+}

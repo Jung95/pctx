@@ -7,11 +7,14 @@
 //! expiry. Regular disk I/O remains cooperatively bounded, not hard-cancelled.
 use crate::{
     deadline::Deadline,
-    domain::{Error, Result},
+    domain::{Error, Result, hash},
+    project::{Project, RootAnchor},
+    reader,
 };
 use std::{
-    fs::File,
+    fs::{self, File, Metadata},
     io::Read,
+    path::{Component, Path, PathBuf},
     sync::{Mutex, TryLockError},
     time::Duration,
 };
@@ -68,6 +71,336 @@ fn read_disk(file: &mut File, deadline: Deadline) -> Result<Vec<u8>> {
             Err(e) => return Err(e.into()),
         }
     }
+}
+
+/// A bounded task input and its retained, private source authority.
+/// Provenance deliberately contains no filesystem names or document text.
+pub struct TaskDocument {
+    pub text: String,
+    raw_hash: String,
+    deadline: Deadline,
+    proof: Option<TaskFileProof>,
+}
+struct TaskFileProof {
+    original: PathBuf,
+    canonical: PathBuf,
+    alias: Vec<(PathBuf, AliasStamp)>,
+    authority: TaskAuthority,
+    identity: same_file::Handle,
+    stamp: FileStamp,
+}
+enum TaskAuthority {
+    Project {
+        project: Box<Project>,
+        relative: String,
+    },
+    External {
+        parent: PathBuf,
+        anchor: RootAnchor,
+        leaf: String,
+    },
+}
+#[derive(PartialEq, Eq)]
+struct FileStamp {
+    length: u64,
+    modified: Option<std::time::SystemTime>,
+}
+impl FileStamp {
+    fn new(m: &Metadata) -> Self {
+        Self {
+            length: m.len(),
+            modified: m.modified().ok(),
+        }
+    }
+}
+#[derive(PartialEq, Eq)]
+struct AliasStamp {
+    directory: bool,
+    symlink: bool,
+    target: Option<PathBuf>,
+    #[cfg(unix)]
+    identity: (u64, u64),
+    #[cfg(windows)]
+    identity: (u32, u64),
+}
+fn changed() -> Error {
+    Error::new("CONCURRENT_MODIFICATION", "Task input authority changed", 4)
+}
+fn unsafe_input() -> Error {
+    Error::new(
+        "POLICY_DENIED",
+        "Task input alias is not an admitted project source",
+        5,
+    )
+}
+fn canonical(path: &Path, deadline: Deadline) -> Result<PathBuf> {
+    deadline.check()?;
+    let value = fs::canonicalize(path);
+    deadline.check()?;
+    Ok(value?)
+}
+fn alias_stamps(path: &Path, deadline: Deadline) -> Result<Vec<(PathBuf, AliasStamp)>> {
+    let mut current = PathBuf::new();
+    let mut out = Vec::new();
+    for component in path.components() {
+        deadline.check()?;
+        current.push(component);
+        // A Windows drive prefix alone is not an absolute directory authority.
+        if !current.is_absolute() {
+            continue;
+        }
+        let m = fs::symlink_metadata(&current)?;
+        #[cfg(windows)]
+        let symlink = {
+            use std::os::windows::fs::MetadataExt;
+            m.file_type().is_symlink() || m.file_attributes() & 0x400 != 0
+        };
+        #[cfg(not(windows))]
+        let symlink = m.file_type().is_symlink();
+        let target = if symlink {
+            Some(fs::read_link(&current)?)
+        } else {
+            None
+        };
+        #[cfg(unix)]
+        let identity = {
+            use std::os::unix::fs::MetadataExt;
+            (m.dev(), m.ino())
+        };
+        #[cfg(windows)]
+        let identity = {
+            use std::os::windows::fs::MetadataExt;
+            (m.file_attributes(), m.creation_time())
+        };
+        out.push((
+            current.clone(),
+            AliasStamp {
+                directory: m.is_dir(),
+                symlink,
+                target,
+                #[cfg(any(unix, windows))]
+                identity,
+            },
+        ));
+        deadline.check()?;
+    }
+    Ok(out)
+}
+impl TaskAuthority {
+    fn open(&self, deadline: Deadline) -> Result<File> {
+        match self {
+            Self::Project { project, relative } => reader::secure_open(project, relative),
+            Self::External {
+                parent,
+                anchor,
+                leaf,
+            } => reader::anchored_open_deadline(parent, anchor, leaf, Some(deadline)),
+        }
+    }
+    fn read(&self, deadline: Deadline) -> Result<(String, same_file::Handle, FileStamp)> {
+        self.read_observed(deadline, |_| Ok(()))
+    }
+    fn read_observed(
+        &self,
+        deadline: Deadline,
+        mut observe: impl FnMut(&str) -> Result<()>,
+    ) -> Result<(String, same_file::Handle, FileStamp)> {
+        deadline.check()?;
+        // Pin identity before reading. Reopening afterwards prevents an atomic
+        // replacement, including one containing identical bytes, from rebinding it.
+        let mut file = self.open(deadline)?;
+        regular(&file, true)?;
+        let stamp = FileStamp::new(&file.metadata()?);
+        let identity = same_file::Handle::from_file(file.try_clone()?)?;
+        observe("pinned")?;
+        let text = match self {
+            Self::Project { project, relative } => {
+                let (source, read_identity) = reader::read_with_identity(project, relative)?;
+                observe("read")?;
+                if identity != read_identity {
+                    return Err(changed());
+                }
+                source.text
+            }
+            Self::External { .. } => {
+                String::from_utf8(read_disk(&mut file, deadline)?).map_err(|_| {
+                    Error::new("UNSUPPORTED_ENCODING", "Task document must be UTF-8", 2)
+                })?
+            }
+        };
+        let reopened = self.open(deadline)?;
+        regular(&reopened, true)?;
+        let after = FileStamp::new(&file.metadata()?);
+        let current = FileStamp::new(&reopened.metadata()?);
+        let current_identity = same_file::Handle::from_file(reopened)?;
+        deadline.check()?;
+        if identity != current_identity || stamp != after || stamp != current {
+            return Err(changed());
+        }
+        Ok((text, identity, stamp))
+    }
+}
+impl TaskDocument {
+    pub fn provenance(&self) -> serde_json::Value {
+        let kind = match self.proof.as_ref().map(|p| &p.authority) {
+            None => "stdin",
+            Some(TaskAuthority::Project { .. }) => "project_file",
+            Some(TaskAuthority::External { .. }) => "external_file",
+        };
+        serde_json::json!({"kind":kind,"hash":self.raw_hash,"replayable":self.proof.is_some()})
+    }
+    /// Checks the original input authority, never rereading stdin or following
+    /// the original alias to open a newly selected file. Delivery-policy
+    /// revalidation remains the caller's responsibility.
+    pub fn revalidate(&self, p: &Project) -> Result<()> {
+        self.deadline.check()?;
+        p.check_deadline()?;
+        let mut current_project = p.clone();
+        current_project.deadline = Some(self.deadline);
+        reader::validate_root(&current_project)?;
+        if let Some(proof) = &self.proof {
+            if canonical(&proof.original, self.deadline)? != proof.canonical
+                || alias_stamps(&proof.original, self.deadline)? != proof.alias
+            {
+                return Err(changed());
+            }
+            if let TaskAuthority::Project { project, .. } = &proof.authority
+                && (project.root != p.root
+                    || project.project_id != p.project_id
+                    || project.workspace_id != p.workspace_id)
+            {
+                return Err(changed());
+            }
+            let (text, identity, stamp) = proof.authority.read(self.deadline)?;
+            if identity != proof.identity
+                || stamp != proof.stamp
+                || hash(text.as_bytes()) != self.raw_hash
+            {
+                return Err(changed());
+            }
+        }
+        self.deadline.check()?;
+        p.check_deadline()
+    }
+}
+/// Explicit task-file input with project-source delivery admission before body
+/// access. External explicit input is pinned independently of project policy.
+pub fn project_task_document(
+    p: &Project,
+    path: &str,
+    mut before_project_read: impl FnMut(&str) -> Result<()>,
+) -> Result<TaskDocument> {
+    let deadline = match p.deadline {
+        Some(deadline) => deadline,
+        None => Deadline::from_millis(10_000)?,
+    };
+    deadline.check()?;
+    if path == "-" {
+        let text = task_document(path, deadline)?;
+        return Ok(TaskDocument {
+            raw_hash: hash(text.as_bytes()),
+            text,
+            deadline,
+            proof: None,
+        });
+    }
+    let mut bounded_project = p.clone();
+    bounded_project.deadline = Some(deadline);
+    reader::validate_root(&bounded_project)?;
+    let original = if Path::new(path).is_absolute() {
+        PathBuf::from(path)
+    } else {
+        std::env::current_dir()?.join(path)
+    };
+    deadline.check()?;
+    let root = canonical(&p.root, deadline)?;
+    let lexical_project = original.starts_with(&p.root) || original.starts_with(&root);
+    if lexical_project {
+        let base = if original.starts_with(&p.root) {
+            &p.root
+        } else {
+            &root
+        };
+        let relative = original.strip_prefix(base).map_err(|_| unsafe_input())?;
+        if relative
+            .components()
+            .any(|c| !matches!(c, Component::Normal(_)))
+        {
+            return Err(unsafe_input());
+        }
+        let mut current = base.clone();
+        for part in relative.components() {
+            current.push(part);
+            deadline.check()?;
+            let m = fs::symlink_metadata(&current)?;
+            #[cfg(windows)]
+            let link = {
+                use std::os::windows::fs::MetadataExt;
+                m.file_type().is_symlink() || m.file_attributes() & 0x400 != 0
+            };
+            #[cfg(not(windows))]
+            let link = m.file_type().is_symlink();
+            if link {
+                return Err(unsafe_input());
+            }
+        }
+    }
+    let target = canonical(&original, deadline)?;
+    if lexical_project && !target.starts_with(&root) {
+        return Err(unsafe_input());
+    }
+    let alias = alias_stamps(&original, deadline)?;
+    let authority = if let Ok(relative) = target.strip_prefix(&root) {
+        let relative = relative
+            .to_str()
+            .ok_or_else(unsafe_input)?
+            .replace('\\', "/");
+        deadline.check()?;
+        before_project_read(&relative)?;
+        deadline.check()?;
+        let mut captured = p.clone();
+        captured.deadline = Some(deadline);
+        captured.config.index.max_file_bytes = captured
+            .config
+            .index
+            .max_file_bytes
+            .min(MAX_TASK_BYTES as u64);
+        TaskAuthority::Project {
+            project: Box::new(captured),
+            relative,
+        }
+    } else {
+        let parent = target.parent().ok_or_else(unsafe_input)?.to_path_buf();
+        let leaf = target
+            .file_name()
+            .and_then(|s| s.to_str())
+            .ok_or_else(unsafe_input)?
+            .to_string();
+        deadline.check()?;
+        let anchor = RootAnchor::capture(&parent)?;
+        deadline.check()?;
+        TaskAuthority::External {
+            parent,
+            anchor,
+            leaf,
+        }
+    };
+    let (text, identity, stamp) = authority.read(deadline)?;
+    let doc = TaskDocument {
+        raw_hash: hash(text.as_bytes()),
+        text,
+        deadline,
+        proof: Some(TaskFileProof {
+            original,
+            canonical: target,
+            alias,
+            authority,
+            identity,
+            stamp,
+        }),
+    };
+    doc.revalidate(p)?;
+    Ok(doc)
 }
 
 pub fn task_document(path: &str, deadline: Deadline) -> Result<String> {
@@ -337,4 +670,70 @@ fn file_bytes(_: &str, _: Deadline) -> Result<Vec<u8>> {
 #[cfg(not(any(unix, windows)))]
 fn stdin_bytes(_: Deadline) -> Result<Vec<u8>> {
     Err(unsupported())
+}
+
+#[cfg(test)]
+mod identity_tests {
+    use super::*;
+    use crate::project::{Config, ProjectConfig};
+
+    #[test]
+    fn project_read_identity_rejects_replace_and_restore_even_with_same_bytes() {
+        for replacement_text in ["different bytes", "original bytes"] {
+            let temp = tempfile::tempdir().unwrap();
+            let root = temp.path().canonicalize().unwrap();
+            let deadline = Deadline::from_millis(10_000).unwrap();
+            let project = Project {
+                deadline: Some(deadline),
+                root_anchor: RootAnchor::capture(&root).unwrap(),
+                data_dir: root.join("data"),
+                workspace_dir: root.join("workspace"),
+                control_dir: root.join("control"),
+                root: root.clone(),
+                project_id: "identity-fixture".into(),
+                workspace_id: "ws".into(),
+                coordination_id: "coord".into(),
+                config: Config {
+                    schema_version: 1,
+                    project: ProjectConfig {
+                        id: "identity-fixture".into(),
+                        name: "fixture".into(),
+                    },
+                    index: Default::default(),
+                    policy: Default::default(),
+                    search: Default::default(),
+                    context: Default::default(),
+                    roles: Default::default(),
+                },
+            };
+            let path = root.join("task.txt");
+            let original = root.join("original.txt");
+            let replacement = root.join("replacement.txt");
+            fs::write(&path, "original bytes").unwrap();
+            fs::write(&replacement, replacement_text).unwrap();
+            let authority = TaskAuthority::Project {
+                project: Box::new(project),
+                relative: "task.txt".into(),
+            };
+            let mut phases = Vec::new();
+            let result = authority.read_observed(deadline, |phase| {
+                phases.push(phase.to_owned());
+                match phase {
+                    "pinned" => {
+                        fs::rename(&path, &original)?;
+                        fs::rename(&replacement, &path)?;
+                    }
+                    "read" => {
+                        fs::rename(&path, &replacement)?;
+                        fs::rename(&original, &path)?;
+                    }
+                    _ => unreachable!(),
+                }
+                Ok(())
+            });
+            assert_eq!(phases, ["pinned", "read"]);
+            assert_eq!(result.err().unwrap().code, "CONCURRENT_MODIFICATION");
+            assert_eq!(fs::read_to_string(&path).unwrap(), "original bytes");
+        }
+    }
 }

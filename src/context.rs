@@ -127,19 +127,24 @@ pub(crate) fn select_scoped_with_measurement(
     let mut source_controls = BTreeMap::new();
     let mut suppressed_sources = false;
     let mut task_sources = Vec::new();
+    let mut task_input = None;
     let mut task_scope = r.seed.clone();
     let task = if let Some(task) = &r.task {
         reader::redact(task).0
     } else if let Some(path) = &r.task_file {
-        let deadline = p.deadline.ok_or_else(|| {
-            Error::new(
-                "INVALID_CONFIG",
-                "Task input requires the context request deadline",
-                2,
-            )
+        let document = crate::input::project_task_document(p, path, |relative| {
+            let control = source_policy
+                .check(
+                    relative,
+                    crate::documents::source_topics(p, relative)?.as_deref(),
+                )
+                .map_err(mandatory_delivery_error)?;
+            source_controls.insert(relative.to_owned(), control);
+            Ok(())
         })?;
-        let text = crate::input::task_document(path, deadline)?;
-        reader::redact(&text).0
+        let text = reader::redact(&document.text).0;
+        task_input = Some(document);
+        text
     } else if let Some(id) = &r.task_id {
         let view = crate::work::execute(
             p,
@@ -452,6 +457,9 @@ pub(crate) fn select_scoped_with_measurement(
     if suppressed_sources {
         omitted.push(json!({"reason":"delivery_policy","omitted_count":"unknown"}));
     }
+    if let Some(input) = &task_input {
+        data["task_input"] = input.provenance();
+    }
     data["source_versions"]["source_delivery_hash"] =
         json!(hash(serde_json::to_vec(&source_controls)?));
     finalize(
@@ -499,9 +507,13 @@ pub(crate) fn select_scoped_with_measurement(
             4,
         ));
     }
-    source_policy.revalidate()?;
+    if let Some(input) = &task_input {
+        input.revalidate(p)?;
+    }
     for (path, expected) in &source_controls {
-        if source_policy.check(path, document_topics(&docs, path).as_deref())? != *expected {
+        if source_policy.check(path, crate::documents::source_topics(p, path)?.as_deref())?
+            != *expected
+        {
             return Err(Error::new(
                 "CONCURRENT_MODIFICATION",
                 "Source delivery controls changed",
@@ -509,6 +521,7 @@ pub(crate) fn select_scoped_with_measurement(
             ));
         }
     }
+    source_policy.revalidate()?;
     p.check_deadline()?;
     if crate::session::delivery_binding(p, r.session.as_deref(), r.topic.as_deref(), &r.role)?.1
         != delivery_barrier

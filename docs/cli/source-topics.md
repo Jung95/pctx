@@ -24,4 +24,13 @@ Current project configuration is read through captured root authority, limited t
 
 Serializer adaptive-context-v7 and selector adaptive-v6 preserve older stored data but require a compatible fresh full packet and explicit acknowledgement. Classification is not author authentication, receipt confirmation, permission restoration or a host-access grant. Original-policy-owner exceptions, explicit conflict priority, broader memory variants and platform/recovery qualification remain required.
 
-The current task guard covers task-id source scope references and managed handoffs. Task-file/stdin/raw input provenance and broader approval/task-memory classification still require separate qualification; this source-context slice does not establish complete memory delivery enforcement.
+Build `--task-file PATH` resolves relative paths against the command's working directory. A file resolving inside the project is checked against source classifications before its task body is read. An external alias resolving into the project receives the same check. In-project symlinks and traversal escapes are refused. Restricted task files produce a bounded mandatory delivery conflict, without their path or body.
+
+Explicit external files are separate input: PCTX pins the canonical parent, file identity, source hash and original alias chain rather than reopening an alias after classification. Files are UTF-8 regular files limited to 1 MiB; the project's smaller reader limit also applies to project files. Before returning a packet, source/alias replacement or content changes invalidate delivery. Reads and checks share the original request deadline; native filesystem calls remain cooperatively bounded.
+
+The packet's `task_input` contains only `kind` (`project_file`, `external_file` or `stdin`), a source hash and `replayable`. Stdin (`--task-file -`) is consumed once with the existing bounded deadline-aware reader and reports `replayable: false`; it is never reread during final checks. This metadata is included in the final serialized byte budget. External input and stdin are explicit caller inputs, without inferred source topics or permission grants. Broader raw-text and approval/task-memory classification remain separate mandatory work; this slice does not establish complete memory delivery enforcement.
+
+```sh
+pctx --root . --format json build --task-file task.txt --budget-bytes 32768
+printf 'Inspect authentication\n' | pctx --root . --format json build --task-file - --budget-bytes 32768
+```
