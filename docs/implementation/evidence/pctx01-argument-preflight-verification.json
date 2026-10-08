@@ -125,5 +125,6 @@
     "Finite-leaf routing audit found no clear omission; it is not downstream phase-race or complete default-budget proof.",
     "Original native process startup failure unresolved; retain all failures and one-second budgets without retry promotion.",
     "Native Linux/Windows execution still required; no new Actions/OS registration/scripts/provider operations."
-  ]
+  ],
+  "runtime_commit": "0538dca6ba5e21f403012fae053f47ba27a02fb4"
 }
