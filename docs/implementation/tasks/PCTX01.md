@@ -255,3 +255,21 @@ session DB. These are PCTX01 common fixes only; no other official task activated
 Native platforms/startup and remaining completion gates stay open.
 
 Final format/locked all-target Clippy PASS. Final native full64728 terminal101: 490 PASS/3 FAIL, retaining original concurrent startup, relative resolution and simultaneous-stream failures at unchanged budgets. All jobs terminal; PCTX01 incomplete.
+
+## PCTX01 Checkpoint pure admission
+
+Existing display-name/redaction/256-byte and relative-glob scope rules now share
+storage checkpoint_arguments, called before producer writer/manifest; CLI pure
+validation precedes discovery/response paths. Names remain display strings,
+checkpoint dot/glob scopes remain supported; no new Checkpoint feature. Actual
+12-case missing/initialized project and absent/existing absolute response matrix
+refuses2 with unchanged tree/response. Library invalid requests create no writer,
+and expired supplied clock remains original TIMEOUT. Valid display name/dot/glob
+flows pass. Related12 PASS. Initial1PASS2FAIL retained (IO7 masks2); prepared
+workspace initial0PASS1FAIL proves actual writer.lock creation. Two controlled
+losses each0PASS1FAIL/exact restore (CLI refusal and writer-order regression).
+[Evidence](../evidence/pctx01-checkpoint-admission-verification.json). Independent
+static review no scoped blocker. Next common defect is ContextGet pure admission;
+PCTX01 stays implementing, no other official task, Actions or rejected-push retry.
+
+Final format/locked all-target Clippy PASS. Final native full97981 terminal101: 493 PASS/3 FAIL; original relative resolution/concurrent startup/simultaneous-stream failures retained without budget relaxation. All jobs terminal; PCTX01 incomplete.

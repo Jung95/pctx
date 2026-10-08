@@ -1,0 +1,17 @@
+from pathlib import Path
+import os, subprocess, json, hashlib
+root=Path('/Users/dev/PCTX')
+env=dict(os.environ,RUSTUP_HOME=str(root/'.toolchain/rustup'),CARGO_HOME=str(root/'.toolchain/cargo'),SDKROOT='/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk',PATH=str(root/'.toolchain/cargo/bin')+':/Library/Developer/CommandLineTools/usr/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin')
+results=[]
+for name,path,needle,target,test in [
+ ('frontend','src/main.rs','        Command::Checkpoint {\n            command: CheckpointCommand::Create { name, scopes, .. },\n        } => storage::validate_checkpoint_request(name.as_deref(), scopes),\n','checkpoint_preflight','invalid_checkpoint_arguments_have_no_project_or_response_effects'),
+ ('producer','src/storage.rs','    let matcher = checkpoint_arguments(name, scopes)?;\n    let _lock = writer(p)?;\n','checkpoint_preflight','checkpoint_producer_validation_precedes_writer_and_manifest')]:
+ p=root/path;original=p.read_bytes();text=original.decode();assert text.count(needle)==1
+ try:
+  p.write_text(text.replace(needle, '    let _lock = writer(p)?;\n    let matcher = checkpoint_arguments(name, scopes)?;\n' if name=='producer' else ''))
+  with (root/f'docs/implementation/evidence/pctx01-checkpoint-admission-loss-{name}.log').open('wb') as log:
+   result=subprocess.run(['cargo','test','--locked','--test',target,test,'--','--exact'],cwd=root,env=env,stdout=log,stderr=subprocess.STDOUT)
+ finally:p.write_bytes(original)
+ results.append(dict(name=name,exit=result.returncode,original_sha256=hashlib.sha256(original).hexdigest(),restored_sha256=hashlib.sha256(p.read_bytes()).hexdigest()))
+ assert result.returncode==101,results[-1]
+(root/'docs/implementation/evidence/pctx01-checkpoint-admission-loss-results.json').write_text(json.dumps(results,indent=2)+'\n')

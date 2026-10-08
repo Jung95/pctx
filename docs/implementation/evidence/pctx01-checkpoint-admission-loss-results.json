@@ -1,0 +1,14 @@
+[
+  {
+    "name": "frontend",
+    "exit": 101,
+    "original_sha256": "67666f5bc37b959fbd72dd29bc8bd3eef7f17b1e7725a35dd1d4f739544bb154",
+    "restored_sha256": "67666f5bc37b959fbd72dd29bc8bd3eef7f17b1e7725a35dd1d4f739544bb154"
+  },
+  {
+    "name": "producer",
+    "exit": 101,
+    "original_sha256": "797a36c4731ae9d4debcfe27096eb74e670bb2d66aca7192b32c4713fa26c2cc",
+    "restored_sha256": "797a36c4731ae9d4debcfe27096eb74e670bb2d66aca7192b32c4713fa26c2cc"
+  }
+]

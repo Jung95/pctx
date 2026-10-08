@@ -912,6 +912,9 @@ fn main() {
                         },
                 },
         } => adapter::validate_event_input(*hook, from_file.as_deref()),
+        Command::Checkpoint {
+            command: CheckpointCommand::Create { name, scopes, .. },
+        } => storage::validate_checkpoint_request(name.as_deref(), scopes),
         Command::Output { command } => output::validate_output_request(command),
         Command::Find(request) => search::validate_find_request(request),
         Command::Query(request) => search::validate_structure_request(request),

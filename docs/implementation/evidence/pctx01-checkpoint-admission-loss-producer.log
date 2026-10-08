@@ -1,0 +1,24 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.92s
+     Running tests/checkpoint_preflight.rs (target/debug/deps/checkpoint_preflight-84e094c99f03ba49)
+
+running 1 test
+test checkpoint_producer_validation_precedes_writer_and_manifest ... FAILED
+
+failures:
+
+---- checkpoint_producer_validation_precedes_writer_and_manifest stdout ----
+
+thread 'checkpoint_producer_validation_precedes_writer_and_manifest' (8522129) panicked at tests/checkpoint_preflight.rs:164:9:
+assertion `left == right` failed
+  left: ({"": None}, {"": None, "workspace": None, "workspace/writer.lock": Some([])})
+ right: ({"": None}, {"": None, "workspace": None})
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    checkpoint_producer_validation_precedes_writer_and_manifest
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--test checkpoint_preflight`

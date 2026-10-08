@@ -315,6 +315,22 @@ pub fn checkpoint(p: &Project, name: Option<&str>, pin: bool) -> Result<Value> {
     let p = &bounded;
     checkpoint_scoped(p, name, pin, &[])
 }
+fn checkpoint_arguments(name: Option<&str>, scopes: &[String]) -> Result<globset::GlobSet> {
+    if name.is_some_and(|n| n.is_empty() || n.len() > 256 || reader::redact(n).1) {
+        return Err(Error::new(
+            "INVALID_ARGUMENT",
+            "Invalid or sensitive checkpoint name",
+            2,
+        ));
+    }
+    scope_matcher(scopes)
+}
+
+/// Pure checkpoint argument admission, without project or writer access.
+pub fn validate_checkpoint_request(name: Option<&str>, scopes: &[String]) -> Result<()> {
+    checkpoint_arguments(name, scopes).map(|_| ())
+}
+
 pub fn checkpoint_scoped(
     p: &Project,
     name: Option<&str>,
@@ -323,17 +339,10 @@ pub fn checkpoint_scoped(
 ) -> Result<Value> {
     let bounded = bounded_project(p, 120_000)?;
     let p = &bounded;
+    let matcher = checkpoint_arguments(name, scopes)?;
     let _lock = writer(p)?;
-    if name.is_some_and(|n| n.is_empty() || n.len() > 256 || reader::redact(n).1) {
-        return Err(Error::new(
-            "INVALID_ARGUMENT",
-            "Invalid or sensitive checkpoint name",
-            2,
-        ));
-    }
     let mut map = reader::manifest(p)?;
     p.check_deadline()?;
-    let matcher = scope_matcher(scopes)?;
     map.retain(|path, _| in_scope(path, scopes, &matcher));
     let payload = json!({"schema_version":1,"id":id("CP"),"name":name,"project_id":p.project_id,"workspace_id":p.workspace_id,"created_at":now(),"policy_hash":p.policy_hash(),"files":map,"scope":if scopes.is_empty(){vec![".".to_string()]}else{scopes.to_vec()},"config_hash":hash(serde_json::to_vec(&p.config)?),"parser_hash":hash(PARSER_SET)});
     let mut db = connect(p)?;

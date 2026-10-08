@@ -1,0 +1,141 @@
+{
+  "task": "PCTX01",
+  "status": "implementing; incomplete; sole active official task",
+  "base_revision": "000d9337db61d0a54a2c483db0bf640704d690a1",
+  "platform": "native macOS arm64",
+  "specification_sections": [
+    "14 pure argument/refusal/effect ordering",
+    "8/38 original request clock and processing failure distinctions"
+  ],
+  "source_sha256": {
+    "src/main.rs": "67666f5bc37b959fbd72dd29bc8bd3eef7f17b1e7725a35dd1d4f739544bb154",
+    "src/storage.rs": "797a36c4731ae9d4debcfe27096eb74e670bb2d66aca7192b32c4713fa26c2cc",
+    "tests/checkpoint_preflight.rs": "bf6c1b4f82154c11673da76ca4769bf3c4c7f7dc0c7df996adf9716c00803b14",
+    "src/session.rs": "7a55b215bbc5c238ded98d027e6d6a333d890a40b5560d8870a79b31f52daf6f",
+    "src/query_process.rs": "2faee00ffc82534c41942adae00e52f81a271072b47338f33cab7b67c43bc5b9",
+    "tests/project_deadline.rs": "8b9fbc97fbd5acaf612b2d75b94cf810faa2b61614b654495082462b1941a8dc"
+  },
+  "runs": [
+    {
+      "path": "pctx01-checkpoint-admission-selected.log",
+      "sha256": "67356b675260f976f6b743a508e61b4a820de65cd9cf7f78866fd93400707340",
+      "exit": 101,
+      "session": 56133,
+      "counts": {
+        "passed": 1,
+        "failed": 2
+      },
+      "qualification": "Initial1PASS2FAIL: missingroot/native IO7 masks argument2; library missingworkspace also IO7. Valid display-name/dot/glob passed."
+    },
+    {
+      "path": "pctx01-checkpoint-admission-fixture.log",
+      "sha256": "4b977a047e24e76aecf2d704b5eb93dbfe0b92f17134a9550f81d9edee4df81b",
+      "exit": 101,
+      "session": 86546,
+      "counts": {
+        "passed": 0,
+        "failed": 1
+      },
+      "qualification": "Before production repair, workspace parent prepared: actual writer.lock appears despite rejected invalid name."
+    },
+    {
+      "path": "pctx01-checkpoint-admission-related.log",
+      "sha256": "e514133dbb133134e70e06eede5bf2656fab24b8b70a4f6e972079cbd3c35cfd",
+      "exit": 0,
+      "session": 41676,
+      "counts": {
+        "passed": 12,
+        "failed": 0
+      },
+      "qualification": "Final checkpoint3/handoff5/storage deadline4;12-case native missing/initialized project and absent/existing response, library snapshot/expiry and positive flow."
+    },
+    {
+      "path": "pctx01-checkpoint-admission-loss-frontend.log",
+      "sha256": "a9f77b023f1dfa8ae05213319656b0f50107d1e2d982c398a68f1a9c7842b26d",
+      "exit": 101,
+      "session": 64149,
+      "counts": {
+        "passed": 0,
+        "failed": 1
+      },
+      "qualification": "Intentional CLI preflight removal; native7versus2."
+    },
+    {
+      "path": "pctx01-checkpoint-admission-loss-producer.log",
+      "sha256": "d9f9caf97399f4126db84091a101e60bbfa367745dbce75eda93c1c8ab0b7fae",
+      "exit": 101,
+      "session": 64149,
+      "counts": {
+        "passed": 0,
+        "failed": 1
+      },
+      "qualification": "Intentional matcher validation afterwriter; actual snapshot includes newwriter.lock."
+    },
+    {
+      "path": "pctx01-checkpoint-admission-static.log",
+      "sha256": "dadbbe6941c5592e7bcb29a95c943780a4d90e9c4b7da22a190b0a430457ac0e",
+      "exit": 0,
+      "session": 39681,
+      "counts": {
+        "passed": 0,
+        "failed": 0
+      },
+      "qualification": "Final fmt --check and locked all-target Clippy -D warnings."
+    },
+    {
+      "path": "pctx01-checkpoint-admission-full.log",
+      "sha256": "d0bfa8978bf5428c0d0aab92d00291ca2b1d7a91b2633c1cbae8a296bb66d523",
+      "exit": 101,
+      "session": 97981,
+      "counts": {
+        "passed": 493,
+        "failed": 3
+      },
+      "qualification": "Final full native exact-source gate; original startup budgets unchanged."
+    }
+  ],
+  "full_failed_tests": [
+    "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+    "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget",
+    "simultaneous_streams_are_collected_and_overflow_never_infers_success"
+  ],
+  "controlled_losses": [
+    {
+      "name": "frontend",
+      "exit": 101,
+      "original_sha256": "67666f5bc37b959fbd72dd29bc8bd3eef7f17b1e7725a35dd1d4f739544bb154",
+      "restored_sha256": "67666f5bc37b959fbd72dd29bc8bd3eef7f17b1e7725a35dd1d4f739544bb154"
+    },
+    {
+      "name": "producer",
+      "exit": 101,
+      "original_sha256": "797a36c4731ae9d4debcfe27096eb74e670bb2d66aca7192b32c4713fa26c2cc",
+      "restored_sha256": "797a36c4731ae9d4debcfe27096eb74e670bb2d66aca7192b32c4713fa26c2cc"
+    }
+  ],
+  "review": {
+    "path": "pctx01-checkpoint-admission-review.txt",
+    "sha256": "d32cae977a5e60917b772542bf023aaf73140f5c4fff25cd3e7f72dde8988261",
+    "result": "No scoped blocker; static independent review only"
+  },
+  "audit": {
+    "path": "../tasks/PCTX01-admission-audit.md",
+    "sha256": "dde8930367dcf3b30ac75ea59b3d6933f35667c431aae68031c62e6d096f95f7",
+    "next": "ContextGet existing pure mode/since/explicit normalized scopes before DB, within PCTX01 only."
+  },
+  "contract": [
+    "Existing name rule unchanged: optional, nonempty<=256UTF8 bytes, redact-detected names refused; display name is not path/handoff identifier.",
+    "Existing scope_matcher reused; dot denotes all allowed, relative glob semantics preserved.",
+    "Producer builds matcher after original bounded deadline admission but before writer/manifest. CLI pure validator precedes project/response access.",
+    "Actual12 invalid name/scope CLI combinations across missing and initialized roots; source/data directory+file snapshots unchanged and absent/existing absolute response unchanged.",
+    "Library prepared workspace snapshot proves no writer; invalid name/traversal/malformedglob and expired original Instant leave state unchanged.",
+    "Actual valid display name release / notes, dot and **/*.py retain code.py manifest."
+  ],
+  "limitations": [
+    "Scoped common admission only; PCTX14 independent checkpoint features/recovery remain inactive/incomplete.",
+    "Native Linux/Windows, remaining PCTX01 frontend/phase/platform gates and original startup failures remain open.",
+    "Secret-shaped name and every positive 256byte edge not independently authored here; existing source rule copied unchanged, no credential fixture.",
+    "Initial selected source precedes prepared-workspace fixture and production repair; exact modified initial source hash not recorded. Final hashes apply related/static/full.",
+    "No Actions, paid calls, OS policy change or rejected-push retry; prior main push pending explicit approval."
+  ]
+}

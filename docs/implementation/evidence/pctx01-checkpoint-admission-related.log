@@ -1,0 +1,32 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.46s
+     Running tests/checkpoint_preflight.rs (target/debug/deps/checkpoint_preflight-84e094c99f03ba49)
+
+running 3 tests
+test checkpoint_producer_validation_precedes_writer_and_manifest ... ok
+test checkpoint_display_names_and_dot_glob_scopes_remain_supported ... ok
+test invalid_checkpoint_arguments_have_no_project_or_response_effects ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.84s
+
+     Running tests/handoff_preflight.rs (target/debug/deps/handoff_preflight-00ee29a516bfb75e)
+
+running 5 tests
+test library_invalid_name_and_original_expiry_refuse_before_input_or_artifacts ... ok
+test fifo_input_is_refused_without_blocking_or_creating_checkpoints ... ok
+test invalid_names_on_every_leaf_refuse_before_discovery_or_response_writes ... ok
+test oversize_and_invalid_utf8_inputs_preserve_every_index_checkpoint_and_file ... ok
+test explicit_regular_file_semantics_and_create_update_show_are_preserved ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.21s
+
+     Running tests/storage_deadline.rs (target/debug/deps/storage_deadline-8fad1ff023fe83b8)
+
+running 4 tests
+test parser_expiry_retains_previous_generation_instead_of_marking_source_skipped ... ok
+test expired_storage_requests_preserve_generation_and_checkpoint ... ok
+test sqlite_writer_contention_times_out_without_publishing_or_losing_checkpoint ... ok
+test writer_and_snapshot_waits_consume_supplied_budget_without_five_second_reset ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.15s
+
