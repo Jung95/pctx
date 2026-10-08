@@ -1,0 +1,14 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.53s
+     Running tests/runner.rs (target/debug/deps/runner-262d46ab6960599b)
+
+running 6 tests
+test check_plan_with_finite_budget_inspects_registered_auxiliary_workspace_without_launch ... ok
+test trusted_typed_check_is_real_evidence ... ok
+test check_alias_preserves_nested_timeout_processing_error ... ok
+test check_capture_partial_is_not_wrapper_success_in_either_route ... ok
+test observed_failed_check_is_distinct_from_processing_failure ... ok
+test source_mutation_during_check_is_stale ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 22 filtered out; finished in 2.42s
+

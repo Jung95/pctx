@@ -1,0 +1,47 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.32s
+     Running tests/runner.rs (target/debug/deps/runner-262d46ab6960599b)
+
+running 6 tests
+test check_plan_with_finite_budget_inspects_registered_auxiliary_workspace_without_launch ... ok
+test check_capture_partial_is_not_wrapper_success_in_either_route ... FAILED
+test observed_failed_check_is_distinct_from_processing_failure ... FAILED
+test trusted_typed_check_is_real_evidence ... ok
+test check_alias_preserves_nested_timeout_processing_error ... FAILED
+test source_mutation_during_check_is_stale ... ok
+
+failures:
+
+---- check_capture_partial_is_not_wrapper_success_in_either_route stdout ----
+
+thread 'check_capture_partial_is_not_wrapper_success_in_either_route' (8449227) panicked at tests/runner.rs:1081:9:
+assertion `left == right` failed: {"command":"runner","coverage":{"reasons":[],"status":"complete"},"data":{"check_id":"CHECK-6291e233-ab2e-4806-9698-2e30b8138c3a","evidence":{"check_id":"CHECK-6291e233-ab2e-4806-9698-2e30b8138c3a","event":{"control_revision":7,"event_seq":7},"result":"stale"},"execution":{"baseline_completeness":"partial","budget_bytes":6692,"capture_complete":false,"captured_bytes":2,"child_exit_code":0,"evidence_origin":"runner_observed","execution_id":"EXEC-3fc22348-c9df-46d8-b13c-1fbbe7d28015","exit_policy":"pctx","input_stage":"captured","normalized_bytes":0,"omitted_bytes":1,"output_id":"OUT-7d38dc4e-8c43-4b70-a217-0656134f1fae","parse_status":"unsupported","pctx_error":null,"protected_records":0,"query_ref":"pctx output show OUT-7d38dc4e-8c43-4b70-a217-0656134f1fae --view full","raw_available":true,"raw_semantics":"redacted_uncompressed","records":[],"records_included":0,"records_omitted":0,"redacted_bytes":0,"redaction_applied":true,"redaction_changed_content":false,"signal":null,"spawned":true,"task_completion":"not_evaluated","termination":"exited","test_result":"not_evaluated"},"host_permission":"separate_required","job_id":"JOB-94f35ee5-c05f-4200-b5b1-e5bf8a24ef04","memory_admission":{"available_bytes":3854860288,"measurement":"macos_vm_stat_free_plus_inactive_reclaimable_estimate","pressure":"reclaimable_estimate","sampled_at":1791480874,"schema_version":1,"source":"native"},"memory_unknown_override":false,"resource_state":"finished","resources_released":true},"errors":[],"generation_id":null,"project_id":"66125cff-c738-4fc8-8618-86a03ea5f381","schema_version":"1.0","status":"ok","truncation":{"reasons":[],"truncated":false},"validation":{"checked_at":"2026-10-08T17:34:34.994Z","mode":"matched","scope":[],"workspace_atomic":false},"warnings":[],"workspace_id":"WS-c09ef079-e410-4ebd-8e2f-0d0a2531ffd5"}
+  left: Some(0)
+ right: Some(3)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- observed_failed_check_is_distinct_from_processing_failure stdout ----
+
+thread 'observed_failed_check_is_distinct_from_processing_failure' (8449229) panicked at tests/runner.rs:1123:9:
+assertion `left == right` failed
+  left: String("stale")
+ right: "failed"
+
+---- check_alias_preserves_nested_timeout_processing_error stdout ----
+
+thread 'check_alias_preserves_nested_timeout_processing_error' (8449226) panicked at tests/runner.rs:1050:5:
+assertion `left == right` failed: {"command":"work","coverage":{"reasons":[],"status":"complete"},"data":{"check_id":"CHECK-4f66f257-4229-4fc2-a326-4e842074c480","evidence":{"check_id":"CHECK-4f66f257-4229-4fc2-a326-4e842074c480","event":{"control_revision":7,"event_seq":7},"result":"timed_out"},"execution":{"baseline_completeness":"complete","budget_bytes":6692,"capture_complete":true,"captured_bytes":0,"child_exit_code":null,"evidence_origin":"runner_observed","execution_id":"EXEC-a20a6763-b7cd-4521-942e-3f3bad0e97ed","exit_policy":"pctx","input_stage":"captured","normalized_bytes":0,"omitted_bytes":0,"output_id":"OUT-0cfdc232-11be-43e0-b66e-7a5460baa0df","parse_status":"unsupported","pctx_error":"TIMEOUT","protected_records":0,"query_ref":"pctx output show OUT-0cfdc232-11be-43e0-b66e-7a5460baa0df --view full","raw_available":true,"raw_semantics":"redacted_uncompressed","records":[],"records_included":0,"records_omitted":0,"redacted_bytes":0,"redaction_applied":true,"redaction_changed_content":false,"signal":15,"spawned":true,"task_completion":"not_evaluated","termination":"timed_out","test_result":"not_evaluated"},"host_permission":"separate_required","job_id":"JOB-6d6ff86b-2995-458e-b46d-5e31713d91af","memory_admission":{"available_bytes":3857399808,"measurement":"macos_vm_stat_free_plus_inactive_reclaimable_estimate","pressure":"reclaimable_estimate","sampled_at":1791480874,"schema_version":1,"source":"native"},"memory_unknown_override":false,"resource_state":"finished","resources_released":true},"errors":[],"generation_id":null,"project_id":"6fa29f3d-5377-40d9-8429-46e0e4adca60","schema_version":"1.0","status":"ok","truncation":{"reasons":[],"truncated":false},"validation":{"checked_at":"2026-10-08T17:34:35.090Z","mode":"matched","scope":[],"workspace_atomic":false},"warnings":[],"workspace_id":"WS-fcef00e3-202d-4d52-83dd-5cb1b5a81934"}
+  left: Some(0)
+ right: Some(7)
+
+
+failures:
+    check_alias_preserves_nested_timeout_processing_error
+    check_capture_partial_is_not_wrapper_success_in_either_route
+    observed_failed_check_is_distinct_from_processing_failure
+
+test result: FAILED. 3 passed; 3 failed; 0 ignored; 0 measured; 22 filtered out; finished in 2.41s
+
+error: test failed, to rerun pass `--test runner`
+error: 1 target failed:
+    `--test runner`

@@ -1,0 +1,24 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.83s
+     Running tests/runner.rs (target/debug/deps/runner-262d46ab6960599b)
+
+running 1 test
+test check_capture_partial_is_not_wrapper_success_in_either_route ... FAILED
+
+failures:
+
+---- check_capture_partial_is_not_wrapper_success_in_either_route stdout ----
+
+thread 'check_capture_partial_is_not_wrapper_success_in_either_route' (8456814) panicked at tests/runner.rs:1078:9:
+assertion `left == right` failed: {"command":"runner","coverage":{"reasons":[],"status":"complete"},"data":{"check_id":"CHECK-b8a8fb00-f2ae-4482-8ec1-c7778ce312a0","evidence":{"check_id":"CHECK-b8a8fb00-f2ae-4482-8ec1-c7778ce312a0","event":{"control_revision":7,"event_seq":7},"result":"unverified"},"execution":{"baseline_completeness":"partial","budget_bytes":6692,"capture_complete":false,"captured_bytes":2,"child_exit_code":0,"evidence_origin":"runner_observed","execution_id":"EXEC-bbcd2f7d-a85c-4650-9145-bc36252beea2","exit_policy":"pctx","input_stage":"captured","normalized_bytes":0,"omitted_bytes":1,"output_id":"OUT-73d3faac-4b29-43c5-985b-3c99819be536","parse_status":"unsupported","pctx_error":null,"protected_records":0,"query_ref":"pctx output show OUT-73d3faac-4b29-43c5-985b-3c99819be536 --view full","raw_available":true,"raw_semantics":"redacted_uncompressed","records":[],"records_included":0,"records_omitted":0,"redacted_bytes":0,"redaction_applied":true,"redaction_changed_content":false,"signal":null,"spawned":true,"task_completion":"not_evaluated","termination":"exited","test_result":"not_evaluated"},"host_permission":"separate_required","job_id":"JOB-2cffb747-9120-47e6-940d-25df62ab0a69","memory_admission":{"available_bytes":3792830464,"measurement":"macos_vm_stat_free_plus_inactive_reclaimable_estimate","pressure":"reclaimable_estimate","sampled_at":1791481322,"schema_version":1,"source":"native"},"memory_unknown_override":false,"resource_state":"finished","resources_released":true},"errors":[],"generation_id":null,"project_id":"5e1b2df2-7556-4bc6-8ca1-b5520aa46cb7","schema_version":"1.0","status":"ok","truncation":{"reasons":[],"truncated":false},"validation":{"checked_at":"2026-10-08T17:42:02.863Z","mode":"matched","scope":[],"workspace_atomic":false},"warnings":[],"workspace_id":"WS-a989514d-4066-4d3a-bf9f-0b75802c49b1"}
+  left: Some(0)
+ right: Some(3)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    check_capture_partial_is_not_wrapper_success_in_either_route
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 28 filtered out; finished in 1.06s
+
+error: test failed, to rerun pass `--test runner`

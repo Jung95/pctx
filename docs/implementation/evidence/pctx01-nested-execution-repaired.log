@@ -1,0 +1,13 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+error[E0599]: no variant named `Check` found for enum `Command`
+    --> src/main.rs:1077:24
+     |
+  47 | enum Command {
+     | ------------ variant `Check` not found here
+...
+1077 |             | Command::Check {
+     |                        ^^^^^ variant not found in `Command`
+
+For more information about this error, try `rustc --explain E0599`.
+error: could not compile `pctx` (bin "pctx") due to 1 previous error
+warning: build failed, waiting for other jobs to finish...

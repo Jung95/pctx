@@ -6,25 +6,21 @@
 
 ## Latest verified integration boundary
 
-PCTX01 remains the only active official task (`implementing`). Basece41af4;
-Outline common envelope now distinguishes complete-source all-unsupported6,
-supported empty0, visible mixed/parse-partial3, and incomplete strict refresh3.
-Metadata remains intact; text Find in unsupported language stays valid0/empty.
-Initial fixture self-indexed data override (backlog), then actualunsupported0/
-complete failed6 expectation. Independent review found all visible unsupported
-incorrectly overriding omitted supported sources; native oversizePython/Ruby
-reproduced6vs3. Source-incomplete precedence repairs it. Both final actual matrices
-include JSON/compact/Markdown. Related74 PASS, format/locked all-target Clippy PASS.
-Two final guard losses each0PASS1FAIL and exact source restoration. Initial full
-76840 terminal101: 482PASS3FAIL retained; final full43620 terminal101:
-482 PASS/4 original startup FAIL at unchanged original1s budgets.
-Independent scoped review found no remaining blocker after repair. Manual alwaysOk
-callback and registered PID-before-publication ordering source-audited only.
-All jobs terminal; no live heavy job. Manifest:
-evidence/pctx01-outline-coverage-verification.json. Native registered faults,
-remaining frontend/producer/phase/startup and native Linux/Windows still required.
-No next official task/Actions. Prior main push rejection unchanged, no retry;
-local commits unpushed pending explicit approval. Whole task/goal incomplete.
+PCTX01 only active (`implementing`), base f1e6134. Common main classifier now
+propagates nested CheckRun/Check Run/local HelperRequest processing errors and
+incomplete capture. Typed error7 and partial3 preserve child observation; valid
+failed checks retain processing0/failed evidence. Manual child policy unchanged.
+Original50ms registered timeout and killed-guardian assertions now reject wrapper
+success; no runner feature/deadline changed. Related49 PASS, added actual linked
+helper1 PASS. Initial3PASS3FAIL and compile error preserved; excluded metadata
+counter fixes source-mutation fixture only. Two controlled losses0PASS1FAIL each,
+exact source restore. Independent static review no scoped blocker; timeout
+attests spawn only, partial capture attests one invocation. Static gates PASS.
+Final native full17428 terminal101: 485 PASS/5 FAIL. Four original1s project_deadline failures and adapter version failure6-versusTIMEOUT7 are retained, without asserting one cause. All jobs terminal; PCTX01 incomplete.
+Manifest evidence/pctx01-nested-execution-verification.json. Existing startup
+and adapter failure causes remain unproven. Native callback faults, remaining
+frontend/phase/startup/native Linux/Windows gates stay open. No next official
+task or Actions. Prior main push rejected/pending explicit approval; no retry.
 
 ## Source, evidence and environment
 
@@ -72,21 +68,18 @@ Original ignored specification SHA256 8914faad57432f524aec0a06aa90c43c18c23f8c19
 
 ## Exact next action
 
-Within PCTX01, audit the remaining common envelope/error/exit matrix, especially
-nested registered execution processing errors and unavailable/partial results.
-Manual run_cli's native attestation is not fallible; registered callbacks are.
-Native registered failure injection remains unqualified, and no product fault
-hook or independent runner feature is authorized by this audit. Outline file
-coverage and incomplete strict-refresh priority are locally qualified; preserve
-source-level omission reasons and avoid declaring an incomplete universe wholly
-unsupported. Shared budget reduction remains boundary-injected qualification.
-Keep original startup budgets and every failure. Counterbalanced fresh/reused
-native executable/group factors remain the next causal startup investigation,
-recording identity, actual signal and expiry without warm-up retries, interpreter
-substitution, deadline increases or OS-policy changes. Required native Linux/
-Windows executions remain open. Finish all PCTX01 gates before another official
-task. Prior rejected main push remains pending explicit approval; no alternate
-mechanism or retry. All current jobs terminal.
+Stay on PCTX01. Read its completion audit and exact-source failure evidence.
+Investigate native startup causally with counterbalanced fresh/reused byte-identical
+executables and group/no-group factors, preserving actual identity/signals and
+original budgets. Include newly retained adapter failure: expected native nonzero
+SOURCE_UNAVAILABLE6, actual TIMEOUT7; no cause established. Do not use warm-up
+retries, interpreter substitution, relaxed deadlines or OS-policy changes.
+Continue the remaining common frontend/producer/phase matrix, including registered
+post-spawn callback failure qualification; no independent runner feature or product
+fault hook authorized. Required native Linux/Windows executions remain unverified.
+Finish all PCTX01 conditions before selecting another official task. Rejected main
+push remains pending explicit approval, without retry or alternate mechanism.
+All current jobs terminal; no live heavy job.
 
 ## Retained historical results and inactive backlog
 

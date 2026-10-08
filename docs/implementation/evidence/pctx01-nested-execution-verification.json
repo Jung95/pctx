@@ -1,0 +1,156 @@
+{
+  "task": "PCTX01",
+  "status": "implementing; incomplete; sole active official task",
+  "base_revision": "f1e613493dd37d18a93908ff1f851a580203041e",
+  "platform": "native macOS arm64",
+  "specification_sections": [
+    "14 common envelope/exit statuses",
+    "38 execution processing/capture versus child outcome"
+  ],
+  "source_sha256": {
+    "src/main.rs": "cfb300ccb007fd979456108c14751b979b9f4a05b271e6e689be9ea2c92d97eb",
+    "tests/runner.rs": "11767bca2b501c0e36c322508064f9962ee4af6c75cc79247b60bd6fbd137e5e",
+    "src/output.rs": "69e1b365abba2986ec1e04b1648c8dbff1fe1eddfa762816e85379f4c3be7940",
+    "src/runner.rs": "573691e7894f2af8651e93f66ddb1aa2a20d20e8b57bb051e262a86e3b84a47a",
+    "src/query_process.rs": "2faee00ffc82534c41942adae00e52f81a271072b47338f33cab7b67c43bc5b9",
+    "tests/adapter_deadline.rs": "31f6f52d2be8a073f6c5c1a2a4587a436fdc96a8939393e35e9c5e3007a32506",
+    "tests/project_deadline.rs": "8b9fbc97fbd5acaf612b2d75b94cf810faa2b61614b654495082462b1941a8dc"
+  },
+  "runs": [
+    {
+      "path": "pctx01-nested-execution-selected.log",
+      "sha256": "9450ed0a88394437f8649b559688d7e18daf8f698556386b81336141ea75958b",
+      "exit": 101,
+      "session": 91259,
+      "counts": {
+        "passed": 3,
+        "failed": 3
+      },
+      "qualification": "Initial check_ filter: wrapper0 falsely reports timeout/capture success; failed-report fixture counter changed fingerprint to stale. Retained."
+    },
+    {
+      "path": "pctx01-nested-execution-repaired.log",
+      "sha256": "7ea25839a67103aed4e8137aa19d9280e1a1d69749cab6ef00a3641516d61855",
+      "exit": 101,
+      "session": null,
+      "counts": {
+        "passed": 0,
+        "failed": 0
+      },
+      "qualification": "Invalid root Command::Check variant compile error; no tests executed."
+    },
+    {
+      "path": "pctx01-nested-execution-related-selected.log",
+      "sha256": "f32734107690717acff6f26029647f5a55c184d56129c9e06f1928ee943b7970",
+      "exit": 0,
+      "session": 8962,
+      "counts": {
+        "passed": 6,
+        "failed": 0
+      },
+      "qualification": "Correct flattened Work check route and counter excluded under .pctx; six selected tests pass."
+    },
+    {
+      "path": "pctx01-nested-execution-related.log",
+      "sha256": "7048482c1447eb1923bd80154c2d1dc162ee223e6e672b97c6b7fbb58baf7b80",
+      "exit": 0,
+      "session": 3521,
+      "counts": {
+        "passed": 49,
+        "failed": 0
+      },
+      "qualification": "Runner28 + manual Run11 + Output10; original50ms timeout and killed-guardian failure assertions preserved/strengthened."
+    },
+    {
+      "path": "pctx01-nested-execution-helper.log",
+      "sha256": "d2f83a9a040ce66e09e516e2d7e64f9f32d18a51d2623245676e9b1e414cde44",
+      "exit": 0,
+      "session": 70760,
+      "counts": {
+        "passed": 1,
+        "failed": 0
+      },
+      "qualification": "Actual linked-worktree local HelperRequest timeout50ms and invalidUTF8 capture; capture exactly one invocation. Timeout spawn attestation only."
+    },
+    {
+      "path": "pctx01-nested-execution-loss-gate.log",
+      "sha256": "f4b454a0ac9b06cb3828ae55d292bfc9ab7289d0ed57e7d1bceb421cdbfa87e2",
+      "exit": 101,
+      "session": 58309,
+      "counts": {
+        "passed": 0,
+        "failed": 1
+      },
+      "qualification": "Intentional common route gate loss; actual wrapper0 versus7; exact restoration."
+    },
+    {
+      "path": "pctx01-nested-execution-loss-nested.log",
+      "sha256": "5a6106a67208bbe4f9684775fbd3cf6458d0dfc7980964b080e3a7c7b8744e46",
+      "exit": 101,
+      "session": 58309,
+      "counts": {
+        "passed": 0,
+        "failed": 1
+      },
+      "qualification": "Intentional nested selector loss; actual wrapper0 versus3; exact restoration."
+    },
+    {
+      "path": "pctx01-nested-execution-static.log",
+      "sha256": "4bf35dabcac215574801be040471a7f78841024aa830027c2ffdd059bc166d31",
+      "exit": 0,
+      "session": 1125,
+      "counts": {
+        "passed": 0,
+        "failed": 0
+      },
+      "qualification": "cargo fmt --check and cargo clippy --locked --all-targets -- -D warnings."
+    },
+    {
+      "path": "pctx01-nested-execution-full.log",
+      "sha256": "257e358caeae4aeedfe79d1bf39cc15f9e9fd425092a6665ebeac7bf46cc5b0e",
+      "exit": 101,
+      "session": 17428,
+      "counts": {
+        "passed": 485,
+        "failed": 5
+      },
+      "qualification": "Final native macOS full required gate; no deadline changes or retry-promotion."
+    }
+  ],
+  "full_failed_tests": [
+    "version_absence_and_native_failure_are_distinct",
+    "query_program_resolution_uses_captured_command_path",
+    "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+    "simultaneous_streams_are_collected_and_overflow_never_infers_success",
+    "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget"
+  ],
+  "controlled_loss_results": {
+    "original_sha256": "cfb300ccb007fd979456108c14751b979b9f4a05b271e6e689be9ea2c92d97eb",
+    "results": [
+      {
+        "name": "gate",
+        "exit": 101,
+        "restored_sha256": "cfb300ccb007fd979456108c14751b979b9f4a05b271e6e689be9ea2c92d97eb"
+      },
+      {
+        "name": "nested",
+        "exit": 101,
+        "restored_sha256": "cfb300ccb007fd979456108c14751b979b9f4a05b271e6e689be9ea2c92d97eb"
+      }
+    ]
+  },
+  "review": {
+    "path": "pctx01-nested-execution-review.txt",
+    "sha256": "a38dd00b933f677b8a0ec969a1fa35339ffa716067df0626f0544f9d41f48474",
+    "result": "No scoped blocker; static independent review only"
+  },
+  "initial_source_qualification": "Initial failing logs preserve observations before the common gate/fixture exclusion repair; exact initial modified-source hashes were not recorded. Final-source hashes apply only repaired/final runs.",
+  "limitations": [
+    "Whole PCTX01 remains incomplete; no next official task.",
+    "Timeout attests spawned, not script body entry/count; partial capture proves actual child0 and exactly one invocation.",
+    "Native registered callback/post-spawn fault injection remains unqualified.",
+    "Native Linux/Windows, cloud actual execution and remaining frontend/phase/startup/platform gates remain open.",
+    "Final full retains four unchanged original1s project_deadline failures and adapter_deadline expected SOURCE_UNAVAILABLE6 but actual TIMEOUT7; exact cause unproven, not attributed to this gate.",
+    "Main push remains rejected/pending explicit approval; no retry/alternate mechanism or Actions."
+  ]
+}

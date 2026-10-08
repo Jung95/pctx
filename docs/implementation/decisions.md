@@ -477,3 +477,19 @@ oversized-Python plus unsupported-Ruby regression reproduced erroneous6 versus3.
 Source incomplete coverage now takes precedence: retain partial3, skipped-source
 reasons and per-file unsupported metadata. Final combined regression includes
 JSON/compact/Markdown, and controlled loss of this precedence fails again.
+
+## PCTX01 nested execution processing state
+
+Common CLI classification now reads nested execution for registered CheckRun,
+Check/Run and local HelperRequest. Processing errors retain typed failure codes;
+incomplete capture returns partial3. Valid observed failed reports remain
+processing success0 with failed evidence. Manual child exit policy is unchanged.
+Real linked-worktree helper and both check routes are covered; the original50ms
+registered timeout and killed-guardian assertions now require error7 instead of
+wrapper success. No runner feature, ledger or deadline changed.
+[Evidence](evidence/pctx01-nested-execution-verification.json) retains initial
+failures, corrected fixture scope, independent review and two controlled losses.
+Native callback-fault injection, remaining frontend/phase/startup gates and
+native Linux/Windows remain open. PCTX01 stays implementing; no next task.
+
+Related49 PASS, added helper1 PASS; two controlled losses each0PASS1FAIL/exact restoration. Final format/locked all-target Clippy PASS. Final native full17428 terminal101: 485 PASS/5 FAIL. Four original1s project_deadline failures and adapter version failure6-versusTIMEOUT7 are retained, without asserting one cause. All jobs terminal; PCTX01 incomplete.

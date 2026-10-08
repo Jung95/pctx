@@ -1067,13 +1067,29 @@ fn main() {
             (out, exit)
         }
     };
-    if matches!(&cli.command, Command::Run(_)) && response["status"] != "error" {
-        if let Some(error) = output::execution_error(&response["data"]) {
+    let executes = matches!(
+        &cli.command,
+        Command::Run(_)
+            | Command::Runner {
+                command: runner::RunnerCommand::CheckRun { .. }
+                    | runner::RunnerCommand::HelperRequest { .. },
+            }
+            | Command::Work(work::WorkCommand::Check {
+                command: work::CheckCommand::Run { .. },
+            })
+    );
+    if executes && response["status"] != "error" {
+        let execution = if response["data"]["execution"].is_object() {
+            &response["data"]["execution"]
+        } else {
+            &response["data"]
+        };
+        if let Some(error) = output::execution_error(execution) {
             exit = error.exit;
             response["status"] = json!("error");
             response["coverage"] = json!({"status":"partial","reasons":[error.code.clone()]});
             response["errors"] = json!([error]);
-        } else if response["data"]["capture_complete"] == false {
+        } else if execution["capture_complete"] == false {
             exit = 3;
             response["status"] = json!("partial");
             response["coverage"] = json!({"status":"partial","reasons":["capture_incomplete"]});

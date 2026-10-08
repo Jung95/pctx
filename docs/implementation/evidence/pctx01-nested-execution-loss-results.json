@@ -1,0 +1,15 @@
+{
+  "original_sha256": "cfb300ccb007fd979456108c14751b979b9f4a05b271e6e689be9ea2c92d97eb",
+  "results": [
+    {
+      "name": "gate",
+      "exit": 101,
+      "restored_sha256": "cfb300ccb007fd979456108c14751b979b9f4a05b271e6e689be9ea2c92d97eb"
+    },
+    {
+      "name": "nested",
+      "exit": 101,
+      "restored_sha256": "cfb300ccb007fd979456108c14751b979b9f4a05b271e6e689be9ea2c92d97eb"
+    }
+  ]
+}

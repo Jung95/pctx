@@ -311,7 +311,12 @@ fn parent_exit_does_not_release_living_child() {
 fn timeout_is_observed_without_success_evidence() {
     let f = Fixture::new("sleep 5\n", true, Some(50));
     f.trust();
-    let v = f.ok(&f.run_args());
+    let out = f.output(&f.run_args());
+    let v: Value = serde_json::from_slice(&out.stdout).unwrap();
+    assert_eq!(out.status.code(), Some(7), "{v}");
+    assert_eq!(v["status"], "error");
+    assert_eq!(v["errors"][0]["code"], "TIMEOUT");
+    assert_eq!(v["data"]["execution"]["spawned"], true);
     assert_ne!(v["data"]["execution"]["termination"], "exited");
     assert_ne!(v["data"]["evidence"]["result"], "passed");
 }
@@ -643,13 +648,10 @@ fn killed_guardian_causes_negative_child_observation() {
         libc::kill(guardian as i32, libc::SIGKILL);
     }
     let o = child.wait_with_output().unwrap();
-    assert!(
-        o.status.success(),
-        "{} {}",
-        String::from_utf8_lossy(&o.stdout),
-        String::from_utf8_lossy(&o.stderr)
-    );
+    assert_eq!(o.status.code(), Some(7), "{o:?}");
     let v: Value = serde_json::from_slice(&o.stdout).unwrap();
+    assert_eq!(v["status"], "error");
+    assert_eq!(v["errors"][0]["code"], "RESOURCE_OWNER_UNKNOWN");
     assert_eq!(
         v["data"]["execution"]["pctx_error"],
         "RESOURCE_OWNER_UNKNOWN"
@@ -1024,5 +1026,155 @@ fn finite_auxiliary_plan_refuses_fifo_metadata_without_waiting_or_launching() {
         assert!(!f.host.exists(), "Rejected plan acquired host resources");
         fs::remove_file(&path).unwrap();
         fs::write(&path, original).unwrap();
+    }
+}
+
+#[test]
+fn check_alias_preserves_nested_timeout_processing_error() {
+    let f = Fixture::new("sleep 5\n", false, Some(50));
+    f.trust();
+    let out = f.output(&[
+        "check",
+        "run",
+        "--task-id",
+        &f.task,
+        "--key",
+        "unit",
+        "--run",
+        &f.run,
+    ]);
+    let v: Value = serde_json::from_slice(&out.stdout).unwrap();
+    assert_eq!(out.status.code(), Some(7), "{v}");
+    assert_eq!(v["status"], "error");
+    assert_eq!(v["errors"][0]["code"], "TIMEOUT");
+    assert_eq!(v["data"]["execution"]["spawned"], true);
+    assert_eq!(v["data"]["execution"]["pctx_error"], "TIMEOUT");
+    assert_ne!(v["data"]["evidence"]["result"], "passed");
+}
+
+#[test]
+fn check_capture_partial_is_not_wrapper_success_in_either_route() {
+    let f = Fixture::new(
+        "printf x >> .pctx/fixture-invocations\nprintf '\\377\\n'\n",
+        false,
+        Some(5000),
+    );
+    f.trust();
+    for argv in [
+        f.run_args(),
+        vec![
+            "check",
+            "run",
+            "--task-id",
+            &f.task,
+            "--key",
+            "unit",
+            "--run",
+            &f.run,
+        ],
+    ] {
+        let out = f.output(&argv);
+        let v: Value = serde_json::from_slice(&out.stdout).unwrap();
+        assert_eq!(out.status.code(), Some(3), "{v}");
+        assert_eq!(v["status"], "partial");
+        assert_eq!(v["data"]["execution"]["spawned"], true);
+        assert_eq!(v["data"]["execution"]["child_exit_code"], 0);
+        assert_eq!(v["data"]["execution"]["capture_complete"], false);
+        assert!(v["data"]["execution"]["pctx_error"].is_null());
+        assert_ne!(v["data"]["evidence"]["result"], "passed");
+    }
+    assert_eq!(
+        fs::read(f.root.join(".pctx/fixture-invocations")).unwrap(),
+        b"xx"
+    );
+}
+
+#[test]
+fn observed_failed_check_is_distinct_from_processing_failure() {
+    let now = chrono::Utc::now().timestamp();
+    let report = json!({"schema_version":1,"check_key":"unit","producer":"isolated-fixture",
+        "source":"external_report","exit_code":1,"tests":1,"passed":0,"failed":1,"errors":0,
+        "skipped":0,"result":"failed","started_at":now,"finished_at":now});
+    let f = Fixture::new(
+        &format!("printf x >> .pctx/fixture-invocations\nprintf '%s\\n' '{report}'\nexit 1\n"),
+        false,
+        Some(5000),
+    );
+    f.trust();
+    for argv in [
+        f.run_args(),
+        vec![
+            "check",
+            "run",
+            "--task-id",
+            &f.task,
+            "--key",
+            "unit",
+            "--run",
+            &f.run,
+        ],
+    ] {
+        let out = f.output(&argv);
+        let v: Value = serde_json::from_slice(&out.stdout).unwrap();
+        assert_eq!(out.status.code(), Some(0), "{v}");
+        assert_eq!(v["status"], "ok");
+        assert_eq!(v["data"]["execution"]["child_exit_code"], 1);
+        assert!(v["data"]["execution"]["pctx_error"].is_null());
+        assert_eq!(v["data"]["evidence"]["result"], "failed");
+    }
+    assert_eq!(
+        fs::read(f.root.join(".pctx/fixture-invocations")).unwrap(),
+        b"xx"
+    );
+}
+
+#[test]
+fn local_helper_preserves_nested_timeout_and_partial_capture() {
+    for (script, timeout, expected_exit, expected_status) in [
+        ("sleep 5\n", 50, 7, "error"),
+        (
+            "printf x >> .pctx/fixture-invocations\nprintf '\\377\\n'\n",
+            5000,
+            3,
+            "partial",
+        ),
+    ] {
+        let f = Fixture::new(script, false, Some(timeout));
+        let target = linked_provider(&f);
+        let path = f.root.join(".pctx/runner.toml");
+        let profile = fs::read_to_string(&path).unwrap().replace(
+            "[checks.unit]\n",
+            &format!("[checks.unit]\nexecution_timeout_ms = {timeout}\n"),
+        );
+        fs::write(path, profile).unwrap();
+        f.trust();
+        let out = f.output(&[
+            "runner",
+            "helper-request",
+            "--task-id",
+            &f.task,
+            "--key",
+            "unit",
+            "--run",
+            &f.run,
+        ]);
+        let v: Value = serde_json::from_slice(&out.stdout).unwrap();
+        assert_eq!(out.status.code(), Some(expected_exit), "{v}");
+        assert_eq!(v["status"], expected_status, "{v}");
+        assert_eq!(v["data"]["execution"]["spawned"], true);
+        assert_eq!(v["data"]["helper"]["started"], true);
+        assert!(!f.host.join("slots/aux-agent.json").exists());
+        if expected_exit == 7 {
+            assert_eq!(v["errors"][0]["code"], "TIMEOUT");
+            assert_eq!(v["data"]["execution"]["pctx_error"], "TIMEOUT");
+        } else {
+            assert_eq!(v["data"]["execution"]["child_exit_code"], 0);
+            assert_eq!(v["data"]["execution"]["capture_complete"], false);
+            assert!(v["data"]["execution"]["pctx_error"].is_null());
+            assert_eq!(
+                fs::read(target.join(".pctx/fixture-invocations")).unwrap(),
+                b"x"
+            );
+        }
     }
 }

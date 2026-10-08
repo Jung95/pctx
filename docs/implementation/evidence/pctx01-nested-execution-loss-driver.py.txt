@@ -1,0 +1,24 @@
+import os, subprocess, hashlib, json
+from pathlib import Path
+root = Path('/Users/dev/PCTX')
+source = root / 'src/main.rs'
+original = source.read_bytes()
+env = dict(os.environ, RUSTUP_HOME=str(root/'.toolchain/rustup'), CARGO_HOME=str(root/'.toolchain/cargo'), SDKROOT='/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk', PATH=str(root/'.toolchain/cargo/bin')+':/Library/Developer/CommandLineTools/usr/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin')
+results=[]
+try:
+    for name, before, after, test in [
+        ('gate', 'if executes && response["status"] != "error" {', 'if executes && matches!(&cli.command, Command::Run(_)) && response["status"] != "error" {', 'check_alias_preserves_nested_timeout_processing_error'),
+        ('nested', '&response["data"]["execution"]', '&response["data"]', 'check_capture_partial_is_not_wrapper_success_in_either_route'),
+    ]:
+        text=original.decode()
+        assert text.count(before)==1, (name, text.count(before))
+        source.write_text(text.replace(before,after))
+        log=root/f'docs/implementation/evidence/pctx01-nested-execution-loss-{name}.log'
+        with log.open('wb') as out:
+            r=subprocess.run(['cargo','test','--locked','--test','runner',test,'--','--exact'],cwd=root,env=env,stdout=out,stderr=subprocess.STDOUT)
+        source.write_bytes(original)
+        results.append(dict(name=name,exit=r.returncode,restored_sha256=hashlib.sha256(source.read_bytes()).hexdigest()))
+        assert r.returncode==101, results[-1]
+finally:
+    source.write_bytes(original)
+    (root/'docs/implementation/evidence/pctx01-nested-execution-loss-results.json').write_text(json.dumps(dict(original_sha256=hashlib.sha256(original).hexdigest(),results=results),indent=2)+'\n')

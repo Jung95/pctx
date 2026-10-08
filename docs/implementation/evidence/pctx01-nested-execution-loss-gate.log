@@ -1,0 +1,24 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.79s
+     Running tests/runner.rs (target/debug/deps/runner-262d46ab6960599b)
+
+running 1 test
+test check_alias_preserves_nested_timeout_processing_error ... FAILED
+
+failures:
+
+---- check_alias_preserves_nested_timeout_processing_error stdout ----
+
+thread 'check_alias_preserves_nested_timeout_processing_error' (8456601) panicked at tests/runner.rs:1047:5:
+assertion `left == right` failed: {"command":"work","coverage":{"reasons":[],"status":"complete"},"data":{"check_id":"CHECK-45649a40-fe20-4de1-bd96-57e513b1753a","evidence":{"check_id":"CHECK-45649a40-fe20-4de1-bd96-57e513b1753a","event":{"control_revision":7,"event_seq":7},"result":"timed_out"},"execution":{"baseline_completeness":"complete","budget_bytes":6692,"capture_complete":true,"captured_bytes":0,"child_exit_code":null,"evidence_origin":"runner_observed","execution_id":"EXEC-09cc2a4d-a01d-4c63-ad57-9b7284dcef89","exit_policy":"pctx","input_stage":"captured","normalized_bytes":0,"omitted_bytes":0,"output_id":"OUT-b0587047-5e1e-47c6-9927-c04bad96c9c3","parse_status":"unsupported","pctx_error":"TIMEOUT","protected_records":0,"query_ref":"pctx output show OUT-b0587047-5e1e-47c6-9927-c04bad96c9c3 --view full","raw_available":true,"raw_semantics":"redacted_uncompressed","records":[],"records_included":0,"records_omitted":0,"redacted_bytes":0,"redaction_applied":true,"redaction_changed_content":false,"signal":15,"spawned":true,"task_completion":"not_evaluated","termination":"timed_out","test_result":"not_evaluated"},"host_permission":"separate_required","job_id":"JOB-7b1a3006-8f3f-42d3-8aa5-f615764c999e","memory_admission":{"available_bytes":3764207616,"measurement":"macos_vm_stat_free_plus_inactive_reclaimable_estimate","pressure":"reclaimable_estimate","sampled_at":1791481320,"schema_version":1,"source":"native"},"memory_unknown_override":false,"resource_state":"finished","resources_released":true},"errors":[],"generation_id":null,"project_id":"35ed56da-a02a-4ea6-8211-4ca21b34de43","schema_version":"1.0","status":"ok","truncation":{"reasons":[],"truncated":false},"validation":{"checked_at":"2026-10-08T17:42:00.931Z","mode":"matched","scope":[],"workspace_atomic":false},"warnings":[],"workspace_id":"WS-2496ab0d-8819-4dbc-b1ba-6389eaef11e2"}
+  left: Some(0)
+ right: Some(7)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    check_alias_preserves_nested_timeout_processing_error
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 28 filtered out; finished in 1.36s
+
+error: test failed, to rerun pass `--test runner`

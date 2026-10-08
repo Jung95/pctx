@@ -1,0 +1,3 @@
+PCTX01 independent read-only review — /root/requirements
+No blocker found in the classification delta. Processing errors precede incomplete capture; already-classified outer errors retain typed exits. Registered valid failed reports preserve processing success0/failed evidence; child exit policy remains confined to manual Run. Both check routes have timeout/capture/failed-evidence coverage and invocation counts.
+Final added linked-worktree local HelperRequest fixture: native timeout7/error and incomplete capture3/partial preserve spawned/helper started and child0 for partial. Partial capture proves one invocation. Timeout proves spawning, not script body entry/invocation count. Static review only. No Windows/cloud/native callback-fault/whole-task qualification.
