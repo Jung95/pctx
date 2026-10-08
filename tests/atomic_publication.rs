@@ -57,9 +57,11 @@ fn replacement_keeps_old_open_reader_and_publishes_complete_new_record() {
 
 #[cfg(windows)]
 #[test]
-fn windows_posix_replacement_preserves_non_delete_shared_readers_and_unicode_names() {
+fn windows_posix_replacement_preserves_delete_shared_readers_and_unicode_names() {
     use std::{io::Read, os::windows::fs::OpenOptionsExt};
-    use windows_sys::Win32::Storage::FileSystem::{FILE_SHARE_READ, FILE_SHARE_WRITE};
+    use windows_sys::Win32::Storage::FileSystem::{
+        FILE_SHARE_DELETE, FILE_SHARE_READ, FILE_SHARE_WRITE,
+    };
     let dir = tempfile::tempdir().unwrap();
     let path = dir.path().join("state-한글-🚀.json");
     let revisions = [
@@ -72,7 +74,7 @@ fn windows_posix_replacement_preserves_non_delete_shared_readers_and_unicode_nam
         atomic_write(&path, revision, !readers.is_empty()).unwrap();
         let reader = std::fs::OpenOptions::new()
             .read(true)
-            .share_mode(FILE_SHARE_READ | FILE_SHARE_WRITE)
+            .share_mode(FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE)
             .open(&path)
             .unwrap();
         readers.push(reader);
@@ -122,4 +124,40 @@ fn windows_create_only_handle_relative_publication_in_nested_unicode_directory()
     assert_eq!(conflict.code, "REVISION_CONFLICT");
     assert_eq!(std::fs::read(&path).unwrap(), bytes);
     assert_eq!(std::fs::read_dir(&directory).unwrap().count(), 1);
+}
+
+#[cfg(windows)]
+#[test]
+fn windows_non_delete_shared_reader_denies_replacement_and_preserves_complete_original() {
+    use std::{io::Read, os::windows::fs::OpenOptionsExt};
+    use windows_sys::Win32::Storage::FileSystem::{FILE_SHARE_READ, FILE_SHARE_WRITE};
+    // An external handle may opt out of rename/delete. PCTX must preserve this OS
+    // constraint rather than removing the target or reporting a successful write.
+    // https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-createfilew
+    let dir = tempfile::tempdir().unwrap();
+    let path = dir.path().join("external-reader-한글.json");
+    let old = br#"{"revision":1}"#;
+    let new = br#"{"revision":2}"#;
+    atomic_write(&path, old, false).unwrap();
+    let mut reader = std::fs::OpenOptions::new()
+        .read(true)
+        .share_mode(FILE_SHARE_READ | FILE_SHARE_WRITE)
+        .open(&path)
+        .unwrap();
+    let failure = atomic_write(&path, new, true).unwrap_err();
+    assert_eq!(failure.code, "IO_ERROR");
+    assert_eq!(failure.exit, 7);
+    assert!(failure.message.contains("ntstatus=0xc0000043"));
+    assert!(failure.message.contains("win32=32"));
+    let mut retained = Vec::new();
+    reader.read_to_end(&mut retained).unwrap();
+    assert_eq!(retained, old);
+    assert_eq!(std::fs::read(&path).unwrap(), old);
+    assert_eq!(std::fs::read_dir(dir.path()).unwrap().count(), 1);
+    drop(reader);
+    // A new explicit caller operation after the incompatible handle closes.
+    // There is no hidden retry, deletion or change to the denied operation.
+    atomic_write(&path, new, true).unwrap();
+    assert_eq!(std::fs::read(&path).unwrap(), new);
+    assert_eq!(std::fs::read_dir(dir.path()).unwrap().count(), 1);
 }
