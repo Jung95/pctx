@@ -6,7 +6,7 @@
 
 ## Source, evidence and environment
 
-Base79eb579b2dbc20cadafe7b84d41954873d765d42; Work/quota runtime commit is bound in evidence/pctx01-work-quota-verification.json after integration. Native full24156 terminal101:382 PASS/4 original startup FAIL across46 suites. CLIquerydeadline7/directWorkQuota3/runner24/mainunit2 PASS; format/locked all-target Clippy PASS; scoped independent review no code blocker. No live heavy job or CI. Confirm Git/process state on resume.
+Base79eb579b2dbc20cadafe7b84d41954873d765d42; runtime2d78bc81685c2d88e179428ba5478fc629422ab8. Native full24156 terminal101:382 PASS/4 original startup FAIL across46 suites. CLIquerydeadline7/directWorkQuota3/runner24/mainunit2 PASS; format/locked all-target Clippy PASS; scoped independent review no code blocker. No live heavy job or CI. Confirm Git/process state on resume.
 
 Finite Work read execute (task list/show/complete --dry-run, agent list/show, check list/show/plan) and quota report/plan/reconcile retain one original deadline; library read execute supplies default10s only when absent. Shared SQL configure/call/error helpers bound waits/progress/rows; read parsing/aggregation/final assembly checks. Runner planned/profile checks and auxiliary Project::open_with_deadline retain original budget; writes/child/watch remain separate. CLI opening contention and Work immediate transaction contention are distinct passing proofs. Quota exclusive fixture mainly opens DB. Initial Git-delay auxiliary fixture premise was invalid and failed; retained log, positive plan replacement is NOT auxiliary phase-expiry qualification. Large-row/CPU-SQL and auxiliary phase-expiry gates remain open. Prior help/color/parser and strict pre-effect snapshots remain qualified locally.
 
