@@ -14,6 +14,10 @@ mkdir "$stage/$name"
 cp target/release/pctx LICENSE README.md "$stage/$name/"
 cp dist/THIRD_PARTY_NOTICES.txt "$stage/$name/"
 cp dist/sbom.json "$stage/$name/"
+# Include the public guides referenced by README; preserve the private input locally.
+mkdir "$stage/$name/docs"
+cp docs/PCTX-implementation-spec-v0.6-en.md docs/translation-coverage.md docs/evaluation.md "$stage/$name/docs/"
+cp -R docs/cli docs/implementation "$stage/$name/docs/"
 "$stage/$name/pctx" --version
 tar -czf "dist/$name.tar.gz" -C "$stage" "$name"
 python3 - "$name" <<'PY'

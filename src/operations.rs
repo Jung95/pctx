@@ -723,14 +723,60 @@ pub fn execute(p: &Project, command: &OperationCommand) -> Result<Value> {
             if *limit == 0 || *limit > 1000 {
                 return Err(invalid("Queue limit must be 1..1000"));
             }
-            let mut s=tx.prepare("SELECT id FROM ops_decisions WHERE state IN ('pending_gateway','waiting_owner') ORDER BY created,id LIMIT ?1")?;
-            let ids = s
-                .query_map([*limit as i64], |r| r.get::<_, String>(0))?
-                .collect::<std::result::Result<Vec<_>, _>>()?;
-            let items = ids
-                .iter()
-                .map(|id| decision_view(&tx, id))
-                .collect::<Result<Vec<_>>>()?;
+            // Suppression is a delivery rule: it precedes ranking/limit and detail projection.
+            let has_sessions: bool = tx.query_row(
+                "SELECT EXISTS(SELECT 1 FROM sqlite_master WHERE type='table' AND name='pctx_sessions')",
+                [], |row| row.get(0),
+            )?;
+            let mut statement = tx.prepare(
+                "SELECT id,action FROM ops_decisions WHERE state IN ('pending_gateway','waiting_owner') ORDER BY created,id",
+            )?;
+            let candidates = statement.query_map([], |row| {
+                Ok((row.get::<_, String>(0)?, row.get::<_, String>(1)?))
+            })?;
+            let mut items = Vec::new();
+            for candidate in candidates {
+                let (id, payload) = candidate?;
+                let action: Action = serde_json::from_str(&payload)?;
+                let mut roles = vec!["*".to_string()];
+                if let Some(role) = &action.role {
+                    roles.push(role.clone());
+                }
+                // Omitted role metadata must not bypass the actor's known session role.
+                if has_sessions {
+                    let mut roles_query = tx.prepare(
+                        "SELECT DISTINCT role FROM pctx_sessions WHERE role IS NOT NULL AND agent IN (SELECT id FROM agents WHERE id=?1 OR name=?1)",
+                    )?;
+                    for role in
+                        roles_query.query_map([&action.actor], |row| row.get::<_, String>(0))?
+                    {
+                        roles.push(role?);
+                    }
+                }
+                roles.sort();
+                roles.dedup();
+                let mut hidden = false;
+                for role in &roles {
+                    if paused(&tx, role)? {
+                        hidden = true;
+                        break;
+                    }
+                    if let Some(topic) = &action.topic
+                        && (silenced(&tx, role, &action.actor, topic)?
+                            || silenced(&tx, role, "owner", topic)?)
+                    {
+                        hidden = true;
+                        break;
+                    }
+                }
+                if hidden {
+                    continue;
+                }
+                items.push(decision_view(&tx, &id)?);
+                if items.len() == *limit {
+                    break;
+                }
+            }
             json!({"decisions":items,"owner_prompt_sent":false})
         }
         OperationCommand::Message { command } => {
@@ -744,73 +790,16 @@ pub fn execute(p: &Project, command: &OperationCommand) -> Result<Value> {
                 } => {
                     let sender = authenticate(p, &tx)?;
                     let m: Message = input(from_file)?;
-                    if m.schema_version != 1
-                        || m.body.len() > 2048
-                        || m.body.lines().count() > 5
-                        || m.body.trim().is_empty()
-                        || m.priority > 3
-                        || ![
-                            "assignment",
-                            "progress",
-                            "question",
-                            "blocker",
-                            "decision",
-                            "result",
-                            "permission_incident",
-                            "notice",
-                        ]
-                        .contains(&m.kind.as_str())
-                    {
-                        return Err(invalid("Message schema/type/body/priority invalid"));
-                    }
-                    label(&m.topic)?;
-                    label(&m.idempotency_key)?;
-                    let recipients = [
-                        ("role", to_role),
-                        ("agent", to_agent),
-                        ("session", to_session),
-                    ]
-                    .into_iter()
-                    .filter_map(|(kind, value)| value.as_ref().map(|v| (kind, v)))
-                    .collect::<Vec<_>>();
-                    if recipients.len() != 1 {
-                        return Err(invalid("Exactly one bounded recipient is required"));
-                    }
-                    let (kind, recipient) = recipients[0];
-                    label(recipient)?;
-                    let recipient = match kind {
-                        "agent" => tx
-                            .query_row(
-                                "SELECT id FROM agents WHERE id=?1 OR name=?1",
-                                [recipient],
-                                |r| r.get::<_, String>(0),
-                            )
-                            .optional()?
-                            .ok_or_else(|| {
-                                Error::new("AGENT_NOT_FOUND", "Recipient agent not registered", 6)
-                            })?,
-                        "session" => {
-                            session(&tx, p, recipient)?;
-                            recipient.clone()
-                        }
-                        _ => recipient.clone(),
-                    };
-                    let task = task_id(&tx, task.as_deref())?;
-                    let payload = serde_json::to_string(&m)?;
-                    let request = hash(serde_json::to_vec(
-                        &json!({"payload":m,"recipient_kind":kind,"recipient":recipient,"task":task}),
-                    )?);
-                    if let Some((h,response))=tx.query_row("SELECT request_hash,response FROM ops_receipts WHERE actor=?1 AND key=?2",params![sender,m.idempotency_key],|r|Ok((r.get::<_,String>(0)?,r.get::<_,String>(1)?))).optional()?{if h!=request{return Err(Error::new("IDEMPOTENCY_CONFLICT","Message key already used with different payload",9));}serde_json::from_str(&response)?}else{
-type SavedMessage = (i64,String,String,String,Option<String>,String,String);
-let saved:Option<SavedMessage>=tx.query_row("SELECT seq,id,recipient_kind,recipient,task,payload,state FROM ops_messages WHERE sender=?1 AND json_extract(payload,'$.idempotency_key')=?2 ORDER BY seq LIMIT 1",params![sender,m.idempotency_key],|r|Ok((r.get(0)?,r.get(1)?,r.get(2)?,r.get(3)?,r.get(4)?,r.get(5)?,r.get(6)?))).optional()?;
-let response=if let Some((seq,message,old_kind,old_recipient,old_task,old_payload,state))=saved{
- let old_message:Message=serde_json::from_str(&old_payload)?;let previous=hash(serde_json::to_vec(&json!({"payload":old_message,"recipient_kind":old_kind,"recipient":old_recipient,"task":old_task}))?);
- if previous!=request{return Err(Error::new("IDEMPOTENCY_CONFLICT","Original queued message key has different payload",9));}
- json!({"message_id":message,"message_seq":seq,"delivery_state":state,"external_transport":"not_attempted","model_woken":false})
-}else{
- if let (Some(task),Some(revision))=(&task,m.source_revision){let current:i64=tx.query_row("SELECT revision FROM tasks WHERE id=?1",[task],|r|r.get(0))?;if current!=revision{return Err(Error::new("REVISION_CONFLICT","Message source task revision changed",9));}}
- let message=id("MSG");tx.execute("INSERT INTO ops_messages(id,sender,recipient_kind,recipient,task,payload,state,created) VALUES(?1,?2,?3,?4,?5,?6,'queued',?7)",params![message,sender,kind,recipient,task,payload,now()])?;let seq=tx.last_insert_rowid();event(&tx,&message,"message_queued",&json!({"recipient_kind":kind,"topic_details_omitted":true}))?;json!({"message_id":message,"message_seq":seq,"delivery_state":"queued","external_transport":"not_attempted","model_woken":false})};
- tx.execute("INSERT INTO ops_receipts VALUES(?1,?2,?3,?4)",params![sender,m.idempotency_key,request,response.to_string()])?;response}
+                    enqueue_message_db(
+                        p,
+                        &tx,
+                        &sender,
+                        &m,
+                        to_role,
+                        to_agent,
+                        to_session,
+                        task.as_deref(),
+                    )?
                 }
                 MessageCommand::Ack {
                     id: message,
@@ -969,4 +958,175 @@ let response=if let Some((seq,message,old_kind,old_recipient,old_task,old_payloa
     };
     tx.commit()?;
     Ok(value)
+}
+
+// Called before opening the schedule claim/finalization transaction.
+pub(crate) fn prepare_scheduled_mailbox(p: &Project) -> Result<()> {
+    connect(p)?;
+    Ok(())
+}
+
+pub(crate) fn enqueue_scheduled_db(
+    p: &Project,
+    db: &Connection,
+    recipient_role: &str,
+    message: &Message,
+) -> Result<Value> {
+    owner()?;
+    let mut payload = serde_json::to_value(message)?;
+    sanitize(&mut payload);
+    let message: Message = serde_json::from_value(payload)?;
+    enqueue_message_db(
+        p,
+        db,
+        "owner",
+        &message,
+        &Some(recipient_role.into()),
+        &None,
+        &None,
+        None,
+    )
+}
+
+// Both explicit sends and schedule delivery use one bounded, idempotent mailbox contract.
+#[allow(clippy::too_many_arguments)]
+fn enqueue_message_db(
+    p: &Project,
+    db: &Connection,
+    sender: &str,
+    m: &Message,
+    to_role: &Option<String>,
+    to_agent: &Option<String>,
+    to_session: &Option<String>,
+    task: Option<&str>,
+) -> Result<Value> {
+    Ok({
+        if m.schema_version != 1
+            || m.body.len() > 2048
+            || m.body.lines().count() > 5
+            || m.body.trim().is_empty()
+            || m.priority > 3
+            || ![
+                "assignment",
+                "progress",
+                "question",
+                "blocker",
+                "decision",
+                "result",
+                "permission_incident",
+                "notice",
+            ]
+            .contains(&m.kind.as_str())
+        {
+            return Err(invalid("Message schema/type/body/priority invalid"));
+        }
+        label(&m.topic)?;
+        label(&m.idempotency_key)?;
+        let recipients = [
+            ("role", to_role),
+            ("agent", to_agent),
+            ("session", to_session),
+        ]
+        .into_iter()
+        .filter_map(|(kind, value)| value.as_ref().map(|v| (kind, v)))
+        .collect::<Vec<_>>();
+        if recipients.len() != 1 {
+            return Err(invalid("Exactly one bounded recipient is required"));
+        }
+        let (kind, recipient) = recipients[0];
+        label(recipient)?;
+        let recipient = match kind {
+            "agent" => {
+                db.query_row(
+                    "SELECT id FROM agents WHERE id=?1 OR name=?1",
+                    [recipient],
+                    |r| r.get::<_, String>(0),
+                )
+                .optional()?
+                .ok_or_else(|| Error::new("AGENT_NOT_FOUND", "Recipient agent not registered", 6))?
+            }
+            "session" => {
+                session(db, p, recipient)?;
+                recipient.clone()
+            }
+            _ => recipient.clone(),
+        };
+        let task = task_id(db, task)?;
+        let payload = serde_json::to_string(&m)?;
+        let request = hash(serde_json::to_vec(
+            &json!({"payload":m,"recipient_kind":kind,"recipient":recipient,"task":task}),
+        )?);
+        if let Some((h, response)) = db
+            .query_row(
+                "SELECT request_hash,response FROM ops_receipts WHERE actor=?1 AND key=?2",
+                params![sender, m.idempotency_key],
+                |r| Ok((r.get::<_, String>(0)?, r.get::<_, String>(1)?)),
+            )
+            .optional()?
+        {
+            if h != request {
+                return Err(Error::new(
+                    "IDEMPOTENCY_CONFLICT",
+                    "Message key already used with different payload",
+                    9,
+                ));
+            }
+            serde_json::from_str(&response)?
+        } else {
+            type SavedMessage = (i64, String, String, String, Option<String>, String, String);
+            let saved:Option<SavedMessage>=db.query_row("SELECT seq,id,recipient_kind,recipient,task,payload,state FROM ops_messages WHERE sender=?1 AND json_extract(payload,'$.idempotency_key')=?2 ORDER BY seq LIMIT 1",params![sender,m.idempotency_key],|r|Ok((r.get(0)?,r.get(1)?,r.get(2)?,r.get(3)?,r.get(4)?,r.get(5)?,r.get(6)?))).optional()?;
+            let response = if let Some((
+                seq,
+                message,
+                old_kind,
+                old_recipient,
+                old_task,
+                old_payload,
+                state,
+            )) = saved
+            {
+                let old_message: Message = serde_json::from_str(&old_payload)?;
+                let previous = hash(serde_json::to_vec(
+                    &json!({"payload":old_message,"recipient_kind":old_kind,"recipient":old_recipient,"task":old_task}),
+                )?);
+                if previous != request {
+                    return Err(Error::new(
+                        "IDEMPOTENCY_CONFLICT",
+                        "Original queued message key has different payload",
+                        9,
+                    ));
+                }
+                json!({"message_id":message,"message_seq":seq,"delivery_state":state,"external_transport":"not_attempted","model_woken":false})
+            } else {
+                if let (Some(task), Some(revision)) = (&task, m.source_revision) {
+                    let current: i64 =
+                        db.query_row("SELECT revision FROM tasks WHERE id=?1", [task], |r| {
+                            r.get(0)
+                        })?;
+                    if current != revision {
+                        return Err(Error::new(
+                            "REVISION_CONFLICT",
+                            "Message source task revision changed",
+                            9,
+                        ));
+                    }
+                }
+                let message = id("MSG");
+                db.execute("INSERT INTO ops_messages(id,sender,recipient_kind,recipient,task,payload,state,created) VALUES(?1,?2,?3,?4,?5,?6,'queued',?7)",params![message,sender,kind,recipient,task,payload,now()])?;
+                let seq = db.last_insert_rowid();
+                event(
+                    db,
+                    &message,
+                    "message_queued",
+                    &json!({"recipient_kind":kind,"topic_details_omitted":true}),
+                )?;
+                json!({"message_id":message,"message_seq":seq,"delivery_state":"queued","external_transport":"not_attempted","model_woken":false})
+            };
+            db.execute(
+                "INSERT INTO ops_receipts VALUES(?1,?2,?3,?4)",
+                params![sender, m.idempotency_key, request, response.to_string()],
+            )?;
+            response
+        }
+    })
 }

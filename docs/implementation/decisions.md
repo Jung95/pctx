@@ -54,3 +54,9 @@ The owner supplied the normative specification in Korean and requested English p
 ## D019 — Atomic derived-index rebuild and recovery evidence
 
 Rebuild creates an independent index, verifies source hashes and database integrity, preserves readable checkpoints, consolidates WAL under the shared publication lock, and atomically replaces the active file. The previous file remains as a quarantine hard link. A corrupt database cannot truthfully recreate historical checkpoints from current source; its original bytes and sidecars are retained and a recovery warning is returned. A newer schema fails closed. Reader snapshots and checkpoint operations participate in the same lock. An independent review rejected a preliminary two-rename publication window; the corrected implementation uses one replacement. Real process-kill and Windows replacement coverage remain unverified.
+
+## D020 — Static inventory claims and portable schedule bindings
+
+Explicit profile schema 1 records current file hashes and observed static selectors. A project file claiming owner confirmation proves only the observed claim/hash; it never grants local owner or operation authority. Document source_refs use exact section, rendered template, source/document hash, and deterministic coordination-scoped proposal IDs; proposals require later authorized task/decision integration. Dynamic configuration is not executed for discovery.
+
+Schedule schema 2 adds local execution bindings, attempt history and reviewed installation metadata. Portable backups strip bindings and private installation paths/environment. Restores invalidate bindings, retain finished attempt/results and durable pauses, mark live attempts interrupted_unknown and installation state unknown_restored. Restore never registers an OS bridge or revives execution permission. Migration and restore regressions must pass before verification status is promoted.

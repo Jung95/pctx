@@ -648,3 +648,98 @@ fn restore_preserves_session_history_without_ack_or_epoch_reuse() {
         "LEASE_REVOKED"
     );
 }
+
+#[test]
+fn schedule_v2_backup_strips_local_binding_and_restore_revokes_running_authority() {
+    let (_dir, p) = setup();
+    work::board(&p).unwrap();
+    pctx::schedule::execute(
+        &p,
+        &pctx::schedule::ScheduleCommand::List { namespace: None },
+    )
+    .unwrap();
+    let db = p.connect(true).unwrap();
+    db.execute_batch("INSERT INTO schedule_bindings VALUES('owner','digest',1,'ws','policy','fingerprint','private-environment-marker',1);
+INSERT INTO schedule_runs VALUES('owner','digest',1,'occurrence',1,'running',NULL,NULL,'{}',NULL,NULL,1,NULL);
+INSERT INTO schedule_runs VALUES('owner','digest',1,'older',1,'succeeded','output','result-hash','{\"count\":1}','message',NULL,1,2);
+INSERT INTO schedule_installations VALUES('owner','digest','ws','launchd','plan','manifest','registered','{\"absolute_path\":\"/private/installation-marker\",\"environment\":\"private-environment-marker\"}',1);
+INSERT INTO schedule_occurrences VALUES('owner','digest',1,'occurrence',1,'running','{}',1);") .unwrap();
+    drop(db);
+    let archive = p.data_dir.join("schedule-backup.json");
+    work::execute(
+        &p,
+        &WorkCommand::Control {
+            command: work::ControlCommand::Backup {
+                output: archive.clone(),
+            },
+        },
+    )
+    .unwrap();
+    let bytes: Value = serde_json::from_slice(&std::fs::read(&archive).unwrap()).unwrap();
+    let database: Vec<u8> = serde_json::from_value(bytes["database"].clone()).unwrap();
+    let content = String::from_utf8_lossy(&database);
+    assert!(!content.contains("private-environment-marker"));
+    assert!(!content.contains("installation-marker"));
+    // Export scrubbing must not mutate the running local installation.
+    let source = p.connect(true).unwrap();
+    assert_eq!(
+        source
+            .query_row("SELECT count(*) FROM schedule_bindings", [], |r| r
+                .get::<_, i64>(0))
+            .unwrap(),
+        1
+    );
+    drop(source);
+    let restored = work::execute(
+        &p,
+        &WorkCommand::Control {
+            command: work::ControlCommand::Restore { input: archive },
+        },
+    )
+    .unwrap();
+    let mut destination = p.clone();
+    destination.coordination_id = restored["coordination_id"].as_str().unwrap().into();
+    destination.control_dir = p
+        .data_dir
+        .join("controls")
+        .join(&destination.coordination_id);
+    let db = destination.connect(true).unwrap();
+    assert_eq!(
+        db.query_row("SELECT count(*) FROM schedule_bindings", [], |r| r
+            .get::<_, i64>(0))
+            .unwrap(),
+        0
+    );
+    assert_eq!(
+        db.query_row(
+            "SELECT state FROM schedule_runs WHERE occurrence='occurrence'",
+            [],
+            |r| r.get::<_, String>(0)
+        )
+        .unwrap(),
+        "interrupted_unknown"
+    );
+    assert_eq!(
+        db.query_row("SELECT state FROM schedule_occurrences", [], |r| r
+            .get::<_, String>(0))
+            .unwrap(),
+        "interrupted_unknown"
+    );
+    assert_eq!(
+        db.query_row("SELECT state FROM schedule_installations", [], |r| r
+            .get::<_, String>(0))
+            .unwrap(),
+        "unknown_restored"
+    );
+    let completed: (String, String, String) = db
+        .query_row(
+            "SELECT state,result_hash,delivery_ref FROM schedule_runs WHERE occurrence='older'",
+            [],
+            |r| Ok((r.get(0)?, r.get(1)?, r.get(2)?)),
+        )
+        .unwrap();
+    assert_eq!(
+        completed,
+        ("succeeded".into(), "result-hash".into(), "message".into())
+    );
+}

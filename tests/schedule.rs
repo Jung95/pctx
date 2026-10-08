@@ -407,3 +407,483 @@ fn session_boundary_invalidates_binding_without_reinstall_or_epoch_inheritance()
         .unwrap();
     assert_eq!(epoch, 2);
 }
+
+fn tick(p: &Project, at: &str, retry_failed: bool) -> Value {
+    schedule::execute(
+        p,
+        &ScheduleCommand::Tick {
+            namespace: None,
+            at: Some(at.into()),
+            retry_failed,
+        },
+    )
+    .unwrap()
+}
+fn fixture_install(p: &Project, d: &ScheduleDefinition) -> Value {
+    let plan = schedule::execute(
+        p,
+        &ScheduleCommand::Plan {
+            namespace: d.namespace.clone(),
+            id: d.id.clone(),
+            provider: "fixture".into(),
+            staging_root: ".pctx/test-bridge".into(),
+        },
+    )
+    .unwrap();
+    let path = p.root.join("reviewed-plan.json");
+    std::fs::write(&path, plan.to_string()).unwrap();
+    schedule::execute(
+        p,
+        &ScheduleCommand::Install {
+            from_file: path,
+            expect_hash: plan["plan_hash"].as_str().unwrap().into(),
+            apply_native: false,
+        },
+    )
+    .unwrap();
+    plan
+}
+#[test]
+fn tick_executes_once_and_only_changed_results_queue_a_local_notice() {
+    let (_t, p) = fixture();
+    let d = definition("local", "09:00", "2024-01-01T00:00:00Z");
+    add(&p, &d, "tick");
+    let task = p.root.join("task.json");
+    std::fs::write(&task,serde_json::json!({"schema_version":1,"title":"A real changed task","scope":["task.json"],"acceptance":[{"id":"done","description":"Reviewed","evidence_check_keys":["unit"]}],"checks":[{"key":"unit","kind":"test"}]}).to_string()).unwrap();
+    pctx::work::execute(
+        &p,
+        &pctx::work::WorkCommand::Task {
+            command: pctx::work::TaskCommand::Create {
+                from_file: task,
+                idempotency_key: None,
+            },
+        },
+    )
+    .unwrap();
+    let first = tick(&p, "2024-02-01T12:00:00Z", false);
+    assert_eq!(first["runs"][0]["state"], "succeeded");
+    assert_eq!(first["runs"][0]["actual_success"], true);
+    assert!(!first["runs"][0]["delivery"].is_null());
+    assert_eq!(first["external_messages"], 0);
+    let replay = tick(&p, "2024-02-01T12:01:00Z", false);
+    assert_eq!(replay["runs"][0]["state"], "already_recorded");
+    let next = tick(&p, "2024-02-02T12:00:00Z", false);
+    assert_eq!(next["runs"][0]["state"], "succeeded");
+    assert_eq!(next["runs"][0]["changed"], false);
+    assert!(next["runs"][0]["delivery"].is_null());
+    let db = p.connect(true).unwrap();
+    let counts: (i64, i64) = db
+        .query_row(
+            "SELECT (SELECT count(*) FROM schedule_runs),(SELECT count(*) FROM ops_messages)",
+            [],
+            |r| Ok((r.get(0)?, r.get(1)?)),
+        )
+        .unwrap();
+    assert_eq!(counts, (2, 1));
+    assert_eq!(
+        reconcile(&p, None, "2024-02-02T12:02:00Z")["schedules"][0]["occurrence"]["state"],
+        "succeeded"
+    );
+    let persisted: String = db
+        .query_row(
+            "SELECT state FROM schedule_occurrences ORDER BY due_at DESC LIMIT 1",
+            [],
+            |r| r.get(0),
+        )
+        .unwrap();
+    assert_eq!(persisted, "succeeded");
+}
+#[test]
+fn managed_bridge_requires_current_reviewed_plan_and_preserves_user_changes() {
+    let (_t, p) = fixture();
+    let mut d = definition("managed", "09:00", "2024-01-01T00:00:00Z");
+    d.bridge = "managed".into();
+    add(&p, &d, "managed");
+    assert_eq!(
+        tick(&p, "2024-02-01T12:00:00Z", false)["runs"][0]["error"],
+        "CAPABILITY_UNVERIFIED"
+    );
+    let plan = fixture_install(&p, &d);
+    let inspect = schedule::execute(
+        &p,
+        &ScheduleCommand::Inspect {
+            namespace: d.namespace.clone(),
+            id: d.id.clone(),
+            observe_native: false,
+        },
+    )
+    .unwrap();
+    assert_eq!(inspect["owned_files_match"], true);
+    assert_eq!(inspect["stored_state"], "staged");
+    assert_eq!(
+        tick(&p, "2024-02-01T12:00:00Z", false)["runs"][0]["actual_success"],
+        true
+    );
+    let filename = plan["files"].as_object().unwrap().keys().next().unwrap();
+    let target = p.root.join(".pctx/test-bridge").join(filename);
+    std::fs::write(&target, "user changed this file").unwrap();
+    assert_eq!(
+        tick(&p, "2024-02-02T12:00:00Z", false)["runs"][0]["error"],
+        "CONFIG_CHANGED"
+    );
+    let error = schedule::execute(
+        &p,
+        &ScheduleCommand::Uninstall {
+            namespace: d.namespace,
+            id: d.id,
+            expect_hash: plan["plan_hash"].as_str().unwrap().into(),
+            apply_native: false,
+        },
+    )
+    .unwrap_err();
+    assert_eq!(error.code, "REVISION_CONFLICT");
+    assert_eq!(
+        std::fs::read_to_string(target).unwrap(),
+        "user changed this file"
+    );
+}
+#[test]
+fn staged_bridge_uninstall_removes_only_owned_files_and_missing_manifest_can_be_repaired() {
+    let (_t, p) = fixture();
+    let d = definition("fixture", "09:00", "2024-01-01T00:00:00Z");
+    add(&p, &d, "fixture");
+    let plan = fixture_install(&p, &d);
+    let root = p.root.join(".pctx/test-bridge");
+    std::fs::write(root.join("unrelated.json"), "user-owned").unwrap();
+    let own = plan["files"].as_object().unwrap().keys().next().unwrap();
+    std::fs::remove_file(root.join(own)).unwrap();
+    fixture_install(&p, &d);
+    let v = schedule::execute(
+        &p,
+        &ScheduleCommand::Uninstall {
+            namespace: d.namespace,
+            id: d.id,
+            expect_hash: plan["plan_hash"].as_str().unwrap().into(),
+            apply_native: false,
+        },
+    )
+    .unwrap();
+    assert_eq!(v["removed"], true);
+    assert!(!root.join(own).exists());
+    assert_eq!(
+        std::fs::read_to_string(root.join("unrelated.json")).unwrap(),
+        "user-owned"
+    );
+}
+#[test]
+fn paused_role_blocks_actual_tick_and_loop_does_not_acquire_keep_awake() {
+    let (_t, p) = fixture();
+    let d = definition("paused", "09:00", "2024-01-01T00:00:00Z");
+    add(&p, &d, "paused");
+    operations::execute(
+        &p,
+        &OperationCommand::Role {
+            command: RoleCommand::Pause {
+                role: "assistant".into(),
+                reason: "quiet".into(),
+                topic: None,
+                recipient: None,
+            },
+        },
+    )
+    .unwrap();
+    assert_eq!(
+        tick(&p, "2024-02-01T12:00:00Z", false)["runs"][0]["state"],
+        "blocked"
+    );
+    let v = schedule::execute(
+        &p,
+        &ScheduleCommand::RunLoop {
+            namespace: None,
+            interval_seconds: 1,
+            max_ticks: 1,
+            ttl_seconds: 1,
+            keep_awake: true,
+            purpose: Some("isolated paused job".into()),
+        },
+    )
+    .unwrap();
+    assert!(v["ticks"].as_array().unwrap().is_empty());
+    assert_eq!(v["model_calls"], 0);
+    let db = p.connect(true).unwrap();
+    let runs: i64 = db
+        .query_row("SELECT count(*) FROM schedule_runs", [], |r| r.get(0))
+        .unwrap();
+    assert_eq!(runs, 0);
+}
+#[cfg(unix)]
+#[test]
+fn project_private_bridge_staging_rejects_user_symlinks_without_changing_target() {
+    use std::os::unix::fs::symlink;
+    let (_t, p) = fixture();
+    let d = definition("link", "09:00", "2024-01-01T00:00:00Z");
+    add(&p, &d, "link");
+    let external = p.data_dir.join("outside");
+    std::fs::create_dir_all(&external).unwrap();
+    std::fs::create_dir_all(p.root.join(".pctx")).unwrap();
+    symlink(&external, p.root.join(".pctx/test-bridge")).unwrap();
+    let err = schedule::execute(
+        &p,
+        &ScheduleCommand::Plan {
+            namespace: d.namespace,
+            id: d.id,
+            provider: "fixture".into(),
+            staging_root: ".pctx/test-bridge".into(),
+        },
+    )
+    .unwrap_err();
+    assert_eq!(err.code, "POLICY_DENIED");
+    assert_eq!(std::fs::read_dir(external).unwrap().count(), 0);
+}
+#[test]
+fn running_owner_is_never_released_by_ttl_and_restored_binding_is_not_inherited() {
+    let (_t, p) = fixture();
+    let mut d = definition("unknown", "09:00", "2024-01-01T00:00:00Z");
+    d.bridge = "managed".into();
+    add(&p, &d, "unknown");
+    fixture_install(&p, &d);
+    let db = p.connect(true).unwrap();
+    db.execute("INSERT INTO schedule_runs(namespace,schedule,revision,occurrence,attempt,state,result,started) VALUES('unknown','owner-digest',1,'local-date:2024-02-01',1,'running',?1,0)",[serde_json::json!({"owner_pid":std::process::id(),"workspace":p.workspace_id,"execution_kind":"in_process"}).to_string()]).unwrap();
+    assert_eq!(
+        tick(&p, "2024-02-02T12:00:00Z", true)["runs"][0]["state"],
+        "execution_owner_unknown_or_busy"
+    );
+    let err = schedule::execute(
+        &p,
+        &ScheduleCommand::Recover {
+            namespace: d.namespace.clone(),
+            id: d.id.clone(),
+            revision: 1,
+            occurrence: "local-date:2024-02-01".into(),
+            attempt: 1,
+            reason: "must not release a live process".into(),
+        },
+    )
+    .unwrap_err();
+    assert_eq!(err.code, "RESOURCE_OWNER_UNKNOWN");
+    db.execute("DELETE FROM schedule_bindings", []).unwrap();
+    db.execute("UPDATE schedule_installations SET state='unknown_restored',metadata=?1",[serde_json::json!({"provider":"fixture","plan_hash":"former-local-plan","requires_reapproval":true}).to_string()]).unwrap();
+    let inspected = schedule::execute(
+        &p,
+        &ScheduleCommand::Inspect {
+            namespace: d.namespace.clone(),
+            id: d.id.clone(),
+            observe_native: false,
+        },
+    )
+    .unwrap();
+    assert_eq!(inspected["stored_state"], "unknown_restored");
+    assert_eq!(inspected["current_binding"], false);
+    assert_eq!(
+        tick(&p, "2024-02-03T12:00:00Z", true)["runs"][0]["error"],
+        "CAPABILITY_UNVERIFIED"
+    );
+}
+#[test]
+fn actual_cli_concurrent_ticks_claim_one_occurrence_and_fixture_bridge_invokes_tick() {
+    use std::{
+        fs,
+        process::Command,
+        sync::{Arc, Barrier},
+    };
+    let temp = tempfile::tempdir().unwrap();
+    let root = temp.path().join("project");
+    let data = temp.path().join("data");
+    fs::create_dir(&root).unwrap();
+    let cli = |args: &[&str]| {
+        let out = Command::new(env!("CARGO_BIN_EXE_pctx"))
+            .args(["--root", root.to_str().unwrap(), "--format", "json"])
+            .args(args)
+            .env("PCTX_DATA_DIR", &data)
+            .env("PCTX_ACTOR", "owner")
+            .env_remove("PCTX_RUN_CAPABILITY")
+            .output()
+            .unwrap();
+        assert!(
+            out.status.success(),
+            "args={args:?} stdout={} stderr={}",
+            String::from_utf8_lossy(&out.stdout),
+            String::from_utf8_lossy(&out.stderr)
+        );
+        serde_json::from_slice::<Value>(&out.stdout).unwrap()["data"].clone()
+    };
+    cli(&["init"]);
+    let mut d = definition("cli", "09:00", "2024-01-01T00:00:00Z");
+    d.bridge = "managed".into();
+    let file = root.join("schedule.json");
+    fs::write(&file, serde_json::to_vec(&d).unwrap()).unwrap();
+    cli(&[
+        "schedule",
+        "add",
+        "--from-file",
+        file.to_str().unwrap(),
+        "--idempotency-key",
+        "cli",
+    ]);
+    let plan = cli(&[
+        "schedule",
+        "plan",
+        "--namespace",
+        "cli",
+        "owner-digest",
+        "--provider",
+        "fixture",
+        "--staging-root",
+        ".pctx/test-bridge",
+    ]);
+    let review = root.join("reviewed.json");
+    fs::write(&review, plan.to_string()).unwrap();
+    cli(&[
+        "schedule",
+        "install",
+        "--from-file",
+        review.to_str().unwrap(),
+        "--expect-hash",
+        plan["plan_hash"].as_str().unwrap(),
+    ]);
+    let barrier = Arc::new(Barrier::new(2));
+    let mut handles = Vec::new();
+    for _ in 0..2 {
+        let b = barrier.clone();
+        let r = root.clone();
+        let dat = data.clone();
+        handles.push(std::thread::spawn(move || {
+            b.wait();
+            let out = Command::new(env!("CARGO_BIN_EXE_pctx"))
+                .args([
+                    "--root",
+                    r.to_str().unwrap(),
+                    "--format",
+                    "json",
+                    "schedule",
+                    "tick",
+                    "--namespace",
+                    "cli",
+                    "--at",
+                    "2024-02-01T12:00:00Z",
+                ])
+                .env("PCTX_DATA_DIR", dat)
+                .env("PCTX_ACTOR", "owner")
+                .env_remove("PCTX_RUN_CAPABILITY")
+                .output()
+                .unwrap();
+            assert!(
+                out.status.success(),
+                "{} {}",
+                String::from_utf8_lossy(&out.stdout),
+                String::from_utf8_lossy(&out.stderr)
+            );
+            serde_json::from_slice::<Value>(&out.stdout).unwrap()["data"].clone()
+        }));
+    }
+    let receipts: Vec<Value> = handles.into_iter().map(|h| h.join().unwrap()).collect();
+    assert_eq!(
+        receipts
+            .iter()
+            .filter(|v| v["runs"][0]["actual_success"] == true)
+            .count(),
+        1
+    );
+    let manifest = plan["files"]
+        .as_object()
+        .unwrap()
+        .values()
+        .next()
+        .unwrap()
+        .as_str()
+        .unwrap();
+    let manifest: Value = serde_json::from_str(manifest).unwrap();
+    let out = Command::new(manifest["argv"][0].as_str().unwrap())
+        .args(
+            manifest["argv"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .skip(1)
+                .map(|v| v.as_str().unwrap()),
+        )
+        .current_dir(&root)
+        .env("PCTX_DATA_DIR", &data)
+        .env("PCTX_ACTOR", "owner")
+        .output()
+        .unwrap();
+    assert!(
+        out.status.success(),
+        "bridge stdout={} stderr={}",
+        String::from_utf8_lossy(&out.stdout),
+        String::from_utf8_lossy(&out.stderr)
+    );
+    assert_eq!(
+        serde_json::from_slice::<Value>(&out.stdout).unwrap()["data"]["model_calls"],
+        0
+    );
+}
+#[test]
+fn empty_readonly_tick_is_successful_without_notification_or_model_wake() {
+    let (_t, p) = fixture();
+    let d = definition("quiet", "09:00", "2024-01-01T00:00:00Z");
+    add(&p, &d, "quiet");
+    let result = tick(&p, "2024-02-01T12:00:00Z", false);
+    assert_eq!(result["runs"][0]["actual_success"], true);
+    assert!(result["runs"][0]["delivery"].is_null());
+    assert_eq!(result["model_calls"], 0);
+    assert_eq!(result["external_messages"], 0);
+}
+#[test]
+fn failed_attempt_is_recorded_and_retry_is_explicit_instead_of_synthetic_success() {
+    let (_t, p) = fixture();
+    let d = definition("failure", "09:00", "2024-01-01T00:00:00Z");
+    add(&p, &d, "failure");
+    // An actual board read cannot parse this persisted task definition; corruption is not success.
+    let task = p.root.join("task.json");
+    std::fs::write(&task,serde_json::json!({"schema_version":1,"title":"Failure fixture","scope":["task.json"],"acceptance":[{"id":"done","description":"Reviewed","evidence_check_keys":["unit"]}],"checks":[{"key":"unit","kind":"test"}]}).to_string()).unwrap();
+    let id = pctx::work::execute(
+        &p,
+        &pctx::work::WorkCommand::Task {
+            command: pctx::work::TaskCommand::Create {
+                from_file: task,
+                idempotency_key: None,
+            },
+        },
+    )
+    .unwrap()["task_id"]
+        .as_str()
+        .unwrap()
+        .to_owned();
+    let db = p.connect(true).unwrap();
+    let original: String = db
+        .query_row("SELECT definition FROM tasks WHERE id=?1", [&id], |r| {
+            r.get(0)
+        })
+        .unwrap();
+    db.execute(
+        "UPDATE tasks SET definition='broken json' WHERE id=?1",
+        [&id],
+    )
+    .unwrap();
+    let failed = tick(&p, "2024-02-01T12:00:00Z", false);
+    assert_eq!(failed["runs"][0]["state"], "failed");
+    assert_eq!(failed["runs"][0]["actual_success"], false);
+    db.execute(
+        "UPDATE tasks SET definition=?1 WHERE id=?2",
+        rusqlite::params![original, id],
+    )
+    .unwrap();
+    assert_eq!(
+        tick(&p, "2024-02-01T12:01:00Z", false)["runs"][0]["state"],
+        "already_recorded"
+    );
+    let retry = tick(&p, "2024-02-01T12:02:00Z", true);
+    assert_eq!(retry["runs"][0]["attempt"], 2);
+    assert_eq!(retry["runs"][0]["state"], "succeeded");
+    let states: Vec<String> = {
+        let mut s = db
+            .prepare("SELECT state FROM schedule_runs ORDER BY attempt")
+            .unwrap();
+        s.query_map([], |r| r.get(0))
+            .unwrap()
+            .collect::<Result<_, _>>()
+            .unwrap()
+    };
+    assert_eq!(states, vec!["failed", "succeeded"]);
+}

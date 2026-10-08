@@ -1,5 +1,6 @@
 use clap::{Parser, Subcommand, ValueEnum};
 use pctx::adapter;
+use pctx::inventory;
 use pctx::runner;
 use pctx::schedule;
 use pctx::{
@@ -69,6 +70,18 @@ enum Command {
     Schedule {
         #[command(subcommand)]
         command: schedule::ScheduleCommand,
+    },
+    Inventory {
+        #[command(subcommand)]
+        command: inventory::InventoryCommand,
+    },
+    Resource {
+        #[command(subcommand)]
+        command: ResourceCommand,
+    },
+    Job {
+        #[command(subcommand)]
+        command: JobCommand,
     },
     Runner {
         #[command(subcommand)]
@@ -165,6 +178,75 @@ enum Command {
         command: HandoffCommand,
     },
 }
+
+impl Command {
+    fn name(&self) -> &'static str {
+        match self {
+            Self::Work(command) => match command {
+                work::WorkCommand::Task { .. } => "task",
+                work::WorkCommand::Agent { .. } => "agent",
+                work::WorkCommand::Check { .. } => "check",
+                work::WorkCommand::Control { .. } => "control",
+            },
+            Self::Operations(command) => match command {
+                operations::OperationCommand::Role { .. } => "role",
+                operations::OperationCommand::Policy { .. } => "policy",
+                operations::OperationCommand::Decision { .. } => "decision",
+                operations::OperationCommand::Owner { .. } => "owner",
+                operations::OperationCommand::Message { .. } => "message",
+                operations::OperationCommand::Inbox { .. } => "inbox",
+            },
+            Self::Quota { .. } => "quota",
+            Self::Pack { .. } => "pack",
+            Self::Filter { .. } => "filter",
+            Self::Session { .. } => "session",
+            Self::Context { .. } => "context",
+            Self::Adapter { .. } => "adapter",
+            Self::Schedule { .. } => "schedule",
+            Self::Inventory { .. } => "inventory",
+            Self::Resource { .. } => "resource",
+            Self::Job { .. } => "job",
+            Self::Runner { .. } => "runner",
+            Self::Run(_) => "run",
+            Self::Output { .. } => "output",
+            Self::Trust { .. } => "trust",
+            Self::Savings { .. } => "savings",
+            Self::Repo { .. } => "repo",
+            Self::Cache { .. } => "cache",
+            Self::Board { .. } => "board",
+            Self::Activity { .. } => "activity",
+            Self::Init => "init",
+            Self::Status { .. } => "status",
+            Self::Doctor => "doctor",
+            Self::Index { .. } => "index",
+            Self::Find(_) => "find",
+            Self::Graph(command) => match command {
+                graph::GraphCommand::Trace { .. } => "trace",
+                graph::GraphCommand::Impact { .. } => "impact",
+                graph::GraphCommand::Refs { .. } => "refs",
+            },
+            Self::Query(_) => "query",
+            Self::Extract(_) => "extract",
+            Self::Outline { .. } => "outline",
+            Self::Read { .. } => "read",
+            Self::Build(_) => "build",
+            Self::Checkpoint { .. } => "checkpoint",
+            Self::Changes { .. } => "changes",
+            Self::Handoff { .. } => "handoff",
+        }
+    }
+}
+#[derive(Subcommand, Debug)]
+enum ResourceCommand {
+    Status {
+        #[arg(long, default_value="current", value_parser=["current"])]
+        host: String,
+    },
+}
+#[derive(Subcommand, Debug)]
+enum JobCommand {
+    Cancel { job: String },
+}
 #[derive(Subcommand, Debug)]
 enum SavingsCommand {
     Report,
@@ -239,7 +321,20 @@ fn execute(cli: &Cli) -> Result<(String, Project, Value)> {
         Command::Session { command } => ("session", session::session(&p, command)?),
         Command::Context { command } => ("context", session::context(&p, command)?),
         Command::Adapter { command } => ("adapter", adapter::execute(&p, command)?),
+        Command::Inventory { command } => ("inventory", inventory::execute(&p, command)?),
         Command::Schedule { command } => ("schedule", schedule::execute(&p, command)?),
+        Command::Resource {
+            command: ResourceCommand::Status { .. },
+        } => (
+            "resource",
+            runner::execute(&p, &runner::RunnerCommand::ResourceStatus)?,
+        ),
+        Command::Job {
+            command: JobCommand::Cancel { job },
+        } => (
+            "job",
+            runner::execute(&p, &runner::RunnerCommand::JobCancel { job: job.clone() })?,
+        ),
         Command::Runner { command } => ("runner", runner::execute(&p, command)?),
         Command::Run(r) => ("run", output::run(&p, r)?),
         Command::Output { command } => ("output", output::output(&p, command)?),
@@ -472,7 +567,7 @@ fn main() {
         }
         Err(e) => {
             let exit = e.exit;
-            let mut out = domain::envelope("request", None, Value::Null);
+            let mut out = domain::envelope(cli.command.name(), None, Value::Null);
             out["status"] = json!("error");
             out["coverage"] = json!({"status":"partial","reasons":[e.code.clone()]});
             out["errors"] = json!([e]);
@@ -518,23 +613,41 @@ fn main() {
             command: session::ContextCommand::Get { budget_bytes, .. },
         } => Some(*budget_bytes),
         Command::Run(r) => Some(r.budget_bytes),
+        Command::Runner {
+            command:
+                runner::RunnerCommand::CheckRun { budget_bytes, .. }
+                | runner::RunnerCommand::HelperRequest { budget_bytes, .. },
+        } => Some(*budget_bytes),
+        Command::Work(work::WorkCommand::Check {
+            command: work::CheckCommand::Run { budget_bytes, .. },
+        }) => Some(*budget_bytes),
         Command::Extract(r) => Some(r.budget_bytes),
         _ => None,
     };
     let mut bytes = bytes;
-    if matches!(&cli.command, Command::Run(_))
+    let execution_pointer = if response["data"]["execution"].is_object() {
+        "/data/execution"
+    } else {
+        "/data"
+    };
+    if response
+        .pointer(execution_pointer)
+        .is_some_and(|v| v["output_id"].is_string())
         && let Some(limit) = limit
     {
+        let records_pointer = format!("{execution_pointer}/records");
         while bytes.len() + 1 > limit
-            && response["data"]["records"]
+            && response
+                .pointer(&records_pointer)
+                .unwrap()
                 .as_array()
                 .is_some_and(|r| !r.is_empty())
         {
-            response["data"]["records"].as_array_mut().unwrap().pop();
-            let count = response["data"]["records_omitted"].as_u64().unwrap_or(0) + 1;
-            response["data"]["records_omitted"] = json!(count);
-            response["data"]["records_included"] =
-                json!(response["data"]["records"].as_array().unwrap().len());
+            let execution = response.pointer_mut(execution_pointer).unwrap();
+            execution["records"].as_array_mut().unwrap().pop();
+            let count = execution["records_omitted"].as_u64().unwrap_or(0) + 1;
+            execution["records_omitted"] = json!(count);
+            execution["records_included"] = json!(execution["records"].as_array().unwrap().len());
             bytes = match &cli.format {
                 Format::Json => serde_json::to_vec(&response).unwrap(),
                 _ => serde_json::to_vec_pretty(&response).unwrap(),
@@ -549,7 +662,7 @@ fn main() {
             "Rendered context exceeds requested budget; use JSON or increase budget",
             8,
         );
-        response = domain::envelope("build", None, Value::Null);
+        response = domain::envelope(cli.command.name(), None, Value::Null);
         response["status"] = json!("error");
         response["errors"] = json!([e]);
         bytes = serde_json::to_vec(&response).unwrap();
@@ -586,7 +699,9 @@ fn main() {
         }
     };
     if delivered
-        && let Some(output_id) = response["data"]["output_id"].as_str()
+        && let Some(output_id) = response
+            .pointer(execution_pointer)
+            .and_then(|v| v["output_id"].as_str())
         && let Ok(root) = project::detect_root(cli.root.as_deref())
         && let Ok(p) = Project::open(&root)
     {

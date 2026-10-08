@@ -68,7 +68,7 @@ pctx task ready "$TASK"
 pctx task assign "$TASK" --agent fixture-worker
 pctx --format json task start "$TASK" > "$PCTX_DATA_DIR/run.json"
 RUN=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["data"]["run_id"])' "$PCTX_DATA_DIR/run.json")
-pctx --format json runner check-plan --task-id "$TASK" --key unit --run "$RUN" > "$PCTX_DATA_DIR/plan.json"
+pctx --format json check plan --task-id "$TASK" --key unit --run "$RUN" > "$PCTX_DATA_DIR/plan.json"
 cat "$PCTX_DATA_DIR/plan.json"
 ```
 
@@ -77,7 +77,7 @@ Inspect the executable, scripts, environment keys, resources, and fingerprint be
 ```sh
 FINGERPRINT=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["data"]["fingerprint"])' "$PCTX_DATA_DIR/plan.json")
 pctx runner trust --key unit --expect-hash "$FINGERPRINT"
-pctx --format json runner check-run --task-id "$TASK" --key unit --run "$RUN" > "$PCTX_DATA_DIR/result.json"
+pctx --format json check run --task-id "$TASK" --key unit --run "$RUN" > "$PCTX_DATA_DIR/result.json"
 cat "$PCTX_DATA_DIR/result.json"
 OUT=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["data"]["execution"]["output_id"])' "$PCTX_DATA_DIR/result.json")
 pctx output show "$OUT" --view full --stream stdout --lines 1:80
@@ -107,8 +107,8 @@ These are entries in the same `[checks.unit]` profile, not a second duplicate ta
 Linux observes `MemAvailable`; macOS observes free plus inactive pages as a reclaimable estimate. Neither is a guarantee that a future allocation will succeed. Unknown measurements defer resource admission. The owner can explicitly trust `unknown = "owner_override"`; output discloses use of that override and keeps the measurement unknown. `source = "fixture"` with `fixture_path` is an explicit synthetic test source, labelled as such, not native memory evidence.
 
 ```sh
-pctx runner resource-status
-pctx runner job-cancel JOB-ID
+pctx resource status --host current
+pctx job cancel JOB-ID
 ```
 
 Lease expiry and main CLI death never release a living execution group's slot. Cancellation signals the group and requires exit proof. Unknown ownership, inaccessible process identity, and orphaned descendants retain the slot. Status does not delete stale locks or perform TTL takeover.
@@ -150,3 +150,5 @@ scope = ["math_fixture.py"]
 The target must be a different registered workspace/root in the same project and coordination, with matching inert Git common-directory and backreference identity. Register it separately before planning; this command does not create or attach worktrees. Trust the resulting profile, then use `runner helper-request ... --mode local`. The explicit provider process is observed before a receipt becomes active, and managed local providers share the single auxiliary slot. External queued intents have no launch capability; an actual external provider needs its own verified admission integration. Release requires the exact output receipt: `pctx runner helper-release HELP-ID --evidence OUT-ID`. Provider output does not complete the task or prove model usage inside an opaque program.
 
 Registered scope is a managed-process policy, not an OS sandbox. Internal trust does not replace host permission. Helper receipts are durable private workspace files and currently excluded from portable control backups. Actual external model/runtime transport and legacy installations need separate live capability verification. Registered supervision currently uses the Unix backend; Windows execution is unavailable rather than reported successful.
+
+Canonical `check plan`, `check run`, `resource status --host current`, and `job cancel` commands call the same application services as their `runner` forms. A check plan may be reviewed before a task run exists; executing a check still requires the current run lease and exact owner trust. Registered output parsers are documented in [parsers](parsers.md); parser summaries alone never supply completion evidence.

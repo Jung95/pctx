@@ -1,0 +1,8 @@
+pctx 0.1.0-dev
+isolated CLI passed: ['init']
+isolated CLI passed: ['index', 'update']
+isolated CLI passed: ['find', 'hello', '--kind', 'symbol']
+isolated CLI passed: ['inventory', 'scan']
+Archive checksum, private-source exclusion, safe entries, public README guide links: passed
+SHA256: 18ececb2670a97693f4f251fb286624ddf76630b45d699765a5627965fb5ba28
+Global installation, OS schedules and external publication: not performed

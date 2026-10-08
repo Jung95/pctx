@@ -10,7 +10,7 @@ use fs2::FileExt;
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
 use std::{
-    collections::BTreeMap,
+    collections::{BTreeMap, VecDeque},
     fs,
     io::Read,
     path::{Path, PathBuf},
@@ -25,6 +25,9 @@ use std::{
 
 const RECORD_LIMIT: usize = 256 * 1024;
 const STREAM_LIMIT: usize = 8 * 1024 * 1024;
+const CAPTURE_RECORD_LIMIT: usize = 65_536;
+const TAIL_RECORD_LIMIT: usize = 64;
+const TAIL_BYTE_LIMIT: usize = 512 * 1024;
 const PROJECT_LIMIT: u64 = 256 * 1024 * 1024;
 const HOST_LIMIT: u64 = 1024 * 1024 * 1024;
 
@@ -106,6 +109,10 @@ struct Record {
 #[derive(Clone, Default, Serialize, Deserialize)]
 struct Capture {
     records: Vec<Record>,
+    tail: VecDeque<Record>,
+    tail_bytes: usize,
+    next_sequence: u64,
+    stored_estimate: usize,
     captured_bytes: u64,
     normalized_bytes: u64,
     redacted_bytes: u64,
@@ -122,6 +129,8 @@ struct Artifact {
     workspace_id: String,
     policy_hash: String,
     input_fingerprint: String,
+    #[serde(default)]
+    parser_identity: String,
     #[serde(default)]
     input_manifest: BTreeMap<String, String>,
     created_at: i64,
@@ -279,11 +288,26 @@ fn binding_inner(p: &Project, argv: &[String], registered: bool, cwd: &str) -> R
     for arg in argv.iter().skip(1) {
         let path = Path::new(arg);
         if path.is_absolute() && path.exists() {
-            return Err(err(
-                "POLICY_DENIED",
-                "Absolute file inputs require a registered execution profile",
-                5,
-            ));
+            if !registered {
+                return Err(err(
+                    "POLICY_DENIED",
+                    "Absolute file inputs require a registered execution profile",
+                    5,
+                ));
+            }
+            let relative = path.strip_prefix(&p.root).map_err(|_| {
+                err(
+                    "POLICY_DENIED",
+                    "Registered absolute input is outside the project",
+                    5,
+                )
+            })?;
+            let relative = relative
+                .to_str()
+                .ok_or_else(|| err("INVALID_ARGUMENT", "Input path is not UTF-8", 2))?;
+            let file = reader::read(p, relative)?;
+            scripts.insert(relative.into(), file.hash);
+            continue;
         }
         let input = if cwd == "." {
             arg.clone()
@@ -395,14 +419,16 @@ fn normalize(bytes: &[u8]) -> Option<String> {
             .collect(),
     )
 }
-fn push_record(c: &mut Capture, bytes: &[u8], stream: &str) {
-    if c.records.len() >= 8192 {
-        c.omitted_bytes += bytes.len() as u64;
-        c.complete = false;
-        return;
-    }
-    if let Some(text) = normalize(bytes) {
-        c.normalized_bytes += text.len() as u64 + 1;
+fn push_record(c: &mut Capture, bytes: &[u8], stream: &str, nul_framed: bool) {
+    let sequence = c.next_sequence;
+    c.next_sequence = c.next_sequence.saturating_add(1);
+    let normalized = if nul_framed {
+        std::str::from_utf8(bytes).ok().map(str::to_owned)
+    } else {
+        normalize(bytes)
+    };
+    if let Some(text) = normalized {
+        c.normalized_bytes += text.len() as u64 + u64::from(!nul_framed);
         if text.contains("-----BEGIN") && text.contains("PRIVATE KEY-----") {
             c.omitted_bytes += bytes.len() as u64;
             c.complete = false;
@@ -413,31 +439,55 @@ fn push_record(c: &mut Capture, bytes: &[u8], stream: &str) {
         } else {
             reader::redact(&text)
         };
-        if c.records.len() >= 8192
-            || c.redacted_bytes + text.len() as u64 + (c.records.len() as u64 + 1) * 128
-                > STREAM_LIMIT as u64
-        {
-            c.omitted_bytes += bytes.len() as u64;
-            c.complete = false;
-            return;
-        }
-        c.redacted_bytes += text.len() as u64 + 1;
+        // The denominator is observed masked output, including bounded-storage omissions.
+        c.redacted_bytes = c
+            .redacted_bytes
+            .saturating_add(text.len() as u64 + u64::from(!nul_framed));
         c.redacted |= redacted;
-        c.records.push(Record {
+        let cost = text.len() + 128;
+        let record = Record {
             stream: stream.into(),
-            sequence: c.records.len() as u64,
+            sequence,
             text,
             redacted,
-        });
+        };
+        if c.records.len() < CAPTURE_RECORD_LIMIT
+            && c.stored_estimate + cost <= STREAM_LIMIT - TAIL_BYTE_LIMIT
+        {
+            c.stored_estimate += cost;
+            c.records.push(record);
+        } else {
+            c.complete = false;
+            c.tail_bytes += cost;
+            c.tail.push_back(record);
+            while c.tail.len() > TAIL_RECORD_LIMIT || c.tail_bytes > TAIL_BYTE_LIMIT {
+                if let Some(omitted) = c.tail.pop_front() {
+                    c.tail_bytes = c.tail_bytes.saturating_sub(omitted.text.len() + 128);
+                    c.omitted_bytes = c
+                        .omitted_bytes
+                        .saturating_add(omitted.text.len() as u64 + 1);
+                }
+            }
+        }
     } else {
         c.omitted_bytes += bytes.len() as u64;
         c.complete = false;
     }
 }
+
+#[cfg(test)]
 fn capture<R: Read + Send + 'static>(
+    pipe: R,
+    stream: &'static str,
+    stop: Arc<AtomicBool>,
+) -> thread::JoinHandle<Capture> {
+    capture_framed(pipe, stream, stop, false)
+}
+fn capture_framed<R: Read + Send + 'static>(
     mut pipe: R,
     stream: &'static str,
     stop: Arc<AtomicBool>,
+    nul_framed: bool,
 ) -> thread::JoinHandle<Capture> {
     thread::spawn(move || {
         let mut c = Capture {
@@ -458,7 +508,12 @@ fn capture<R: Read + Send + 'static>(
                 Ok(n) => {
                     c.captured_bytes += n as u64;
                     for byte in &chunk[..n] {
-                        if *byte == b'\n' || *byte == b'\r' {
+                        if (nul_framed && *byte == 0)
+                            || (!nul_framed && (*byte == b'\n' || *byte == b'\r'))
+                        {
+                            if nul_framed && !dropping {
+                                record.push(0);
+                            }
                             if !dropping {
                                 let marker = String::from_utf8_lossy(&record);
                                 if marker.contains("-----BEGIN")
@@ -475,7 +530,7 @@ fn capture<R: Read + Send + 'static>(
                                         pem_block = false;
                                     }
                                 } else {
-                                    push_record(&mut c, &record, stream);
+                                    push_record(&mut c, &record, stream, nul_framed);
                                 }
                             }
                             record.clear();
@@ -517,9 +572,10 @@ fn capture<R: Read + Send + 'static>(
                 c.omitted_bytes += record.len() as u64;
                 c.complete = false;
             } else {
-                push_record(&mut c, &record, stream);
+                push_record(&mut c, &record, stream, nul_framed);
             }
         }
+        c.records.extend(c.tail.drain(..));
         c
     })
 }
@@ -688,15 +744,61 @@ fn compact(a: &Artifact, budget: usize) -> Value {
             included.push(value);
         }
     }
-    let mut value = json!({"execution_id":a.execution_id,"output_id":a.output_id,"spawned":a.spawned,"termination":a.termination,"child_exit_code":a.child_exit_code,"signal":a.signal,"pctx_error":a.pctx_error,"parse_status":"unsupported","capture_complete":a.capture_complete,"redaction_applied":true,"redaction_changed_content":a.records.iter().any(|r|r.redacted),"input_stage":a.input_stage,"raw_available":a.retained && a.expires_at>now(),"raw_semantics":"redacted_uncompressed","records":included,"records_included":included.len(),"records_omitted":total.saturating_sub(included.len()),"protected_records":protected.len(),"captured_bytes":a.captured_bytes,"normalized_bytes":a.normalized_bytes,"redacted_bytes":a.redacted_bytes,"omitted_bytes":a.omitted_bytes,"query_ref":format!("pctx output show {} --view full",a.output_id),"evidence_origin":"runner_observed","task_completion":"not_evaluated","test_result":"not_evaluated","budget_bytes":budget});
+    let mut value = json!({"execution_id":a.execution_id,"output_id":a.output_id,"spawned":a.spawned,"termination":a.termination,"child_exit_code":a.child_exit_code,"signal":a.signal,"pctx_error":a.pctx_error,"parse_status":"unsupported","capture_complete":a.capture_complete,"redaction_applied":true,"redaction_changed_content":a.records.iter().any(|r|r.redacted),"input_stage":a.input_stage,"raw_available":a.retained && a.expires_at>now(),"raw_semantics":"redacted_uncompressed","records":included,"records_included":included.len(),"records_omitted":total.saturating_sub(included.len()),"protected_records":protected.len(),"captured_bytes":a.captured_bytes,"normalized_bytes":a.normalized_bytes,"redacted_bytes":a.redacted_bytes,"baseline_completeness":if a.capture_complete{"complete"}else{"partial"},"omitted_bytes":a.omitted_bytes,"query_ref":format!("pctx output show {} --view full",a.output_id),"evidence_origin":"runner_observed","task_completion":"not_evaluated","test_result":"not_evaluated","budget_bytes":budget});
     if let Some(report) = typed_report(a) {
         value["parse_status"] = json!("complete");
         value["typed_report"] = report;
     }
+    if !a.parser_identity.is_empty()
+        && a.parser_identity != "unsupported"
+        && a.parser_identity != "pctx-json-v1"
+    {
+        let records = a
+            .records
+            .iter()
+            .take(8193)
+            .map(|r| json!({"stream":r.stream,"sequence":r.sequence,"text":r.text}))
+            .collect::<Vec<_>>();
+        let parsed = crate::parsers::parse(
+            &a.parser_identity,
+            &records,
+            a.child_exit_code,
+            &a.termination,
+            a.capture_complete && a.pctx_error.is_none(),
+        );
+        value["parse_status"] = parsed["parse_status"].clone();
+        value["parser"] = parsed;
+        let mut omitted = serde_json::Map::new();
+        // Rendering omissions are distinct from incomplete parsing and capture.
+        let parser_room = budget.saturating_sub(2500) / 2;
+        while serde_json::to_vec(&value["parser"]).is_ok_and(|v| v.len() > parser_room) {
+            let key = ["diagnostics", "items", "reasons"]
+                .into_iter()
+                .filter(|key| {
+                    value["parser"][*key]
+                        .as_array()
+                        .is_some_and(|v| !v.is_empty())
+                })
+                .max_by_key(|key| {
+                    serde_json::to_vec(&value["parser"][*key])
+                        .map(|v| v.len())
+                        .unwrap_or(0)
+                });
+            let Some(key) = key else {
+                break;
+            };
+            value["parser"][key].as_array_mut().unwrap().pop();
+            let count = omitted.get(key).and_then(Value::as_u64).unwrap_or(0) + 1;
+            omitted.insert(key.into(), json!(count));
+        }
+        value["parser"]["presentation_omissions"] = Value::Object(omitted);
+        value["parser"]["query_ref"] =
+            json!(format!("pctx output show {} --view full", a.output_id));
+    }
     value
 }
 pub fn run(p: &Project, r: &RunRequest) -> Result<Value> {
-    run_inner(p, r, ".", &BTreeMap::new(), None, None, None)
+    run_inner(p, r, ".", &BTreeMap::new(), None, None, None, None)
 }
 pub(crate) fn registered_binding_at(p: &Project, argv: &[String], cwd: &str) -> Result<Value> {
     Ok(serde_json::to_value(binding_inner(p, argv, true, cwd)?)?)
@@ -718,8 +820,33 @@ pub(crate) fn run_registered_monitored(
         Some(expected_binding),
         Some(on_spawn),
         Some(on_poll),
+        None,
     )
 }
+// Parser selection is presentation-only and bound by the registered profile.
+#[allow(clippy::too_many_arguments)]
+pub(crate) fn run_registered_parsed(
+    p: &Project,
+    r: &RunRequest,
+    cwd: &str,
+    environment: &BTreeMap<String, String>,
+    expected_binding: &str,
+    on_spawn: &mut dyn FnMut(u32) -> Result<()>,
+    on_poll: &mut dyn FnMut() -> Result<()>,
+    parser: &str,
+) -> Result<Value> {
+    run_inner(
+        p,
+        r,
+        cwd,
+        environment,
+        Some(expected_binding),
+        Some(on_spawn),
+        Some(on_poll),
+        Some(parser),
+    )
+}
+#[allow(clippy::too_many_arguments)]
 fn run_inner(
     p: &Project,
     r: &RunRequest,
@@ -728,6 +855,7 @@ fn run_inner(
     expected_binding: Option<&str>,
     mut on_spawn: Option<&mut dyn FnMut(u32) -> Result<()>>,
     mut on_poll: Option<&mut dyn FnMut() -> Result<()>>,
+    parser_identity: Option<&str>,
 ) -> Result<Value> {
     if r.budget_bytes < 3000 {
         return Err(err(
@@ -861,8 +989,12 @@ fn run_inner(
         return Err(err("IO_ERROR", "Pipe capture setup failed after spawn", 7));
     }
     let stop = Arc::new(AtomicBool::new(false));
-    let out_thread = capture(stdout, "stdout", stop.clone());
-    let err_thread = capture(stderr, "stderr", stop.clone());
+    let nul_framed = matches!(
+        parser_identity,
+        Some("git-status-porcelain-v1-z" | "git-log-nul-v1")
+    );
+    let out_thread = capture_framed(stdout, "stdout", stop.clone(), nul_framed);
+    let err_thread = capture_framed(stderr, "stderr", stop.clone(), false);
     let start = Instant::now();
     let mut timed_out = false;
     let mut monitor_error = None;
@@ -957,6 +1089,7 @@ fn run_inner(
         workspace_id: p.workspace_id.clone(),
         policy_hash: p.policy_hash(),
         input_fingerprint,
+        parser_identity: parser_identity.unwrap_or("unsupported").into(),
         input_manifest,
         created_at: now(),
         expires_at: now() + 86400,
@@ -1086,7 +1219,7 @@ pub fn output(p: &Project, command: &OutputCommand) -> Result<Value> {
                 .iter()
                 .filter(|r| stream.as_ref().is_none_or(|s| s == &r.stream))
                 .collect::<Vec<_>>();
-            let records=all.iter().skip(first-1).take(last-first+1).map(|r|json!({"stream":r.stream,"sequence":r.sequence,"text":r.text,"redacted":r.redacted})).collect::<Vec<_>>();
+            let records=all.iter().filter(|r|{let line=r.sequence as usize+1;line>=first&&line<=last}).map(|r|json!({"stream":r.stream,"sequence":r.sequence,"text":r.text,"redacted":r.redacted})).collect::<Vec<_>>();
             Ok(
                 json!({"output_id":a.output_id,"execution_id":a.execution_id,"view":"full","raw_semantics":"redacted_uncompressed","records":records,"total_records":all.len(),"omitted_records":all.len().saturating_sub(records.len()),"capture_complete":a.capture_complete,"omitted_bytes":a.omitted_bytes,"child_exit_code":a.child_exit_code,"termination":a.termination,"command_rerun":false,"delivery_kind":"retrieval"}),
             )
@@ -1347,7 +1480,7 @@ mod capture_tests {
         )
         .join()
         .unwrap();
-        assert!(c.records.len() <= 8192);
+        assert!(c.records.len() <= CAPTURE_RECORD_LIMIT + TAIL_RECORD_LIMIT);
         assert!(!c.complete);
     }
     #[test]
@@ -1361,5 +1494,54 @@ mod capture_tests {
         .unwrap();
         assert!(!c.complete);
         assert!(c.records.is_empty());
+    }
+    #[test]
+    fn registered_git_nul_capture_preserves_filename_controls_and_record_boundaries() {
+        let bytes = b" M path with\nnewline\0R  new\0old\0".to_vec();
+        let c = capture_framed(
+            Fragmented {
+                data: bytes.clone(),
+                offset: 0,
+            },
+            "stdout",
+            Arc::new(AtomicBool::new(false)),
+            true,
+        )
+        .join()
+        .unwrap();
+        assert!(c.complete);
+        assert_eq!(c.records.len(), 3);
+        assert_eq!(
+            c.records
+                .iter()
+                .map(|r| r.text.as_str())
+                .collect::<String>()
+                .as_bytes(),
+            bytes
+        );
+        assert_eq!(c.redacted_bytes, bytes.len() as u64);
+        let records = c
+            .records
+            .iter()
+            .map(|r| json!({"stream":r.stream,"sequence":r.sequence,"text":r.text}))
+            .collect::<Vec<_>>();
+        let parsed = crate::parsers::parse(
+            "git-status-porcelain-v1-z",
+            &records,
+            Some(0),
+            "exited",
+            true,
+        );
+        assert_eq!(parsed["parse_status"], "complete");
+        assert_eq!(parsed["items"].as_array().unwrap().len(), 2);
+        // NUL preservation belongs only to the explicitly registered Git parser.
+        let ordinary = capture(
+            std::io::Cursor::new(bytes),
+            "stdout",
+            Arc::new(AtomicBool::new(false)),
+        )
+        .join()
+        .unwrap();
+        assert!(!ordinary.complete);
     }
 }

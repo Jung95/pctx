@@ -22,7 +22,7 @@ pub enum RunnerCommand {
         #[arg(long)]
         key: String,
         #[arg(long)]
-        run: String,
+        run: Option<String>,
     },
     CheckRun {
         #[arg(long)]
@@ -226,6 +226,27 @@ struct Job {
     created_at: i64,
     updated_at: i64,
 }
+struct AdmissionDiagnostics {
+    start: std::time::Instant,
+    enabled: bool,
+}
+impl AdmissionDiagnostics {
+    fn new() -> Self {
+        Self {
+            start: std::time::Instant::now(),
+            enabled: std::env::var_os("PCTX_RUNNER_DIAGNOSTICS").is_some_and(|v| v == "1"),
+        }
+    }
+    fn phase(&self, phase: &'static str) {
+        if self.enabled {
+            eprintln!(
+                "PCTX-RUNNER-PHASE-v1 pid={} elapsed_ms={} phase={phase}",
+                std::process::id(),
+                self.start.elapsed().as_millis()
+            );
+        }
+    }
+}
 fn error(code: &str, msg: &str, exit: i32) -> Error {
     Error::new(code, msg, exit)
 }
@@ -326,7 +347,17 @@ fn profile(p: &Project, key: &str) -> Result<Binding> {
     if spec.argv.is_empty()
         || spec.argv.len() > 256
         || spec.argv.iter().map(String::len).sum::<usize>() > 16384
-        || spec.reporter != "pctx-json-v1"
+        || ![
+            "pctx-json-v1",
+            "jest-json-v1",
+            "vitest-json-v1",
+            "eslint-json-v1",
+            "typescript-text-v1",
+            "git-status-porcelain-v1-z",
+            "git-log-nul-v1",
+            "git-diff-unified-v1",
+        ]
+        .contains(&spec.reporter.as_str())
     {
         return Err(error(
             "INVALID_CONFIG",
@@ -631,7 +662,7 @@ fn process_start(pid: u32) -> Option<String> {
             .1
             .split_whitespace()
             .collect::<Vec<_>>();
-        return fields.get(19).map(|value| value.to_string());
+        fields.get(19).map(|value| value.to_string())
     }
     #[cfg(target_os = "macos")]
     {
@@ -817,7 +848,7 @@ fn task_check(
     p: &Project,
     task_name: &str,
     key: &str,
-    run: &str,
+    run: Option<&str>,
 ) -> Result<(String, work::CheckDefinition)> {
     let db = work::connect(p)?;
     let number = task_name
@@ -838,18 +869,20 @@ fn task_check(
         .into_iter()
         .find(|c| c.key == key)
         .ok_or_else(|| error("INVALID_ARGUMENT", "Check is not defined on task", 2))?;
-    let valid:bool=db.query_row("SELECT EXISTS(SELECT 1 FROM runs WHERE id=?1 AND task=?2 AND workspace=?3 AND status='active' AND lease_until>?4)",rusqlite::params![run,task,p.workspace_id,now()],|r|r.get(0))?;
-    if !valid {
-        return Err(error(
-            "LEASE_REVOKED",
-            "Check requires active task run in current workspace",
-            9,
-        ));
+    if let Some(run) = run {
+        let valid:bool=db.query_row("SELECT EXISTS(SELECT 1 FROM runs WHERE id=?1 AND task=?2 AND workspace=?3 AND status='active' AND lease_until>?4)",rusqlite::params![run,task,p.workspace_id,now()],|r|r.get(0))?;
+        if !valid {
+            return Err(error(
+                "LEASE_REVOKED",
+                "Check requires active task run in current workspace",
+                9,
+            ));
+        }
+        let agent: String = db.query_row("SELECT agent FROM runs WHERE id=?1", [run], |row| {
+            row.get(0)
+        })?;
+        crate::operations::ensure_claim_allowed_db(&db, &agent)?;
     }
-    let agent: String = db.query_row("SELECT agent FROM runs WHERE id=?1", [run], |row| {
-        row.get(0)
-    })?;
-    crate::operations::ensure_claim_allowed_db(&db, &agent)?;
     if !check.allowed_sources.iter().any(|s| s == "runner_observed") {
         return Err(error(
             "POLICY_DENIED",
@@ -859,7 +892,7 @@ fn task_check(
     }
     Ok((task, check))
 }
-fn planned(p: &Project, task: &str, key: &str, run: &str) -> Result<(Binding, Value)> {
+fn planned(p: &Project, task: &str, key: &str, run: Option<&str>) -> Result<(Binding, Value)> {
     let (_, check) = task_check(p, task, key, run)?;
     let b = profile(p, key)?;
     let mut reasons = vec![];
@@ -872,7 +905,7 @@ fn planned(p: &Project, task: &str, key: &str, run: &str) -> Result<(Binding, Va
     {
         reasons.push("legacy_bridge_unverified");
     }
-    let plan = json!({"key":key,"fingerprint":b.fingerprint,"executable_hash":b.executable_hash,"script_hashes":b.script_hashes,"cwd":b.profile.cwd,"environment_keys":b.profile.env.keys().collect::<Vec<_>>(),"resources":b.profile.resources,"heavy":b.profile.heavy,"resource_provider":b.profile.resource_backend,"execution_timeout_ms":b.profile.execution_timeout_ms,"reporter":b.profile.reporter,"allowed_sources":check.allowed_sources,"output_paths":check.output_paths,"blocked_reasons":reasons,"execution_started":false,"host_permission":"separate_required","memory_policy":b.profile.memory,"guardian_protocol":b.profile.bridge.as_ref().map(|b|&b.protocol),"guardian_executable_hash":b.guardian_hash});
+    let plan = json!({"key":key,"fingerprint":b.fingerprint,"executable_hash":b.executable_hash,"script_hashes":b.script_hashes,"cwd":b.profile.cwd,"environment_keys":b.profile.env.keys().collect::<Vec<_>>(),"resources":b.profile.resources,"heavy":b.profile.heavy,"resource_provider":b.profile.resource_backend,"execution_timeout_ms":b.profile.execution_timeout_ms,"reporter":b.profile.reporter,"allowed_sources":check.allowed_sources,"output_paths":check.output_paths,"blocked_reasons":reasons,"execution_started":false,"active_run_verified":run.is_some(),"run_required_before_execution":true,"host_permission":"separate_required","memory_policy":b.profile.memory,"guardian_protocol":b.profile.bridge.as_ref().map(|b|&b.protocol),"guardian_executable_hash":b.guardian_hash});
     Ok((b, plan))
 }
 fn release_not_spawned(dir: &Path, job: &mut Job) -> Result<()> {
@@ -907,7 +940,9 @@ pub fn execute(p: &Project, command: &RunnerCommand) -> Result<Value> {
         RunnerCommand::HelperStatus { helper } => helper_status(p, helper),
         RunnerCommand::HelperCancel { helper } => helper_cancel(p, helper),
         RunnerCommand::HelperRelease { helper, evidence } => helper_release(p, helper, evidence),
-        RunnerCommand::CheckPlan { task_id, key, run } => Ok(planned(p, task_id, key, run)?.1),
+        RunnerCommand::CheckPlan { task_id, key, run } => {
+            Ok(planned(p, task_id, key, run.as_deref())?.1)
+        }
         RunnerCommand::Trust { key, expect_hash } => {
             owner()?;
             let b = profile(p, key)?;
@@ -953,7 +988,10 @@ pub fn execute(p: &Project, command: &RunnerCommand) -> Result<Value> {
                     8,
                 ));
             }
-            let (b, _) = planned(p, task_id, key, run)?;
+            let diagnostics = AdmissionDiagnostics::new();
+            diagnostics.phase("planned_profile_begin");
+            let (b, _) = planned(p, task_id, key, Some(run))?;
+            diagnostics.phase("planned_profile_ready");
             if b.profile.auxiliary_provider.is_some() {
                 return Err(error(
                     "POLICY_DENIED",
@@ -962,7 +1000,9 @@ pub fn execute(p: &Project, command: &RunnerCommand) -> Result<Value> {
                 ));
             }
             trusted(p, &b)?;
+            diagnostics.phase("current_profile_begin");
             let current = profile(p, key)?;
+            diagnostics.phase("current_profile_ready");
             if current.fingerprint != b.fingerprint {
                 return Err(error(
                     "CONFIG_CHANGED",
@@ -980,6 +1020,7 @@ pub fn execute(p: &Project, command: &RunnerCommand) -> Result<Value> {
                 admit_memory(&memory, &b.profile.memory)?;
             }
             let (dir, mut job) = acquire(p, &b)?;
+            diagnostics.phase("host_slots_acquired");
             let begin = work::execute(
                 p,
                 &work::WorkCommand::Check {
@@ -1001,6 +1042,7 @@ pub fn execute(p: &Project, command: &RunnerCommand) -> Result<Value> {
                 .as_str()
                 .ok_or_else(|| error("DB_ERROR", "Check begin did not return attempt identity", 7))?
                 .to_owned();
+            diagnostics.phase("final_profile_begin");
             let final_binding = match profile(p, key) {
                 Ok(v) => v,
                 Err(e) => {
@@ -1009,6 +1051,7 @@ pub fn execute(p: &Project, command: &RunnerCommand) -> Result<Value> {
                     return Err(e);
                 }
             };
+            diagnostics.phase("final_profile_ready");
             if final_binding.fingerprint != b.fingerprint {
                 work::record_runner_not_started(p, &check_id, "CONFIG_CHANGED")?;
                 release_not_spawned(&dir, &mut job)?;
@@ -1018,6 +1061,7 @@ pub fn execute(p: &Project, command: &RunnerCommand) -> Result<Value> {
                     9,
                 ));
             }
+            diagnostics.phase("guardian_admission_begin");
             let guardian = match start_guardian(p, &b, &dir, &mut job) {
                 Ok(v) => v,
                 Err(e) => {
@@ -1027,6 +1071,7 @@ pub fn execute(p: &Project, command: &RunnerCommand) -> Result<Value> {
                 }
             }
             .map(|g| std::rc::Rc::new(std::cell::RefCell::new(g)));
+            diagnostics.phase("guardian_admission_ready");
             let argv = b.profile.argv.clone();
             let request = output::RunRequest {
                 task_id: Some(task_id.clone()),
@@ -1038,17 +1083,20 @@ pub fn execute(p: &Project, command: &RunnerCommand) -> Result<Value> {
                 stdin: "closed".into(),
                 argv,
             };
-            let observed = output::run_registered_monitored(
+            let observed = output::run_registered_parsed(
                 p,
                 &request,
                 &b.profile.cwd,
                 &b.profile.env,
                 &b.execution_fingerprint,
                 &mut |pid| {
+                    diagnostics.phase("child_spawned");
                     spawned(&dir, &mut job, pid)?;
                     if let Some(g) = guardian.as_ref() {
+                        diagnostics.phase("guardian_attach_begin");
                         g.borrow_mut().attach(&job)?;
                         acknowledged_guardian(&dir, &mut job)?;
+                        diagnostics.phase("guardian_durable_ack");
                     }
                     Ok(())
                 },
@@ -1058,6 +1106,7 @@ pub fn execute(p: &Project, command: &RunnerCommand) -> Result<Value> {
                     }
                     Ok(())
                 },
+                &b.profile.reporter,
             );
             if job.pid.is_none()
                 && let Some(g) = guardian.as_ref()
@@ -1231,8 +1280,8 @@ fn observe_memory(p: &Project, policy: &MemoryPolicy) -> Result<MemoryObservatio
     }
     #[cfg(target_os = "linux")]
     {
-        if let Ok(text) = fs::read_to_string("/proc/meminfo") {
-            if let Some(bytes) = text.lines().find_map(|line| {
+        if let Ok(text) = fs::read_to_string("/proc/meminfo")
+            && let Some(bytes) = text.lines().find_map(|line| {
                 line.strip_prefix("MemAvailable:").and_then(|s| {
                     s.split_whitespace()
                         .next()?
@@ -1240,16 +1289,16 @@ fn observe_memory(p: &Project, policy: &MemoryPolicy) -> Result<MemoryObservatio
                         .ok()?
                         .checked_mul(1024)
                 })
-            }) {
-                return Ok(MemoryObservation {
-                    schema_version: 1,
-                    source: "native".into(),
-                    available_bytes: Some(bytes),
-                    pressure: "observed_available".into(),
-                    sampled_at: now(),
-                    measurement: "linux_proc_MemAvailable_estimate".into(),
-                });
-            }
+            })
+        {
+            return Ok(MemoryObservation {
+                schema_version: 1,
+                source: "native".into(),
+                available_bytes: Some(bytes),
+                pressure: "observed_available".into(),
+                sampled_at: now(),
+                measurement: "linux_proc_MemAvailable_estimate".into(),
+            });
         }
     }
     #[cfg(target_os = "macos")]
@@ -1412,12 +1461,29 @@ impl Guardian {
         self.input.write_all(&serde_json::to_vec(job)?)?;
         self.input.write_all(b"\n")?;
         self.input.flush()?;
-        if guardian_line(&mut self.output)? != "PCTX-GUARDIAN-ATTACHED-v1" {
-            return Err(error(
-                "RESOURCE_OWNER_UNKNOWN",
-                "Guardian did not verify child receipt",
-                7,
-            ));
+        match guardian_line(&mut self.output)?.as_str() {
+            "PCTX-GUARDIAN-ATTACHED-v1" => (),
+            "PCTX-GUARDIAN-REJECTED-PROOF-v1" => {
+                return Err(error(
+                    "RESOURCE_OWNER_UNKNOWN",
+                    "Guardian rejected child receipt proof while retaining canonical lock",
+                    7,
+                ));
+            }
+            "PCTX-GUARDIAN-REJECTED-START-v1" => {
+                return Err(error(
+                    "RESOURCE_OWNER_UNKNOWN",
+                    "Guardian rejected child start identity while retaining canonical lock",
+                    7,
+                ));
+            }
+            _ => {
+                return Err(error(
+                    "RESOURCE_OWNER_UNKNOWN",
+                    "Guardian did not verify child receipt",
+                    7,
+                ));
+            }
         }
         Ok(())
     }
@@ -1648,6 +1714,10 @@ fn guardian_main(fd: i32, path: &Path) -> Result<Value> {
                 && j.guardian_pid == Some(std::process::id())
         });
         let Some(job) = proof else {
+            // One bounded static protocol diagnostic, then retain the inherited
+            // lock. Invalid/absent proof never authorizes release or success.
+            let _ = std::io::stdout().write_all(b"PCTX-GUARDIAN-REJECTED-PROOF-v1\n");
+            let _ = std::io::stdout().flush();
             loop {
                 std::thread::sleep(std::time::Duration::from_secs(1));
             }
@@ -1655,6 +1725,8 @@ fn guardian_main(fd: i32, path: &Path) -> Result<Value> {
         if let Some(pid) = job.pid
             && process_start(pid).is_some_and(|actual| Some(actual) != job.start_identity)
         {
+            let _ = std::io::stdout().write_all(b"PCTX-GUARDIAN-REJECTED-START-v1\n");
+            let _ = std::io::stdout().flush();
             loop {
                 std::thread::sleep(std::time::Duration::from_secs(1));
             }
@@ -1779,7 +1851,7 @@ fn helper_request(
     budget: usize,
 ) -> Result<Value> {
     owner()?;
-    let (task_id, _) = task_check(p, task, key, run)?;
+    let (task_id, _) = task_check(p, task, key, Some(run))?;
     if !["local", "cloud", "native"].contains(&mode) {
         return Err(error(
             "INVALID_ARGUMENT",

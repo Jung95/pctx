@@ -27,3 +27,7 @@ pub mod schedule;
 pub mod adapter;
 
 pub mod watch;
+
+pub mod parsers;
+
+pub mod inventory;

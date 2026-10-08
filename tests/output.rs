@@ -349,3 +349,79 @@ fn diagnostic_extract_binds_original_source_and_rereads_without_execution() {
     );
     assert_eq!(full(&p, &run)["command_rerun"], false);
 }
+
+#[cfg(unix)]
+#[test]
+fn verbose_output_preserves_late_diagnostics_and_full_masked_denominator() {
+    let (_temp, p) = fixture();
+    let text = format!(
+        "{}error DIAGNOSTIC_AFTER_PROGRESS retained\nwarning SECOND_LOCATION retained\n",
+        "progress 10%\n".repeat(40_000)
+    );
+    fs::write(p.root.join("input.txt"), &text).unwrap();
+    let mut request = request(&["/bin/cat", "input.txt"]);
+    request.execution_timeout_ms = Some(15_000);
+    trust(&p, &request);
+    let result = output::run(&p, &request).unwrap();
+    assert_eq!(result["child_exit_code"], 0);
+    assert_eq!(result["capture_complete"], true, "{result}");
+    assert_eq!(result["redacted_bytes"], text.len() as u64);
+    assert!(result["records"].as_array().unwrap().iter().any(|r| {
+        r["text"]
+            .as_str()
+            .unwrap()
+            .contains("DIAGNOSTIC_AFTER_PROGRESS")
+    }));
+    let id = result["output_id"].as_str().unwrap().to_string();
+    fs::remove_file(p.root.join("input.txt")).unwrap();
+    let reread = output::output(
+        &p,
+        &OutputCommand::Find {
+            id,
+            literal: "SECOND_LOCATION".into(),
+            limit: 5,
+        },
+    )
+    .unwrap();
+    assert_eq!(reread["records"].as_array().unwrap().len(), 1);
+    assert_eq!(reread["command_rerun"], false);
+}
+
+#[cfg(unix)]
+#[test]
+fn bounded_capture_retains_tail_and_original_record_positions() {
+    let (_temp, p) = fixture();
+    let text = format!(
+        "{}error FINAL_TAIL ghp_abcdefghijklmnop123456789\n",
+        "p\n".repeat(140_000)
+    );
+    fs::write(p.root.join("input.txt"), &text).unwrap();
+    let mut request = request(&["/bin/cat", "input.txt"]);
+    request.execution_timeout_ms = Some(15_000);
+    trust(&p, &request);
+    let result = output::run(&p, &request).unwrap();
+    assert_eq!(result["child_exit_code"], 0);
+    assert_eq!(result["capture_complete"], false);
+    assert!(result["omitted_bytes"].as_u64().unwrap() > 0);
+    let id = result["output_id"].as_str().unwrap().to_owned();
+    let tail = output::output(
+        &p,
+        &OutputCommand::Show {
+            id,
+            view: "full".into(),
+            stream: Some("stdout".into()),
+            lines: Some("140001:140001".into()),
+        },
+    )
+    .unwrap();
+    let records = tail["records"].as_array().unwrap();
+    assert_eq!(records.len(), 1);
+    assert_eq!(records[0]["sequence"], 140_000);
+    assert!(
+        records[0]["text"]
+            .as_str()
+            .unwrap()
+            .contains("FINAL_TAIL [REDACTED]")
+    );
+    assert!(!tail.to_string().contains("ghp_abcdefghijklmnop123456789"));
+}

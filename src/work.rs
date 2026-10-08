@@ -188,6 +188,25 @@ pub enum AgentCommand {
 }
 #[derive(Debug, Clone, Subcommand)]
 pub enum CheckCommand {
+    Plan {
+        #[arg(long)]
+        task_id: String,
+        #[arg(long)]
+        key: String,
+        #[arg(long)]
+        run: Option<String>,
+    },
+    Run {
+        key: Option<String>,
+        #[arg(long = "key", required_unless_present = "key", conflicts_with = "key")]
+        registered_key: Option<String>,
+        #[arg(long)]
+        task_id: String,
+        #[arg(long)]
+        run: String,
+        #[arg(long, default_value_t = 8192)]
+        budget_bytes: usize,
+    },
     Begin {
         task: String,
         #[arg(long)]
@@ -748,6 +767,44 @@ fn gates(db: &Connection, project: &Project, t: &Task) -> Result<Value> {
     )
 }
 pub fn execute(project: &Project, command: &WorkCommand) -> Result<Value> {
+    if let WorkCommand::Check {
+        command: CheckCommand::Plan { task_id, key, run },
+    } = command
+    {
+        return crate::runner::execute(
+            project,
+            &crate::runner::RunnerCommand::CheckPlan {
+                task_id: task_id.clone(),
+                key: key.clone(),
+                run: run.clone(),
+            },
+        );
+    }
+    if let WorkCommand::Check {
+        command:
+            CheckCommand::Run {
+                key,
+                registered_key,
+                task_id,
+                run,
+                budget_bytes,
+            },
+    } = command
+    {
+        let key = key
+            .as_ref()
+            .or(registered_key.as_ref())
+            .ok_or_else(|| invalid("Check key is required"))?;
+        return crate::runner::execute(
+            project,
+            &crate::runner::RunnerCommand::CheckRun {
+                task_id: task_id.clone(),
+                key: key.clone(),
+                run: run.clone(),
+                budget_bytes: *budget_bytes,
+            },
+        );
+    }
     if let WorkCommand::Control { command } = command {
         return control_command(project, command);
     }
@@ -1326,6 +1383,7 @@ fn agent_command(project: &Project, db: &Connection, command: &AgentCommand) -> 
 }
 fn check_command(project: &Project, db: &Connection, command: &CheckCommand) -> Result<Value> {
     match command {
+ CheckCommand::Plan{..}|CheckCommand::Run{..}=>unreachable!("Runner dispatch precedes control transaction"),
  CheckCommand::Begin{task:name,key,run}=>{let t=task(db,name)?;let (run_task,_,_)=lease(db,run,None,project)?;if run_task!=t.id{return Err(conflict("LEASE_REVOKED","Run belongs to another task"));}let c=t.def.checks.iter().find(|c|&c.key==key).ok_or_else(||invalid("Check key not defined"))?;let target=fingerprint(project,&t.def,Some(c))?;let check=id("CHECK");db.execute("INSERT INTO checks VALUES(?1,?2,?3,?4,?5,?6,?7,'running',NULL,?8)",params![check,t.id,key,run,t.def_rev,target,project.policy_hash(),now()])?;let e=event(db,&t.id,"check_begun",&json!({"check_id":check,"key":key,"target":target}))?;Ok(json!({"check_id":check,"artifact_fingerprint":target,"event":e}))},
  CheckCommand::Record{check,from_file}=>{let report:CheckReport=parse_file(from_file)?;if report.source=="runner_observed"{return Err(invalid("External report cannot claim runner-observed provenance"));}record_check_report(project,db,check,report,false,None)},
  CheckCommand::List{task:name}=>{let task_id=name.as_ref().map(|name|task(db,name).map(|t|t.id)).transpose()?;let mut s=db.prepare("SELECT id,task,key,status,target,report FROM checks WHERE ?1 IS NULL OR task=?1 ORDER BY rowid")?;let checks=s.query_map([task_id],|r|Ok(json!({"check_id":r.get::<_,String>(0)?,"task_id":r.get::<_,String>(1)?,"key":r.get::<_,String>(2)?,"result":r.get::<_,String>(3)?,"target":r.get::<_,String>(4)?,"report":r.get::<_,Option<String>>(5)?})))?.collect::<std::result::Result<Vec<_>,_>>()?;Ok(json!({"checks":checks}))},
@@ -1472,6 +1530,10 @@ fn control_command(project: &Project, command: &ControlCommand) -> Result<Value>
                 }
                 // Credentials live outside SQLite. Strip arbitrary environment data from portable metadata.
                 destination.execute("UPDATE checks SET report=json_remove(report,'$.report.environment') WHERE report IS NOT NULL",[])?;
+                let schedule_v2: bool = destination.query_row("SELECT EXISTS(SELECT 1 FROM sqlite_master WHERE type='table' AND name='schedule_bindings')", [], |r| r.get(0))?;
+                if schedule_v2 {
+                    destination.execute_batch("DELETE FROM schedule_bindings; UPDATE schedule_installations SET metadata=json_object('provider',provider,'plan_hash',plan_hash,'former_state',state,'requires_reapproval',json('true')),state='unknown_restored';")?;
+                }
                 destination.execute_batch("PRAGMA journal_mode=DELETE; VACUUM;")?;
                 drop(destination);
                 let bytes = std::fs::read(&path)?;
@@ -1557,6 +1619,9 @@ fn control_command(project: &Project, command: &ControlCommand) -> Result<Value>
                     "schedule_occurrences",
                     "schedule_receipts",
                     "schedule_events",
+                    "schedule_bindings",
+                    "schedule_runs",
+                    "schedule_installations",
                     "adapter_schema",
                     "adapter_bindings",
                     "adapter_receipts",
@@ -1642,33 +1707,49 @@ fn control_command(project: &Project, command: &ControlCommand) -> Result<Value>
                         return Err(Error::new("INVALID_ARCHIVE", "Unsupported quota schema", 2));
                     }
                 }
-                let schedule_tables = &tables[29..34];
+                let schedule_tables = &tables[29..37];
                 let has_schedule = names.iter().any(|name| name == "schedule_schema");
+                let mut schedule_version = 0;
                 if schedule_tables
                     .iter()
                     .any(|table| names.iter().any(|name| name == table))
                 {
-                    if !schedule_tables
-                        .iter()
-                        .all(|table| names.iter().any(|name| name == table))
-                    {
+                    if !has_schedule {
                         return Err(Error::new(
                             "INVALID_ARCHIVE",
                             "Incomplete schedule schema",
                             2,
                         ));
                     }
-                    let version: i64 =
+                    schedule_version =
                         db.query_row("SELECT version FROM schedule_schema", [], |r| r.get(0))?;
-                    if version != 1 {
+                    let required = match schedule_version {
+                        1 => &schedule_tables[..5],
+                        2 => schedule_tables,
+                        _ => {
+                            return Err(Error::new(
+                                "INVALID_ARCHIVE",
+                                "Unsupported schedule schema",
+                                2,
+                            ));
+                        }
+                    };
+                    if !required
+                        .iter()
+                        .all(|table| names.iter().any(|name| name == table))
+                        || (schedule_version == 1
+                            && schedule_tables[5..]
+                                .iter()
+                                .any(|table| names.iter().any(|name| name == table)))
+                    {
                         return Err(Error::new(
                             "INVALID_ARCHIVE",
-                            "Unsupported schedule schema",
+                            "Incomplete or inconsistent schedule schema",
                             2,
                         ));
                     }
                 }
-                let adapter_tables = &tables[34..];
+                let adapter_tables = &tables[37..];
                 let has_adapter = names.iter().any(|name| name == "adapter_schema");
                 if adapter_tables
                     .iter()
@@ -1733,6 +1814,9 @@ fn control_command(project: &Project, command: &ControlCommand) -> Result<Value>
                     db.execute("INSERT INTO quota_events(entity,kind,metadata,created) VALUES(?1,'control_restored',?2,?3)",params![coordination,json!({"reservations_invalidated":true,"pause_and_silence_preserved":true,"observations_are_historical":true,"historical_observation_rowid":cutoff}).to_string(),now()])?;
                 }
                 if has_schedule {
+                    if schedule_version == 2 {
+                        db.execute_batch("DELETE FROM schedule_bindings; UPDATE schedule_runs SET state='interrupted_unknown',error='control_restored',finished=NULL WHERE state='running'; UPDATE schedule_occurrences SET state='interrupted_unknown' WHERE state='running'; UPDATE schedule_installations SET metadata=json_object('provider',provider,'plan_hash',plan_hash,'former_state',state,'requires_reapproval',json('true')),state='unknown_restored';")?;
+                    }
                     db.execute_batch("CREATE TRIGGER schedule_events_no_update BEFORE UPDATE ON schedule_events BEGIN SELECT RAISE(ABORT,'append-only schedule events');END; CREATE TRIGGER schedule_events_no_delete BEFORE DELETE ON schedule_events BEGIN SELECT RAISE(ABORT,'append-only schedule events');END;")?;
                     db.execute("INSERT INTO schedule_events(namespace,schedule,kind,metadata,created) VALUES('control',?1,'control_restored',?2,?3)",params![coordination,json!({"registrations":"unknown","automatic_install":false,"pause_and_occurrences_preserved":true}).to_string(),now()])?;
                 }

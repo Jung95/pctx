@@ -18,7 +18,7 @@ These are partial specification implementations. Code or a passing subset does n
 - extensions-tests.log: filters, operations and pack initial suites passed. A later independent pack review found policy visibility, pinned read, aggregate bound and freshness gaps; fixes and new regression evidence are required before promotion.
 - rebuild-tests.log: ten core/security tests passed, including corruption quarantine/checkpoint preservation and refusal to replace a newer schema. Independent review subsequently found a two-rename crash window; publication was changed to preserve the original by hard link and atomically replace the active path. Rerun pending.
 - The output fixture failure used raw '%' as a printf format. It now passes data through '%s'; the secret masking assertion remains intact.
-- No real Linux/Windows execution, provider model usage, paid cost evaluation, platform CI or live product connector result is established. Byte measurements are not model-token or quota savings.
+- Actual first GitHub CI ran on Windows, Linux and macOS and failed (run 37710582060). Windows/Linux stopped at static checks; macOS stopped at three guardian fixture admission timeouts. No passing platform CI, provider model usage, paid cost evaluation or live product connector result is established. Byte measurements are not model-token or quota savings.
 
 ## Environment and publication
 
@@ -35,3 +35,13 @@ Pack corrections, scoped documents, quota ledger, local schedule registry and of
 Release smoke observation: `evidence/evaluation-smoke-release.json` records the optimized binary on the same nonnormative 100-file / single-repeat corpus. Verbose children now exit normally, but record limits still cause lost diagnostics and negative net byte savings. Session workload full packets did not produce baselines; investigation remains open. These failures remain visible and prevent acceptance promotion.
 
 Corrected session fixture: `evidence/evaluation-smoke-bounded.json` declares a one-symbol task scope and unchanged 12,000-byte budget. Five actual sessions produced 1,992-byte full packets and 1,106-byte unchanged delta packets; old baseline after compact was rejected. Five simultaneous Git queries observed one refresh. These are local byte/correctness observations, not token/billing/quota evidence. Verbose output still missed one required diagnostic and incurred -78,161 net saved bytes (-34.08%); this remains a required correction.
+
+## Pending second integration
+
+First verified development commit `ad6ab48` is pushed. Current uncommitted extensions include retained late diagnostic tails, registered parsers, static inventory/profile/drift proposals, canonical check aliases, shared scheduled mailbox, managed schedule execution and portable schedule restore scrubbing. Parser/inventory modules were handed back; schedule and CI/privacy repairs are still owned by agents. Newest edits and regression fixtures await compilation/testing; the first-commit gate does not verify them. Detailed ownership and exact next actions are in handoff.md.
+
+Second integration gate: formatting and all-target static checks passed; all 190 actual macOS tests passed (`evidence/second-macos-static.log`, `evidence/second-full-macos-tests.log`). This includes 15 parser, 8 inventory, 11 operations, 10 output, 20 runner, 17 schedule and 9 work-control tests, plus remaining full regression suites. Native schedule registration and active keep-awake effects were deliberately not exercised. New release smoke and normative M/30 observations are pending; cross-platform CI remains failed until a new actual run proves otherwise.
+
+Second release smoke (`evidence/evaluation-second-smoke.json`) retained all mandatory diagnostics (zero misses) and observed zero presentation false passes. Net emitted-byte reduction after rereads was 462,221 / 770,084 bytes (60.02%); tiny/malformed/Unicode/large-record cases still had negative individual savings. Supported-parser bundle and model outcome remain unknown; this 100-file/51,200-byte/one-repeat smoke is not normative certification. The regenerated local archive includes public guides; checksum, safe entries, private-input exclusion, README guide links and isolated init/index/find/inventory passed (`evidence/second-archive-validation.log`).
+
+Normative M/30 free observation started after all builds/tests/package checks, using 10,000 files/200 MiB and unchanged workload budgets. It is still running; no performance acceptance result exists yet. No model/provider calls are authorized or made.

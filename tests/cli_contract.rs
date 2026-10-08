@@ -231,3 +231,39 @@ fn ndjson_snapshot_follow_and_resume_have_no_event_gap() {
         Some(2)
     );
 }
+
+#[test]
+fn inventory_cli_reports_static_candidates_without_execution_or_authority() {
+    let f = Fixture::new();
+    f.ok(&["init"]);
+    fs::write(
+        f.root.join("package.json"),
+        r#"{"name":"fixture","scripts":{"test":"touch must-not-run"},"engines":{"node":">=22"}}"#,
+    )
+    .unwrap();
+    let scan = f.ok(&[
+        "inventory",
+        "scan",
+        "--max-files",
+        "10",
+        "--max-bytes",
+        "4096",
+    ]);
+    assert!(
+        scan["data"]["check_candidates"]
+            .as_array()
+            .is_some_and(|v| !v.is_empty()),
+        "{scan}"
+    );
+    assert!(!f.root.join("must-not-run").exists());
+    assert_eq!(
+        f.run(&["resource", "status", "--host", "remote"])
+            .status
+            .code(),
+        Some(2)
+    );
+    let unavailable = f.run(&["job", "cancel", "missing-job"]);
+    let result: Value = serde_json::from_slice(&unavailable.stdout).unwrap();
+    assert!(!unavailable.status.success());
+    assert_eq!(result["command"], "job");
+}

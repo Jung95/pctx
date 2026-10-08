@@ -534,3 +534,143 @@ fn role_pause_blocks_claim_without_mutating_task_or_run() {
     assert_eq!(shown["state"], "ready");
     assert!(shown["run"].is_null());
 }
+
+fn owner_queue(p: &Project, limit: usize) -> Value {
+    operations::execute(
+        p,
+        &Op::Owner {
+            command: operations::OwnerCommand::Queue { limit },
+        },
+    )
+    .unwrap()
+}
+fn pause_delivery(p: &Project, role: &str, topic: Option<&str>, recipient: Option<&str>) {
+    operations::execute(
+        p,
+        &Op::Role {
+            command: RoleCommand::Pause {
+                role: role.into(),
+                reason: "Synthetic delivery barrier".into(),
+                topic: topic.map(str::to_owned),
+                recipient: recipient.map(str::to_owned),
+            },
+        },
+    )
+    .unwrap();
+}
+#[test]
+fn owner_queue_filters_oldest_hidden_actions_before_limit_without_disclosing_details() {
+    let (_temp, p) = fixture();
+    let mut role_hidden = action();
+    role_hidden["environment"] = json!("paused-private-detail");
+    let hidden_pause = request(&p, role_hidden);
+    let mut topic_hidden = action();
+    topic_hidden["role"] = json!("auditor");
+    topic_hidden["topic"] = json!("silent-private-topic");
+    topic_hidden["environment"] = json!("silent-private-detail");
+    let hidden_topic = request(&p, topic_hidden);
+    let mut visible = action();
+    visible["role"] = json!("public-worker");
+    visible["topic"] = json!("public-topic");
+    visible["environment"] = json!("public-detail");
+    let public = request(&p, visible);
+    let db = work::connect(&p).unwrap();
+    for (id, created) in [(&hidden_pause, 1), (&hidden_topic, 2), (&public, 3)] {
+        db.execute(
+            "UPDATE ops_decisions SET created=? WHERE id=?",
+            rusqlite::params![created, id],
+        )
+        .unwrap();
+    }
+    pause_delivery(&p, "developer", None, None);
+    pause_delivery(&p, "auditor", Some("silent-private-topic"), None);
+    let queue = owner_queue(&p, 1);
+    assert_eq!(queue["decisions"].as_array().unwrap().len(), 1);
+    assert_eq!(queue["decisions"][0]["decision_id"], public);
+    let encoded = queue.to_string();
+    for hidden in [
+        hidden_pause.as_str(),
+        hidden_topic.as_str(),
+        "paused-private-detail",
+        "silent-private-detail",
+        "silent-private-topic",
+    ] {
+        assert!(!encoded.contains(hidden));
+    }
+    assert_eq!(queue["owner_prompt_sent"], false);
+}
+#[test]
+fn owner_queue_honors_specific_recipients_and_owner_destination_without_globalizing_silence() {
+    let (_temp, p) = fixture();
+    let mut hidden_actor = action();
+    hidden_actor["topic"] = json!("recipient-topic");
+    let actor_hidden = request(&p, hidden_actor);
+    let mut other_actor = action();
+    other_actor["actor"] = json!("other-worker");
+    other_actor["topic"] = json!("recipient-topic");
+    let allowed_other = request(&p, other_actor);
+    let mut hidden_owner = action();
+    hidden_owner["topic"] = json!("owner-topic");
+    hidden_owner["actor"] = json!("different-worker");
+    let owner_hidden = request(&p, hidden_owner);
+    pause_delivery(&p, "developer", Some("recipient-topic"), Some("worker"));
+    pause_delivery(&p, "developer", Some("owner-topic"), Some("owner"));
+    let queue = owner_queue(&p, 10);
+    let items = queue["decisions"].as_array().unwrap();
+    assert_eq!(items.len(), 1);
+    assert_eq!(items[0]["decision_id"], allowed_other);
+    assert!(!queue.to_string().contains(&actor_hidden));
+    assert!(!queue.to_string().contains(&owner_hidden));
+}
+#[test]
+fn omitted_action_role_cannot_bypass_registered_actor_pause() {
+    let (_temp, p) = fixture();
+    attach(&p, "worker");
+    let mut no_role = action();
+    no_role.as_object_mut().unwrap().remove("role");
+    let hidden = request(&p, no_role);
+    pause_delivery(&p, "developer", None, None);
+    let queue = owner_queue(&p, 1);
+    assert!(queue["decisions"].as_array().unwrap().is_empty());
+    assert!(!queue.to_string().contains(&hidden));
+}
+#[test]
+fn owner_queue_delivery_barriers_survive_control_restore() {
+    let (_temp, p) = fixture();
+    let paused = request(&p, action());
+    let mut silent = action();
+    silent["role"] = json!("auditor");
+    silent["topic"] = json!("restored-private-topic");
+    let silence = request(&p, silent);
+    let mut allowed = action();
+    allowed["role"] = json!("public-worker");
+    let visible = request(&p, allowed);
+    pause_delivery(&p, "developer", None, None);
+    pause_delivery(&p, "auditor", Some("restored-private-topic"), None);
+    let archive = p.data_dir.join("queue-backup.json");
+    work::execute(
+        &p,
+        &WorkCommand::Control {
+            command: work::ControlCommand::Backup {
+                output: archive.clone(),
+            },
+        },
+    )
+    .unwrap();
+    let response = work::execute(
+        &p,
+        &WorkCommand::Control {
+            command: work::ControlCommand::Restore { input: archive },
+        },
+    )
+    .unwrap();
+    let mut restored = p.clone();
+    restored.coordination_id = response["coordination_id"].as_str().unwrap().to_owned();
+    restored.control_dir = p.data_dir.join("controls").join(&restored.coordination_id);
+    let queue = owner_queue(&restored, 1);
+    assert_eq!(queue["decisions"].as_array().unwrap().len(), 1);
+    assert_eq!(queue["decisions"][0]["decision_id"], visible);
+    assert!(!queue.to_string().contains(&paused));
+    assert!(!queue.to_string().contains(&silence));
+    assert!(!queue.to_string().contains("restored-private-topic"));
+}

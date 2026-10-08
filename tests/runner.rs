@@ -71,6 +71,7 @@ impl Fixture {
             .env("PCTX_DATA_DIR", &self.data)
             .env("PCTX_HOST_RESOURCE_DIR", &self.host)
             .env("PCTX_ACTOR", "owner")
+            .env("PCTX_RUNNER_DIAGNOSTICS", "1")
             .env("GIT_CONFIG_GLOBAL", "/dev/null")
             .env("GIT_CONFIG_SYSTEM", "/dev/null")
             .env_remove("PCTX_RUN_CAPABILITY");
@@ -126,7 +127,14 @@ impl Fixture {
     }
     fn wait_child_process(&self, child: &mut std::process::Child) -> Value {
         use std::io::Read;
-        let end = Instant::now() + Duration::from_secs(8);
+        let started = Instant::now();
+        // The legacy route performs four mandatory executable fingerprint checks
+        // before ACK, plus separate five-second READY and ATTACHED handshakes.
+        // Eight seconds expired on native GitHub macOS with runner still alive.
+        // Allow 10s protocol + 30s bounded admission/hash work + 5s publication;
+        // this is a fixture allowance, not a product performance pass or weaker
+        // attachment criterion. Stage diagnostics expose where that time went.
+        let end = started + Duration::from_secs(45);
         loop {
             if let Ok(bytes) = fs::read(self.slot())
                 && let Ok(v) = serde_json::from_slice::<Value>(&bytes)
@@ -141,16 +149,28 @@ impl Fixture {
                     let _ = child.kill();
                     let _ = child.wait();
                 }
-                let mut stdout = String::new();
-                let mut stderr = String::new();
-                if let Some(mut pipe) = child.stdout.take() {
-                    let _ = pipe.read_to_string(&mut stdout);
-                }
-                if let Some(mut pipe) = child.stderr.take() {
-                    let _ = pipe.read_to_string(&mut stderr);
-                }
+                let bounded = |pipe: &mut dyn Read| {
+                    let mut bytes = vec![];
+                    let _ = pipe.take(32768).read_to_end(&mut bytes);
+                    pctx::reader::redact(&String::from_utf8_lossy(&bytes)).0
+                };
+                let stdout = child
+                    .stdout
+                    .take()
+                    .map(|mut pipe| bounded(&mut pipe))
+                    .unwrap_or_default();
+                let stderr = child
+                    .stderr
+                    .take()
+                    .map(|mut pipe| bounded(&mut pipe))
+                    .unwrap_or_default();
+                let latest = fs::read(self.slot())
+                    .ok()
+                    .and_then(|b| serde_json::from_slice::<Value>(&b).ok());
+                let slot=latest.map(|v|json!({"job_id":v["job_id"],"state":v["state"],"pid":v["pid"],"process_group":v["process_group"],"start_identity":v["start_identity"],"guardian_pid":v["guardian_pid"],"guardian_start":v["guardian_start"],"guardian_attached":v["guardian_attached"],"updated_at":v["updated_at"]}));
                 panic!(
-                    "Runner did not durably acknowledge guardian attachment; status={exited:?} stdout={stdout} stderr={stderr}. Native boot/start identity must be observable; sandbox denial does not qualify as bridge support."
+                    "Runner did not durably acknowledge guardian attachment; elapsed_ms={} status={exited:?} latest_slot={slot:?} stdout={stdout} bounded_stage_stderr={stderr}. Native boot/start identity must be observable; sandbox denial does not qualify as bridge support.",
+                    started.elapsed().as_millis()
                 );
             }
             std::thread::sleep(Duration::from_millis(10));
@@ -683,4 +703,93 @@ fn linked_slot_child_directory_cannot_redirect_state() {
     let o = f.output(&f.run_args());
     assert!(!o.status.success());
     assert_eq!(fs::read_dir(&outside).unwrap().count(), 0);
+}
+
+#[test]
+fn inherited_canonical_descriptor_retains_lock_after_invalid_proof_and_parent_close() {
+    use fs2::FileExt;
+    use std::{
+        io::{BufRead, BufReader},
+        os::{fd::AsRawFd, unix::process::CommandExt},
+    };
+    struct Cleanup(std::process::Child);
+    impl Drop for Cleanup {
+        fn drop(&mut self) {
+            let _ = self.0.kill();
+            let _ = self.0.wait();
+        }
+    }
+    let f = Fixture::new(&report(1), true, None);
+    let lock_path = bridge(&f);
+    let lock = fs::OpenOptions::new()
+        .read(true)
+        .write(true)
+        .open(&lock_path)
+        .unwrap();
+    lock.try_lock_exclusive().unwrap();
+    let fd = lock.as_raw_fd();
+    let mut command = f.command(&[
+        "runner",
+        "bridge-guardian",
+        "--fd",
+        "197",
+        "--lock-path",
+        lock_path.to_str().unwrap(),
+    ]);
+    command
+        .stdin(Stdio::null())
+        .stdout(Stdio::piped())
+        .stderr(Stdio::null());
+    unsafe {
+        command.pre_exec(move || {
+            if libc::dup2(fd, 197) < 0 || libc::fcntl(197, libc::F_SETFD, 0) < 0 {
+                return Err(std::io::Error::last_os_error());
+            }
+            Ok(())
+        });
+    }
+    let mut guardian = Cleanup(command.spawn().unwrap());
+    let mut pipe = guardian.0.stdout.take().unwrap();
+    unsafe {
+        let flags = libc::fcntl(pipe.as_raw_fd(), libc::F_GETFL);
+        assert!(
+            flags >= 0
+                && libc::fcntl(pipe.as_raw_fd(), libc::F_SETFL, flags | libc::O_NONBLOCK) >= 0
+        );
+    }
+    let mut read = BufReader::new(&mut pipe);
+    let mut lines = String::new();
+    let deadline = Instant::now() + Duration::from_secs(10);
+    while !lines.contains("PCTX-GUARDIAN-REJECTED-PROOF-v1\n") {
+        let mut line = String::new();
+        match read.read_line(&mut line) {
+            Ok(0) => panic!("Guardian ended without retaining inherited descriptor: {lines}"),
+            Ok(_) => lines.push_str(&line),
+            Err(e) if e.kind() == std::io::ErrorKind::WouldBlock => (),
+            Err(e) => panic!("Guardian protocol IO: {e}"),
+        }
+        assert!(
+            lines.len() <= 512 && Instant::now() < deadline,
+            "Bounded guardian protocol timeout: {lines}"
+        );
+        std::thread::sleep(Duration::from_millis(5));
+    }
+    assert!(lines.starts_with("PCTX-GUARDIAN-READY-v1\n"));
+    assert!(!lines.contains("PCTX-GUARDIAN-ATTACHED-v1"));
+    drop(lock);
+    assert!(guardian.0.try_wait().unwrap().is_none());
+    let contender = fs::OpenOptions::new()
+        .read(true)
+        .write(true)
+        .open(&lock_path)
+        .unwrap();
+    assert!(
+        contender.try_lock_exclusive().is_err(),
+        "Invalid proof must retain the inherited canonical mutex after parent's descriptor closes"
+    );
+    // No execution was launched. Explicit fixture destruction is safe and must
+    // release the last inherited reference, unlike product TTL reclamation.
+    guardian.0.kill().unwrap();
+    guardian.0.wait().unwrap();
+    contender.try_lock_exclusive().unwrap();
 }
