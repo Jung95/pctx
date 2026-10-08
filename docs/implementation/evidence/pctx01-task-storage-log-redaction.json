@@ -1,0 +1,20 @@
+{
+  "log": "pctx01-task-storage-baseline.log",
+  "original_sha256": "8983e7eb646963a12276cdb01cda0114fe44f752881dcec1d4e9c3d83a98e15b",
+  "public_sha256": "7c9e549a70a92a0824733ca4723ad86847def70a1ffd3bd4f9cd3722bac99bdd",
+  "redactions": [
+    {
+      "line": 22,
+      "bytes": 268675,
+      "sha256": "0543e659a4830a53dda33b4e7011fd186d1732dd0707769d1ea82098efa0e086",
+      "reason": "Prepared-state byte dump can include disposable fixture run capability; public evidence omits raw state bytes"
+    },
+    {
+      "line": 23,
+      "bytes": 380034,
+      "sha256": "eb76da7900e1e9d8d6d9ec48b7ace40e3f209697243760fdcf14e3dfc0a6f1c9",
+      "reason": "Prepared-state byte dump can include disposable fixture run capability; public evidence omits raw state bytes"
+    }
+  ],
+  "failure_names_exit_and_status_unchanged": true
+}

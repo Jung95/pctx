@@ -1,0 +1,142 @@
+{
+  "task": "PCTX01",
+  "gates": [
+    "G05"
+  ],
+  "status": "implementing",
+  "base_revision": "931c1e0753b5b94f846409241ba2337638d2d8b7",
+  "runtime_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+  "whole_gates_closed": 0,
+  "whole_gate_denominator": 10,
+  "visible_leaf_denominator": 140,
+  "historical_group_denominator": 12,
+  "scope": "Five existing DB-origin typed Task/nullable JSON and Create/Report receipt conversions only; storage corruption7, caller2, state conflicts9, exact replay/clock preserved",
+  "initial_compile": {
+    "session": 57187,
+    "exit": 101,
+    "tests_executed": false,
+    "log": "pctx01-task-storage-initial.log",
+    "cause": "Fixture constant index outside report argv array"
+  },
+  "initial_baseline": {
+    "session": 42554,
+    "exit": 101,
+    "passed": 1,
+    "failed": 3,
+    "log": "pctx01-task-storage-baseline.log",
+    "fixture_issue": "Report injection DB left open during snapshot; WAL lifecycle changes are not product mutation. Corrected to close after every write.",
+    "public_log_redaction": "pctx01-task-storage-log-redaction.json"
+  },
+  "baseline": {
+    "session": 66612,
+    "exit": 101,
+    "passed": 1,
+    "failed": 3,
+    "log": "pctx01-task-storage-baseline-final.log",
+    "actual_misclassification": "All three new corruption fixtures return2 instead of7"
+  },
+  "initial_related": {
+    "exit": 101,
+    "tests_executed": false,
+    "log": "pctx01-task-storage-related.log",
+    "cause": "Wrong target name activity_admission; corrected to activity_preflight"
+  },
+  "related": {
+    "session": 85718,
+    "exit": 0,
+    "passed": 27,
+    "failed": 0,
+    "log": "pctx01-task-storage-related-final.log"
+  },
+  "controlled_loss": {
+    "session": 53690,
+    "exit": 0,
+    "test_exit": 101,
+    "passed": 1,
+    "failed": 3,
+    "restored_exactly": true,
+    "record": "pctx01-task-storage-loss.json",
+    "log": "pctx01-task-storage-loss.log"
+  },
+  "static_macos": {
+    "session": 6622,
+    "exit": 0,
+    "format_exit": 0,
+    "log": "pctx01-task-storage-static.log"
+  },
+  "full_macos": {
+    "session": 71737,
+    "status": "terminal",
+    "log": "pctx01-task-storage-full-macos.log",
+    "exit": 101,
+    "passed": 576,
+    "failed": 4,
+    "failed_tests": [
+      "query_program_resolution_uses_captured_command_path",
+      "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+      "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget",
+      "simultaneous_streams_are_collected_and_overflow_never_infers_success"
+    ],
+    "counts_exclude_nested_child_summary": true
+  },
+  "linux_source": {
+    "source_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+    "snapshot": "/Users/dev/PCTX/.toolchain/linux/source-00df0e2",
+    "archive_sha256": "f959a64d38d9796a4ccb6bcf967b37d4893ec88ff0a06ad1640273bb2a789933",
+    "tracked_archive_only": true,
+    "snapshot_files_compared_to_git_archive": 1091,
+    "executable_modes_match": true,
+    "files_sha256": {
+      "src/work.rs": "b624ab8aec564ad62d557f30cda96058032f1159c462f5d3560d9aaf657660ed",
+      "tests/persisted_error_contract.rs": "be731f6fbf1bbb95291daded9d369c45b891d21811eaaf0e388a4ad02c14398f",
+      "scripts/validate-linux-container.py": "cb7c0ba4656f42a3c6eb5cc21108acc384b2b8c8ac8284fce4fe27a1050d6033"
+    }
+  },
+  "independent_review": {
+    "agent": "/root/work_control",
+    "scoped_blocker": false,
+    "no_tests_or_edits": true
+  },
+  "proof_limits": [
+    "Prepared control store snapshots, not cold first-use rollback",
+    "Completion values decoded but not directly emitted/asserted; submission is emitted and asserted",
+    "Valid arbitrary receipt JSON remains compatible, not new receipt shape validation",
+    "Four historical macOS startup conditions remain unresolved; Linux schedule failure remains unresolved",
+    "Windows unverified; no Actions dispatched"
+  ],
+  "next_same_task": "Execute frozen grouped G02-D04/G03-D03-D04/G05-D04-D06 admission/error candidate; G10-D02/D03 closed, no incremental exploration queue",
+  "next_source_audit": {
+    "quota.rs": [
+      408,
+      447,
+      480,
+      531
+    ],
+    "session.rs": [
+      379,
+      515
+    ],
+    "source_review": "DB-origin only; preserve hash/attribution/cumulative/baseline identity/ack conflicts and original expiry; SQL json_extract syntax exceptions already storage7; caller UsageBatch remains2"
+  },
+  "linux_current_slice": {
+    "status": "not_run",
+    "reason": "Updated user goal requires one-time whole PCTX01 closure plan and grouped integration gates; do not repeat full multi-platform validation per small slice. Previous fixed-source native Linux evidence remains bounded to its revision."
+  },
+  "runtime_binary_sha256": "a9ede263b04c416576d91b923a8c52ceb7b9355621d9d38deeddf675f1a8d5e9",
+  "files_sha256": {
+    "src/work.rs": "b624ab8aec564ad62d557f30cda96058032f1159c462f5d3560d9aaf657660ed",
+    "tests/persisted_error_contract.rs": "be731f6fbf1bbb95291daded9d369c45b891d21811eaaf0e388a4ad02c14398f"
+  },
+  "logs_sha256": {
+    "pctx01-task-storage-static.log": "f5298120e7d0185c848aedccb80a9274f6ea24137e6a8b7c7dde5ef429416bb4",
+    "pctx01-task-storage-related-final.log": "7ed97b29d5cec64eb7d029456ccdce482ce4f444a9cd9a9859c1da6c89f400cf",
+    "pctx01-task-storage-initial.log": "ddd469a0cca32b16bc65778510c94e84392d60c15fdfa155d72863b0efc6854d",
+    "pctx01-task-storage-baseline.log": "7c9e549a70a92a0824733ca4723ad86847def70a1ffd3bd4f9cd3722bac99bdd",
+    "pctx01-task-storage-full-macos.log": "479bfc45930723cf81006ec37849038f687991da6e04c3b835037fd07c169882",
+    "pctx01-task-storage-related.log": "169b912cff0ba3bf6f76f06634a46cd9aa71da4284ab4d87306f951060df76bc",
+    "pctx01-task-storage-loss.log": "88228f915138d9e4421c7445c104c2ccd7281253ae235e4e560873619feaa3d5",
+    "pctx01-task-storage-baseline-final.log": "ff1170ee65f11b0c1ed23e3f0c5c804042899deabeb679be2e874a47187532fb"
+  },
+  "whole_detail_denominator": 40,
+  "closed_whole_detail_subconditions": 23
+}

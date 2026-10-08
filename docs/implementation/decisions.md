@@ -1048,3 +1048,37 @@ runtime_identity hashes inside IMMEDIATE claim/final transactions (§35/38,
 PCTX36); causal lock-duration proof remains missing. Do not widen the wait or
 add a query clock to force this test green. Independent scheduling repair stays
 backlog while PCTX01 owns its error envelope/classification.
+
+## PCTX01 stored Task and receipt JSON classification (2026-10-09)
+
+Specification §14 distinguishes caller argument errors2 from storage errors7;
+§27 retains idempotency, revision and lease conflicts9. Work's five DB-origin
+conversions used the generic caller serde classifier. A local generic contextual
+decoder changes only those conversion failures to DB_CORRUPT7, with fixed safe
+messages. It preserves typed TaskDefinition decoding, nullable optional Value
+fields, arbitrary valid receipt JSON, exact replay before lease checks and
+request-hash conflict before response decoding. This is existing PCTX01-G05
+coverage, not new Task/Report semantics or a gate-denominator change. Injection
+connections are closed before prepared-state snapshots to avoid treating their
+WAL lifecycle as product effects. Cold first-use rollback and new receipt shape
+validation are not established by these fixtures.
+
+## One-time PCTX01 closure freeze (2026-10-09)
+
+The updated user objective replaces incremental similar-path exploration with a
+single finite whole-G01–G10 register:40 stable detail IDs, bounded local closure
+23/40, whole0/10. Existing10 gates/140 leaves/172 help paths/historical12 R groups
+are unchanged; first whole-detail denominator40 decomposes mandatory common
+contracts rather than adding features. The 140-route response/error/clock crosswalk
+and91 decode-site source inventory are review inputs, not91 defects. Unknown
+origins are resolved together in G05-D04, not by extending the implementation
+queue repeatedly. Independent producer contracts keep their task owners.
+
+§23 requires macOS arm64/x86_64, Linux x86_64 and Windows x86_64. Linux aarch64
+is follow-up evidence only. Original macOS startup failures remain common product
+contract failures; no unsupported environmental exemption. PCTX36 concurrent Tick
+failure is retained separately because occurrence claiming is independent from
+common INDEX_BUSY envelope metadata and Tick has no general query clock; no whole
+suite pass or causal hash-phase claim. Repeated full platform/mutation gates on
+every small patch are superseded by focused/static checks and justified grouped
+integration candidates. No current-slice Linux full rerun or Actions was started.

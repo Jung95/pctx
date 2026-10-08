@@ -1,0 +1,13 @@
+{
+  "source_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+  "snapshot": "/Users/dev/PCTX/.toolchain/linux/source-00df0e2",
+  "archive_sha256": "f959a64d38d9796a4ccb6bcf967b37d4893ec88ff0a06ad1640273bb2a789933",
+  "tracked_archive_only": true,
+  "snapshot_files_compared_to_git_archive": 1091,
+  "executable_modes_match": true,
+  "files_sha256": {
+    "src/work.rs": "b624ab8aec564ad62d557f30cda96058032f1159c462f5d3560d9aaf657660ed",
+    "tests/persisted_error_contract.rs": "be731f6fbf1bbb95291daded9d369c45b891d21811eaaf0e388a4ad02c14398f",
+    "scripts/validate-linux-container.py": "cb7c0ba4656f42a3c6eb5cc21108acc384b2b8c8ac8284fce4fe27a1050d6033"
+  }
+}

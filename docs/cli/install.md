@@ -1,6 +1,6 @@
 # Installation, update and removal
 
-This is a development build. Full release qualification is pending. Local execution evidence is macOS arm64 only; other targets are not verified by compilation alone.
+This is a development build. Full release qualification is pending. Native development evidence exists for macOS arm64 and Linux aarch64, with unresolved full-suite failures. The first-release targets are macOS arm64/x86_64, Linux x86_64 and Windows x86_64; none is fully release-qualified. Compilation and scoped historical CI do not establish current platform qualification.
 
 ## Build and install from source
 

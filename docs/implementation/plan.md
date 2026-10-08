@@ -17,6 +17,34 @@ if external conditions block completion, report the exact condition and required
 action, preserve the current task, and do not select another task. Current selection:
 PCTX01, implementing, no next official task.
 
+## Current fixed PCTX01 execution register — 2026-10-09
+
+Only PCTX01 is active. The user-requested one-time whole-G01–G10 reorganization
+is [PCTX01-closure-plan](tasks/PCTX01-closure-plan.md), with machine-readable
+states in tasks/PCTX01-closure-plan.json and complete static 140-leaf crosswalk
+in evidence/pctx01-closure-audit.json. Its fixed40 subconditions replace all
+historical incremental next-action lists below. Bounded detail closure23/40;
+whole gates0/10. This is the first whole-detail denominator, not a change to the
+10 gates/140 leaves/172 help paths/12 bounded R groups. R local12/12 is not
+whole-local PCTX01 completion. Implementation, evidence and platform waits are
+recorded separately; required §23 targets are macOS arm64/x86_64, Linux x86_64,
+Windows x86_64. Linux aarch64 is supporting follow-up evidence only.
+
+Current bounded Task/receipt runtime00df0e2, related27PASS/staticPASS, macOS
+full71737 terminal101:576PASS4FAIL; all four historical startup failures remain
+product/common-contract failures at original budgets. No heavy job is live.
+Evidence: pctx01-task-storage-verification.json (retains fixture errors and
+privacy-safe log redaction). No repeated Linux full gate for this small slice;
+previous native Linux source-specific evidence remains bounded. Actions not used.
+
+G10-D02/D03 review/document reconciliation is closed. Next: execute the fixed
+grouped parser/admission/stored-error candidate (G02-D04/G03-D03/D04/G05-D04/D06).
+Do not resume the older quota→session→next-path investigation chain. New findings
+map to existing items or producer backlog; any added item requires mandatory-spec
+omission plus PCTX01 ownership and an explicit old/new denominator record.
+Independent PCTX36 schedule concurrency failure remains visible and does not
+turn Tick into a general finite-query route or a new PCTX01 schedule feature.
+
 ## Ownership and common boundaries
 
 The integration owner alone edits Cargo configuration/lockfiles, common Domain types, shared schemas/migrations, CLI routing and publication metadata. Delegated work has exclusive file ownership and proposes shared contract changes before implementation. Current documentation analysis owns only `requirements.md`, `plan.md`, and `decisions.md`. Progress, handoff, source specification and product code are outside that assignment.

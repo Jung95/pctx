@@ -1,0 +1,18 @@
+{
+  "task": "PCTX01",
+  "detail_denominator": 40,
+  "closed_details": 23,
+  "whole_gates_closed": 0,
+  "whole_gate_denominator": 10,
+  "reviewer": "/root/work_control",
+  "finding": "Original G05-D02 closed row overclaimed callback/post-spawn fault injection; linked nested-execution manifest retains it unqualified. Row now open.",
+  "resolved": true,
+  "additional_closed_details": [
+    "G10-D02 independent fixed-plan review",
+    "G10-D03 current-document reconciliation"
+  ],
+  "no_feature_or_denominator_added": true,
+  "source_inventory": "140 command rows, 91 decode-site inputs, source hashes and evidence references checked",
+  "platform_basis": "Specification23 macOS arm64/x86_64 Linux x86_64 Windows x86_64; Linuxarm64 only supporting followup",
+  "next": "Single frozen grouped admission/error candidate, not per-decoder investigation"
+}

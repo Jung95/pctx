@@ -1,160 +1,70 @@
 # Resume handoff
 
-## Active official task
+## Active task and fixed completion contract
 
-**PCTX01 — CLI, envelope and stable errors** is the only active task (`implementing`). It is lowest incomplete with no prerequisites. The latest user goal supersedes historical next-action lists: finish all current-task mandatory implementation, validation, documentation and platform gates before choosing another task. Read docs/implementation/tasks/PCTX01.md, requirements.md and progress.md, then inspect actual Git/code/jobs. Other official items and D-series future slices are backlog. A subset/macOS pass is not task completion. No next official task is selected.
+Only **PCTX01 — CLI, envelope and stable errors** is active (`implementing`),
+lowest incomplete official ID/no prerequisite. The user's one-time full-G01–G10
+reorganization is now fixed in [closure plan](tasks/PCTX01-closure-plan.md) and
+[40-item register](tasks/PCTX01-closure-plan.json). Read those, requirements,
+progress and actual code/Git/jobs before resuming. Historical A/R and old next
+lists are bounded evidence, not alternate execution plans.
 
-## Current PCTX01 error-contract boundary — 2026-10-09
+Detail closure23/40; whole gates0/10. First whole-detail denominator40; previous
+whole gates10 remain10, help172/leaves140/Rgroups12 unchanged. R local12/12 is
+not all-local completion. Other official tasks remain inactive. Do not repeat
+this initial reorganization; execute fixed conditions to closure. PCTX01 done
+then next official task's finite list within the same Goal.
 
-Only PCTX01 is active (`implementing`), whole gates 0/10. Runtime
-`e2fff281a915f55835d689747980a1c3bbfd7b9d` classifies malformed persisted
-Activity event JSON as DB_CORRUPT7 and exposes INDEX_BUSY as retryable, as
-required by specification §9/14. Caller syntax remains INVALID_ARGUMENT2;
-valid JSON values, pagination, delivered earlier stream pages, state-conflict
-precedence and original clocks remain unchanged. No retry or wait was added.
+## Current source and verification
 
-Related tests:21PASS; two controlled losses each0PASS1FAIL with exact source
-restoration. Independent read-only review found no scoped blocker. Native macOS
-full47802 terminal101:573PASS4FAIL (all four retained startup conditions).
-Native Linux aarch64 full33955 terminal101:582PASS1FAIL (persistent concurrent
-schedule tick INDEX_BUSY); all four new error-contract tests pass there.
-Evidence: `evidence/pctx01-persisted-errors-verification.json`, with source/archive
-identity, original failures, transport fixture corrections and loss logs.
-Linux source is fixed runtime revision, read-only, hash-isolated target; source
-unchanged. macOS static checks pass; Linux static result is recorded in manifest.
-Windows remains unverified; no Actions dispatched. Neither platform subset nor
-retryable metadata repairs the independent schedule concurrency failure.
+Runtime `00df0e2f3254f6697148e64a677a712d4c63ddd9`, parent published baseline
+931c1e0753b5b94f846409241ba2337638d2d8b7. Exactly five Work stored Task/receipt
+JSON decoders now report contextual DB_CORRUPT7. Caller2, conflict9, nullable/
+valid Value categories, original expiry, hash-conflict-before-response and
+exact Report replay-before-lease remain. Newthree tests plus existingfour in
+persisted_error_contract; related27PASS. Decoder-loss actual1PASS3FAIL/exact
+restore; format/Clippy PASS; independent scoped review no blocker.
 
-Next action remains PCTX01 G05: audit five existing DB-origin Work Task/receipt
-JSON conversions, preserving nullable/valid values, caller syntax2, lease/state
-conflicts9, request-hash conflict before saved-receipt decode and original expiry.
-No new official task selected. Schedule writer-critical-section concern is
-recorded for inactive PCTX36; hash-phase causation has not been proven.
+Full macOS71737 terminal101:576PASS4FAIL. Original failures: captured command
+PATH, relative PATH/child cwd, eight-worker startup1s, simultaneous streams;
+see pctx01-task-storage-full-macos.log and verification manifest. No original
+budget/concurrency changed, no incidental pass promoted. Source/binary/hash
+bindings and synthetic-state log redaction are recorded. No heavy job live.
+Source Linux archive ready .toolchain/linux/source-00df0e2 (1091 files/modes
+compared); no current-slice Linux run. Updated user rule schedules whole native
+platform validation on grouped integration candidates, not every small patch.
+Previous Linux e2fff281 native full582PASS1FAIL remains revision-specific in
+pctx01-persisted-errors-verification.json, with persistent PCTX36 Tick failure.
 
-## Latest integration boundary
+Required §23 targets: macOS arm64/x86_64, Linux x86_64, Windows x86_64. Native
+Linux aarch64 Ubuntu VM is supporting follow-up evidence, not x86 qualification.
+Mac arm startup failures are product/common-contract failures, cause unproven;
+other required real architectures need approved hosts/runners. No Actions
+(monthly3000min); Node24 action pins retained. Normal main commit/push authorized,
+[skip ci]; no force/operational publish/install/accounts/models/global schedules.
 
-PCTX01 G05/G08/G09 Linux proc-stat disappearance repair, runtime
-5ff3f46ad757f8f19483763fa3048b6baafc065e. Normal push74592 terminal0
-published runtime and evidence704503b93beeda74cc74af33b5d5a345b08bfb98
-to origin/main (ede9285..704503b), [skip ci]. Publication record follows.
-Linux aarch64 VM, Ubuntu24.04.4/LinuxKit7.0.12, Rust1.99, Docker29.8,
-6CPU/5.047GiB; immutable image7759288062d2. Actual native execution, not
-cross-compilation/Actions/x86_64/Windows qualification. Source/toolchain RO,
-network none, UID502:20, private HOME, dedicated registry/target, init reaper,
-executable tmpfs. No host credentials/socket/registration/global settings.
+## Next exact action and ownership
 
-src/query_process.rs accepts an opened stat descriptor's ESRCH as disappeared;
-other errors remain SOURCE_UNAVAILABLE6, pinned root required, zombies remain
-members, original budgets/concurrency unchanged. Actual FD-after-reap probe
-and two new unit regressions; independent read-only review no product blocker.
-Original-source full18470:555PASS22FAIL with implicit noexec/no init. Environment
-fixed full85854:575PASS2FAIL (proc scan and concurrent schedule INDEX_BUSY).
-Focused3971:5PASS; separate guard loss62467:4PASS1FAIL, checkout unchanged.
-Shared-target full68758 invalidated: restored archive may reuse mutation unit
-artifact; failed runtime qualification is retained, never promoted. Launcher now
-selects source-tree-hash target directories and records its own hash.
+**G10-D02/D03** independent review/document reconciliation is closed.
+Next execute the one grouped admission/error candidate G02-D04/G03-D03/D04/
+G05-D04/D06, using the frozen140-route crosswalk and91 serde-site input inventory.
+Classify caller/storage/external/internal/test origins together; every listed
+site is not a defect. Preserve producer-specific policy/state/replay/clock rules.
+No quota→session→next-path incremental search queue; other findings map to fixed
+items or inactive producer backlog. G05/G08 startup then existing response/phase
+items follow plan order; do not add new independent features.
 
-Fresh exact-source full16560 terminal101:578PASS1FAIL. Library44PASS and
-project_deadline14PASS at original clocks/workers. Only concurrent schedule tick
-fails INDEX_BUSY; PCTX36 remains inactive, failure is not repaired/hidden.
-Fresh library/CLI hashes and archived Git provenance recorded. Manifest:
-evidence/pctx01-linux-verification.json. Final isolated Clippy status in manifest.
-PCTX01 remains implementing, whole0/10;140 leaves/historical12 groups unchanged.
-Four historical macOS conditions unresolved; Linux-only repair does not fix them.
-Windows unavailable/unverified. No other official task or Actions started.
+PCTX36 Tick occurrence-claim failure is retained independently: it has no
+finite-query default, shared INDEX_BUSY metadata is already tested. Confirmed
+hashing inside writer transaction is not proven cause. Never call whole suite
+passing. README/platform claims must match actual fixed-source evidence.
 
-Preceding C001 Activity cursor runtime4ec8177/publicationede92857 and its macOS
-full13204:570PASS3FAIL remain in pctx01-activity-admission-verification.json.
-The older Linux-no-Rust capability is superseded by actual native runs above.
+## Environment and operating constraints
 
-## Source, evidence and environment
-
-PCTX01 remains the only active official task (`implementing`). Checked primary output covers help/version print, stream-error stderr, native hook stdout and response-file-error diagnostic; failures returnIO7 without successful absence or panic. Initial actual closed pipes0PASS4FAIL (help0, NDJSON refusal2, hook/file diagnostic101) retained. Hook/NDJSON use shared reversible JSON escaping without added envelope; compact columns escape hidden controls/newline/tab and preserve row boundaries. Watch2unitPASS including value roundtrip/write/flush error7; related28PASS and final delivery/metering13PASS. Actual hook test qualifies replay of already imported PermissionDenied under broken stdout: same key remains one receipt, not first-import failure/rollback. Actual saved-output metrics-lock plus closed-stderr warning preserves completed stdout/exit0, unchanged artifact and one invocation/no rerun; warning is best effort and measurement remains unknown. Format/locked all-target Clippy PASS. Final native full84654 terminal101: 464PASS/4 retained original startup FAIL. Evidence: pctx01-delivery-verification.json. Independent scoped review no blocker. Unix-only pipe proof, first-import timing, hook input/output preflight, actual child-exit matrix and full remaining frontend/phase/platform/startup gates stay open. No next official task or Actions.
-
-PCTX01 remains the only active official task (`implementing`). Singular root/format/output/timeout-ms/no-color options now reject same/cross-depth duplicates through a fresh shared command-line-only typed parser, preserving defaults, native paths, typed validation/possible-values metadata, repeated scopes and literal child argv. Ten actual duplicate cases refuse2 before missing-root/data/output effects; three global positions bind identical root/workspace and preserve accepted10000ms/zero-refusal semantics. Four root version/flag-order cases return exact compiled plain version/no effects. Pack/Create alone defers builder output requiredness until global propagation; nonoptional PathBuf presence still required and help explicit. Actual Pack CLI publishes artifacts at all3 depths with response stdout, rejects missing/duplicate output. Initial global0PASS2FAIL includes checkpoint-list DB_ERROR before index preparation; global fixture now prepares index and independent checkpoint issue is PCTX14 backlog, not fixed/qualified here. Initial parser2PASS1FAIL retains pre-group Pack output refusal; repaired3PASS. Related56PASS and added actual Pack1PASS; controlled guard loss actual0PASS1FAIL/exact restore. Format/locked all-target Clippy PASS. Final native full82923 terminal101: 459PASS/3 retained original startup FAIL. Evidence: pctx01-global-argument-verification.json. Independent scoped review no blocker. Fresh command required per parse; full frontend/phase/platform/startup gates remain open. No next official task or Actions.
-
-PCTX01 remains the only active official task (`implementing`). Common Markdown admission reuses the exact supported registry after capacity checks and before semantic/project/stream/response-file dispatch; execute retains defense. Eleven valid unsupported routes with/without output require JSON INVALID_ARGUMENT2 and unchanged missing-root/data/output state, including watch/follow and run argv. Initial relative-output attempt returned7; the absolute fixture proves rejected init wrote its response file. Both are retained. Removing only common preflight yields actual0PASS1FAIL and exact source restoration. Actual plain parser closed stderr initially exits101; checked writes repair it toIO7 while normal delivered diagnostics stay2, with masking unchanged. Related37PASS; format and locked all-target Clippy PASS. First full71673 stops at261PASS3FAIL; final no-fail-fast full38079 is terminal101: 453PASS/2FAIL, retaining original native startup failures. Evidence: pctx01-representation-admission-verification.json. Independent review no scoped blocker. Unix pipe evidence does not qualify Windows; full frontend/phase/platform/startup gates remain open. No next official task or Actions.
-
-Preceding read-only native startup isolation at unchanged base fc1849d18df11e9f21f1dad2bf9d550ac580f03d reproduces original1s expiry outside the PCTX supervisor: raw direct scripts fail with both empty and minimal PATH environments; reversed-order group controls show sub-millisecond spawn return followed by delayed first execution, and no-group-first scripts also produce two expiries. System /bin/echo passes128 attempts; a private copy fails all8 (6 expiry,2 early signal-status failures; signal number not recorded), so it is not an equivalent trust/location control. Correlated privacy-redacted syspolicyd scans are not bound to exact child paths/PIDs and do not prove causation. Passing later attempts are not repairs. Tiny inert drivers stop each worker after failure and root wait after kill can exceed1s; no production cleanup qualification. Evidence: pctx01-startup-isolation-verification.json. No production/test/budget changes, security-policy changes, interpreter substitution, full-gate rerun or Actions. At that evidence boundary the exact-source full was452PASS1FAIL; frontend and native Linux/Windows gates remained open. No next official task selected.
-
-Base1f535788928a55fd8cb4c8b46fe795d1da9f2929; handoff input runtime 081dcf4415dc485222eac4682d09e4d379b4e39c. Final full39587 terminal101:452PASS1FAIL; all targeted/mutation/static/full jobs terminal, no live heavy job. Confirm actual Git/process state on resume.
-
-PCTX01 remains the only active official task (`implementing`). Handoff Create/Update/Show now share existing nonempty ASCII name grammar before CLI discovery and producer effects. Existing bounded explicit-file input handles Create/Update under the original request clock and1MiB cap before checkpoint; &Path, cwd-relative files, literal dash and regular-file symlinks remain supported, with no new stdin mode or CLI timeout route. Actual invalid names leave missing root/data/output untouched; sparse oversize/invalidUTF8 and FIFO refusal preserve initialized state/checkpoints. Direct invalid-name/expired-original-clock checks and valid create/update/show/collision-preserved handoff body pass. Initial target-selection101 ran no tests; first related47PASS1FAIL was macOS APFS refusing nonUTF8 fixture creation EILSEQ, retained. Repaired related54PASS: macOS actual opaque argv is IO_ERROR7/no effects; native Linux successful opaque filename remains required. Three controlled losses each actual0PASS1FAIL/exact restore. Initial Clippy101 fixture type/constant style fixed without behavior weakening; final format/locked all-target Clippy PASS. Final native full39587 terminal101:452 PASS/1 retained original startup FAIL. Evidence: pctx01-handoff-input-verification.json. Independent scoped review no blocker. Filesystem calls remain cooperative; Windows nonregular-open behavior and broader PCTX11 handoff schema/rollback/recovery are unqualified. Full PCTX01 frontend/platform/startup gates remain open; no next official task or Actions.
-
-Preceding refusal runtime95c09f2a52ce5debb79ec15d210ca7b045ae5e79/full11657:447PASS1FAIL, initial interrupted130 and bidi observation/loss/closed-pipe proofs retained in pctx01-refusal-rendering-verification.json.
-
-Preceding argument runtime0538dca6ba5e21f403012fae053f47ba27a02fb4/full5705:443PASS1FAIL; all original capacity regressions and controlled-loss evidence retained in pctx01-argument-preflight-verification.json.
-
-Preceding inventory runtime c0dcd264aa38b3e297206cea4d0f327913ef0b95/full98832:435PASS1FAIL; inventory unit4 and related14 PASS. pctx01-inventory-deadline-verification.json retains original clock/phase/partial-error/state/FIFO proofs and initial mutation compilation failure, separately repaired with actual failed test.
-
-Preceding schedule runtime59cdc41268a59d844c6741d3734ca5856e8adc2e/full61099:425PASS1FAIL; pctx01-schedule-deadline-verification.json retains read-only DB/original row/native observation proofs, initial alias and schema-preparation fixture failures, no OS registration.
-
-Preceding filter runtime80c0c7f3f1740b92d692626ac4f2ef5fc502c7e0/full56147:414PASS3FAIL. Original partial stdin250ms,1000-record/input phases, typed size-versus-policy failures and four controlled losses stay in pctx01-filter-deadline-verification.json; no whole-task/platform promotion.
-
-Runner/trust runtime08996219d824647e845daac129763131044cea0b; preceding full29877:406 PASS/3 startup FAIL.
-
-Finite ResourceStatus/Runner CheckPlan/HelperStatus/Trust Plan now share one absent default10s or original supplied instant. Status path admission creates no host/helper directories; explicit directory/slot errors return failure instead of normal empty resources. Actual invalid ancestor CLI gives IO_ERROR7/null data/unchanged bytes/no jobs. Metadata uses shared pinned regular1MiB chunks/cap/growth/final identity/mtime/Unixctime. Native observation original1s TIMEOUT occurs before local admission, leaves slot bytes unchanged; actual trust hash chunks keep one instant and byte-exact SHA/no artifacts. FIFO helper refuses INVALID_ARGUMENT2, parent owns3s kill/reap. Guard/scope/FIFO loss probes each fail and exact restore; final host validation came later, covered by final full gate. Initial prohibited direct-shell fixture failure retained; private named executable repair only. Evidence pctx01-runner-read-verification.json. Cooperative syscalls, broader races and native Linux/Windows remain unqualified.
-
-Actual auxiliary ConfigAdmitted original2s expiry refuses before RegistryRead/ResultReady, unchanged registry/no DB. Actual registered fingerprint original2s expires after first real64KiB read before hash (read1/hash0/no later work), positive byte-exact SHA, no job/trust/output/DB. Old source-after-open1s proof stays independent. Each isolated test fresh request/private env, parent10s cleanup. Actual linked-worktree CLI refuses FIFO commondir/backref exit9/no host resources, request1000ms/parent3s bound. Controlled inheritance/guard/FIFO losses each fail; driver38470 restores exact sources. Initial wrapper-warning/lint errors retained; final test-observer style repair has no production effect. External executable/guardian streaming preserves128MiB cap and identity; shared anchored metadata4096 cap/regular/nonblocking. No default query clock for None execution. See pctx01-auxiliary-phase-verification.json. Filesystem calls remain cooperative; this is fingerprint input-phase proof, not SHA/syscall preemption or all races/platforms.
-
-Public quota Report parses10000 validated stored observations; positive20000 tokens/10000 observations/0 duplicates. Under original2s,100 real aggregate iterations complete, then expiry before101 work requires TIMEOUT7/no later entries/work, same instant and unchanged observation/event snapshot. Removing guard makes10000 entered iterations and regression fails despite outer timeout. SQL50ms tests use emergency2s test-only interrupt which explicitly fails if activated; handler-loss mutation proves sensitivity. Driver71925 terminal0, exact quota/project sources restored. Final other_windows scan checks each row. See pctx01-aggregation-deadline-verification.json; this proves one command aggregation phase, not all CPU phases/platforms.
-
-Adapter Doctor/Verify/ProtocolFixture preserve one original finite deadline; default10s only when none exists. Actual private-HOME synthetic version probe entry then original1.5s TIMEOUT, absence/positive/nonzero/empty/invalidUTF8 and128KiB overflow distinctions qualified on macOS. Exact shared version-only whitelist rejects inference/extra argv. Verify stays lock-free/no new config; supplied50ms existing Install lock contention expires without installation while Verify succeeds with that lock held. CLI zero-budget refuses before discovery/input; positive envelope/input checks pass. Initial /var alias fixture failure retained; canonicalize test base only, no policy relaxation. Cooperative input/root/final phase checks do not qualify preemptive syscalls or all phase races. No live Claude or native Linux/Windows inference. See pctx01-adapter-deadline-verification.json.
-
-Opened auxiliary source reads retain original1s budget: succeeds before expiry, changed source refused TIMEOUT/exit7 after expiry, no DB effects. Isolated child uses inert linked metadata/private registry and config; parent timeout10s. Original-loss mutation makes regression fail with returned post-expiry source; exact source restored. Real CLI linked-Git-worktree positive fixture stays separate. That earlier proof closes opened-target source propagation only; newer config-admission/fingerprint input-phase proofs are recorded above. Logs/mutation driver retained.
-
-Long recursive SQL proves actual VM work and TIMEOUT/exit7 under immutable original50ms. New distinct deadline-free caller clears the connection's expired prior progress handler; expired Some(deadline) still refuses before reconfiguration. Initial DB_ERROR failure retained. SQL engine qualification is distinct from newer authored quota aggregation proof; other command phases and additional metadata/input races remain unqualified.
-
-Finite Work read execute (task list/show/complete --dry-run, agent list/show, check list/show/plan) and quota report/plan/reconcile retain one original deadline; library read execute supplies default10s only when absent. Shared SQL configure/call/error helpers bound waits/progress/rows; read parsing/aggregation/final assembly checks. Runner planned/profile checks and auxiliary Project::open_with_deadline retain original budget; writes/child/watch remain separate. CLI opening contention and Work immediate transaction contention are distinct passing proofs. Quota exclusive fixture mainly opens DB. Initial Git-delay auxiliary fixture premise was invalid and failed; retained log, positive plan replacement is NOT auxiliary phase-expiry qualification. Authored quota aggregation is now qualified separately; other command CPU phases and additional metadata/input races remain open. Prior help/color/parser and strict pre-effect snapshots remain qualified locally.
-
-Use RUSTUP_HOME=/Users/dev/PCTX/.toolchain/rustup, CARGO_HOME=/Users/dev/PCTX/.toolchain/cargo, SDKROOT=/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk and local cargo/CLT/Homebrew/system PATH. Rust1.99, macOS arm64,10 CPUs/16GiB. One heavy build/test/benchmark at a time. Native process fixtures require native execution. GitHub auth Jung95; origin https://github.com/Jung95/pctx.git. Development commits use [skip ci]; no additional Actions dispatched. Node24 action pins are already qualified by actions-node24-pins.json. No paid calls/operational mutations/global hooks/OS schedules solely from specification.
-
-Original ignored specification SHA256 8914faad57432f524aec0a06aa90c43c18c23f8c19e9f54fe69d9ad185db6523. The original objective attachment exists at /Users/dev/.codex/attachments/a70cb63d-6864-42d0-b70f-dcd339aa73fd/goal-objective.md (historical input). The latest user-provided goal in this thread supersedes it; specification v0.6 is the current baseline. Public documents are English. No AGENTS.md found in current project/ancestor scans.
-
-## Exact next action
-
-Remain on PCTX01. Inspect the actual Linux failure
-actual_cli_concurrent_ticks_claim_one_occurrence_and_fixture_bridge_invokes_tick
-in pctx01-linux-clean-full.log (INDEX_BUSY). Compare project startup/control schema
-opening/lock waits against original common finite-request deadlines and source
-contracts before deciding ownership. Necessary common fixes remain PCTX01;
-independent PCTX36 scheduling features stay inactive. Do not weaken original
-concurrency/deadlines, retry-green, ignore this failure, or switch tasks.
-
-Then same-task G05/G06 audit: work::activity_inner parses persisted events.payload
-with generic serde input2. Malformed stored syntax should contextual DB_CORRUPT7;
-preserve every valid JSON value/cursor/order/original clock. No new Activity/Watch
-feature or skip-corrupt-row/empty-success behavior. Additional frontend/phase
-matrix and Windows execution remain mandatory. No next official task selected.
-
-All heavy jobs are terminal. Confirm actual handles/Git and manifest on resume. Windows needs real current-source full/CLI matrix with
-OS/compiler/source/log IDs; no Windows environment available. Monthly3000-minute
-constraint remains: no Actions dispatched. Original objective attachment exists.
-
-## Retained historical results and inactive backlog
-
-Pre-existing M30 handle63324 terminal0; immutable clean-build source f81d55ebf64f58a461da14d0bb3249ff2f94a5bc/binary target/measurement-eleventh/pctx SHA256 e0bacfa558d6a81641d84c457d2c9efcea5d4da5d33f41f6bcaf251eb39e59b2. Evidence evaluation-m30-eleventh report/samples/mission/source/build logs: body30/30 errors0,p95 1739.805458ms; other observed timing targets met. Hardware equivalence/cold cache/model/task quality/provider cost/quota remain unqualified. Drained previous job only, no PCTX05/PCTX17 completion or active task. Older 2691.926416ms miss is retained. Current PCTX01 source is not measured by that historical binary.
-
-Package target-directory defect and task-linked approval snapshot omission are in backlog.md; package patch backlog/package-target-directory.patch is prepared, not applied. No new archive created. D047 source/report exceptions, D048 candidate admission, other historical scope and evidence are in decisions.md and source verification manifests; these do not complete whole-task AC77/platform/recovery/forward migration. Original native startup failures remain unexplained, no retry/deadline promotion.
-
-
-## Historical push approval boundary — resolved
-
-Latest explicit development-push authorization was accepted: normal push13833
-terminal0 published02979e1..aab2602 to https://github.com/Jung95/pctx.git main.
-No alternate mechanism, forced push or Actions dispatch was used. The following
-paragraphs retain the earlier rejection as historical evidence.
-
-
-Development commit d490e41 was created locally after the above verification.
-Automatic approval review rejected `git push origin main`: it treated main-branch
-mutation and export of repository contents as lacking exact trusted authorization
-for destination/payload. No alternate push mechanism or retry was attempted.
-Origin is https://github.com/Jung95/pctx.git; locally observed origin/main remains
-02979e1634a205fd2a54605da41d563dde08aeae. Explicit approval is needed to push the
-local delivery-fixture/evidence commit and this handoff-only record to that main.
-PCTX01 remains incomplete and no other task is started. All test jobs terminal.
-
-Two previously failing resolution tests pass in the latest full without any
-query-process/test or budget correction. This is not repair evidence; all four
-historical startup conditions remain unresolved. No retry-green promotion.
+/Users/dev/PCTX, main, origin https://github.com/Jung95/pctx.git. macOS arm64,
+Rust1.99 in ignored .toolchain;10CPU/16GiB. No project AGENTS instruction. Parent
+owns all edits/builds/common schema/Cargo. At most one active read-only review
+agent; /root/work_control completed fixed-plan review, no edits/tests.
+One heavy build/test at a time; do not edit product/test/harness during live job.
+Poll exact handle; timeout is not terminal. Original specification stays local
+unchanged. All public docs English; user reports Korean.

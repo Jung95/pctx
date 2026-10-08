@@ -8,32 +8,33 @@ Baseline: specification 0.6, all 45 sections read; 2026-10-08. The repository be
 
 The pre-existing eleventh M30 has finished and remains historical evidence. Packaging target-directory repair and approval-memory integration are backlog. No unrelated implementation or verification is active.
 
-## Current PCTX01 error-contract boundary — 2026-10-09
+## Current fixed PCTX01 execution register — 2026-10-09
 
-Only PCTX01 is active (`implementing`), whole gates 0/10. Runtime
-`e2fff281a915f55835d689747980a1c3bbfd7b9d` classifies malformed persisted
-Activity event JSON as DB_CORRUPT7 and exposes INDEX_BUSY as retryable, as
-required by specification §9/14. Caller syntax remains INVALID_ARGUMENT2;
-valid JSON values, pagination, delivered earlier stream pages, state-conflict
-precedence and original clocks remain unchanged. No retry or wait was added.
+Only PCTX01 is active. The user-requested one-time whole-G01–G10 reorganization
+is [PCTX01-closure-plan](tasks/PCTX01-closure-plan.md), with machine-readable
+states in tasks/PCTX01-closure-plan.json and complete static 140-leaf crosswalk
+in evidence/pctx01-closure-audit.json. Its fixed40 subconditions replace all
+historical incremental next-action lists below. Bounded detail closure23/40;
+whole gates0/10. This is the first whole-detail denominator, not a change to the
+10 gates/140 leaves/172 help paths/12 bounded R groups. R local12/12 is not
+whole-local PCTX01 completion. Implementation, evidence and platform waits are
+recorded separately; required §23 targets are macOS arm64/x86_64, Linux x86_64,
+Windows x86_64. Linux aarch64 is supporting follow-up evidence only.
 
-Related tests:21PASS; two controlled losses each0PASS1FAIL with exact source
-restoration. Independent read-only review found no scoped blocker. Native macOS
-full47802 terminal101:573PASS4FAIL (all four retained startup conditions).
-Native Linux aarch64 full33955 terminal101:582PASS1FAIL (persistent concurrent
-schedule tick INDEX_BUSY); all four new error-contract tests pass there.
-Evidence: `evidence/pctx01-persisted-errors-verification.json`, with source/archive
-identity, original failures, transport fixture corrections and loss logs.
-Linux source is fixed runtime revision, read-only, hash-isolated target; source
-unchanged. macOS static checks pass; Linux static result is recorded in manifest.
-Windows remains unverified; no Actions dispatched. Neither platform subset nor
-retryable metadata repairs the independent schedule concurrency failure.
+Current bounded Task/receipt runtime00df0e2, related27PASS/staticPASS, macOS
+full71737 terminal101:576PASS4FAIL; all four historical startup failures remain
+product/common-contract failures at original budgets. No heavy job is live.
+Evidence: pctx01-task-storage-verification.json (retains fixture errors and
+privacy-safe log redaction). No repeated Linux full gate for this small slice;
+previous native Linux source-specific evidence remains bounded. Actions not used.
 
-Next action remains PCTX01 G05: audit five existing DB-origin Work Task/receipt
-JSON conversions, preserving nullable/valid values, caller syntax2, lease/state
-conflicts9, request-hash conflict before saved-receipt decode and original expiry.
-No new official task selected. Schedule writer-critical-section concern is
-recorded for inactive PCTX36; hash-phase causation has not been proven.
+G10-D02/D03 review/document reconciliation is closed. Next: execute the fixed
+grouped parser/admission/stored-error candidate (G02-D04/G03-D03/D04/G05-D04/D06).
+Do not resume the older quota→session→next-path investigation chain. New findings
+map to existing items or producer backlog; any added item requires mandatory-spec
+omission plus PCTX01 ownership and an explicit old/new denominator record.
+Independent PCTX36 schedule concurrency failure remains visible and does not
+turn Tick into a general finite-query route or a new PCTX01 schedule feature.
 
 ## Integrated behavior
 

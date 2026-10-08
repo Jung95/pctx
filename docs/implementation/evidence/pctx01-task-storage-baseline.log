@@ -1,0 +1,36 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.06s
+     Running tests/persisted_error_contract.rs (target/debug/deps/persisted_error_contract-257962e0e1215410)
+
+running 4 tests
+
+thread 'stored_task_fields_refuse_corruption_without_mutating_or_changing_input_errors' (9054188) panicked at tests/persisted_error_contract.rs:347:13:
+assertion `left == right` failed: Output { status: ExitStatus(unix_wait_status(512)), stdout: "{\"command\":\"task\",\"coverage\":{\"reasons\":[\"INVALID_ARGUMENT\"],\"status\":\"partial\"},\"data\":null,\"errors\":[{\"code\":\"INVALID_ARGUMENT\",\"message\":\"Invalid JSON data\",\"retryable\":false}],\"generation_id\":null,\"project_id\":null,\"schema_version\":\"1.0\",\"status\":\"error\",\"truncation\":{\"reasons\":[],\"truncated\":false},\"validation\":{\"checked_at\":\"2026-10-08T23:19:22.066Z\",\"mode\":\"matched\",\"scope\":[],\"workspace_atomic\":false},\"warnings\":[],\"workspace_id\":null}\n", stderr: "" }
+  left: Some(2)
+ right: Some(7)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test stored_task_fields_refuse_corruption_without_mutating_or_changing_input_errors ... FAILED
+
+thread 'stored_create_receipt_preserves_replay_conflict_and_original_expiry' (9054186) panicked at tests/persisted_error_contract.rs:347:13:
+assertion `left == right` failed: Output { status: ExitStatus(unix_wait_status(512)), stdout: "{\"command\":\"task\",\"coverage\":{\"reasons\":[\"INVALID_ARGUMENT\"],\"status\":\"partial\"},\"data\":null,\"errors\":[{\"code\":\"INVALID_ARGUMENT\",\"message\":\"Invalid JSON data\",\"retryable\":false}],\"generation_id\":null,\"project_id\":null,\"schema_version\":\"1.0\",\"status\":\"error\",\"truncation\":{\"reasons\":[],\"truncated\":false},\"validation\":{\"checked_at\":\"2026-10-08T23:19:22.083Z\",\"mode\":\"matched\",\"scope\":[],\"workspace_atomic\":false},\"warnings\":[],\"workspace_id\":null}\n", stderr: "" }
+  left: Some(2)
+ right: Some(7)
+test stored_create_receipt_preserves_replay_conflict_and_original_expiry ... FAILED
+
+thread 'stored_report_receipt_preserves_exact_replay_before_lease_and_hash_conflict_before_decode' (9054187) panicked at tests/persisted_error_contract.rs:452:5:
+assertion `left == right` failed
+  left: [prepared-state byte dump omitted; see redaction record]
+ right: [prepared-state byte dump omitted; see redaction record]
+test stored_report_receipt_preserves_exact_replay_before_lease_and_hash_conflict_before_decode ... FAILED
+test valid_stored_json_values_and_later_page_failure_preserve_events_and_cursors ... ok
+
+failures:
+
+failures:
+    stored_create_receipt_preserves_replay_conflict_and_original_expiry
+    stored_report_receipt_preserves_exact_replay_before_lease_and_hash_conflict_before_decode
+    stored_task_fields_refuse_corruption_without_mutating_or_changing_input_errors
+
+test result: FAILED. 1 passed; 3 failed; 0 ignored; 0 measured; 3 filtered out; finished in 1.61s
+
+error: test failed, to rerun pass `--test persisted_error_contract`

@@ -1,0 +1,3906 @@
+{
+  "revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+  "scope": "Complete static registry crosswalk and bounded decode-site input; not execution proof",
+  "command_count": 140,
+  "help_path_count": 172,
+  "commands": [
+    {
+      "leaf_id": "C001",
+      "route": "activity",
+      "producer_family": "activity",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms when finite; watch/follow have separate continuous lifetime",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "board/activity only; stream framing",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C002",
+      "route": "adapter claude doctor",
+      "producer_family": "adapter",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C003",
+      "route": "adapter claude event",
+      "producer_family": "adapter",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "No general finite query default; execution/mutation-specific contract",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": "adapter claude event/statusline condition-dependent; inspect existing hook contract",
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C004",
+      "route": "adapter claude install",
+      "producer_family": "adapter",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "No general finite query default; execution/mutation-specific contract",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C005",
+      "route": "adapter claude plan",
+      "producer_family": "adapter",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "No general finite query default; execution/mutation-specific contract",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C006",
+      "route": "adapter claude protocol-fixture",
+      "producer_family": "adapter",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C007",
+      "route": "adapter claude statusline",
+      "producer_family": "adapter",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "No general finite query default; execution/mutation-specific contract",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": "adapter claude event/statusline condition-dependent; inspect existing hook contract",
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C008",
+      "route": "adapter claude uninstall",
+      "producer_family": "adapter",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "No general finite query default; execution/mutation-specific contract",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C009",
+      "route": "adapter claude verify",
+      "producer_family": "adapter",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C010",
+      "route": "agent heartbeat",
+      "producer_family": "agent",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "No general finite query default; execution/mutation-specific contract",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C011",
+      "route": "agent list",
+      "producer_family": "agent",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C012",
+      "route": "agent register",
+      "producer_family": "agent",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "No general finite query default; execution/mutation-specific contract",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C013",
+      "route": "agent report",
+      "producer_family": "agent",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "No general finite query default; execution/mutation-specific contract",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C014",
+      "route": "agent show",
+      "producer_family": "agent",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C015",
+      "route": "board",
+      "producer_family": "board",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms when finite; watch/follow have separate continuous lifetime",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "board/activity only; stream framing",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C016",
+      "route": "build",
+      "producer_family": "build",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "120000ms finite default",
+      "markdown_admission": "supported",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C017",
+      "route": "cache stats",
+      "producer_family": "cache",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C018",
+      "route": "changes",
+      "producer_family": "changes",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C019",
+      "route": "check begin",
+      "producer_family": "check",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "No general finite query default; execution/mutation-specific contract",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C020",
+      "route": "check list",
+      "producer_family": "check",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C021",
+      "route": "check plan",
+      "producer_family": "check",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C022",
+      "route": "check record",
+      "producer_family": "check",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "No general finite query default; execution/mutation-specific contract",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C023",
+      "route": "check run",
+      "producer_family": "check",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "No general finite query default; execution/mutation-specific contract",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C024",
+      "route": "check show",
+      "producer_family": "check",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C025",
+      "route": "checkpoint create",
+      "producer_family": "checkpoint",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "120000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C026",
+      "route": "checkpoint delete",
+      "producer_family": "checkpoint",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "120000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C027",
+      "route": "checkpoint list",
+      "producer_family": "checkpoint",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "120000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C028",
+      "route": "context ack",
+      "producer_family": "context",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C029",
+      "route": "context get",
+      "producer_family": "context",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C030",
+      "route": "control backup",
+      "producer_family": "control",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "No general finite query default; execution/mutation-specific contract",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C031",
+      "route": "control restore",
+      "producer_family": "control",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "No general finite query default; execution/mutation-specific contract",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C032",
+      "route": "decision record",
+      "producer_family": "decision",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C033",
+      "route": "decision request",
+      "producer_family": "decision",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C034",
+      "route": "decision show",
+      "producer_family": "decision",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C035",
+      "route": "doctor",
+      "producer_family": "doctor",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C036",
+      "route": "extract",
+      "producer_family": "extract",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C037",
+      "route": "filter activate",
+      "producer_family": "filter",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "No general finite query default; execution/mutation-specific contract",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C038",
+      "route": "filter apply",
+      "producer_family": "filter",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C039",
+      "route": "filter explain",
+      "producer_family": "filter",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C040",
+      "route": "filter test",
+      "producer_family": "filter",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "No general finite query default; execution/mutation-specific contract",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C041",
+      "route": "filter validate",
+      "producer_family": "filter",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C042",
+      "route": "find",
+      "producer_family": "find",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C043",
+      "route": "handoff create",
+      "producer_family": "handoff",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "No general finite query default; execution/mutation-specific contract",
+      "markdown_admission": "supported",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C044",
+      "route": "handoff show",
+      "producer_family": "handoff",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "supported",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C045",
+      "route": "handoff update",
+      "producer_family": "handoff",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "No general finite query default; execution/mutation-specific contract",
+      "markdown_admission": "supported",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C046",
+      "route": "impact",
+      "producer_family": "impact",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C047",
+      "route": "inbox read",
+      "producer_family": "inbox",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C048",
+      "route": "index gc",
+      "producer_family": "index",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "120000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C049",
+      "route": "index rebuild",
+      "producer_family": "index",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "120000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C050",
+      "route": "index update",
+      "producer_family": "index",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "120000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C051",
+      "route": "init",
+      "producer_family": "init",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "No general finite query default; execution/mutation-specific contract",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C052",
+      "route": "inventory audit",
+      "producer_family": "inventory",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C053",
+      "route": "inventory profile",
+      "producer_family": "inventory",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C054",
+      "route": "inventory scan",
+      "producer_family": "inventory",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C055",
+      "route": "job cancel",
+      "producer_family": "job",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "No general finite query default; execution/mutation-specific contract",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C056",
+      "route": "message ack",
+      "producer_family": "message",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C057",
+      "route": "message resolve",
+      "producer_family": "message",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C058",
+      "route": "message send",
+      "producer_family": "message",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C059",
+      "route": "outline",
+      "producer_family": "outline",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "supported",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C060",
+      "route": "output find",
+      "producer_family": "output",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C061",
+      "route": "output render",
+      "producer_family": "output",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C062",
+      "route": "output show",
+      "producer_family": "output",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C063",
+      "route": "owner queue",
+      "producer_family": "owner",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C064",
+      "route": "pack create",
+      "producer_family": "pack",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C065",
+      "route": "pack inspect",
+      "producer_family": "pack",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C066",
+      "route": "pack plan",
+      "producer_family": "pack",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C067",
+      "route": "pack verify",
+      "producer_family": "pack",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C068",
+      "route": "policy attest-owner",
+      "producer_family": "policy",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C069",
+      "route": "policy evaluate",
+      "producer_family": "policy",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C070",
+      "route": "policy exception-record",
+      "producer_family": "policy",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C071",
+      "route": "policy exception-revoke",
+      "producer_family": "policy",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C072",
+      "route": "policy release",
+      "producer_family": "policy",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C073",
+      "route": "policy report-evaluate",
+      "producer_family": "policy",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C074",
+      "route": "policy report-fingerprint",
+      "producer_family": "policy",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C075",
+      "route": "query",
+      "producer_family": "query",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C076",
+      "route": "quota ingest",
+      "producer_family": "quota",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "No general finite query default; execution/mutation-specific contract",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C077",
+      "route": "quota plan",
+      "producer_family": "quota",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C078",
+      "route": "quota reconcile",
+      "producer_family": "quota",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C079",
+      "route": "quota release",
+      "producer_family": "quota",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "No general finite query default; execution/mutation-specific contract",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C080",
+      "route": "quota report",
+      "producer_family": "quota",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C081",
+      "route": "quota reserve",
+      "producer_family": "quota",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "No general finite query default; execution/mutation-specific contract",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C082",
+      "route": "read",
+      "producer_family": "read",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "supported",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C083",
+      "route": "refs",
+      "producer_family": "refs",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C084",
+      "route": "repo status",
+      "producer_family": "repo",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C085",
+      "route": "resource status",
+      "producer_family": "resource",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C086",
+      "route": "role list",
+      "producer_family": "role",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C087",
+      "route": "role pause",
+      "producer_family": "role",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C088",
+      "route": "role resume",
+      "producer_family": "role",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C089",
+      "route": "run",
+      "producer_family": "run",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "No general finite query default; execution/mutation-specific contract",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C090",
+      "route": "runner check-plan",
+      "producer_family": "runner",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C091",
+      "route": "runner check-run",
+      "producer_family": "runner",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "No general finite query default; execution/mutation-specific contract",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C092",
+      "route": "runner helper-cancel",
+      "producer_family": "runner",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "No general finite query default; execution/mutation-specific contract",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C093",
+      "route": "runner helper-release",
+      "producer_family": "runner",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "No general finite query default; execution/mutation-specific contract",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C094",
+      "route": "runner helper-request",
+      "producer_family": "runner",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "No general finite query default; execution/mutation-specific contract",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C095",
+      "route": "runner helper-status",
+      "producer_family": "runner",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C096",
+      "route": "runner job-cancel",
+      "producer_family": "runner",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "No general finite query default; execution/mutation-specific contract",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C097",
+      "route": "runner resource-status",
+      "producer_family": "runner",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C098",
+      "route": "runner trust",
+      "producer_family": "runner",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "No general finite query default; execution/mutation-specific contract",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C099",
+      "route": "savings opportunities",
+      "producer_family": "savings",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C100",
+      "route": "savings report",
+      "producer_family": "savings",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C101",
+      "route": "schedule add",
+      "producer_family": "schedule",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "No general finite query default; execution/mutation-specific contract",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C102",
+      "route": "schedule inspect",
+      "producer_family": "schedule",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C103",
+      "route": "schedule install",
+      "producer_family": "schedule",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "No general finite query default; execution/mutation-specific contract",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C104",
+      "route": "schedule list",
+      "producer_family": "schedule",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C105",
+      "route": "schedule pause",
+      "producer_family": "schedule",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "No general finite query default; execution/mutation-specific contract",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C106",
+      "route": "schedule plan",
+      "producer_family": "schedule",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C107",
+      "route": "schedule reconcile",
+      "producer_family": "schedule",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "No general finite query default; execution/mutation-specific contract",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C108",
+      "route": "schedule recover",
+      "producer_family": "schedule",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "No general finite query default; execution/mutation-specific contract",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C109",
+      "route": "schedule remove",
+      "producer_family": "schedule",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "No general finite query default; execution/mutation-specific contract",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C110",
+      "route": "schedule resume",
+      "producer_family": "schedule",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "No general finite query default; execution/mutation-specific contract",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C111",
+      "route": "schedule run-loop",
+      "producer_family": "schedule",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "No general finite query default; execution/mutation-specific contract",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C112",
+      "route": "schedule tick",
+      "producer_family": "schedule",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "No general finite query default; execution/mutation-specific contract",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C113",
+      "route": "schedule uninstall",
+      "producer_family": "schedule",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "No general finite query default; execution/mutation-specific contract",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C114",
+      "route": "schedule update",
+      "producer_family": "schedule",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "No general finite query default; execution/mutation-specific contract",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C115",
+      "route": "session attach",
+      "producer_family": "session",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C116",
+      "route": "session boundary",
+      "producer_family": "session",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C117",
+      "route": "session reconcile",
+      "producer_family": "session",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C118",
+      "route": "session suspend",
+      "producer_family": "session",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C119",
+      "route": "status",
+      "producer_family": "status",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C120",
+      "route": "task assign",
+      "producer_family": "task",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "No general finite query default; execution/mutation-specific contract",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C121",
+      "route": "task block",
+      "producer_family": "task",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "No general finite query default; execution/mutation-specific contract",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C122",
+      "route": "task cancel",
+      "producer_family": "task",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "No general finite query default; execution/mutation-specific contract",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C123",
+      "route": "task claim",
+      "producer_family": "task",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "No general finite query default; execution/mutation-specific contract",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C124",
+      "route": "task complete",
+      "producer_family": "task",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms only --dry-run; mutation has no query default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C125",
+      "route": "task create",
+      "producer_family": "task",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "No general finite query default; execution/mutation-specific contract",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C126",
+      "route": "task criterion accept",
+      "producer_family": "task",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "No general finite query default; execution/mutation-specific contract",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C127",
+      "route": "task edit",
+      "producer_family": "task",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "No general finite query default; execution/mutation-specific contract",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C128",
+      "route": "task list",
+      "producer_family": "task",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C129",
+      "route": "task pause",
+      "producer_family": "task",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "No general finite query default; execution/mutation-specific contract",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C130",
+      "route": "task ready",
+      "producer_family": "task",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "No general finite query default; execution/mutation-specific contract",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C131",
+      "route": "task reassign",
+      "producer_family": "task",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "No general finite query default; execution/mutation-specific contract",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C132",
+      "route": "task reopen",
+      "producer_family": "task",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "No general finite query default; execution/mutation-specific contract",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C133",
+      "route": "task resume",
+      "producer_family": "task",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "No general finite query default; execution/mutation-specific contract",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C134",
+      "route": "task review",
+      "producer_family": "task",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "No general finite query default; execution/mutation-specific contract",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C135",
+      "route": "task show",
+      "producer_family": "task",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C136",
+      "route": "task start",
+      "producer_family": "task",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "No general finite query default; execution/mutation-specific contract",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C137",
+      "route": "task submit",
+      "producer_family": "task",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "No general finite query default; execution/mutation-specific contract",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C138",
+      "route": "trace",
+      "producer_family": "trace",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C139",
+      "route": "trust add",
+      "producer_family": "trust",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "No general finite query default; execution/mutation-specific contract",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    },
+    {
+      "leaf_id": "C140",
+      "route": "trust plan",
+      "producer_family": "trust",
+      "parser_admission_items": [
+        "G02-D04",
+        "G03-D03",
+        "G03-D04"
+      ],
+      "response_error_items": [
+        "G04-D03",
+        "G05-D04",
+        "G05-D06",
+        "G06-D03",
+        "G07-D03"
+      ],
+      "timeout_item": "G08-D04",
+      "timeout_contract_source": "10000ms finite default",
+      "markdown_admission": "unsupported2 pre-effect",
+      "ndjson_admission": "unsupported2 pre-effect",
+      "native_output_exception": null,
+      "semantic_matrix_state": "existing bounded evidence plus frozen remaining matrix; enumeration is not completion"
+    }
+  ],
+  "serde_decode_sites": [
+    {
+      "path": "src/adapter.rs",
+      "line": 363,
+      "text": "serde_json::from_slice(&bytes)",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/adapter.rs",
+      "line": 443,
+      "text": "let raw: Value = serde_json::from_slice(bytes)",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/adapter.rs",
+      "line": 504,
+      "text": "let raw: Value = serde_json::from_slice(&bytes)?;",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/adapter.rs",
+      "line": 526,
+      "text": "let previous: Value = serde_json::from_str(&r)",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/adapter.rs",
+      "line": 932,
+      "text": "let plan: Plan = serde_json::from_slice(&bytes)?;",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/adapter.rs",
+      "line": 1084,
+      "text": "let owned: Value = serde_json::from_str(&owned)",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/adapter.rs",
+      "line": 1193,
+      "text": "let raw: Value = serde_json::from_slice(&bounded(Some(path))?)",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/broker.rs",
+      "line": 59,
+      "text": "value: serde_json::from_str(&value)?,",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/documents.rs",
+      "line": 145,
+      "text": "let record: Retirement = serde_json::from_str(&payload)",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/filters.rs",
+      "line": 516,
+      "text": "serde_json::from_str::<Value>(&text)",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/filters.rs",
+      "line": 923,
+      "text": "let binding: Binding = serde_json::from_slice(",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/filters.rs",
+      "line": 960,
+      "text": "let report: Report = serde_json::from_slice(&report_bytes)?;",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/filters.rs",
+      "line": 1084,
+      "text": "let suite: Suite = serde_json::from_str(&manifest.text)",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/filters.rs",
+      "line": 1147,
+      "text": "\"malformed\" => serde_json::from_str::<Value>(&raw.text).is_err(),",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/filters.rs",
+      "line": 1220,
+      "text": "let report: Report = serde_json::from_slice(&bytes)?;",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/graph.rs",
+      "line": 419,
+      "text": "match serde_json::from_str::<Value>(&f.text) {",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/inventory.rs",
+      "line": 246,
+      "text": "serde_json::from_str(text)",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/inventory.rs",
+      "line": 364,
+      "text": "serde_json::from_str(&file.text).map_err(|_| invalid(\"Invalid explicit profile schema\"))?;",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/inventory.rs",
+      "line": 1073,
+      "text": "let registry: Registry = serde_json::from_str(&file.text)",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/main.rs",
+      "line": 1309,
+      "text": "let decoded: Value = serde_json::from_slice(&bytes).unwrap();",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/operations.rs",
+      "line": 292,
+      "text": "Ok(serde_json::from_str(&input_text(p, path)?)?)",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/operations.rs",
+      "line": 295,
+      "text": "let mut v: Value = serde_json::from_str(&input_text(p, path)?)?;",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/operations.rs",
+      "line": 353,
+      "text": "let credential: Value = serde_json::from_slice(",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/operations.rs",
+      "line": 884,
+      "text": "json!({\"decision_id\":decision,\"action\":serde_json::from_str::<Value>(&action)?,\"state\":if state==\"approved\"&&expires.is_none_or(|n|n<=now()){\"expired\"}else{&state},\"reason\":reason,\"request\":serde_json::from_str::<Value>(&request)?,\"owner_evidence\":evidence,\"expires_at\":expires,\"provenance\":provenance,\"requesters\":requesters,\"host_permission\":\"separate_required\"}),",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/operations.rs",
+      "line": 1310,
+      "text": "let action: Action = serde_json::from_str(&payload)?;",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/operations.rs",
+      "line": 1405,
+      "text": "let m: Message = serde_json::from_str(&payload)?;",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/operations.rs",
+      "line": 1495,
+      "text": "let m: Message = serde_json::from_str(&payload)?;",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/operations.rs",
+      "line": 1661,
+      "text": "serde_json::from_str(&response)?",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/operations.rs",
+      "line": 1675,
+      "text": "let old_message: Message = serde_json::from_str(&old_payload)?;",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/operations.rs",
+      "line": 1834,
+      "text": "let mut policy: Value = serde_json::from_str(&body).unwrap();",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/operations.rs",
+      "line": 1894,
+      "text": "let mut policy: Value = serde_json::from_str(&body).unwrap();",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/output.rs",
+      "line": 671,
+      "text": "let old: Binding = serde_json::from_slice(&raw)?;",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/output.rs",
+      "line": 1015,
+      "text": "let a: Artifact = phase(p, || Ok(serde_json::from_slice(&bytes)?))?;",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/output.rs",
+      "line": 1052,
+      "text": "let r: crate::work::CheckReport = serde_json::from_str(&text).ok()?;",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/output.rs",
+      "line": 1878,
+      "text": "let mut report: crate::work::CheckReport = serde_json::from_str(&text)?;",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/pack.rs",
+      "line": 411,
+      "text": ".map(|(name, bytes)| Ok((name.clone(), serde_json::from_slice::<Value>(bytes)?)))",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/pack.rs",
+      "line": 457,
+      "text": "let plan: Plan = serde_json::from_slice(&bytes)?;",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/pack.rs",
+      "line": 940,
+      "text": "let wrapper: Value = serde_json::from_slice(single)?;",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/pack.rs",
+      "line": 954,
+      "text": "manifest: serde_json::from_slice(&files[\"manifest.json\"])?,",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/pack.rs",
+      "line": 1178,
+      "text": "serde_json::from_slice(bytes).map_err(Into::into)",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/parsers.rs",
+      "line": 61,
+      "text": "let Ok(key) = serde_json::from_str::<String>(&s[string_start..=i]) else {",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/parsers.rs",
+      "line": 499,
+      "text": "match serde_json::from_str::<Value>(&stdout) {",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/policy_controls.rs",
+      "line": 986,
+      "text": "let policy: ExceptionPolicy = serde_json::from_str(&body).map_err(|_| unavailable())?;",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/project.rs",
+      "line": 733,
+      "text": "Ok(b) => serde_json::from_slice(&b)?,",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/quota.rs",
+      "line": 408,
+      "text": "return Ok(Some(serde_json::from_str(&response)?));",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/quota.rs",
+      "line": 420,
+      "text": "let batch: UsageBatch = serde_json::from_slice(&std::fs::read(path)?)?;",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/quota.rs",
+      "line": 447,
+      "text": "let old: Observation = serde_json::from_str(&previous)?;",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/quota.rs",
+      "line": 480,
+      "text": "let prev: Observation = serde_json::from_str(&previous)?;",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/quota.rs",
+      "line": 531,
+      "text": "let mut o: Observation = serde_json::from_str(&payload)?;",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/runner.rs",
+      "line": 579,
+      "text": "let saved: Value = serde_json::from_slice(&raw)?;",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/runner.rs",
+      "line": 846,
+      "text": "let owner: Job = serde_json::from_slice(&fs::read(&path)?)?;",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/runner.rs",
+      "line": 876,
+      "text": "let current: Job = serde_json::from_slice(&fs::read(&path)?)?;",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/runner.rs",
+      "line": 915,
+      "text": "let d: work::TaskDefinition = serde_json::from_str(&definition)?;",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/runner.rs",
+      "line": 975,
+      "text": "let current: Job = serde_json::from_slice(&fs::read(&path)?)?;",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/runner.rs",
+      "line": 1431,
+      "text": "serde_json::from_slice(&finite_metadata(p, &path, 1024 * 1024)?)?;",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/runner.rs",
+      "line": 1458,
+      "text": "let mut job: Job = serde_json::from_slice(&fs::read(path)?)?;",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/runner.rs",
+      "line": 1530,
+      "text": "let mut observation: MemoryObservation = serde_json::from_str(&f.text)?;",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/runner.rs",
+      "line": 1967,
+      "text": "serde_json::from_str::<Job>(&line).ok()",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/runner.rs",
+      "line": 2189,
+      "text": "serde_json::from_slice(&finite_metadata(p, &helper_path(p, id)?, 1024 * 1024)?)?;",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/runner.rs",
+      "line": 2362,
+      "text": "let h: Helper = serde_json::from_slice(&finite_metadata(p, &path, 1024 * 1024)?)?;",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/runner.rs",
+      "line": 2373,
+      "text": "Some(serde_json::from_slice::<Job>(&finite_metadata(",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/runner.rs",
+      "line": 2410,
+      "text": "let mut job: Job = serde_json::from_slice(&fs::read(job_path(",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/schedule.rs",
+      "line": 333,
+      "text": "let definition = serde_json::from_str(&row.0)?;",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/schedule.rs",
+      "line": 520,
+      "text": "let action: Action = serde_json::from_str(&stored)?;",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/schedule.rs",
+      "line": 686,
+      "text": "let value: ScheduleDefinition = serde_json::from_slice(&std::fs::read(path)?)?;",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/schedule.rs",
+      "line": 706,
+      "text": "db.query_row(\"SELECT definition,revision,workspace,enabled,pause_source,removed,cursor_at,last_success,next_due FROM schedule_definitions WHERE namespace=?1 AND id=?2\",params![namespace,id],|r|Ok((r.get::<_,String>(0)?,r.get(1)?,r.get(2)?,r.get(3)?,r.get(4)?,r.get(5)?,r.get(6)?,r.get(7)?,r.get(8)?))).optional()?.ok_or_else(||Error::new(\"SCHEDULE_NOT_FOUND\",\"No schedule in the exact namespace\",6)).and_then(|(definition,revision,workspace,enabled,pause,removed,cursor,success,next)|Ok(Stored{definition:serde_json::from_str(&definition)?,revision,workspace,enabled,pause,removed,cursor,success,next}))",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/schedule.rs",
+      "line": 761,
+      "text": "let old: Value = serde_json::from_str(&old_metadata)?;",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/schedule.rs",
+      "line": 1129,
+      "text": "return Ok(serde_json::from_str(&response)?);",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/schedule.rs",
+      "line": 1513,
+      "text": "let value: Value = serde_json::from_slice(&fs::read(path)?)?;",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/schedule.rs",
+      "line": 1893,
+      "text": "let value: Value = serde_json::from_str(&metadata)?;",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/schedule.rs",
+      "line": 2021,
+      "text": "let v: Value = serde_json::from_str(&profile)?;",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/schedule.rs",
+      "line": 2168,
+      "text": "let full_result: Value = serde_json::from_str(&masked)?;",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/schedule.rs",
+      "line": 2492,
+      "text": "let metadata: Value = serde_json::from_str(&result)?;",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/session.rs",
+      "line": 379,
+      "text": ".map(|(_, s)| serde_json::from_str::<Value>(s))",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/session.rs",
+      "line": 515,
+      "text": "let selection: BTreeMap<String, Value> = serde_json::from_str(&row.6)?;",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/storage.rs",
+      "line": 146,
+      "text": "serde_json::from_str::<FileEntry>(&c)?",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/storage.rs",
+      "line": 255,
+      "text": "let f: FileEntry = serde_json::from_str(&row.map_err(|e| sql_error(p, e))?)?;",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/storage.rs",
+      "line": 410,
+      "text": "let mut value: Value = serde_json::from_str(&body)?;",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/storage.rs",
+      "line": 437,
+      "text": "let mut value = serde_json::from_str::<Value>(&body)?;",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/storage.rs",
+      "line": 548,
+      "text": "let meta: Value = serde_json::from_str(parts.get(1).unwrap_or(&\"\").trim())?;",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/watch.rs",
+      "line": 141,
+      "text": "assert_eq!(serde_json::from_slice::<Value>(&json_bytes).unwrap(), frame);",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/windows_guardian.rs",
+      "line": 401,
+      "text": "serde_json::from_slice(&bytes).map_err(|_| invalid(\"invalid durable receipt\"))",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/windows_guardian.rs",
+      "line": 409,
+      "text": "serde_json::from_slice(&bytes).map_err(|_| invalid(\"invalid guardian protocol input\"))",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/windows_guardian.rs",
+      "line": 858,
+      "text": "return serde_json::from_str(&text[offset + PREFIX.len()..])",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/work.rs",
+      "line": 414,
+      "text": "let mut value: Value = serde_json::from_slice(&std::fs::read(p)?)?;",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/work.rs",
+      "line": 515,
+      "text": "serde_json::from_str(text).map_err(|_| Error::new(\"DB_CORRUPT\", message, 7))",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/work.rs",
+      "line": 622,
+      "text": "let credential: Value = serde_json::from_slice(&bytes)?;",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/work.rs",
+      "line": 751,
+      "text": "let Some(data) = stored.and_then(|s| serde_json::from_str::<Value>(s).ok()) else {",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/work.rs",
+      "line": 1688,
+      "text": "let data = serde_json::from_str::<Value>(&payload).map_err(|_| {",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/work.rs",
+      "line": 1766,
+      "text": "let archive: BackupArchive = serde_json::from_slice(&std::fs::read(input)?)?;",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    },
+    {
+      "path": "src/work.rs",
+      "line": 2094,
+      "text": "report.environment = serde_json::from_str(&sanitized).unwrap_or(json!({\"redacted\":true}));",
+      "closure_item": "G05-D04",
+      "classification": "classify caller/stored/external/internal/test origin together; preserve existing explicit mapping/fail-closed rules"
+    }
+  ],
+  "source_sha256": {
+    "src/parsers.rs": "4134e27817423a4718348da1ad15e22304caaa1b9f9ff0e6bb6c98f37cdc1455",
+    "src/session.rs": "16184a48353c55bfdddcffe955d6401f74cecc8e3f08696fe979c7bb7e5c74df",
+    "src/windows_guardian.rs": "d2d672f29e43b603482b44c195d5e702990d2d0416a2a6bb9add138139b312d7",
+    "src/cli_help.rs": "a73dc639251b58f468527f2a5e2cee0594a052597da9fb6ff73455b630b71151",
+    "src/adapter.rs": "a61ed524d6abad0f127ed2ff6553c014682148c37e678833a3cd245fddb8c129",
+    "src/quota.rs": "c85bb611421632a9b8a8eca20b6dfe74d78aa3736a8848b094a4c9090fd625e8",
+    "src/graph.rs": "54da586daa91a3c7f2e97534fa68824ff0e0d796dd69054be27960799d94e2c7",
+    "src/documents.rs": "0ae1965d81a09cb5cd20c7dc33a7e5b287929d1d4424796b092ead36151ca953",
+    "src/render.rs": "020c3e4303829c4ac12c2db85120e41d5b901422849d67513a78fce9608a5633",
+    "src/lib.rs": "e636fe455847f82f5962d1ac8ede864f476fdb4cc80c29c58769eb7685036e9a",
+    "src/domain.rs": "28586433d27e7d969345c4a07dec8ae7434e771a34ddddd9e2b0612c9a77d9b9",
+    "src/pack.rs": "7336ce57a6d1a99e5ea84754be7482533f88ae218f0972d37f97ee4f43098d66",
+    "src/cli_args.rs": "2ae3676485714fc79c19ceed1f96c94347d7458286a0ae07e9096af308576d39",
+    "src/runner.rs": "a3254f651ec32b2db18bf6943ec5d104eaa6b750fca606b29fdf3415733a9fd7",
+    "src/query_process.rs": "74c4c46c6b224563c63e9e2d7a9beac7996ef69735b072a39ee22c9aa989d6cb",
+    "src/policy_controls.rs": "20b5426e447360199584ad0b8e5cf82ea26339d44d7fef384bddd9b1a6c406d9",
+    "src/extract.rs": "76e36421efa026822cd551a3c5cd51d8c58c1263c966b92dcc5a15ec269b4f4b",
+    "src/inventory.rs": "b5508410b77fabe332beb3bb7b793bd94908a6f2b1249fe542cf391078b78612",
+    "src/project.rs": "b26681e04129cc2d533d83249dc27764f5678fce326b5461a3d854b564db70b3",
+    "src/filters.rs": "96b52a57bd2cfac9c5331be489b2587e3cfc1c5c7f7417fb56c0358b652be91a",
+    "src/output.rs": "463fc3c8b23957228f0eaf436ace70722a9a1df519ec3f87a503eb7e217c37b3",
+    "src/deadline.rs": "81d7757649acb12837c4e1cc51b7a462ecdc3b2bb341d21baf286f35bf0eaae4",
+    "src/watch.rs": "dc6c6f1d4bbe27fe2dccd4505a8ddfed54fbf8224f793fbe72d3751ba654c2fb",
+    "src/schedule.rs": "cc8a6bf0731be2d29fcba174947c10ba53731eed83b048b2b235208a36bf7ef4",
+    "src/main.rs": "4bc497bf9baf426719b511ca3b9450dcb9524a7df4ed184e600b0e7c9bd8b592",
+    "src/broker.rs": "bf19d20102f5b3f6a0e0c6cf844bcc8820306e23940cde086fd7eebbbdaf1609",
+    "src/storage.rs": "797a36c4731ae9d4debcfe27096eb74e670bb2d66aca7192b32c4713fa26c2cc",
+    "src/input.rs": "116f3da7008abc6b04d821061c1a8f43509f06d9505729fb600ce2c9cc5e1fe8",
+    "src/source_delivery.rs": "947c4ae8dafdd685449d49b4b4dcd267426374dae3bb6e29276fdde667356d47",
+    "src/search.rs": "15483186930d9c818e56ea96b15585e7912af4cb759850b7d1c766d86a1588a8",
+    "src/work.rs": "b624ab8aec564ad62d557f30cda96058032f1159c462f5d3560d9aaf657660ed",
+    "src/operations.rs": "244236f6fc7a187c18db5eba0cfd0e8e3389c66f1c9c4b8b89f26d65d326d7f7",
+    "src/windows_process.rs": "ae4ed108587e66489ade743ad25e3e6c68b3c14547eaaf6e963162af3d29030e",
+    "src/reader.rs": "8770ea1bf18a7439d0869d0d366cb3833b37ef1c8fb72c3ced6dba58cffe2281",
+    "src/context.rs": "faa1b3c76ffc53e7240a809ae226d229252ec056d0b985b4adecd62df6a4dcb9"
+  },
+  "closed_details": 23,
+  "detail_denominator": 40
+}
