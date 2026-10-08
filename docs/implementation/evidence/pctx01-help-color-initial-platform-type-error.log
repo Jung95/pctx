@@ -1,0 +1,29 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+error[E0308]: arguments to this function are incorrect
+    --> tests/cli_frontend.rs:244:17
+     |
+ 244 |                 libc::openpty(
+     |                 ^^^^^^^^^^^^^
+     |
+note: types differ in mutability
+    --> tests/cli_frontend.rs:248:21
+     |
+ 248 |                     std::ptr::null(),
+     |                     ^^^^^^^^^^^^^^^^
+     = note: expected raw pointer `*mut termios`
+                found raw pointer `*const _`
+note: types differ in mutability
+    --> tests/cli_frontend.rs:249:21
+     |
+ 249 |                     std::ptr::null(),
+     |                     ^^^^^^^^^^^^^^^^
+     = note: expected raw pointer `*mut winsize`
+                found raw pointer `*const _`
+note: function defined here
+    --> /Users/dev/PCTX/.toolchain/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/libc-0.2.190/src/unix/bsd/apple/mod.rs:4947:12
+     |
+4947 |     pub fn openpty(
+     |            ^^^^^^^
+
+For more information about this error, try `rustc --explain E0308`.
+error: could not compile `pctx` (test "cli_frontend") due to 1 previous error

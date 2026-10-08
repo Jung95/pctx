@@ -216,3 +216,189 @@ fn invalid_strict_queries_preserve_generation_database_sources_and_output_path()
         assert!(!f.temp.path().join("rejected.json").exists());
     }
 }
+
+#[test]
+fn parser_diagnostics_mask_secrets_and_escape_control_characters() {
+    let f = Fixture::new();
+    let output = f.run(&args(&["--no-color", "ghp_abcdefghijklmnopqrst\u{1b}[31m"]));
+    assert_eq!(output.status.code(), Some(2));
+    let text = String::from_utf8(output.stderr).unwrap();
+    assert!(!text.contains("ghp_abcdefghijklmnopqrst"));
+    assert!(!text.contains('\u{1b}'));
+    assert!(text.contains("REDACTED"));
+    f.unchanged();
+}
+
+#[cfg(unix)]
+#[test]
+fn no_color_suppresses_help_on_a_real_terminal_including_nested_help() {
+    use std::{
+        io::Read,
+        os::fd::{AsRawFd, FromRawFd},
+        process::{Child, Stdio},
+        time::{Duration, Instant},
+    };
+    struct Reap(Child);
+    impl Drop for Reap {
+        fn drop(&mut self) {
+            let _ = self.0.kill();
+            let _ = self.0.wait();
+        }
+    }
+    fn terminal(f: &Fixture, values: &[&str]) -> Vec<u8> {
+        let mut master = -1;
+        let mut slave = -1;
+        assert_eq!(
+            unsafe {
+                libc::openpty(
+                    &mut master,
+                    &mut slave,
+                    std::ptr::null_mut(),
+                    std::ptr::null_mut(),
+                    std::ptr::null_mut(),
+                )
+            },
+            0
+        );
+        // The child receives only its stdout/stderr copies, not the master.
+        assert_eq!(
+            unsafe { libc::fcntl(master, libc::F_SETFD, libc::FD_CLOEXEC) },
+            0
+        );
+        assert_eq!(
+            unsafe { libc::fcntl(slave, libc::F_SETFD, libc::FD_CLOEXEC) },
+            0
+        );
+        let mut master = unsafe { fs::File::from_raw_fd(master) };
+        let slave = unsafe { fs::File::from_raw_fd(slave) };
+        let mut child = Reap(
+            Command::new(env!("CARGO_BIN_EXE_pctx"))
+                .current_dir(f.temp.path())
+                .args(values)
+                .env("TERM", "xterm-256color")
+                .env("CLICOLOR_FORCE", "1")
+                .env_remove("NO_COLOR")
+                .env_remove("CLICOLOR")
+                .stdin(Stdio::null())
+                .stdout(slave.try_clone().unwrap())
+                .stderr(slave)
+                .spawn()
+                .unwrap(),
+        );
+        let mut bytes = Vec::new();
+        let mut chunk = [0; 4096];
+        let deadline = Instant::now() + Duration::from_secs(10);
+        loop {
+            let remaining = deadline
+                .checked_duration_since(Instant::now())
+                .expect("Terminal help exceeded ten seconds");
+            let mut ready = libc::pollfd {
+                fd: master.as_raw_fd(),
+                events: libc::POLLIN,
+                revents: 0,
+            };
+            let result = unsafe {
+                libc::poll(
+                    &mut ready,
+                    1,
+                    remaining.as_millis().min(i32::MAX as u128) as i32,
+                )
+            };
+            if result < 0
+                && std::io::Error::last_os_error().kind() == std::io::ErrorKind::Interrupted
+            {
+                continue;
+            }
+            assert!(
+                result > 0,
+                "Terminal help did not finish within ten seconds"
+            );
+            match master.read(&mut chunk) {
+                Ok(0) => break,
+                Ok(n) => bytes.extend_from_slice(&chunk[..n]),
+                Err(e) if e.raw_os_error() == Some(libc::EIO) => break,
+                Err(e) => panic!("Terminal capture failed: {e}"),
+            }
+        }
+        let status = loop {
+            if let Some(status) = child.0.try_wait().unwrap() {
+                break status;
+            }
+            assert!(
+                Instant::now() < deadline,
+                "Terminal child did not exit within ten seconds"
+            );
+            std::thread::sleep(Duration::from_millis(10));
+        };
+        assert!(status.success());
+        bytes
+    }
+    let f = Fixture::new();
+    let colored = terminal(&f, &["--help"]);
+    assert!(
+        colored.contains(&27),
+        "Positive color control was not a colored terminal"
+    );
+    for values in [
+        vec!["--no-color", "--help"],
+        vec!["session", "attach", "--no-color", "--help"],
+        vec!["--format=json", "--help"],
+    ] {
+        let plain = terminal(&f, &values);
+        assert!(!plain.contains(&27));
+    }
+    f.unchanged();
+}
+
+#[test]
+fn every_visible_help_path_describes_schema_and_effects_without_project_access() {
+    let f = Fixture::new();
+    let mut pending = vec![Vec::<String>::new()];
+    let mut visited = 0;
+    while let Some(path) = pending.pop() {
+        let mut argv = path.clone();
+        argv.extend(["--no-color".into(), "--help".into()]);
+        let output = f.run(&argv.iter().map(Into::into).collect::<Vec<_>>());
+        assert!(output.status.success(), "{path:?}");
+        assert!(output.stderr.is_empty(), "{path:?}");
+        let text = String::from_utf8(output.stdout).unwrap();
+        assert!(text.contains("JSON envelope schema 1.0"), "{path:?}");
+        assert!(text.contains("Effects:"), "{path:?}");
+        assert!(!text.contains("unclassified:"), "{path:?}");
+        assert!(!text.contains('\u{1b}'), "{path:?}");
+        // Discover the public command tree from actual help, including flattened groups.
+        if let Some(section) = text.split("Commands:\n").nth(1) {
+            for line in section.lines().take_while(|line| !line.is_empty()) {
+                let name = line.split_whitespace().next().unwrap();
+                if name != "help" {
+                    let mut next = path.clone();
+                    next.push(name.into());
+                    pending.push(next);
+                }
+            }
+        }
+        visited += 1;
+    }
+    assert!(
+        visited > 100,
+        "Command-tree traversal stopped early: {visited}"
+    );
+    for (path, required) in [
+        (vec!["index", "gc"], "--apply writes by deleting"),
+        (vec!["task", "complete"], "--dry-run only reads"),
+        (vec!["adapter", "claude", "doctor"], "claude --version"),
+        (vec!["context", "get"], "context receipt"),
+        (vec!["session", "reconcile"], "does not mutate epochs"),
+        (vec!["output", "render"], "never reruns"),
+        (vec!["schedule", "inspect"], "--observe-native executes"),
+        (vec!["schedule", "install"], "--apply-native executes"),
+        (vec!["extract"], "refresh derived index"),
+    ] {
+        let mut argv = path;
+        argv.push("--help");
+        let output = f.run(&args(&argv));
+        assert!(output.status.success());
+        assert!(String::from_utf8(output.stdout).unwrap().contains(required));
+    }
+    f.unchanged();
+}

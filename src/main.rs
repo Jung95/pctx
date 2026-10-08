@@ -1,4 +1,6 @@
-use clap::{Parser, Subcommand, ValueEnum};
+mod cli_help;
+
+use clap::{ColorChoice, CommandFactory, FromArgMatches, Parser, Subcommand, ValueEnum};
 use pctx::adapter;
 use pctx::inventory;
 use pctx::runner;
@@ -141,7 +143,7 @@ enum Command {
     Graph(graph::GraphCommand),
     Query(search::StructureRequest),
     Extract(extract::ExtractRequest),
-    /// Read verified syntax metadata (read).
+    /// Read verified syntax metadata (read; strict may update index).
     Outline {
         path: String,
         #[arg(long)]
@@ -711,14 +713,22 @@ fn main() {
         }
     }
     let raw = std::env::args_os().collect::<Vec<_>>();
-    let cli = match Cli::try_parse() {
+    let options = raw.iter().take_while(|s| *s != "--").collect::<Vec<_>>();
+    let json_requested = options.iter().any(|s| **s == "--format=json")
+        || options
+            .windows(2)
+            .any(|pair| pair[0] == "--format" && pair[1] == "json");
+    let no_color = options.iter().any(|s| **s == "--no-color");
+    let mut command = cli_help::annotate(Cli::command());
+    if no_color || json_requested {
+        command = command.color(ColorChoice::Never);
+    }
+    let parsed = command
+        .try_get_matches_from(raw.iter().cloned())
+        .and_then(|matches| Cli::from_arg_matches(&matches));
+    let cli = match parsed {
         Ok(c) => c,
         Err(e) => {
-            let options = raw.iter().take_while(|s| *s != "--").collect::<Vec<_>>();
-            let json_requested = options.iter().any(|s| **s == "--format=json")
-                || options
-                    .windows(2)
-                    .any(|pair| pair[0] == "--format" && pair[1] == "json");
             if e.use_stderr() && json_requested {
                 let err = Error::new(
                     "INVALID_ARGUMENT",
@@ -730,6 +740,22 @@ fn main() {
                 out["errors"] = json!([err]);
                 println!("{}", out);
                 std::process::exit(2);
+            }
+            if e.use_stderr() {
+                // Parser diagnostics also cross the shared secret/control boundary.
+                let (message, _) = pctx::reader::redact(&e.to_string());
+                let message = message
+                    .chars()
+                    .flat_map(|c| {
+                        if c.is_control() && !matches!(c, '\n' | '\t') {
+                            c.escape_unicode().collect::<Vec<_>>()
+                        } else {
+                            vec![c]
+                        }
+                    })
+                    .collect::<String>();
+                eprintln!("{message}");
+                std::process::exit(e.exit_code());
             }
             e.exit()
         }

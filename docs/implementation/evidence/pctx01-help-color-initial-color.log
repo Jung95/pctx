@@ -1,0 +1,13 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.71s
+     Running tests/cli_frontend.rs (target/debug/deps/cli_frontend-4948844b4d514170)
+
+running 5 tests
+test non_utf8_argument_returns_structured_error_without_panic_or_effect ... ok
+test unsupported_ndjson_is_rejected_before_project_discovery_or_init ... ok
+test help_and_version_are_successful_without_project_access ... ok
+test parser_errors_respect_actual_json_option_and_do_not_load_project ... ok
+test invalid_strict_queries_preserve_generation_database_sources_and_output_path ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.89s
+

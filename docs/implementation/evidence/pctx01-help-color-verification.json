@@ -1,0 +1,100 @@
+{
+  "official_task": "PCTX01",
+  "status": "implementing_not_complete",
+  "base_commit": "ee4b9e744a724a1be69928139b2a8416b8aad542",
+  "platform": "native macOS arm64",
+  "source_sha256": {
+    "src/main.rs": "6ad51f3f645dcbd32d12ad4a296d70c6aed53d2efc5185368d7bcdc55e30a8de",
+    "src/cli_help.rs": "e074bb65a27a4c0b07a479df4312389121c84c3d021a3b1404f90e2588b6271f",
+    "tests/cli_frontend.rs": "87df7e49da7066dcf44ac54e26eb015fd605d8e5d04fd5143812d0f8b162b22b"
+  },
+  "verification": {
+    "final_full": {
+      "handle": 52787,
+      "exit": 101,
+      "passed": 377,
+      "failed": 3,
+      "suites": 45,
+      "command": "cargo test --locked --all-targets --no-fail-fast",
+      "failures": [
+        "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+        "simultaneous_streams_are_collected_and_overflow_never_infers_success",
+        "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget"
+      ]
+    },
+    "actual_cli_frontend": {
+      "passed": 8,
+      "failed": 0,
+      "proof": "All visible help paths discovered through actual CLI; schema/effect descriptions and exceptional flags, no project side effects. Unix real PTY positive color control, root/nested/JSON no-color, reflected secret/control masking; original pre-effect fixtures preserved."
+    },
+    "effect_registry_coverage": {
+      "passed": 1,
+      "failed": 0
+    },
+    "format_exit": 0,
+    "locked_all_target_clippy_exit": 0
+  },
+  "review": {
+    "agent": "requirements",
+    "findings": [
+      "Envelope transport exceptions and Pack output artifact distinction corrected",
+      "PTY read and child exit bounded by original ten-second fixture deadline; kill/reap on failure"
+    ],
+    "remaining_scoped_blockers": 0,
+    "whole_task_complete": false
+  },
+  "remaining_required_gates": [
+    "Complete invalid/duplicate/global-position and frontend error/exit/representation/budget matrix",
+    "Remaining finite-route original deadline and semantic option-before-effect contracts",
+    "Unresolved original native query startup failure root cause",
+    "Required native Linux/Windows execution including console behavior"
+  ],
+  "logs": {
+    "initial-color": {
+      "path": "docs/implementation/evidence/pctx01-help-color-initial-color.log",
+      "sha256": "c1741ed9ad90e52edba53bc8b995ae21e96f30f48a794084e35bf3dad580871b"
+    },
+    "initial-environment-error": {
+      "path": "docs/implementation/evidence/pctx01-help-color-initial-environment-error.log",
+      "sha256": "5bde50b746ebedd7062be3cfad2ea02346d2c776689c157d8c57931971e4b96f"
+    },
+    "initial-platform-type-error": {
+      "path": "docs/implementation/evidence/pctx01-help-color-initial-platform-type-error.log",
+      "sha256": "4532ba215a439931911964dc380328407086336d68d4642e1a6d7b30071758b0"
+    },
+    "initial-unreflected-secret-fixture": {
+      "path": "docs/implementation/evidence/pctx01-help-color-initial-unreflected-secret-fixture.log",
+      "sha256": "106543ecb1b49e04e7b538c75753cb3a697e223a5a2c6a5f612d04493919c5b0"
+    },
+    "corrected-secret-fixture": {
+      "path": "docs/implementation/evidence/pctx01-help-color-corrected-secret-fixture.log",
+      "sha256": "0eb96811e35e6865a2efc643879f0b11704ca7700e0974074ed8373127f99f6c"
+    },
+    "unit-before-review": {
+      "path": "docs/implementation/evidence/pctx01-help-color-unit-before-review.log",
+      "sha256": "60aadda152f23e274293b915ea480da72a277cb83134ee7f2a910cbca8cb59a2"
+    },
+    "frontend-before-review": {
+      "path": "docs/implementation/evidence/pctx01-help-color-frontend-before-review.log",
+      "sha256": "9a32dedf73971e974e385d0961797d3fb8c098c0c2de4e4f569a770d75ba24d8"
+    },
+    "full-before-bounded-exit": {
+      "path": "docs/implementation/evidence/pctx01-help-color-full-before-bounded-exit.log",
+      "sha256": "3ec79ded220bc81abd0d384538844a487cba1b0db96687b4ebefc4c264547140"
+    },
+    "final-full": {
+      "path": "docs/implementation/evidence/pctx01-help-color-final-full.log",
+      "sha256": "284ca8f150546275bd50d0a5b600360c7bd60670aa58bef3750e8e2862222b05"
+    },
+    "final-clippy": {
+      "path": "docs/implementation/evidence/pctx01-help-color-final-clippy.log",
+      "sha256": "b3902ffff82377028c9288c5596854235c5fe39e7ec8b407d807c5cce9b6fd34"
+    },
+    "final-format": {
+      "path": "docs/implementation/evidence/pctx01-help-color-final-format.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "actions_dispatched": 0,
+  "other_active_official_tasks": []
+}
