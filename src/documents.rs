@@ -106,20 +106,23 @@ fn retirement_history(
     let mut history_bytes = 0usize;
     for subject in subjects {
         p.check_deadline()?;
-        let mut statement = tx.prepare("SELECT payload FROM events WHERE type='document_retirement_observed' AND entity=?1 ORDER BY seq LIMIT 1025")?;
-        let payloads = statement
-            .query_map([retirement_entity(p, &subject)], |r| r.get::<_, String>(0))?
-            .collect::<std::result::Result<Vec<_>, _>>()?;
-        if payloads.len() > 1024 {
-            return Err(Error::new(
-                "PARTIAL_RESULT",
-                "Document retirement history exceeds bounded limits",
-                3,
-            ));
-        }
+        // Reject oversized or non-TEXT storage before transferring payloads to
+        // Rust. BLOB length measures UTF8 bytes, not SQLite's character count.
+        let mut statement = tx.prepare("SELECT CASE WHEN typeof(payload)='text' AND length(CAST(payload AS BLOB))<=4096 THEN payload ELSE NULL END FROM events WHERE type='document_retirement_observed' AND entity=?1 ORDER BY seq LIMIT 1025")?;
+        let mut rows = statement.query([retirement_entity(p, &subject)])?;
         let mut records = Vec::new();
-        for payload in payloads {
+        while let Some(row) = rows.next()? {
             p.check_deadline()?;
+            if records.len() >= 1024 {
+                return Err(Error::new(
+                    "PARTIAL_RESULT",
+                    "Document retirement history exceeds bounded limits",
+                    3,
+                ));
+            }
+            let payload = row
+                .get::<_, Option<String>>(0)?
+                .ok_or_else(|| Error::new("DB_ERROR", "Invalid document lineage observation", 7))?;
             history_bytes = history_bytes.saturating_add(payload.len());
             if history_bytes > 8 * 1024 * 1024 {
                 return Err(Error::new(

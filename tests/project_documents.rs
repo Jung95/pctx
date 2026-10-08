@@ -445,3 +445,59 @@ fn corrupt_lineage_cannot_silently_promote_current_guidance() {
     assert_eq!(documents::load(&p, &[]).unwrap_err().code, "DB_ERROR");
     assert_eq!(retirement_count(&p), 2);
 }
+#[test]
+fn lineage_payload_byte_limit_precedes_materialization_and_rolls_back_new_edges() {
+    for case in ["boundary", "oversized", "unicode", "blob"] {
+        let (_t, p) = fixture();
+        decision(&p, "old.md", "old", "[]");
+        decision(&p, "new.md", "new", "old");
+        assert_eq!(old_decision(&p)["current_guidance"], false);
+        let original = std::fs::read(p.root.join(".pctx/decisions/old.md")).unwrap();
+        let db = pctx::work::connect(&p).unwrap();
+        let (entity, mut payload): (String, String) = db
+            .query_row(
+                "SELECT entity,payload FROM events WHERE type='document_retirement_observed'",
+                [],
+                |r| Ok((r.get(0)?, r.get(1)?)),
+            )
+            .unwrap();
+        match case {
+            "boundary" | "oversized" => {
+                let size = if case == "boundary" { 4096 } else { 4097 };
+                payload.push_str(&" ".repeat(size - payload.len()));
+                db.execute("INSERT INTO events(entity,type,payload,created) VALUES(?1,'document_retirement_observed',?2,0)", rusqlite::params![entity, payload]).unwrap();
+            }
+            "unicode" => {
+                let mut record: serde_json::Value = serde_json::from_str(&payload).unwrap();
+                record["replacement_path"] =
+                    serde_json::json!(format!(".pctx/decisions/{}.md", "猫".repeat(1400)));
+                payload = record.to_string();
+                assert!(payload.chars().count() < 4096 && payload.len() > 4096);
+                db.execute("INSERT INTO events(entity,type,payload,created) VALUES(?1,'document_retirement_observed',?2,0)", rusqlite::params![entity, payload]).unwrap();
+            }
+            "blob" => {
+                db.execute("INSERT INTO events(entity,type,payload,created) VALUES(?1,'document_retirement_observed',zeroblob(1048576),0)", [entity]).unwrap();
+            }
+            _ => unreachable!(),
+        }
+        // A valid pending relationship must not be published on corrupt history.
+        decision(&p, "later.md", "later", "old");
+        if case == "boundary" {
+            assert_eq!(old_decision(&p)["current_guidance"], false);
+            assert_eq!(retirement_count(&p), 3);
+        } else {
+            let error = documents::load(&p, &[]).unwrap_err();
+            assert_eq!(error.code, "DB_ERROR", "{case}");
+            assert!(!error.message.contains("猫"));
+            assert_eq!(
+                retirement_count(&p),
+                2,
+                "failed reads must not publish later observations"
+            );
+        }
+        assert_eq!(
+            std::fs::read(p.root.join(".pctx/decisions/old.md")).unwrap(),
+            original
+        );
+    }
+}

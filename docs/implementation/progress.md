@@ -155,3 +155,9 @@ Validated decision retirement observations now survive replacement deletion and 
 Final native macOS gate50586 PASS317; targeted reviewed gate54781 PASS41, locked all-target Clippy/format PASS. Evidence persistent-lineage-verification.json binds final source hashes and retained logs. Earlier full attempt95568 FAILED at existing1000ms query path resolution; final success does not establish that intermittent startup cause is fixed. Initial missing fixture control directories and representation-name assertion failures remain retained. No Actions dispatched; [skip ci] preserves the monthly3000 minute budget.
 
 Still implementing: complete AC77/PCTX44, topic/paused-role/handoff/task/approval variants, other-platform qualification and complete mandatory goal. Independent review identified a defensive follow-up: bound corrupt oversized SQL payloads before materialization; the8MiB serialized-history cap is not a hard RSS bound.
+
+## D040 defensive lineage payload boundary
+
+Decision history SQL now guards TEXT type and4096 UTF8 bytes before transferring one row at a time to Rust. Direct integration covers a valid4096-byte row,4097-byte rejection, a Unicode row with fewer4096 characters but excess bytes,1MiB non-TEXT storage, retained source bytes and rollback of pending observations. Targeted documents12 PASS; locked all-target Clippy/format PASS. Evidence lineage-payload-verification.json binds final source hashes. This bounds payload transfer/serialized history, not native SQLite RSS.
+
+Full native gate22781 FAILED:316 PASS,2 original1000ms process startup failures (relative PATH and builtin concurrent streams). No deadline was relaxed, no retry promoted to proof. Synthetic diagnostic evidence retained; root cause remains required work. No Actions dispatched. D041 records the next consumer-bound topic/role delivery contract; it is planned, not implemented or qualified. Whole mandatory goal remains active.

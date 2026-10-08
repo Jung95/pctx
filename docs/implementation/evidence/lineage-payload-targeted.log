@@ -1,0 +1,20 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.64s
+     Running tests/project_documents.rs (target/debug/deps/project_documents-7b87e5d6e076ca8b)
+
+running 12 tests
+test rules_are_scoped_required_and_keep_source_provenance ... ok
+test legacy_instructions_are_opaque_and_all_returned_metadata_is_masked ... ok
+test decision_lifecycle_never_promotes_retired_or_proposed_claims ... ok
+test decisions_keep_superseded_records_and_report_unresolved_references ... ok
+test corrupt_lineage_cannot_silently_promote_current_guidance ... ok
+test tags_aliases_duplicate_ids_and_excess_nesting_are_rejected ... ok
+test structured_conflicts_fail_but_natural_contradictions_remain_data ... ok
+test proposed_replacement_cannot_retire_current_claim_and_cancellation_cannot_revive_predecessor ... ok
+test invalid_reinstatement_rolls_back_observations_and_workspace_history_is_isolated ... ok
+test retirement_survives_replacement_deletion_and_explicit_reinstatement_is_required ... ok
+test control_backup_preserves_lineage_without_reactivating_guidance ... ok
+test lineage_payload_byte_limit_precedes_materialization_and_rolls_back_new_edges ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.19s
+

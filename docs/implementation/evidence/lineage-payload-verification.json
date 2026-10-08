@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "base_commit": "c46561b607612c43e4f1ac68035f69e074242e1d",
+  "source_sha256": {
+    "src/documents.rs": "50b00f1ce13329a1b13d2be2f055e553aab34b1c7b2cb00f2edff98c67eaf031",
+    "tests/project_documents.rs": "dbbce7af2b8a2e20af71b867032fafd37262c27a247141cabee8b6a23d829794"
+  },
+  "checks": {
+    "format": "PASS",
+    "locked_all_target_clippy": "PASS",
+    "targeted_documents": {
+      "passed": 12,
+      "failed": 0
+    },
+    "full_native_macos": {
+      "passed": 316,
+      "failed": 2,
+      "exit_code": 101,
+      "handle": 22781,
+      "status": "FAILED"
+    }
+  },
+  "failures": [
+    "project_deadline::relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+    "project_deadline::simultaneous_streams_are_collected_and_overflow_never_infers_success"
+  ],
+  "limits": [
+    "Intermittent script startup remains unresolved; no retry qualifies repair",
+    "Pre-materialization SQL sentinel bounds Rust payload transfer, not SQLite or hard RSS",
+    "Full AC77/PCTX44 and mandatory goal incomplete",
+    "No Actions dispatched; exact Node24 pins unchanged"
+  ],
+  "evidence_sha256": {
+    "docs/implementation/evidence/lineage-payload-static.log": "9293dccaf03327692bb670ded5903f06d43d4e5054fc880bfe8ce6e91ec5b2b2",
+    "docs/implementation/evidence/lineage-payload-targeted.log": "95898f2804d598db19e515198c9ae2dacb2ed62666c57492a005b59c8027b97d",
+    "docs/implementation/evidence/lineage-payload-full-macos.log": "3ae3984c2f2fe77defa8fc367c843cbe93095f14610b23fbeb7d0cd09f23e65a",
+    "docs/implementation/evidence/lineage-payload-format.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}
