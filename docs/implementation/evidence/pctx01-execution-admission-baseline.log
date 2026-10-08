@@ -1,0 +1,35 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.65s
+     Running tests/execution_preflight.rs (target/debug/deps/execution_preflight-abdedd2027af4e4d)
+
+running 2 tests
+test direct_execution_refusals_preserve_storage_and_original_expiry ... FAILED
+test execution_argv_limits_precede_project_and_response_effects ... FAILED
+
+failures:
+
+---- direct_execution_refusals_preserve_storage_and_original_expiry stdout ----
+
+thread 'direct_execution_refusals_preserve_storage_and_original_expiry' (8752936) panicked at tests/execution_preflight.rs:157:9:
+assertion `left == right` failed
+  left: "INVALID_ARGUMENT"
+ right: "TIMEOUT"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- execution_argv_limits_precede_project_and_response_effects stdout ----
+
+thread 'execution_argv_limits_precede_project_and_response_effects' (8752937) panicked at tests/execution_preflight.rs:126:21:
+assertion `left == right` failed: ["run"]: Output { status: ExitStatus(unix_wait_status(1792)), stdout: "", stderr: "" }
+  left: Some(7)
+ right: Some(2)
+
+
+failures:
+    direct_execution_refusals_preserve_storage_and_original_expiry
+    execution_argv_limits_precede_project_and_response_effects
+
+test result: FAILED. 0 passed; 2 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.75s
+
+error: test failed, to rerun pass `--test execution_preflight`
+error: 1 target failed:
+    `--test execution_preflight`

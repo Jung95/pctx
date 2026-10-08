@@ -1,0 +1,24 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.62s
+     Running tests/execution_preflight.rs (target/debug/deps/execution_preflight-abdedd2027af4e4d)
+
+running 1 test
+test direct_execution_refusals_preserve_storage_and_original_expiry ... FAILED
+
+failures:
+
+---- direct_execution_refusals_preserve_storage_and_original_expiry stdout ----
+
+thread 'direct_execution_refusals_preserve_storage_and_original_expiry' (8760103) panicked at tests/execution_preflight.rs:216:9:
+assertion `left == right` failed
+  left: "INVALID_ARGUMENT"
+ right: "TIMEOUT"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    direct_execution_refusals_preserve_storage_and_original_expiry
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 4 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `--test execution_preflight`

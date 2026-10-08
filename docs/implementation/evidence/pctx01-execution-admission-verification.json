@@ -1,0 +1,132 @@
+{
+  "official_task": "PCTX01",
+  "gates": [
+    "PCTX01-G03",
+    "PCTX01-G08"
+  ],
+  "residuals": [
+    "R08"
+  ],
+  "base_revision": "cd7ed7efb4bf64f36389e4a771dab1ebf2198ea3",
+  "source_sha256": {
+    "src/main.rs": "9348adfa6bd1116c833636bdd0d8f76f21afa704fd0c868914414fb22a615be2",
+    "src/output.rs": "463fc3c8b23957228f0eaf436ace70722a9a1df519ec3f87a503eb7e217c37b3",
+    "tests/execution_preflight.rs": "f7e91c3b973c80760a89520a7fe7175b77cf9752caf3f04a07540743d54343ad"
+  },
+  "platform": "native macOS arm64",
+  "cli": {
+    "invalid_forms": 6,
+    "combinations": 24,
+    "proof": "INVALID_ARGUMENT2 before project/data/absolute response; nonowner caller"
+  },
+  "direct": {
+    "invalid_run_requests": 6,
+    "run_entries_per_request": 2,
+    "invalid_trust_requests": 6,
+    "expired_entries": 18,
+    "proof": "Original Instant/TIMEOUT7; not_started; unchanged storage"
+  },
+  "positive": [
+    "All Run modes/empty elements/count256/257/65536/65537 UTF-8: pure validators",
+    "Actual Unix Trust Plan256/65536, no execution or trust writes",
+    "Isolated nonowner direct TrustAdd invalid2/valid5/expired7 without effects",
+    "Actual nonowner Add5 and wrong fingerprint9 unchanged state",
+    "Direct Run budget2999/invalid grammar yields8; supplied expired clock yields7"
+  ],
+  "related": {
+    "session": 60797,
+    "log": "pctx01-execution-admission-final-related.log",
+    "exit": 0,
+    "passed": 34,
+    "qualification": "One nested child result excluded; child stdout then suppressed and final isolated suite27921 passed5. Equivalent assert-style fix later, final full validates final source."
+  },
+  "controlled_losses": {
+    "driver": "pctx01-execution-admission-loss-driver.json",
+    "count": 4,
+    "each_exit": 101,
+    "each_passed": 0,
+    "each_failed": 1,
+    "exact_product_source_restored": true
+  },
+  "static": {
+    "session": 50746,
+    "log": "pctx01-execution-admission-final-static.log",
+    "exit": 0,
+    "commands": [
+      "cargo fmt --all -- --check",
+      "cargo clippy --locked --all-targets -- -D warnings"
+    ]
+  },
+  "full": {
+    "session": 98801,
+    "log": "pctx01-execution-admission-full.log",
+    "status": "terminal",
+    "command": "cargo test --locked --all-targets --no-fail-fast",
+    "exit": 101,
+    "passed": 531,
+    "failed": 4,
+    "failed_tests": [
+      "query_program_resolution_uses_captured_command_path",
+      "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+      "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget",
+      "simultaneous_streams_are_collected_and_overflow_never_infers_success"
+    ],
+    "qualification": "Final source; all four historical startup tests fail at unchanged budgets. No repair/retry qualification."
+  },
+  "review": "pctx01-execution-admission-review.md",
+  "logs": {
+    "pctx01-execution-admission-baseline.log": {
+      "passed": 0,
+      "failed": 2
+    },
+    "pctx01-execution-admission-final-related.log": {
+      "passed": 34,
+      "failed": 0,
+      "excluded_nested_child_passes": 1
+    },
+    "pctx01-execution-admission-final-static.log": {
+      "passed": 0,
+      "failed": 0
+    },
+    "pctx01-execution-admission-isolated-final.log": {
+      "passed": 5,
+      "failed": 0
+    },
+    "pctx01-execution-admission-loss-frontend.log": {
+      "passed": 0,
+      "failed": 1
+    },
+    "pctx01-execution-admission-loss-run-expiry.log": {
+      "passed": 0,
+      "failed": 1
+    },
+    "pctx01-execution-admission-loss-run-producer.log": {
+      "passed": 0,
+      "failed": 1
+    },
+    "pctx01-execution-admission-loss-trust-producer.log": {
+      "passed": 0,
+      "failed": 1
+    },
+    "pctx01-execution-admission-related.log": {
+      "passed": 33,
+      "failed": 0
+    },
+    "pctx01-execution-admission-static.log": {
+      "passed": 0,
+      "failed": 0
+    },
+    "pctx01-execution-admission-full.log": {
+      "passed": 531,
+      "failed": 4
+    }
+  },
+  "limits": [
+    "Whole PCTX01 remains0/10; local9/12 and required-platform0/12 fixed residuals",
+    "Native Linux/Windows unverified",
+    "All four historical startup conditions unresolved regardless of incidental passes",
+    "New native boundary qualification is Trust planning; existing execution suites separate",
+    "Registered binding guard retained but not separately mutation-qualified here",
+    "No independent execution feature or Actions; R09\u2013R11 and other gates open"
+  ]
+}

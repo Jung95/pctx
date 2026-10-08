@@ -1,0 +1,72 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.59s
+     Running tests/cli_run_exit.rs (target/debug/deps/cli_run_exit-6950b2b7b4cecebc)
+
+running 11 tests
+test missing_project_is_prelaunch_failure_in_both_modes_without_files ... ok
+test project_refusal_near_minimum_keeps_original_exit_and_fits ... ok
+test project_refusals_preserve_typed_exit_and_message_before_spawn ... ok
+test actual_prelaunch_refusal_has_no_child_outcome_or_invocation ... ok
+test admitted_small_run_budgets_preserve_prelaunch_truth_without_artifact ... ok
+test actual_spawn_failure_never_becomes_success_or_child_exit ... ok
+test publication_failure_preserves_child_outcome_and_never_retries ... ok
+test incomplete_capture_is_partial_without_replacing_child_success ... ok
+test actual_execution_timeout_preserves_observation_but_returns_wrapper_error ... ok
+test actual_child_codes_and_signal_are_distinct_from_wrapper_status ... ok
+test final_serialized_budget_preserves_actual_child_truth_and_full_reread ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.89s
+
+     Running tests/execution_preflight.rs (target/debug/deps/execution_preflight-abdedd2027af4e4d)
+
+running 5 tests
+test shared_execution_boundaries_preserve_modes_empty_elements_and_budget_priority ... ok
+test direct_execution_refusals_preserve_storage_and_original_expiry ... ok
+
+running 1 test
+test isolated_nonowner_trust_admission_keeps_invalid_expired_and_authority_distinct ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 4 filtered out; finished in 0.00s
+
+test isolated_nonowner_trust_admission_keeps_invalid_expired_and_authority_distinct ... ok
+test native_trust_plan_accepts_exact_boundaries_without_execution_or_trust_writes ... ok
+test execution_argv_limits_precede_project_and_response_effects ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.19s
+
+     Running tests/output.rs (target/debug/deps/output-6e0a106d5d0b7325)
+
+running 11 tests
+test opaque_shell_heavy_and_bad_identifiers_rejected ... ok
+test invalid_saved_output_queries_precede_artifact_reads ... ok
+test agent_cannot_mint_execution_trust_and_git_helpers_are_unavailable ... ok
+test typed_full_report_preserves_failed_counts_without_becoming_gate_evidence ... ok
+test masking_is_before_storage_and_cr_preserves_error ... ok
+test exact_trust_child_exit_and_reread_without_execution ... ok
+test none_expiry_tamper_and_policy_change_cannot_restore_records ... ok
+test diagnostic_extract_binds_original_source_and_rereads_without_execution ... ok
+test nonzero_and_timeout_are_not_filter_success ... ok
+test verbose_output_preserves_late_diagnostics_and_full_masked_denominator ... ok
+test bounded_capture_retains_tail_and_original_record_positions ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.20s
+
+     Running tests/output_deadline.rs (target/debug/deps/output_deadline-9a5db5bcae11ac4f)
+
+running 5 tests
+test fifo_artifact_is_rejected_without_waiting_for_writer ... ok
+test expired_saved_queries_and_accounting_preserve_exact_artifact ... ok
+test failed_accounting_under_contention_never_increments_observed_bytes ... ok
+test retention_expiry_is_distinct_from_request_expiry_and_never_rewrites_artifact ... ok
+test saved_views_keep_unicode_and_original_budget_without_executing_or_mutating ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/output_delivery_observation.rs (target/debug/deps/output_delivery_observation-513791f406dd7de4)
+
+running 2 tests
+test successful_full_delivery_counts_exact_stdout_including_final_newline ... ok
+test observed_live_pipe_write_keeps_delivery_success_after_original_budget_expires ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.39s
+

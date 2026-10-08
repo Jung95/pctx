@@ -1,0 +1,38 @@
+[
+  {
+    "name": "frontend",
+    "path": "src/main.rs",
+    "exit": 101,
+    "test": "execution_argv_limits_precede_project_and_response_effects",
+    "source_sha256": "9348adfa6bd1116c833636bdd0d8f76f21afa704fd0c868914414fb22a615be2",
+    "exact_source_restored": true,
+    "log": "pctx01-execution-admission-loss-frontend.log"
+  },
+  {
+    "name": "run-producer",
+    "path": "src/output.rs",
+    "exit": 101,
+    "test": "direct_execution_refusals_preserve_storage_and_original_expiry",
+    "source_sha256": "463fc3c8b23957228f0eaf436ace70722a9a1df519ec3f87a503eb7e217c37b3",
+    "exact_source_restored": true,
+    "log": "pctx01-execution-admission-loss-run-producer.log"
+  },
+  {
+    "name": "trust-producer",
+    "path": "src/output.rs",
+    "exit": 101,
+    "test": "isolated_nonowner_trust_admission_keeps_invalid_expired_and_authority_distinct",
+    "source_sha256": "463fc3c8b23957228f0eaf436ace70722a9a1df519ec3f87a503eb7e217c37b3",
+    "exact_source_restored": true,
+    "log": "pctx01-execution-admission-loss-trust-producer.log"
+  },
+  {
+    "name": "run-expiry",
+    "path": "src/output.rs",
+    "exit": 101,
+    "test": "direct_execution_refusals_preserve_storage_and_original_expiry",
+    "source_sha256": "463fc3c8b23957228f0eaf436ace70722a9a1df519ec3f87a503eb7e217c37b3",
+    "exact_source_restored": true,
+    "log": "pctx01-execution-admission-loss-run-expiry.log"
+  }
+]

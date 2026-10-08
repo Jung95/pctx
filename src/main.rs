@@ -930,6 +930,8 @@ fn main() {
         Command::Repo { command } => broker::validate_repo_request(command),
         Command::Context { command } => session::validate_context_request(command),
         Command::Output { command } => output::validate_output_request(command),
+        Command::Run(request) => output::validate_run_request(request),
+        Command::Trust { command } => output::validate_trust_request(command),
         Command::Find(request) => search::validate_find_request(request),
         Command::Query(request) => search::validate_structure_request(request),
         Command::Read {

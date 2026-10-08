@@ -815,3 +815,42 @@ startup conditions remain open. Next same-task boundary R08 existing execution
 argv grammar; no next official task or Actions selected.
 
 Final native full99805 terminal101: 527 PASS / 3 FAIL. Failed tests: concurrent_query_startup_preserves_group_streams_and_original_one_second_budget, relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry, simultaneous_streams_are_collected_and_overflow_never_infers_success. Captured-command-path test passed without any startup/resolution code repair; that pass does not qualify a fix. All four historical startup conditions remain unresolved and original budgets unchanged. All jobs terminal; no heavy job live. PCTX01 remains incomplete (0/10 whole gates).
+
+## PCTX01 execution input admission — 2026-10-08
+
+Only PCTX01 remains active, fixed G03-R08/G08, specification §14/§38.
+Exact existing argv collection grammar (nonempty, at most256 elements, at most65536
+UTF-8 bytes including argv0) and Run modes now share validators before CLI project
+access and inside binding/run/trust producers. No new restriction on individual
+empty elements, whitespace, Unicode or option strings. Supplied producer expiry
+is first; direct Run budget below3000 retains BUDGET_TOO_SMALL8 before modes/argv.
+Trust Add creates no new default query clock. Exact fingerprints, owner authority,
+resolution/classification/script policy, registered bindings and execution clocks
+remain producer contracts.
+
+Native macOS: six invalid route/argv forms across24 JSON/compact and missing/
+initialized project combinations preserve project/data and absent/existing absolute
+response (response existence follows initialization); caller actor is nonowner.
+Six Run requests through library and frontend-observation entry plus six Trust
+requests refuse2 without storage; the same18 entry calls with supplied expiry
+retain original Instant/TIMEOUT7/not_started/no storage. Isolated nonowner library
+Trust Add distinguishes invalid2, valid authority5 and expired7. Pure validators
+qualify all modes, empty elements,256/257 count and65536/65537 UTF-8 byte boundaries.
+Actual Unix Trust Plan accepts256 elements and65536 bytes without executing or
+writing trust; valid nonowner Add denies5 and wrong fingerprint Add denies9.
+New positive boundary proof is planning, not child execution. Existing related
+execution/output/deadline/delivery suites provide separate child-regression proof.
+
+Related34 outer PASS (one nested child PASS is not an extra suite test); final
+isolated5PASS after child stdout suppression. Four controlled losses each0PASS/
+1FAIL and exact product-source restoration. Initial static assertion-style failure
+retained; equivalent assert syntax repaired, final format/locked all-target Clippy
+PASS. Independent read-only review found no blocker. Initial unchanged-product
+baseline0PASS2FAIL proves CLI IO7 masks argv2 and invalid Run masks original expiry.
+Evidence: `evidence/pctx01-execution-admission-verification.json`.
+Fixed residual denominator12 unchanged: local9/12 (R01–R08,R12), whole required
+platform0/12; PCTX01 whole0/10. Native Linux/Windows and four historical startup
+conditions remain open. Next same-task boundary R09 existing filter grammar;
+no independent execution feature, next official task or Actions.
+
+Final native full98801 terminal101: 531 PASS / 4 FAIL. Failed tests: query_program_resolution_uses_captured_command_path, relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry, concurrent_query_startup_preserves_group_streams_and_original_one_second_budget, simultaneous_streams_are_collected_and_overflow_never_infers_success. All four historical startup conditions remain unresolved and original budgets unchanged. All jobs terminal; no heavy job live. PCTX01 remains incomplete (0/10 whole gates).

@@ -377,6 +377,27 @@ fn classification(_argv: &[String], executable: &Path) -> Result<()> {
 fn binding(p: &Project, argv: &[String]) -> Result<Binding> {
     binding_inner(p, argv, false, ".")
 }
+fn validate_argv(argv: &[String]) -> Result<()> {
+    if argv.is_empty() || argv.len() > 256 || argv.iter().map(String::len).sum::<usize>() > 65536 {
+        return Err(err("INVALID_ARGUMENT", "Bounded nonempty argv required", 2));
+    }
+    Ok(())
+}
+/// Existing pure execution modes and argv grammar, without binding or authority checks.
+pub fn validate_run_request(r: &RunRequest) -> Result<()> {
+    if r.stdin != "closed"
+        || !["temporary", "none"].contains(&r.retain.as_str())
+        || !["child", "pctx"].contains(&r.exit_policy.as_str())
+    {
+        return Err(err("INVALID_ARGUMENT", "Unsupported run mode", 2));
+    }
+    validate_argv(&r.argv)
+}
+pub fn validate_trust_request(command: &TrustCommand) -> Result<()> {
+    match command {
+        TrustCommand::Plan { argv } | TrustCommand::Add { argv, .. } => validate_argv(argv),
+    }
+}
 #[cfg(test)]
 #[derive(Clone, Copy)]
 pub(crate) enum HashPhase {
@@ -523,9 +544,8 @@ fn hash_executable_bounded(
     Ok(format!("{:x}", sha.finalize()))
 }
 fn binding_inner(p: &Project, argv: &[String], registered: bool, cwd: &str) -> Result<Binding> {
-    if argv.is_empty() || argv.len() > 256 || argv.iter().map(String::len).sum::<usize>() > 65536 {
-        return Err(err("INVALID_ARGUMENT", "Bounded nonempty argv required", 2));
-    }
+    p.check_deadline()?;
+    validate_argv(argv)?;
     let executable = phase(p, || resolve(&argv[0]))?;
     if !registered {
         classification(argv, &executable)?;
@@ -598,6 +618,8 @@ pub fn trust(p: &Project, command: &TrustCommand) -> Result<Value> {
     result
 }
 fn trust_inner(p: &Project, command: &TrustCommand) -> Result<Value> {
+    p.check_deadline()?;
+    validate_trust_request(command)?;
     if matches!(command, TrustCommand::Add { .. })
         && std::env::var("PCTX_ACTOR").unwrap_or_else(|_| "owner".into()) != "owner"
     {
@@ -1272,6 +1294,7 @@ fn run_inner(
     parser_identity: Option<&str>,
     check_binding: Option<&Value>,
 ) -> Result<Value> {
+    p.check_deadline()?;
     if r.budget_bytes < 3000 {
         return Err(err(
             "BUDGET_TOO_SMALL",
@@ -1279,12 +1302,7 @@ fn run_inner(
             8,
         ));
     }
-    if r.stdin != "closed"
-        || !["temporary", "none"].contains(&r.retain.as_str())
-        || !["child", "pctx"].contains(&r.exit_policy.as_str())
-    {
-        return Err(err("INVALID_ARGUMENT", "Unsupported run mode", 2));
-    }
+    validate_run_request(r)?;
     #[cfg(not(unix))]
     {
         let _ = (

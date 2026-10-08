@@ -1,0 +1,18 @@
+    Checking pctx v0.1.0-dev (/Users/dev/PCTX)
+error: used `assert_eq!` with a literal bool
+   --> tests/execution_preflight.rs:253:9
+    |
+253 |         assert_eq!(argv.iter().map(String::len).sum::<usize>() <= 65536, true);
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#bool_assert_comparison
+    = note: `-D clippy::bool-assert-comparison` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::bool_assert_comparison)]`
+help: replace it with `assert!(..)`
+    |
+253 -         assert_eq!(argv.iter().map(String::len).sum::<usize>() <= 65536, true);
+253 +         assert!(argv.iter().map(String::len).sum::<usize>() <= 65536);
+    |
+
+error: could not compile `pctx` (test "execution_preflight") due to 1 previous error
+warning: build failed, waiting for other jobs to finish...

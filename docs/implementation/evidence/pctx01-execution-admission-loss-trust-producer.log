@@ -1,0 +1,28 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.73s
+     Running tests/execution_preflight.rs (target/debug/deps/execution_preflight-abdedd2027af4e4d)
+
+running 1 test
+
+thread 'isolated_nonowner_trust_admission_keeps_invalid_expired_and_authority_distinct' (8759528) panicked at tests/execution_preflight.rs:335:9:
+assertion `left == right` failed
+  left: ("POLICY_DENIED", 5)
+ right: ("INVALID_ARGUMENT", 2)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test isolated_nonowner_trust_admission_keeps_invalid_expired_and_authority_distinct ... FAILED
+
+failures:
+
+---- isolated_nonowner_trust_admission_keeps_invalid_expired_and_authority_distinct stdout ----
+
+thread 'isolated_nonowner_trust_admission_keeps_invalid_expired_and_authority_distinct' (8759526) panicked at tests/execution_preflight.rs:311:17:
+assertion failed: status.success()
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    isolated_nonowner_trust_admission_keeps_invalid_expired_and_authority_distinct
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 4 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `--test execution_preflight`

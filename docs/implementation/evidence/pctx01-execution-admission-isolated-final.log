@@ -1,0 +1,13 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.06s
+     Running tests/execution_preflight.rs (target/debug/deps/execution_preflight-abdedd2027af4e4d)
+
+running 5 tests
+test shared_execution_boundaries_preserve_modes_empty_elements_and_budget_priority ... ok
+test direct_execution_refusals_preserve_storage_and_original_expiry ... ok
+test isolated_nonowner_trust_admission_keeps_invalid_expired_and_authority_distinct ... ok
+test native_trust_plan_accepts_exact_boundaries_without_execution_or_trust_writes ... ok
+test execution_argv_limits_precede_project_and_response_effects ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.78s
+

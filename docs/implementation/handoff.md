@@ -6,21 +6,19 @@
 
 ## Latest integration boundary
 
-PCTX01-G03-R07/G08 inventory path admission, runtime 942db870d847f6a76a8e60a20adfa412de1bea42,
-base ac2099f. Normal push76155 terminal0 published ac2099f..942db87 to origin/main.
-Runtime edits
-src/inventory.rs, src/main.rs; new tests/inventory_preflight.rs. Exact reader
-lexical predicate before root/policy/discovery, original supplied expiry first,
-Scan limits before optional path. No business/schema/policy feature added.
-Corrected native baseline13996 terminal101:1PASS3FAIL (initial fixture mistakes
-retained). Final related81529 terminal0:40PASS; five loss probes56082 terminal0,
-each test101/0PASS1FAIL and exact sources restored. Static26942 terminal0;
-independent read-only /root/work_control review no blocker. Full99805 terminal101: 527 PASS / 3 FAIL; captured-path pass is incidental,
-not a qualified repair. All four historical conditions remain unresolved at original
-budgets. All jobs terminal; no heavy job live. Manifest pctx01-inventory-admission-verification.json.
-Local residual8/12 (R01–R07,R12), whole required platform0/12; PCTX01 whole0/10.
-Linux/Windows and four historical native startup conditions remain open. Latest
-serial instruction retains PCTX01 even on external blockers. No Actions.
+PCTX01-G03-R08/G08 execution input admission, base cd7ed7e. Runtime edits
+src/output.rs and src/main.rs; new tests/execution_preflight.rs. Exact argv/modes
+before project/authority/binding, supplied expiry first; direct Run budget3000
+error8 retained before grammar. No clock/execution/classification/trust feature.
+Baseline68000 terminal101:0PASS2FAIL. Related60797 terminal0:34 outerPASS, extra
+nested child1PASS excluded. Isolated27921 terminal0:5PASS after child stdout
+suppression. Four loss probes24405 terminal0 (each101/0PASS1FAIL, exact product
+restore). Initial static71042 assertion-style101 retained; final50746 terminal0.
+Independent /root/work_control read-only review no blocker. Full98801 terminal101: 531 PASS / 4 FAIL, all four historical startup tests fail
+at unchanged budgets. All jobs terminal; no heavy job live.
+Manifest pctx01-execution-admission-verification.json. Local residual9/12
+(R01–R08,R12), whole required platform0/12; whole PCTX01 gates0/10. Linux/Windows
+and four historical startup conditions remain unresolved. No Actions.
 
 ## Source, evidence and environment
 
@@ -68,14 +66,14 @@ Original ignored specification SHA256 8914faad57432f524aec0a06aa90c43c18c23f8c19
 
 ## Exact next action
 
-Final full99805 and normal push76155 are terminal. Remain on PCTX01 and address fixed R08 existing execution binding argv grammar
-(nonempty/count256/bytes65536) and library Run modes already Clap-protected.
-Current source: src/output.rs binding_inner525 contains the argv predicate;
-RunRequest and Trust Plan/Add own CLI inputs. Resolution/trust/classification/
-receipts remain stateful producer contracts. R09–R11
-and other whole gates remain open. No next official task, unchanged full rerun,
-deadline/interpreter/OS policy change or Actions. External blockers require exact
-needed action while retaining the current task.
+Final full98801 is terminal. Normally publish verified development changes [skip ci].
+Then remain on PCTX01, fixed R09: existing Filter Activate identifier, Explain
+argv1..256 and explicit non-UTF8 relative-path handling. Apply accepts either an
+identifier or a project filter path; do not narrow it. Definition/fixture content,
+current policy, receipts and input remain producer-owned. R10–R11 and other whole
+gates remain open. No next official task, unchanged full rerun, OS/interpreter/
+deadline changes or Actions. Latest instruction retains current task on external
+blockers and reports exact required action.
 
 ## Retained historical results and inactive backlog
 
