@@ -1,0 +1,104 @@
+{
+  "official_task": "PCTX01",
+  "status": "implementing_not_complete",
+  "base_commit": "1dcc08e65e4b237e145bec1ea056fc5a7970944a",
+  "platform": "native macOS arm64",
+  "source_sha256": {
+    "src/inventory.rs": "c5610650ddbecebce5b5015a83121a0d0544c130a3db83bf195575b8d124471b",
+    "src/main.rs": "3200f1b2524a5d4cb7bdcde1e7fe3039ccfab59d7922277b085ddcc321e22a24",
+    "src/reader.rs": "8e298b824a461dc160c8c023b2df7b1bb362c8508e89ecaac5bf037dbb5ecb4f",
+    "tests/inventory.rs": "d4e042661ebd107aeb39cb410c5e85779c15d5eb9a55765828fcb13dd8b72b47",
+    "tests/inventory_deadline.rs": "d30242009547ca7e3a987faa743b7d8098100df5d1b609febb6e111b65ebbc1d",
+    "tests/inventory_deadline_cli.rs": "dad3595d4cad3f2328804596e098aeca349ce8faae1abca7291d70a60997353b"
+  },
+  "verification": {
+    "unit": {
+      "handle": 58732,
+      "exit": 0,
+      "passed": 4
+    },
+    "targeted": {
+      "handle": 2492,
+      "exit": 0,
+      "passed": 14,
+      "failed": 0,
+      "suite_counts": {
+        "inventory": 8,
+        "inventory_deadline": 4,
+        "inventory_deadline_cli": 2
+      }
+    },
+    "controlled_mutations_initial": {
+      "handle": 42489,
+      "driver_exit": 1,
+      "probes": [
+        {
+          "probe": "scan-guard",
+          "exit": 101,
+          "expected_failure": true
+        },
+        {
+          "probe": "profile-guard",
+          "exit": 101,
+          "expected_failure": true
+        },
+        {
+          "probe": "audit-guard",
+          "exit": 101,
+          "expected_failure": true
+        },
+        {
+          "probe": "partial-error-loss",
+          "exit": 101,
+          "expected_failure": false
+        },
+        {
+          "probe": "original-scope-loss",
+          "exit": 101,
+          "expected_failure": true
+        }
+      ],
+      "initial_partial_error_tests_executed": false,
+      "reason": "Partial-error mutation range also deleted test-only observers; retained compilation failure is not test sensitivity evidence."
+    },
+    "controlled_partial_repair": {
+      "handle": 71156,
+      "driver_exit": 0,
+      "probes": [
+        {
+          "probe": "partial-error-loss",
+          "exit": 101,
+          "expected_failure": true
+        }
+      ],
+      "qualification": "Narrowed mutation preserves observers; actual0PASS1FAIL/test101, no compilation failure."
+    },
+    "format": {
+      "exit": 0
+    },
+    "clippy": {
+      "handle": 86589,
+      "exit": 0
+    },
+    "full": {
+      "handle": 98832,
+      "exit": 101,
+      "passed": 435,
+      "failed": 1,
+      "failed_tests": [
+        "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget"
+      ],
+      "original_one_second_budgets_unchanged": true
+    },
+    "independent_review": "requirements agent read-only scoped review no blocker; no tests/builds/edits"
+  },
+  "qualification": "PCTX01 remains the only active official task (`implementing`). Final native full98832 terminal101:435 PASS/1 retained original startup FAIL; inventory unit4 and related14 PASS; format/locked all-target Clippy PASS. Evidence: pctx01-inventory-deadline-verification.json. Inventory Scan/Profile/Audit and direct application methods establish one absent default10s or retain the supplied instant; nested scan/profile reads keep the same scope. CLI preflight reuses exact existing Scan file/byte bounds before discovery. Shared reader handles walking/regular source input; static parsing, fallible recursive masking, source observation, metadata, workspace/dependency/role loops, section/document comparison and final assembly check the original budget. Catch-to-problems/unconfirmed/review validates original deadline, anchored root and loaded policy validity before admitting incidental missing/unsupported/denied items. TIMEOUT/config/workspace failures propagate; no silent .ok fallback for audit source reread. This checks the loaded policy, not a qualification of concurrent on-disk policy changes. No DB/schema/output/script effects or new inventory features. Actual128-package positive/default work phases share one10s instant; actual256 confirmed profile claims and256 audit references pass. Each separate original1s request completes16 real work iterations, expires at17th admission, and requires17 admitted/16 worked/TIMEOUT7/same instant/unchanged source manifest/no state or EXECUTED marker. Direct and dispatch expiry, bounds/default empty, missing/unsupported claims and FIFO refusal2 pass; Unix FIFO parent owns3s cleanup. Actual CLI all three zero budgets and invalid Scan bounds refuse before missing root/data effects; positive finite reads preserve conflicting/unconfirmed claims, baseline mismatch9, complete envelopes, every file byte and directory, and never execute scripts. Three processing guard losses and original-scope loss each produce actual0PASS1FAIL; partial-error helper loss is separately detected by direct fallback guard test. The initial partial mutation script mistakenly removed test observers and failed compilation without tests; narrowed repair gives actual0PASS1FAIL. Both initial driver failure and repaired evidence retained. Saved source is restored before final static/full checks. Independent scoped review found no blocker. Calls/parser/sort/filesystem remain cooperative, not preemptive or atomic snapshot proof; additional phase races/native Linux/Windows and full frontend matrix remain. Historical original startup failures remain unresolved even when a particular latest run passes them. No next official task or Actions.",
+  "limits": [
+    "PCTX01 remains incomplete; no next official task selected",
+    "Loaded policy validated, concurrent on-disk policy changes unqualified",
+    "Cooperative calls/parser/sort and per-item reads; no preemptive or atomic snapshot qualification",
+    "Unix FIFO proof only; native Linux/Windows remain required",
+    "Original startup failures unresolved; no retry/deadline promotion",
+    "No new Actions or operational/script/provider execution"
+  ]
+}

@@ -1,0 +1,24 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.16s
+     Running unittests src/lib.rs (target/debug/deps/pctx-ae897bec01e143c7)
+
+running 1 test
+test inventory::deadline_tests::scan_original_budget_expires_after_real_source_items_before_next_processing ... FAILED
+
+failures:
+
+---- inventory::deadline_tests::scan_original_budget_expires_after_real_source_items_before_next_processing stdout ----
+
+thread 'inventory::deadline_tests::scan_original_budget_expires_after_real_source_items_before_next_processing' (8113436) panicked at src/inventory.rs:1258:17:
+assertion `left == right` failed
+  left: Instant { tv_sec: 242602, tv_nsec: 579920791 }
+ right: Instant { tv_sec: 242593, tv_nsec: 579908541 }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    inventory::deadline_tests::scan_original_budget_expires_after_real_source_items_before_next_processing
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 35 filtered out; finished in 0.29s
+
+error: test failed, to rerun pass `--lib`

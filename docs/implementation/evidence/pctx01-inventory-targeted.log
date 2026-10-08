@@ -1,0 +1,34 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.46s
+     Running tests/inventory.rs (target/debug/deps/inventory-3ccb113965ac776c)
+
+running 8 tests
+test audit_proposals_are_deterministic_hash_bound_and_do_not_write ... ok
+test dynamic_invalid_and_unsupported_configs_are_explicit ... ok
+test exclusions_and_redaction_apply_to_scan_and_current_audit ... ok
+test profile_confirms_observation_not_owner_authority_and_detects_conflict_and_stale ... ok
+test stale_documents_and_changed_source_only_need_review ... ok
+test static_workspace_packages_and_checks_have_current_proof_without_execution ... ok
+test symlinks_and_budgets_are_not_traversed ... ok
+test unknown_selectors_and_code_structure_do_not_invent_facts ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+
+     Running tests/inventory_deadline.rs (target/debug/deps/inventory_deadline-224421bc5547688e)
+
+running 4 tests
+test expired_direct_and_dispatch_queries_cannot_be_successful_partial ... ok
+test fifo_profile_source_is_refused_without_waiting_or_effects ... ok
+test missing_and_unsupported_items_remain_truthful_unconfirmed_claims ... ok
+test semantic_scan_limits_precede_source_reads_and_default_empty_scan_has_no_effects ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/inventory_deadline_cli.rs (target/debug/deps/inventory_deadline_cli-4fdabe28999c445d)
+
+running 2 tests
+test finite_inventory_cli_preserves_files_and_reports_explicit_claims ... ok
+test inventory_limits_and_zero_budget_refuse_before_project_discovery ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.89s
+

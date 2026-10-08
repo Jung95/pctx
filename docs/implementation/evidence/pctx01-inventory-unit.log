@@ -1,0 +1,12 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 7.01s
+     Running unittests src/lib.rs (target/debug/deps/pctx-ae897bec01e143c7)
+
+running 4 tests
+test inventory::deadline_tests::audit_original_budget_expires_after_actual_claim_reads ... ok
+test inventory::deadline_tests::confirmation_and_partial_fallback_cannot_absorb_expired_or_changed_root ... ok
+test inventory::deadline_tests::profile_original_budget_expires_after_actual_confirmed_claims ... ok
+test inventory::deadline_tests::scan_original_budget_expires_after_real_source_items_before_next_processing ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 32 filtered out; finished in 3.61s
+

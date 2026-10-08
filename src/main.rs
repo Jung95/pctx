@@ -412,6 +412,7 @@ fn query_deadline(cli: &Cli) -> Result<Option<pctx::deadline::Deadline>> {
                         | adapter::ClaudeCommand::ProtocolFixture { .. },
                 },
         }
+        | Command::Inventory { .. }
         | Command::Find(_)
         | Command::Query(_)
         | Command::Extract(_)
@@ -818,6 +819,14 @@ fn main() {
     let preflight = match &cli.command {
         Command::Find(request) => search::validate_find_request(request),
         Command::Query(request) => search::validate_structure_request(request),
+        Command::Inventory {
+            command:
+                inventory::InventoryCommand::Scan {
+                    max_files,
+                    max_bytes,
+                    ..
+                },
+        } => inventory::validate_limits(*max_files, *max_bytes),
         _ => Ok(()),
     };
     if let Err(error) = preflight {
@@ -1157,6 +1166,9 @@ mod finite_route_tests {
                 "1",
             ],
             vec!["filter", "explain", "--", "fixture"],
+            vec!["inventory", "scan"],
+            vec!["inventory", "profile", "--path", "profile.json"],
+            vec!["inventory", "audit", "--registry", "registry.json"],
             vec!["schedule", "list"],
             vec!["schedule", "plan", "--namespace", "local", "digest"],
             vec![

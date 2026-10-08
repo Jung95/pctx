@@ -1,0 +1,22 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.81s
+     Running unittests src/lib.rs (target/debug/deps/pctx-ae897bec01e143c7)
+
+running 1 test
+test inventory::deadline_tests::confirmation_and_partial_fallback_cannot_absorb_expired_or_changed_root ... FAILED
+
+failures:
+
+---- inventory::deadline_tests::confirmation_and_partial_fallback_cannot_absorb_expired_or_changed_root stdout ----
+
+thread 'inventory::deadline_tests::confirmation_and_partial_fallback_cannot_absorb_expired_or_changed_root' (8115275) panicked at src/inventory.rs:1375:50:
+called `Result::unwrap_err()` on an `Ok` value: Error { code: "SOURCE_UNAVAILABLE", message: "Missing fixture", retryable: false, exit: 6 }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    inventory::deadline_tests::confirmation_and_partial_fallback_cannot_absorb_expired_or_changed_root
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 35 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--lib`

@@ -1,0 +1,24 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.20s
+     Running unittests src/lib.rs (target/debug/deps/pctx-ae897bec01e143c7)
+
+running 1 test
+test inventory::deadline_tests::profile_original_budget_expires_after_actual_confirmed_claims ... FAILED
+
+failures:
+
+---- inventory::deadline_tests::profile_original_budget_expires_after_actual_confirmed_claims stdout ----
+
+thread 'inventory::deadline_tests::profile_original_budget_expires_after_actual_confirmed_claims' (8112695) panicked at src/inventory.rs:1274:9:
+assertion `left == right` failed
+  left: (17, 17)
+ right: (17, 16)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    inventory::deadline_tests::profile_original_budget_expires_after_actual_confirmed_claims
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 35 filtered out; finished in 1.15s
+
+error: test failed, to rerun pass `--lib`

@@ -1,0 +1,226 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+error[E0425]: cannot find function `phase_observation` in this scope
+   --> src/inventory.rs:318:9
+    |
+318 |         phase_observation(p, Phase::ProfileAdmitted);
+    |         ^^^^^^^^^^^^^^^^^ not found in this scope
+    |
+note: function `crate::filters::phase_observation` exists but is inaccessible
+   --> src/filters.rs:358:1
+    |
+358 | fn phase_observation(p: &Project, phase: FilterPhase) {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ not accessible
+
+error[E0425]: cannot find function `phase_observation` in this scope
+   --> src/inventory.rs:321:9
+    |
+321 |         phase_observation(p, Phase::ProfileWork);
+    |         ^^^^^^^^^^^^^^^^^ not found in this scope
+    |
+note: function `crate::filters::phase_observation` exists but is inaccessible
+   --> src/filters.rs:358:1
+    |
+358 | fn phase_observation(p: &Project, phase: FilterPhase) {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ not accessible
+
+error[E0425]: cannot find function `phase_observation` in this scope
+   --> src/inventory.rs:569:9
+    |
+569 |         phase_observation(p, Phase::ScanAdmitted);
+    |         ^^^^^^^^^^^^^^^^^ not found in this scope
+    |
+note: function `crate::filters::phase_observation` exists but is inaccessible
+   --> src/filters.rs:358:1
+    |
+358 | fn phase_observation(p: &Project, phase: FilterPhase) {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ not accessible
+
+error[E0425]: cannot find function `phase_observation` in this scope
+   --> src/inventory.rs:572:9
+    |
+572 |         phase_observation(p, Phase::ScanWork);
+    |         ^^^^^^^^^^^^^^^^^ not found in this scope
+    |
+note: function `crate::filters::phase_observation` exists but is inaccessible
+   --> src/filters.rs:358:1
+    |
+358 | fn phase_observation(p: &Project, phase: FilterPhase) {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ not accessible
+
+error[E0425]: cannot find function `phase_observation` in this scope
+    --> src/inventory.rs:1015:9
+     |
+1015 |         phase_observation(p, Phase::AuditAdmitted);
+     |         ^^^^^^^^^^^^^^^^^ not found in this scope
+     |
+note: function `crate::filters::phase_observation` exists but is inaccessible
+    --> src/filters.rs:358:1
+     |
+ 358 | fn phase_observation(p: &Project, phase: FilterPhase) {
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ not accessible
+
+error[E0425]: cannot find function `phase_observation` in this scope
+    --> src/inventory.rs:1018:9
+     |
+1018 |         phase_observation(p, Phase::AuditWork);
+     |         ^^^^^^^^^^^^^^^^^ not found in this scope
+     |
+note: function `crate::filters::phase_observation` exists but is inaccessible
+    --> src/filters.rs:358:1
+     |
+ 358 | fn phase_observation(p: &Project, phase: FilterPhase) {
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ not accessible
+
+error[E0425]: cannot find type `Phase` in this scope
+    --> src/inventory.rs:1190:19
+     |
+1190 |         admitted: Phase,
+     |                   ^^^^^ not found in this scope
+
+error[E0425]: cannot find type `Phase` in this scope
+    --> src/inventory.rs:1191:15
+     |
+1191 |         work: Phase,
+     |               ^^^^^ not found in this scope
+
+error[E0425]: cannot find function `observe_phase` in this scope
+    --> src/inventory.rs:1201:26
+     |
+1201 |             let _guard = observe_phase(move |phase, deadline| {
+     |                          ^^^^^^^^^^^^^ not found in this scope
+     |
+note: function `crate::filters::observe_phase` exists but is inaccessible
+    --> src/filters.rs:348:1
+     |
+ 348 | / fn observe_phase(
+ 349 | |     callback: impl FnMut(FilterPhase, Option<crate::deadline::Deadline>) + 'static,
+ 350 | | ) -> PhaseGuard {
+ 351 | |     PHASE_OBSERVER.with(|s| {
+...    |
+ 355 | |     PhaseGuard
+ 356 | | }
+     | |_^ not accessible
+
+error[E0425]: cannot find function `observe_phase` in this scope
+    --> src/inventory.rs:1237:26
+     |
+1237 |             let _guard = observe_phase(move |phase, deadline| {
+     |                          ^^^^^^^^^^^^^ not found in this scope
+     |
+note: function `crate::filters::observe_phase` exists but is inaccessible
+    --> src/filters.rs:348:1
+     |
+ 348 | / fn observe_phase(
+ 349 | |     callback: impl FnMut(FilterPhase, Option<crate::deadline::Deadline>) + 'static,
+ 350 | | ) -> PhaseGuard {
+ 351 | |     PHASE_OBSERVER.with(|s| {
+...    |
+ 355 | |     PhaseGuard
+ 356 | | }
+     | |_^ not accessible
+
+error[E0425]: cannot find function `observe_phase` in this scope
+    --> src/inventory.rs:1300:26
+     |
+1300 |             let _guard = observe_phase(move |phase, deadline| {
+     |                          ^^^^^^^^^^^^^ not found in this scope
+     |
+note: function `crate::filters::observe_phase` exists but is inaccessible
+    --> src/filters.rs:348:1
+     |
+ 348 | / fn observe_phase(
+ 349 | |     callback: impl FnMut(FilterPhase, Option<crate::deadline::Deadline>) + 'static,
+ 350 | | ) -> PhaseGuard {
+ 351 | |     PHASE_OBSERVER.with(|s| {
+...    |
+ 355 | |     PhaseGuard
+ 356 | | }
+     | |_^ not accessible
+
+error[E0433]: cannot find type `Phase` in this scope
+   --> src/inventory.rs:318:30
+    |
+318 |         phase_observation(p, Phase::ProfileAdmitted);
+    |                              ^^^^^ use of undeclared type `Phase`
+
+error[E0433]: cannot find type `Phase` in this scope
+   --> src/inventory.rs:321:30
+    |
+321 |         phase_observation(p, Phase::ProfileWork);
+    |                              ^^^^^ use of undeclared type `Phase`
+
+error[E0433]: cannot find type `Phase` in this scope
+   --> src/inventory.rs:569:30
+    |
+569 |         phase_observation(p, Phase::ScanAdmitted);
+    |                              ^^^^^ use of undeclared type `Phase`
+
+error[E0433]: cannot find type `Phase` in this scope
+   --> src/inventory.rs:572:30
+    |
+572 |         phase_observation(p, Phase::ScanWork);
+    |                              ^^^^^ use of undeclared type `Phase`
+
+error[E0433]: cannot find type `Phase` in this scope
+    --> src/inventory.rs:1015:30
+     |
+1015 |         phase_observation(p, Phase::AuditAdmitted);
+     |                              ^^^^^ use of undeclared type `Phase`
+
+error[E0433]: cannot find type `Phase` in this scope
+    --> src/inventory.rs:1018:30
+     |
+1018 |         phase_observation(p, Phase::AuditWork);
+     |                              ^^^^^ use of undeclared type `Phase`
+
+error[E0433]: cannot find type `Phase` in this scope
+    --> src/inventory.rs:1238:29
+     |
+1238 |                 if phase == Phase::ScanWork {
+     |                             ^^^^^ use of undeclared type `Phase`
+
+error[E0433]: cannot find type `Phase` in this scope
+    --> src/inventory.rs:1254:26
+     |
+1254 |         expiring(&mut p, Phase::ScanAdmitted, Phase::ScanWork, |p| {
+     |                          ^^^^^ use of undeclared type `Phase`
+
+error[E0433]: cannot find type `Phase` in this scope
+    --> src/inventory.rs:1254:47
+     |
+1254 |         expiring(&mut p, Phase::ScanAdmitted, Phase::ScanWork, |p| {
+     |                                               ^^^^^ use of undeclared type `Phase`
+
+error[E0433]: cannot find type `Phase` in this scope
+    --> src/inventory.rs:1279:26
+     |
+1279 |         expiring(&mut p, Phase::ProfileAdmitted, Phase::ProfileWork, |p| {
+     |                          ^^^^^ use of undeclared type `Phase`
+
+error[E0433]: cannot find type `Phase` in this scope
+    --> src/inventory.rs:1279:50
+     |
+1279 |         expiring(&mut p, Phase::ProfileAdmitted, Phase::ProfileWork, |p| {
+     |                                                  ^^^^^ use of undeclared type `Phase`
+
+error[E0433]: cannot find type `Phase` in this scope
+    --> src/inventory.rs:1301:29
+     |
+1301 |                 if phase == Phase::AuditWork {
+     |                             ^^^^^ use of undeclared type `Phase`
+
+error[E0433]: cannot find type `Phase` in this scope
+    --> src/inventory.rs:1319:26
+     |
+1319 |         expiring(&mut p, Phase::AuditAdmitted, Phase::AuditWork, |p| {
+     |                          ^^^^^ use of undeclared type `Phase`
+
+error[E0433]: cannot find type `Phase` in this scope
+    --> src/inventory.rs:1319:48
+     |
+1319 |         expiring(&mut p, Phase::AuditAdmitted, Phase::AuditWork, |p| {
+     |                                                ^^^^^ use of undeclared type `Phase`
+
+Some errors have detailed explanations: E0425, E0433.
+For more information about an error, try `rustc --explain E0425`.
+error: could not compile `pctx` (lib test) due to 25 previous errors

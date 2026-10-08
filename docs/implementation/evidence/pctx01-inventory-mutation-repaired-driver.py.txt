@@ -1,0 +1,28 @@
+from pathlib import Path
+import os, subprocess, json
+p=Path('/Users/dev/PCTX/src/inventory.rs'); original=p.read_bytes(); source=original.decode()
+env=os.environ.copy();env.update(RUSTUP_HOME='/Users/dev/PCTX/.toolchain/rustup',CARGO_HOME='/Users/dev/PCTX/.toolchain/cargo',SDKROOT='/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk',PATH='/Users/dev/PCTX/.toolchain/cargo/bin:/Library/Developer/CommandLineTools/usr/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin')
+names={'Scan':'scan_original_budget_expires_after_real_source_items_before_next_processing','Profile':'profile_original_budget_expires_after_actual_confirmed_claims','Audit':'audit_original_budget_expires_after_actual_claim_reads'}
+probes=[]
+for phase,test in names.items():
+ old=f'phase_observation(p, Phase::{phase}Admitted);\n        p.check_deadline()?;'
+ assert source.count(old)==1,phase
+ probes.append((phase.lower()+'-guard',source.replace(old,f'phase_observation(p, Phase::{phase}Admitted);'),test))
+a=source.index('fn partial_error(');b=source.index('\n#[cfg(test)]',a)
+probes.append(('partial-error-loss',source[:a]+'fn partial_error(_p: &Project, e: Error) -> Result<Error> { Ok(e) }\n'+source[b:],'confirmation_and_partial_fallback_cannot_absorb_expired_or_changed_root'))
+old='if scope.deadline.is_none() {';assert source.count(old)==1
+probes.append(('original-scope-loss',source.replace(old,'if true {'),'scan_original_budget_expires_after_real_source_items_before_next_processing'))
+probes=[probe for probe in probes if probe[0]=='partial-error-loss']
+results=[]
+try:
+ for name,mutated,test in probes:
+  p.write_text(mutated)
+  with open('/tmp/pctx-inventory-mutation-'+name+'.log','w') as log:
+   r=subprocess.run(['cargo','test','--locked','--lib','inventory::deadline_tests::'+test,'--','--exact','--test-threads=1'],cwd='/Users/dev/PCTX',env=env,stdout=log,stderr=subprocess.STDOUT,timeout=120)
+  s=Path('/tmp/pctx-inventory-mutation-'+name+'.log').read_text()
+  results.append(dict(probe=name,exit=r.returncode,expected_failure=r.returncode==101 and '0 passed; 1 failed' in s))
+  p.write_bytes(original)
+finally:
+ p.write_bytes(original)
+ Path('/tmp/pctx-inventory-mutation-partial-repaired-results.json').write_text(json.dumps(results,indent=2))
+print(json.dumps(results));assert len(results)==1 and all(r['expected_failure'] for r in results)
