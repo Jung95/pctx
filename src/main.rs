@@ -496,7 +496,7 @@ fn execute(
             runner::execute(&p, &runner::RunnerCommand::JobCancel { job: job.clone() })?,
         ),
         Command::Runner { command } => ("runner", runner::execute(&p, command)?),
-        Command::Run(r) => ("run", output::run(&p, r)?),
+        Command::Run(r) => ("run", output::run_cli(&p, r)),
         Command::Output { command } => ("output", output::output(&p, command)?),
         Command::Trust { command } => ("trust", output::trust(&p, command)?),
         Command::Savings { .. } => ("savings", output::savings(&p)?),
@@ -1005,13 +1005,34 @@ fn main() {
         Err(e) => {
             let e = request_error(deadline, e);
             let exit = e.exit;
-            let mut out = domain::envelope(cli.command.name(), None, Value::Null);
+            // Run's producer facade retains every post-spawn failure as data.
+            // An outer execute error therefore attests failure before dispatch.
+            let data = if matches!(&cli.command, Command::Run(_)) {
+                json!({"spawned":false,"termination":"not_started",
+                    "child_exit_code":null,"signal":null,"pctx_error":e.code,
+                    "task_completion":"not_evaluated","test_result":"not_evaluated"})
+            } else {
+                Value::Null
+            };
+            let mut out = domain::envelope(cli.command.name(), None, data);
             out["status"] = json!("error");
             out["coverage"] = json!({"status":"partial","reasons":[e.code.clone()]});
             out["errors"] = json!([e]);
             (out, exit)
         }
     };
+    if matches!(&cli.command, Command::Run(_)) && response["status"] != "error" {
+        if let Some(error) = output::execution_error(&response["data"]) {
+            exit = error.exit;
+            response["status"] = json!("error");
+            response["coverage"] = json!({"status":"partial","reasons":[error.code.clone()]});
+            response["errors"] = json!([error]);
+        } else if response["data"]["capture_complete"] == false {
+            exit = 3;
+            response["status"] = json!("partial");
+            response["coverage"] = json!({"status":"partial","reasons":["capture_incomplete"]});
+        }
+    }
     if matches!(&cli.command, Command::Read { .. }) {
         while serde_json::to_vec(&response).unwrap().len() + 1 > 65536 {
             let Some(text) = response["data"]["text"].as_str() else {
@@ -1127,6 +1148,9 @@ fn main() {
                 "spawned",
                 "child_exit_code",
                 "signal",
+                "termination",
+                "pctx_error",
+                "capture_complete",
                 "execution_status",
                 "delivery_kind",
             ] {
@@ -1145,7 +1169,7 @@ fn main() {
         exit = 8;
     }
     if let Command::Run(r) = &cli.command
-        && response["status"] != "error"
+        && response["status"] == "ok"
         && response["data"]["spawned"] == true
         && r.exit_policy == "child"
     {

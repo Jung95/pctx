@@ -1069,6 +1069,54 @@ fn compact(p: &Project, a: &Artifact, budget: usize) -> Result<Value> {
 pub fn run(p: &Project, r: &RunRequest) -> Result<Value> {
     run_inner(p, r, ".", &BTreeMap::new(), None, None, None, None, None)
 }
+
+/// Frontend observation preserves admission failures separately from child truth.
+/// The callback attests native spawn; post-spawn failures cannot claim not_started.
+pub fn run_cli(p: &Project, r: &RunRequest) -> Value {
+    let mut spawned = false;
+    let result = {
+        let mut observed = |_pid| {
+            spawned = true;
+            Ok(())
+        };
+        run_inner(
+            p,
+            r,
+            ".",
+            &BTreeMap::new(),
+            None,
+            Some(&mut observed),
+            None,
+            None,
+            None,
+        )
+    };
+    match result {
+        Ok(data) => data,
+        Err(error) => json!({
+            "spawned":spawned,
+            "termination":if spawned { "unknown" } else { "not_started" },
+            "child_exit_code":null,
+            "signal":null,
+            "pctx_error":error.code,
+            "processing_error":error,
+            "processing_exit":error.exit,
+            "raw_available":false,
+            "task_completion":"not_evaluated",
+            "test_result":"not_evaluated"
+        }),
+    }
+}
+
+/// Processing failures take precedence over shell exit propagation.
+pub fn execution_error(data: &Value) -> Option<Error> {
+    let code = data["pctx_error"].as_str()?;
+    let exit = data["processing_exit"].as_i64().unwrap_or(7) as i32;
+    let message = data["processing_error"]["message"]
+        .as_str()
+        .unwrap_or("Execution processing failed");
+    Some(Error::new(code, message, exit))
+}
 pub(crate) fn registered_environment_fingerprint(
     environment: &BTreeMap<String, String>,
 ) -> Result<String> {
@@ -1508,6 +1556,8 @@ fn run_inner(
         }
         if let Err(e) = save(p, &a) {
             data["pctx_error"] = json!(e.code);
+            data["processing_exit"] = json!(e.exit);
+            data["processing_error"] = json!(e);
             data["raw_available"] = json!(false);
         }
         let _ = atomic_write(
@@ -1618,7 +1668,7 @@ fn output_inner(p: &Project, command: &OutputCommand) -> Result<Value> {
                 }
             }
             Ok(
-                json!({"output_id":a.output_id,"execution_id":a.execution_id,"view":"full","raw_semantics":"redacted_uncompressed","records":records,"total_records":total,"omitted_records":total.saturating_sub(records.len()),"capture_complete":a.capture_complete,"omitted_bytes":a.omitted_bytes,"child_exit_code":a.child_exit_code,"termination":a.termination,"command_rerun":false,"delivery_kind":"retrieval"}),
+                json!({"output_id":a.output_id,"execution_id":a.execution_id,"view":"full","raw_semantics":"redacted_uncompressed","records":records,"total_records":total,"omitted_records":total.saturating_sub(records.len()),"capture_complete":a.capture_complete,"omitted_bytes":a.omitted_bytes,"child_exit_code":a.child_exit_code,"signal":a.signal,"spawned":a.spawned,"pctx_error":a.pctx_error,"termination":a.termination,"command_rerun":false,"delivery_kind":"retrieval"}),
             )
         }
         OutputCommand::Find { literal, limit, .. } => {

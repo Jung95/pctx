@@ -400,3 +400,14 @@ targeted/static/full results and source hashes. Independent scoped review found
 no blocker. Native Unix pipes are not live Claude or native Linux/Windows proof.
 The remaining PCTX01 frontend/phase/platform and original startup gates remain
 mandatory; no next official task is selected or Actions dispatched.
+
+
+## PCTX01 manual-run frontend outcomes
+
+A producer-owned spawn observer distinguishes prelaunch refusal from unknown
+post-spawn outcome. Error codes alone cannot attest whether a child started.
+Complete processing permits child-code propagation; fatal processing errors and
+partial capture preserve separate PCTX status/exit while retaining child truth.
+Already classified outer project errors keep their exact typed exit/message.
+Publication failure does not establish readable retained output or trigger retry.
+Basis: §40/AC63 common frontend contract; [proof](evidence/pctx01-run-exit-verification.json).

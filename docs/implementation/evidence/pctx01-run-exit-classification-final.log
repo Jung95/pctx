@@ -1,0 +1,31 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.66s
+     Running tests/cli_run_exit.rs (target/debug/deps/cli_run_exit-6950b2b7b4cecebc)
+
+running 8 tests
+test missing_project_is_prelaunch_failure_in_both_modes_without_files ... ok
+test project_refusals_preserve_typed_exit_and_message_before_spawn ... FAILED
+test actual_prelaunch_refusal_has_no_child_outcome_or_invocation ... ok
+test actual_spawn_failure_never_becomes_success_or_child_exit ... ok
+test publication_failure_preserves_child_outcome_and_never_retries ... ok
+test incomplete_capture_is_partial_without_replacing_child_success ... ok
+test actual_execution_timeout_preserves_observation_but_returns_wrapper_error ... ok
+test actual_child_codes_and_signal_are_distinct_from_wrapper_status ... ok
+
+failures:
+
+---- project_refusals_preserve_typed_exit_and_message_before_spawn stdout ----
+
+thread 'project_refusals_preserve_typed_exit_and_message_before_spawn' (8330891) panicked at tests/cli_run_exit.rs:308:13:
+assertion `left == right` failed
+  left: String("Invalid project TOML or unknown field")
+ right: "Invalid project configuration"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    project_refusals_preserve_typed_exit_and_message_before_spawn
+
+test result: FAILED. 7 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.81s
+
+error: test failed, to rerun pass `--test cli_run_exit`

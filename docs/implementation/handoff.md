@@ -6,18 +6,20 @@
 
 ## Latest verified integration boundary
 
-PCTX01 is the only active official task and remains implementing. Base
-f021f567579441889bd2a00bf75c5b1316518be6; this integration adds hook stdin/stdout
-preflight and first-import output-failure/replay coverage. Related35 PASS;
-format/locked all-target Clippy PASS. Final full46672 terminal101:
-466 PASS/3 original startup FAIL. All jobs terminal; no live heavy job.
-Initial zero-test selection and actual0PASS1FAIL retained. Source/log hashes and
-independent review: evidence/pctx01-hook-verification.json.
-Next action: continue PCTX01 actual frontend child exit/prelaunch/error matrix,
-then remaining phase/platform/startup gates. Do not choose another official task.
-Native Unix delivery is not live Claude/Linux/Windows qualification; the receipt
-count is inspected after replay, not at an instrumented import-commit instant.
-No Actions dispatched.
+PCTX01 remains the only active official task (implementing). Base
+d28bf15a208b5082b7f67bcb52b3d2326866d2ce; latest integration repairs manual-run
+frontend processing errors and preserves native child outcome. Related45 PASS;
+final reviewed format/all-target locked Clippy PASS. Final full97588 terminal101:
+473 PASS/4 original startup FAIL. All jobs terminal; no live heavy job.
+Initial4FAIL, reread signal/fixture diagnostic/message failures, interrupted
+full130 and controlled classification loss6->7 are retained. Source/log hashes
+and resolved independent review: evidence/pctx01-run-exit-verification.json.
+Next local action: PCTX01 remaining pure parser/preflight refusal and exact
+budget/representation execution-outcome matrix, post-spawn observer-error proof,
+phase races and original startup cause. Required native Linux/Windows remain
+unqualified; do not select another official task or dispatch Actions.
+The observer records spawn, not body entry or verified cleanup. A child can
+time out before its first script instruction. Whole task/goal remain incomplete.
 
 ## Source, evidence and environment
 

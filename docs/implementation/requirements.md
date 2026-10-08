@@ -363,3 +363,12 @@ targeted/static/full results and source hashes. Independent scoped review found
 no blocker. Native Unix pipes are not live Claude or native Linux/Windows proof.
 The remaining PCTX01 frontend/phase/platform and original startup gates remain
 mandatory; no next official task is selected or Actions dispatched.
+
+
+## PCTX01 manual-run frontend outcomes
+
+Common manual-run outcomes now retain attested spawn, typed prelaunch/processing
+errors, child codes/signals and partial capture separately. Actual CLI proof and
+retained initial failures: [manifest](evidence/pctx01-run-exit-verification.json).
+PCTX01 stays implementing; remaining argument/budget/phase/platform qualification
+and original startup failures prevent whole-task completion.

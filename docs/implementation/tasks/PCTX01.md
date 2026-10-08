@@ -54,3 +54,17 @@ The remaining PCTX01 frontend/phase/platform and original startup gates remain
 mandatory; no next official task is selected or Actions dispatched.
 
 Final native full46672 terminal101: 466 PASS/3 original startup FAIL; related35 PASS, format/locked all-target Clippy PASS. All jobs terminal; PCTX01 remains incomplete.
+
+
+## PCTX01 manual-run frontend outcomes
+
+Actual CLI cases now qualify child0/1/2/signal in both modes, project/trust
+prelaunch refusal, missing-interpreter spawn failure, execution timeout, invalid
+UTF8 partial capture and real output-publication lock contention. Signal/full
+reread preserves outcome with no rerun; classification-guard loss detects6->7.
+[Manifest](../evidence/pctx01-run-exit-verification.json) retains initial/interrupted
+gates and fixture errors. Post-spawn unknown branch still needs fault-injection
+proof; pure argument/budget/phase/native platform gates remain mandatory.
+PCTX01 remains implementing, with no next official task.
+
+Final native full97588 terminal101: 473 PASS/4 retained original startup FAIL. Related45 PASS; final format/locked all-target Clippy PASS. All jobs terminal; PCTX01 remains incomplete.

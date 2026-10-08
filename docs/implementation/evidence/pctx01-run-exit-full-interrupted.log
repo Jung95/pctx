@@ -1,0 +1,78 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 9.43s
+     Running unittests src/lib.rs (target/debug/deps/pctx-ae897bec01e143c7)
+
+running 38 tests
+test input::identity_tests::project_read_identity_rejects_replace_and_restore_even_with_same_bytes ... ok
+test broker::tests::nul_names_rename_and_unborn_metadata_are_machine_parsed ... ok
+test inventory::deadline_tests::confirmation_and_partial_fallback_cannot_absorb_expired_or_changed_root ... ok
+test filters::deadline_tests::explain_preserves_admitted_executable_symlink_denial_and_size_limit ... ok
+test output::capture_tests::incomplete_private_key_never_reaches_records ... ok
+test filters::deadline_tests::preview_default_scope_is_one_budget_over_all_actual_records ... ok
+test output::capture_tests::registered_git_nul_capture_preserves_filename_controls_and_record_boundaries ... ok
+test output::capture_tests::split_secret_and_ansi_never_survive_normalization ... ok
+test output::capture_tests::oversize_binary_invalid_utf8_and_record_counts_are_bounded ... ok
+test operations::reporting_aggregation_tests::source_classification_changed_after_last_admission_is_not_emitted ... ok
+test query_process::adapter_version_policy_tests::version_observation_does_not_admit_inference_or_extra_arguments ... ok
+test query_process::managed_observation_policy_tests::schedule_queries_reject_mutations_wildcards_and_extra_arguments ... ok
+test pack::validation_tests::committed_pause_during_source_validation_prevents_delivery_and_publication ... ok
+test reader::search_candidate_tests::admitted_size_and_encoding_failures_are_errors ... ok
+test reader::search_candidate_tests::authority_errors_never_become_absent_candidates ... ok
+test reader::search_candidate_tests::deletion_and_identical_replacement_after_admission_are_fatal ... ok
+test reader::search_candidate_tests::initial_local_missing_excluded_link_directory_fifo_and_permission_are_not_sources ... ok
+test reader::search_candidate_tests::normal_body_hash_and_original_expired_deadline_are_preserved ... ok
+test filters::deadline_tests::original_budget_expires_during_actual_preview_record_admission ... ok
+test filters::deadline_tests::original_budget_expires_during_actual_loaded_input_record_admission ... ok
+test pack::validation_tests::source_read_expiry_keeps_original_timeout_in_library_validation ... ok
+test inventory::deadline_tests::audit_original_budget_expires_after_actual_claim_reads ... ok
+test inventory::deadline_tests::profile_original_budget_expires_after_actual_confirmed_claims ... ok
+test runner::auxiliary_deadline_tests::trust_plan_establishes_one_default_scope_and_preserves_supplied_scope ... ok
+test runner::auxiliary_deadline_tests::opened_auxiliary_keeps_budget_for_subsequent_source_reads ... ok
+test search::tests::boolean_precedence_and_bounds ... ok
+test search::tests::literal_smart_case ... ok
+test watch::tests::frame_delivery_and_flush_failures_propagate_io_errors ... ok
+test watch::tests::frames_escape_hidden_controls_without_changing_ndjson_values ... ok
+test inventory::deadline_tests::scan_original_budget_expires_after_real_source_items_before_next_processing ... ok
+test schedule::deadline_tests::list_original_budget_expires_after_actual_rows_before_assembly ... ok
+test runner::auxiliary_deadline_tests::resource_status_retains_original_budget_after_native_identity_observation ... ok
+test operations::reporting_aggregation_tests::expiry_during_later_role_evaluation_never_accepts_earlier_admission ... ok
+test operations::reporting_aggregation_tests::inbox_batch_drops_earlier_expired_admission_and_rechecks_earlier_sources ... ok
+test runner::auxiliary_deadline_tests::auxiliary_loading_expires_after_actual_config_admission ... ok
+test runner::auxiliary_deadline_tests::registered_fingerprint_expires_after_actual_executable_chunk_read ... ok
+test schedule::deadline_tests::native_observation_original_expiry_does_not_become_registration_absence ... ok
+test quota::aggregation_deadline_tests::public_report_stops_real_aggregation_at_original_deadline_after_rows_admitted ... ok
+
+test result: ok. 38 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.05s
+
+     Running unittests src/main.rs (target/debug/deps/pctx-5861ab217462b7f0)
+
+running 5 tests
+test cli_args::tests::producer_repetition_and_literal_child_options_preserve_exact_values ... ok
+test cli_help::tests::every_declared_leaf_has_an_explicit_effect_contract ... ok
+test cli_args::tests::pack_artifact_output_and_global_output_share_one_singular_binding ... ok
+test cli_args::tests::defaults_and_fresh_parses_do_not_count_as_duplicate_inputs ... ok
+test finite_route_tests::finite_work_quota_adapter_reads_do_not_time_execution ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s
+
+     Running tests/adapter.rs (target/debug/deps/adapter-8bd8637316f7f388)
+
+running 10 tests
+test symlink_configuration_is_rejected ... ok
+test pretool_decisions_never_rewrite_or_execute_declared_commands ... ok
+test malformed_and_version_variation_are_rejected_without_mutation ... ok
+test stale_plans_do_not_change_config ... ok
+test permission_events_are_observation_only ... ok
+test edited_owned_hook_conflicts_without_partial_removal ... ok
+test plans_are_hash_bound_and_preserve_existing_settings ... ok
+test uninstall_preserves_user_changes_and_only_removes_new_entries ... ok
+test events_delegate_epoch_and_never_ack_or_store_dialogue ... ok
+test statusline_cost_is_estimate_context_is_snapshot_and_epoch_is_checked ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.18s
+
+     Running tests/adapter_deadline.rs (target/debug/deps/adapter_deadline-71f8a5b8d2a2921f)
+
+running 6 tests
+test expired_read_leaves_have_no_lock_config_or_storage_effects ... ok
+test existing_install_lock_obeys_explicit_budget_without_installation_effects ... ok

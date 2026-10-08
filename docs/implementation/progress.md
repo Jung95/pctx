@@ -261,3 +261,14 @@ The remaining PCTX01 frontend/phase/platform and original startup gates remain
 mandatory; no next official task is selected or Actions dispatched.
 
 Final native full46672 terminal101: 466 PASS/3 original startup FAIL; related35 PASS, format/locked all-target Clippy PASS. All jobs terminal; PCTX01 remains incomplete.
+
+
+## PCTX01 manual-run frontend outcomes
+
+Manual-run frontend repairs and actual both-policy child/prelaunch/publication
+fixtures are integrated; related45 PASS and reviewed format/all-target locked
+Clippy PASS. Initial full was interrupted130 for a review blocker; no passing
+qualification is claimed. See [manifest](evidence/pctx01-run-exit-verification.json).
+PCTX01 remains the only active official task; final full result is recorded below.
+
+Final native full97588 terminal101: 473 PASS/4 retained original startup FAIL. Related45 PASS; final format/locked all-target Clippy PASS. All jobs terminal; PCTX01 remains incomplete.

@@ -1,0 +1,15 @@
+from pathlib import Path
+import subprocess, hashlib
+p=Path('src/main.rs')
+original=p.read_bytes()
+old=b'if matches!(&cli.command, Command::Run(_)) && response["status"] != "error" {'
+new=b'if matches!(&cli.command, Command::Run(_)) {'
+assert original.count(old)==1
+try:
+    p.write_bytes(original.replace(old,new,1))
+    with open('docs/implementation/evidence/pctx01-run-exit-classification-loss.log','wb') as log:
+        result=subprocess.run(['cargo','test','--locked','--test','cli_run_exit','project_refusals_preserve_typed_exit_and_message_before_spawn','--','--exact'],stdout=log,stderr=subprocess.STDOUT)
+    assert result.returncode==101, result.returncode
+finally:
+    p.write_bytes(original)
+    assert hashlib.sha256(p.read_bytes()).digest()==hashlib.sha256(original).digest()

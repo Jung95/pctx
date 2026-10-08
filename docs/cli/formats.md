@@ -111,3 +111,27 @@ input-file or output-file access. Ordinary non-hook imports retain file input an
 standard response output. If hook output delivery fails after import, exit 7 does
 not imply rollback: replaying the same idempotency key delivers the recorded result
 without adding another receipt. These delivery tests use isolated native Unix pipes.
+
+For admitted manual `run` requests, the envelope describes PCTX processing;
+the child result remains in `data.child_exit_code`, `data.signal` and
+`data.termination`. A complete capture of child exit 1 or 2 can have envelope
+status `ok`; that status is not test success or task completion.
+
+| Observed result | Default `--exit-policy child` | `--exit-policy pctx` |
+| --- | --- | --- |
+| Complete processing, ordinary child exit | Original child code | 0 |
+| Complete processing, POSIX signal | 128 + signal | 0 |
+| Incomplete capture without a fatal processing error | 3, partial envelope | 3, partial envelope |
+| Execution timeout, capture or publication failure | PCTX error code; observed child fields retained | Same PCTX error code |
+| Refusal before launch | Original PCTX error code, `spawned:false`, `termination:not_started` | Same |
+
+Processing errors take precedence over child propagation. A failed spawn has no
+child exit code and returns `SPAWN_FAILED`/7. If native spawn was observed but a
+later operation cannot determine its outcome, the frontend reports
+`spawned:true`, `termination:unknown` and null child code/signal; it does not
+invent a prelaunch refusal or an observed exit. Full output reread preserves
+signal and processing-error metadata without executing the command again.
+Failed artifact publication sets `raw_available:false`; the output identifier
+alone is not proof that a readable artifact exists. Accounting warnings remain
+separate from the completed response. These execution proofs are native Unix;
+Windows status and containment qualification remain required.

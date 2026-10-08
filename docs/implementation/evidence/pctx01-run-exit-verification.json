@@ -1,0 +1,169 @@
+{
+  "official_task": "PCTX01",
+  "status": "implementing_not_complete",
+  "base_commit": "d28bf15a208b5082b7f67bcb52b3d2326866d2ce",
+  "platform": "native macOS arm64",
+  "source_sha256": {
+    "src/main.rs": "38be2ce3c721700139f667e280bd96639b183e104177f5cbde25c70ef2671220",
+    "src/output.rs": "69e1b365abba2986ec1e04b1648c8dbff1fe1eddfa762816e85379f4c3be7940",
+    "tests/cli_run_exit.rs": "55ee36c340048f7f4c52b5741b694479591dd8ee5d7c37e9cc739cf73172c003"
+  },
+  "verification": {
+    "initial": {
+      "log": "pctx01-run-exit-initial.log",
+      "exit": 101,
+      "handle": 44544,
+      "passed": 0,
+      "failed": 4,
+      "failed_tests": [
+        "actual_prelaunch_refusal_has_no_child_outcome_or_invocation",
+        "actual_spawn_failure_never_becomes_success_or_child_exit",
+        "actual_execution_timeout_preserves_observation_but_returns_wrapper_error",
+        "actual_child_codes_and_signal_are_distinct_from_wrapper_status"
+      ]
+    },
+    "first_repair": {
+      "log": "pctx01-run-exit-targeted.log",
+      "exit": 101,
+      "handle": 78491,
+      "passed": 17,
+      "failed": 1,
+      "failed_tests": [
+        "actual_child_codes_and_signal_are_distinct_from_wrapper_status"
+      ]
+    },
+    "repaired_capture_and_publication": {
+      "log": "pctx01-run-exit-targeted-repaired.log",
+      "exit": 101,
+      "handle": 58712,
+      "passed": 19,
+      "failed": 1,
+      "failed_tests": [
+        "publication_failure_preserves_child_outcome_and_never_retries"
+      ]
+    },
+    "related_before_outer_error_review": {
+      "log": "pctx01-run-exit-targeted-final.log",
+      "exit": 0,
+      "handle": 66428,
+      "passed": 43,
+      "failed": 0,
+      "failed_tests": []
+    },
+    "project_prelaunch_review": {
+      "log": "pctx01-run-exit-review-final.log",
+      "exit": 0,
+      "handle": 48589,
+      "passed": 44,
+      "failed": 0,
+      "failed_tests": []
+    },
+    "initial_full_interrupted": {
+      "log": "pctx01-run-exit-full-interrupted.log",
+      "exit": 130,
+      "handle": 86493,
+      "passed": 53,
+      "failed": 0,
+      "failed_tests": [],
+      "qualification": "Incomplete gate interrupted for independent review blocker; no full-gate success."
+    },
+    "classification_initial_fixture_message": {
+      "log": "pctx01-run-exit-classification-final.log",
+      "exit": 101,
+      "handle": 20665,
+      "passed": 7,
+      "failed": 1,
+      "failed_tests": [
+        "project_refusals_preserve_typed_exit_and_message_before_spawn"
+      ]
+    },
+    "classification_repaired_related": {
+      "log": "pctx01-run-exit-classification-repaired.log",
+      "exit": 0,
+      "handle": 55416,
+      "passed": 45,
+      "failed": 0,
+      "failed_tests": []
+    },
+    "classification_guard_loss": {
+      "log": "pctx01-run-exit-classification-loss.log",
+      "exit": 101,
+      "handle": null,
+      "passed": 0,
+      "failed": 1,
+      "failed_tests": [
+        "project_refusals_preserve_typed_exit_and_message_before_spawn"
+      ]
+    },
+    "format_final": {
+      "log": "pctx01-run-exit-format-reviewed.log",
+      "exit": 0,
+      "handle": null,
+      "passed": 0,
+      "failed": 0,
+      "failed_tests": []
+    },
+    "clippy_final": {
+      "log": "pctx01-run-exit-clippy-reviewed.log",
+      "exit": 0,
+      "handle": 2634,
+      "passed": 0,
+      "failed": 0,
+      "failed_tests": []
+    },
+    "final_full": {
+      "log": "pctx01-run-exit-full-reviewed.log",
+      "handle": 97588,
+      "exit": 101,
+      "passed": 473,
+      "failed": 4,
+      "failed_tests": [
+        "query_program_resolution_uses_captured_command_path",
+        "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget",
+        "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+        "simultaneous_streams_are_collected_and_overflow_never_infers_success"
+      ]
+    }
+  },
+  "proofs": [
+    "Initial actual tests0PASS4FAIL retain missing prelaunch data, false spawn success0 and timeout143. Child fixture also had eager unwrap bug, corrected without changing runtime contract.",
+    "First repair17PASS1FAIL retains full-reread signal omission; next19PASS1FAIL retains fixture assumption of empty diagnostics on failed publication. Fixture now explicitly verifies separate unknown-accounting warning.",
+    "Actual child0/1/2/signal both policies retain null-vs-numeric child/signal distinctions, wrapper completion not test/task success, stderr provenance, durable full reread without rerun, exactly two explicit body invocations.",
+    "Missing interpreter attests spawnedfalse/not_started/SPAWN_FAILED7. Native spawn observer binds producer Err; a post-spawn error reports unknown outcome rather than fabricating not_started. This latter observer error branch lacks fault-injection runtime qualification.",
+    "Execution timeout original250ms preserves spawned/signal/timed_out/TIMEOUT7. Spawn is not body entry; a script may time out before first instruction, so no exact body-count assertion is made for this case.",
+    "InvalidUTF8 child0 capture yields partial3 in both modes while child_code0 remains; actual publication store.lock contention returns RESOURCE_BUSY7 with child0, raw_availablefalse, no readable artifact, two explicit invocations/no retry, separate warning delivery_writtentrue/measurement_recordedunknown.",
+    "Independent review found project-stage datanull and then outer6/2 classification overwritten7. Final exact typed exit/message proofs cover existing uninitialized directory6/invalidTOML2 with unchanged files/no data directory. Removing only already-error guard yields actual0PASS1FAIL6->7; driver restores exact source.",
+    "Final related45PASS, format and locked all-target Clippy PASS; final no-fail-fast native full473PASS/4FAIL. All original failures retained; no source/test/budget relaxation."
+  ],
+  "independent_review": {
+    "agent": "requirements",
+    "result": "No remaining blocker after project prelaunch and outer-error classification repairs; exact6/2 fixtures and attested spawn invariant reviewed. No agent tests substituted for runtime evidence."
+  },
+  "remaining": [
+    "Full PCTX01 pure parser/preflight/refusal and budget/representation/phase/race matrix still required.",
+    "Post-spawn observer-error/cleanup unknown branch not directly fault-injected by these fixtures.",
+    "Original native query startup failures retain original one-second budgets; no causal repair.",
+    "Native Linux/Windows and broader containment/recovery remain unqualified.",
+    "No next official task selected, Actions or external calls."
+  ],
+  "artifact_sha256": {
+    "pctx01-run-exit-full-interrupted.log": "209dedec6832ba5d2540fe78a69eb3653edda2d17fb7972e7f47c92e8355eed0",
+    "pctx01-run-exit-classification-repaired.log": "21c61366e6c32c285ee14df79d68b73ecd942f261ab74a29040c27566557545b",
+    "pctx01-run-exit-classification-loss.log": "99bcab5f0f073e8492fd7c0f6a3112c2fe2788e668e0e27c3cd0f72837cdc39e",
+    "pctx01-run-exit-format.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "pctx01-run-exit-targeted-repaired.log": "3745f6786367bcf151758d9bd1430144c3dd984c53c2ecba0814da82071555ce",
+    "pctx01-run-exit-classification-final.log": "a67486e616efaa6d063342a61c95e63051d623dcc60ac21dc5cfc903fb27f94e",
+    "pctx01-run-exit-clippy.log": "1c1cff1dd4869dcd77a18f5fa4022f00be3a489e551f24d06642cbf0b1af96e9",
+    "pctx01-run-exit-loss-driver.py.txt": "982779b2e3dd116bdf5168bf4c1c9876b8b6e78642ba860b456debc95ed8644c",
+    "pctx01-run-exit-clippy-final.log": "1bc36cc3612e2144c667805c726d4044faca8cf6848a18f2ae19fdba1ecf3f81",
+    "pctx01-run-exit-format-final.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "pctx01-run-exit-full-reviewed.log": "3d42b9485b0976e27deee64ca2c57211df77a15bf58e20de377f591dff9aa6e7",
+    "pctx01-run-exit-initial.log": "6a91f9c07b04189e2ff775de301969563cbcb99525c88e50f4e96342ad87d8e7",
+    "pctx01-run-exit-targeted-final.log": "1fed52132881bd5c458989b3dcd16e6bcb1a7e95e8de1dcf8ba2d464a639119b",
+    "pctx01-run-exit-format-reviewed.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "pctx01-run-exit-clippy-reviewed.log": "3d2049896e0822f921616635ef2a022a49db66497941aa95d124ed31a23cf52d",
+    "pctx01-run-exit-loss-driver.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "pctx01-run-exit-targeted.log": "86b202c943b9080f31af8142402f064f09c3465ad4c412743517066218f01605",
+    "pctx01-run-exit-review-final.log": "0131d4f536faf4b77918b0a1a9b6e2790cd40c32879348854a4838c84861afa9"
+  }
+}

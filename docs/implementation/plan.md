@@ -142,3 +142,13 @@ targeted/static/full results and source hashes. Independent scoped review found
 no blocker. Native Unix pipes are not live Claude or native Linux/Windows proof.
 The remaining PCTX01 frontend/phase/platform and original startup gates remain
 mandatory; no next official task is selected or Actions dispatched.
+
+
+## PCTX01 manual-run frontend outcomes
+
+Current PCTX01 frontend run outcome slice uses the same producer supervisor with
+a native spawn observer; no independent runner feature was added. Next local work:
+remaining pure parser/preflight and budget/representation matrix, post-spawn error
+observation, phase races and original startup cause; required native Linux/Windows
+gates remain. See [manifest](evidence/pctx01-run-exit-verification.json). Do not
+select another official task or dispatch Actions.

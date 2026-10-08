@@ -1,0 +1,24 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.51s
+     Running tests/cli_run_exit.rs (target/debug/deps/cli_run_exit-6950b2b7b4cecebc)
+
+running 1 test
+test project_refusals_preserve_typed_exit_and_message_before_spawn ... FAILED
+
+failures:
+
+---- project_refusals_preserve_typed_exit_and_message_before_spawn stdout ----
+
+thread 'project_refusals_preserve_typed_exit_and_message_before_spawn' (8332793) panicked at tests/cli_run_exit.rs:306:13:
+assertion `left == right` failed: {"command":"run","coverage":{"reasons":["NOT_INITIALIZED"],"status":"partial"},"data":{"child_exit_code":null,"pctx_error":"NOT_INITIALIZED","signal":null,"spawned":false,"task_completion":"not_evaluated","termination":"not_started","test_result":"not_evaluated"},"errors":[{"code":"NOT_INITIALIZED","message":"Execution processing failed","retryable":false}],"generation_id":null,"project_id":null,"schema_version":"1.0","status":"error","truncation":{"reasons":[],"truncated":false},"validation":{"checked_at":"2026-10-08T16:06:34.101Z","mode":"matched","scope":[],"workspace_atomic":false},"warnings":[],"workspace_id":null}
+  left: Some(7)
+ right: Some(6)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    project_refusals_preserve_typed_exit_and_message_before_spawn
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 7 filtered out; finished in 0.82s
+
+error: test failed, to rerun pass `--test cli_run_exit`

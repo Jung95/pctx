@@ -1,0 +1,49 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.05s
+     Running tests/cli_run_exit.rs (target/debug/deps/cli_run_exit-6950b2b7b4cecebc)
+
+running 4 tests
+test actual_prelaunch_refusal_has_no_child_outcome_or_invocation ... FAILED
+test actual_spawn_failure_never_becomes_success_or_child_exit ... FAILED
+test actual_execution_timeout_preserves_observation_but_returns_wrapper_error ... FAILED
+test actual_child_codes_and_signal_are_distinct_from_wrapper_status ... FAILED
+
+failures:
+
+---- actual_prelaunch_refusal_has_no_child_outcome_or_invocation stdout ----
+
+thread 'actual_prelaunch_refusal_has_no_child_outcome_or_invocation' (8315547) panicked at tests/cli_run_exit.rs:89:9:
+assertion `left == right` failed
+  left: Null
+ right: false
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- actual_spawn_failure_never_becomes_success_or_child_exit stdout ----
+
+thread 'actual_spawn_failure_never_becomes_success_or_child_exit' (8315548) panicked at tests/cli_run_exit.rs:103:9:
+assertion `left == right` failed: {"command":"run","coverage":{"reasons":[],"status":"complete"},"data":{"child_exit_code":null,"execution_id":"EXEC-abcf73c4-f1c4-4199-a06d-4faa3497822d","pctx_error":"SPAWN_FAILED","spawned":false,"task_completion":"not_evaluated","termination":"not_started"},"errors":[],"generation_id":null,"project_id":"e5f314fd-4a90-493a-9a19-1dc38b5fa7ca","schema_version":"1.0","status":"ok","truncation":{"reasons":[],"truncated":false},"validation":{"checked_at":"2026-10-08T15:57:57.297Z","mode":"matched","scope":[],"workspace_atomic":false},"warnings":[],"workspace_id":"WS-af4dcc0d-3a66-441a-8ae7-2b976c10c2eb"}
+  left: Some(0)
+ right: Some(7)
+
+---- actual_execution_timeout_preserves_observation_but_returns_wrapper_error stdout ----
+
+thread 'actual_execution_timeout_preserves_observation_but_returns_wrapper_error' (8315546) panicked at tests/cli_run_exit.rs:119:9:
+assertion `left == right` failed: {"command":"run","coverage":{"reasons":[],"status":"complete"},"data":{"baseline_completeness":"complete","budget_bytes":8192,"capture_complete":true,"captured_bytes":0,"child_exit_code":null,"evidence_origin":"runner_observed","execution_id":"EXEC-ddf6f670-70ab-4491-895b-33d9e47dbc07","exit_policy":"child","input_stage":"captured","normalized_bytes":0,"omitted_bytes":0,"output_id":"OUT-c469d328-d2cd-4c98-a679-6654e02e4cb0","parse_status":"unsupported","pctx_error":"TIMEOUT","protected_records":0,"query_ref":"pctx output show OUT-c469d328-d2cd-4c98-a679-6654e02e4cb0 --view full","raw_available":true,"raw_semantics":"redacted_uncompressed","records":[],"records_included":0,"records_omitted":0,"redacted_bytes":0,"redaction_applied":true,"redaction_changed_content":false,"signal":15,"spawned":true,"task_completion":"not_evaluated","termination":"timed_out","test_result":"not_evaluated"},"errors":[],"generation_id":null,"project_id":"f84856c8-168b-4ff5-8bee-ddd0e3ecf088","schema_version":"1.0","status":"ok","truncation":{"reasons":[],"truncated":false},"validation":{"checked_at":"2026-10-08T15:57:57.676Z","mode":"matched","scope":[],"workspace_atomic":false},"warnings":[],"workspace_id":"WS-23091b46-be13-4198-beda-c04eac7806ba"}
+  left: Some(143)
+ right: Some(7)
+
+---- actual_child_codes_and_signal_are_distinct_from_wrapper_status stdout ----
+
+thread 'actual_child_codes_and_signal_are_distinct_from_wrapper_status' (8315545) panicked at tests/cli_run_exit.rs:60:89:
+called `Option::unwrap()` on a `None` value
+
+
+failures:
+    actual_child_codes_and_signal_are_distinct_from_wrapper_status
+    actual_execution_timeout_preserves_observation_but_returns_wrapper_error
+    actual_prelaunch_refusal_has_no_child_outcome_or_invocation
+    actual_spawn_failure_never_becomes_success_or_child_exit
+
+test result: FAILED. 0 passed; 4 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.39s
+
+error: test failed, to rerun pass `--test cli_run_exit`
