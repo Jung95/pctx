@@ -4,7 +4,7 @@ The full mandatory v0.6 goal remains active. Read requirements.md, decisions.md 
 
 ## Authoritative source and environment
 
-Current D046 owner-reporting source is bound by owner-reporting-verification.json, base561c20d5297fc466b4207be465584ecb94e6d98a; exact runtime commit follows below. Final native28036 terminal101:358 PASS/3 query startup FAIL, related46 PASS and format/Clippy PASS. D0452b55f277754e3b913d1f9ffd3b427d0bf189b4a8 task-input evidence remains historical. Development commits use [skip ci]. work_control and requirements handback/reviews are complete; no live agent/heavy job/CI/watch/managed worktree. Inspect actual Git/process state before resuming; native GitHub auth is Jung95.
+Current D046 owner-reporting source is bound by owner-reporting-verification.json, base561c20d5297fc466b4207be465584ecb94e6d98a; runtime558853a7d9b486c60b7ac98059db9230b7ac1f9f. Final native28036 terminal101:358 PASS/3 query startup FAIL, related46 PASS and format/Clippy PASS. D0452b55f277754e3b913d1f9ffd3b427d0bf189b4a8 task-input evidence remains historical. Development commits use [skip ci]. work_control and requirements handback/reviews are complete; no live agent/heavy job/CI/watch/managed worktree. Inspect actual Git/process state before resuming; native GitHub auth is Jung95.
 
 Use RUSTUP_HOME=/Users/dev/PCTX/.toolchain/rustup, CARGO_HOME=/Users/dev/PCTX/.toolchain/cargo, SDKROOT=/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk and local cargo/CLT/Homebrew/system PATH. One heavy build/test/benchmark at a time. Native process fixtures require native execution. Agents search and requirements previously stopped on usage-limit errors; their changes were subsequently reviewed and integrated by the parent.
 

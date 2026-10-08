@@ -107,5 +107,6 @@
     "Build/Context/Pack do not infer reporting category or gain reporting exceptions; claims/wake/schedule/host permissions remain separately enforced"
   ],
   "actions_dispatched": 0,
-  "spec_sha256": "8914faad57432f524aec0a06aa90c43c18c23f8c19e9f54fe69d9ad185db6523"
+  "spec_sha256": "8914faad57432f524aec0a06aa90c43c18c23f8c19e9f54fe69d9ad185db6523",
+  "runtime_commit": "558853a7d9b486c60b7ac98059db9230b7ac1f9f"
 }
