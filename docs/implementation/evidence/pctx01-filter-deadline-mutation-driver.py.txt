@@ -1,0 +1,30 @@
+from pathlib import Path
+import subprocess,json,hashlib
+root=Path('/Users/dev/PCTX'); e=root/'docs/implementation/evidence'; filters=root/'src/filters.rs'; inp=root/'src/input.rs'
+original={p:p.read_bytes() for p in [filters,inp]}
+cases=[
+('record-guard-loss',filters,b'''phase_observation(p, FilterPhase::RecordAdmitted);
+        deadline(p, started)?;''',b'''phase_observation(p, FilterPhase::RecordAdmitted);''',['--lib','filters::deadline_tests::original_budget_expires_during_actual_preview_record_admission']),
+('input-guard-loss',filters,b'''phase_observation(p, FilterPhase::InputAdmitted);
+        p.check_deadline()?;''',b'''phase_observation(p, FilterPhase::InputAdmitted);''',['--lib','filters::deadline_tests::original_budget_expires_during_actual_loaded_input_record_admission']),
+('stdin-transport-loss',inp,b'let bytes = stdin_bytes(deadline);',b'''let bytes = (|| -> Result<Vec<u8>> { let mut bytes = Vec::new(); std::io::stdin().take(MAX_TASK_BYTES as u64 + 1).read_to_end(&mut bytes)?; Ok(bytes) })();''',['--test','filter_deadline_cli','stalled_partial_stdin_times_out_instead_of_waiting_for_eof']),
+('policy-classification-loss',filters,b'''    })?;
+    p.check_deadline()?;
+    Ok((path.to_string_lossy().into_owned(), digest))''',b'''    }).map_err(|e| { if e.code == "POLICY_DENIED" { err("FILTER_LIMIT_EXCEEDED", "Executable fingerprint exceeds bounds", 3) } else { e } })?;
+    p.check_deadline()?;
+    Ok((path.to_string_lossy().into_owned(), digest))''',['--lib','filters::deadline_tests::explain_preserves_admitted_executable_symlink_denial_and_size_limit'])]
+records=[]
+try:
+ for name,p,old,new,args in cases:
+  for path,body in original.items(): path.write_bytes(body)
+  assert original[p].count(old)==1,(name,'unique selector required')
+  p.write_bytes(original[p].replace(old,new,1))
+  with (e/f'pctx01-filter-deadline-{name}.log').open('wb') as log:
+   result=subprocess.run(['cargo','test','--locked',*args,'--','--exact','--nocapture'],cwd=root,stdout=log,stderr=subprocess.STDOUT,timeout=90)
+  records.append({'probe':name,'expected_exit':101,'actual_exit':result.returncode})
+  assert result.returncode==101,(name,result.returncode)
+  print(name,result.returncode,flush=True)
+finally:
+ for p,b in original.items():
+  p.write_bytes(b); assert p.read_bytes()==b
+ print(json.dumps({'probes':records,'restored_sha256':{str(p.relative_to(root)):hashlib.sha256(b).hexdigest() for p,b in original.items()}}),flush=True)

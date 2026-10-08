@@ -347,6 +347,15 @@ fn hash_observation(phase: HashPhase, bytes: usize, p: &Project) {
 /// External native executable domain, distinct from project-source policy.
 /// Retains the regular-file authority throughout bounded streaming hashing.
 pub(crate) fn hash_executable(p: &Project, path: &Path) -> Result<String> {
+    hash_executable_with_limit_error(p, path, |message| err("POLICY_DENIED", message, 5))
+}
+/// Domain-specific limit errors are constructed only at the actual size guard.
+/// Authority, I/O, identity and timeout errors keep their original classification.
+pub(crate) fn hash_executable_with_limit_error(
+    p: &Project,
+    path: &Path,
+    limit_error: impl Fn(&'static str) -> Error,
+) -> Result<String> {
     use sha2::{Digest, Sha256};
     p.check_deadline()?;
     let parent = path
@@ -360,12 +369,15 @@ pub(crate) fn hash_executable(p: &Project, path: &Path) -> Result<String> {
     p.check_deadline()?;
     let mut file = reader::anchored_open_deadline(parent, &anchor, leaf, p.deadline)?;
     let before = file.metadata()?;
-    if !before.is_file() || before.len() > 128 * 1024 * 1024 {
+    if !before.is_file() {
         return Err(err(
             "POLICY_DENIED",
             "Executable is not a bounded regular file",
             5,
         ));
+    }
+    if before.len() > 128 * 1024 * 1024 {
+        return Err(limit_error("Executable is not a bounded regular file"));
     }
     let identity = same_file::Handle::from_file(file.try_clone()?)?;
     let mut sha = Sha256::new();
@@ -387,7 +399,7 @@ pub(crate) fn hash_executable(p: &Project, path: &Path) -> Result<String> {
         }
         total += count;
         if total > 128 * 1024 * 1024 {
-            return Err(err("POLICY_DENIED", "Executable exceeds size bound", 5));
+            return Err(limit_error("Executable exceeds size bound"));
         }
         sha.update(&chunk[..count]);
         #[cfg(test)]

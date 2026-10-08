@@ -1,0 +1,21 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.37s
+     Running unittests src/lib.rs (target/debug/deps/pctx-ae897bec01e143c7)
+
+running 1 test
+
+thread 'filters::deadline_tests::explain_preserves_admitted_executable_symlink_denial_and_size_limit' (8058258) panicked at src/filters.rs:1420:13:
+assertion `left == right` failed
+  left: "FILTER_LIMIT_EXCEEDED"
+ right: "POLICY_DENIED"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test filters::deadline_tests::explain_preserves_admitted_executable_symlink_denial_and_size_limit ... FAILED
+
+failures:
+
+failures:
+    filters::deadline_tests::explain_preserves_admitted_executable_symlink_denial_and_size_limit
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 28 filtered out; finished in 0.02s
+
+error: test failed, to rerun pass `--lib`

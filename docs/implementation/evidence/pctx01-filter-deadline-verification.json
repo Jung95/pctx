@@ -1,0 +1,137 @@
+{
+  "official_task": "PCTX01",
+  "status": "implementing_not_complete",
+  "base_commit": "256955634802e4838da7a7d4f802731d5f52f13e",
+  "platform": "native macOS arm64",
+  "source_sha256": {
+    "src/filters.rs": "ce48858216205c3040bae238d41ae177d20fbcaeeb2eb508fb4aa9a4f0f15668",
+    "src/input.rs": "d308d34a5952f7a76d6b1b583c4c2a27b5d910efe2eb05480496159f2aeeb7d4",
+    "src/main.rs": "1940534bd3157e17e0ececc4728235c59baa402ddb81d817a7a330a2d743771d",
+    "src/output.rs": "c065f5e888341517e919f80a7b1bd2f71557fbae581f988789bd86ebe5a00779",
+    "src/reader.rs": "8e298b824a461dc160c8c023b2df7b1bb362c8508e89ecaac5bf037dbb5ecb4f",
+    "tests/filter_deadline.rs": "654b60a6b37ee4b9b18f0a20337e9ba62cd6c678fa872d11d1261e7a0d291ae0",
+    "tests/filter_deadline_cli.rs": "89b0cdfb13481e0daff5a51cedf12f1808cd2978e391f33bb36cc9205e443c06"
+  },
+  "verification": {
+    "unit_initial": {
+      "handle": 86968,
+      "exit": 101,
+      "tests_executed": false,
+      "reason": "New test compared HashPhase without PartialEq; corrected only test to matches! pattern."
+    },
+    "unit": {
+      "handle": 27623,
+      "exit": 0,
+      "passed": 4,
+      "failed": 0
+    },
+    "target_selection_initial": {
+      "exit": 101,
+      "tests_executed": false,
+      "reason": "Requested absent task_input target; actual context_input_deadline/task_input_source selected afterwards."
+    },
+    "targeted": {
+      "handle": 41407,
+      "exit": 0,
+      "passed": 22,
+      "failed": 0,
+      "suite_counts": {
+        "context_input_deadline": 5,
+        "filter_deadline": 2,
+        "filter_deadline_cli": 2,
+        "filters": 7,
+        "task_input_source": 6
+      }
+    },
+    "controlled_mutations": {
+      "handle": 36478,
+      "exit": 0,
+      "probes": [
+        {
+          "probe": "record-guard-loss",
+          "expected_exit": 101,
+          "actual_exit": 101
+        },
+        {
+          "probe": "input-guard-loss",
+          "expected_exit": 101,
+          "actual_exit": 101
+        },
+        {
+          "probe": "stdin-transport-loss",
+          "expected_exit": 101,
+          "actual_exit": 101
+        },
+        {
+          "probe": "policy-classification-loss",
+          "expected_exit": 101,
+          "actual_exit": 101
+        }
+      ],
+      "restored_sha256": {
+        "src/filters.rs": "ce48858216205c3040bae238d41ae177d20fbcaeeb2eb508fb4aa9a4f0f15668",
+        "src/input.rs": "d308d34a5952f7a76d6b1b583c4c2a27b5d910efe2eb05480496159f2aeeb7d4"
+      },
+      "qualification": "Each is actual0PASS1FAIL test exit101, not compile failure; exact source restoration, then final formatting/static/full gate."
+    },
+    "format": {
+      "exit": 0
+    },
+    "clippy": {
+      "handle": 49617,
+      "exit": 0
+    },
+    "full_native": {
+      "handle": 56147,
+      "exit": 101,
+      "passed": 414,
+      "failed": 3,
+      "result_lines_including_zero_and_doc_tests": 52
+    }
+  },
+  "retained_failures": [
+    "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+    "simultaneous_streams_are_collected_and_overflow_never_infers_success",
+    "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget"
+  ],
+  "qualified_boundaries": [
+    "Filter Validate/Apply/Explain and explicit public preview_records establish one absent default10s and retain suppliedSome; Test/Activate and observed executionNone gain no default",
+    "Actual shared stdin held partial pipe original250ms TIMEOUT7/null data before EOF; owner3s kill/reap bound. Positive EOF Unicode/claimed child1/falseexecution/not_evaluated",
+    "Shared serialized Unix/Windows byte transport reused at original deadline/cap1MiB; actual regular stdin1MiB+1 givesFILTER_LIMIT_EXCEEDED3 and invalidUTF8 givesUNSUPPORTED_ENCODING3; zero request budget before missing-project discovery does not wait for stdin",
+    "Public1000-record preview positive then fresh250ms expiry after actual record admission: admitted1/work0/sameInstant/no privateeffects; input1000-line source likewise exact original250ms/admitted1/work0/unchanged bytes",
+    "Default preview actual1000 RecordWork phases share one10s instant, callerNone unchanged and no evidence/child launch",
+    "Shared executable hash receives limit-specific constructor only at real initial/growth cap guards. Actual admitted regular executable replaced by symlink after first realchunk returnsPOLICY_DENIED5; sparseoversize128MiB+1 returnsFILTER_LIMIT3. No artifact creation",
+    "Finite binding/report reads path-only/pinned regular1MiB/chunks/growth/identity+mtime+Unixctime; directory/entry/read errors preserved; independent1s filter processing cap still applies"
+  ],
+  "independent_review": {
+    "reviewer": "requirements",
+    "resolved": [
+      "Broad shared POLICY_DENIED mapping confused actual symlink refusal with size cap; replaced with size-specific error constructor and actual race proof"
+    ],
+    "final_scoped_blocker": false,
+    "verification_owner": "root"
+  },
+  "limitations": [
+    "Cooperative checks do not preempt regex/parser/serializer/sort/filesystem syscalls",
+    "No exhaustive metadata/config/input race qualification",
+    "Unix symlink race proof only; native current-source Linux/Windows and console transport not qualified",
+    "Original native startup root cause unresolved; original1s budgets unchanged and failures not retry-promoted",
+    "Schedule/inventory finite routes and full argument/envelope/representation/error/exit/budget matrix remain incomplete; wholePCTX01 incomplete"
+  ],
+  "actions_dispatched": 0,
+  "artifacts_sha256": {
+    "pctx01-filter-deadline-clippy.log": "e68b3c90e6b23405e30b3ae7693e7f877d3ea4763fe823b6874b4cd70a479a9d",
+    "pctx01-filter-deadline-format.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "pctx01-filter-deadline-full-native.log": "8b3ea678bc02766dac859221642b0c4a32bfbbf677e62af343513474ad8c89aa",
+    "pctx01-filter-deadline-input-guard-loss.log": "ec9fdbe2cea0789615d44d243be15af43870f442ba45fcefd17349354790d637",
+    "pctx01-filter-deadline-mutation-driver.log": "90b7cc46372f9a2636b96d708a4d7b89cdf415a55055d27c59d89b03c399f0a9",
+    "pctx01-filter-deadline-mutation-driver.py.txt": "0002082013aadd77caedd914e7c7aa7862a7d82b557bb0ca865ad016803db2cf",
+    "pctx01-filter-deadline-policy-classification-loss.log": "528af9b5f78d0380077546c0963acab61d692b8d4084b5175b71469f070c0581",
+    "pctx01-filter-deadline-record-guard-loss.log": "f4f586a228674094491584981531fb629e533995b67750a47e42f9acec07fcf0",
+    "pctx01-filter-deadline-stdin-transport-loss.log": "cd391a45b6c25a9b47c22cdf7e422eeb339d39af6eafdbdc41a2579ae69ece04",
+    "pctx01-filter-deadline-target-selection.log": "3e7231a8c5aeba2ffc22a69091ca37671b31adcd27bcf0c2ef968dc9a6d23cfa",
+    "pctx01-filter-deadline-targeted.log": "f21e90bc1bf2d13accd85311ddb916284026415fe15d7b27bd2325318eea31f3",
+    "pctx01-filter-deadline-unit-initial.log": "1c75c398641cd408656a6a7c4a32d84c8f7e081f04c646f6cbe2443fdae40155",
+    "pctx01-filter-deadline-unit.log": "4e81441cdfb78091c86f686d42da533cb319811025f55ad85f92b251b0bcb6ba"
+  }
+}

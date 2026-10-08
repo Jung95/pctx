@@ -1,0 +1,12 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.65s
+     Running unittests src/lib.rs (target/debug/deps/pctx-ae897bec01e143c7)
+
+running 4 tests
+test filters::deadline_tests::explain_preserves_admitted_executable_symlink_denial_and_size_limit ... ok
+test filters::deadline_tests::preview_default_scope_is_one_budget_over_all_actual_records ... ok
+test filters::deadline_tests::original_budget_expires_during_actual_preview_record_admission ... ok
+test filters::deadline_tests::original_budget_expires_during_actual_loaded_input_record_admission ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 25 filtered out; finished in 0.35s
+

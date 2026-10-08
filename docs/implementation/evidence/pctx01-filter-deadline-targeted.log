@@ -1,0 +1,54 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.68s
+     Running tests/context_input_deadline.rs (target/debug/deps/context_input_deadline-0de6c57f731310c2)
+
+running 5 tests
+test unix_stdin_flags_probe ... ok
+test task_file_reader_preserves_utf8_and_rejects_oversize_invalid_and_expired_inputs ... ok
+test stdin_flag_restoration_is_observed_in_a_separate_process ... ok
+test fifo_task_path_is_rejected_without_waiting_for_a_writer_or_publishing ... ok
+test held_open_task_stdin_times_out_without_index_publication ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.28s
+
+     Running tests/filter_deadline.rs (target/debug/deps/filter_deadline-979c395461b474ff)
+
+running 2 tests
+test expired_public_filter_queries_and_preview_have_no_effects ... ok
+test default_public_preview_keeps_unicode_negative_status_and_no_evidence ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/filter_deadline_cli.rs (target/debug/deps/filter_deadline_cli-5966f219f9da0f22)
+
+running 2 tests
+test finite_filter_stdin_limits_and_preflight_errors_keep_complete_envelopes ... ok
+test stalled_partial_stdin_times_out_instead_of_waiting_for_eof ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.36s
+
+     Running tests/filters.rs (target/debug/deps/filters-9e3df5656f93ef1c)
+
+running 7 tests
+test strict_keys_operations_and_regex_no_code_execution ... ok
+test protect_beats_drop_dedup_keeps_occurrences_ranges_and_no_pass_claim ... ok
+test structured_fields_grouping_and_excerpt_keep_protected_metadata ... ok
+test secrets_cr_and_unicode_are_safe_and_protected_survives_excerpt ... ok
+test changed_fixture_cannot_activate_old_report_and_bounds_are_explicit ... ok
+test saved_output_custom_render_preserves_observed_failure_without_rerun ... ok
+test full_fixture_activation_hash_invalidation_and_exact_match_ambiguity ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.45s
+
+     Running tests/task_input_source.rs (target/debug/deps/task_input_source-58b95f4079975e1d)
+
+running 6 tests
+test fifo_is_rejected_without_waiting_for_a_writer ... ok
+test bounds_encoding_and_original_deadline_are_enforced ... ok
+test external_input_is_explicit_and_content_or_same_bytes_replacement_is_detected ... ok
+test original_external_ancestor_and_canonical_parent_remain_bound ... ok
+test external_alias_into_project_is_admitted_but_internal_aliases_and_escapes_are_denied ... ok
+test project_admission_precedes_body_and_provenance_has_no_path ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+

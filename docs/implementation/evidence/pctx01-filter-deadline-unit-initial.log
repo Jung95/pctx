@@ -1,0 +1,23 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+error[E0369]: binary operation `==` cannot be applied to type `HashPhase`
+    --> src/filters.rs:1411:26
+     |
+1411 |                 if phase == crate::output::HashPhase::ChunkRead && !replaced {
+     |                    ----- ^^ ----------------------------------- HashPhase
+     |                    |
+     |                    HashPhase
+     |
+note: an implementation of `PartialEq` might be missing for `HashPhase`
+    --> src/output.rs:313:1
+     |
+ 313 | pub(crate) enum HashPhase {
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^ must implement `PartialEq`
+help: consider annotating `HashPhase` with `#[derive(PartialEq)]`
+    -->  src/output.rs:313:1
+     |
+ 313 + #[derive(PartialEq)]
+ 314 | pub(crate) enum HashPhase {
+     |
+
+For more information about this error, try `rustc --explain E0369`.
+error: could not compile `pctx` (lib test) due to 1 previous error

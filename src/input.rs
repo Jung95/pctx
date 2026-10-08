@@ -403,26 +403,35 @@ pub fn project_task_document(
     Ok(doc)
 }
 
+/// One bounded, serialized stdin transport shared by finite explicit inputs.
+/// The caller owns the deadline and maps byte/encoding policy to its domain.
+pub(crate) fn read_stdin(deadline: Deadline) -> Result<Vec<u8>> {
+    deadline.check()?;
+    let _owner = loop {
+        deadline.check()?;
+        match STDIN_OWNER.try_lock() {
+            Ok(owner) => break owner,
+            Err(TryLockError::WouldBlock) => {
+                std::thread::sleep(deadline.remaining()?.min(Duration::from_millis(1)))
+            }
+            Err(TryLockError::Poisoned(_)) => {
+                return Err(Error::new(
+                    "SOURCE_UNAVAILABLE",
+                    "Task input ownership unavailable",
+                    7,
+                ));
+            }
+        }
+    };
+    let bytes = stdin_bytes(deadline);
+    deadline.check()?;
+    bytes
+}
+
 pub fn task_document(path: &str, deadline: Deadline) -> Result<String> {
     deadline.check()?;
     let bytes = if path == "-" {
-        let _owner = loop {
-            deadline.check()?;
-            match STDIN_OWNER.try_lock() {
-                Ok(owner) => break owner,
-                Err(TryLockError::WouldBlock) => {
-                    std::thread::sleep(deadline.remaining()?.min(Duration::from_millis(1)))
-                }
-                Err(TryLockError::Poisoned(_)) => {
-                    return Err(Error::new(
-                        "SOURCE_UNAVAILABLE",
-                        "Task input ownership unavailable",
-                        7,
-                    ));
-                }
-            }
-        };
-        stdin_bytes(deadline)
+        read_stdin(deadline)
     } else {
         file_bytes(path, deadline)
     };

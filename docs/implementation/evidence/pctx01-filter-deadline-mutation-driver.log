@@ -1,0 +1,5 @@
+record-guard-loss 101
+input-guard-loss 101
+stdin-transport-loss 101
+policy-classification-loss 101
+{"probes": [{"probe": "record-guard-loss", "expected_exit": 101, "actual_exit": 101}, {"probe": "input-guard-loss", "expected_exit": 101, "actual_exit": 101}, {"probe": "stdin-transport-loss", "expected_exit": 101, "actual_exit": 101}, {"probe": "policy-classification-loss", "expected_exit": 101, "actual_exit": 101}], "restored_sha256": {"src/filters.rs": "ce48858216205c3040bae238d41ae177d20fbcaeeb2eb508fb4aa9a4f0f15668", "src/input.rs": "d308d34a5952f7a76d6b1b583c4c2a27b5d910efe2eb05480496159f2aeeb7d4"}}

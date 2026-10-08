@@ -379,7 +379,13 @@ fn query_deadline(cli: &Cli) -> Result<Option<pctx::deadline::Deadline>> {
                 | quota::QuotaCommand::Plan { .. }
                 | quota::QuotaCommand::Reconcile { .. },
         } => Some(10_000),
-        Command::Resource {
+        Command::Filter {
+            command:
+                filters::FilterCommand::Validate { .. }
+                | filters::FilterCommand::Apply { .. }
+                | filters::FilterCommand::Explain { .. },
+        }
+        | Command::Resource {
             command: ResourceCommand::Status { .. },
         }
         | Command::Runner {
@@ -1133,6 +1139,18 @@ mod finite_route_tests {
             vec!["runner", "check-plan", "--task-id", "T001", "--key", "test"],
             vec!["runner", "helper-status", "H001"],
             vec!["trust", "plan", "--", "/bin/sh"],
+            vec!["filter", "validate", ".pctx/filters/sample.toml"],
+            vec![
+                "filter",
+                "apply",
+                "--filter",
+                "sample",
+                "--input",
+                "-",
+                "--child-exit",
+                "1",
+            ],
+            vec!["filter", "explain", "--", "fixture"],
         ] {
             let mut argv = vec!["pctx", "--timeout-ms", "100"];
             argv.extend(values.clone());
@@ -1193,6 +1211,14 @@ mod finite_route_tests {
                 "lock",
             ],
             vec!["trust", "add", "--expect-hash", "hash", "--", "/bin/sh"],
+            vec![
+                "filter",
+                "test",
+                ".pctx/filters/sample.toml",
+                "--fixtures",
+                "fixtures",
+            ],
+            vec!["filter", "activate", "sample", "--expect-hash", "hash"],
         ] {
             let mut argv = vec!["pctx"];
             argv.extend(values.clone());
