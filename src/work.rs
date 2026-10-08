@@ -709,6 +709,38 @@ fn evidence_set(db: &Connection, t: &Task) -> Result<Value> {
     let accept=s.query_map([&t.id],|r|Ok(json!({"criterion":r.get::<_,String>(0)?,"evidence":r.get::<_,String>(1)?,"definition_revision":r.get::<_,i64>(2)?})))?.collect::<std::result::Result<Vec<_>,_>>()?;
     Ok(json!({"checks":checks,"acceptances":accept}))
 }
+fn check_environment_current(project: &Project, key: &str, stored: Option<&str>) -> bool {
+    let Some(data) = stored.and_then(|s| serde_json::from_str::<Value>(s).ok()) else {
+        return false;
+    };
+    // External reports remain explicitly allowed assertions, without local execution authority.
+    match data["report"]["source"].as_str() {
+        Some("external_report") => true,
+        Some("runner_observed") => crate::runner::current_check_binding(project, key)
+            .is_ok_and(|current| data["check_binding"] == current),
+        _ => false,
+    }
+}
+fn required_environments_current(db: &Connection, project: &Project, t: &Task) -> Result<bool> {
+    for c in t
+        .def
+        .checks
+        .iter()
+        .filter(|c| c.required && c.kind != "not_applicable")
+    {
+        let report: Option<Option<String>> = db
+            .query_row(
+                "SELECT report FROM checks WHERE task=?1 AND key=?2 ORDER BY rowid DESC LIMIT 1",
+                params![t.id, c.key],
+                |r| r.get(0),
+            )
+            .optional()?;
+        if !check_environment_current(project, &c.key, report.flatten().as_deref()) {
+            return Ok(false);
+        }
+    }
+    Ok(true)
+}
 fn gates(db: &Connection, project: &Project, t: &Task) -> Result<Value> {
     let mut failures = vec![];
     if t.state != "in_review" {
@@ -746,10 +778,14 @@ fn gates(db: &Connection, project: &Project, t: &Task) -> Result<Value> {
         if !c.required || c.kind == "not_applicable" {
             continue;
         }
-        let latest:Option<(String,String,i64,String)>=db.query_row("SELECT status,target,definition_revision,policy FROM checks WHERE task=?1 AND key=?2 ORDER BY rowid DESC LIMIT 1",params![t.id,c.key],|r|Ok((r.get(0)?,r.get(1)?,r.get(2)?,r.get(3)?))).optional()?;
+        let latest:Option<(String,String,i64,String,Option<String>)>=db.query_row("SELECT status,target,definition_revision,policy,report FROM checks WHERE task=?1 AND key=?2 ORDER BY rowid DESC LIMIT 1",params![t.id,c.key],|r|Ok((r.get(0)?,r.get(1)?,r.get(2)?,r.get(3)?,r.get(4)?))).optional()?;
         let current = fingerprint(project, &t.def, Some(c))?;
-        if !latest.is_some_and(|(s, h, r, p)| {
-            s == "passed" && h == current && r == t.def_rev && p == project.policy_hash()
+        if !latest.is_some_and(|(s, h, r, p, report)| {
+            s == "passed"
+                && h == current
+                && r == t.def_rev
+                && p == project.policy_hash()
+                && check_environment_current(project, &c.key, report.as_deref())
         }) {
             failures.push(format!("check:{}", c.key));
         }
@@ -1074,7 +1110,15 @@ fn task_command(project: &Project, db: &Connection, command: &TaskCommand) -> Re
                 )
                 .optional()?
                 .ok_or_else(|| invalid("Criterion evidence does not exist"))?;
-            if status != "passed" || rev != t.def_rev || !c.evidence_check_keys.contains(&key) {
+            let stored: Option<String> =
+                db.query_row("SELECT report FROM checks WHERE id=?1", [evidence], |r| {
+                    r.get(0)
+                })?;
+            if status != "passed"
+                || rev != t.def_rev
+                || !c.evidence_check_keys.contains(&key)
+                || !check_environment_current(project, &key, stored.as_deref())
+            {
                 return Err(Error::new(
                     "CHECK_EVIDENCE_STALE",
                     "Evidence does not satisfy criterion",
@@ -1411,6 +1455,7 @@ fn task_view(project: &Project, db: &Connection, t: &Task) -> Result<Value> {
             .as_ref()
             .and_then(|c| c["gate"]["target"].as_str())
             .is_some_and(|h| fingerprint(project, &t.def, None).is_ok_and(|current| h == current))
+            && required_environments_current(db, project, t)?
         {
             "current"
         } else {
@@ -1421,12 +1466,14 @@ fn task_view(project: &Project, db: &Connection, t: &Task) -> Result<Value> {
     };
     let mut checks = Vec::new();
     for required in &t.def.checks {
-        let latest:Option<(String,String,i64,String)>=db.query_row("SELECT status,target,definition_revision,policy FROM checks WHERE task=?1 AND key=?2 ORDER BY rowid DESC LIMIT 1",params![t.id,required.key],|r|Ok((r.get(0)?,r.get(1)?,r.get(2)?,r.get(3)?))).optional()?;
+        let latest:Option<(String,String,i64,String,Option<String>)>=db.query_row("SELECT status,target,definition_revision,policy,report FROM checks WHERE task=?1 AND key=?2 ORDER BY rowid DESC LIMIT 1",params![t.id,required.key],|r|Ok((r.get(0)?,r.get(1)?,r.get(2)?,r.get(3)?,r.get(4)?))).optional()?;
         let result = match latest {
-            Some((status, target, revision, policy))
-                if revision == t.def_rev
+            Some((status, target, revision, policy, report))
+                if (status != "passed"
+                    || check_environment_current(project, &required.key, report.as_deref()))
+                    && revision == t.def_rev
                     && policy == project.policy_hash()
-                    && fingerprint(project, &t.def, None)
+                    && fingerprint(project, &t.def, Some(required))
                         .is_ok_and(|current| current == target) =>
             {
                 status
@@ -1906,12 +1953,28 @@ fn record_check_report(
     {
         return Err(invalid("Invalid check report schema or counts"));
     }
+    let check_binding = if trusted_runner {
+        output_ref
+            .map(|output| crate::output::observed_check_binding(project, output))
+            .transpose()?
+            .flatten()
+    } else {
+        None
+    };
+    let environment_stale = trusted_runner
+        && check_binding.as_ref().is_some_and(|binding| {
+            binding["key"] != key
+                || !crate::runner::current_check_binding(project, &key)
+                    .is_ok_and(|current| current == *binding)
+        });
     let result = if rev != t.def_rev
         || target != fingerprint(project, &t.def, Some(c))?
         || policy != project.policy_hash()
+        || environment_stale
     {
         "stale"
-    } else if !c.allowed_sources.contains(&report.source)
+    } else if (trusted_runner && check_binding.is_none())
+        || !c.allowed_sources.contains(&report.source)
         || !(report.source == "external_report"
             || (trusted_runner && report.source == "runner_observed"))
         || report.source == "manual_claim"
@@ -1933,7 +1996,7 @@ fn record_check_report(
     } else {
         "passed"
     };
-    let data = json!({"report":report,"report_digest":hash(serde_json::to_vec(&report)?),"environment_fingerprint":hash(serde_json::to_vec(&report.environment)?),"output_id":output_ref});
+    let data = json!({"report":report,"report_digest":hash(serde_json::to_vec(&report)?),"report_environment_digest":hash(serde_json::to_vec(&report.environment)?),"environment_fingerprint":check_binding.as_ref().map(|b|b["environment_fingerprint"].clone()),"environment_authority":if trusted_runner && check_binding.is_some(){"trusted_local_runner_profile"}else if trusted_runner{"runner_observation_binding_missing"}else{"external_report_claim_not_locally_verified"},"check_binding":check_binding,"output_id":output_ref});
     db.execute(
         "UPDATE checks SET status=?1,report=?2 WHERE id=?3",
         params![result, data.to_string(), check],

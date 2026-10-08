@@ -786,17 +786,24 @@ const MAX_IPC_WORKERS: usize = 8;
 struct WorkerPermit;
 impl WorkerPermit {
     fn acquire() -> io::Result<Self> {
-        IPC_WORKERS
-            .fetch_update(Ordering::AcqRel, Ordering::Acquire, |n| {
-                (n < MAX_IPC_WORKERS).then_some(n + 1)
-            })
-            .map_err(|_| {
-                io::Error::new(
+        let mut current = IPC_WORKERS.load(Ordering::Acquire);
+        loop {
+            if current >= MAX_IPC_WORKERS {
+                return Err(io::Error::new(
                     io::ErrorKind::WouldBlock,
                     "guardian IPC workers unavailable; retain lease",
-                )
-            })?;
-        Ok(Self)
+                ));
+            }
+            match IPC_WORKERS.compare_exchange_weak(
+                current,
+                current + 1,
+                Ordering::AcqRel,
+                Ordering::Acquire,
+            ) {
+                Ok(_) => return Ok(Self),
+                Err(observed) => current = observed,
+            }
+        }
     }
 }
 impl Drop for WorkerPermit {

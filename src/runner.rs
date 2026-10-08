@@ -580,6 +580,15 @@ fn trusted(p: &Project, b: &Binding) -> Result<()> {
     }
     Ok(())
 }
+/// Authority comes from the current locally trusted profile, never child report fields.
+pub(crate) fn current_check_binding(p: &Project, key: &str) -> Result<Value> {
+    let b = profile(p, key)?;
+    trusted(p, &b)?;
+    Ok(json!({"authority":"trusted_local_runner_profile","key":key,
+        "profile_fingerprint":b.fingerprint,"execution_fingerprint":b.execution_fingerprint,
+        "environment_fingerprint":output::registered_environment_fingerprint(&b.profile.env)?,
+        "cwd":b.profile.cwd,"workspace":p.workspace_id,"policy":p.policy_hash()}))
+}
 fn host_dir(p: &Project) -> Result<PathBuf> {
     let path = std::env::var_os("PCTX_HOST_RESOURCE_DIR")
         .map(PathBuf::from)
@@ -1014,6 +1023,7 @@ pub fn execute(p: &Project, command: &RunnerCommand) -> Result<Value> {
             {
                 admit_memory(&memory, &b.profile.memory)?;
             }
+            let check_binding = current_check_binding(p, key)?;
             let (dir, mut job) = acquire(p, &b)?;
             diagnostics.phase("host_slots_acquired");
             let begin = work::execute(
@@ -1102,6 +1112,7 @@ pub fn execute(p: &Project, command: &RunnerCommand) -> Result<Value> {
                     Ok(())
                 },
                 &b.profile.reporter,
+                &check_binding,
             );
             if job.pid.is_none()
                 && let Some(g) = guardian.as_ref()

@@ -1,0 +1,56 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.20s
+     Running tests/atomic_publication.rs (target/debug/deps/atomic_publication-64663f147e00f63e)
+
+running 2 tests
+test create_only_race_publishes_one_complete_record_and_preserves_it ... ok
+test replacement_keeps_old_open_reader_and_publishes_complete_new_record ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+
+     Running tests/runner.rs (target/debug/deps/runner-51df6110d5dbdca9)
+
+running 23 tests
+test legacy_lock_fixture ... ok
+test inherited_canonical_descriptor_retains_lock_after_invalid_proof_and_parent_close ... ok
+test cloud_helper_is_only_durable_intent ... ok
+test explicit_script_input_change_requires_new_trust ... ok
+test changed_script_and_agent_forged_trust_are_denied ... ok
+test legacy_bridge_absence_prevents_execution ... ok
+test linked_slot_child_directory_cannot_redirect_state ... ok
+test profile_change_during_execution_is_stale_at_report_recording ... ok
+test native_pass_is_invalidated_by_external_executable_change_with_sources_unchanged ... ok
+test synthetic_low_memory_defers_heavy_admission ... ok
+test parent_exit_does_not_release_living_child ... ok
+test native_environment_change_or_missing_profile_invalidates_existing_pass ... ok
+test trusted_typed_check_is_real_evidence ... ok
+test timeout_is_observed_without_success_evidence ... ok
+test source_mutation_during_check_is_stale ... ok
+test user_created_host_state_symlink_is_denied ... ok
+test unknown_and_zero_tests_do_not_pass ... ok
+test unknown_memory_requires_disclosed_exact_owner_override ... ok
+test cross_project_heavy_capacity_is_one ... ok
+test local_auxiliary_provider_needs_registered_linked_workspace_and_capacity ... ok
+test canonical_mutex_survives_main_parent_death ... ok
+test killed_guardian_causes_negative_child_observation ... ok
+test canonical_legacy_and_pctx_exclude_each_other ... ok
+
+test result: ok. 23 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 24.17s
+
+     Running tests/work_control.rs (target/debug/deps/work_control-ac356ae4dc70f37a)
+
+running 11 tests
+test database_rejects_event_modification_and_receipt_conflict ... ok
+test external_report_is_an_allowed_claim_without_native_environment_authority ... ok
+test zero_minimum_cannot_make_zero_tests_pass ... ok
+test legacy_native_pass_without_authoritative_binding_is_not_current_evidence ... ok
+test claims_reports_reassignment_and_cursor ... ok
+test schedule_v2_backup_strips_local_binding_and_restore_revokes_running_authority ... ok
+test zero_tests_and_revision_conflict ... ok
+test current_source_change_blocks_completion ... ok
+test backup_restore_revokes_live_leases_and_preserves_pause ... ok
+test evidence_gate_and_historical_completion ... ok
+test restore_preserves_session_history_without_ack_or_epoch_reuse ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.31s
+

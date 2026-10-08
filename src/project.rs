@@ -160,6 +160,81 @@ pub fn private_dir(path: &Path) -> Result<()> {
     }
     Ok(())
 }
+#[cfg(windows)]
+fn windows_publish_file(
+    source: &fs::File,
+    directory: &fs::File,
+    path: &Path,
+    overwrite: bool,
+) -> Result<()> {
+    use std::{
+        mem::{MaybeUninit, offset_of, size_of},
+        os::windows::{ffi::OsStrExt, io::AsRawHandle},
+    };
+    use windows_sys::Win32::Storage::FileSystem::{
+        FILE_RENAME_INFO, FILE_RENAME_INFO_0, FileRenameInfoEx, SetFileInformationByHandle,
+    };
+    let name = path
+        .file_name()
+        .ok_or_else(|| Error::new("INVALID_ARGUMENT", "Output needs a filename", 2))?;
+    let name: Vec<u16> = name.encode_wide().take(32768).collect();
+    if name.is_empty() || name.len() >= 32768 || name.contains(&0) || name.contains(&(b':' as u16))
+    {
+        return Err(Error::new(
+            "INVALID_ARGUMENT",
+            "Invalid bounded output filename",
+            2,
+        ));
+    }
+    let name_bytes = name
+        .len()
+        .checked_mul(size_of::<u16>())
+        .ok_or_else(|| Error::new("INVALID_ARGUMENT", "Output filename too long", 2))?;
+    // Allocate native-header-aligned, fully initialized backing storage, including
+    // a whole header PLUS the filename payload. Never extend FileName[1] through
+    // a Rust array reference and never cast an alignment-1 Vec<u8> into a header.
+    let bytes = size_of::<FILE_RENAME_INFO>() + name_bytes;
+    let units = bytes.div_ceil(size_of::<FILE_RENAME_INFO>());
+    let mut storage: Vec<MaybeUninit<FILE_RENAME_INFO>> =
+        (0..units).map(|_| MaybeUninit::zeroed()).collect();
+    let base = storage.as_mut_ptr().cast::<FILE_RENAME_INFO>();
+    // FILE_RENAME_REPLACE_IF_EXISTS=1, FILE_RENAME_POSIX_SEMANTICS=2. Existing
+    // target handles remain valid and subsequent opens see the source identity.
+    // https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/ns-ntifs-_file_rename_information
+    // https://learn.microsoft.com/en-us/windows/win32/api/winbase/ns-winbase-file_rename_info
+    unsafe {
+        base.write(FILE_RENAME_INFO {
+            Anonymous: FILE_RENAME_INFO_0 {
+                Flags: if overwrite { 1 | 2 } else { 0 },
+            },
+            RootDirectory: directory.as_raw_handle(),
+            FileNameLength: name_bytes as u32,
+            FileName: [0],
+        });
+        let payload = base
+            .cast::<u8>()
+            .add(offset_of!(FILE_RENAME_INFO, FileName))
+            .cast::<u16>();
+        std::ptr::copy_nonoverlapping(name.as_ptr(), payload, name.len());
+        if SetFileInformationByHandle(
+            source.as_raw_handle(),
+            FileRenameInfoEx,
+            base.cast(),
+            bytes as u32,
+        ) == 0
+        {
+            let error = std::io::Error::last_os_error();
+            if !overwrite && error.kind() == std::io::ErrorKind::AlreadyExists {
+                return Err(Error::new("REVISION_CONFLICT", "Output already exists", 9));
+            }
+            return Err(error.into());
+        }
+    }
+    // Source data was WRITE_THROUGH + sync_all before publication. Do not claim
+    // directory-fsync or reboot/crash durability, and never copy across volumes,
+    // delete the old target first, or silently downgrade unsupported filesystems.
+    Ok(())
+}
 pub fn atomic_write(path: &Path, bytes: &[u8], overwrite: bool) -> Result<()> {
     let parent = path
         .parent()
@@ -173,6 +248,31 @@ pub fn atomic_write(path: &Path, bytes: &[u8], overwrite: bool) -> Result<()> {
     if fs::symlink_metadata(path).is_ok_and(|m| m.file_type().is_symlink()) {
         return Err(Error::new("POLICY_DENIED", "Symlink output denied", 5));
     }
+    #[cfg(windows)]
+    let directory = {
+        use std::os::windows::fs::{MetadataExt, OpenOptionsExt};
+        use windows_sys::Win32::Storage::FileSystem::{
+            FILE_ATTRIBUTE_REPARSE_POINT, FILE_FLAG_BACKUP_SEMANTICS, FILE_FLAG_OPEN_REPARSE_POINT,
+            FILE_READ_ATTRIBUTES, FILE_SHARE_READ, FILE_SHARE_WRITE, FILE_TRAVERSE,
+        };
+        // Hold the target directory identity without delete sharing and rename to
+        // a relative leaf through that handle. Staging creation still resolves a
+        // pathname; this is not a complete NT-relative ancestor traversal proof.
+        let file = fs::OpenOptions::new()
+            .access_mode(FILE_READ_ATTRIBUTES | FILE_TRAVERSE)
+            .share_mode(FILE_SHARE_READ | FILE_SHARE_WRITE)
+            .custom_flags(FILE_FLAG_BACKUP_SEMANTICS | FILE_FLAG_OPEN_REPARSE_POINT)
+            .open(parent)?;
+        let metadata = file.metadata()?;
+        if !metadata.is_dir() || metadata.file_attributes() & FILE_ATTRIBUTE_REPARSE_POINT != 0 {
+            return Err(Error::new(
+                "POLICY_DENIED",
+                "Linked output parent denied",
+                5,
+            ));
+        }
+        file
+    };
     let temp = parent.join(format!(".pctx-{}.tmp", id("write")));
     let result = (|| {
         let mut options = fs::OpenOptions::new();
@@ -182,40 +282,25 @@ pub fn atomic_write(path: &Path, bytes: &[u8], overwrite: bool) -> Result<()> {
             use std::os::unix::fs::OpenOptionsExt;
             options.mode(0o600);
         }
+        #[cfg(windows)]
+        {
+            use std::os::windows::fs::OpenOptionsExt;
+            use windows_sys::Win32::{
+                Foundation::GENERIC_WRITE,
+                Storage::FileSystem::{DELETE, FILE_FLAG_WRITE_THROUGH, FILE_SHARE_READ},
+            };
+            // Renaming the owned staging identity requires DELETE source access.
+            options
+                .access_mode(GENERIC_WRITE | DELETE)
+                .share_mode(FILE_SHARE_READ)
+                .custom_flags(FILE_FLAG_WRITE_THROUGH);
+        }
         let mut f = options.open(&temp)?;
         f.write_all(bytes)?;
         f.sync_all()?;
-        drop(f);
         #[cfg(windows)]
-        {
-            use std::os::windows::ffi::OsStrExt;
-            use windows_sys::Win32::Storage::FileSystem::{
-                MOVEFILE_REPLACE_EXISTING, MOVEFILE_WRITE_THROUGH, MoveFileExW,
-            };
-            let wide = |p: &Path| -> Result<Vec<u16>> {
-                let mut value: Vec<_> = p.as_os_str().encode_wide().collect();
-                if value.contains(&0) {
-                    return Err(Error::new("INVALID_ARGUMENT", "NUL in output path", 2));
-                }
-                value.push(0);
-                Ok(value)
-            };
-            // Same-directory move only; no cross-volume copy fallback. Windows
-            // directories cannot use the Unix read-only-directory fsync below.
-            let flags = MOVEFILE_WRITE_THROUGH
-                | if overwrite {
-                    MOVEFILE_REPLACE_EXISTING
-                } else {
-                    0
-                };
-            if unsafe { MoveFileExW(wide(&temp)?.as_ptr(), wide(path)?.as_ptr(), flags) } == 0 {
-                let e = std::io::Error::last_os_error();
-                if !overwrite && e.kind() == std::io::ErrorKind::AlreadyExists {
-                    return Err(Error::new("REVISION_CONFLICT", "Output already exists", 9));
-                }
-                return Err(e.into());
-            }
-        }
+        windows_publish_file(&f, &directory, path, overwrite)?;
+        drop(f);
         #[cfg(not(windows))]
         {
             if overwrite {

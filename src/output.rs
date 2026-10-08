@@ -143,6 +143,8 @@ struct Artifact {
     policy_hash: String,
     input_fingerprint: String,
     #[serde(default)]
+    check_binding: Option<Value>,
+    #[serde(default)]
     parser_identity: String,
     #[serde(default)]
     input_manifest: BTreeMap<String, String>,
@@ -815,7 +817,31 @@ fn compact(a: &Artifact, budget: usize) -> Value {
     value
 }
 pub fn run(p: &Project, r: &RunRequest) -> Result<Value> {
-    run_inner(p, r, ".", &BTreeMap::new(), None, None, None, None)
+    run_inner(p, r, ".", &BTreeMap::new(), None, None, None, None, None)
+}
+pub(crate) fn registered_environment_fingerprint(
+    environment: &BTreeMap<String, String>,
+) -> Result<String> {
+    registered_environment_fingerprint_with_path(
+        environment,
+        &std::env::var_os("PATH").unwrap_or_default(),
+    )
+}
+fn registered_environment_fingerprint_with_path(
+    environment: &BTreeMap<String, String>,
+    path: &std::ffi::OsStr,
+) -> Result<String> {
+    let mut effective = BTreeMap::from([
+        ("LANG".to_string(), "C.UTF-8".to_string()),
+        ("GIT_PAGER".into(), "cat".into()),
+        ("PAGER".into(), "cat".into()),
+        ("GIT_EXTERNAL_DIFF".into(), "".into()),
+        ("GIT_CONFIG_COUNT".into(), "0".into()),
+    ]);
+    effective.extend(environment.clone());
+    Ok(hash(serde_json::to_vec(
+        &json!({"environment":effective,"path_bytes_hash":hash(path.as_encoded_bytes())}),
+    )?))
 }
 pub(crate) fn registered_binding_at(p: &Project, argv: &[String], cwd: &str) -> Result<Value> {
     Ok(serde_json::to_value(binding_inner(p, argv, true, cwd)?)?)
@@ -838,6 +864,7 @@ pub(crate) fn run_registered_monitored(
         Some(on_spawn),
         Some(on_poll),
         None,
+        None,
     )
 }
 // Parser selection is presentation-only and bound by the registered profile.
@@ -851,6 +878,7 @@ pub(crate) fn run_registered_parsed(
     on_spawn: &mut dyn FnMut(u32) -> Result<()>,
     on_poll: &mut dyn FnMut() -> Result<()>,
     parser: &str,
+    check_binding: &Value,
 ) -> Result<Value> {
     run_inner(
         p,
@@ -861,6 +889,7 @@ pub(crate) fn run_registered_parsed(
         Some(on_spawn),
         Some(on_poll),
         Some(parser),
+        Some(check_binding),
     )
 }
 #[allow(clippy::too_many_arguments)]
@@ -873,6 +902,7 @@ fn run_inner(
     on_spawn: Option<&mut dyn FnMut(u32) -> Result<()>>,
     on_poll: Option<&mut dyn FnMut() -> Result<()>>,
     parser_identity: Option<&str>,
+    check_binding: Option<&Value>,
 ) -> Result<Value> {
     if r.budget_bytes < 3000 {
         return Err(err(
@@ -897,6 +927,7 @@ fn run_inner(
             on_spawn,
             on_poll,
             parser_identity,
+            check_binding,
         );
         Err(err(
             "CAPABILITY_UNAVAILABLE",
@@ -909,6 +940,7 @@ fn run_inner(
         let mut on_spawn = on_spawn;
         let mut on_poll = on_poll;
         let registered = expected_binding.is_some();
+        let execution_path = std::env::var_os("PATH").unwrap_or_default();
         let b = binding_inner(p, &r.argv, registered, cwd)?;
         if let Some(expected) = expected_binding {
             if b.fingerprint != expected {
@@ -920,6 +952,23 @@ fn run_inner(
             }
         } else {
             validate_trust(p, &b)?;
+        }
+        if let Some(receipt) = check_binding {
+            let key = receipt["key"]
+                .as_str()
+                .ok_or_else(|| err("INVALID_CONFIG", "Missing check binding key", 2))?;
+            if crate::runner::current_check_binding(p, key)? != *receipt
+                || receipt["execution_fingerprint"] != b.fingerprint
+                || receipt["cwd"] != cwd
+                || receipt["environment_fingerprint"]
+                    != registered_environment_fingerprint_with_path(environment, &execution_path)?
+            {
+                return Err(err(
+                    "CONFIG_CHANGED",
+                    "Trusted runner environment changed before spawn",
+                    9,
+                ));
+            }
         }
         let input_manifest = reader::manifest(p)?;
         let input_fingerprint = hash(serde_json::to_vec(&input_manifest)?);
@@ -944,7 +993,7 @@ fn run_inner(
             .stderr(Stdio::piped())
             .env_clear();
         // Git metadata reads must not invoke external pagers, diff helpers or textconv.
-        cmd.env("PATH", std::env::var_os("PATH").unwrap_or_default())
+        cmd.env("PATH", &execution_path)
             .env("LANG", "C.UTF-8")
             .env("GIT_PAGER", "cat")
             .env("PAGER", "cat")
@@ -972,6 +1021,52 @@ fn run_inner(
                     Ok(())
                 });
             }
+        }
+        // Manifest reads and admission setup can outlive the initial binding check.
+        // Revalidate at the last parent-side boundary before admitting a child.
+        let final_binding = (|| -> Result<()> {
+            let current = binding_inner(p, &r.argv, registered, cwd)?;
+            if current.fingerprint != b.fingerprint {
+                return Err(err(
+                    "CONFIG_CHANGED",
+                    "Execution binding changed before spawn",
+                    9,
+                ));
+            }
+            if !registered {
+                validate_trust(p, &current)?;
+            }
+            if let Some(receipt) = check_binding {
+                let key = receipt["key"]
+                    .as_str()
+                    .ok_or_else(|| err("INVALID_CONFIG", "Missing check binding key", 2))?;
+                if crate::runner::current_check_binding(p, key)? != *receipt
+                    || receipt["execution_fingerprint"] != current.fingerprint
+                    || receipt["cwd"] != cwd
+                    || receipt["environment_fingerprint"]
+                        != registered_environment_fingerprint_with_path(
+                            environment,
+                            &execution_path,
+                        )?
+                {
+                    return Err(err(
+                        "CONFIG_CHANGED",
+                        "Trusted runner environment changed before spawn",
+                        9,
+                    ));
+                }
+            }
+            Ok(())
+        })();
+        if let Err(e) = final_binding {
+            atomic_write(
+                &job_path,
+                &serde_json::to_vec(
+                    &json!({"execution_id":execution_id,"state":"not_started","spawned":false,"termination":"not_started","pctx_error":e.code,"task_completion":"not_evaluated"}),
+                )?,
+                true,
+            )?;
+            return Err(e);
         }
         let mut child = match cmd.spawn() {
             Ok(c) => c,
@@ -1119,6 +1214,7 @@ fn run_inner(
             workspace_id: p.workspace_id.clone(),
             policy_hash: p.policy_hash(),
             input_fingerprint,
+            check_binding: check_binding.cloned(),
             parser_identity: parser_identity.unwrap_or("unsupported").into(),
             input_manifest,
             created_at: now(),
@@ -1356,6 +1452,10 @@ pub fn savings(p: &Project) -> Result<Value> {
     Ok(
         json!({"scope":"workspace","metric":"observed_emitted_bytes","samples":samples,"redacted_uncompressed_bytes":baseline,"emitted_compact_bytes":emitted,"emitted_retrieval_bytes":retrieval,"net_bytes_saved":net as i64,"net_percent":if baseline==0 {Value::Null}else{json!(net as f64*100.0/baseline as f64)},"tokenizer_tokens":"unknown","provider_usage":"unknown","subscription_quota":"unknown","api_cost":"unknown","delivery_receipt":"not_observed","metrics_available":emitted+retrieval>0}),
     )
+}
+
+pub(crate) fn observed_check_binding(p: &Project, output_id: &str) -> Result<Option<Value>> {
+    Ok(load(p, output_id)?.check_binding)
 }
 
 pub(crate) fn observed_report(

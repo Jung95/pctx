@@ -54,3 +54,49 @@ fn replacement_keeps_old_open_reader_and_publishes_complete_new_record() {
     assert_eq!(std::fs::read(&path).unwrap(), new);
     assert_eq!(std::fs::read_dir(dir.path()).unwrap().count(), 1);
 }
+
+#[cfg(windows)]
+#[test]
+fn windows_posix_replacement_preserves_non_delete_shared_readers_and_unicode_names() {
+    use std::{io::Read, os::windows::fs::OpenOptionsExt};
+    use windows_sys::Win32::Storage::FileSystem::{FILE_SHARE_READ, FILE_SHARE_WRITE};
+    let dir = tempfile::tempdir().unwrap();
+    let path = dir.path().join("state-한글-🚀.json");
+    let revisions = [
+        b"first".as_slice(),
+        b"second".as_slice(),
+        b"third".as_slice(),
+    ];
+    let mut readers = Vec::new();
+    for revision in revisions {
+        atomic_write(&path, revision, !readers.is_empty()).unwrap();
+        let reader = std::fs::OpenOptions::new()
+            .read(true)
+            .share_mode(FILE_SHARE_READ | FILE_SHARE_WRITE)
+            .open(&path)
+            .unwrap();
+        readers.push(reader);
+    }
+    for (mut reader, expected) in readers.into_iter().zip(revisions) {
+        let mut contents = Vec::new();
+        reader.read_to_end(&mut contents).unwrap();
+        assert_eq!(contents, expected);
+    }
+    assert_eq!(std::fs::read(&path).unwrap(), revisions[2]);
+    assert_eq!(std::fs::read_dir(dir.path()).unwrap().count(), 1);
+}
+
+#[cfg(windows)]
+#[test]
+fn windows_replacement_failure_preserves_directory_target_and_cleans_staging() {
+    let dir = tempfile::tempdir().unwrap();
+    let target = dir.path().join("target");
+    std::fs::create_dir(&target).unwrap();
+    std::fs::write(target.join("preserved"), b"original").unwrap();
+    assert!(atomic_write(&target, b"new file", true).is_err());
+    assert_eq!(
+        std::fs::read(target.join("preserved")).unwrap(),
+        b"original"
+    );
+    assert_eq!(std::fs::read_dir(dir.path()).unwrap().count(), 1);
+}

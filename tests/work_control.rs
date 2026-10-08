@@ -744,3 +744,58 @@ INSERT INTO schedule_occurrences VALUES('owner','digest',1,'occurrence',1,'runni
         ("succeeded".into(), "result-hash".into(), "message".into())
     );
 }
+
+#[test]
+fn external_report_is_an_allowed_claim_without_native_environment_authority() {
+    let (_d, p) = setup();
+    let (run, _) = start(&p);
+    let id = check(&p, &run, 1);
+    let shown = work::execute(
+        &p,
+        &WorkCommand::Check {
+            command: CheckCommand::Show { check: id },
+        },
+    )
+    .unwrap();
+    assert_eq!(shown["result"], "passed");
+    let metadata: Value = serde_json::from_str(shown["report"].as_str().unwrap()).unwrap();
+    assert_eq!(
+        metadata["environment_authority"],
+        "external_report_claim_not_locally_verified"
+    );
+    assert!(metadata["environment_fingerprint"].is_null());
+    assert!(metadata["check_binding"].is_null());
+    assert!(metadata["report_environment_digest"].is_string());
+}
+
+#[test]
+fn legacy_native_pass_without_authoritative_binding_is_not_current_evidence() {
+    let (_d, p) = setup();
+    let (run, _) = start(&p);
+    let id = check(&p, &run, 1);
+    let db = p.connect(true).unwrap();
+    db.execute(
+        "UPDATE checks SET report=json_set(report,'$.report.source','runner_observed') WHERE id=?1",
+        [&id],
+    )
+    .unwrap();
+    let name = work::board(&p).unwrap()["tasks"][0]["task_id"]
+        .as_str()
+        .unwrap()
+        .to_owned();
+    let accepted = work::execute(
+        &p,
+        &WorkCommand::Task {
+            command: TaskCommand::Criterion {
+                command: CriterionCommand::Accept {
+                    task: name,
+                    criterion: "behavior".into(),
+                    evidence: id,
+                    note: "legacy receipt has no binding".into(),
+                },
+            },
+        },
+    )
+    .unwrap_err();
+    assert_eq!(accepted.code, "CHECK_EVIDENCE_STALE");
+}

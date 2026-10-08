@@ -793,3 +793,150 @@ fn inherited_canonical_descriptor_retains_lock_after_invalid_proof_and_parent_cl
     guardian.0.wait().unwrap();
     contender.try_lock_exclusive().unwrap();
 }
+
+fn submit_reviewed_evidence(f: &Fixture, check: &str) {
+    f.ok(&[
+        "task",
+        "criterion",
+        "accept",
+        &f.task,
+        "--criterion",
+        "behavior",
+        "--evidence",
+        check,
+    ]);
+    f.ok(&["task", "submit", &f.task, "--run", &f.run]);
+    f.ok(&["task", "review", &f.task, "--approve"]);
+    assert_eq!(
+        f.ok(&["task", "complete", &f.task, "--dry-run"])["data"]["passed"],
+        true
+    );
+}
+
+#[test]
+fn native_pass_is_invalidated_by_external_executable_change_with_sources_unchanged() {
+    use std::{io::Write, os::unix::fs::PermissionsExt};
+    let f = Fixture::new(&report(1), false, None);
+    let tool = f._temp.path().join("registered-shell");
+    // Relocated macOS system binaries can be killed before exec due to signature trust.
+    // Use a real private executable wrapper; its bytes remain outside source inventory.
+    fs::write(&tool, "#!/bin/sh\nexec /bin/sh \"$@\"\n").unwrap();
+    fs::set_permissions(&tool, fs::Permissions::from_mode(0o700)).unwrap();
+    // The executable is outside the workspace source inventory, but inside a private fixture.
+    let tool = fs::canonicalize(tool).unwrap();
+    fs::write(f.root.join(".pctx/runner.toml"), format!("schema_version = 1\n[checks.unit]\nargv = ['{}', 'fixture.sh']\nreporter = 'pctx-json-v1'\nheavy = false\nresources = []\n", tool.display())).unwrap();
+    let source_before = fs::read(f.root.join("code.rs")).unwrap();
+    let script_before = fs::read(f.root.join("fixture.sh")).unwrap();
+    f.trust();
+    let result = f.ok(&f.run_args());
+    if result["data"]["evidence"]["result"] != "passed" {
+        let diagnostics = tempfile::Builder::new()
+            .prefix("pctx-native-tool-failure-")
+            .tempdir_in("/tmp")
+            .unwrap()
+            .keep();
+        fs::write(
+            diagnostics.join("runner.json"),
+            serde_json::to_vec_pretty(&result).unwrap(),
+        )
+        .unwrap();
+        if let Some(output) = result["data"]["execution"]["output_id"].as_str() {
+            let full = f.output(&["output", "show", output, "--view", "full"]);
+            fs::write(diagnostics.join("child-output.json"), &full.stdout).unwrap();
+            fs::write(diagnostics.join("retrieval-stderr.txt"), &full.stderr).unwrap();
+        }
+        panic!(
+            "Native initial pass failed; preserved child evidence at {}: {}",
+            diagnostics.display(),
+            result
+        );
+    }
+    assert_eq!(result["data"]["evidence"]["result"], "passed");
+    let check = result["data"]["check_id"].as_str().unwrap();
+    let stored = f.ok(&["check", "show", check]);
+    let receipt: Value = serde_json::from_str(stored["data"]["report"].as_str().unwrap()).unwrap();
+    assert_eq!(
+        receipt["environment_authority"],
+        "trusted_local_runner_profile"
+    );
+    assert!(receipt["check_binding"]["execution_fingerprint"].is_string());
+    submit_reviewed_evidence(&f, check);
+    fs::OpenOptions::new()
+        .append(true)
+        .open(&tool)
+        .unwrap()
+        .write_all(b"# changed tool bytes\n")
+        .unwrap();
+    assert_eq!(fs::read(f.root.join("code.rs")).unwrap(), source_before);
+    assert_eq!(fs::read(f.root.join("fixture.sh")).unwrap(), script_before);
+    let gate = f.ok(&["task", "complete", &f.task, "--dry-run"]);
+    assert_eq!(gate["data"]["passed"], false);
+    assert!(
+        gate["data"]["failures"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .any(|v| v == "check:unit")
+    );
+    assert_eq!(
+        f.output(&["task", "complete", &f.task]).status.code(),
+        Some(10)
+    );
+    assert_eq!(
+        f.ok(&["task", "show", &f.task])["data"]["checks"][0]["result"],
+        "stale"
+    );
+}
+
+#[test]
+fn native_environment_change_or_missing_profile_invalidates_existing_pass() {
+    for missing in [false, true] {
+        let f = Fixture::new(&report(1), false, None);
+        f.trust();
+        let result = f.ok(&f.run_args());
+        assert_eq!(result["data"]["evidence"]["result"], "passed");
+        submit_reviewed_evidence(&f, result["data"]["check_id"].as_str().unwrap());
+        let profile = f.root.join(".pctx/runner.toml");
+        if missing {
+            fs::remove_file(profile).unwrap();
+        } else {
+            let mut text = fs::read_to_string(&profile).unwrap();
+            text.push_str("env_allowlist = ['CI']\n[checks.unit.env]\nCI = 'changed'\n");
+            fs::write(&profile, text).unwrap();
+            // Even newly approving the changed environment cannot bless an old execution.
+            let plan = f.ok(&[
+                "runner",
+                "check-plan",
+                "--task-id",
+                &f.task,
+                "--key",
+                "unit",
+            ]);
+            f.ok(&[
+                "runner",
+                "trust",
+                "--key",
+                "unit",
+                "--expect-hash",
+                plan["data"]["fingerprint"].as_str().unwrap(),
+            ]);
+        }
+        assert_eq!(
+            f.ok(&["task", "complete", &f.task, "--dry-run"])["data"]["passed"],
+            false
+        );
+    }
+}
+
+#[test]
+fn profile_change_during_execution_is_stale_at_report_recording() {
+    let script = format!(
+        "{}printf '%s\\n' \"env_allowlist = ['CI']\" '[checks.unit.env]' \"CI = 'during-run'\" >> .pctx/runner.toml\n",
+        report(1)
+    );
+    let f = Fixture::new(&script, false, None);
+    f.trust();
+    let result = f.ok(&f.run_args());
+    assert_eq!(result["data"]["execution"]["child_exit_code"], 0);
+    assert_eq!(result["data"]["evidence"]["result"], "stale");
+}
