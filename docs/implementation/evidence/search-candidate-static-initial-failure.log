@@ -1,0 +1,12 @@
+    Checking pctx v0.1.0-dev (/Users/dev/PCTX)
+error: using a non-octal value to set unix file permissions
+   --> src/reader.rs:865:79
+    |
+865 |         fs::set_permissions(p.root.join("ok.txt"), fs::Permissions::from_mode(0)).unwrap();
+    |                                                                               ^ help: consider using an octal literal instead: `0o0`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#non_octal_unix_permissions
+    = note: `#[deny(clippy::non_octal_unix_permissions)]` on by default
+
+error: could not compile `pctx` (lib test) due to 1 previous error
+warning: build failed, waiting for other jobs to finish...

@@ -167,10 +167,51 @@ pub fn read(p: &Project, path: &str) -> Result<VerifiedFile> {
     read_with_identity(p, path).map(|(file, _)| file)
 }
 
+/// Search candidates may be absent or locally denied before admission.
+/// Authority and all post-admission failures remain errors.
+pub(crate) fn read_search_candidate(p: &Project, path: &str) -> Result<Option<VerifiedFile>> {
+    read_search_candidate_observed(p, path, || Ok(()))
+}
+fn read_search_candidate_observed(
+    p: &Project,
+    path: &str,
+    observe: impl FnOnce() -> Result<()>,
+) -> Result<Option<VerifiedFile>> {
+    p.check_deadline()?;
+    validate_policy(p)?;
+    if let Err(error) = policy_allows(p, path) {
+        if matches!(error.code.as_str(), "POLICY_DENIED" | "PATH_OUTSIDE_ROOT") {
+            validate_root(p)?;
+            return Ok(None);
+        }
+        return Err(error);
+    }
+    let initial = anchored_open_admission(&p.root, &p.root_anchor, path, p.deadline, true)?;
+    let Some(initial) = initial else {
+        return Ok(None);
+    };
+    let metadata = checked_fs(p, || initial.metadata())?;
+    if !metadata.is_file() {
+        validate_root(p)?;
+        return Ok(None);
+    }
+    observe()?;
+    read_from_initial(p, path, Some(initial)).map(|(file, _)| Some(file))
+}
+
 pub(crate) fn read_with_identity(
     p: &Project,
     path: &str,
 ) -> Result<(VerifiedFile, same_file::Handle)> {
+    read_from_initial(p, path, None)
+}
+
+fn read_from_initial(
+    p: &Project,
+    path: &str,
+    mut initial: Option<fs::File>,
+) -> Result<(VerifiedFile, same_file::Handle)> {
+    let strict_admission = initial.is_some();
     p.check_deadline()?;
     for _ in 0..3 {
         p.check_deadline()?;
@@ -178,7 +219,10 @@ pub(crate) fn read_with_identity(
         policy_allows(p, path)?;
         #[cfg(not(unix))]
         authorize(p, path)?;
-        let mut f = secure_open(p, path)?;
+        let mut f = match initial.take() {
+            Some(file) => file,
+            None => secure_open(p, path)?,
+        };
         let before = checked_fs(p, || f.metadata())?;
         if !before.is_file() {
             return Err(Error::new("INVALID_ARGUMENT", "Expected a regular file", 2));
@@ -216,7 +260,8 @@ pub(crate) fn read_with_identity(
         let identity = same_file::Handle::from_file(checked_fs(p, || f.try_clone())?)?;
         let same_instance = identity == same_file::Handle::from_file(reopened_file)?;
         p.check_deadline()?;
-        let stable = same_instance
+        #[allow(unused_mut)]
+        let mut stable = same_instance
             && before.len() == after.len()
             && after.len() == reopened.len()
             && before.modified().ok() == after.modified().ok()
@@ -224,16 +269,20 @@ pub(crate) fn read_with_identity(
         #[cfg(unix)]
         {
             use std::os::unix::fs::MetadataExt;
-            let stable = stable
+            stable = stable
                 && before.ino() == after.ino()
                 && after.ino() == reopened.ino()
                 && before.dev() == reopened.dev()
                 && before.mtime_nsec() == after.mtime_nsec();
-            if !stable {
-                continue;
-            }
         }
         if !stable {
+            if strict_admission {
+                return Err(Error::new(
+                    "CONCURRENT_MODIFICATION",
+                    "Admitted search source changed",
+                    4,
+                ));
+            }
             continue;
         }
         if bytes.len() as u64 > p.config.index.max_file_bytes {
@@ -627,6 +676,59 @@ fn non_unix_open(path: &Path, directory: bool) -> Result<fs::File> {
     }
 }
 
+#[cfg(not(unix))]
+fn non_unix_candidate_open(path: &Path, directory: bool) -> Result<Option<fs::File>> {
+    // Preserve native error kinds at the descendant phase. Never apply this
+    // local rejection rule to root capture/validation or post-admission reads.
+    fn local<T>(result: std::io::Result<T>) -> Result<Option<T>> {
+        match result {
+            Ok(value) => Ok(Some(value)),
+            Err(error)
+                if matches!(
+                    error.kind(),
+                    std::io::ErrorKind::NotFound
+                        | std::io::ErrorKind::PermissionDenied
+                        | std::io::ErrorKind::NotADirectory
+                ) =>
+            {
+                Ok(None)
+            }
+            Err(error) => Err(error.into()),
+        }
+    }
+    let Some(before) = local(fs::symlink_metadata(path))? else {
+        return Ok(None);
+    };
+    if before.file_type().is_symlink() || (directory && !before.is_dir()) {
+        return Ok(None);
+    }
+    let mut options = fs::OpenOptions::new();
+    options.read(true);
+    #[cfg(windows)]
+    {
+        use std::os::windows::fs::{MetadataExt, OpenOptionsExt};
+        if before.file_attributes() & 0x400 != 0 {
+            return Ok(None);
+        }
+        options.custom_flags(0x0200_0000 | 0x0020_0000);
+    }
+    let Some(file) = local(options.open(path))? else {
+        return Ok(None);
+    };
+    let actual = file.metadata()?;
+    #[cfg(windows)]
+    {
+        use std::os::windows::fs::MetadataExt;
+        if actual.file_attributes() & 0x400 != 0 {
+            return Ok(None);
+        }
+    }
+    if directory && !actual.is_dir() {
+        return Ok(None);
+    }
+    Ok(Some(file))
+}
+
 pub(crate) fn anchored_open(
     root: &Path,
     anchor: &crate::project::RootAnchor,
@@ -640,6 +742,16 @@ pub(crate) fn anchored_open_deadline(
     path: &str,
     deadline: Option<crate::deadline::Deadline>,
 ) -> Result<fs::File> {
+    anchored_open_admission(root, anchor, path, deadline, false)?
+        .ok_or_else(|| Error::new("IO_ERROR", "Filesystem operation failed", 7))
+}
+fn anchored_open_admission(
+    root: &Path,
+    anchor: &crate::project::RootAnchor,
+    path: &str,
+    deadline: Option<crate::deadline::Deadline>,
+    _skip_candidate: bool,
+) -> Result<Option<fs::File>> {
     let check = || deadline.map(|d| d.check()).unwrap_or(Ok(()));
     check()?;
     let relative = Path::new(path);
@@ -687,6 +799,20 @@ pub(crate) fn anchored_open_deadline(
             }
             check()?;
             if let Some(error) = native_error {
+                if _skip_candidate
+                    && matches!(
+                        error.raw_os_error(),
+                        Some(
+                            libc::ENOENT | libc::EACCES | libc::EPERM | libc::ELOOP | libc::ENOTDIR
+                        )
+                    )
+                {
+                    // Root identity and original deadline failures are never a
+                    // local candidate rejection, even when descent failed.
+                    anchored_root(root, anchor, deadline)?;
+                    check()?;
+                    return Ok(None);
+                }
                 if error.kind() == std::io::ErrorKind::NotFound {
                     return Err(error.into());
                 }
@@ -700,7 +826,7 @@ pub(crate) fn anchored_open_deadline(
         // The opened chain is pinned; reject a replaced named root before return.
         anchored_root(root, anchor, deadline)?;
         check()?;
-        Ok(dir)
+        Ok(Some(dir))
     }
     #[cfg(not(unix))]
     {
@@ -709,13 +835,24 @@ pub(crate) fn anchored_open_deadline(
         for (i, component) in components.iter().enumerate() {
             check()?;
             current.push(component);
-            let opened = non_unix_open(&current, i + 1 < components.len());
-            check()?;
-            dir = opened?;
+            if _skip_candidate {
+                let opened = non_unix_candidate_open(&current, i + 1 < components.len());
+                check()?;
+                let Some(opened) = opened? else {
+                    anchored_root(root, anchor, deadline)?;
+                    check()?;
+                    return Ok(None);
+                };
+                dir = opened;
+            } else {
+                let opened = non_unix_open(&current, i + 1 < components.len());
+                check()?;
+                dir = opened?;
+            }
         }
         anchored_root(root, anchor, deadline)?;
         check()?;
-        Ok(dir)
+        Ok(Some(dir))
     }
 }
 
@@ -724,4 +861,147 @@ pub(crate) fn secure_open(p: &Project, path: &str) -> Result<fs::File> {
     let opened = anchored_open_deadline(&p.root, &p.root_anchor, path, p.deadline);
     p.check_deadline()?;
     opened
+}
+
+#[cfg(test)]
+mod search_candidate_tests {
+    use super::*;
+    use crate::project::{Config, ProjectConfig, RootAnchor};
+    fn fixture() -> (tempfile::TempDir, Project) {
+        let temp = tempfile::tempdir().unwrap();
+        let root = temp.path().canonicalize().unwrap();
+        let p = Project {
+            root_anchor: RootAnchor::capture(&root).unwrap(),
+            root,
+            data_dir: temp.path().join("data"),
+            workspace_dir: temp.path().join("data/workspace"),
+            control_dir: temp.path().join("data/control"),
+            project_id: "candidate".into(),
+            workspace_id: "workspace".into(),
+            coordination_id: "coordination".into(),
+            deadline: None,
+            config: Config {
+                schema_version: 1,
+                project: ProjectConfig {
+                    id: "candidate".into(),
+                    name: "candidate".into(),
+                },
+                index: Default::default(),
+                policy: Default::default(),
+                search: Default::default(),
+                context: Default::default(),
+                roles: Default::default(),
+            },
+        };
+        (temp, p)
+    }
+    #[cfg(unix)]
+    #[test]
+    fn initial_local_missing_excluded_link_directory_fifo_and_permission_are_not_sources() {
+        use std::os::unix::{
+            ffi::OsStrExt,
+            fs::{PermissionsExt, symlink},
+        };
+        let (_temp, p) = fixture();
+        fs::write(p.root.join("ok.txt"), "ordinary source").unwrap();
+        symlink("ok.txt", p.root.join("link.txt")).unwrap();
+        fs::create_dir(p.root.join("directory")).unwrap();
+        let fifo = std::ffi::CString::new(p.root.join("fifo").as_os_str().as_bytes()).unwrap();
+        assert_eq!(unsafe { libc::mkfifo(fifo.as_ptr(), 0o600) }, 0);
+        for path in [
+            "missing.txt",
+            ".env",
+            "link.txt",
+            "directory",
+            "fifo",
+            "directory/no.txt",
+            "ok.txt/child",
+        ] {
+            assert!(read_search_candidate(&p, path).unwrap().is_none(), "{path}");
+        }
+        fs::set_permissions(p.root.join("ok.txt"), fs::Permissions::from_mode(0o0)).unwrap();
+        if unsafe { libc::geteuid() } != 0 {
+            assert!(read_search_candidate(&p, "ok.txt").unwrap().is_none());
+        }
+        fs::set_permissions(p.root.join("ok.txt"), fs::Permissions::from_mode(0o600)).unwrap();
+    }
+    #[cfg(not(unix))]
+    #[test]
+    fn initial_missing_excluded_directory_and_parent_non_directory_are_not_sources() {
+        let (_temp, p) = fixture();
+        fs::write(p.root.join("source"), "ordinary source").unwrap();
+        fs::create_dir(p.root.join("directory")).unwrap();
+        for path in ["missing", ".env", "directory", "source/child"] {
+            assert!(read_search_candidate(&p, path).unwrap().is_none(), "{path}");
+        }
+    }
+    #[test]
+    fn authority_errors_never_become_absent_candidates() {
+        let (_temp, mut p) = fixture();
+        p.config.policy.exclude.push("[".into());
+        assert_eq!(
+            read_search_candidate(&p, "missing").unwrap_err().code,
+            "INVALID_CONFIG"
+        );
+        p.config.policy.exclude.clear();
+        let displaced = p.root.with_extension("displaced");
+        fs::rename(&p.root, &displaced).unwrap();
+        fs::create_dir(&p.root).unwrap();
+        assert_eq!(
+            read_search_candidate(&p, "missing").unwrap_err().code,
+            "POLICY_DENIED"
+        );
+        fs::remove_dir(&p.root).unwrap();
+        fs::rename(displaced, &p.root).unwrap();
+    }
+    #[test]
+    fn admitted_size_and_encoding_failures_are_errors() {
+        let (_temp, mut p) = fixture();
+        p.config.index.max_file_bytes = 4;
+        fs::write(p.root.join("source"), b"too large").unwrap();
+        assert_eq!(
+            read_search_candidate(&p, "source").unwrap_err().code,
+            "FILE_TOO_LARGE"
+        );
+        for body in [vec![0], vec![255]] {
+            fs::write(p.root.join("source"), body).unwrap();
+            assert_eq!(
+                read_search_candidate(&p, "source").unwrap_err().code,
+                "UNSUPPORTED_ENCODING"
+            );
+        }
+    }
+    #[test]
+    fn deletion_and_identical_replacement_after_admission_are_fatal() {
+        let (_temp, p) = fixture();
+        fs::write(p.root.join("source"), "first pinned source").unwrap();
+        let error = read_search_candidate_observed(&p, "source", || {
+            fs::remove_file(p.root.join("source"))?;
+            Ok(())
+        })
+        .unwrap_err();
+        assert_eq!(error.code, "IO_ERROR");
+        fs::write(p.root.join("source"), "first pinned source").unwrap();
+        let error = read_search_candidate_observed(&p, "source", || {
+            fs::rename(p.root.join("source"), p.root.join("original"))?;
+            fs::write(p.root.join("source"), "first pinned source")?;
+            Ok(())
+        })
+        .unwrap_err();
+        assert_eq!(error.code, "CONCURRENT_MODIFICATION");
+    }
+    #[test]
+    fn normal_body_hash_and_original_expired_deadline_are_preserved() {
+        let (_temp, mut p) = fixture();
+        fs::write(p.root.join("source"), "unchanged source").unwrap();
+        let source = read_search_candidate(&p, "source").unwrap().unwrap();
+        assert_eq!(source.text, "unchanged source");
+        assert_eq!(source.hash, crate::domain::hash(source.text.as_bytes()));
+        p.deadline = Some(crate::deadline::Deadline::from_millis(1).unwrap());
+        std::thread::sleep(std::time::Duration::from_millis(5));
+        assert_eq!(
+            read_search_candidate(&p, "missing").unwrap_err().code,
+            "TIMEOUT"
+        );
+    }
 }

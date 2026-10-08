@@ -1,0 +1,13 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.19s
+     Running unittests src/lib.rs (target/debug/deps/pctx-ae897bec01e143c7)
+
+running 5 tests
+test reader::search_candidate_tests::authority_errors_never_become_absent_candidates ... ok
+test reader::search_candidate_tests::deletion_and_identical_replacement_after_admission_are_fatal ... ok
+test reader::search_candidate_tests::admitted_size_and_encoding_failures_are_errors ... ok
+test reader::search_candidate_tests::initial_local_missing_excluded_link_directory_fifo_and_permission_are_not_sources ... ok
+test reader::search_candidate_tests::normal_body_hash_and_original_expired_deadline_are_preserved ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 13 filtered out; finished in 0.02s
+

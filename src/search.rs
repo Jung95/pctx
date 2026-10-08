@@ -685,24 +685,12 @@ pub fn find(p: &Project, files: &[FileEntry], req: &FindRequest) -> Result<Value
         {
             continue;
         }
-        // Policy filters index metadata first; physical path checks happen before
-        // any candidate is emitted, including freshness=off and negative matches.
-        if let Err(e) = reader::authorize(p, &f.path) {
-            if matches!(
-                e.code.as_str(),
-                "TIMEOUT" | "INVALID_CONFIG" | "POLICY_UNAVAILABLE"
-            ) {
-                if e.code != "TIMEOUT" || results.is_empty() {
-                    return Err(e);
-                }
-                reasons.push("timeout");
-                break;
-            }
-            continue;
-        }
+        // Body candidates are admitted once through the anchored reader. Only
+        // candidate-local rejection before the pinned read is skippable.
         let body = if matches!(req.kind.as_str(), "text" | "all") || req.freshness != "off" {
-            match reader::read(p, &f.path) {
-                Ok(body) => Some(body),
+            match reader::read_search_candidate(p, &f.path) {
+                Ok(Some(body)) => Some(body),
+                Ok(None) => continue,
                 Err(e) if e.code == "TIMEOUT" && !results.is_empty() => {
                     reasons.push("timeout");
                     break;
@@ -710,6 +698,20 @@ pub fn find(p: &Project, files: &[FileEntry], req: &FindRequest) -> Result<Value
                 Err(e) => return Err(e),
             }
         } else {
+            // Metadata-only results still require physical path admission.
+            if let Err(e) = reader::authorize(p, &f.path) {
+                if matches!(
+                    e.code.as_str(),
+                    "TIMEOUT" | "INVALID_CONFIG" | "POLICY_UNAVAILABLE"
+                ) {
+                    if e.code != "TIMEOUT" || results.is_empty() {
+                        return Err(e);
+                    }
+                    reasons.push("timeout");
+                    break;
+                }
+                continue;
+            }
             None
         };
         if body.is_some() && matches!(req.kind.as_str(), "text" | "all") {

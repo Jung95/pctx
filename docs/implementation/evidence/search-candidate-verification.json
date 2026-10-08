@@ -1,0 +1,97 @@
+{
+  "decision": "D048-phase-aware-search-candidate-admission",
+  "base_commit": "4ce3af99d9d0673394647c0ea178fdb59e0a0c95",
+  "platform": "native macOS arm64",
+  "source_sha256": {
+    "src/reader.rs": "5a7f25e364ad5abaee6b0cf0310dae0efd64a0798a0cc1ad01c5ee99140057ae",
+    "src/search.rs": "c0edc24022c40ccd502f0b772ef3d54fc837f3debe8bdaaeec785e57e9cc06b6"
+  },
+  "verification": {
+    "full": {
+      "handle": 18183,
+      "exit": 101,
+      "passed": 367,
+      "failed": 4,
+      "failed_target": "project_deadline",
+      "failures": [
+        "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+        "query_program_resolution_uses_captured_command_path",
+        "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget",
+        "simultaneous_streams_are_collected_and_overflow_never_infers_success"
+      ]
+    },
+    "related_full_counts": {
+      "search": {
+        "passed": 27,
+        "failed": 0
+      },
+      "reader_deadline": {
+        "passed": 4,
+        "failed": 0
+      },
+      "reader_policy_cache": {
+        "passed": 8,
+        "failed": 0
+      },
+      "core_security": {
+        "passed": 12,
+        "failed": 0
+      },
+      "source_delivery": {
+        "passed": 11,
+        "failed": 0
+      },
+      "session_render_budget": {
+        "passed": 13,
+        "failed": 0
+      }
+    },
+    "private_candidate_tests": {
+      "passed": 5,
+      "failed": 0,
+      "effective_uid": 502,
+      "permission_case_executed": true
+    },
+    "locked_all_target_clippy_exit": 0,
+    "format_exit": 0
+  },
+  "review": {
+    "independent_agent": "requirements",
+    "findings": [
+      "Public POLICY_DENIED/IO_ERROR cannot safely distinguish candidate rejection from authority failure.",
+      "Initial non-Unix authorize propagation regressed missing indexed candidates."
+    ],
+    "repair": "Use private descendant phase native errno/ErrorKind admission, revalidate anchored root before omission, reuse admitted handle, fail on post-admission replacement; portable local rejection keeps root walker fatal.",
+    "remaining_scoped_blockers": 0
+  },
+  "logs": {
+    "full-final": {
+      "path": "docs/implementation/evidence/search-candidate-full-final.log",
+      "sha256": "bd1fec6aa550140cc18f7723a57c0f100aafe8513ad90859649d4ffe7ac7beb0"
+    },
+    "unit-initial": {
+      "path": "docs/implementation/evidence/search-candidate-unit-initial.log",
+      "sha256": "6d8917ed7a81ad4d5d0f944c0b61302b7cc8a45cd09c88ed530da4f4417ca5da"
+    },
+    "static-initial-failure": {
+      "path": "docs/implementation/evidence/search-candidate-static-initial-failure.log",
+      "sha256": "5c08fc95f4382f0195078141a6d9de5c17db6524608d2e9d1c761bb3bfa23d84"
+    },
+    "static-final": {
+      "path": "docs/implementation/evidence/search-candidate-static-final.log",
+      "sha256": "be565e0e1e001f3b63b0ddfbfc80b9085c1393454ea5add4474d41792e1ef366"
+    },
+    "format": {
+      "path": "docs/implementation/evidence/search-candidate-format.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "limitations": [
+    "Native Windows/Linux new admission and reparse/access cases remain unverified; Windows retains existing pathname traversal limitation.",
+    "No new M30 latency measurement yet; historical body p95 2691.926416ms still misses 2000ms.",
+    "Original startup failures remain unexplained; no deadline extension/retry promotion.",
+    "Whole mandatory goal, performance/task-quality/provider cost/quota and platform/recovery/installation qualification remain incomplete."
+  ],
+  "actions_dispatched": 0,
+  "original_spec_sha256": "8914faad57432f524aec0a06aa90c43c18c23f8c19e9f54fe69d9ad185db6523"
+}
