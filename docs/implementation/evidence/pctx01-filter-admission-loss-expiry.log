@@ -1,0 +1,24 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.59s
+     Running tests/filter_preflight.rs (target/debug/deps/filter_preflight-c42afe2a3953f33b)
+
+running 1 test
+test direct_filter_refusals_preserve_storage_and_original_expiry ... FAILED
+
+failures:
+
+---- direct_filter_refusals_preserve_storage_and_original_expiry stdout ----
+
+thread 'direct_filter_refusals_preserve_storage_and_original_expiry' (8783387) panicked at tests/filter_preflight.rs:270:9:
+assertion `left == right` failed
+  left: "FILTER_INVALID"
+ right: "TIMEOUT"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    direct_filter_refusals_preserve_storage_and_original_expiry
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 3 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--test filter_preflight`

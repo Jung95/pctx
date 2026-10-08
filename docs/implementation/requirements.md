@@ -854,3 +854,40 @@ conditions remain open. Next same-task boundary R09 existing filter grammar;
 no independent execution feature, next official task or Actions.
 
 Final native full98801 terminal101: 531 PASS / 4 FAIL. Failed tests: query_program_resolution_uses_captured_command_path, relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry, concurrent_query_startup_preserves_group_streams_and_original_one_second_budget, simultaneous_streams_are_collected_and_overflow_never_infers_success. All four historical startup conditions remain unresolved and original budgets unchanged. All jobs terminal; no heavy job live. PCTX01 remains incomplete (0/10 whole gates).
+
+## PCTX01 filter argument admission — 2026-10-08
+
+Only PCTX01 is active, fixed G03-R09/G08, specification §14/§38. Activate reuses
+existing ASCII ID grammar (nonempty, at most64 bytes, letters/digits/hyphen/
+underscore) with FILTER_INVALID2, retained in private storage. Explain reuses its
+existing1..256 argv count, without a new byte limit or empty-element prohibition.
+Relative explicit Validate/Test/Apply input paths share the existing UTF-8 error2
+before discovery or source reads. Absolute paths are deferred: relative() strips
+the actual project root before UTF-8 conversion; the root itself may be opaque.
+Apply still accepts ID or project filter path. Input '-' remains bounded stdin.
+Original supplied expiry precedes producer grammar; existing default clocks and
+Test/Activate write behavior are unchanged. Schemas/hashes/fixtures/current policy
+and activation authority remain producer-owned.
+
+Native macOS: eight invalid forms across32 JSON/compact and missing/initialized
+project combinations preserve project/data/absolute response; response existence
+follows initialization. Nine direct commands (including four opaque relative-path
+forms) refuse typed2 without storage; the same nine expired calls retain the exact
+original Instant/TIMEOUT7. Pure tests qualify ID64/65, Explain256 and accepted empty
+elements/large UTF-8 input, identifier/project paths, stdin sentinel and deferred
+opaque absolute paths. Actual ID/relative/absolute Validate and Apply preserve
+preview child exit17 and storage; Explain256 succeeds without execution. Activation
+without complete fixture report and valid nonowner activation deny5; outside-root
+path denies5. No new successful activation or opaque-root native proof is claimed.
+Final related18PASS; four controlled losses each0PASS1FAIL/exact restoration;
+format/locked all-target Clippy PASS. Independent read-only review no blocker.
+Initial unchanged-product baseline0PASS2FAIL proves POLICY_DENIED5 masks invalid
+Activate ID and main missing-root IO7 masks2. Evidence:
+`evidence/pctx01-filter-admission-verification.json`.
+
+Fixed residual denominator12 unchanged: local10/12 (R01–R09,R12), whole required
+platform0/12; whole PCTX01 gates0/10. Native Linux/Windows and four historical
+startup conditions remain open. Next same-task boundary R10 existing adapter
+labels; no independent filter feature, next official task or Actions.
+
+Final native full27236 terminal101: 535 PASS / 4 FAIL. Failed tests: query_program_resolution_uses_captured_command_path, relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry, concurrent_query_startup_preserves_group_streams_and_original_one_second_budget, simultaneous_streams_are_collected_and_overflow_never_infers_success. All four historical startup conditions remain unresolved and original budgets unchanged. All jobs terminal; no heavy job live. Whole PCTX01 remains incomplete0/10.

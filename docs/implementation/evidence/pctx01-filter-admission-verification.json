@@ -1,0 +1,119 @@
+{
+  "official_task": "PCTX01",
+  "gates": [
+    "PCTX01-G03",
+    "PCTX01-G08"
+  ],
+  "residuals": [
+    "R09"
+  ],
+  "base_revision": "0b970eac188ac399b41c628572ce9fd47c2da53e",
+  "source_sha256": {
+    "src/main.rs": "22c9c34e72c788f8c716392f136eb8e75976e9da770ce0a55e6b6a32b8dcf5a7",
+    "src/filters.rs": "96b52a57bd2cfac9c5331be489b2587e3cfc1c5c7f7417fb56c0358b652be91a",
+    "tests/filter_preflight.rs": "e46635e8aa9192b55c678e9b8d3105ba8fb1027d72e75c3903c8f9ef57015c82"
+  },
+  "platform": "native macOS arm64",
+  "cli": {
+    "invalid_forms": 8,
+    "combinations": 32,
+    "qualification": "Four opaque relative-path forms Unix only. Response existence tied to initialization; JSON/compact."
+  },
+  "direct": {
+    "invalid_commands": 9,
+    "expired_commands": 9,
+    "proof": "Typed2 before source/store, TIMEOUT7 first with same original Instant, unchanged state"
+  },
+  "positive": [
+    "ID64/65 and Explain256/empty-elements/largebytes: pure grammar",
+    "Deferred absolute opaque paths and stdin sentinel: pure only",
+    "Actual ID/relative/absolute Validate+Apply, child17 and state preserved",
+    "Actual Explain256 without execution or writes",
+    "Actual missing fixture/nonowner activation5 and outside-root5 unchanged state"
+  ],
+  "related": {
+    "session": 7718,
+    "log": "pctx01-filter-admission-final-related.log",
+    "exit": 0,
+    "passed": 18
+  },
+  "controlled_losses": {
+    "driver": "pctx01-filter-admission-loss-driver.json",
+    "count": 4,
+    "each_exit": 101,
+    "each_passed": 0,
+    "each_failed": 1,
+    "exact_source_restored": true
+  },
+  "static": {
+    "session": 2288,
+    "log": "pctx01-filter-admission-final-static.log",
+    "exit": 0,
+    "commands": [
+      "cargo fmt --all -- --check",
+      "cargo clippy --locked --all-targets -- -D warnings"
+    ]
+  },
+  "full": {
+    "log": "pctx01-filter-admission-full.log",
+    "status": "terminal",
+    "command": "cargo test --locked --all-targets --no-fail-fast",
+    "session": 27236,
+    "exit": 101,
+    "passed": 535,
+    "failed": 4,
+    "failed_tests": [
+      "query_program_resolution_uses_captured_command_path",
+      "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+      "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget",
+      "simultaneous_streams_are_collected_and_overflow_never_infers_success"
+    ],
+    "qualification": "Final source; all four historical startup conditions fail at unchanged budgets. No retry or repair qualification."
+  },
+  "review": "pctx01-filter-admission-review.md",
+  "logs": {
+    "pctx01-filter-admission-baseline.log": {
+      "passed": 0,
+      "failed": 2
+    },
+    "pctx01-filter-admission-final-related.log": {
+      "passed": 18,
+      "failed": 0
+    },
+    "pctx01-filter-admission-final-static.log": {
+      "passed": 0,
+      "failed": 0
+    },
+    "pctx01-filter-admission-loss-expiry.log": {
+      "passed": 0,
+      "failed": 1
+    },
+    "pctx01-filter-admission-loss-frontend.log": {
+      "passed": 0,
+      "failed": 1
+    },
+    "pctx01-filter-admission-loss-producer.log": {
+      "passed": 0,
+      "failed": 1
+    },
+    "pctx01-filter-admission-loss-relative-utf8.log": {
+      "passed": 0,
+      "failed": 1
+    },
+    "pctx01-filter-admission-related.log": {
+      "passed": 16,
+      "failed": 0
+    },
+    "pctx01-filter-admission-full.log": {
+      "passed": 535,
+      "failed": 4
+    }
+  },
+  "limits": [
+    "PCTX01 whole0/10, fixed residual local10/12, required-platform0/12",
+    "Native Linux/Windows unverified; native opaque-root access unverified",
+    "All four historical startup conditions unresolved regardless of incidental pass",
+    "No new successful activation proof; existing activation suites separate",
+    "No independent filter feature or Actions; R10\u2013R11 and other gates open"
+  ]
+}

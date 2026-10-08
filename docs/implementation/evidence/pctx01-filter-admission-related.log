@@ -1,0 +1,48 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.96s
+     Running tests/filter_deadline.rs (target/debug/deps/filter_deadline-979c395461b474ff)
+
+running 2 tests
+test expired_public_filter_queries_and_preview_have_no_effects ... ok
+test default_public_preview_keeps_unicode_negative_status_and_no_evidence ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/filter_deadline_cli.rs (target/debug/deps/filter_deadline_cli-5966f219f9da0f22)
+
+running 2 tests
+test finite_filter_stdin_limits_and_preflight_errors_keep_complete_envelopes ... ok
+test stalled_partial_stdin_times_out_instead_of_waiting_for_eof ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.22s
+
+     Running tests/filter_preflight.rs (target/debug/deps/filter_preflight-c42afe2a3953f33b)
+
+running 2 tests
+test direct_filter_refusals_preserve_storage_and_original_expiry ... ok
+test filter_arguments_precede_project_and_response_effects ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.23s
+
+     Running tests/filters.rs (target/debug/deps/filters-9e3df5656f93ef1c)
+
+running 7 tests
+test strict_keys_operations_and_regex_no_code_execution ... ok
+test structured_fields_grouping_and_excerpt_keep_protected_metadata ... ok
+test protect_beats_drop_dedup_keeps_occurrences_ranges_and_no_pass_claim ... ok
+test secrets_cr_and_unicode_are_safe_and_protected_survives_excerpt ... ok
+test changed_fixture_cannot_activate_old_report_and_bounds_are_explicit ... ok
+test saved_output_custom_render_preserves_observed_failure_without_rerun ... ok
+test full_fixture_activation_hash_invalidation_and_exact_match_ambiguity ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.45s
+
+     Running tests/query_filter_guard.rs (target/debug/deps/query_filter_guard-227c495d0a8a5b95)
+
+running 3 tests
+test filter_configuration_query_is_narrow_and_not_general_configuration_access ... ok
+test no_filter_match_is_normal_and_invalid_configuration_is_not_an_empty_observation ... ok
+test effective_clean_or_process_filter_declines_status_without_running_driver ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.36s
+

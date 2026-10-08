@@ -200,6 +200,43 @@ fn safe_id(id: &str) -> bool {
             .bytes()
             .all(|b| b.is_ascii_alphanumeric() || b == b'-' || b == b'_')
 }
+fn validate_filter_id(id: &str) -> Result<()> {
+    if !safe_id(id) {
+        return Err(err("FILTER_INVALID", "Invalid filter identifier", 2));
+    }
+    Ok(())
+}
+fn utf8_path(path: &Path) -> Result<&str> {
+    path.to_str()
+        .ok_or_else(|| err("INVALID_ARGUMENT", "UTF-8 path required", 2))
+}
+fn relative_path_argument(path: &Path) -> Result<()> {
+    // An absolute path is interpreted after stripping the actual project root,
+    // which may itself contain native non-UTF-8 components.
+    if !path.is_absolute() {
+        utf8_path(path)?;
+    }
+    Ok(())
+}
+fn explain_arguments(argv: &[String]) -> Result<()> {
+    if argv.is_empty() || argv.len() > 256 {
+        return Err(err("INVALID_ARGUMENT", "Bounded argv required", 2));
+    }
+    Ok(())
+}
+/// Existing pure filter grammar; source policy and absolute paths remain project-dependent.
+pub fn validate_filter_request(command: &FilterCommand) -> Result<()> {
+    match command {
+        FilterCommand::Activate { id, .. } => validate_filter_id(id),
+        FilterCommand::Explain { argv } => explain_arguments(argv),
+        FilterCommand::Validate { path } => relative_path_argument(path),
+        FilterCommand::Test { path, fixtures } => {
+            relative_path_argument(path)?;
+            relative_path_argument(fixtures)
+        }
+        FilterCommand::Apply { input, .. } => relative_path_argument(input),
+    }
+}
 fn relative(p: &Project, path: &Path) -> Result<String> {
     p.check_deadline()?;
     let path = if path.is_absolute() {
@@ -213,9 +250,7 @@ fn relative(p: &Project, path: &Path) -> Result<String> {
     } else {
         path
     };
-    path.to_str()
-        .map(str::to_owned)
-        .ok_or_else(|| err("INVALID_ARGUMENT", "UTF-8 path required", 2))
+    utf8_path(path).map(str::to_owned)
 }
 fn filter_path(p: &Project, value: &str) -> Result<String> {
     if safe_id(value) {
@@ -724,9 +759,7 @@ fn private_store(p: &Project, area: &str) -> Result<PathBuf> {
     Ok(dir)
 }
 fn private_location(p: &Project, area: &str, id: &str) -> Result<PathBuf> {
-    if !safe_id(id) {
-        return Err(err("FILTER_INVALID", "Invalid filter identifier", 2));
-    }
+    validate_filter_id(id)?;
     Ok(private_store(p, area)?.join(format!("{id}.json")))
 }
 fn private_path(p: &Project, area: &str, id: &str) -> Result<PathBuf> {
@@ -1005,6 +1038,8 @@ pub fn apply_observed(
     Ok(result)
 }
 pub fn execute(p: &Project, command: &FilterCommand) -> Result<Value> {
+    p.check_deadline()?;
+    validate_filter_request(command)?;
     if matches!(
         command,
         FilterCommand::Validate { .. }
@@ -1240,9 +1275,7 @@ fn activate(p: &Project, id: &str, expect_hash: &str) -> Result<Value> {
     )
 }
 fn explain(p: &Project, argv: &[String]) -> Result<Value> {
-    if argv.is_empty() || argv.len() > 256 {
-        return Err(err("INVALID_ARGUMENT", "Bounded argv required", 2));
-    }
+    explain_arguments(argv)?;
     let actual = executable(p, &argv[0])?;
     p.check_deadline()?;
     let dir = private_store(p, "filter-bindings")?;

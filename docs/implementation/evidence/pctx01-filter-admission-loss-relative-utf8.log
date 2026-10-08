@@ -1,0 +1,24 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.58s
+     Running tests/filter_preflight.rs (target/debug/deps/filter_preflight-c42afe2a3953f33b)
+
+running 1 test
+test filter_arguments_precede_project_and_response_effects ... FAILED
+
+failures:
+
+---- filter_arguments_precede_project_and_response_effects stdout ----
+
+thread 'filter_arguments_precede_project_and_response_effects' (8783940) panicked at tests/filter_preflight.rs:242:17:
+assertion `left == right` failed: Output { status: ExitStatus(unix_wait_status(1792)), stdout: "", stderr: "" }
+  left: Some(7)
+ right: Some(2)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    filter_arguments_precede_project_and_response_effects
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 3 filtered out; finished in 0.82s
+
+error: test failed, to rerun pass `--test filter_preflight`

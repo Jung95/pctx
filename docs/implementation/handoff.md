@@ -6,21 +6,20 @@
 
 ## Latest integration boundary
 
-PCTX01-G03-R08/G08 execution input admission, runtime 8ae45edf95a1bbc5d5a9b456a7077f130dfef7ba,
-base cd7ed7e. Normal push29864 terminal0 published cd7ed7e..8ae45ed to origin/main.
-Runtime edits
-src/output.rs and src/main.rs; new tests/execution_preflight.rs. Exact argv/modes
-before project/authority/binding, supplied expiry first; direct Run budget3000
-error8 retained before grammar. No clock/execution/classification/trust feature.
-Baseline68000 terminal101:0PASS2FAIL. Related60797 terminal0:34 outerPASS, extra
-nested child1PASS excluded. Isolated27921 terminal0:5PASS after child stdout
-suppression. Four loss probes24405 terminal0 (each101/0PASS1FAIL, exact product
-restore). Initial static71042 assertion-style101 retained; final50746 terminal0.
-Independent /root/work_control read-only review no blocker. Full98801 terminal101: 531 PASS / 4 FAIL, all four historical startup tests fail
-at unchanged budgets. All jobs terminal; no heavy job live.
-Manifest pctx01-execution-admission-verification.json. Local residual9/12
-(R01–R08,R12), whole required platform0/12; whole PCTX01 gates0/10. Linux/Windows
-and four historical startup conditions remain unresolved. No Actions.
+PCTX01-G03-R09/G08 filter admission, base0b970ea. Runtime edits src/filters.rs
+(plural), src/main.rs; tests/filter_preflight.rs. Exact ID/count and relative
+UTF-8 grammar before discovery/producer reads; absolute paths deferred before
+root stripping, Apply ID-or-path preserved, supplied expiry first. No feature.
+Baseline69957 terminal101:0PASS2FAIL; final related7718 terminal0:18PASS;
+four loss probes64763 terminal0(each101/0PASS1FAIL/exact restore); static2288
+terminal0; independent /root/work_control read-only review no blocker.
+Full27236 terminal101: 535 PASS / 4 FAIL, all four historical startup
+conditions fail at unchanged budgets. All jobs terminal; no heavy job live.
+No other heavy job. Manifest pctx01-filter-admission-verification.json. Local
+residual10/12(R01–R09,R12), required-platform0/12; PCTX01 whole0/10. Native
+Linux/Windows, opaque absolute-root access and four startup conditions remain
+unverified/unresolved. Latest serial rule retains current task on external blockers.
+No Actions.
 
 ## Source, evidence and environment
 
@@ -68,13 +67,13 @@ Original ignored specification SHA256 8914faad57432f524aec0a06aa90c43c18c23f8c19
 
 ## Exact next action
 
-Final full98801 and normal push29864 are terminal. Remain on PCTX01, fixed R09: existing Filter Activate identifier, Explain
-argv1..256 and explicit non-UTF8 relative-path handling. Apply accepts either an
-identifier or a project filter path; do not narrow it. Definition/fixture content,
-current policy, receipts and input remain producer-owned. R10–R11 and other whole
-gates remain open. No next official task, unchanged full rerun, OS/interpreter/
-deadline changes or Actions. Latest instruction retains current task on external
-blockers and reports exact required action.
+Final full27236 is terminal. Normally publish verified development changes [skip ci].
+Then remain on PCTX01, fixed R10: existing adapter Plan/Event agent, explicit
+Event key, Uninstall plan and Statusline task/pool/session/counter/key labels.
+File JSON/protocol/config/runtime receipts and internal hash equality remain
+producer-owned. R11 and other whole gates remain open. No next official task,
+unchanged full rerun, OS/interpreter/deadline changes or Actions. External blockers
+require exact needed action while retaining the current task.
 
 ## Retained historical results and inactive backlog
 

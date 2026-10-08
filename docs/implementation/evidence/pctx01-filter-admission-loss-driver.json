@@ -1,0 +1,38 @@
+[
+  {
+    "name": "frontend",
+    "path": "src/main.rs",
+    "exit": 101,
+    "test": "filter_arguments_precede_project_and_response_effects",
+    "source_sha256": "22c9c34e72c788f8c716392f136eb8e75976e9da770ce0a55e6b6a32b8dcf5a7",
+    "exact_source_restored": true,
+    "log": "pctx01-filter-admission-loss-frontend.log"
+  },
+  {
+    "name": "producer",
+    "path": "src/filters.rs",
+    "exit": 101,
+    "test": "direct_filter_refusals_preserve_storage_and_original_expiry",
+    "source_sha256": "96b52a57bd2cfac9c5331be489b2587e3cfc1c5c7f7417fb56c0358b652be91a",
+    "exact_source_restored": true,
+    "log": "pctx01-filter-admission-loss-producer.log"
+  },
+  {
+    "name": "expiry",
+    "path": "src/filters.rs",
+    "exit": 101,
+    "test": "direct_filter_refusals_preserve_storage_and_original_expiry",
+    "source_sha256": "96b52a57bd2cfac9c5331be489b2587e3cfc1c5c7f7417fb56c0358b652be91a",
+    "exact_source_restored": true,
+    "log": "pctx01-filter-admission-loss-expiry.log"
+  },
+  {
+    "name": "relative-utf8",
+    "path": "src/filters.rs",
+    "exit": 101,
+    "test": "filter_arguments_precede_project_and_response_effects",
+    "source_sha256": "96b52a57bd2cfac9c5331be489b2587e3cfc1c5c7f7417fb56c0358b652be91a",
+    "exact_source_restored": true,
+    "log": "pctx01-filter-admission-loss-relative-utf8.log"
+  }
+]
