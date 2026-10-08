@@ -6,7 +6,9 @@
 
 ## Latest integration boundary
 
-PCTX01-G03-R08/G08 execution input admission, base cd7ed7e. Runtime edits
+PCTX01-G03-R08/G08 execution input admission, runtime 8ae45edf95a1bbc5d5a9b456a7077f130dfef7ba,
+base cd7ed7e. Normal push29864 terminal0 published cd7ed7e..8ae45ed to origin/main.
+Runtime edits
 src/output.rs and src/main.rs; new tests/execution_preflight.rs. Exact argv/modes
 before project/authority/binding, supplied expiry first; direct Run budget3000
 error8 retained before grammar. No clock/execution/classification/trust feature.
@@ -66,8 +68,7 @@ Original ignored specification SHA256 8914faad57432f524aec0a06aa90c43c18c23f8c19
 
 ## Exact next action
 
-Final full98801 is terminal. Normally publish verified development changes [skip ci].
-Then remain on PCTX01, fixed R09: existing Filter Activate identifier, Explain
+Final full98801 and normal push29864 are terminal. Remain on PCTX01, fixed R09: existing Filter Activate identifier, Explain
 argv1..256 and explicit non-UTF8 relative-path handling. Apply accepts either an
 identifier or a project filter path; do not narrow it. Definition/fixture content,
 current policy, receipts and input remain producer-owned. R10–R11 and other whole

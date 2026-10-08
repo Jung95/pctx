@@ -128,5 +128,14 @@
     "New native boundary qualification is Trust planning; existing execution suites separate",
     "Registered binding guard retained but not separately mutation-qualified here",
     "No independent execution feature or Actions; R09\u2013R11 and other gates open"
-  ]
+  ],
+  "runtime_revision": "8ae45edf95a1bbc5d5a9b456a7077f130dfef7ba",
+  "publication": {
+    "normal_push_session": 29864,
+    "exit": 0,
+    "destination": "https://github.com/Jung95/pctx.git",
+    "branch": "main",
+    "range": "cd7ed7e..8ae45ed",
+    "skip_ci": true
+  }
 }
