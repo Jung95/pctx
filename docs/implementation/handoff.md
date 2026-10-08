@@ -6,9 +6,11 @@
 
 ## Latest integration boundary
 
-PCTX01-G03-R10/G08 adapter admission, base
-ec0b2f534a897ec521e29828d863c65d999d0607. Uncommitted edits: src/adapter.rs,
-src/main.rs, tests/adapter_preflight.rs and adapter-admission evidence/docs.
+PCTX01-G03-R10/G08 adapter admission, runtime
+dce6ad2b2fabdc9e3ab771b38035f6c2edfd4685, base
+ec0b2f534a897ec521e29828d863c65d999d0607. Normal push49732 terminal0 published
+ec0b2f5..dce6ad2 to origin/main. Runtime edits: src/adapter.rs, src/main.rs,
+tests/adapter_preflight.rs and adapter-admission evidence/docs.
 Exact existing identities before discovery/owner/input effects; original supplied
 expiry first. Event explicit key stays input-dependent after parse/PreToolUse
 branch before receipts. No config installation, clock or independent feature.
@@ -69,13 +71,18 @@ Original ignored specification SHA256 8914faad57432f524aec0a06aa90c43c18c23f8c19
 
 ## Exact next action
 
-Full native macOS98442 is terminal, source hashes recorded. Publish verified
-development integration with [skip ci], then resume the fixed same-task boundary.
+Full native macOS98442 and normal push49732 are terminal, source hashes recorded.
+Resume the fixed same-task boundary from published runtime dce6ad2.
 Remain on PCTX01; fixed R11 existing schedule grammar is the next local boundary
 after R10 integration. Other whole gates remain open, including the source/spec discrepancy: adapter
 POLICY_DENIED currently9 versus required §14 policy5. R10 preserves baseline only;
 G05 needs exact classification/transport evidence. No next official task.
 External blockers require exact needed action while retaining the current task.
+Native G09 requires actual Linux and Windows hosts at the current source: run
+`cargo test --locked --all-targets --no-fail-fast` and the required native CLI
+input/transport/platform matrix, retaining full logs and source/environment IDs.
+Cross-builds or fixture mocks do not close G09. No Actions dispatch is authorized
+by this record; the monthly limit remains respected. Local PCTX01 work remains.
 
 ## Retained historical results and inactive backlog
 

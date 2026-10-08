@@ -871,3 +871,9 @@ task, independent adapter feature or Actions.
 
 
 Final native full98442 terminal101: 541 PASS / 4 FAIL. All four historical startup conditions fail at unchanged budgets: query_program_resolution_uses_captured_command_path, relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry, simultaneous_streams_are_collected_and_overflow_never_infers_success, concurrent_query_startup_preserves_group_streams_and_original_one_second_budget. All jobs terminal; no heavy job live. PCTX01 remains incomplete0/10.
+
+
+Development runtime dce6ad2b2fabdc9e3ab771b38035f6c2edfd4685 published by normal
+push49732 terminal0, ec0b2f5..dce6ad2 to origin/main, [skip ci]. All jobs
+terminal, no Actions. PCTX01 remains the only active official task; next local
+boundary R11, with adapter stable-error G05 discrepancy and other gates retained.

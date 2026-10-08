@@ -153,5 +153,14 @@
     "Current adapter POLICY_DENIED9 differs from spec \u00a714 policy5; preserved baseline is not stable-exit conformance, mandatory G05 residual",
     "No live Claude/account/hook installation, config installation or Actions",
     "No new mutation/default clocks; protocol/config/runtime/state remain producer-owned"
-  ]
+  ],
+  "development_publication": {
+    "runtime_revision": "dce6ad2b2fabdc9e3ab771b38035f6c2edfd4685",
+    "remote": "https://github.com/Jung95/pctx.git",
+    "branch": "main",
+    "session": 49732,
+    "exit": 0,
+    "range": "ec0b2f5..dce6ad2",
+    "actions_dispatched": false
+  }
 }
