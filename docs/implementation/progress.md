@@ -725,3 +725,7 @@ incidental later passes. Next local boundary is R07 within PCTX01. No next offic
 task or Actions is selected.
 
 Final native full44671 terminal101: 521 PASS / 4 FAIL. Failed tests: relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry, query_program_resolution_uses_captured_command_path, simultaneous_streams_are_collected_and_overflow_never_infers_success, concurrent_query_startup_preserves_group_streams_and_original_one_second_budget. All four historical startup conditions remain unresolved; original budgets unchanged. All jobs terminal; no heavy job live. PCTX01 remains incomplete (0/10 whole gates).
+
+Development integration c46f6c4a75de5105efe686b1ba52eb48f38031ce normally pushed to origin/main
+(session98340 terminal0, f506193..c46f6c4, [skip ci]). No Actions dispatched.
+PCTX01 remains the only active task; next local boundary R07.

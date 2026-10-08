@@ -6,7 +6,9 @@
 
 ## Latest integration boundary
 
-PCTX01-G03-R04–R06 Report/Session/Ingest, base f506193. Runtime changes are
+PCTX01-G03-R04–R06 Report/Session/Ingest, runtime c46f6c4a75de5105efe686b1ba52eb48f38031ce,
+base f506193. Normal push98340 terminal0 published f506193..c46f6c4 to origin/main.
+Runtime changes are
 src/work.rs, src/session.rs, src/quota.rs and tests/control_preflight.rs.
 Native related45118 terminal0:51PASS; five controlled-loss probes85659 terminal0
 with each test101/0PASS1FAIL and exact source restoration; static89953 terminal0.
@@ -64,8 +66,8 @@ Original ignored specification SHA256 8914faad57432f524aec0a06aa90c43c18c23f8c19
 
 ## Exact next action
 
-Final full44671 is terminal. Normally publish this verified development
-integration with [skip ci]. Then remain on PCTX01 and address fixed R07 inventory
+Final full44671 and normal push98340 are terminal. Remain on PCTX01 and
+address fixed R07 inventory
 Profile/Audit/optional Scan profile lexical paths and original-expiry priority.
 Path-policy errors remain5; do not invent2 or broaden source policy. R08–R11 and
 other whole gates remain open. No next official task, unchanged full rerun,
