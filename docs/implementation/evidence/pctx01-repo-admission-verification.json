@@ -1,0 +1,112 @@
+{
+  "task": "PCTX01",
+  "fixed_gates": [
+    "PCTX01-G03",
+    "PCTX01-G06"
+  ],
+  "status": "implementing; only active official task; whole gates closed0/10",
+  "base_revision": "20bdd6215d081e6cca05a8a954d5402a7c701e6b",
+  "platform": "native macOS arm64",
+  "specification_sections": [
+    "14 argument effects and stable exits",
+    "8/38 coverage/unsupported truth"
+  ],
+  "source_sha256": {
+    "src/main.rs": "684fa6a148fbf33929063f7927c9f49f4db913c6c7d8b4d562822c701c347741",
+    "src/broker.rs": "bf19d20102f5b3f6a0e0c6cf844bcc8820306e23940cde086fd7eebbbdaf1609",
+    "tests/repo_preflight.rs": "bba2fce7c6dcf0879955f5585d38cacd4d72e19875669619328515cda3108395",
+    "src/query_process.rs": "2faee00ffc82534c41942adae00e52f81a271072b47338f33cab7b67c43bc5b9",
+    "tests/project_deadline.rs": "8b9fbc97fbd5acaf612b2d75b94cf810faa2b61614b654495082462b1941a8dc"
+  },
+  "runs": [
+    {
+      "path": "pctx01-repo-admission-initial.log",
+      "sha256": "17b5e59430abd876a412a58cef62d04282461f2848facb38b4860175c1d24f4a",
+      "exit": 101,
+      "counts": {
+        "passed": 1,
+        "failed": 2
+      }
+    },
+    {
+      "path": "pctx01-repo-admission-related.log",
+      "sha256": "88c30ded2ec13b7140bd1f50800a3601e8f7eb0beaa1fe09f0ce91b575c913c8",
+      "exit": 0,
+      "counts": {
+        "passed": 13,
+        "failed": 0
+      }
+    },
+    {
+      "path": "pctx01-repo-admission-loss-frontend.log",
+      "sha256": "18dce0cae937e20e01bf94c7f768ec911a737ea2e6796cf253e3754c26545aa5",
+      "exit": 101,
+      "counts": {
+        "passed": 0,
+        "failed": 1
+      }
+    },
+    {
+      "path": "pctx01-repo-admission-loss-producer.log",
+      "sha256": "907b3787d79dcf30433c9bc62bcd042e90478b0d209fead412b9edff610ea497",
+      "exit": 101,
+      "counts": {
+        "passed": 0,
+        "failed": 1
+      }
+    },
+    {
+      "path": "pctx01-repo-admission-loss-coverage.log",
+      "sha256": "35bcac921542c958f8d378a1f794c5e64d9f7f73396b49f7753278c2f5063cf3",
+      "exit": 101,
+      "counts": {
+        "passed": 0,
+        "failed": 1
+      }
+    },
+    {
+      "path": "pctx01-repo-admission-static.log",
+      "sha256": "b66e396c0a356929cabaaf30af074281b671e26dd9e0e10389d6e46909afddef",
+      "exit": 0,
+      "counts": {
+        "passed": 0,
+        "failed": 0
+      }
+    }
+  ],
+  "qualification": [
+    "Shared exact existing workspace current and comma field grammar (branch/dirty/head/counts); duplicates preserved, whitespace and empty entries rejected, no new broker features.",
+    "32 CLI refusals:8 invalid forms times missing/initialized root times JSON/compact; absent/existing absolute response preserved, tree names and bytes unchanged. Direct producer validates before DB and retains invalid zero timeout2.",
+    "Actual nonGit unsupported previously innerunsupported/outercomplete/exit0; repaired outerunsupported/error6. Actual supported Git field selection includes duplicate fields and stays0/complete. No hidden platform claims.",
+    "Initial1PASS2FAIL retained: IO7 masks argument2 and nonGit actual0 versus6. Related13 PASS including9 existing broker process/concurrency/policy tests.",
+    "Three intentional losses each0PASS1FAIL, exact source restoration; producer loss accepts invalid workspace and publishes actual unsupported snapshot instead of invalid2. Driver JSON records original hashes.",
+    "Format check and locked all-target Clippy -Dwarnings pass. Independent read-only requirements review no blocker; agent did not edit/test."
+  ],
+  "limitations": [
+    "Partial Repo frontend branch now mirrors partial3, but no dedicated new native CLI partial fixture; existing broker waiter tests are producer evidence only.",
+    "Linux/Windows remain unverified, original native startup and remaining whole-task gates open.",
+    "No Actions, paid calls, operational mutations, OS policy changes, interpreter substitutions or budget relaxation."
+  ],
+  "scope_record": "Initial G03 admission validation also revealed an existing G06 unsupported propagation defect; no rows added or split, previous denominator10/current10.",
+  "next_local_gap": "Existing Pack Plan scope/budget/split pure grammar before main discovery (G03), no PCTX47 feature expansion.",
+  "full_gate": {
+    "path": "pctx01-repo-admission-full.log",
+    "sha256": "e1b375dd3d2c254b2ef6539029674d7ddf70c9b9f178cd7e240492f33de8f6d6",
+    "session": 76492,
+    "exit": 101,
+    "counts": {
+      "passed": 500,
+      "failed": 3
+    },
+    "failed_tests": [
+      "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+      "simultaneous_streams_are_collected_and_overflow_never_infers_success",
+      "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget"
+    ],
+    "qualification": "Original native startup failures retained without retry-success promotion or budget relaxation. All jobs terminal."
+  },
+  "review": {
+    "path": "pctx01-repo-admission-review.md",
+    "sha256": "5cc9e360fe17e4bde79c22a0bc9843a9af17ab0c6942532b43d1bf8916efb60b"
+  }
+}

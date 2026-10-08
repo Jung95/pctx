@@ -40,3 +40,10 @@ components return `INVALID_ARGUMENT` (exit 2). Context scopes differ from
 Checkpoint glob scopes. Valid requests still require an authorized project
 session. CLI capacity admission runs first; an expired library request retains
 its original timeout before argument validation.
+
+Repo Status checks `--workspace current` and comma-separated fields
+`branch,dirty,head,counts` before project discovery. Empty or unknown entries,
+whitespace and other workspaces return `INVALID_ARGUMENT` (exit 2) without writing
+a response file. Duplicate valid fields remain accepted. A workspace without Git
+returns unsupported coverage and exit 6; supported observations remain exit 0.
+The broker's data, permission isolation and refresh ownership remain unchanged.

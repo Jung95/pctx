@@ -1,0 +1,34 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.34s
+     Running tests/repo_preflight.rs (target/debug/deps/repo_preflight-7a92a364b9d86625)
+
+running 3 tests
+test repo_producer_validation_precedes_database ... ok
+test invalid_repo_arguments_have_no_project_or_response_effects ... FAILED
+test valid_repo_selection_preserves_non_git_unsupported_truth ... FAILED
+
+failures:
+
+---- invalid_repo_arguments_have_no_project_or_response_effects stdout ----
+
+thread 'invalid_repo_arguments_have_no_project_or_response_effects' (8558903) panicked at tests/repo_preflight.rs:79:5:
+assertion `left == right` failed: Output { status: ExitStatus(unix_wait_status(1792)), stdout: "", stderr: "" }
+  left: Some(7)
+ right: Some(2)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- valid_repo_selection_preserves_non_git_unsupported_truth stdout ----
+
+thread 'valid_repo_selection_preserves_non_git_unsupported_truth' (8558905) panicked at tests/repo_preflight.rs:160:5:
+assertion `left == right` failed: Output { status: ExitStatus(unix_wait_status(0)), stdout: "{\"command\":\"repo status\",\"coverage\":{\"reasons\":[],\"status\":\"complete\"},\"data\":{\"age_ms\":0,\"authority\":\"git_local_observation\",\"cache_status\":\"refreshed\",\"coverage\":{\"reasons\":[\"git_unavailable_for_workspace\"],\"status\":\"unsupported\"},\"freshness\":\"current\",\"items\":{\"capability\":\"unsupported\",\"reason\":\"no_git_repository\"},\"network\":\"not_used\",\"observed_at\":\"2026-10-08T18:40:46.608+00:00\",\"permission_scope\":\"4c1029697ee358715d3a14a2add817c4b01651440de808371f78165ac90dc581\",\"refresh_status\":\"idle\",\"source_generation\":1,\"source_revision\":\"84e6334918be3d0c4298a5b84e39a7342d370f77dbcbf14337406100f2c28afb\",\"source_status\":\"unsupported\",\"workspace_atomic\":false},\"errors\":[],\"generation_id\":null,\"project_id\":\"0dabe469-f7b6-4df2-a147-2af808fd8619\",\"schema_version\":\"1.0\",\"status\":\"ok\",\"truncation\":{\"reasons\":[],\"truncated\":false},\"validation\":{\"checked_at\":\"2026-10-08T18:40:46.609Z\",\"mode\":\"matched\",\"scope\":[],\"workspace_atomic\":false},\"warnings\":[],\"workspace_id\":\"WS-02c7c6d4-7c75-4533-a4cd-b55151f7acc0\"}\n", stderr: "" }
+  left: Some(0)
+ right: Some(6)
+
+
+failures:
+    invalid_repo_arguments_have_no_project_or_response_effects
+    valid_repo_selection_preserves_non_git_unsupported_truth
+
+test result: FAILED. 1 passed; 2 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.83s
+
+error: test failed, to rerun pass `--test repo_preflight`

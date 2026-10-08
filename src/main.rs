@@ -915,6 +915,7 @@ fn main() {
         Command::Checkpoint {
             command: CheckpointCommand::Create { name, scopes, .. },
         } => storage::validate_checkpoint_request(name.as_deref(), scopes),
+        Command::Repo { command } => broker::validate_repo_request(command),
         Command::Context { command } => session::validate_context_request(command),
         Command::Output { command } => output::validate_output_request(command),
         Command::Find(request) => search::validate_find_request(request),
@@ -1098,6 +1099,26 @@ fn main() {
             exit = 3;
             response["status"] = json!("partial");
             response["coverage"] = json!({"status":"partial","reasons":["capture_incomplete"]});
+        }
+    }
+    if matches!(&cli.command, Command::Repo { .. }) && exit == 0 {
+        match response["data"]["coverage"]["status"].as_str() {
+            Some("unsupported") => {
+                exit = 6;
+                response["status"] = json!("error");
+                response["coverage"] = response["data"]["coverage"].clone();
+                response["errors"] = json!([Error::new(
+                    "UNSUPPORTED",
+                    "Git status is unavailable for the current workspace",
+                    6,
+                )]);
+            }
+            Some("partial") => {
+                exit = 3;
+                response["status"] = json!("partial");
+                response["coverage"] = response["data"]["coverage"].clone();
+            }
+            _ => {}
         }
     }
     if matches!(&cli.command, Command::Read { .. }) {

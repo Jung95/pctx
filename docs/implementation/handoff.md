@@ -4,25 +4,21 @@
 
 **PCTX01 — CLI, envelope and stable errors** is the only active task (`implementing`). It is lowest incomplete with no prerequisites. The latest user goal supersedes historical next-action lists: finish all current-task mandatory implementation, validation, documentation and platform gates before choosing another task. Read docs/implementation/tasks/PCTX01.md, requirements.md and progress.md, then inspect actual Git/code/jobs. Other official items and D-series future slices are backlog. A subset/macOS pass is not task completion. No next official task is selected.
 
-## Latest verified integration boundary
+## Latest integration boundary
 
-PCTX01 only; verified runtime revision aab2602597635fd96d750b66b4400af4a8f50fc7,
-base dfde21c. ContextGet existing pure mode/full+since/explicit
-normalized scope/budget shared before main discovery and producer DB; original
-library deadline first, valid session/delivery authorization retained. Native18
-no-effects cases, direct producer/expiry, valid full/delta absent-session refusal
-and existing session flows: final related10 PASS. Initial0PASS2FAIL retained;
-additional fixture error-project_id assertion failure retained and corrected.
-Two intentional losses fail/exact restoration. Static PASS, independent read-only
-review no blocker. Manifest evidence/pctx01-context-admission-verification.json.
-Final native full21292 terminal101: 496PASS/3FAIL, original startup
-failures retained; all jobs terminal, no heavy job live. PCTX01 incomplete; fixed existing checklist0/10 whole gates,
-IDs G01–G10, denominator unchanged. Next local existing gap Repo Status grammar
-before discovery; no independent PCTX28 feature and no next official task.
-Latest user goal explicitly authorizes development commits/pushes to Jung95/pctx.
-Normal push13833 terminal0 published02979e1..aab2602 to origin/main. Previous
-auto-review rejection is historical and resolved under that new authorization.
-No Actions, paid calls or policy/deadline changes.
+PCTX01 G03/G06 only, base20bdd62. Repo existing workspace/fields shared before
+main discovery and producer DB; supported valid Git0, nonGit outerunsupported6.
+Native32-case no-effects matrix and producer/zero-timeout pass; related13PASS
+including9 existing broker tests. Initial1PASS2FAIL retained, three controlled
+losses0PASS1FAIL/exact restore. Static PASS, independent read-only review no blocker.
+Manifest evidence/pctx01-repo-admission-verification.json. Final native full76492
+terminal101: 500PASS/3FAIL, original startup failures retained; all jobs
+terminal, no heavy job live. No source budgets/security policies/Actions changed.
+PCTX01 incomplete, whole existing gates0/10, denominator10 unchanged; dedicated
+partial CLI fixture and required Linux/Windows remain unverified. Next concrete
+G03 gap Pack Plan current pure scope/content/budget/split before discovery;
+no independent PCTX47 feature or next official task. Normal development pushes
+approved by latest user goal; previous rejection resolved at20bdd62.
 
 ## Source, evidence and environment
 
@@ -70,16 +66,14 @@ Original ignored specification SHA256 8914faad57432f524aec0a06aa90c43c18c23f8c19
 
 ## Exact next action
 
-ContextGet integration and normal push are finished. Stay on PCTX01-G03:
-share Repo Status existing workspace/field grammar between broker and main before
-discovery; native missing/initialized tree and absolute response snapshots.
-Common source fix only, no independent PCTX28 features. Required platform,
-startup and remaining PCTX01 gates stay open. No unchanged expensive rerun to
-seek green. Latest goal authorizes development push to the configured repository;
-publication aab2602 is verified. Keep later integration pushes scoped and preserve
-any renewed rejection. Never bypass a rejection. After local work is exhausted,
-external-only blocker may be recorded and one ready task selected per latest goal;
-that condition is not met now.
+Repo full gate/evidence is terminal; preserve the integration commit/push. Stay PCTX01-G03:
+extract Pack Plan existing scope/content/budget/split validator and reuse before
+main discovery and producer delivery binding. Test native missing/initialized
+project and absolute response snapshots; keep budget error8 and explicit source
+pack policy unchanged. No independent PCTX47 feature. Close PCTX01 common local
+contracts before treating remaining conditions as external-only blocked. Do not
+rerun unchanged expensive/startup tests for a green result, change budgets,
+substitute interpreters or alter host security policies. No next official task.
 
 ## Retained historical results and inactive backlog
 

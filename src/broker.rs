@@ -345,6 +345,33 @@ fn response(s: Option<Snapshot>, fields: &[&str], cache: &str, pending: bool) ->
         .unwrap_or("unavailable");
     json!({"items":selected,"source_status":status,"source_revision":s.as_ref().map(|s|&s.revision),"source_generation":s.as_ref().map(|s|s.generation),"observed_at":s.as_ref().and_then(|s|chrono::DateTime::from_timestamp_millis(s.observed)).map(|t|t.to_rfc3339()),"age_ms":s.as_ref().map(|s|millis().saturating_sub(s.observed).max(0)),"cache_status":cache,"refresh_status":if pending{"refresh_pending"}else{"idle"},"coverage":{"status":if matches!(status,"ok_nonempty"|"ok_empty"){"complete"}else if status=="unsupported"{"unsupported"}else{"partial"},"reasons":if status=="unsupported"{vec!["git_unavailable_for_workspace"]}else{vec![]}},"authority":"git_local_observation","freshness":if s.as_ref().is_some_and(valid){"current"}else{"stale"},"permission_scope":permission_scope(),"workspace_atomic":false,"network":"not_used"})
 }
+fn repo_fields(command: &RepoCommand) -> Result<Vec<&str>> {
+    let RepoCommand::Status { fields, workspace } = command;
+    if workspace != "current" {
+        return Err(error(
+            "INVALID_ARGUMENT",
+            "Only the current workspace can be queried",
+            2,
+        ));
+    }
+    let fields = fields.split(',').collect::<Vec<_>>();
+    if fields.is_empty()
+        || fields
+            .iter()
+            .any(|f| !matches!(*f, "branch" | "dirty" | "head" | "counts"))
+    {
+        return Err(error(
+            "INVALID_ARGUMENT",
+            "Unknown repository status field",
+            2,
+        ));
+    }
+    Ok(fields)
+}
+/// Pure existing workspace/field grammar for CLI and producer admission.
+pub fn validate_repo_request(command: &RepoCommand) -> Result<()> {
+    repo_fields(command).map(|_| ())
+}
 /// Ordinary local query deadline from §11; TTL is a freshness bound, not a wait bound.
 pub fn repo(p: &Project, command: &RepoCommand) -> Result<Value> {
     repo_with_timeout(p, command, Duration::from_secs(10))
@@ -370,26 +397,7 @@ pub fn repo_with_timeout(p: &Project, command: &RepoCommand, timeout: Duration) 
     let mut scoped = p.clone();
     scoped.deadline = Some(crate::deadline::Deadline::from_instant(deadline));
     let p = &scoped;
-    let RepoCommand::Status { fields, workspace } = command;
-    if workspace != "current" {
-        return Err(error(
-            "INVALID_ARGUMENT",
-            "Only the current workspace can be queried",
-            2,
-        ));
-    }
-    let fields = fields.split(',').collect::<Vec<_>>();
-    if fields.is_empty()
-        || fields
-            .iter()
-            .any(|f| !matches!(*f, "branch" | "dirty" | "head" | "counts"))
-    {
-        return Err(error(
-            "INVALID_ARGUMENT",
-            "Unknown repository status field",
-            2,
-        ));
-    }
+    let fields = repo_fields(command)?;
     let key = key(p);
     let mut db = connect(p)?;
     loop {

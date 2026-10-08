@@ -1,0 +1,24 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.60s
+     Running tests/repo_preflight.rs (target/debug/deps/repo_preflight-7a92a364b9d86625)
+
+running 1 test
+test invalid_repo_arguments_have_no_project_or_response_effects ... FAILED
+
+failures:
+
+---- invalid_repo_arguments_have_no_project_or_response_effects stdout ----
+
+thread 'invalid_repo_arguments_have_no_project_or_response_effects' (8561331) panicked at tests/repo_preflight.rs:79:5:
+assertion `left == right` failed: Output { status: ExitStatus(unix_wait_status(1792)), stdout: "", stderr: "" }
+  left: Some(7)
+ right: Some(2)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    invalid_repo_arguments_have_no_project_or_response_effects
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 3 filtered out; finished in 0.83s
+
+error: test failed, to rerun pass `--test repo_preflight`

@@ -1,0 +1,24 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.38s
+     Running tests/repo_preflight.rs (target/debug/deps/repo_preflight-7a92a364b9d86625)
+
+running 1 test
+test valid_repo_selection_preserves_non_git_unsupported_truth ... FAILED
+
+failures:
+
+---- valid_repo_selection_preserves_non_git_unsupported_truth stdout ----
+
+thread 'valid_repo_selection_preserves_non_git_unsupported_truth' (8562474) panicked at tests/repo_preflight.rs:197:5:
+assertion `left == right` failed: Output { status: ExitStatus(unix_wait_status(0)), stdout: "{\"command\":\"repo status\",\"coverage\":{\"reasons\":[],\"status\":\"complete\"},\"data\":{\"age_ms\":0,\"authority\":\"git_local_observation\",\"cache_status\":\"refreshed\",\"coverage\":{\"reasons\":[\"git_unavailable_for_workspace\"],\"status\":\"unsupported\"},\"freshness\":\"current\",\"items\":{\"capability\":\"unsupported\",\"reason\":\"no_git_repository\"},\"network\":\"not_used\",\"observed_at\":\"2026-10-08T18:42:44.324+00:00\",\"permission_scope\":\"4c1029697ee358715d3a14a2add817c4b01651440de808371f78165ac90dc581\",\"refresh_status\":\"idle\",\"source_generation\":1,\"source_revision\":\"84e6334918be3d0c4298a5b84e39a7342d370f77dbcbf14337406100f2c28afb\",\"source_status\":\"unsupported\",\"workspace_atomic\":false},\"errors\":[],\"generation_id\":null,\"project_id\":\"5af01824-c94b-41e6-894b-cd9860d45b30\",\"schema_version\":\"1.0\",\"status\":\"ok\",\"truncation\":{\"reasons\":[],\"truncated\":false},\"validation\":{\"checked_at\":\"2026-10-08T18:42:44.325Z\",\"mode\":\"matched\",\"scope\":[],\"workspace_atomic\":false},\"warnings\":[],\"workspace_id\":\"WS-3a5f6487-a8b4-4660-aaea-2c20f2e138ef\"}\n", stderr: "" }
+  left: Some(0)
+ right: Some(6)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    valid_repo_selection_preserves_non_git_unsupported_truth
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 3 filtered out; finished in 0.93s
+
+error: test failed, to rerun pass `--test repo_preflight`

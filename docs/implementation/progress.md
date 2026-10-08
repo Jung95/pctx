@@ -521,3 +521,28 @@ Development publication: aab2602597635fd96d750b66b4400af4a8f50fc7 pushed normall
 to Jung95/pctx main (session13833 terminal0,02979e1..aab2602). Latest user Goal
 explicitly authorizes development pushes; prior rejection is resolved without
 a bypass. Whole PCTX01 stays incomplete; no Actions dispatched.
+
+## PCTX01 Repo admission and coverage propagation
+
+Only PCTX01 remains active (G03/G06). Existing workspace current and comma field
+rules now share broker repo_fields, reused before main discovery and producer DB.
+Duplicates stay accepted; empty/unknown/whitespace entries still reject2. Actual
+32-case JSON/compact missing/initialized project and absent/existing response
+snapshots pass unchanged. Direct producer and zero-timeout admission preserve
+state. Native valid field selection on Git stays0; nonGit existing innerunsupported
+now propagates to outerunsupported/error6 instead of outercomplete/0. Broker
+claims/refresh/policy rules remain unchanged, no independent PCTX28 feature added.
+
+Initial1PASS2FAIL retained: missingrootIO7 masks2; actual nonGit0 contradicts
+unsupported6. Related13PASS includes9 existing broker process/concurrency tests.
+Three intentional losses each0PASS1FAIL/exact source restore: frontend7vs2,
+producer accepts invalid workspace and publishes a snapshot, coverage0vs6.
+Format/locked all-target Clippy PASS; independent read-only review no blocker.
+Dedicated new partial-status CLI fixture and native Linux/Windows remain
+unverified. Existing ten gates remain0/10 closed (denominator10 unchanged); G06
+correction was required by the actual initial unsupported failure, no new row.
+See [manifest](evidence/pctx01-repo-admission-verification.json).
+Next existing G03 gap: Pack Plan scope/content/budget/split admission before main
+discovery, not independent PCTX47 functionality. No next official task or Actions.
+
+Final native full76492 terminal101: 500 PASS/3 FAIL; original relative resolution, concurrent startup and simultaneous-stream failures retained at unchanged budgets. All jobs terminal; PCTX01 incomplete.

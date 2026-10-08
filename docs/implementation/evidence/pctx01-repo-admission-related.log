@@ -1,0 +1,27 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.65s
+     Running tests/broker.rs (target/debug/deps/broker-9f124a6ad706c742)
+
+running 9 tests
+test field_selection_and_nul_filenames_do_not_emit_paths_or_source ... ok
+test repo_fsmonitor_script_is_never_executed ... ok
+test non_git_is_unsupported_and_corrupt_git_is_never_empty_or_clean ... ok
+test proven_dead_refresh_owner_can_be_reclaimed_without_ttl_guessing ... ok
+test concurrent_refresh_is_shared_but_workspace_and_policy_keys_are_isolated ... ok
+test live_refresh_owner_is_not_stolen_by_age_and_returns_pending ... ok
+test bounded_wait_without_snapshot_is_unavailable_and_never_reclaims_live_owner ... ok
+test default_waiter_receives_shared_publication_after_old_half_second_cutoff ... ok
+test five_actual_cli_processes_share_one_refresh ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.92s
+
+     Running tests/repo_preflight.rs (target/debug/deps/repo_preflight-7a92a364b9d86625)
+
+running 4 tests
+test repo_producer_validation_precedes_database ... ok
+test valid_repo_selection_preserves_non_git_unsupported_truth ... ok
+test valid_repo_fields_preserve_supported_git_observation ... ok
+test invalid_repo_arguments_have_no_project_or_response_effects ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.23s
+

@@ -1,0 +1,17 @@
+[
+  {
+    "loss": "frontend",
+    "exit": 101,
+    "source_restored_sha256": "684fa6a148fbf33929063f7927c9f49f4db913c6c7d8b4d562822c701c347741"
+  },
+  {
+    "loss": "producer",
+    "exit": 101,
+    "source_restored_sha256": "bf19d20102f5b3f6a0e0c6cf844bcc8820306e23940cde086fd7eebbbdaf1609"
+  },
+  {
+    "loss": "coverage",
+    "exit": 101,
+    "source_restored_sha256": "684fa6a148fbf33929063f7927c9f49f4db913c6c7d8b4d562822c701c347741"
+  }
+]

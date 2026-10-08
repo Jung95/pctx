@@ -1,0 +1,22 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.01s
+     Running tests/repo_preflight.rs (target/debug/deps/repo_preflight-7a92a364b9d86625)
+
+running 1 test
+test repo_producer_validation_precedes_database ... FAILED
+
+failures:
+
+---- repo_producer_validation_precedes_database stdout ----
+
+thread 'repo_producer_validation_precedes_database' (8561916) panicked at tests/repo_preflight.rs:173:48:
+called `Result::unwrap_err()` on an `Ok` value: Object {"age_ms": Number(0), "authority": String("git_local_observation"), "cache_status": String("refreshed"), "coverage": Object {"reasons": Array [String("git_unavailable_for_workspace")], "status": String("unsupported")}, "freshness": String("current"), "items": Object {"capability": String("unsupported"), "reason": String("no_git_repository")}, "network": String("not_used"), "observed_at": String("2026-10-08T18:42:40.024+00:00"), "permission_scope": String("4c1029697ee358715d3a14a2add817c4b01651440de808371f78165ac90dc581"), "refresh_status": String("idle"), "source_generation": Number(1), "source_revision": String("84e6334918be3d0c4298a5b84e39a7342d370f77dbcbf14337406100f2c28afb"), "source_status": String("unsupported"), "workspace_atomic": Bool(false)}
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    repo_producer_validation_precedes_database
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 3 filtered out; finished in 0.02s
+
+error: test failed, to rerun pass `--test repo_preflight`
