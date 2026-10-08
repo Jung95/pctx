@@ -317,3 +317,108 @@ fn markdown_is_a_safe_document_and_unsupported_formats_precede_writes() {
     let error: Value = serde_json::from_slice(&oversized.stdout).unwrap();
     assert_eq!(error["errors"][0]["code"], "BUDGET_TOO_SMALL");
 }
+
+#[test]
+fn invalid_project_and_merged_user_policy_never_become_successful_empty_results() {
+    let f = Fixture::new();
+    fs::write(f.root.join("auth.py"), "def auth():\n    return True\n").unwrap();
+    f.ok(&["init"]);
+    f.ok(&["index", "update"]);
+    let config = f.root.join(".pctx/config.toml");
+    let original = fs::read_to_string(&config).unwrap();
+    fs::write(
+        &config,
+        original.replace("exclude = []", "exclude = [\"[\"]"),
+    )
+    .unwrap();
+    for args in [
+        vec!["find", "auth", "--kind", "symbol", "--freshness", "matched"],
+        vec!["find", "auth", "--kind", "symbol", "--freshness", "off"],
+        vec!["find", "auth", "--kind", "symbol", "--freshness", "strict"],
+        vec!["outline", "auth.py"],
+        vec!["query", "--language", "python"],
+    ] {
+        let output = f.run(&args);
+        assert_eq!(
+            output.status.code(),
+            Some(2),
+            "{args:?}: {}",
+            String::from_utf8_lossy(&output.stdout)
+        );
+        let value: Value = serde_json::from_slice(&output.stdout).unwrap();
+        assert_eq!(value["errors"][0]["code"], "INVALID_CONFIG");
+        assert_eq!(value["status"], "error");
+    }
+    fs::write(&config, &original).unwrap();
+    let user = f._temp.path().join("invalid-user.toml");
+    fs::write(&user, "[policy]\nexclude = ['[']\n").unwrap();
+    let output = Command::new(env!("CARGO_BIN_EXE_pctx"))
+        .args([
+            "--root",
+            f.root.to_str().unwrap(),
+            "find",
+            "auth",
+            "--kind",
+            "symbol",
+        ])
+        .env("PCTX_DATA_DIR", &f.data)
+        .env("PCTX_USER_CONFIG", &user)
+        .output()
+        .unwrap();
+    assert_eq!(output.status.code(), Some(2));
+    assert_eq!(
+        serde_json::from_slice::<Value>(&output.stdout).unwrap()["errors"][0]["code"],
+        "INVALID_CONFIG"
+    );
+    fs::write(
+        &config,
+        original.replace("exclude = []", "exclude = [\"auth.py\"]"),
+    )
+    .unwrap();
+    assert!(
+        f.ok(&["find", "auth", "--kind", "symbol"])["data"]["items"]
+            .as_array()
+            .unwrap()
+            .is_empty()
+    );
+}
+
+#[test]
+fn strict_lookup_retains_available_evidence_and_reports_incomplete_refresh() {
+    let f = Fixture::new();
+    fs::write(f.root.join("auth.py"), "def auth():\n    return True\n").unwrap();
+    fs::write(f.root.join("broken.py"), "def broken():\n    pass\n").unwrap();
+    f.ok(&["init"]);
+    f.ok(&["index", "update"]);
+    fs::write(f.root.join("broken.py"), [0xff, 0xfe]).unwrap();
+    for args in [
+        vec!["find", "auth", "--kind", "symbol", "--freshness", "strict"],
+        vec!["query", "--language", "python", "--freshness", "strict"],
+        vec!["outline", "auth.py", "--freshness", "strict"],
+    ] {
+        let output = f.run(&args);
+        assert_eq!(
+            output.status.code(),
+            Some(3),
+            "{args:?}: {}",
+            String::from_utf8_lossy(&output.stdout)
+        );
+        let value: Value = serde_json::from_slice(&output.stdout).unwrap();
+        assert_eq!(value["status"], "partial");
+        assert_eq!(value["data"]["coverage"]["status"], "partial");
+        assert!(value["data"]["omitted_count"].is_null());
+        assert_eq!(value["data"]["refresh"]["skipped_count"], 1);
+        assert!(
+            value["data"]["refresh"]["reasons"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .any(|v| v == "UNSUPPORTED_ENCODING")
+        );
+        assert!(
+            String::from_utf8(output.stdout)
+                .unwrap()
+                .contains("auth.py")
+        );
+    }
+}

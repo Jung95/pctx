@@ -143,6 +143,8 @@ pub fn update(p: &Project) -> Result<Value> {
     )
 }
 pub fn snapshot(p: &Project) -> Result<(Option<String>, Vec<FileEntry>)> {
+    reader::validate_policy(p)?;
+    reader::validate_root(p)?;
     let _lock = reader_lock(p)?;
     if !p.index_db().exists() {
         return Err(Error::new(

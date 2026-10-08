@@ -406,3 +406,30 @@ fn text_and_all_still_read_sources_without_metadata_hits_and_policy_hides_candid
     assert!(value["items"].as_array().unwrap().is_empty());
     assert!(!serde_json::to_string(&value).unwrap().contains("other.py"));
 }
+
+#[test]
+fn invalid_policy_fails_even_without_metadata_candidates() {
+    let temp = tempfile::tempdir().unwrap();
+    let mut p = project(temp.path());
+    let source = "def auth():\n    return True\n";
+    std::fs::write(temp.path().join("auth.py"), source).unwrap();
+    let entry = analyze("auth.py", &hash(source), source).unwrap();
+    p.config.policy.exclude.push("[".into());
+    let request = metadata_request("symbol", "unmatched");
+    for entries in [&[][..], std::slice::from_ref(&entry)] {
+        assert_eq!(
+            pctx::search::find(&p, entries, &request).unwrap_err().code,
+            "INVALID_CONFIG"
+        );
+        assert_eq!(
+            pctx::search::outline(&p, entries, "auth.py", None, "off")
+                .unwrap_err()
+                .code,
+            "INVALID_CONFIG"
+        );
+    }
+    assert_eq!(
+        pctx::reader::inventory(&p, false).unwrap_err().code,
+        "INVALID_CONFIG"
+    );
+}

@@ -27,7 +27,7 @@ pub struct Inventory {
 // Exact current exclusion vectors are keys; a policy edit cannot reuse an older program.
 static SECURITY_GLOBS: LazyLock<Mutex<BTreeMap<Vec<String>, Arc<globset::GlobSet>>>> =
     LazyLock::new(|| Mutex::new(BTreeMap::new()));
-fn security_globs(p: &Project) -> Result<Arc<globset::GlobSet>> {
+fn security_globs(exclusions: &[String]) -> Result<Arc<globset::GlobSet>> {
     {
         let cache = SECURITY_GLOBS.lock().map_err(|_| {
             Error::new(
@@ -36,7 +36,7 @@ fn security_globs(p: &Project) -> Result<Arc<globset::GlobSet>> {
                 7,
             )
         })?;
-        if let Some(program) = cache.get(&p.config.policy.exclude) {
+        if let Some(program) = cache.get(exclusions) {
             return Ok(Arc::clone(program));
         }
     }
@@ -51,7 +51,7 @@ fn security_globs(p: &Project) -> Result<Arc<globset::GlobSet>> {
     ]
     .iter()
     .map(|s| s.to_string())
-    .chain(p.config.policy.exclude.iter().cloned())
+    .chain(exclusions.iter().cloned())
     {
         b.add(Glob::new(&s).map_err(|_| Error::new("INVALID_CONFIG", "Invalid security glob", 2))?);
     }
@@ -69,8 +69,15 @@ fn security_globs(p: &Project) -> Result<Arc<globset::GlobSet>> {
     if cache.len() >= 8 {
         cache.clear();
     }
-    cache.insert(p.config.policy.exclude.clone(), Arc::clone(&program));
+    cache.insert(exclusions.to_vec(), Arc::clone(&program));
     Ok(program)
+}
+pub(crate) fn validate_exclusions(exclusions: &[String]) -> Result<()> {
+    security_globs(exclusions)?;
+    Ok(())
+}
+pub(crate) fn validate_policy(p: &Project) -> Result<()> {
+    validate_exclusions(&p.config.policy.exclude)
 }
 pub fn policy_allows(p: &Project, path: &str) -> Result<()> {
     let rel = Path::new(path);
@@ -81,7 +88,9 @@ pub fn policy_allows(p: &Project, path: &str) -> Result<()> {
     {
         return Err(Error::new("PATH_OUTSIDE_ROOT", "Invalid relative path", 5));
     }
-    if rel.components().any(|c| c.as_os_str() == ".git") || security_globs(p)?.is_match(path) {
+    if rel.components().any(|c| c.as_os_str() == ".git")
+        || security_globs(&p.config.policy.exclude)?.is_match(path)
+    {
         return Err(Error::new("POLICY_DENIED", "Excluded by current policy", 5));
     }
     Ok(())
@@ -119,7 +128,9 @@ pub fn authorize(p: &Project, path: &str) -> Result<PathBuf> {
             5,
         ));
     }
-    if rel.components().any(|c| c.as_os_str() == ".git") || security_globs(p)?.is_match(path) {
+    if rel.components().any(|c| c.as_os_str() == ".git")
+        || security_globs(&p.config.policy.exclude)?.is_match(path)
+    {
         return Err(Error::new(
             "POLICY_DENIED",
             "Path excluded by security policy",
@@ -255,6 +266,7 @@ pub fn redact_span(text: &str, start: usize, end: usize) -> (String, bool) {
     (result, !merged.is_empty())
 }
 pub fn inventory(p: &Project, include_ignored: bool) -> Result<Inventory> {
+    validate_policy(p)?;
     #[cfg(unix)]
     let _root = secure_root(p)?;
     #[cfg(not(unix))]

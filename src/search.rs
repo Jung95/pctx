@@ -483,6 +483,7 @@ fn aliases(p: &Project, terms: &[String]) -> Result<AliasExpansion> {
     Ok((map, expanded))
 }
 pub fn find(p: &Project, files: &[FileEntry], req: &FindRequest) -> Result<Value> {
+    reader::validate_policy(p)?;
     reader::validate_root(p)?;
     if req.regex && req.boolean_query.is_some() {
         return Err(invalid("Regex and Boolean modes cannot be combined"));
@@ -760,6 +761,7 @@ pub fn outline(
     depth: Option<usize>,
     freshness: &str,
 ) -> Result<Value> {
+    reader::validate_policy(p)?;
     let mut results = Vec::new();
     for f in files {
         if !scope(&f.path, &[path.into()]) || reader::authorize(p, &f.path).is_err() {
@@ -928,6 +930,7 @@ pub struct StructureRequest {
 }
 /// Limited structural predicates use grammar tokens, never guessed source patterns.
 pub fn query_structure(p: &Project, files: &[FileEntry], req: &StructureRequest) -> Result<Value> {
+    reader::validate_policy(p)?;
     if req.limit > 1000 {
         return Err(invalid("Limit exceeds supported bound"));
     }

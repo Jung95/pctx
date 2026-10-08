@@ -599,5 +599,6 @@ fn effective_config(mut project: Config) -> Result<Config> {
             ));
         }
     }
+    crate::reader::validate_exclusions(&project.policy.exclude)?;
     Ok(project)
 }

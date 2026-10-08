@@ -300,6 +300,31 @@ enum HandoffCommand {
         validate: bool,
     },
 }
+// A ready generation may still omit sources. Strict lookup must carry that
+// refresh uncertainty rather than treating the available metadata as exhaustive.
+fn with_refresh_coverage(mut value: Value, refresh: Option<Value>) -> Value {
+    if let Some(refresh) = refresh.filter(|refresh| refresh["coverage"] == "partial") {
+        let mut reasons: Vec<_> = refresh["skipped"]
+            .as_array()
+            .into_iter()
+            .flatten()
+            .filter_map(|skip| skip["reason"].as_str())
+            .map(str::to_owned)
+            .collect();
+        reasons.sort();
+        reasons.dedup();
+        if !value["coverage"].is_object() {
+            value["coverage"] = json!({});
+        }
+        value["coverage"]["status"] = json!("partial");
+        value["coverage"]["refresh_reasons"] = json!(reasons);
+        value["coverage"]["omitted_count"] = Value::Null;
+        value["omitted_count"] = Value::Null;
+        value["refresh"] = json!({"coverage":"partial", "generation_id":refresh["generation_id"],
+            "skipped_count":refresh["skipped"].as_array().map(Vec::len), "reasons":reasons});
+    }
+    value
+}
 fn encoded(value: &mut Value, format: &Format, exit: &mut i32) -> Vec<u8> {
     let format = match format {
         Format::Compact => pctx::render::Format::Compact,
@@ -403,33 +428,48 @@ fn execute(cli: &Cli) -> Result<(String, Project, Value)> {
             IndexCommand::Gc { apply, .. } => ("index gc", storage::gc(&p, *apply)?),
         },
         Command::Find(r) => {
-            if r.freshness == "strict" {
-                storage::update(&p)?;
-            }
+            let refresh = if r.freshness == "strict" {
+                Some(storage::update(&p)?)
+            } else {
+                None
+            };
             let (_, files) = storage::snapshot(&p)?;
-            ("find", search::find(&p, &files, r)?)
+            (
+                "find",
+                with_refresh_coverage(search::find(&p, &files, r)?, refresh),
+            )
         }
         Command::Extract(r) => ("extract", extract::extract(&p, r)?),
         Command::Graph(r) => ("graph", graph::execute(&p, r)?),
         Command::Query(r) => {
-            if r.freshness == "strict" {
-                storage::update(&p)?;
-            }
+            let refresh = if r.freshness == "strict" {
+                Some(storage::update(&p)?)
+            } else {
+                None
+            };
             let (_, files) = storage::snapshot(&p)?;
-            ("query", search::query_structure(&p, &files, r)?)
+            (
+                "query",
+                with_refresh_coverage(search::query_structure(&p, &files, r)?, refresh),
+            )
         }
         Command::Outline {
             path,
             depth,
             freshness,
         } => {
-            if freshness == "strict" {
-                storage::update(&p)?;
-            }
+            let refresh = if freshness == "strict" {
+                Some(storage::update(&p)?)
+            } else {
+                None
+            };
             let (_, files) = storage::snapshot(&p)?;
             (
                 "outline",
-                search::outline(&p, &files, path, *depth, freshness)?,
+                with_refresh_coverage(
+                    search::outline(&p, &files, path, *depth, freshness)?,
+                    refresh,
+                ),
             )
         }
         Command::Read {
