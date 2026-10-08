@@ -1,0 +1,31 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+warning: function `explicit_file_bytes` is never used
+   --> src/input.rs:408:15
+    |
+408 | pub(crate) fn explicit_file_bytes(path: &Path, deadline: Deadline) -> Result<Vec<u8>> {
+    |               ^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `pctx` (lib) generated 1 warning
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.83s
+     Running tests/handoff_preflight.rs (target/debug/deps/handoff_preflight-00ee29a516bfb75e)
+
+running 1 test
+test fifo_input_is_refused_without_blocking_or_creating_checkpoints ... FAILED
+
+failures:
+
+---- fifo_input_is_refused_without_blocking_or_creating_checkpoints stdout ----
+
+thread 'fifo_input_is_refused_without_blocking_or_creating_checkpoints' (8205560) panicked at tests/handoff_preflight.rs:291:13:
+FIFO reader blocked instead of refusing; parent cleaned up
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    fifo_input_is_refused_without_blocking_or_creating_checkpoints
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 4 filtered out; finished in 3.79s
+
+error: test failed, to rerun pass `--test handoff_preflight`

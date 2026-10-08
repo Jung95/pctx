@@ -498,9 +498,8 @@ pub fn changes(p: &Project, key: &str) -> Result<Value> {
         json!({"checkpoint_id":cp["id"],"items":items,"rename_hints":renames,"comparison_scope":scopes,"policy_changed":cp["policy_hash"]!=p.policy_hash(),"historical_source_available":false}),
     )
 }
-pub fn handoff_create(p: &Project, name: &str, source: &Path, replace: bool) -> Result<Value> {
-    let bounded = bounded_project(p, 10000)?;
-    let p = &bounded;
+/// Pure name grammar shared by CLI preflight and handoff producers.
+pub fn validate_handoff_name(name: &str) -> Result<()> {
     if name.is_empty()
         || !name
             .chars()
@@ -508,7 +507,13 @@ pub fn handoff_create(p: &Project, name: &str, source: &Path, replace: bool) -> 
     {
         return Err(Error::new("INVALID_ARGUMENT", "Invalid handoff name", 2));
     }
-    let bytes = fs::read(source)?;
+    Ok(())
+}
+pub fn handoff_create(p: &Project, name: &str, source: &Path, replace: bool) -> Result<Value> {
+    validate_handoff_name(name)?;
+    let bounded = bounded_project(p, 10000)?;
+    let p = &bounded;
+    let bytes = crate::input::explicit_file_bytes(source, p.deadline.unwrap())?;
     if bytes.len() > 1048576 {
         return Err(Error::new("FILE_TOO_LARGE", "Handoff input too large", 2));
     }
@@ -526,14 +531,9 @@ pub fn handoff_create(p: &Project, name: &str, source: &Path, replace: bool) -> 
     )
 }
 pub fn handoff_show(p: &Project, name: &str, validate: bool) -> Result<Value> {
+    validate_handoff_name(name)?;
     let bounded = bounded_project(p, 10000)?;
     let p = &bounded;
-    if !name
-        .chars()
-        .all(|c| c.is_ascii_alphanumeric() || c == '-' || c == '_')
-    {
-        return Err(Error::new("INVALID_ARGUMENT", "Invalid handoff name", 2));
-    }
     let file = reader::read(p, &format!(".pctx/handoffs/{name}.md"))?;
     let parts: Vec<&str> = file.text.splitn(3, "---").collect();
     let meta: Value = serde_json::from_str(parts.get(1).unwrap_or(&"").trim())?;

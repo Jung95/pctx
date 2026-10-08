@@ -878,6 +878,11 @@ fn main() {
         Command::Extract(request) => extract::validate_request(request),
         Command::Build(request) => context::validate_build_request(request),
         Command::Graph(request) => graph::validate_request(request),
+        Command::Handoff { command } => match command {
+            HandoffCommand::Create { name, .. }
+            | HandoffCommand::Update { name, .. }
+            | HandoffCommand::Show { name, .. } => storage::validate_handoff_name(name),
+        },
         Command::Inventory {
             command:
                 inventory::InventoryCommand::Scan {

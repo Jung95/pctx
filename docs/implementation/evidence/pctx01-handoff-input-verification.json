@@ -1,0 +1,107 @@
+{
+  "official_task": "PCTX01",
+  "status": "implementing_not_complete",
+  "base_commit": "1f535788928a55fd8cb4c8b46fe795d1da9f2929",
+  "platform": "native macOS arm64",
+  "source_sha256": {
+    "src/main.rs": "984ee7a7178aac89c15dae71317d7ab9fe635807904bef04d63c424d9deb54b8",
+    "src/storage.rs": "2806165e9f1e21a66524240192b585d0807433e230f40a535b5e3ee14aa2e301",
+    "src/input.rs": "116f3da7008abc6b04d821061c1a8f43509f06d9505729fb600ce2c9cc5e1fe8",
+    "tests/handoff_preflight.rs": "2cf01f2b41d48d9b2d0fc6dee7cf07cb42ca7116fc361263a494dc1284cd491c"
+  },
+  "verification": {
+    "initial_target_selection": {
+      "exit": 101,
+      "tests_executed": false,
+      "reason": "Requested nonexistent input integration target; no tests ran, then selected actual context_input_deadline/task_input_source.",
+      "log": "pctx-handoff-targeted.log"
+    },
+    "initial_targeted": {
+      "handle": 9618,
+      "exit": 101,
+      "passed": 47,
+      "failed": 1,
+      "failed_tests": [
+        "explicit_regular_file_semantics_and_create_update_show_are_preserved"
+      ],
+      "log": "pctx-handoff-targeted-final.log"
+    },
+    "repaired_targeted": {
+      "handle": 64366,
+      "exit": 0,
+      "passed": 54,
+      "failed": 0,
+      "failed_tests": [],
+      "log": "pctx-handoff-targeted-repaired.log"
+    },
+    "controlled_losses": {
+      "handle": 13654,
+      "driver_exit": 0,
+      "probes": [
+        {
+          "probe": "cli-name-loss",
+          "exit": 101,
+          "actual_test_failure": true
+        },
+        {
+          "probe": "producer-name-loss",
+          "exit": 101,
+          "actual_test_failure": true
+        },
+        {
+          "probe": "bounded-input-loss",
+          "exit": 101,
+          "actual_test_failure": true
+        }
+      ],
+      "restored_sha256": {
+        "src/main.rs": "984ee7a7178aac89c15dae71317d7ab9fe635807904bef04d63c424d9deb54b8",
+        "src/storage.rs": "2806165e9f1e21a66524240192b585d0807433e230f40a535b5e3ee14aa2e301"
+      }
+    },
+    "initial_clippy": {
+      "handle": 18337,
+      "exit": 101,
+      "reason": "Test snapshot tuple type complexity and constant platform assertion; repaired type alias and compile-time platform branch without loosening behavior.",
+      "log": "pctx-handoff-clippy.log"
+    },
+    "clippy": {
+      "handle": 96965,
+      "exit": 0,
+      "log": "pctx-handoff-clippy-final.log"
+    },
+    "format": {
+      "exit": 0,
+      "log": "pctx-handoff-format-check.log"
+    },
+    "full": {
+      "handle": 39587,
+      "exit": 101,
+      "passed": 452,
+      "failed": 1,
+      "failed_tests": [
+        "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget"
+      ],
+      "log": "pctx-handoff-full.log",
+      "original_one_second_budgets_unchanged": true
+    },
+    "independent_review": "requirements agent read-only final producer/common-input compatibility review: no blocker; no builds/tests/edits."
+  },
+  "contracts": [
+    "Shared existing ASCII alphanumeric/hyphen/underscore name grammar, nonempty on all three leaves, before CLI discovery and producer input/reader/checkpoint. Actual six invalid-name cases on Create/Update/Show leave root/data/output absent with INVALID_ARGUMENT2.",
+    "Handoff Create/Update use shared explicit regular-file bytes transport under original supplied/default10s deadline, original1MiB metadata/read cap and UTF8 check before checkpoint. No stdin transport introduced for literal filename -.",
+    "Actual sparse1MiB+1 and invalidUTF8 Create/Update preserve byte-exact root/data directories and files, no checkpoint/handoff/index effects. Dynamic input errors retain normal command error output behavior.",
+    "Actual initialized FIFO request refuses INVALID_ARGUMENT2 before checkpoint without writer; parent owns3s kill/reap on regression. Bounded-reader loss blocks and parent-cleans then yields actual0PASS1FAIL.",
+    "Library invalid-name/expired original instant errors are INVALID_ARGUMENT2/TIMEOUT7 before missing input or artifact access, with unchanged project/data state and original instant.",
+    "Actual normal create/update/show --validate, conflict leaves existing handoff file unchanged, cwd-relative/literal dash/regular-file symlink inputs preserved; content is user_provided evidence.",
+    "macOS APFS rejects invalid byte filename at fixture creation with EILSEQ: initial test failure retained, repaired fixture asserts actual CLI IO_ERROR7 with unchanged state. Linux branch still requires actual successful file creation/read.",
+    "CLI name/producer name/bounded input controlled losses each run actual failed tests, exact main/storage sources restored before final static/full verification. Final fixture style-only lint edits retain semantics and are covered by full gate."
+  ],
+  "limits": [
+    "PCTX01 incomplete; no other official task selected and no Actions.",
+    "Regular filesystem/native operations remain cooperative; Windows nonregular File::open before classification is not hard deadline qualification.",
+    "macOS nonUTF8 filename success impossible in this fixture; native Linux success still required.",
+    "Broader \u00a713 Markdown validation, checkpoint rollback/recovery and Handoff feature completeness remain separate PCTX11 gates; this does not complete that task.",
+    "Original startup failure root cause/full frontend matrix/native Linux-Windows qualification remain open."
+  ]
+}

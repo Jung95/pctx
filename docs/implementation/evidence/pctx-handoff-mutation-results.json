@@ -1,0 +1,23 @@
+{
+  "probes": [
+    {
+      "probe": "cli-name-loss",
+      "exit": 101,
+      "actual_test_failure": true
+    },
+    {
+      "probe": "producer-name-loss",
+      "exit": 101,
+      "actual_test_failure": true
+    },
+    {
+      "probe": "bounded-input-loss",
+      "exit": 101,
+      "actual_test_failure": true
+    }
+  ],
+  "restored_sha256": {
+    "src/main.rs": "984ee7a7178aac89c15dae71317d7ab9fe635807904bef04d63c424d9deb54b8",
+    "src/storage.rs": "2806165e9f1e21a66524240192b585d0807433e230f40a535b5e3ee14aa2e301"
+  }
+}

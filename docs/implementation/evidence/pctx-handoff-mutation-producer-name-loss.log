@@ -1,0 +1,24 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.25s
+     Running tests/handoff_preflight.rs (target/debug/deps/handoff_preflight-00ee29a516bfb75e)
+
+running 1 test
+test library_invalid_name_and_original_expiry_refuse_before_input_or_artifacts ... FAILED
+
+failures:
+
+---- library_invalid_name_and_original_expiry_refuse_before_input_or_artifacts stdout ----
+
+thread 'library_invalid_name_and_original_expiry_refuse_before_input_or_artifacts' (8205066) panicked at tests/handoff_preflight.rs:252:9:
+assertion `left == right` failed
+  left: ("IO_ERROR", 7)
+ right: ("INVALID_ARGUMENT", 2)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    library_invalid_name_and_original_expiry_refuse_before_input_or_artifacts
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 4 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--test handoff_preflight`

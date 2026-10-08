@@ -1,0 +1,28 @@
+    Checking pctx v0.1.0-dev (/Users/dev/PCTX)
+error: very complex type used. Consider factoring parts into `type` definitions
+  --> tests/handoff_preflight.rs:52:10
+   |
+52 |       ) -> (
+   |  __________^
+53 | |         BTreeMap<PathBuf, Option<Vec<u8>>>,
+54 | |         BTreeMap<PathBuf, Option<Vec<u8>>>,
+55 | |     ) {
+   | |_____^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#type_complexity
+   = note: `-D clippy::type-complexity` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::type_complexity)]`
+
+error: this assertion has a constant value
+   --> tests/handoff_preflight.rs:211:17
+    |
+211 |                 assert!(cfg!(target_os = "macos"));
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: consider moving this into a const block: `const { assert!(..) }`
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#assertions_on_constants
+    = note: `-D clippy::assertions-on-constants` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::assertions_on_constants)]`
+
+error: could not compile `pctx` (test "handoff_preflight") due to 2 previous errors
+warning: build failed, waiting for other jobs to finish...

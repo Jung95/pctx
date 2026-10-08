@@ -1,0 +1,13 @@
+from pathlib import Path
+import os,subprocess,json,hashlib
+root=Path('/Users/dev/PCTX');saved={p:(root/p).read_bytes() for p in ['src/main.rs','src/storage.rs']};main=saved['src/main.rs'].decode();a=main.index('        Command::Handoff { command } => match command {',main.index('    let preflight = match'));b=main.index('        Command::Inventory {',a);storage=saved['src/storage.rs'].decode();a2=storage.index('pub fn handoff_create(');b2=storage.index('pub fn handoff_show(',a2);section=storage[a2:b2];old='    validate_handoff_name(name)?;';assert old in section;bounded='let bytes = crate::input::explicit_file_bytes(source, p.deadline.unwrap())?;';assert bounded in section
+probes=[('cli-name-loss','src/main.rs',main[:a]+main[b:],'invalid_names_on_every_leaf_refuse_before_discovery_or_response_writes'),('producer-name-loss','src/storage.rs',storage[:a2]+section.replace(old,'',1)+storage[b2:],'library_invalid_name_and_original_expiry_refuse_before_input_or_artifacts'),('bounded-input-loss','src/storage.rs',storage[:a2]+section.replace(bounded,'let bytes = fs::read(source)?;',1)+storage[b2:],'fifo_input_is_refused_without_blocking_or_creating_checkpoints')];env=os.environ.copy();env.update(RUSTUP_HOME='/Users/dev/PCTX/.toolchain/rustup',CARGO_HOME='/Users/dev/PCTX/.toolchain/cargo',SDKROOT='/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk',PATH='/Users/dev/PCTX/.toolchain/cargo/bin:/Library/Developer/CommandLineTools/usr/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin');results=[]
+try:
+ for name,p,source,test in probes:
+  (root/p).write_text(source)
+  with open('/tmp/pctx-handoff-mutation-'+name+'.log','w') as f:r=subprocess.run(['cargo','test','--locked','--test','handoff_preflight',test,'--','--exact','--test-threads=1'],cwd=root,env=env,stdout=f,stderr=subprocess.STDOUT,timeout=120)
+  log=Path('/tmp/pctx-handoff-mutation-'+name+'.log').read_text();results.append({'probe':name,'exit':r.returncode,'actual_test_failure':r.returncode==101 and '0 passed; 1 failed' in log});(root/p).write_bytes(saved[p])
+finally:
+ for p,s in saved.items():(root/p).write_bytes(s)
+ Path('/tmp/pctx-handoff-mutation-results.json').write_text(json.dumps({'probes':results,'restored_sha256':{p:hashlib.sha256((root/p).read_bytes()).hexdigest() for p in saved}},indent=2)+'\n')
+print(results);assert len(results)==3 and all(r['actual_test_failure'] for r in results)

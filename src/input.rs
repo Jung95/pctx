@@ -403,6 +403,15 @@ pub fn project_task_document(
     Ok(doc)
 }
 
+/// Existing explicit regular-file input transport, without interpreting "-" as stdin.
+/// The caller retains its original request clock and encoding/domain rules.
+pub(crate) fn explicit_file_bytes(path: &Path, deadline: Deadline) -> Result<Vec<u8>> {
+    deadline.check()?;
+    let bytes = file_bytes(path, deadline)?;
+    deadline.check()?;
+    Ok(bytes)
+}
+
 /// One bounded, serialized stdin transport shared by finite explicit inputs.
 /// The caller owns the deadline and maps byte/encoding policy to its domain.
 pub(crate) fn read_stdin(deadline: Deadline) -> Result<Vec<u8>> {
@@ -433,7 +442,7 @@ pub fn task_document(path: &str, deadline: Deadline) -> Result<String> {
     let bytes = if path == "-" {
         read_stdin(deadline)
     } else {
-        file_bytes(path, deadline)
+        file_bytes(Path::new(path), deadline)
     };
     deadline.check()?;
     let text = String::from_utf8(bytes?);
@@ -442,7 +451,7 @@ pub fn task_document(path: &str, deadline: Deadline) -> Result<String> {
 }
 
 #[cfg(unix)]
-fn file_bytes(path: &str, deadline: Deadline) -> Result<Vec<u8>> {
+fn file_bytes(path: &Path, deadline: Deadline) -> Result<Vec<u8>> {
     use std::os::unix::fs::OpenOptionsExt;
     deadline.check()?;
     // O_NONBLOCK prevents a FIFO pathname from blocking during open; metadata
@@ -556,7 +565,7 @@ fn stdin_bytes(deadline: Deadline) -> Result<Vec<u8>> {
 }
 
 #[cfg(windows)]
-fn file_bytes(path: &str, deadline: Deadline) -> Result<Vec<u8>> {
+fn file_bytes(path: &Path, deadline: Deadline) -> Result<Vec<u8>> {
     use std::os::windows::io::AsRawHandle;
     use windows_sys::Win32::Storage::FileSystem::{FILE_TYPE_DISK, GetFileType};
     let mut file = File::open(path)?;
@@ -673,7 +682,7 @@ fn stdin_bytes(deadline: Deadline) -> Result<Vec<u8>> {
 }
 
 #[cfg(not(any(unix, windows)))]
-fn file_bytes(_: &str, _: Deadline) -> Result<Vec<u8>> {
+fn file_bytes(_: &Path, _: Deadline) -> Result<Vec<u8>> {
     Err(unsupported())
 }
 #[cfg(not(any(unix, windows)))]
