@@ -185,3 +185,258 @@ fn owned_process_pins_unsigned_creation_identity_and_detects_mismatch() {
     drop(process);
     assert_eq!(second.identity().unwrap(), first);
 }
+
+fn launch_fixture(
+    temp: &tempfile::TempDir,
+    mode: &str,
+    payload: &[&str],
+) -> pctx::windows_process::NativeSpawnRequest {
+    use std::{collections::BTreeMap, ffi::OsString};
+    let args: Vec<OsString> = ["--exact", "--nocapture", "--", "fixture_child_entry"]
+        .into_iter()
+        .chain(payload.iter().copied())
+        .map(OsString::from)
+        .collect();
+    let expected: Vec<String> = args
+        .iter()
+        .map(|s| s.to_str().unwrap().to_owned())
+        .collect();
+    let mut environment: BTreeMap<OsString, OsString> = std::env::vars_os()
+        .filter(|(k, _)| {
+            k.to_str()
+                .is_some_and(|k| k.is_ascii() && !k.contains('=') && !k.is_empty())
+        })
+        .collect();
+    // All fixture paths and values are generated test data, not command trust grants.
+    environment.insert("PCTX_NATIVE_FIXTURE_MODE".into(), mode.into());
+    environment.insert(
+        "PCTX_NATIVE_FIXTURE_DIR".into(),
+        temp.path().as_os_str().to_owned(),
+    );
+    environment.insert(
+        "PCTX_NATIVE_FIXTURE_ARGS".into(),
+        serde_json::to_string(&expected).unwrap().into(),
+    );
+    environment.insert("PCTX_NATIVE_FIXTURE_UNICODE".into(), "환경-雪-😀".into());
+    pctx::windows_process::NativeSpawnRequest {
+        executable: std::env::current_exe().unwrap(),
+        args,
+        environment,
+        cwd: temp.path().to_owned(),
+    }
+}
+
+// A real native child target in this test executable. The exact libtest filter
+// means the payload arguments cannot recursively execute the parent fixtures.
+#[test]
+fn fixture_child_entry() {
+    let Ok(mode) = std::env::var("PCTX_NATIVE_FIXTURE_MODE") else {
+        return;
+    };
+    let dir = std::path::PathBuf::from(std::env::var_os("PCTX_NATIVE_FIXTURE_DIR").unwrap());
+    if mode == "descendant" {
+        std::fs::write(dir.join("descendant-marker"), "descendant ran").unwrap();
+        std::thread::sleep(Duration::from_secs(60));
+        return;
+    }
+    let actual: Vec<String> = std::env::args().skip(1).collect();
+    let expected: Vec<String> =
+        serde_json::from_str(&std::env::var("PCTX_NATIVE_FIXTURE_ARGS").unwrap()).unwrap();
+    assert_eq!(actual, expected);
+    assert_eq!(
+        std::env::current_dir().unwrap().canonicalize().unwrap(),
+        dir.canonicalize().unwrap()
+    );
+    assert_eq!(
+        std::env::var("PCTX_NATIVE_FIXTURE_UNICODE").unwrap(),
+        "환경-雪-😀"
+    );
+    use std::io::Read;
+    let mut input = String::new();
+    assert_eq!(std::io::stdin().read_to_string(&mut input).unwrap(), 0);
+    if mode == "spawn-descendant" {
+        let descendant: std::os::windows::io::OwnedHandle =
+            std::process::Command::new(std::env::current_exe().unwrap())
+                .args(["--exact", "fixture_child_entry", "--nocapture"])
+                .env("PCTX_NATIVE_FIXTURE_MODE", "descendant")
+                .stdin(std::process::Stdio::null())
+                .stdout(std::process::Stdio::null())
+                .stderr(std::process::Stdio::null())
+                .spawn()
+                .unwrap()
+                .into();
+        let deadline = std::time::Instant::now() + Duration::from_secs(15);
+        while !dir.join("descendant-marker").exists() {
+            if std::time::Instant::now() >= deadline {
+                use std::os::windows::io::AsRawHandle;
+                unsafe {
+                    windows_sys::Win32::System::Threading::TerminateProcess(
+                        descendant.as_raw_handle(),
+                        1,
+                    );
+                    windows_sys::Win32::System::Threading::WaitForSingleObject(
+                        descendant.as_raw_handle(),
+                        1000,
+                    );
+                }
+                panic!("descendant did not start");
+            }
+            std::thread::sleep(Duration::from_millis(10));
+        }
+        // Intentionally exit this root with a live descendant. Containment, not
+        // root exit or pipe EOF, must govern the parent test's cleanup proof.
+    }
+    std::fs::write(
+        dir.join("root-marker"),
+        serde_json::to_vec(&actual).unwrap(),
+    )
+    .unwrap();
+    if mode == "exit259" {
+        std::process::exit(259);
+    }
+    println!("native fixture output: 雪");
+    eprintln!("native fixture stderr");
+}
+
+fn fixture_ack_and_resume(
+    child: &mut pctx::windows_process::SuspendedChild,
+    job: &PreparedJob,
+    temp: &tempfile::TempDir,
+) {
+    use std::io::Write;
+    // Test-local durable receipt only; this does not certify production guardian
+    // attachment. This isolated fixture owns no production resource lease.
+    let identity = child.identity().unwrap();
+    let mut receipt = std::fs::File::create(temp.path().join("fixture-admission-receipt")).unwrap();
+    write!(
+        receipt,
+        "{} {} {}",
+        job.identity().name,
+        identity.pid,
+        identity.creation_filetime
+    )
+    .unwrap();
+    receipt.sync_all().unwrap();
+    // SAFETY: controlled fixture; this test retains the owning job/process and
+    // always observes native cleanup. Production must supply its real ACK first.
+    unsafe {
+        child.resume_after_guardian_ack().unwrap();
+    }
+}
+
+#[test]
+fn suspended_native_admission_roundtrips_crt_unicode_arguments_and_pipes() {
+    use std::io::Read;
+    let temp = tempfile::tempdir().unwrap();
+    let request = launch_fixture(
+        &temp,
+        "echo",
+        &[
+            "",
+            "white space",
+            "quote\"inside",
+            "backslash\\\"quote",
+            "trailing\\\\",
+            "雪😀",
+        ],
+    );
+    let mut job = PreparedJob::create().unwrap();
+    let mut child = job.spawn_suspended(&request).unwrap();
+    assert_eq!(
+        job.observe(),
+        ContainmentObservation::Live {
+            active_processes: 1
+        }
+    );
+    std::thread::sleep(Duration::from_millis(100));
+    assert!(!temp.path().join("root-marker").exists());
+    assert_eq!(child.wait_exit(Duration::ZERO).unwrap(), None);
+    let mut stdout = child.take_stdout().unwrap();
+    let mut stderr = child.take_stderr().unwrap();
+    fixture_ack_and_resume(&mut child, &job, &temp);
+    assert_eq!(child.wait_exit(Duration::from_secs(15)).unwrap(), Some(0));
+    let mut out = String::new();
+    let mut err = String::new();
+    stdout.read_to_string(&mut out).unwrap();
+    stderr.read_to_string(&mut err).unwrap();
+    assert!(out.contains("native fixture output: 雪"));
+    assert!(err.contains("native fixture stderr"));
+    assert!(temp.path().join("root-marker").exists());
+    assert_eq!(
+        child.observe_containment(),
+        ContainmentObservation::EmptyProven
+    );
+    assert!(
+        job.spawn_suspended(&request).is_err(),
+        "one job cannot reopen admission after root completion"
+    );
+}
+
+#[test]
+fn rejection_of_suspended_child_observes_empty_without_executing_marker() {
+    let temp = tempfile::tempdir().unwrap();
+    let request = launch_fixture(&temp, "echo", &[]);
+    let mut job = PreparedJob::create().unwrap();
+    let mut child = job.spawn_suspended(&request).unwrap();
+    assert_eq!(
+        child.reject_and_observe(23, Duration::from_secs(15)),
+        ContainmentObservation::EmptyProven
+    );
+    assert_eq!(child.wait_exit(Duration::ZERO).unwrap(), Some(23));
+    assert!(!temp.path().join("root-marker").exists());
+    // Cancellation resolved admission; it cannot subsequently resume.
+    assert!(unsafe { child.resume_after_guardian_ack() }.is_err());
+}
+
+#[test]
+fn descendant_stays_contained_after_root_exit_until_explicit_cancellation() {
+    let temp = tempfile::tempdir().unwrap();
+    let request = launch_fixture(&temp, "spawn-descendant", &[]);
+    let mut job = PreparedJob::create().unwrap();
+    let mut child = job.spawn_suspended(&request).unwrap();
+    fixture_ack_and_resume(&mut child, &job, &temp);
+    assert_eq!(child.wait_exit(Duration::from_secs(20)).unwrap(), Some(0));
+    assert!(temp.path().join("descendant-marker").exists());
+    assert!(matches!(
+        child.observe_containment(),
+        ContainmentObservation::Live {
+            active_processes: 1..
+        }
+    ));
+    assert_eq!(
+        child.reject_and_observe(31, Duration::from_secs(15)),
+        ContainmentObservation::EmptyProven
+    );
+}
+
+#[test]
+fn native_admission_rejects_ambiguous_environment_and_relative_executable() {
+    let temp = tempfile::tempdir().unwrap();
+    let mut request = launch_fixture(&temp, "echo", &[]);
+    let mut job = PreparedJob::create().unwrap();
+    request
+        .environment
+        .insert("pctx_duplicate".into(), "first".into());
+    request
+        .environment
+        .insert("PCTX_DUPLICATE".into(), "second".into());
+    assert!(job.spawn_suspended(&request).is_err());
+    assert_eq!(job.observe(), ContainmentObservation::EmptyProven);
+    request.executable = "implicit.exe".into();
+    assert!(job.spawn_suspended(&request).is_err());
+    assert!(!temp.path().join("root-marker").exists());
+}
+
+#[test]
+fn signaled_native_exit_259_is_an_exit_code_not_liveness() {
+    let temp = tempfile::tempdir().unwrap();
+    let request = launch_fixture(&temp, "exit259", &[]);
+    let mut job = PreparedJob::create().unwrap();
+    let mut child = job.spawn_suspended(&request).unwrap();
+    fixture_ack_and_resume(&mut child, &job, &temp);
+    assert_eq!(child.wait_exit(Duration::from_secs(15)).unwrap(), Some(259));
+    assert_eq!(
+        child.observe_containment(),
+        ContainmentObservation::EmptyProven
+    );
+}

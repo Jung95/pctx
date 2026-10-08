@@ -68,3 +68,7 @@ Only compiled glob programs are shared, keyed by the exact current exclusion vec
 ## D022 — Presentation budgets and execution truth
 
 Compact and JSON retain one minified complete envelope; Markdown has readable evidence plus a reversible full JSON appendix. A final budget overflow produces a JSON error instead of truncated source/JSON, retaining available output handle and child outcome. Wrapper budget failure exits 8 even under child exit policy. Complete error documents have a minimum representable size, so arbitrarily tiny requests cannot be represented as successful bounded context. Renderer tests and CLI fixtures are separate evidence; neither establishes model-token savings.
+
+## D023 — Windows suspended admission is a component contract
+
+The native module atomically assigns the child to a private Job Object with STARTUPINFOEX JOB_LIST and creates it suspended with restricted inherited handles. Its explicit resume API requires the caller to establish durable identity-bound guardian ACK; module fixtures cannot supply production lease proof. Empty accounting snapshots and object-handle closure never independently authorize resource release. Capture pipe readers must be drained concurrently by the shared bounded collector. Host formatting/static gates do not establish native Windows compilation; actual Windows CI is the next evidence boundary. Unicode environment-name support and guardian/lease integration remain pending.
