@@ -6,22 +6,22 @@
 
 ## Latest integration boundary
 
-PCTX01-G03-R09/G08 filter admission, runtime 824a7d630f8f2234bab1b69ad7abcbce27e8d331,
-base0b970ea. Normal push79593 terminal0 published0b970ea..824a7d6 to origin/main.
-Runtime edits src/filters.rs
-(plural), src/main.rs; tests/filter_preflight.rs. Exact ID/count and relative
-UTF-8 grammar before discovery/producer reads; absolute paths deferred before
-root stripping, Apply ID-or-path preserved, supplied expiry first. No feature.
-Baseline69957 terminal101:0PASS2FAIL; final related7718 terminal0:18PASS;
-four loss probes64763 terminal0(each101/0PASS1FAIL/exact restore); static2288
-terminal0; independent /root/work_control read-only review no blocker.
-Full27236 terminal101: 535 PASS / 4 FAIL, all four historical startup
-conditions fail at unchanged budgets. All jobs terminal; no heavy job live.
-No other heavy job. Manifest pctx01-filter-admission-verification.json. Local
-residual10/12(R01–R09,R12), required-platform0/12; PCTX01 whole0/10. Native
-Linux/Windows, opaque absolute-root access and four startup conditions remain
-unverified/unresolved. Latest serial rule retains current task on external blockers.
-No Actions.
+PCTX01-G03-R10/G08 adapter admission, base
+ec0b2f534a897ec521e29828d863c65d999d0607. Uncommitted edits: src/adapter.rs,
+src/main.rs, tests/adapter_preflight.rs and adapter-admission evidence/docs.
+Exact existing identities before discovery/owner/input effects; original supplied
+expiry first. Event explicit key stays input-dependent after parse/PreToolUse
+branch before receipts. No config installation, clock or independent feature.
+Baseline39373 terminal101:0PASS2FAIL; initial related83452 terminal0:22PASS;
+final related3814 terminal0:26PASS; loss driver45068 terminal0 with four actual
+0PASS1FAIL/exact restoration; format terminal0, Clippy1683 terminal0. Independent
+/root/work_control read-only review no blocker; accepted Statusline boundaries
+and valid nonowner Event/Statusline/Uninstall not separately demonstrated.
+Full native macOS98442 terminal101:541PASS4FAIL; all four historical startup
+conditions fail at unchanged budgets/no-fail-fast. All jobs terminal; no heavy
+job live. Manifest pctx01-adapter-admission-verification.json. Local residual
+11/12(R01–R10,R12), required-platform0/12; PCTX01 whole0/10. Linux/Windows and
+four historical startup conditions remain unverified/unresolved. No Actions.
 
 ## Source, evidence and environment
 
@@ -69,12 +69,13 @@ Original ignored specification SHA256 8914faad57432f524aec0a06aa90c43c18c23f8c19
 
 ## Exact next action
 
-Final full27236 and normal push79593 are terminal. Remain on PCTX01, fixed R10: existing adapter Plan/Event agent, explicit
-Event key, Uninstall plan and Statusline task/pool/session/counter/key labels.
-File JSON/protocol/config/runtime receipts and internal hash equality remain
-producer-owned. R11 and other whole gates remain open. No next official task,
-unchanged full rerun, OS/interpreter/deadline changes or Actions. External blockers
-require exact needed action while retaining the current task.
+Full native macOS98442 is terminal, source hashes recorded. Publish verified
+development integration with [skip ci], then resume the fixed same-task boundary.
+Remain on PCTX01; fixed R11 existing schedule grammar is the next local boundary
+after R10 integration. Other whole gates remain open, including the source/spec discrepancy: adapter
+POLICY_DENIED currently9 versus required §14 policy5. R10 preserves baseline only;
+G05 needs exact classification/transport evidence. No next official task.
+External blockers require exact needed action while retaining the current task.
 
 ## Retained historical results and inactive backlog
 

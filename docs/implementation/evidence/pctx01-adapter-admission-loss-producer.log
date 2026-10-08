@@ -1,0 +1,25 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.05s
+     Running tests/adapter_preflight.rs (target/debug/deps/adapter_preflight-6aa1789fcd433973)
+
+running 1 test
+
+thread 'isolated_nonowner_adapter_admission_precedes_authority' (8809189) panicked at tests/adapter_preflight.rs:434:9:
+assertion `left == right` failed
+  left: ("POLICY_DENIED", 9)
+ right: ("INVALID_ARGUMENT", 2)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+thread 'isolated_nonowner_adapter_admission_precedes_authority' (8809187) panicked at tests/adapter_preflight.rs:418:17:
+isolated child exit status: 101
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test isolated_nonowner_adapter_admission_precedes_authority ... FAILED
+
+failures:
+
+failures:
+    isolated_nonowner_adapter_admission_precedes_authority
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 5 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `--test adapter_preflight`

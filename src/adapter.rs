@@ -107,6 +107,39 @@ fn label(s: &str) -> Result<()> {
     }
     Ok(())
 }
+/// Existing pure adapter identities and transport grammar, without protocol/state reads.
+pub fn validate_adapter_request(c: &AdapterCommand) -> Result<()> {
+    let AdapterCommand::Claude { command } = c;
+    match command {
+        ClaudeCommand::Plan { agent } => label(agent)?,
+        ClaudeCommand::Event {
+            agent,
+            from_file,
+            hook,
+            ..
+        } => {
+            validate_event_input(*hook, from_file.as_deref())?;
+            label(agent)?;
+            // PreToolUse ignores the key before the receipt branch. Its validity
+            // remains input-dependent and is checked by import after parsing.
+        }
+        ClaudeCommand::Uninstall { plan, .. } => label(plan)?,
+        ClaudeCommand::Statusline {
+            task_id,
+            pool,
+            session,
+            counter_epoch,
+            idempotency_key,
+            ..
+        } => {
+            for value in [task_id, pool, session, counter_epoch, idempotency_key] {
+                label(value)?;
+            }
+        }
+        _ => {}
+    }
+    Ok(())
+}
 fn owner() -> Result<()> {
     if std::env::var("PCTX_ACTOR").unwrap_or_else(|_| "owner".into()) != "owner" {
         return Err(err(
@@ -806,6 +839,8 @@ pub fn execute(p: &Project, c: &AdapterCommand) -> Result<Value> {
     }
 }
 fn execute_inner(p: &Project, c: &AdapterCommand) -> Result<Value> {
+    p.check_deadline()?;
+    validate_adapter_request(c)?;
     let AdapterCommand::Claude { command } = c;
     match command {
         ClaudeCommand::Doctor => {

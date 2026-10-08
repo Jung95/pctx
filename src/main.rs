@@ -903,15 +903,7 @@ fn main() {
     }
     // Pure argument checks precede project discovery, refresh and output paths.
     let preflight = match &cli.command {
-        Command::Adapter {
-            command:
-                adapter::AdapterCommand::Claude {
-                    command:
-                        adapter::ClaudeCommand::Event {
-                            hook, from_file, ..
-                        },
-                },
-        } => adapter::validate_event_input(*hook, from_file.as_deref()),
+        Command::Adapter { command } => adapter::validate_adapter_request(command),
         Command::Checkpoint {
             command: CheckpointCommand::Create { name, scopes, .. },
         } => storage::validate_checkpoint_request(name.as_deref(), scopes),

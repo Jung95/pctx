@@ -891,3 +891,53 @@ startup conditions remain open. Next same-task boundary R10 existing adapter
 labels; no independent filter feature, next official task or Actions.
 
 Final native full27236 terminal101: 535 PASS / 4 FAIL. Failed tests: query_program_resolution_uses_captured_command_path, relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry, concurrent_query_startup_preserves_group_streams_and_original_one_second_budget, simultaneous_streams_are_collected_and_overflow_never_infers_success. All four historical startup conditions remain unresolved and original budgets unchanged. All jobs terminal; no heavy job live. Whole PCTX01 remains incomplete0/10.
+
+
+## PCTX01 adapter identity admission — 2026-10-08
+
+Only PCTX01 is active, fixed G03-R10/G08, specification §14/§38.
+`src/main.rs` and `src/adapter.rs` now share existing unconditional Plan/Event
+agent, Uninstall plan and Statusline task/pool/session/counter/key admission
+before discovery, owner or input/state effects. Exact grammar: nonempty, at most
+256 UTF-8 bytes, no controls or detected secret; whitespace remains accepted.
+Original supplied expiry precedes direct admission. No new mutation/default
+clock, protocol, config installation or independent adapter feature was added.
+
+The registry's unconditional Event-key classification was incorrect: existing
+import returns PreToolUse protection before consulting an explicit key. The key
+is input-dependent and remains validated after parse/protection and before
+receipt lock/DB/replay. Native protection accepts empty/control/257-byte unused
+keys without command execution, host permission or state effects; other events
+reject empty keys before receipts. This corrects the classification without
+changing the fixed residual denominator12 or product grammar.
+
+Native macOS evidence: nine invalid forms across36 missing/initialized and
+JSON/compact combinations preserve project/data and absent/existing absolute
+response files, with INVALID_ARGUMENT2/null project ID. Nine direct invalid
+calls and nine expired calls preserve state and the exact original Instant;
+isolated nonowner direct admission detects authority masking. Pure Plan checks
+cover ASCII256/257, multibyte256/258, whitespace, controls and synthetic secrets;
+hook/file conflict remains admitted before access. Actual owner Plan accepts
+256-byte/whitespace identities without installing config; valid nonowner Plan
+retains POLICY_DENIED9. PermissionDenied same-key replay preserves data and
+exact durable bytes. Accepted Statusline boundaries and valid nonowner
+Event/Statusline/Uninstall are not separately qualified by this new suite.
+
+Baseline0PASS2FAIL retained; initial related22PASS, final related26PASS; four
+controlled losses each0PASS1FAIL/exact source restoration. Final format/locked
+all-target Clippy PASS. Independent read-only review found no scoped blocker.
+Evidence: `evidence/pctx01-adapter-admission-verification.json`. Required native
+Linux/Windows and four historical startup conditions remain open. Local residual
+11/12(R01–R10,R12), whole required-platform0/12, whole PCTX01 gates0/10.
+R11 is the next local boundary within PCTX01; no next official task or Actions.
+Full native integration is terminal; this is not whole-task completion.
+
+Source/spec reconciliation: adapter's existing error helper maps POLICY_DENIED
+to9, whereas specification §14 requires policy exit5. R10's positive test records
+the current behavior, not specification conformance. This is a mandatory current
+PCTX01-G05 residual; do not mark stable-error completion or move to another task.
+Resolve the shared producer error classification with a complete error/transport
+matrix after the pending integration, preserving the recorded initial behavior.
+
+
+Final native full98442 terminal101: 541 PASS / 4 FAIL. All four historical startup conditions fail at unchanged budgets: query_program_resolution_uses_captured_command_path, relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry, simultaneous_streams_are_collected_and_overflow_never_infers_success, concurrent_query_startup_preserves_group_streams_and_original_one_second_budget. All jobs terminal; no heavy job live. PCTX01 remains incomplete0/10.

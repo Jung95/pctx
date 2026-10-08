@@ -1,0 +1,48 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.26s
+     Running tests/adapter.rs (target/debug/deps/adapter-8bd8637316f7f388)
+
+running 10 tests
+test symlink_configuration_is_rejected ... ok
+test malformed_and_version_variation_are_rejected_without_mutation ... ok
+test pretool_decisions_never_rewrite_or_execute_declared_commands ... ok
+test stale_plans_do_not_change_config ... ok
+test permission_events_are_observation_only ... ok
+test plans_are_hash_bound_and_preserve_existing_settings ... ok
+test edited_owned_hook_conflicts_without_partial_removal ... ok
+test uninstall_preserves_user_changes_and_only_removes_new_entries ... ok
+test events_delegate_epoch_and_never_ack_or_store_dialogue ... ok
+test statusline_cost_is_estimate_context_is_snapshot_and_epoch_is_checked ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.23s
+
+     Running tests/adapter_deadline.rs (target/debug/deps/adapter_deadline-71f8a5b8d2a2921f)
+
+running 6 tests
+test expired_read_leaves_have_no_lock_config_or_storage_effects ... ok
+test existing_install_lock_obeys_explicit_budget_without_installation_effects ... ok
+test version_success_empty_and_invalid_encoding_are_distinct ... ok
+test version_capture_overflow_is_reported_without_installation_inference ... ok
+test version_absence_and_native_failure_are_distinct ... ok
+test delayed_version_probe_times_out_after_actual_start_not_installed_false ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.32s
+
+     Running tests/adapter_preflight.rs (target/debug/deps/adapter_preflight-6aa1789fcd433973)
+
+running 2 tests
+test direct_adapter_labels_keep_original_expiry_and_no_effects ... ok
+test adapter_labels_precede_project_and_response_effects ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.34s
+
+     Running tests/cli_delivery.rs (target/debug/deps/cli_delivery-d6142b38e0664ae4)
+
+running 4 tests
+test failed_response_file_and_closed_diagnostic_are_io_error_without_overwrite ... ok
+test undeliverable_stream_refusal_returns_io_exit_without_project_effects ... ok
+test undeliverable_help_and_version_return_io_exit_without_project_effects ... ok
+test undeliverable_native_hook_output_is_io_error_without_repeating_import ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s
+

@@ -1,0 +1,33 @@
+{
+  "results": [
+    {
+      "case": "frontend",
+      "test": "adapter_labels_precede_project_and_response_effects",
+      "exit": 101,
+      "actual_test_failed": true
+    },
+    {
+      "case": "producer",
+      "test": "isolated_nonowner_adapter_admission_precedes_authority",
+      "exit": 101,
+      "actual_test_failed": true
+    },
+    {
+      "case": "expiry",
+      "test": "direct_adapter_labels_keep_original_expiry_and_no_effects",
+      "exit": 101,
+      "actual_test_failed": true
+    },
+    {
+      "case": "key-exemption",
+      "test": "native_event_keys_remain_input_dependent_and_replay_is_stable",
+      "exit": 101,
+      "actual_test_failed": true
+    }
+  ],
+  "exact_source_restored": true,
+  "source_sha256": {
+    "src/main.rs": "fbef4ac56f55b13afbce583cb1917072846d35c2f0b7c186c35351cd5be9142b",
+    "src/adapter.rs": "f876d9d00ebab3eb1ac2590031ff7523f944d150726f082f3cd9526238f535c6"
+  }
+}

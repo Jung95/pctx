@@ -1,0 +1,157 @@
+{
+  "official_task": "PCTX01",
+  "gates": [
+    "PCTX01-G03",
+    "PCTX01-G08"
+  ],
+  "residuals": [
+    "R10"
+  ],
+  "baseline_sections": [
+    "\u00a714",
+    "\u00a738"
+  ],
+  "base_revision": "ec0b2f534a897ec521e29828d863c65d999d0607",
+  "source_sha256": {
+    "src/main.rs": "fbef4ac56f55b13afbce583cb1917072846d35c2f0b7c186c35351cd5be9142b",
+    "src/adapter.rs": "f876d9d00ebab3eb1ac2590031ff7523f944d150726f082f3cd9526238f535c6",
+    "tests/adapter_preflight.rs": "ef72e8eb4b1f16be0748508b37cee3afec05da637a0ea804908e8548a0bc428a"
+  },
+  "platform": "native macOS arm64",
+  "cli": {
+    "invalid_forms": 9,
+    "combinations": 36,
+    "qualification": "JSON/compact \u00d7 missing/initialized, absolute response absent/existing tied to initialization, nonowner actor, INVALID_ARGUMENT2/null project ID, exact project/data/output preservation"
+  },
+  "direct": {
+    "invalid_commands": 9,
+    "expired_commands": 9,
+    "proof": "No effects, TIMEOUT7 first and same original Instant; isolated nonowner child has independent parent5s bound and does not mutate parent environment"
+  },
+  "contract_reconciliation": "Event explicit key is input-dependent: existing PreToolUse returns protection without using it; other events validate after parse and before receipt lock/DB/replay. Fixed residual denominator12 unchanged.",
+  "positive": [
+    "Pure Plan ASCII256/257 and UTF8 bytes256/258, whitespace/control/synthetic secret and hook/file conflict",
+    "Actual PreToolUse empty/control/257-byte unused keys, no command/permission/state effects",
+    "Actual PermissionDenied empty key refusal before receipts; valid key stable replay data and exact durable bytes",
+    "Actual owner Plan agent256/whitespace without config installation; valid nonowner Plan retains historical POLICY_DENIED9"
+  ],
+  "related": {
+    "session": 3814,
+    "log": "pctx01-adapter-admission-related-final.log",
+    "exit": 0,
+    "passed": 26,
+    "failed": 0
+  },
+  "controlled_losses": {
+    "session": 45068,
+    "driver": "pctx01-adapter-admission-loss.py.txt",
+    "results": "pctx01-adapter-admission-loss-results.json",
+    "count": 4,
+    "each_exit": 101,
+    "each_passed": 0,
+    "each_failed": 1,
+    "exact_source_restored": true
+  },
+  "static": {
+    "format": {
+      "exit": 0,
+      "log": "pctx01-adapter-admission-format.log"
+    },
+    "clippy": {
+      "session": 1683,
+      "exit": 0,
+      "log": "pctx01-adapter-admission-clippy.log"
+    },
+    "commands": [
+      "cargo fmt --all -- --check",
+      "cargo clippy --locked --all-targets -- -D warnings"
+    ]
+  },
+  "full": {
+    "session": 98442,
+    "log": "pctx01-adapter-admission-full-macos.log",
+    "command": "cargo test --locked --all-targets --no-fail-fast",
+    "status": "terminal",
+    "exit": 101,
+    "passed": 541,
+    "failed": 4,
+    "failed_tests": [
+      "query_program_resolution_uses_captured_command_path",
+      "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+      "simultaneous_streams_are_collected_and_overflow_never_infers_success",
+      "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget"
+    ],
+    "qualification": "All four historical native startup conditions fail at unchanged original budgets. No retry or repair qualification; all jobs terminal."
+  },
+  "review": "pctx01-adapter-admission-review.md",
+  "logs": {
+    "pctx01-adapter-admission-baseline.log": {
+      "passed": 0,
+      "failed": 2,
+      "sha256": "f6a4b6cae8c2dd1af83ce3e33f0e497ebe2b502e0a83d29d87edd73ad1a5fb88"
+    },
+    "pctx01-adapter-admission-clippy.log": {
+      "passed": 0,
+      "failed": 0,
+      "sha256": "604f18673303708fc89e6056cebc7f9b84798859a8cf43b104a57de58b90b943"
+    },
+    "pctx01-adapter-admission-format.log": {
+      "passed": 0,
+      "failed": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "pctx01-adapter-admission-full-macos.log": {
+      "passed": 541,
+      "failed": 4,
+      "sha256": "9c9b65453047eef79b1c9d268247c1e89ae1ad4e73ea555344d80c61aa44022b"
+    },
+    "pctx01-adapter-admission-loss-expiry.log": {
+      "passed": 0,
+      "failed": 1,
+      "sha256": "abf3e9e594c36c972db1f1952d20449b938bbc8bc41d82527e7ab4731f2f81c4"
+    },
+    "pctx01-adapter-admission-loss-frontend.log": {
+      "passed": 0,
+      "failed": 1,
+      "sha256": "2fe452b18aaaaf0321cf82dbdfe5341815841bc23c9cb515706a92689286b520"
+    },
+    "pctx01-adapter-admission-loss-key-exemption.log": {
+      "passed": 0,
+      "failed": 1,
+      "sha256": "919f7c0bc62d94f7c7cf644235c3bce7dad46c4d0650fffb053fa86423cdec58"
+    },
+    "pctx01-adapter-admission-loss-producer.log": {
+      "passed": 0,
+      "failed": 1,
+      "sha256": "6a2ed4019f008ca32b4e4bc0f92d1184c156ef7ff7348739e1494bbb4f849987"
+    },
+    "pctx01-adapter-admission-related-final.log": {
+      "passed": 26,
+      "failed": 0,
+      "sha256": "ee312a3f893a833615150fbcc2d9de4194d5e91384b5e202aa0b2d133c143c92"
+    },
+    "pctx01-adapter-admission-related.log": {
+      "passed": 22,
+      "failed": 0,
+      "sha256": "2adf2b343751d0da98a5e4d20e886dca44e758939d857ec94322ef5390a1f55b"
+    }
+  },
+  "status": {
+    "local_residuals_closed": 11,
+    "fixed_residuals_total": 12,
+    "required_platform_residuals_closed": 0,
+    "whole_task_gates_closed": 0,
+    "fixed_whole_task_gates_total": 10,
+    "official": "implementing",
+    "next_local_boundary": "PCTX01 R11",
+    "next_official_task": null
+  },
+  "limitations": [
+    "Native Linux/Windows unverified",
+    "Four historical native startup conditions unresolved; incidental pass is not a repair",
+    "Accepted Statusline boundaries and valid nonowner Event/Statusline/Uninstall not separately qualified in new suite",
+    "Current adapter POLICY_DENIED9 differs from spec \u00a714 policy5; preserved baseline is not stable-exit conformance, mandatory G05 residual",
+    "No live Claude/account/hook installation, config installation or Actions",
+    "No new mutation/default clocks; protocol/config/runtime/state remain producer-owned"
+  ]
+}

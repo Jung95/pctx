@@ -1,0 +1,31 @@
+import hashlib,json,os,pathlib,subprocess
+root=pathlib.Path("/Users/dev/PCTX")
+paths={name:root/name for name in ["src/main.rs","src/adapter.rs"]}
+original={name:path.read_bytes() for name,path in paths.items()}
+env=dict(os.environ,RUSTUP_HOME=str(root/".toolchain/rustup"),CARGO_HOME=str(root/".toolchain/cargo"),SDKROOT="/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",PATH=str(root/".toolchain/cargo/bin")+":/Library/Developer/CommandLineTools/usr/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin")
+prefix=root/"docs/implementation/evidence/pctx01-adapter-admission"
+cases=[
+("frontend","src/main.rs",'Command::Adapter { command } => adapter::validate_adapter_request(command),','Command::Adapter { .. } => Ok(()),',"adapter_labels_precede_project_and_response_effects"),
+("producer","src/adapter.rs",'    validate_adapter_request(c)?;','',"isolated_nonowner_adapter_admission_precedes_authority"),
+("expiry","src/adapter.rs",'fn execute_inner(p: &Project, c: &AdapterCommand) -> Result<Value> {\n    p.check_deadline()?;','fn execute_inner(p: &Project, c: &AdapterCommand) -> Result<Value> {',"direct_adapter_labels_keep_original_expiry_and_no_effects"),
+("key-exemption","src/adapter.rs",'            label(agent)?;\n            // PreToolUse','            label(agent)?;\n            if let ClaudeCommand::Event { idempotency_key: Some(key), .. } = command { label(key)?; }\n            // PreToolUse',"native_event_keys_remain_input_dependent_and_replay_is_stable")]
+results=[]
+try:
+ for name,source,old,new,test in cases:
+  for file,data in original.items(): paths[file].write_bytes(data)
+  text=original[source].decode()
+  assert text.count(old)==1,(name,text.count(old))
+  paths[source].write_text(text.replace(old,new,1))
+  log=pathlib.Path(str(prefix)+"-loss-"+name+".log")
+  with log.open("wb") as output:
+   run=subprocess.run(["cargo","test","--locked","--test","adapter_preflight",test,"--","--exact","--nocapture"],cwd=root,env=env,stdout=output,stderr=subprocess.STDOUT)
+  data=log.read_text()
+  results.append(dict(case=name,test=test,exit=run.returncode,actual_test_failed="test result: FAILED. 0 passed; 1 failed;" in data))
+  assert run.returncode==101 and results[-1]["actual_test_failed"],results[-1]
+finally:
+ for file,data in original.items(): paths[file].write_bytes(data)
+ restored=all(paths[file].read_bytes()==data for file,data in original.items())
+ pathlib.Path(str(prefix)+"-loss-results.json").write_text(json.dumps(dict(results=results,exact_source_restored=restored,source_sha256={file:hashlib.sha256(data).hexdigest() for file,data in original.items()}),indent=2)+"\n")
+ assert restored
+print(json.dumps(results))
+

@@ -853,3 +853,21 @@ Final native full27236 terminal101: 535 PASS / 4 FAIL. Failed tests: query_progr
 Development integration 824a7d630f8f2234bab1b69ad7abcbce27e8d331 normally pushed to origin/main
 (session79593 terminal0, 0b970ea..824a7d6, [skip ci]). No Actions dispatched.
 Only PCTX01 remains active; next local boundary R10.
+
+
+## PCTX01 R10 integration — 2026-10-08
+
+Only PCTX01 remains active. Exact existing adapter labels now precede discovery/
+owner/input effects; supplied expiry is first. PreToolUse ignores unused Event
+keys, so the register's unconditional-key classification is corrected without
+narrowing the producer contract. See requirements.md, “PCTX01 adapter identity
+admission”, and evidence/pctx01-adapter-admission-verification.json for boundary,
+no-effects, replay and controlled-loss evidence. Related26PASS; four losses fail
+with exact restoration; format/locked all-target Clippy PASS; independent review
+no scoped blocker. Full native integration is terminal (541 PASS / 4 FAIL). Local residual11/12,
+required-platform0/12, whole gates0/10. Linux/Windows and four historical startup
+conditions stay open. Next local boundary R11 within PCTX01; no next official
+task, independent adapter feature or Actions.
+
+
+Final native full98442 terminal101: 541 PASS / 4 FAIL. All four historical startup conditions fail at unchanged budgets: query_program_resolution_uses_captured_command_path, relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry, simultaneous_streams_are_collected_and_overflow_never_infers_success, concurrent_query_startup_preserves_group_streams_and_original_one_second_budget. All jobs terminal; no heavy job live. PCTX01 remains incomplete0/10.

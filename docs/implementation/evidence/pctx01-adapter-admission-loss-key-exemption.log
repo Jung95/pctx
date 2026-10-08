@@ -1,0 +1,21 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.64s
+     Running tests/adapter_preflight.rs (target/debug/deps/adapter_preflight-6aa1789fcd433973)
+
+running 1 test
+
+thread 'native_event_keys_remain_input_dependent_and_replay_is_stable' (8810272) panicked at tests/adapter_preflight.rs:345:9:
+assertion `left == right` failed: Output { status: ExitStatus(unix_wait_status(512)), stdout: "{\"command\":\"adapter\",\"coverage\":{\"reasons\":[],\"status\":\"complete\"},\"data\":null,\"errors\":[{\"code\":\"INVALID_ARGUMENT\",\"message\":\"Invalid or sensitive adapter identity\",\"retryable\":false}],\"generation_id\":null,\"project_id\":null,\"schema_version\":\"1.0\",\"status\":\"error\",\"truncation\":{\"reasons\":[],\"truncated\":false},\"validation\":{\"checked_at\":\"2026-10-08T20:52:28.867Z\",\"mode\":\"matched\",\"scope\":[],\"workspace_atomic\":false},\"warnings\":[],\"workspace_id\":null}\n", stderr: "" }
+  left: Some(2)
+ right: Some(0)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test native_event_keys_remain_input_dependent_and_replay_is_stable ... FAILED
+
+failures:
+
+failures:
+    native_event_keys_remain_input_dependent_and_replay_is_stable
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 5 filtered out; finished in 0.86s
+
+error: test failed, to rerun pass `--test adapter_preflight`

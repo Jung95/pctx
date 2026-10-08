@@ -1,0 +1,35 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.52s
+     Running tests/adapter_preflight.rs (target/debug/deps/adapter_preflight-6aa1789fcd433973)
+
+running 2 tests
+test direct_adapter_labels_keep_original_expiry_and_no_effects ... FAILED
+test adapter_labels_precede_project_and_response_effects ... FAILED
+
+failures:
+
+---- direct_adapter_labels_keep_original_expiry_and_no_effects stdout ----
+
+thread 'direct_adapter_labels_keep_original_expiry_and_no_effects' (8802259) panicked at tests/adapter_preflight.rs:142:65:
+assertion `left == right` failed
+  left: "INVALID_ARGUMENT"
+ right: "TIMEOUT"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- adapter_labels_precede_project_and_response_effects stdout ----
+
+thread 'adapter_labels_precede_project_and_response_effects' (8802258) panicked at tests/adapter_preflight.rs:132:13:
+assertion `left == right` failed: Output { status: ExitStatus(unix_wait_status(1792)), stdout: "", stderr: "" }
+  left: Some(7)
+ right: Some(2)
+
+
+failures:
+    adapter_labels_precede_project_and_response_effects
+    direct_adapter_labels_keep_original_expiry_and_no_effects
+
+test result: FAILED. 0 passed; 2 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.74s
+
+error: test failed, to rerun pass `--test adapter_preflight`
+error: 1 target failed:
+    `--test adapter_preflight`

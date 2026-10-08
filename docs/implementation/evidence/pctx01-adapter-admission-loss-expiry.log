@@ -1,0 +1,21 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.59s
+     Running tests/adapter_preflight.rs (target/debug/deps/adapter_preflight-6aa1789fcd433973)
+
+running 1 test
+
+thread 'direct_adapter_labels_keep_original_expiry_and_no_effects' (8809734) panicked at tests/adapter_preflight.rs:267:9:
+assertion `left == right` failed
+  left: "INVALID_ARGUMENT"
+ right: "TIMEOUT"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test direct_adapter_labels_keep_original_expiry_and_no_effects ... FAILED
+
+failures:
+
+failures:
+    direct_adapter_labels_keep_original_expiry_and_no_effects
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 5 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `--test adapter_preflight`

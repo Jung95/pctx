@@ -908,3 +908,26 @@ startup conditions remain open. Next same-task boundary R10 existing adapter
 labels; no independent filter feature, next official task or Actions.
 
 Final native full27236 terminal101: 535 PASS / 4 FAIL. Failed tests: query_program_resolution_uses_captured_command_path, relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry, concurrent_query_startup_preserves_group_streams_and_original_one_second_budget, simultaneous_streams_are_collected_and_overflow_never_infers_success. All four historical startup conditions remain unresolved and original budgets unchanged. All jobs terminal; no heavy job live. Whole PCTX01 remains incomplete0/10.
+
+
+## PCTX01 R10: preserve input-dependent Event keys — 2026-10-08
+
+Specification §14/§38 common admission must reuse existing producer contracts.
+The frozen R10 registry called every explicit adapter Event key pure, but
+`import` parses the event and returns PreToolUse protection before key use.
+Therefore only agent and hook/file transport grammar are unconditional. Event
+key validation remains after parsing/protection and before receipt lock/DB/replay.
+Native tests prove invalid unused keys retain protection without execution or
+permission, while PermissionDenied empty key refuses before state effects and
+valid same-key replay is stable. Denominator12 unchanged. Existing label256
+UTF-8-byte/control/secret grammar and whitespace acceptance, POLICY_DENIED9,
+original expiry and default-clock scope remain unchanged. No business feature
+was added. Latest serial instruction remains authoritative over older objective
+text: external blockers do not authorize starting another official task.
+
+Source/spec reconciliation: adapter's existing error helper maps POLICY_DENIED
+to9, whereas specification §14 requires policy exit5. R10's positive test records
+the current behavior, not specification conformance. This is a mandatory current
+PCTX01-G05 residual; do not mark stable-error completion or move to another task.
+Resolve the shared producer error classification with a complete error/transport
+matrix after the pending integration, preserving the recorded initial behavior.
