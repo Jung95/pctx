@@ -8,7 +8,7 @@ use clap::Subcommand;
 use rusqlite::{Connection, OptionalExtension, TransactionBehavior, params};
 use serde_json::{Value, json};
 use std::collections::BTreeMap;
-const SERIALIZER: &str = "minimal-context-v2";
+const SERIALIZER: &str = "adaptive-context-v3";
 #[derive(Debug, Clone, Subcommand)]
 pub enum SessionCommand {
     Attach {
@@ -382,91 +382,168 @@ fn representation_metadata(mut metadata: Value, body: &Value) -> Result<Value> {
         metadata["delivered_text_hash"] = json!(hash(text.as_bytes()));
         metadata["delivered_text_byte_range"] = json!([0, text.len()]);
     }
-    for key in ["byte_range", "line_range", "source_range"] {
+    for key in ["byte_range", "line_range", "source_range", "range"] {
         if let Some(range) = body.get(key) {
             metadata[key] = range.clone();
         }
     }
+    if let Some(signatures) = body["signatures"].as_array() {
+        metadata["signature_ranges"] = json!(
+            signatures
+                .iter()
+                .map(|s| json!({"symbol_id":s["symbol_id"],"range":s["range"]}))
+                .collect::<Vec<_>>()
+        );
+    }
     Ok(metadata)
 }
-fn selection(
-    p: &Project,
-    task: &str,
-    scope: &[String],
-) -> Result<(BTreeMap<String, Value>, BTreeMap<String, Value>)> {
-    let task_value = work::execute(
-        p,
-        &work::WorkCommand::Task {
-            command: work::TaskCommand::Show { task: task.into() },
-        },
-    )?;
-    let task_value = redact_value(task_value);
-    let mut metadata = BTreeMap::new();
-    let mut bodies = BTreeMap::new();
-    let task_body = json!({"kind":"task","representation":"metadata","metadata":task_value});
-    metadata.insert("task".into(), representation_metadata(json!({"hash":hash(task_value.to_string()),"task_id":task_value["task_id"],"revision":task_value["task_revision"],"definition_revision":task_value["definition_revision"],"kind":"task"}), &task_body)?);
-    bodies.insert("task".into(), task_body);
-    let inventory = reader::inventory(p, false)?;
-    if !inventory.skipped.is_empty() {
-        return Err(Error::new(
-            "PARTIAL_RESULT",
-            "Context inventory is incomplete",
-            3,
-        ));
+struct ReceiptSpec<'a> {
+    session: &'a str,
+    epoch: i64,
+    status: &'a str,
+    task: &'a str,
+    mode: &'a str,
+    since: Option<&'a str>,
+    scope: &'a [String],
+    policy: String,
+    scope_json: String,
+}
+impl ReceiptSpec<'_> {
+    fn baseline(&self, db: &Connection) -> Result<Option<BTreeMap<String, Value>>> {
+        if self.mode != "delta" {
+            return Ok(None);
+        }
+        let baseline = self
+            .since
+            .ok_or_else(|| mismatch("Delta requires an acknowledged context"))?;
+        let row: Option<(String, i64, String, String, String, String, String)> = db.query_row(
+            "SELECT session,epoch,task,policy,scope,serializer,selection FROM pctx_context_emissions WHERE id=?1",
+            [baseline], |r| Ok((r.get(0)?,r.get(1)?,r.get(2)?,r.get(3)?,r.get(4)?,r.get(5)?,r.get(6)?)),
+        ).optional()?;
+        let row = row.ok_or_else(|| mismatch("Baseline does not exist"))?;
+        let ack: bool = db.query_row(
+            "SELECT EXISTS(SELECT 1 FROM pctx_context_acks WHERE session=?1 AND epoch=?2 AND context=?3)",
+            params![self.session,self.epoch,baseline], |r| r.get(0),
+        )?;
+        if !ack
+            || row.0 != self.session
+            || row.1 != self.epoch
+            || row.2 != self.task
+            || row.3 != self.policy
+            || row.4 != self.scope_json
+            || row.5 != SERIALIZER
+        {
+            return Err(mismatch(
+                "Baseline session, epoch, task, permission scope, serializer or acknowledgement differs",
+            ));
+        }
+        Ok(Some(serde_json::from_str(&row.6)?))
     }
-    let effective_scope = if scope.is_empty() {
-        task_value["definition"]["scope"]
-            .as_array()
-            .map(|a| {
-                a.iter()
-                    .filter_map(|s| s.as_str().map(str::to_string))
-                    .collect::<Vec<_>>()
-            })
-            .unwrap_or_default()
-    } else {
-        scope.to_vec()
-    };
-    let docs = crate::documents::load(p, &effective_scope)?;
-    for section in ["rules", "decisions", "instructions"] {
+    fn packet(
+        &self,
+        p: &Project,
+        data: &Value,
+        task: &Value,
+        old: Option<&BTreeMap<String, Value>>,
+        present: &std::collections::BTreeSet<String>,
+    ) -> Result<(Value, BTreeMap<String, Value>)> {
         p.check_deadline()?;
-        for doc in docs[section].as_array().into_iter().flatten() {
+        let mut metadata = BTreeMap::new();
+        let mut bodies = BTreeMap::new();
+        let task_body = json!({"kind":"task","representation":"metadata","metadata":task});
+        metadata.insert(
+            "task".into(),
+            representation_metadata(
+                json!({"hash":hash(task.to_string()),
+            "task_id":task["task_id"],"revision":task["task_revision"],
+            "definition_revision":task["definition_revision"],"kind":"task"}),
+                &task_body,
+            )?,
+        );
+        bodies.insert("task".to_string(), task_body);
+        for item in data["items"].as_array().into_iter().flatten() {
             p.check_deadline()?;
-            let path = doc["path"].as_str().unwrap();
-            let key = format!("file:{path}");
-            let kind = if section == "rules" && doc["required"] == true {
-                "required_rule"
-            } else if section == "decisions" {
-                "decision"
-            } else {
-                "project_document"
+            let path = item["path"]
+                .as_str()
+                .ok_or_else(|| invalid("Selected item has no path"))?;
+            let kind = match item["reason"].as_str() {
+                Some("required_rule") => "required_rule",
+                Some("required_decision") => "decision",
+                Some("related_document") => "project_document",
+                _ => "code",
             };
-            let mut body = doc.clone();
-            body["text"] = body["content"].take();
+            let mut body = item.clone();
             body["kind"] = json!(kind);
-            body["representation"] = json!("full_span");
-            metadata.insert(key.clone(), representation_metadata(json!({"path":path,"hash":doc["file_hash"],"kind":kind,"scope":doc["scope"],"required":doc["required"]}), &body)?);
+            if body.get("content").is_some() {
+                body["text"] = body["content"].take();
+                body.as_object_mut().unwrap().remove("content");
+            }
+            let key = format!("file:{path}");
+            metadata.insert(
+                key.clone(),
+                representation_metadata(
+                    json!({"path":path,"hash":item["file_hash"],
+                "kind":kind,"required":item["required"],"parser_set":item["parser_set"]}),
+                    &body,
+                )?,
+            );
             bodies.insert(key, body);
         }
-    }
-    for path in inventory.paths {
-        p.check_deadline()?;
-        if path.starts_with(".pctx/rules/")
-            || path.starts_with(".pctx/decisions/")
-            || effective_scope.is_empty()
-            || !in_scope(&path, &effective_scope)
-        {
-            continue;
-        }
-        let f = reader::read(p, &path)?;
-        let key = format!("file:{path}");
-        let body = json!({"path":path,"file_hash":f.hash,"kind":"reference","representation":"reference","evidence_status":"observed","freshness":"current"});
-        metadata.insert(
-            key.clone(),
-            representation_metadata(json!({"path":path,"hash":f.hash,"kind":"reference"}), &body)?,
+        let plan = json!({"omissions":data["omitted_items"],"omitted_count":data["omitted_count"],
+            "omission_reasons":data["omission_reasons"],"omission_details_omitted":data["omission_details_omitted"],
+            "selection_complete":data["selection_complete"],"selector_version":data["selection_inputs"]["selector_version"],
+            "parser_set":data["selection_inputs"]["parser_set"]});
+        // Persist selection metadata, never the source bodies or task text.
+        metadata.insert("__plan".into(), plan.clone());
+        let content_hash = hash(serde_json::to_vec(
+            &json!({"selection":metadata,"policy":self.policy,
+            "scope":self.scope,"serializer":SERIALIZER,"workspace":p.workspace_id}),
+        )?);
+        let context_id = format!(
+            "CTX-{}",
+            hash(format!("{}\0{}\0{content_hash}", self.session, self.epoch))
         );
-        bodies.insert(key, body);
+        let mut added = Vec::new();
+        let mut changed = Vec::new();
+        let mut removed = Vec::new();
+        let mut invalidated = Vec::new();
+        let mut unchanged = 0;
+        for (key, body) in &bodies {
+            p.check_deadline()?;
+            match old.and_then(|old| old.get(key)) {
+                None => added.push(body.clone()),
+                Some(previous) if *previous != metadata[key] => changed.push(body.clone()),
+                _ => unchanged += 1,
+            }
+        }
+        if let Some(old) = old {
+            for (key, previous) in old {
+                p.check_deadline()?;
+                if key == "__plan" || metadata.contains_key(key) {
+                    continue;
+                }
+                let still_present = previous["path"]
+                    .as_str()
+                    .is_some_and(|path| present.contains(path));
+                let tombstone = json!({"item_id":key,"previous":previous,"tombstone":true,
+                    "reason":if still_present {"no_longer_selected"} else {"removed_or_no_longer_visible"}});
+                if still_present {
+                    invalidated.push(tombstone);
+                } else {
+                    removed.push(tombstone);
+                }
+            }
+        }
+        let value = json!({"context_id":context_id,"session_id":self.session,"context_epoch":self.epoch,
+            "task_id":self.task,"task_revision":task["task_revision"],"mode":self.mode,"baseline":self.since,
+            "content_hash":content_hash,"policy_hash":self.policy,"scope":self.scope,"serializer":SERIALIZER,
+            "added":added,"changed":changed,"removed":removed,"invalidated":invalidated,
+            "unchanged_count":unchanged,"unchanged":self.mode=="delta" && added.is_empty() && changed.is_empty()
+                && removed.is_empty() && invalidated.is_empty() && old.is_some_and(|old| old.get("__plan")==Some(&plan)),
+            "ack_required":true,"required_minimum_complete":true,"session_status":self.status,
+            "selection_plan":plan,"source_versions":data["source_versions"],"budget":data["budget"]});
+        Ok((value, metadata))
     }
-    Ok((metadata, bodies))
 }
 pub fn context(p: &Project, c: &ContextCommand) -> Result<Value> {
     request(p, |p| context_inner(p, c))
@@ -502,20 +579,27 @@ fn context_inner(p: &Project, c: &ContextCommand) -> Result<Value> {
                     "Context was not issued to this session/epoch/policy",
                 ));
             }
-            tx.execute(
+            let inserted = tx.execute(
                 "INSERT OR IGNORE INTO pctx_context_acks VALUES(?1,?2,?3,?4,?5)",
                 params![session, epoch, context, provenance, now()],
             )?;
-            event(
-                &tx,
-                session,
-                "context_ack",
-                &json!({"context_id":context,"epoch":epoch,"provenance":provenance}),
-            )?;
+            if inserted != 0 {
+                event(
+                    &tx,
+                    session,
+                    "context_ack",
+                    &json!({"context_id":context,"epoch":epoch,"provenance":provenance}),
+                )?;
+            }
+            let recorded_provenance: String = tx.query_row(
+                "SELECT provenance FROM pctx_context_acks WHERE session=?1 AND epoch=?2 AND context=?3",
+                params![session, epoch, context], |r| r.get(0))?;
             p.check_deadline()?;
             tx.commit()?;
             Ok(
-                json!({"context_id":context,"session_id":session,"context_epoch":epoch,"acknowledged":true,"provenance":provenance,"understanding_proven":false}),
+                json!({"context_id":context,"session_id":session,"context_epoch":epoch,
+                "acknowledged":true,"provenance":recorded_provenance,"receipt_reused":inserted==0,
+                "understanding_proven":false}),
             )
         }
         ContextCommand::Get {
@@ -554,64 +638,103 @@ fn context_inner(p: &Project, c: &ContextCommand) -> Result<Value> {
             }
             scope.sort();
             scope.dedup();
-            let (metadata, bodies) = selection(p, task_id, &scope).map_err(|e| {
-                Error::new(&e.code, format!("Context selection: {}", e.message), e.exit)
-            })?;
+            let authorization_db = connect(p)?;
+            let authorized_session = get(&authorization_db, p, session)?;
+            let policy = p.policy_hash();
+            let scope_json = serde_json::to_string(&scope)?;
+            let spec = ReceiptSpec {
+                session,
+                epoch: authorized_session.epoch,
+                status: &authorized_session.status,
+                task: task_id,
+                mode,
+                since: since.as_deref(),
+                scope: &scope,
+                policy: policy.clone(),
+                scope_json: scope_json.clone(),
+            };
+            let old = spec.baseline(&authorization_db)?;
+            drop(authorization_db);
+            let task_value = redact_value(work::execute(
+                p,
+                &work::WorkCommand::Task {
+                    command: work::TaskCommand::Show {
+                        task: task_id.clone(),
+                    },
+                },
+            )?);
+            let effective_scope = if scope.is_empty() {
+                task_value["definition"]["scope"]
+                    .as_array()
+                    .into_iter()
+                    .flatten()
+                    .filter_map(|s| s.as_str().map(str::to_string))
+                    .collect::<Vec<_>>()
+            } else {
+                scope.clone()
+            };
+            let inventory = reader::inventory(p, false)?;
+            if !inventory.skipped.is_empty() {
+                return Err(Error::new(
+                    "PARTIAL_RESULT",
+                    "Context inventory is incomplete",
+                    3,
+                ));
+            }
+            let present = inventory.paths.iter().cloned().collect();
+            let seed = inventory
+                .paths
+                .into_iter()
+                .filter(|path| {
+                    !path.starts_with(".pctx/")
+                        && !effective_scope.is_empty()
+                        && in_scope(path, &effective_scope)
+                })
+                .collect();
+            let request = crate::context::BuildRequest {
+                task: Some(serde_json::to_string(&task_value)?),
+                task_file: None,
+                task_id: None,
+                seed,
+                budget_bytes: *budget_bytes,
+                budget_tokens: None,
+                tokenizer: None,
+                handoff: None,
+                role: "implementer".into(),
+                detail: "adaptive".into(),
+                changed_since: None,
+                dependency_depth: 0,
+                explain: false,
+                require_complete: false,
+            };
+            // No writer lock is held during refresh, selection or delivery measurement.
+            let data = crate::context::select_scoped_with_measurement(
+                p,
+                &request,
+                crate::render::Format::Json,
+                Some(&effective_scope),
+                |data| {
+                    let (value, _) = spec.packet(p, data, &task_value, old.as_ref(), &present)?;
+                    Ok(crate::render::render(
+                        &crate::domain::envelope("context", Some(p), value),
+                        crate::render::Format::Json,
+                    )?
+                    .len())
+                },
+            )?;
+            let (value, metadata) = spec.packet(p, &data, &task_value, old.as_ref(), &present)?;
             let mut db = connect(p)?;
             let tx = db.transaction_with_behavior(TransactionBehavior::Immediate)?;
             let s = get(&tx, p, session)?;
-            let selection_json = serde_json::to_string(&metadata)?;
-            let policy = p.policy_hash();
-            let scope_json = serde_json::to_string(&scope)?;
-            let content_hash = hash(serde_json::to_vec(
-                &json!({"selection":metadata,"policy":policy,"scope":scope,"serializer":SERIALIZER,"workspace":p.workspace_id}),
-            )?);
-            let context_id = format!(
-                "CTX-{}",
-                hash(format!("{session}\0{}\0{content_hash}", s.epoch))
-            );
-            let mut added = Vec::new();
-            let mut changed = Vec::new();
-            let mut removed = Vec::new();
-            let mut unchanged = 0;
-            if mode == "delta" {
-                let baseline = since
-                    .as_ref()
-                    .ok_or_else(|| mismatch("Delta requires --since an acknowledged context"))?;
-                let row:Option<(String,i64,String,String,String,String,String)>=tx.query_row("SELECT session,epoch,task,policy,scope,serializer,selection FROM pctx_context_emissions WHERE id=?1",[baseline],|r|Ok((r.get(0)?,r.get(1)?,r.get(2)?,r.get(3)?,r.get(4)?,r.get(5)?,r.get(6)?))).optional()?;
-                let row = row.ok_or_else(|| mismatch("Baseline does not exist"))?;
-                let ack:bool=tx.query_row("SELECT EXISTS(SELECT 1 FROM pctx_context_acks WHERE session=?1 AND epoch=?2 AND context=?3)",params![session,s.epoch,baseline],|r|r.get(0))?;
-                if !ack
-                    || row.0 != *session
-                    || row.1 != s.epoch
-                    || row.2 != *task_id
-                    || row.3 != policy
-                    || row.4 != scope_json
-                    || row.5 != SERIALIZER
-                {
-                    return Err(mismatch(
-                        "Baseline session, epoch, task, permission scope, serializer or acknowledgement differs",
-                    ));
-                }
-                let old: BTreeMap<String, Value> = serde_json::from_str(&row.6)?;
-                for (key, value) in &metadata {
-                    p.check_deadline()?;
-                    match old.get(key) {
-                        None => added.push(bodies[key].clone()),
-                        Some(v) if v != value => changed.push(bodies[key].clone()),
-                        _ => unchanged += 1,
-                    }
-                }
-                for (key, value) in &old {
-                    p.check_deadline()?;
-                    if !metadata.contains_key(key) {
-                        removed.push(json!({"item_id":key,"previous":value,"tombstone":true,"reason":"removed_or_no_longer_visible"}));
-                    }
-                }
-            } else {
-                added = bodies.values().cloned().collect();
+            if s.epoch != authorized_session.epoch || s.status != authorized_session.status {
+                return Err(mismatch("Session changed during selection"));
             }
-            let value = json!({"context_id":context_id,"session_id":session,"context_epoch":s.epoch,"task_id":task_id,"mode":mode,"baseline":since,"content_hash":content_hash,"policy_hash":policy,"scope":scope,"serializer":SERIALIZER,"added":added,"changed":changed,"removed":removed,"invalidated":[],"unchanged_count":unchanged,"ack_required":true,"required_minimum_complete":true,"session_status":s.status});
+            if spec.baseline(&tx)? != old {
+                return Err(mismatch("Baseline changed during selection"));
+            }
+            let selection_json = serde_json::to_string(&metadata)?;
+            let context_id = value["context_id"].as_str().unwrap();
+            let content_hash = value["content_hash"].as_str().unwrap();
             if crate::render::render(
                 &crate::domain::envelope("context", Some(p), value.clone()),
                 crate::render::Format::Json,
@@ -621,7 +744,7 @@ fn context_inner(p: &Project, c: &ContextCommand) -> Result<Value> {
             {
                 return Err(Error::new(
                     "BUDGET_TOO_SMALL",
-                    "Required task/rules/references exceed budget; narrow scope or increase --budget-bytes",
+                    "Final context delivery exceeds budget",
                     8,
                 ));
             }
@@ -652,13 +775,15 @@ fn context_inner(p: &Project, c: &ContextCommand) -> Result<Value> {
                     4,
                 ));
             }
-            tx.execute("INSERT OR IGNORE INTO pctx_context_emissions VALUES(?1,?2,?3,?4,?5,?6,?7,?8,?9,?10)",params![context_id,session,s.epoch,task_id,policy,scope_json,SERIALIZER,content_hash,selection_json,now()]).map_err(|_|Error::new("DB_ERROR","Context emission insert failed",7))?;
-            event(
-                &tx,
-                session,
-                "context_emitted",
-                &json!({"context_id":context_id,"mode":mode,"epoch":s.epoch}),
-            )?;
+            let inserted = tx.execute("INSERT OR IGNORE INTO pctx_context_emissions VALUES(?1,?2,?3,?4,?5,?6,?7,?8,?9,?10)",params![context_id,session,s.epoch,task_id,policy,scope_json,SERIALIZER,content_hash,selection_json,now()]).map_err(|_|Error::new("DB_ERROR","Context emission insert failed",7))?;
+            if inserted != 0 {
+                event(
+                    &tx,
+                    session,
+                    "context_emitted",
+                    &json!({"context_id":context_id,"mode":mode,"epoch":s.epoch}),
+                )?;
+            }
             p.check_deadline()?;
             tx.commit()?;
             Ok(value)

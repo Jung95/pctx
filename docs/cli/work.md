@@ -63,3 +63,14 @@ pctx activity --since-seq 0
 External reports are claims from an explicit producer. PCTX validates their structure, counts, source policy, and source fingerprint; it does not retrospectively prove execution or lock ownership. A zero-test report, failure, changed input, changed definition, missing review, or old submission cannot satisfy the completion gate.
 
 Local invocations default to the trusted owner operator. Set `PCTX_ACTOR` to an agent identity for restricted writes and present `PCTX_RUN_CAPABILITY` for that run. Run credentials are private local files and are excluded from backups and normal output. This prevents accidental stale-run mutation; it does not isolate adversaries sharing the same OS user.
+
+## Adaptive session context
+
+```sh
+pctx session attach --agent AGENT_ID --runtime manual
+pctx context get --task-id TASK_ID --session SESSION_ID --scope src --budget-bytes 6000
+pctx context ack CONTEXT_ID --session SESSION_ID --epoch 1
+pctx context get --task-id TASK_ID --session SESSION_ID --scope src --mode delta --since CONTEXT_ID --budget-bytes 6000
+```
+
+Use returned IDs and epoch values. Full packets preserve mandatory task/policy content, choose optional verified representations within the actual final byte budget and report omissions in `selection_plan`. Increase the budget when mandatory content cannot fit. Delta requires explicit acknowledgement of a compatible packet; a new session or epoch needs a new full packet. Acknowledging a signature/reference does not mark its full body received. Larger subsequent budgets can deliver that body in `changed`, and previously omitted files arrive in `added`. See [format contracts](formats.md) for source invalidations and retained historical serializer data.

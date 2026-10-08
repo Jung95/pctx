@@ -64,6 +64,16 @@ pub fn select_with_measurement(
     format: crate::render::Format,
     mut measure: impl FnMut(&Value) -> Result<usize>,
 ) -> Result<Value> {
+    select_scoped_with_measurement(p, r, format, None, &mut measure)
+}
+
+pub(crate) fn select_scoped_with_measurement(
+    p: &Project,
+    r: &BuildRequest,
+    format: crate::render::Format,
+    scope: Option<&[String]>,
+    mut measure: impl FnMut(&Value) -> Result<usize>,
+) -> Result<Value> {
     let mut scoped;
     let p = if p.deadline.is_none() {
         scoped = p.clone();
@@ -138,6 +148,9 @@ pub fn select_with_measurement(
             2,
         ));
     };
+    if let Some(scope) = scope {
+        task_scope = scope.to_vec();
+    }
     let indexed = storage::update(p)?;
     p.check_deadline()?;
     if indexed["coverage"] == "partial" {
@@ -256,7 +269,11 @@ pub fn select_with_measurement(
     }
     let mut data = json!({"task":task,"role":r.role,"items":items,"omitted_items":[],"selection_complete":true,"search_coverage":{"status":"partial","reasons":["lexical_candidates_only"]},"rule_scope_uncertain":docs["scope_uncertain"],"source_versions":{"policy_hash":p.policy_hash()},"import_expansions":graph_sources,"budget":{"limit":r.budget_bytes,"used":0,"unit":"bytes"}});
     let mut candidate_seen = BTreeSet::new();
-    candidates.retain(|(path, _)| !seen.contains(path) && candidate_seen.insert(path.clone()));
+    candidates.retain(|(path, reason)| {
+        let allowed =
+            scope.is_none_or(|scope| *reason == "related_document" || in_scope(path, scope));
+        allowed && !seen.contains(path) && candidate_seen.insert(path.clone())
+    });
     for (path, _) in candidates.iter().skip(200) {
         omitted.push(json!({"path":path,"reason":"candidate_limit"}));
     }
@@ -550,4 +567,12 @@ fn finalize(
             ));
         }
     }
+}
+
+fn in_scope(path: &str, scope: &[String]) -> bool {
+    scope.iter().any(|s| {
+        path == s
+            || path.starts_with(&format!("{s}/"))
+            || globset::Glob::new(s).is_ok_and(|g| g.compile_matcher().is_match(path))
+    })
 }

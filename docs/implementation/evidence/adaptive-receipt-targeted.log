@@ -1,0 +1,72 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.74s
+     Running tests/context_adaptive.rs (target/debug/deps/context_adaptive-70b876c348e77459)
+
+running 7 tests
+test adaptive_budget_uses_intermediate_tiers_and_accounts_final_overhead_deterministically ... ok
+test excerpts_preserve_exact_original_ranges_and_unsupported_signature_is_explicit ... ok
+test explicit_seed_survives_lower_priority_imports_under_tight_budget ... ok
+test final_escaped_document_budget_and_unsupported_tokenizer_remain_truthful ... ok
+test final_omissions_fit_without_cutting_mandatory_task_rules_or_decisions ... ok
+test markdown_final_document_uses_the_same_exact_accounting ... ok
+test multiline_signatures_have_verified_utf8_crlf_ranges_and_distinct_outlines ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.37s
+
+     Running tests/context_delivery_selection.rs (target/debug/deps/context_delivery_selection-2d942bfc32429490)
+
+running 4 tests
+test consumer_envelope_and_escaped_overhead_drive_tiers_and_exact_capacity ... ok
+test consumer_failure_and_original_deadline_cannot_publish_a_selection ... ok
+test consumer_overhead_cannot_remove_mandatory_rules_or_fake_a_fitting_packet ... ok
+test source_changed_during_delivery_preparation_cannot_publish_stale_spans ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.12s
+
+     Running tests/context_input_deadline.rs (target/debug/deps/context_input_deadline-0de6c57f731310c2)
+
+running 5 tests
+test fifo_task_path_is_rejected_without_waiting_for_a_writer_or_publishing ... ok
+test held_open_task_stdin_times_out_without_index_publication ... ok
+test stdin_flag_restoration_is_observed_in_a_separate_process ... ok
+test task_file_reader_preserves_utf8_and_rejects_oversize_invalid_and_expired_inputs ... ok
+test unix_stdin_flags_probe ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.67s
+
+     Running tests/query_deadline_cli.rs (target/debug/deps/query_deadline_cli-91fccc6ca25b7a4f)
+
+running 6 tests
+test doctor_contention_reports_timeout_with_original_budget_and_unchanged_database ... ok
+test finite_ndjson_contention_preserves_error_code_without_creating_events ... ok
+test finite_saved_routes_accept_timeout_and_reject_zero_before_project_effects ... ok
+test invalid_or_inapplicable_timeout_has_no_project_effects ... ok
+test saved_cli_reread_never_reruns_and_failed_metering_preserves_delivery_truth ... ok
+test strict_find_waits_only_remaining_budget_and_preserves_active_generation ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.37s
+
+     Running tests/session.rs (target/debug/deps/session-e37e24e280aa64af)
+
+running 7 tests
+test expired_outer_budget_cannot_emit_ack_attach_or_change_epoch ... ok
+test explicit_ack_unchanged_delta_and_no_source_ledger ... ok
+test identity_secrets_are_rejected_before_persistence ... ok
+test independent_sessions_boundaries_and_policy_reject_old_baselines ... ok
+test minimum_budget_failure_creates_no_emission ... ok
+test rule_changes_and_deleted_paths_are_explicit ... ok
+test suspend_reconcile_preserves_task_pause_and_never_revives_run ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.20s
+
+     Running tests/session_render_budget.rs (target/debug/deps/session_render_budget-2e37552a4a4fa12a)
+
+running 5 tests
+test adaptive_delta_resends_unreceived_body_and_reuses_acknowledged_receipts ... ok
+test exact_final_budget_and_representation_receipts_require_explicit_ack ... ok
+test omitted_sources_are_not_acknowledged_and_later_delivery_is_explicit ... ok
+test original_cli_budget_bounds_writer_admission_without_context_or_epoch_writes ... ok
+test terminal_escape_overflow_is_rejected_before_context_emission_or_event ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.01s
+

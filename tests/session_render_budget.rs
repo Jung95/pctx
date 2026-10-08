@@ -186,7 +186,11 @@ fn exact_final_budget_and_representation_receipts_require_explicit_ack() {
     assert_eq!(exit, 0, "{probe}");
     let session = f.attach();
     assert_eq!(session.len(), probe_session.len());
-    let budget = probe_bytes.len();
+    // The now-visible budget.limit has fewer decimal digits than 20000.
+    // Stabilize its width, then keep the exact complete-document assertion.
+    let (exit, normalized, _) = f.get(&probe_session, &probe_bytes.len().to_string());
+    assert_eq!(exit, 0);
+    let budget = normalized.len();
     let (exit, bytes, full) = f.get(&session, &budget.to_string());
     assert_eq!(exit, 0, "{full}");
     assert_eq!(
@@ -196,7 +200,7 @@ fn exact_final_budget_and_representation_receipts_require_explicit_ack() {
     );
     assert_eq!(bytes.last(), Some(&b'\n'));
     let packet = &full["data"];
-    assert_eq!(packet["serializer"], "minimal-context-v2");
+    assert_eq!(packet["serializer"], "adaptive-context-v3");
     let context = packet["context_id"].as_str().unwrap();
     let db = f.db();
     let selection: String = db
@@ -208,12 +212,13 @@ fn exact_final_budget_and_representation_receipts_require_explicit_ack() {
         .unwrap();
     let metadata: Value = serde_json::from_str(&selection).unwrap();
     assert_eq!(metadata["task"]["representation"], "metadata");
-    assert_eq!(metadata["file:auth.py"]["representation"], "reference");
+    assert_eq!(metadata["file:auth.py"]["representation"], "full_span");
     assert!(
         metadata["file:auth.py"]
             .get("delivered_text_hash")
-            .is_none()
+            .is_some()
     );
+    assert!(metadata["file:auth.py"].get("range").is_some());
     assert_eq!(
         metadata["file:.pctx/rules/required.md"]["representation"],
         "full_span"
@@ -410,4 +415,352 @@ fn original_cli_budget_bounds_writer_admission_without_context_or_epoch_writes()
     assert_eq!(epoch, 1);
     let (_, _, current) = f.get(&session, "20000");
     assert_eq!(current["status"], "ok", "{current}");
+}
+
+#[test]
+fn adaptive_delta_resends_unreceived_body_and_reuses_acknowledged_receipts() {
+    let f = fixture();
+    let source = format!(
+        "def auth(\n    credential: str,\n):\n{}",
+        ("    # preserved full body payload ".to_owned() + &"payload ".repeat(18) + "\n")
+            .repeat(70)
+    );
+    fs::write(f.root.join("auth.py"), &source).unwrap();
+    // A lexical candidate in Build's wider universe must not escape ContextGet scope.
+    fs::write(
+        f.root.join("representation.py"),
+        "def outside():\n    return 'OFF_SCOPE_BODY'\n",
+    )
+    .unwrap();
+    let session = f.attach();
+    let (exit, full_bytes, full) = f.get(&session, "64000");
+    assert_eq!(exit, 0, "{full}");
+    let body = full["data"]["added"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .find(|v| v["path"] == "auth.py")
+        .unwrap();
+    assert_eq!(body["representation"], "full_span");
+    let budget = full_bytes.len() - serde_json::to_vec(body).unwrap().len() + 1000;
+    let (exit, narrow_bytes, narrow) = f.get(&session, &budget.to_string());
+    assert_eq!(exit, 0, "{narrow}");
+    assert!(narrow_bytes.len() <= budget);
+    assert_eq!(narrow["data"]["budget"]["used"], narrow_bytes.len());
+    assert!(
+        !String::from_utf8(narrow_bytes)
+            .unwrap()
+            .contains("representation.py")
+    );
+    let signature = narrow["data"]["added"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .find(|v| v["path"] == "auth.py")
+        .unwrap();
+    assert_eq!(signature["representation"], "signature");
+    assert_eq!(signature["body_omitted"], true);
+    let range = &signature["signatures"][0]["range"];
+    let start = range["start_byte"].as_u64().unwrap() as usize;
+    let end = range["end_byte"].as_u64().unwrap() as usize;
+    assert_eq!(signature["signatures"][0]["content"], source[start..end]);
+    assert!(!signature.to_string().contains("preserved full body"));
+    assert!(narrow["data"]["added"].as_array().unwrap().iter().any(|v| {
+        v["kind"] == "required_rule"
+            && v["text"]
+                .as_str()
+                .unwrap()
+                .contains("Preserve mandatory content")
+    }));
+    let context = narrow["data"]["context_id"].as_str().unwrap();
+    let run_delta = |budget: &str| {
+        f.run(&[
+            "context",
+            "get",
+            "--task-id",
+            &f.task,
+            "--session",
+            &session,
+            "--scope",
+            "auth.py",
+            "--mode",
+            "delta",
+            "--since",
+            context,
+            "--budget-bytes",
+            budget,
+        ])
+    };
+    let ok_delta = |budget: &str| {
+        let (exit, _, value) = run_delta(budget);
+        assert_eq!(exit, 0, "{value}");
+        value
+    };
+    let (exit, _, refused) = run_delta("64000");
+    assert_eq!(exit, 9, "{refused}");
+    assert_eq!(refused["errors"][0]["code"], "BASELINE_MISMATCH");
+    f.ok(&[
+        "context",
+        "ack",
+        context,
+        "--session",
+        &session,
+        "--epoch",
+        "1",
+    ]);
+    let db = f.db();
+    let counts = || {
+        [
+            "pctx_context_emissions",
+            "pctx_context_acks",
+            "pctx_session_events",
+        ]
+        .map(|table| {
+            db.query_row(&format!("SELECT count(*) FROM {table}"), [], |r| {
+                r.get::<_, i64>(0)
+            })
+            .unwrap()
+        })
+    };
+    let before = counts();
+    let tight = budget.to_string();
+    let unchanged = ok_delta(&tight);
+    assert_eq!(unchanged["data"]["context_id"], context);
+    assert_eq!(unchanged["data"]["unchanged"], true);
+    assert!(unchanged["data"]["changed"].as_array().unwrap().is_empty());
+    // Repeated query/ack must not grow either the receipt or event ledgers.
+    ok_delta(&tight);
+    f.ok(&[
+        "context",
+        "ack",
+        context,
+        "--session",
+        &session,
+        "--epoch",
+        "1",
+    ]);
+    assert_eq!(counts(), before);
+    let upgraded = ok_delta("64000");
+    let changed = upgraded["data"]["changed"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .find(|v| v["path"] == "auth.py")
+        .unwrap();
+    assert_eq!(changed["representation"], "full_span");
+    assert_eq!(changed["text"], source);
+    assert_eq!(upgraded["data"]["unchanged"], false);
+    assert_ne!(upgraded["data"]["context_id"], context);
+    // The previously delivered full packet was never acked, so its body must
+    // still be sent when upgrading the explicitly acknowledged signature.
+    assert_eq!(upgraded["data"]["context_id"], full["data"]["context_id"]);
+    let stored: String = db
+        .query_row(
+            "SELECT selection FROM pctx_context_emissions WHERE id=?1",
+            [context],
+            |r| r.get(0),
+        )
+        .unwrap();
+    assert!(!stored.contains("credential: str"));
+    assert!(!stored.contains("preserved full body"));
+    let metadata: Value = serde_json::from_str(&stored).unwrap();
+    assert_eq!(
+        metadata["file:auth.py"]["signature_ranges"][0]["range"],
+        *range
+    );
+    assert_eq!(
+        metadata["file:auth.py"]["delivered_body_hash"],
+        hash(serde_json::to_vec(signature).unwrap())
+    );
+    // Existing v2 data survives the semantic boundary, but cannot authorize v3 delta.
+    db.execute("INSERT INTO pctx_context_emissions SELECT 'CTX-v2-fixture',session,epoch,task,policy,scope,'minimal-context-v2',content_hash,selection,created FROM pctx_context_emissions WHERE id=?1", [context]).unwrap();
+    db.execute("INSERT INTO pctx_context_acks SELECT session,epoch,'CTX-v2-fixture',provenance,created FROM pctx_context_acks WHERE context=?1", [context]).unwrap();
+    let (exit, _, legacy) = f.run(&[
+        "context",
+        "get",
+        "--task-id",
+        &f.task,
+        "--session",
+        &session,
+        "--scope",
+        "auth.py",
+        "--mode",
+        "delta",
+        "--since",
+        "CTX-v2-fixture",
+        "--budget-bytes",
+        "64000",
+    ]);
+    assert_eq!(exit, 9, "{legacy}");
+    assert_eq!(legacy["errors"][0]["code"], "BASELINE_MISMATCH");
+}
+
+#[test]
+fn omitted_sources_are_not_acknowledged_and_later_delivery_is_explicit() {
+    let f = fixture();
+    fs::write(f.root.join(".pctx/rules/required.md"),
+        "---\nschema_version: 1\nid: global-policy\nrequired: true\nscope: ['**']\n---\nKeep the required policy in every full context.\n").unwrap();
+    fs::create_dir(f.root.join("selected")).unwrap();
+    for i in 0..20 {
+        fs::write(
+            f.root.join(format!("selected/file_{i:02}.py")),
+            format!(
+                "def selected_{i}(value: int):\n{}",
+                ("    # optional source ".to_owned() + &"payload ".repeat(10) + "\n").repeat(20)
+            ),
+        )
+        .unwrap();
+    }
+    let session = f.attach();
+    let run = |mode: &str, since: Option<&str>, budget: &str| {
+        let mut args = vec![
+            "context",
+            "get",
+            "--task-id",
+            &f.task,
+            "--session",
+            &session,
+            "--scope",
+            "selected",
+            "--mode",
+            mode,
+            "--budget-bytes",
+            budget,
+        ];
+        if let Some(id) = since {
+            args.extend(["--since", id]);
+        }
+        let (exit, bytes, value) = f.run(&args);
+        assert_eq!(exit, 0, "{mode}/{budget}: {value}");
+        assert!(bytes.len() <= budget.parse::<usize>().unwrap());
+        assert_eq!(value["data"]["budget"]["used"], bytes.len());
+        value
+    };
+    let small = run("full", None, "8000");
+    assert_eq!(small["data"]["selection_plan"]["selection_complete"], false);
+    assert!(
+        small["data"]["selection_plan"]["omitted_count"]
+            .as_u64()
+            .unwrap()
+            > 0
+    );
+    assert!(small["data"]["added"].as_array().unwrap().iter().any(|v| {
+        v["required"] == true
+            && v["text"]
+                .as_str()
+                .unwrap()
+                .contains("Keep the required policy")
+    }));
+    let id = small["data"]["context_id"].as_str().unwrap();
+    let omitted = small["data"]["selection_plan"]["omissions"]
+        .as_array()
+        .unwrap();
+    assert!(
+        !omitted.is_empty(),
+        "fixture must preserve explicit omitted paths"
+    );
+    let db = f.db();
+    let stored: String = db
+        .query_row(
+            "SELECT selection FROM pctx_context_emissions WHERE id=?1",
+            [id],
+            |r| r.get(0),
+        )
+        .unwrap();
+    let metadata: Value = serde_json::from_str(&stored).unwrap();
+    for entry in omitted {
+        assert!(
+            metadata
+                .get(format!("file:{}", entry["path"].as_str().unwrap()))
+                .is_none()
+        );
+    }
+    let ack = f.ok(&[
+        "context",
+        "ack",
+        id,
+        "--session",
+        &session,
+        "--epoch",
+        "1",
+        "--provenance",
+        "transport-receipt",
+    ]);
+    assert_eq!(ack["data"]["receipt_reused"], false);
+    let reused = f.ok(&[
+        "context",
+        "ack",
+        id,
+        "--session",
+        &session,
+        "--epoch",
+        "1",
+        "--provenance",
+        "explicit-agent",
+    ]);
+    assert_eq!(reused["data"]["receipt_reused"], true);
+    assert_eq!(
+        reused["data"]["provenance"], "transport-receipt",
+        "reuse preserves recorded provenance"
+    );
+    let expanded = run("delta", Some(id), "64000");
+    assert_eq!(
+        expanded["data"]["selection_plan"]["selection_complete"],
+        true
+    );
+    for entry in omitted {
+        assert!(
+            expanded["data"]["added"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .any(|v| v["path"] == entry["path"]
+                    && v["representation"] == "full_span"
+                    && v["text"].as_str().unwrap().contains("optional source"))
+        );
+    }
+    assert!(!stored.contains("optional source"));
+    assert!(!stored.contains("Keep the required policy"));
+    let expanded_id = expanded["data"]["context_id"].as_str().unwrap();
+    f.ok(&[
+        "context",
+        "ack",
+        expanded_id,
+        "--session",
+        &session,
+        "--epoch",
+        "1",
+    ]);
+    for i in 0..20 {
+        fs::write(
+            f.root.join(format!("selected/file_{i:02}.py")),
+            format!(
+                "def changed_{i}(value: int):\n{}",
+                ("    # current revision ".to_owned() + &"changed ".repeat(10) + "\n").repeat(20)
+            ),
+        )
+        .unwrap();
+    }
+    // Keep capacity for every prior selection tombstone as well as changed bodies.
+    let changed = run("delta", Some(expanded_id), "20000");
+    assert!(!changed["data"]["changed"].as_array().unwrap().is_empty());
+    assert!(
+        !changed["data"]["invalidated"]
+            .as_array()
+            .unwrap()
+            .is_empty()
+    );
+    for tombstone in changed["data"]["invalidated"].as_array().unwrap() {
+        assert_eq!(tombstone["reason"], "no_longer_selected");
+        assert_eq!(tombstone["tombstone"], true);
+        assert!(
+            f.root
+                .join(tombstone["previous"]["path"].as_str().unwrap())
+                .is_file()
+        );
+    }
+    assert!(
+        changed["data"]["removed"].as_array().unwrap().is_empty(),
+        "budget omission is not source deletion"
+    );
 }

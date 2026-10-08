@@ -1,0 +1,30 @@
+{
+  "base_revision": "f69b8daab3139baf4e9d7eadccd476d34f822ded",
+  "platform": "native macOS arm64",
+  "source_sha256": {
+    "src/context.rs": "a2086292cbb3514a01dadea014df1f2ee2846c51b9df698e6d4805abe5022bb2",
+    "src/session.rs": "58c77c08a7a209dcf2ca148f19ffd05d7c1da50af54df2f5142ef83293a4f97e",
+    "tests/context_delivery_selection.rs": "ec46fa53bc044b713b3e5ddd1a77cb414e2055a2d21130d674b78a98602499c2",
+    "tests/session_render_budget.rs": "d9c555597c3f5ced94c806fb06ddad7d7e6ff6fe7c10ccd0882d51f7aeffc51e"
+  },
+  "gates": {
+    "54648": {
+      "exit": 0,
+      "targeted_passed": 34,
+      "clippy": "all-targets locked warnings denied"
+    },
+    "80808": {
+      "exit": 0,
+      "full_passed": 308
+    }
+  },
+  "serializer": "adaptive-context-v3",
+  "db_schema_version": 1,
+  "ci_dispatched": false,
+  "scope_limits": [
+    "complete task/error span ranking and decision/memory invalidation unfinished",
+    "epoch/baseline revalidation implemented but controlled mid-selection epoch race unqualified",
+    "cooperative native calls",
+    "Linux and Windows integration unverified"
+  ]
+}

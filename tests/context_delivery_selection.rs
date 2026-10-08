@@ -133,13 +133,19 @@ fn consumer_failure_and_original_deadline_cannot_publish_a_selection() {
     // Expire the same request from within delivery preparation, after selection.
     p.deadline = Some(pctx::deadline::Deadline::from_millis(1000).unwrap());
     let end = p.deadline.unwrap().instant();
+    let mut measured = false;
     let error = select_with_measurement(&p, &r, Format::Json, |_| {
+        measured = true;
         std::thread::sleep(
             end.saturating_duration_since(Instant::now()) + Duration::from_millis(2),
         );
         Ok(1)
     })
     .unwrap_err();
+    assert!(
+        measured,
+        "fixture must reach delivery preparation before expiry"
+    );
     assert_eq!(error.code, "TIMEOUT");
 }
 #[test]
@@ -151,4 +157,23 @@ fn consumer_overhead_cannot_remove_mandatory_rules_or_fake_a_fitting_packet() {
     })
     .unwrap_err();
     assert_eq!(error.code, "BUDGET_TOO_SMALL");
+}
+
+#[test]
+fn source_changed_during_delivery_preparation_cannot_publish_stale_spans() {
+    let (_temp, p, r) = fixture();
+    let mut changed = false;
+    let error = select_with_measurement(&p, &r, Format::Json, |data| {
+        if !changed {
+            fs::write(
+                p.root.join("code.py"),
+                "def replacement():\n    return 42\n",
+            )?;
+            changed = true;
+        }
+        Ok(render(&packet(&p, data), Format::Json)?.len())
+    })
+    .unwrap_err();
+    assert!(changed);
+    assert_eq!(error.code, "CONCURRENT_MODIFICATION");
 }
