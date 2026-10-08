@@ -4,9 +4,10 @@
 
 **PCTX01 — CLI, envelope and stable errors** is the only active task (`implementing`). It is lowest incomplete with no prerequisites. The latest user goal supersedes historical next-action lists: finish all current-task mandatory implementation, validation, documentation and platform gates before choosing another task. Read docs/implementation/tasks/PCTX01.md, requirements.md and progress.md, then inspect actual Git/code/jobs. Other official items and D-series future slices are backlog. A subset/macOS pass is not task completion. No next official task is selected.
 
-## Latest integration boundary
+## Latest verified integration boundary
 
-PCTX01 G03/G06 only, base20bdd62. Repo existing workspace/fields shared before
+PCTX01 G03/G06 only; verified runtime revision
+4f5ce4bb7603967c16a5e7dc8cd272c32fb14d1d, base20bdd62. Repo existing workspace/fields shared before
 main discovery and producer DB; supported valid Git0, nonGit outerunsupported6.
 Native32-case no-effects matrix and producer/zero-timeout pass; related13PASS
 including9 existing broker tests. Initial1PASS2FAIL retained, three controlled
@@ -18,7 +19,8 @@ PCTX01 incomplete, whole existing gates0/10, denominator10 unchanged; dedicated
 partial CLI fixture and required Linux/Windows remain unverified. Next concrete
 G03 gap Pack Plan current pure scope/content/budget/split before discovery;
 no independent PCTX47 feature or next official task. Normal development pushes
-approved by latest user goal; previous rejection resolved at20bdd62.
+approved by latest user goal; previous rejection resolved at20bdd62. Normal push53833 terminal0 published
+20bdd62..4f5ce4b to configured origin/main.
 
 ## Source, evidence and environment
 
@@ -66,7 +68,7 @@ Original ignored specification SHA256 8914faad57432f524aec0a06aa90c43c18c23f8c19
 
 ## Exact next action
 
-Repo full gate/evidence is terminal; preserve the integration commit/push. Stay PCTX01-G03:
+Repo integration4f5ce4b is committed and normally pushed. Stay PCTX01-G03:
 extract Pack Plan existing scope/content/budget/split validator and reuse before
 main discovery and producer delivery binding. Test native missing/initialized
 project and absolute response snapshots; keep budget error8 and explicit source

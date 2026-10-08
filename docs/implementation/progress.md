@@ -546,3 +546,8 @@ Next existing G03 gap: Pack Plan scope/content/budget/split admission before mai
 discovery, not independent PCTX47 functionality. No next official task or Actions.
 
 Final native full76492 terminal101: 500 PASS/3 FAIL; original relative resolution, concurrent startup and simultaneous-stream failures retained at unchanged budgets. All jobs terminal; PCTX01 incomplete.
+
+Repo integration4f5ce4bb7603967c16a5e7dc8cd272c32fb14d1d committed and published
+to Jung95/pctx main by normal push53833 terminal0 (20bdd62..4f5ce4b). No Actions.
+PCTX01 remains implementing; fixed whole-gate checklist0/10, platform and startup
+conditions open. Next local G03: existing Pack Plan pure grammar before discovery.
