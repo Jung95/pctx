@@ -613,3 +613,7 @@ admission before choosing further necessary PCTX01 work. No other official task,
 Actions, OS registration or independent business expansion.
 
 Final native full31923 terminal101: 512 PASS/4 FAIL. Failed tests: relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry, query_program_resolution_uses_captured_command_path, simultaneous_streams_are_collected_and_overflow_never_infers_success, concurrent_query_startup_preserves_group_streams_and_original_one_second_budget. All jobs terminal; no heavy job live. Whole PCTX01 remains incomplete0/10; no other official task selected.
+
+Control-admission runtime74a326c4024ea2a8dda51e5ba91e10cd543e228c normally
+pushed by15474 terminal0 to origin/main; skip ci. All jobs terminal. PCTX01
+remains active/incomplete; no next official task selected.

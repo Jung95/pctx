@@ -6,7 +6,8 @@
 
 ## Latest integration boundary
 
-PCTX01-G03-A07–A11, base234349c; current uncommitted control admission changes.
+PCTX01-G03-A07–A11, runtime74a326c4024ea2a8dda51e5ba91e10cd543e228c,
+base234349c. Normal push15474 terminal0 published234349c..74a326c to origin/main.
 Read evidence/pctx01-control-admission-verification.json and independent review.
 Native132 no-effects combinations, reviewed9 PASS, seven loss probes fail/exact
 restore. Original deadline and valid/non-owner paths preserved. Private schedule
@@ -63,8 +64,8 @@ Original ignored specification SHA256 8914faad57432f524aec0a06aa90c43c18c23f8c19
 ## Exact next action
 
 Final full31923 is terminal; all failures are retained without retry-green
-promotion. Current control-admission evidence/documents are ready to commit
-[skip ci] and normally push. Then stay on PCTX01 and audit the complete
+promotion. Current control-admission changes and evidence are committed and normally
+pushed as74a326c [skip ci]. Stay on PCTX01 and audit the complete
 command registry against pure/state-dependent admission; do not activate another
 formal task. Required local gates remain, so external-only switching does not
 apply. Keep original budgets/interpreters/OS policy and preserve historical

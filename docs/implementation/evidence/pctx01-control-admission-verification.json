@@ -182,5 +182,14 @@
       "failed": 0,
       "qualification": "Native test summaries"
     }
+  },
+  "runtime_revision": "74a326c4024ea2a8dda51e5ba91e10cd543e228c",
+  "publication": {
+    "normal_push_session": 15474,
+    "exit": 0,
+    "destination": "https://github.com/Jung95/pctx.git",
+    "branch": "main",
+    "range": "234349c..74a326c",
+    "skip_ci": true
   }
 }
