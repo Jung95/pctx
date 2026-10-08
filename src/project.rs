@@ -730,7 +730,9 @@ impl Project {
         load_observation(&root, deadline, LoadPhase::RegistryRead);
         check_request(deadline)?;
         let mut registry: Registry = match fs::read(&registry_path) {
-            Ok(b) => serde_json::from_slice(&b)?,
+            Ok(b) => {
+                crate::domain::stored_json_bytes(&b, "Stored project registry JSON is invalid")?
+            }
             Err(e) if e.kind() == std::io::ErrorKind::NotFound => Registry::default(),
             Err(e) => return Err(e.into()),
         };

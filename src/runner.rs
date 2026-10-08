@@ -576,7 +576,8 @@ fn trusted(p: &Project, b: &Binding) -> Result<()> {
             5,
         )
     })?;
-    let saved: Value = serde_json::from_slice(&raw)?;
+    let saved: Value =
+        crate::domain::stored_json_bytes(&raw, "Stored runner trust JSON is invalid")?;
     if saved["schema_version"] != 1
         || saved["fingerprint"] != b.fingerprint
         || saved["workspace"] != p.workspace_id
@@ -843,7 +844,10 @@ fn acknowledged_guardian(dir: &Path, job: &mut Job) -> Result<()> {
     publish(dir, job)?;
     for resource in &job.resources {
         let path = dir.join("slots").join(format!("{resource}.json"));
-        let owner: Job = serde_json::from_slice(&fs::read(&path)?)?;
+        let owner: Job = crate::domain::stored_json_bytes(
+            &fs::read(&path)?,
+            "Stored job metadata JSON is invalid",
+        )?;
         if owner.job_id != job.job_id {
             return Err(error(
                 "RESOURCE_OWNER_UNKNOWN",
@@ -873,7 +877,10 @@ fn release(dir: &Path, job: &mut Job) -> Result<bool> {
     }
     for resource in &job.resources {
         let path = dir.join("slots").join(format!("{resource}.json"));
-        let current: Job = serde_json::from_slice(&fs::read(&path)?)?;
+        let current: Job = crate::domain::stored_json_bytes(
+            &fs::read(&path)?,
+            "Stored job metadata JSON is invalid",
+        )?;
         if current.job_id != job.job_id {
             return Err(error(
                 "RESOURCE_OWNER_UNKNOWN",
@@ -912,7 +919,8 @@ fn task_check(
         })?
         .ok_or_else(|| error("TASK_NOT_FOUND", "Task not found", 6))?;
     p.check_deadline()?;
-    let d: work::TaskDefinition = serde_json::from_str(&definition)?;
+    let d: work::TaskDefinition =
+        crate::domain::stored_json(&definition, "Stored task definition JSON is invalid")?;
     p.check_deadline()?;
     let check = d
         .checks
@@ -972,7 +980,10 @@ fn planned(p: &Project, task: &str, key: &str, run: Option<&str>) -> Result<(Bin
 fn release_not_spawned(dir: &Path, job: &mut Job) -> Result<()> {
     for resource in &job.resources {
         let path = dir.join("slots").join(format!("{resource}.json"));
-        let current: Job = serde_json::from_slice(&fs::read(&path)?)?;
+        let current: Job = crate::domain::stored_json_bytes(
+            &fs::read(&path)?,
+            "Stored job metadata JSON is invalid",
+        )?;
         if current.job_id != job.job_id {
             return Err(error(
                 "RESOURCE_OWNER_UNKNOWN",
@@ -1427,8 +1438,10 @@ fn execute_inner(p: &Project, command: &RunnerCommand) -> Result<Value> {
                     Err(e) => return Err(e.into()),
                     Ok(_) => {}
                 }
-                let mut job: Job =
-                    serde_json::from_slice(&finite_metadata(p, &path, 1024 * 1024)?)?;
+                let mut job: Job = crate::domain::stored_json_bytes(
+                    &finite_metadata(p, &path, 1024 * 1024)?,
+                    "Stored runner metadata JSON is invalid",
+                )?;
                 if job.boot_id != boot
                     || job.pid.is_none()
                     || match job.pid {
@@ -1455,7 +1468,10 @@ fn execute_inner(p: &Project, command: &RunnerCommand) -> Result<Value> {
             owner()?;
             let dir = host_dir(p)?;
             let path = job_path(&dir, id)?;
-            let mut job: Job = serde_json::from_slice(&fs::read(path)?)?;
+            let mut job: Job = crate::domain::stored_json_bytes(
+                &fs::read(path)?,
+                "Stored job metadata JSON is invalid",
+            )?;
             if job.job_id != *id || job.schema_version != 1 {
                 return Err(error(
                     "RESOURCE_OWNER_UNKNOWN",
@@ -2185,8 +2201,10 @@ fn save_helper(p: &Project, h: &Helper) -> Result<()> {
     )
 }
 fn load_helper(p: &Project, id: &str) -> Result<Helper> {
-    let h: Helper =
-        serde_json::from_slice(&finite_metadata(p, &helper_path(p, id)?, 1024 * 1024)?)?;
+    let h: Helper = crate::domain::stored_json_bytes(
+        &finite_metadata(p, &helper_path(p, id)?, 1024 * 1024)?,
+        "Stored helper metadata JSON is invalid",
+    )?;
     if h.schema_version != 1 || h.helper_id != id || h.workspace != p.workspace_id {
         return Err(error(
             "WORKSPACE_MISMATCH",
@@ -2359,7 +2377,10 @@ fn helper_request(
 fn helper_status(p: &Project, id: &str) -> Result<Value> {
     p.check_deadline()?;
     let path = helper_read_path(p, id)?;
-    let h: Helper = serde_json::from_slice(&finite_metadata(p, &path, 1024 * 1024)?)?;
+    let h: Helper = crate::domain::stored_json_bytes(
+        &finite_metadata(p, &path, 1024 * 1024)?,
+        "Stored runner metadata JSON is invalid",
+    )?;
     if h.schema_version != 1 || h.helper_id != id || h.workspace != p.workspace_id {
         return Err(error(
             "WORKSPACE_MISMATCH",
@@ -2370,11 +2391,10 @@ fn helper_status(p: &Project, id: &str) -> Result<Value> {
     p.check_deadline()?;
     let job = if let Some(id) = &h.job_id {
         let dir = host_path(p)?;
-        Some(serde_json::from_slice::<Job>(&finite_metadata(
-            p,
-            &job_path(&dir, id)?,
-            1024 * 1024,
-        )?)?)
+        Some(crate::domain::stored_json_bytes::<Job>(
+            &finite_metadata(p, &job_path(&dir, id)?, 1024 * 1024)?,
+            "Stored job metadata JSON is invalid",
+        )?)
     } else {
         None
     };
@@ -2407,12 +2427,15 @@ fn helper_release(p: &Project, id: &str, evidence: &str) -> Result<Value> {
         ));
     }
     let dir = host_dir(p)?;
-    let mut job: Job = serde_json::from_slice(&fs::read(job_path(
-        &dir,
-        h.job_id
-            .as_ref()
-            .ok_or_else(|| error("RESOURCE_OWNER_UNKNOWN", "Helper has no observed job", 7))?,
-    )?)?)?;
+    let mut job: Job = crate::domain::stored_json_bytes(
+        &fs::read(job_path(
+            &dir,
+            h.job_id
+                .as_ref()
+                .ok_or_else(|| error("RESOURCE_OWNER_UNKNOWN", "Helper has no observed job", 7))?,
+        )?)?,
+        "Stored job metadata JSON is invalid",
+    )?;
     if job.state != "finished" && !release(&dir, &mut job)? {
         return Err(error(
             "RESOURCE_OWNER_UNKNOWN",

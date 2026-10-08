@@ -1,0 +1,30 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.04s
+     Running tests/persisted_error_contract.rs (target/debug/deps/persisted_error_contract-257962e0e1215410)
+
+running 7 tests
+test grouped_decision_payloads_preserve_caller_errors_and_safe_storage_refusal ... ok
+test grouped_broker_saved_snapshot_preserves_parser_priority ... FAILED
+test grouped_index_metadata_and_checksum_matched_checkpoint_json_are_storage_errors ... ok
+test grouped_registry_pack_output_and_helper_metadata_refuse_without_publication ... ok
+test grouped_quota_observation_syntax_and_shape_are_storage_errors ... ok
+test grouped_schedule_stored_definition_and_receipt_preserve_replay_conflict ... ok
+test grouped_context_selection_and_capsule_keep_identity_conflict_before_storage_decode ... ok
+
+failures:
+
+---- grouped_broker_saved_snapshot_preserves_parser_priority stdout ----
+
+thread 'grouped_broker_saved_snapshot_preserves_parser_priority' (9093275) panicked at tests/persisted_error_contract.rs:1098:10:
+called `Result::unwrap()` on an `Err` value: SqliteFailure(Error { code: Unknown, extended_code: 1 }, Some("no such table: broker_snapshots"))
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    grouped_broker_saved_snapshot_preserves_parser_priority
+
+test result: FAILED. 6 passed; 1 failed; 0 ignored; 0 measured; 7 filtered out; finished in 1.17s
+
+error: test failed, to rerun pass `--test persisted_error_contract`
+error: 1 target failed:
+    `--test persisted_error_contract`

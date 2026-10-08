@@ -50,6 +50,14 @@ impl From<serde_json::Error> for Error {
         Self::new("INVALID_ARGUMENT", "Invalid JSON data", 2)
     }
 }
+/// Decode already persisted metadata without classifying corruption as caller input.
+/// Callers retain admission, identity, integrity and request-conflict ordering.
+pub fn stored_json<T: serde::de::DeserializeOwned>(text: &str, message: &str) -> Result<T> {
+    serde_json::from_str(text).map_err(|_| Error::new("DB_CORRUPT", message, 7))
+}
+pub fn stored_json_bytes<T: serde::de::DeserializeOwned>(bytes: &[u8], message: &str) -> Result<T> {
+    serde_json::from_slice(bytes).map_err(|_| Error::new("DB_CORRUPT", message, 7))
+}
 pub fn hash(bytes: impl AsRef<[u8]>) -> String {
     format!("{:x}", Sha256::digest(bytes.as_ref()))
 }

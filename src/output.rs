@@ -668,7 +668,8 @@ fn validate_trust(p: &Project, b: &Binding) -> Result<()> {
             5,
         )
     })?;
-    let old: Binding = serde_json::from_slice(&raw)?;
+    let old: Binding =
+        crate::domain::stored_json_bytes(&raw, "Stored execution trust JSON is invalid")?;
     if old.fingerprint != b.fingerprint
         || old.executable_hash != b.executable_hash
         || old.scripts != b.scripts
@@ -1012,7 +1013,9 @@ fn load_inner(p: &Project, value: &str) -> Result<Artifact> {
             ));
         }
     }
-    let a: Artifact = phase(p, || Ok(serde_json::from_slice(&bytes)?))?;
+    let a: Artifact = phase(p, || {
+        crate::domain::stored_json_bytes(&bytes, "Stored output artifact JSON is invalid")
+    })?;
     if a.schema_version != 1 || a.output_id != value || a.workspace_id != p.workspace_id {
         return Err(err(
             "POLICY_DENIED",

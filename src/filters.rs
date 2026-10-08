@@ -920,7 +920,7 @@ fn prefix_hashes(p: &Project, loaded: &Loaded) -> Result<BTreeMap<String, String
 }
 fn checked_binding(p: &Project, loaded: &Loaded) -> Result<Binding> {
     p.check_deadline()?;
-    let binding: Binding = serde_json::from_slice(
+    let binding: Binding = crate::domain::stored_json_bytes(
         &private_read(p, "filter-bindings", &loaded.definition.id).map_err(|e| {
             if e.code == "FILTER_METADATA_MISSING" {
                 err("POLICY_DENIED", "Filter is not activated", 5)
@@ -928,6 +928,7 @@ fn checked_binding(p: &Project, loaded: &Loaded) -> Result<Binding> {
                 e
             }
         })?,
+        "Stored filter binding JSON is invalid",
     )?;
     p.check_deadline()?;
     let current = executable(p, &loaded.definition.matcher.program)?;
@@ -957,7 +958,8 @@ fn checked_binding(p: &Project, loaded: &Loaded) -> Result<Binding> {
     if hash(&report_bytes) != binding.fixture_report_hash {
         return Err(err("CONFIG_CHANGED", "Activated fixture report changed", 9));
     }
-    let report: Report = serde_json::from_slice(&report_bytes)?;
+    let report: Report =
+        crate::domain::stored_json_bytes(&report_bytes, "Stored filter report JSON is invalid")?;
     if reader::read(p, &report.manifest_path)?.hash != report.manifest_hash {
         return Err(err(
             "CONFIG_CHANGED",
@@ -1217,7 +1219,8 @@ fn activate(p: &Project, id: &str, expect_hash: &str) -> Result<Value> {
         }
     })?;
     p.check_deadline()?;
-    let report: Report = serde_json::from_slice(&bytes)?;
+    let report: Report =
+        crate::domain::stored_json_bytes(&bytes, "Stored filter report JSON is invalid")?;
     if !report.all_passed
         || report.schema_version != 1
         || report.filter_id != id

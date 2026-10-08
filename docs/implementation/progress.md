@@ -21,20 +21,27 @@ whole-local PCTX01 completion. Implementation, evidence and platform waits are
 recorded separately; required §23 targets are macOS arm64/x86_64, Linux x86_64,
 Windows x86_64. Linux aarch64 is supporting follow-up evidence only.
 
-Current bounded Task/receipt runtime00df0e2, related27PASS/staticPASS, macOS
-full71737 terminal101:576PASS4FAIL; all four historical startup failures remain
-product/common-contract failures at original budgets. No heavy job is live.
-Evidence: pctx01-task-storage-verification.json (retains fixture errors and
-privacy-safe log redaction). No repeated Linux full gate for this small slice;
-previous native Linux source-specific evidence remains bounded. Actions not used.
+Current grouped stored-error candidate classifies the frozen91 decode sites in one
+batch and corrects persisted-origin errors through the common decoder; caller,
+conflict, integrity and original-clock ordering remain. Related127PASS and
+expanded7PASS, format/ClippyPASS; final full-file contract result is recorded in
+evidence/pctx01-grouped-storage-verification.json. Initial fixture and static
+failures remain recorded. Schedule refusal asserts logical SQL/schema and non-DB
+state, not physical DB/WAL/SHM immutability. G05-D04 remains open: private
+trust/credential/job-slot and remaining managed schedule/message/receipt runtime
+coverage and precedence remain within the frozen inventory. No denominator or
+closed-count change:23/40, whole0/10. No new whole/platform run or Actions.
+Prior Task runtime00df0e2 macOS full576PASS4FAIL is historical fixed-source
+qualification only; all four startup failures still require repair.
 
-G10-D02/D03 review/document reconciliation is closed. Next: execute the fixed
-grouped parser/admission/stored-error candidate (G02-D04/G03-D03/D04/G05-D04/D06).
-Do not resume the older quota→session→next-path investigation chain. New findings
-map to existing items or producer backlog; any added item requires mandatory-spec
-omission plus PCTX01 ownership and an explicit old/new denominator record.
-Independent PCTX36 schedule concurrency failure remains visible and does not
-turn Tick into a general finite-query route or a new PCTX01 schedule feature.
+G10-D02/D03 review/document reconciliation remains closed. Current next action:
+reconcile the remaining G05-D04 proof categories and ownership against the fixed
+inventory before any further implementation expansion, then finish that bounded
+runtime matrix within the existing grouped admission/error candidate. Two plan
+checks without an item closure trigger this reconciliation; no new IDs or
+independent producer features. Other current fixed candidates remain
+G02-D04/G03-D03/D04/G05-D06. Independent PCTX36 schedule concurrency failure
+remains visible; do not report the whole suite passing.
 
 ## Integrated behavior
 

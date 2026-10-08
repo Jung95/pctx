@@ -512,7 +512,7 @@ struct Task {
     completion: Option<Value>,
 }
 fn stored_json<T: serde::de::DeserializeOwned>(text: &str, message: &str) -> Result<T> {
-    serde_json::from_str(text).map_err(|_| Error::new("DB_CORRUPT", message, 7))
+    crate::domain::stored_json(text, message)
 }
 fn task(db: &Connection, name: &str) -> Result<Task> {
     let number = name
@@ -619,7 +619,8 @@ fn authenticate(project: &Project, run: &str, epoch: i64) -> Result<()> {
             .join(format!("{run}.json")),
     )
     .map_err(|_| Error::new("POLICY_DENIED", "Run capability unavailable", 5))?;
-    let credential: Value = serde_json::from_slice(&bytes)?;
+    let credential: Value =
+        crate::domain::stored_json_bytes(&bytes, "Stored run credential JSON is invalid")?;
     if credential["run_id"] != run
         || credential["lease_epoch"] != epoch
         || credential["capability"] != supplied

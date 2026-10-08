@@ -17,47 +17,46 @@ then next official task's finite list within the same Goal.
 
 ## Current source and verification
 
-Runtime `00df0e2f3254f6697148e64a677a712d4c63ddd9`, parent published baseline
-931c1e0753b5b94f846409241ba2337638d2d8b7. Exactly five Work stored Task/receipt
-JSON decoders now report contextual DB_CORRUPT7. Caller2, conflict9, nullable/
-valid Value categories, original expiry, hash-conflict-before-response and
-exact Report replay-before-lease remain. Newthree tests plus existingfour in
-persisted_error_contract; related27PASS. Decoder-loss actual1PASS3FAIL/exact
-restore; format/Clippy PASS; independent scoped review no blocker.
+Grouped G05-D04 candidate corrects persisted-origin JSON errors through shared
+storage7 decoding, preserving caller2, integrity/conflict/identity9 and original
+expiry ordering. Frozen91 origins classified in one batch (48 persisted); no
+new ID or feature. Source and binary hashes, all initial/final logs and scopes:
+evidence/pctx01-grouped-storage-verification.json and classification.json.
+Related127 PASS precedes behavior-equivalent schedule lint correction and two
+new fixtures. Final grouped7 PASS; current complete persisted target14 PASS;
+format and all-target Clippy PASS. Independent production/fixture review no
+scoped blocker. Initial SQLite physical-state premise failures, wrong broker
+fixture DB and Clippy failure remain preserved. Schedule asserts logical
+SQL/schema and non-DB state, not physical DB/WAL/SHM immutability. No heavy job
+live or new whole/platform run. Closed detail23/40, whole0/10 unchanged.
 
-Full macOS71737 terminal101:576PASS4FAIL. Original failures: captured command
-PATH, relative PATH/child cwd, eight-worker startup1s, simultaneous streams;
-see pctx01-task-storage-full-macos.log and verification manifest. No original
-budget/concurrency changed, no incidental pass promoted. Source/binary/hash
-bindings and synthetic-state log redaction are recorded. No heavy job live.
-Source Linux archive ready .toolchain/linux/source-00df0e2 (1091 files/modes
-compared); no current-slice Linux run. Updated user rule schedules whole native
-platform validation on grouped integration candidates, not every small patch.
-Previous Linux e2fff281 native full582PASS1FAIL remains revision-specific in
-pctx01-persisted-errors-verification.json, with persistent PCTX36 Tick failure.
+Prior runtime00df0e2 full macOS71737:576 PASS/4 FAIL remains historical fixed-
+source evidence only. Original startup failures at unchanged budgets: captured
+PATH, relative PATH/child cwd, eight-worker1s, simultaneous streams. Product
+common-contract failures, cause unproven; no environmental exemption.
 
-Required §23 targets: macOS arm64/x86_64, Linux x86_64, Windows x86_64. Native
-Linux aarch64 Ubuntu VM is supporting follow-up evidence, not x86 qualification.
-Mac arm startup failures are product/common-contract failures, cause unproven;
-other required real architectures need approved hosts/runners. No Actions
-(monthly3000min); Node24 action pins retained. Normal main commit/push authorized,
-[skip ci]; no force/operational publish/install/accounts/models/global schedules.
+Required §23: macOS arm64/x86_64, Linux x86_64, Windows x86_64. Prior Linux
+source-specific aarch64 proof is follow-up support only. Other required real
+hosts/architectures remain unverified. No Actions (monthly3000min); Node24
+pins retained. Normal main [skip ci] commit/push authorized.
 
 ## Next exact action and ownership
 
-**G10-D02/D03** independent review/document reconciliation is closed.
-Next execute the one grouped admission/error candidate G02-D04/G03-D03/D04/
-G05-D04/D06, using the frozen140-route crosswalk and91 serde-site input inventory.
-Classify caller/storage/external/internal/test origins together; every listed
-site is not a defect. Preserve producer-specific policy/state/replay/clock rules.
-No quota→session→next-path incremental search queue; other findings map to fixed
-items or inactive producer backlog. G05/G08 startup then existing response/phase
-items follow plan order; do not add new independent features.
+Only PCTX01 active. Before further implementation expansion, reconcile the
+remaining fixed G05-D04 runtime proof classes against frozen inventory and
+ownership under the two-plan-check rule (23/40 unchanged). Residual: private
+trust/credential/job-slot and managed schedule/message/receipt variants with
+existing expiry/integrity/ownership priority. No incremental similar-path
+search or new denominator; then finish the existing bounded runtime matrix.
+Other fixed grouped candidate conditions G02-D04/G03-D03/D04/G05-D06 remain
+open. Do not claim source classification or14 tests closes G05-D04.
 
-PCTX36 Tick occurrence-claim failure is retained independently: it has no
-finite-query default, shared INDEX_BUSY metadata is already tested. Confirmed
-hashing inside writer transaction is not proven cause. Never call whole suite
-passing. README/platform claims must match actual fixed-source evidence.
+Current PCTX01 must finish every fixed condition/platform before next official
+task. Unrelated defects remain inactive owner backlog. PCTX36 Tick concurrent
+occurrence failure retained; shared INDEX_BUSY metadata verified, no default
+finite Tick deadline and no independent algorithm expansion here. Whole suite
+must not be called passing. Original-clock startup and other existing response/
+phase items follow fixed plan order.
 
 ## Environment and operating constraints
 

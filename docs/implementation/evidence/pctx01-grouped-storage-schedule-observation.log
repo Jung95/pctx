@@ -1,0 +1,22 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.71s
+     Running tests/persisted_error_contract.rs (target/debug/deps/persisted_error_contract-257962e0e1215410)
+
+running 1 test
+test grouped_schedule_stored_definition_and_receipt_preserve_replay_conflict ... FAILED
+
+failures:
+
+---- grouped_schedule_stored_definition_and_receipt_preserve_replay_conflict stdout ----
+
+thread 'grouped_schedule_stored_definition_and_receipt_preserve_replay_conflict' (9085484) panicked at tests/persisted_error_contract.rs:368:13:
+["schedule", "list", "--namespace", "fixture"] changed prepared paths: ["controls/COORD-91d6afb8-02fe-464d-987f-ac93e4e928c1/control.sqlite3-shm", "controls/COORD-91d6afb8-02fe-464d-987f-ac93e4e928c1/control.sqlite3-wal"]
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    grouped_schedule_stored_definition_and_receipt_preserve_replay_conflict
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 11 filtered out; finished in 0.69s
+
+error: test failed, to rerun pass `--test persisted_error_contract`

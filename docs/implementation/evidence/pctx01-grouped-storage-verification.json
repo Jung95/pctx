@@ -1,0 +1,176 @@
+{
+  "task": "PCTX01",
+  "item": "PCTX01-G05-D04",
+  "status": "implementing; not closed",
+  "detail_closed": 23,
+  "detail_denominator": 40,
+  "whole_gates_closed": 0,
+  "whole_gates_denominator": 10,
+  "baseline_revision": "83c95fc04c637b5f8d441adb5a88e06e1fc57a1e",
+  "source_identity": "final candidate file hashes; committed revision resolves these exact files",
+  "files_sha256": {
+    "src/parsers.rs": "4134e27817423a4718348da1ad15e22304caaa1b9f9ff0e6bb6c98f37cdc1455",
+    "src/session.rs": "ca151ac9451579726d149490ab6c48a9e796143327208c9fb855ab5734ae5612",
+    "src/windows_guardian.rs": "d2d672f29e43b603482b44c195d5e702990d2d0416a2a6bb9add138139b312d7",
+    "src/cli_help.rs": "a73dc639251b58f468527f2a5e2cee0594a052597da9fb6ff73455b630b71151",
+    "src/adapter.rs": "41f18fda7ee7f3852e5ad49e5d9098f21474d5a1915ba6d48db52cfbcabf9def",
+    "src/quota.rs": "e2ed05ee8eb5142763f12c7dc4e90253c02160583f6783c44521149a81132edd",
+    "src/graph.rs": "54da586daa91a3c7f2e97534fa68824ff0e0d796dd69054be27960799d94e2c7",
+    "src/documents.rs": "0ae1965d81a09cb5cd20c7dc33a7e5b287929d1d4424796b092ead36151ca953",
+    "src/render.rs": "020c3e4303829c4ac12c2db85120e41d5b901422849d67513a78fce9608a5633",
+    "src/lib.rs": "e636fe455847f82f5962d1ac8ede864f476fdb4cc80c29c58769eb7685036e9a",
+    "src/domain.rs": "ebc5fb36aced808593a9df4606293e8900450c67f068de1574369c9c4b810c25",
+    "src/pack.rs": "a6fa74d6ae0ab46f57b32a3bd03cd3a8e5b69da17cc091c9abb81a5596f76d4c",
+    "src/cli_args.rs": "2ae3676485714fc79c19ceed1f96c94347d7458286a0ae07e9096af308576d39",
+    "src/runner.rs": "05407598e0ba37b751fdda30964ab2c17c49fbfe552dde5ea6b62f15b06ac19f",
+    "src/query_process.rs": "74c4c46c6b224563c63e9e2d7a9beac7996ef69735b072a39ee22c9aa989d6cb",
+    "src/policy_controls.rs": "20b5426e447360199584ad0b8e5cf82ea26339d44d7fef384bddd9b1a6c406d9",
+    "src/extract.rs": "76e36421efa026822cd551a3c5cd51d8c58c1263c966b92dcc5a15ec269b4f4b",
+    "src/inventory.rs": "b5508410b77fabe332beb3bb7b793bd94908a6f2b1249fe542cf391078b78612",
+    "src/project.rs": "0813b7ddde8bb74ff6fc019370d7ff966e1214e2b15c94ed12496eb797a06063",
+    "src/filters.rs": "2d24ede383d1779e2d9fe8d97fa005c0bdd3ab454ea2267d5bc0d09f7415f542",
+    "src/output.rs": "d14a138e780e8ac87408c803cda30c115867f5d825ac17789bbeedc1c7696c73",
+    "src/deadline.rs": "81d7757649acb12837c4e1cc51b7a462ecdc3b2bb341d21baf286f35bf0eaae4",
+    "src/watch.rs": "dc6c6f1d4bbe27fe2dccd4505a8ddfed54fbf8224f793fbe72d3751ba654c2fb",
+    "src/schedule.rs": "1bb79d3ac611cecfc3191889eb52d2b9a0979b9af5759535b6900979a29d1628",
+    "src/main.rs": "4bc497bf9baf426719b511ca3b9450dcb9524a7df4ed184e600b0e7c9bd8b592",
+    "src/broker.rs": "252c56c96599a5b4b0795e3fc4283bb35563742ea8ba61cfea790f262feebce1",
+    "src/storage.rs": "64d8aa5e4913cc632d66f261cc2773f9988efa78cddb3c6b72014a505afa2e64",
+    "src/input.rs": "116f3da7008abc6b04d821061c1a8f43509f06d9505729fb600ce2c9cc5e1fe8",
+    "src/source_delivery.rs": "947c4ae8dafdd685449d49b4b4dcd267426374dae3bb6e29276fdde667356d47",
+    "src/search.rs": "15483186930d9c818e56ea96b15585e7912af4cb759850b7d1c766d86a1588a8",
+    "src/work.rs": "8a00d58cde783c6c5b9480ac680d5a0cb2052aec5976851d2fb353982d61eb9d",
+    "src/operations.rs": "37393df0108ee918b3680ab2d3c45905ea95c38fef1c384cafdc8281538a366f",
+    "src/windows_process.rs": "ae4ed108587e66489ade743ad25e3e6c68b3c14547eaaf6e963162af3d29030e",
+    "src/reader.rs": "8770ea1bf18a7439d0869d0d366cb3833b37ef1c8fb72c3ced6dba58cffe2281",
+    "src/context.rs": "faa1b3c76ffc53e7240a809ae226d229252ec056d0b985b4adecd62df6a4dcb9",
+    "tests/persisted_error_contract.rs": "a11eca746cf5a7884a1a7562460664bc1a0d1e6b9409ad204863a86764b8d1dc"
+  },
+  "binary_sha256": "3c4f8fb228091f3355f9f8ccf46dfc6110af6b72f791432bd3d6039e6db1b055",
+  "environment": {
+    "system": "macOS-26.7.1-arm64-arm-64bit-Mach-O",
+    "architecture": "arm64",
+    "compiler": "rustc 1.99.0 (b940084d7 2026-09-28)"
+  },
+  "results": [
+    {
+      "job": "42540",
+      "exit": 101,
+      "passed": 4,
+      "failed": 1,
+      "log": "pctx01-grouped-storage-initial.log",
+      "cause": "Schedule first readonly connection creates WAL/SHM; overly broad physical no-write fixture premise failed"
+    },
+    {
+      "job": "62384",
+      "exit": 101,
+      "passed": 0,
+      "failed": 1,
+      "log": "pctx01-grouped-storage-schedule-observation.log",
+      "cause": "Prepared WAL/SHM lifecycle observation; no product corruption classification failure"
+    },
+    {
+      "job": "82104",
+      "exit": 101,
+      "passed": 4,
+      "failed": 1,
+      "log": "pctx01-grouped-storage-prepared.log",
+      "cause": "SQLite shared-memory reader slots change after prepared keeper"
+    },
+    {
+      "job": "63168",
+      "exit": 101,
+      "passed": 11,
+      "failed": 1,
+      "log": "pctx01-grouped-storage-related.log",
+      "cause": "Schedule Add checkpoint moves committed WAL into DB; physical-byte fixture premise invalid"
+    },
+    {
+      "job": "13364",
+      "exit": 0,
+      "passed": 127,
+      "failed": 0,
+      "log": "pctx01-grouped-storage-related-final.log",
+      "scope": "12 related integration targets; before behavior-equivalent schedule needless-question-mark correction and two additional fixtures; not whole suite or current platform gate"
+    },
+    {
+      "job": "99228",
+      "exit": 101,
+      "log": "pctx01-grouped-storage-static.log",
+      "cause": "Clippy needless_question_mark in schedule receipt helper; fixed without behavior change"
+    },
+    {
+      "job": "27902",
+      "exit": 101,
+      "passed": 6,
+      "failed": 1,
+      "log": "pctx01-grouped-storage-expanded.log",
+      "cause": "Broker corruption fixture selected index DB instead of actual control DB; original failure retained"
+    },
+    {
+      "job": "44685",
+      "exit": 0,
+      "passed": 7,
+      "failed": 0,
+      "log": "pctx01-grouped-storage-expanded-final.log",
+      "scope": "expanded grouped actual-CLI fixtures with corrected authoritative control DB"
+    },
+    {
+      "exit": 0,
+      "log": "pctx01-grouped-storage-format-final.log",
+      "scope": "cargo fmt --all -- --check"
+    },
+    {
+      "job": "95990",
+      "exit": 0,
+      "log": "pctx01-grouped-storage-static-final.log",
+      "scope": "cargo clippy --locked --all-targets -- -D warnings"
+    },
+    {
+      "job": "12985",
+      "exit": 0,
+      "passed": 14,
+      "failed": 0,
+      "log": "pctx01-grouped-storage-contract-final.log",
+      "scope": "complete current persisted_error_contract target, existing and new tests"
+    }
+  ],
+  "logs_sha256": {
+    "pctx01-grouped-storage-contract-final.log": "463e8585803970ab7fb9d0f6583243ea80ae104f161805d2b4a5fd20209ce560",
+    "pctx01-grouped-storage-expanded-final.log": "3781506ec0baece2993b13bf3076f7c2ceb7412ecd1632629ca6f9096506e94e",
+    "pctx01-grouped-storage-expanded.log": "a532ab891ef8b4de6027680671fadac4d36d73347f5e4f83e13bcb74ee3359d1",
+    "pctx01-grouped-storage-format-final.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "pctx01-grouped-storage-initial.log": "46f6d8d6f8e828f26f002ec39c090a436d32bc5ef9163204c3ec03533bbde24e",
+    "pctx01-grouped-storage-prepared.log": "d8a6729fc82fd0ab57cebb119b1ad1af114e1ee4366fea464d02f83277484192",
+    "pctx01-grouped-storage-related-final.log": "64fb99adb5d07cf4fdeb35b28940204914f5827ce8323231e135ca2dde3d9deb",
+    "pctx01-grouped-storage-related.log": "09b53ec19fd4d1454906ace98e0eb583e21b040473f93b4a5d853d1e06a48272",
+    "pctx01-grouped-storage-schedule-observation.log": "452e4a37d289ed1a7cc30ded1c78eb0e0c187cd724e0edd77bebaf25828d5814",
+    "pctx01-grouped-storage-static-final.log": "42310173c41bbab95b678b3cbc51f302e01f5e444fdc5fcf6c627919cd802af5",
+    "pctx01-grouped-storage-static.log": "4871c6432369a949bcca2ea0029a638ce1fbb6b271006e453720d33805e0e236"
+  },
+  "proved": [
+    "frozen91 origins classified without denominator expansion; 48 persisted origins identified",
+    "representative corrupt syntax and incompatible typed shapes refuse storage7/DB_CORRUPT in JSON and compact without sentinel disclosure",
+    "tested caller2, conflict9 and acknowledgement-before-decode priority retained",
+    "tested byte-exact prepared filesystem state outside Schedule; Schedule all table/schema cells and non-DB files unchanged"
+  ],
+  "limits": [
+    "Source inventory and representative runtime cases do not close the all-site G05-D04 matrix",
+    "Schedule physical control DB/WAL/SHM changes, hidden rowids and PRAGMAs are not asserted",
+    "No universal mutation rollback or changed producer write-order claim",
+    "Private trust/credential/job-slot plus remaining managed schedule/message/receipt variants and original ownership/expiry/integrity precedence remain frozen residual proof categories",
+    "Required native macOS arm64/x86_64, Linux x86_64, Windows x86_64 whole candidate qualification remains open; prior startup failures unchanged; no Actions dispatched"
+  ],
+  "independent_review": {
+    "agent": "/root/work_control",
+    "production_diff_blocker": false,
+    "final_fixture_blocker": false,
+    "no_agent_edits_builds_tests": true
+  },
+  "plan_check": {
+    "closed_count_unchanged": true,
+    "denominator_unchanged": true,
+    "action": "Pause implementation expansion and reconcile residual proofs/ownership under the two-plan-check rule; then execute only fixed G05-D04 matrix",
+    "no_other_official_task_started": true
+  }
+}

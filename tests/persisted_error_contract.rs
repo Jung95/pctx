@@ -351,7 +351,55 @@ impl Fixture {
         (file, value["task_id"].as_str().unwrap().into(), value)
     }
     fn assert_storage_refusal(&self, args: &[&str]) {
-        let before = self.state();
+        self.assert_storage_refusal_state(args, false);
+    }
+    fn control_rows(&self) -> BTreeMap<String, Vec<Vec<String>>> {
+        let db = Connection::open(&self.db).unwrap();
+        let tables: Vec<String> = db
+            .prepare("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name")
+            .unwrap()
+            .query_map([], |r| r.get(0))
+            .unwrap()
+            .collect::<rusqlite::Result<_>>()
+            .unwrap();
+        let mut result = BTreeMap::new();
+        for table in std::iter::once("sqlite_master".to_string()).chain(tables) {
+            let query = format!(
+                "SELECT * FROM \"{}\" ORDER BY rowid",
+                table.replace('"', "\"\"")
+            );
+            let mut statement = db.prepare(&query).unwrap();
+            let columns = statement.column_count();
+            let data = statement
+                .query_map([], |row| {
+                    (0..columns)
+                        .map(|i| Ok(pctx::domain::hash(format!("{:?}", row.get_ref(i)?))))
+                        .collect::<rusqlite::Result<Vec<_>>>()
+                })
+                .unwrap()
+                .collect::<rusqlite::Result<Vec<_>>>()
+                .unwrap();
+            result.insert(table, data);
+        }
+        result
+    }
+    fn assert_storage_refusal_state(&self, args: &[&str], logical_sqlite: bool) {
+        let state = || {
+            let mut state = self.state();
+            if logical_sqlite {
+                // SQLite checkpoints can move existing WAL pages into the DB.
+                // Compare every SQL/schema cell separately and all non-DB files.
+                let database = self.db.strip_prefix(&self.data).unwrap();
+                state.1.retain(|path, _| {
+                    path != database
+                        && path != &PathBuf::from(format!("{}-wal", database.display()))
+                        && path != &PathBuf::from(format!("{}-shm", database.display()))
+                });
+            }
+            state
+        };
+        let before_rows = logical_sqlite.then(|| self.control_rows());
+        let before = state();
         for format in ["json", "compact"] {
             let out = self.run(format, args);
             assert_eq!(out.status.code(), Some(7), "{out:?}");
@@ -361,7 +409,28 @@ impl Fixture {
             assert!(value["data"].is_null());
             assert!(out.stderr.is_empty());
             assert!(!String::from_utf8_lossy(&out.stdout).contains("PCTX_STORED_SENTINEL"));
-            assert_eq!(self.state(), before);
+            if let Some(rows) = &before_rows {
+                assert!(
+                    self.control_rows() == *rows,
+                    "{args:?} changed stored SQL/schema cells"
+                );
+            }
+            let after = state();
+            let changed: Vec<_> = [&before.0, &before.1]
+                .into_iter()
+                .zip([&after.0, &after.1])
+                .flat_map(|(left, right)| {
+                    left.keys()
+                        .chain(right.keys())
+                        .filter(|key| left.get(*key) != right.get(*key))
+                        .map(|key| key.display().to_string())
+                        .collect::<std::collections::BTreeSet<_>>()
+                })
+                .collect();
+            assert!(
+                after == before,
+                "{args:?} changed prepared paths: {changed:?}"
+            );
         }
     }
 }
@@ -653,4 +722,397 @@ fn stored_report_receipt_preserves_exact_replay_before_lease_and_hash_conflict_b
         "LEASE_EXPIRED"
     );
     assert_eq!(f.state(), before);
+}
+
+impl Fixture {
+    fn index_db(&self) -> PathBuf {
+        let paths: Vec<_> = snapshot(&self.data)
+            .keys()
+            .filter(|p| p.file_name().is_some_and(|n| n == "index.sqlite3"))
+            .cloned()
+            .collect();
+        assert_eq!(paths.len(), 1);
+        self.data.join(&paths[0])
+    }
+    fn indexed(&self) {
+        fs::write(self.root.join("code.rs"), "fn fixture() {}\n").unwrap();
+        self.success(&["index", "update"]);
+    }
+    fn prepare_file(&self, path: &Path, bytes: &[u8]) {
+        fs::create_dir_all(path.parent().unwrap()).unwrap();
+        fs::write(path, bytes).unwrap();
+    }
+}
+
+#[test]
+fn grouped_quota_observation_syntax_and_shape_are_storage_errors() {
+    let f = Fixture::new();
+    f.success(&["quota", "report"]);
+    for payload in ["{PCTX_STORED_SENTINEL", "{}"] {
+        f.update("INSERT OR REPLACE INTO quota_observations VALUES('observation','main','fixture','fixture','input_tokens','tokens','statusline',NULL,NULL,NULL,0,0,9999999999,?1,'synthetic')", [payload]).unwrap();
+        for args in [
+            vec!["quota", "report"],
+            vec!["quota", "plan", "--pool", "main"],
+            vec!["quota", "reconcile", "--pool", "main"],
+        ] {
+            f.assert_storage_refusal(&args);
+        }
+    }
+    f.update("DELETE FROM quota_observations", []).unwrap();
+    let file = f.base.join("bad-usage.json");
+    fs::write(&file, "{}").unwrap();
+    let out = f.run(
+        "json",
+        &[
+            "quota",
+            "ingest",
+            "--from-file",
+            file.to_str().unwrap(),
+            "--idempotency-key",
+            "input",
+        ],
+    );
+    assert_eq!(out.status.code(), Some(2));
+}
+
+#[test]
+fn grouped_decision_payloads_preserve_caller_errors_and_safe_storage_refusal() {
+    let f = Fixture::new();
+    let file = f.base.join("decision.json");
+    fs::write(&file, json!({"schema_version":1,"reason":"Synthetic decision","action":{"schema_version":1,"kind":"local_modify","resource":"code.rs","environment":"development","scope":["code.rs"],"actor":"worker","amount":0,"reversible":true,"cost_known":true}}).to_string()).unwrap();
+    let id =
+        f.success(&["decision", "request", "--from-file", file.to_str().unwrap()])["decision_id"]
+            .as_str()
+            .unwrap()
+            .to_owned();
+    for field in ["action", "request"] {
+        let original: String = Connection::open(&f.db)
+            .unwrap()
+            .query_row(
+                &format!("SELECT {field} FROM ops_decisions WHERE id=?1"),
+                [&id],
+                |r| r.get(0),
+            )
+            .unwrap();
+        f.update(
+            &format!("UPDATE ops_decisions SET {field}=?1 WHERE id=?2"),
+            rusqlite::params!["{PCTX_STORED_SENTINEL", id],
+        )
+        .unwrap();
+        f.assert_storage_refusal(&["decision", "show", &id]);
+        f.update(
+            &format!("UPDATE ops_decisions SET {field}=?1 WHERE id=?2"),
+            rusqlite::params![original, id],
+        )
+        .unwrap();
+    }
+    fs::write(&file, "{PCTX_STORED_SENTINEL").unwrap();
+    let out = f.run(
+        "json",
+        &["decision", "request", "--from-file", file.to_str().unwrap()],
+    );
+    assert_eq!(out.status.code(), Some(2));
+}
+
+#[test]
+fn grouped_schedule_stored_definition_and_receipt_preserve_replay_conflict() {
+    let f = Fixture::new();
+    let file = f.base.join("schedule.json");
+    let mut definition = json!({"schema_version":1,"namespace":"fixture","id":"digest","timezone":"UTC","cadence":{"kind":"daily","at":"10:00"},"valid_from":"2024-01-01T00:00:00Z","job":"read_query","bridge":"manual","role":"assistant","recipient":"owner","topic":"digest","enabled":true,"misfire":"coalesce_latest"});
+    fs::write(&file, definition.to_string()).unwrap();
+    let args = [
+        "schedule",
+        "add",
+        "--from-file",
+        file.to_str().unwrap(),
+        "--idempotency-key",
+        "stored-schedule",
+    ];
+    let first = f.success(&args);
+    assert_eq!(f.success(&args), first);
+    // Prepare SQLite's WAL reader markers without decoding the damaged value.
+    // This qualifies an already-open control store, not first-reader journal creation.
+    let keeper = Connection::open(&f.db).unwrap();
+    keeper
+        .query_row("SELECT count(*) FROM schedule_definitions", [], |r| {
+            r.get::<_, i64>(0)
+        })
+        .unwrap();
+    let original = definition.to_string();
+    for corrupt in ["{PCTX_STORED_SENTINEL", "{}"] {
+        f.update("UPDATE schedule_definitions SET definition=?1", [corrupt])
+            .unwrap();
+        keeper
+            .query_row("SELECT count(*) FROM schedule_definitions", [], |r| {
+                r.get::<_, i64>(0)
+            })
+            .unwrap();
+        f.assert_storage_refusal_state(&["schedule", "list", "--namespace", "fixture"], true);
+        f.assert_storage_refusal_state(
+            &["schedule", "plan", "--namespace", "fixture", "digest"],
+            true,
+        );
+    }
+    f.update("UPDATE schedule_definitions SET definition=?1", [original])
+        .unwrap();
+    f.update(
+        "UPDATE schedule_receipts SET response=?1 WHERE key='stored-schedule'",
+        ["{PCTX_STORED_SENTINEL"],
+    )
+    .unwrap();
+    keeper
+        .query_row("SELECT count(*) FROM schedule_receipts", [], |r| {
+            r.get::<_, i64>(0)
+        })
+        .unwrap();
+    f.assert_storage_refusal_state(&args, true);
+    definition["topic"] = json!("changed");
+    fs::write(&file, definition.to_string()).unwrap();
+    let out = f.run("json", &args);
+    assert_eq!(out.status.code(), Some(9));
+    assert_eq!(
+        serde_json::from_slice::<Value>(&out.stdout).unwrap()["errors"][0]["code"],
+        "IDEMPOTENCY_CONFLICT"
+    );
+    fs::write(&file, "{PCTX_STORED_SENTINEL").unwrap();
+    assert_eq!(f.run("json", &args).status.code(), Some(2));
+}
+
+#[test]
+fn grouped_index_metadata_and_checksum_matched_checkpoint_json_are_storage_errors() {
+    let f = Fixture::new();
+    f.indexed();
+    f.success(&["checkpoint", "create", "--name", "fixture"]);
+    let index = f.index_db();
+    let corrupt = "{PCTX_STORED_SENTINEL";
+    Connection::open(&index)
+        .unwrap()
+        .execute(
+            "UPDATE checkpoints SET manifest=?1,manifest_hash=?2",
+            rusqlite::params![corrupt, pctx::domain::hash(corrupt)],
+        )
+        .unwrap();
+    f.assert_storage_refusal(&["checkpoint", "list"]);
+    for payload in [corrupt, "{}"] {
+        Connection::open(&index)
+            .unwrap()
+            .execute("UPDATE file_versions SET metadata=?1", [payload])
+            .unwrap();
+        f.assert_storage_refusal(&["outline", "code.rs"]);
+    }
+    // Pure invalid arguments still win before corrupt index access.
+    assert_eq!(
+        f.run("json", &["read", "code.rs", "--lines", "0:1"])
+            .status
+            .code(),
+        Some(2)
+    );
+}
+
+#[test]
+fn grouped_registry_pack_output_and_helper_metadata_refuse_without_publication() {
+    let f = Fixture::new();
+    f.indexed();
+    let plan =
+        f.db.parent()
+            .unwrap()
+            .join("pack-plans/PACKPLAN-fixture.json");
+    let output = f.base.join("must-not-publish.tar");
+    let registry = f.data.join("registry.json");
+    let reg: Value = serde_json::from_slice(&fs::read(&registry).unwrap()).unwrap();
+    let workspace = reg["roots"][f.root.to_str().unwrap()]["workspace_id"]
+        .as_str()
+        .unwrap();
+    let artifact = f
+        .data
+        .join("outputs")
+        .join(workspace)
+        .join("OUT-fixture.json");
+    let helper = f
+        .index_db()
+        .parent()
+        .unwrap()
+        .join("helpers/HELP-fixture.json");
+    for bytes in [b"{PCTX_STORED_SENTINEL".as_slice(), b"{}".as_slice()] {
+        for path in [&plan, &artifact, &helper] {
+            f.prepare_file(path, bytes);
+        }
+        f.assert_storage_refusal(&[
+            "pack",
+            "create",
+            "--plan",
+            "PACKPLAN-fixture",
+            "--expect-hash",
+            &"a".repeat(64),
+            "--output",
+            output.to_str().unwrap(),
+        ]);
+        assert!(!output.exists());
+        f.assert_storage_refusal(&["output", "show", "OUT-fixture"]);
+        f.assert_storage_refusal(&["runner", "helper-status", "HELP-fixture"]);
+    }
+    let original = fs::read(&registry).unwrap();
+    fs::write(&registry, "{PCTX_STORED_SENTINEL").unwrap();
+    f.assert_storage_refusal(&["status"]);
+    fs::write(&registry, original).unwrap();
+    assert_eq!(
+        f.run(
+            "json",
+            &[
+                "pack",
+                "create",
+                "--plan",
+                "../bad",
+                "--expect-hash",
+                &"a".repeat(64),
+                "--output",
+                output.to_str().unwrap()
+            ]
+        )
+        .status
+        .code(),
+        Some(2)
+    );
+}
+
+#[test]
+fn grouped_context_selection_and_capsule_keep_identity_conflict_before_storage_decode() {
+    let f = Fixture::new();
+    f.indexed();
+    let (_, task, _) = f.create_task("context-storage");
+    let agent = f.success(&["agent", "register", "--name", "context-fixture"])["agent_id"]
+        .as_str()
+        .unwrap()
+        .to_owned();
+    let session = f.success(&[
+        "session",
+        "attach",
+        "--agent",
+        &agent,
+        "--runtime",
+        "manual",
+    ])["session_id"]
+        .as_str()
+        .unwrap()
+        .to_owned();
+    let full = f.success(&[
+        "context",
+        "get",
+        "--task-id",
+        &task,
+        "--session",
+        &session,
+        "--scope",
+        "code.rs",
+        "--budget-bytes",
+        "50000",
+    ]);
+    let context = full["context_id"].as_str().unwrap();
+    let delta = [
+        "context",
+        "get",
+        "--task-id",
+        &task,
+        "--session",
+        &session,
+        "--mode",
+        "delta",
+        "--since",
+        context,
+        "--scope",
+        "code.rs",
+        "--budget-bytes",
+        "50000",
+    ];
+    let original: String = Connection::open(&f.db)
+        .unwrap()
+        .query_row(
+            "SELECT selection FROM pctx_context_emissions WHERE id=?1",
+            [context],
+            |r| r.get(0),
+        )
+        .unwrap();
+    f.update(
+        "UPDATE pctx_context_emissions SET selection=?1 WHERE id=?2",
+        rusqlite::params!["{PCTX_STORED_SENTINEL", context],
+    )
+    .unwrap();
+    let out = f.run("json", &delta);
+    assert_eq!(out.status.code(), Some(9));
+    assert_eq!(
+        serde_json::from_slice::<Value>(&out.stdout).unwrap()["errors"][0]["code"],
+        "BASELINE_MISMATCH"
+    );
+    f.success(&[
+        "context",
+        "ack",
+        context,
+        "--session",
+        &session,
+        "--epoch",
+        "1",
+    ]);
+    for corrupt in ["{PCTX_STORED_SENTINEL", "[]"] {
+        f.update(
+            "UPDATE pctx_context_emissions SET selection=?1 WHERE id=?2",
+            rusqlite::params![corrupt, context],
+        )
+        .unwrap();
+        f.assert_storage_refusal(&delta);
+    }
+    f.update(
+        "UPDATE pctx_context_emissions SET selection=?1 WHERE id=?2",
+        rusqlite::params![original, context],
+    )
+    .unwrap();
+    assert_eq!(f.success(&delta)["mode"], "delta");
+    f.success(&["session", "suspend", "--session", &session]);
+    f.success(&["session", "reconcile", "--session", &session]);
+    f.update(
+        "UPDATE pctx_session_capsules SET metadata=?1",
+        ["{PCTX_STORED_SENTINEL"],
+    )
+    .unwrap();
+    f.assert_storage_refusal(&["session", "reconcile", "--session", &session]);
+}
+
+#[test]
+fn grouped_broker_saved_snapshot_preserves_parser_priority() {
+    let f = Fixture::new();
+    f.indexed();
+    assert!(
+        Command::new("git")
+            .args(["init", "--quiet"])
+            .current_dir(&f.root)
+            .env("GIT_CONFIG_NOSYSTEM", "1")
+            .env("GIT_CONFIG_GLOBAL", "/dev/null")
+            .status()
+            .unwrap()
+            .success()
+    );
+    f.success(&["repo", "status"]);
+    let control = &f.db;
+    let original: String = Connection::open(control)
+        .unwrap()
+        .query_row("SELECT value FROM broker_snapshots", [], |r| r.get(0))
+        .unwrap();
+    Connection::open(control)
+        .unwrap()
+        .execute(
+            "UPDATE broker_snapshots SET value=?1",
+            ["{PCTX_STORED_SENTINEL"],
+        )
+        .unwrap();
+    f.assert_storage_refusal(&["repo", "status"]);
+    assert_eq!(
+        f.run("json", &["repo", "status", "--fields", "invalid-field"])
+            .status
+            .code(),
+        Some(2)
+    );
+    Connection::open(control)
+        .unwrap()
+        .execute("UPDATE broker_snapshots SET value=?1", [original])
+        .unwrap();
+    f.success(&["repo", "status"]);
 }

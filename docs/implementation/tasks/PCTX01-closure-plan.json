@@ -422,7 +422,7 @@
       "id": "PCTX01-G05-D04",
       "gate": "G05",
       "status": "open",
-      "local_implementation": "remaining",
+      "local_implementation": "frozen91 origins classified; grouped persisted decoder correction implemented; runtime residuals remain",
       "completion_condition": "One grouped persisted-data error matrix: known repaired Work/Adapter plus all frozen DB/artifact/credential decoders; caller/config2 versus storage7, original expiry, conflict9 and replay precedence; safe fixed errors/no corrupt bytes",
       "spec_sections": [
         "14",
@@ -434,15 +434,17 @@
       "evidence": [
         "pctx01-adapter-errors-verification.json",
         "pctx01-persisted-errors-verification.json",
-        "pctx01-task-storage-verification.json"
+        "pctx01-task-storage-verification.json",
+        "pctx01-grouped-storage-classification.json",
+        "pctx01-grouped-storage-verification.json"
       ],
       "verification_environment": "Native macOS arm64 local common proof; all release platforms separately required by G09",
-      "macOS_arm64": "remaining",
+      "macOS_arm64": "related127 and expanded7 passed; complete frozen runtime matrix remains open",
       "macOS_x86_64": "unverified; G09-D02",
       "Linux_x86_64": "unverified; G09-D03",
       "Linux_aarch64": "prior fixed-source full only; inspect linked manifest per contract",
       "Windows_x86_64": "unverified; G09-D04",
-      "documentation_evidence": "closure plan recorded; execution gaps retained"
+      "documentation_evidence": "grouped source classification and verification manifest; no whole-item closure"
     },
     {
       "id": "PCTX01-G05-D05",

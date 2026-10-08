@@ -350,13 +350,14 @@ fn authenticate(p: &Project, db: &Connection) -> Result<String> {
             9,
         ));
     }
-    let credential: Value = serde_json::from_slice(
+    let credential: Value = crate::domain::stored_json_bytes(
         &std::fs::read(
             p.workspace_dir
                 .join("credentials")
                 .join(format!("{run}.json")),
         )
         .map_err(|_| denied("Run credential unavailable"))?,
+        "Stored run credential JSON is invalid",
     )?;
     if credential["run_id"] != run
         || credential["lease_epoch"] != epoch
@@ -881,7 +882,7 @@ fn decision_view(db: &Connection, decision: &str) -> Result<Value> {
         .query_map([decision], |r| r.get::<_, String>(0))?
         .collect::<std::result::Result<Vec<_>, _>>()?;
     Ok(
-        json!({"decision_id":decision,"action":serde_json::from_str::<Value>(&action)?,"state":if state=="approved"&&expires.is_none_or(|n|n<=now()){"expired"}else{&state},"reason":reason,"request":serde_json::from_str::<Value>(&request)?,"owner_evidence":evidence,"expires_at":expires,"provenance":provenance,"requesters":requesters,"host_permission":"separate_required"}),
+        json!({"decision_id":decision,"action":crate::domain::stored_json::<Value>(&action, "Stored decision action JSON is invalid")?,"state":if state=="approved"&&expires.is_none_or(|n|n<=now()){"expired"}else{&state},"reason":reason,"request":crate::domain::stored_json::<Value>(&request, "Stored decision request JSON is invalid")?,"owner_evidence":evidence,"expires_at":expires,"provenance":provenance,"requesters":requesters,"host_permission":"separate_required"}),
     )
 }
 
@@ -1307,7 +1308,10 @@ pub fn execute(p: &Project, command: &OperationCommand) -> Result<Value> {
             let mut items = Vec::new();
             for candidate in candidates {
                 let (id, payload) = candidate?;
-                let action: Action = serde_json::from_str(&payload)?;
+                let action: Action = crate::domain::stored_json(
+                    &payload,
+                    "Stored operation payload JSON is invalid",
+                )?;
                 let mut roles = vec!["*".to_string()];
                 if let Some(role) = &action.role {
                     roles.push(role.clone());
@@ -1402,7 +1406,10 @@ pub fn execute(p: &Project, command: &OperationCommand) -> Result<Value> {
                             "Acknowledgement session does not match exact recipient",
                         ));
                     }
-                    let m: Message = serde_json::from_str(&payload)?;
+                    let m: Message = crate::domain::stored_json(
+                        &payload,
+                        "Stored operation payload JSON is invalid",
+                    )?;
                     if m.expires_at.is_some_and(|t| t <= now()) {
                         return Err(Error::new("MESSAGE_EXPIRED", "Message expired", 9));
                     }
@@ -1492,7 +1499,10 @@ pub fn execute(p: &Project, command: &OperationCommand) -> Result<Value> {
             let mut cursor = *since_seq;
             let mut suppressed = 0;
             for (seq, id, _kind, _recipient, payload, state) in rows {
-                let m: Message = serde_json::from_str(&payload)?;
+                let m: Message = crate::domain::stored_json(
+                    &payload,
+                    "Stored operation payload JSON is invalid",
+                )?;
                 cursor = seq;
                 let mut valid_until = m.expires_at;
                 let mut source_hash = None;
@@ -1658,7 +1668,7 @@ fn enqueue_message_db(
                     9,
                 ));
             }
-            serde_json::from_str(&response)?
+            crate::domain::stored_json(&response, "Stored message receipt JSON is invalid")?
         } else {
             type SavedMessage = (i64, String, String, String, Option<String>, String, String);
             let saved:Option<SavedMessage>=db.query_row("SELECT seq,id,recipient_kind,recipient,task,payload,state FROM ops_messages WHERE sender=?1 AND json_extract(payload,'$.idempotency_key')=?2 ORDER BY seq LIMIT 1",params![sender,m.idempotency_key],|r|Ok((r.get(0)?,r.get(1)?,r.get(2)?,r.get(3)?,r.get(4)?,r.get(5)?,r.get(6)?))).optional()?;
@@ -1672,7 +1682,10 @@ fn enqueue_message_db(
                 state,
             )) = saved
             {
-                let old_message: Message = serde_json::from_str(&old_payload)?;
+                let old_message: Message = crate::domain::stored_json(
+                    &old_payload,
+                    "Stored message payload JSON is invalid",
+                )?;
                 let previous = hash(serde_json::to_vec(
                     &json!({"payload":old_message,"recipient_kind":old_kind,"recipient":old_recipient,"task":old_task}),
                 )?);

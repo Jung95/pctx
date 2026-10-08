@@ -376,7 +376,9 @@ fn session_inner(p: &Project, c: &SessionCommand) -> Result<Value> {
             let latest:Option<(String,String)>=tx.query_row("SELECT id,metadata FROM pctx_session_capsules WHERE session=?1 ORDER BY rowid DESC LIMIT 1",[session],|r|Ok((r.get(0)?,r.get(1)?))).optional()?;
             let old = latest
                 .as_ref()
-                .map(|(_, s)| serde_json::from_str::<Value>(s))
+                .map(|(_, s)| {
+                    crate::domain::stored_json::<Value>(s, "Stored session capsule JSON is invalid")
+                })
                 .transpose()?;
             let paused = current["tasks"]
                 .as_array()
@@ -512,7 +514,8 @@ impl ReceiptSpec<'_> {
                 "Baseline session, epoch, task, permission scope, serializer or acknowledgement differs",
             ));
         }
-        let selection: BTreeMap<String, Value> = serde_json::from_str(&row.6)?;
+        let selection: BTreeMap<String, Value> =
+            crate::domain::stored_json(&row.6, "Stored context selection JSON is invalid")?;
         if selection
             .get("__plan")
             .and_then(|p| p.get("delivery_barrier"))

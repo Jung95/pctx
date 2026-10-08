@@ -454,7 +454,7 @@ fn load_plan(p: &Project, name: &str) -> Result<Plan> {
     if bytes.len() > 16 * 1024 * 1024 {
         return Err(invalid("Plan exceeds size bound"));
     }
-    let plan: Plan = serde_json::from_slice(&bytes)?;
+    let plan: Plan = crate::domain::stored_json_bytes(&bytes, "Stored pack plan JSON is invalid")?;
     if plan.schema_version == 1 {
         return Err(stale(
             "Legacy plan lacks consumer delivery binding; create a new plan",

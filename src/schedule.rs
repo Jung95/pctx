@@ -330,7 +330,8 @@ fn read_connection(p: &Project) -> Result<Option<Connection>> {
 fn read_get(p: &Project, db: &Connection, namespace: &str, id: &str) -> Result<Stored> {
     let row=p.sqlite_call(db,||db.query_row("SELECT definition,revision,workspace,enabled,pause_source,removed,cursor_at,last_success,next_due FROM schedule_definitions WHERE namespace=?1 AND id=?2",params![namespace,id],|r|Ok((r.get::<_,String>(0)?,r.get(1)?,r.get(2)?,r.get(3)?,r.get(4)?,r.get(5)?,r.get(6)?,r.get(7)?,r.get(8)?))).optional())?.ok_or_else(||Error::new("SCHEDULE_NOT_FOUND","No schedule in the exact namespace",6))?;
     p.check_deadline()?;
-    let definition = serde_json::from_str(&row.0)?;
+    let definition =
+        crate::domain::stored_json(&row.0, "Stored schedule definition JSON is invalid")?;
     p.check_deadline()?;
     Ok(Stored {
         definition,
@@ -517,7 +518,8 @@ fn grant_reason(
         return Ok(Some("operation_decision_missing".into()));
     };
     p.check_deadline()?;
-    let action: Action = serde_json::from_str(&stored)?;
+    let action: Action =
+        crate::domain::stored_json(&stored, "Stored schedule decision JSON is invalid")?;
     p.check_deadline()?;
     if policy != p.policy_hash()
         || state != "approved"
@@ -703,7 +705,7 @@ struct Stored {
     next: Option<i64>,
 }
 fn get(db: &Connection, namespace: &str, id: &str) -> Result<Stored> {
-    db.query_row("SELECT definition,revision,workspace,enabled,pause_source,removed,cursor_at,last_success,next_due FROM schedule_definitions WHERE namespace=?1 AND id=?2",params![namespace,id],|r|Ok((r.get::<_,String>(0)?,r.get(1)?,r.get(2)?,r.get(3)?,r.get(4)?,r.get(5)?,r.get(6)?,r.get(7)?,r.get(8)?))).optional()?.ok_or_else(||Error::new("SCHEDULE_NOT_FOUND","No schedule in the exact namespace",6)).and_then(|(definition,revision,workspace,enabled,pause,removed,cursor,success,next)|Ok(Stored{definition:serde_json::from_str(&definition)?,revision,workspace,enabled,pause,removed,cursor,success,next}))
+    db.query_row("SELECT definition,revision,workspace,enabled,pause_source,removed,cursor_at,last_success,next_due FROM schedule_definitions WHERE namespace=?1 AND id=?2",params![namespace,id],|r|Ok((r.get::<_,String>(0)?,r.get(1)?,r.get(2)?,r.get(3)?,r.get(4)?,r.get(5)?,r.get(6)?,r.get(7)?,r.get(8)?))).optional()?.ok_or_else(||Error::new("SCHEDULE_NOT_FOUND","No schedule in the exact namespace",6)).and_then(|(definition,revision,workspace,enabled,pause,removed,cursor,success,next)|Ok(Stored{definition:crate::domain::stored_json(&definition, "Stored schedule definition JSON is invalid")?,revision,workspace,enabled,pause,removed,cursor,success,next}))
 }
 fn reconcile(p: &Project, namespace: Option<&str>, at: i64) -> Result<Value> {
     owner()?;
@@ -758,7 +760,10 @@ fn reconcile(p: &Project, namespace: Option<&str>, at: i64) -> Result<Value> {
             let existing:Option<(String,String)>=tx.query_row("SELECT state,metadata FROM schedule_occurrences WHERE namespace=?1 AND schedule=?2 AND revision=?3 AND occurrence=?4",params![namespace,id,stored.revision,key],|r|Ok((r.get(0)?,r.get(1)?))).optional()?;
             if let Some((old_state, old_metadata)) = existing {
                 reused = true;
-                let old: Value = serde_json::from_str(&old_metadata)?;
+                let old: Value = crate::domain::stored_json(
+                    &old_metadata,
+                    "Stored occurrence metadata JSON is invalid",
+                )?;
                 if !["running", "succeeded", "failed", "interrupted_unknown"]
                     .contains(&old_state.as_str())
                     && (old_state != state || old["barriers"] != metadata["barriers"])
@@ -1126,7 +1131,10 @@ fn execute_inner(p: &Project, c: &ScheduleCommand) -> Result<Value> {
                         9,
                     ));
                 }
-                return Ok(serde_json::from_str(&response)?);
+                return crate::domain::stored_json(
+                    &response,
+                    "Stored schedule receipt JSON is invalid",
+                );
             }
             let exists: bool = tx.query_row(
                 "SELECT EXISTS(SELECT 1 FROM schedule_definitions WHERE namespace=?1 AND id=?2)",
@@ -1890,7 +1898,8 @@ fn installed_plan(
     if metadata.len() > 1024 * 1024 {
         return Err(invalid("Managed installation metadata exceeds bound"));
     }
-    let value: Value = serde_json::from_str(&metadata)?;
+    let value: Value =
+        crate::domain::stored_json(&metadata, "Stored installation metadata JSON is invalid")?;
     p.check_deadline()?;
     Ok((state, value.get("plan").cloned().unwrap_or(value)))
 }
@@ -2018,7 +2027,7 @@ fn execution_binding(p: &Project, db: &Connection, s: &Stored) -> Result<()> {
             6,
         ));
     };
-    let v: Value = serde_json::from_str(&profile)?;
+    let v: Value = crate::domain::stored_json(&profile, "Stored schedule binding JSON is invalid")?;
     if revision != s.revision
         || workspace != p.workspace_id
         || policy != p.policy_hash()
@@ -2489,7 +2498,8 @@ fn recover(
     #[cfg(not(unix))]
     let _ = &s;
     let (state,result):(String,String)=tx.query_row("SELECT state,result FROM schedule_runs WHERE namespace=?1 AND schedule=?2 AND revision=?3 AND occurrence=?4 AND attempt=?5",params![namespace,id,revision,occurrence,attempt],|r|Ok((r.get(0)?,r.get(1)?)))?;
-    let metadata: Value = serde_json::from_str(&result)?;
+    let metadata: Value =
+        crate::domain::stored_json(&result, "Stored schedule run JSON is invalid")?;
     if !["running", "interrupted_unknown"].contains(&state.as_str())
         || metadata["workspace"] != p.workspace_id
         || metadata["execution_kind"] != "in_process"

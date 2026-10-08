@@ -56,7 +56,7 @@ fn snapshot(db: &Connection, key: &str) -> Result<Option<Snapshot>> {
     let row:Option<(String,i64,i64,String,String)>=db.query_row("SELECT value,observed_ms,generation,status,revision FROM broker_snapshots WHERE key=?1",[key],|r|Ok((r.get(0)?,r.get(1)?,r.get(2)?,r.get(3)?,r.get(4)?))).optional()?;
     row.map(|(value, observed, generation, status, revision)| {
         Ok(Snapshot {
-            value: serde_json::from_str(&value)?,
+            value: crate::domain::stored_json(&value, "Stored broker snapshot JSON is invalid")?,
             observed,
             generation,
             status,

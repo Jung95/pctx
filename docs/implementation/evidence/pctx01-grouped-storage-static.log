@@ -1,0 +1,25 @@
+    Checking pctx v0.1.0-dev (/Users/dev/PCTX)
+error: enclosing `Ok` and `?` operator are unneeded
+    --> src/schedule.rs:1134:24
+     |
+1134 |                   return Ok(crate::domain::stored_json(
+     |  ________________________^
+1135 | |                     &response,
+1136 | |                     "Stored schedule receipt JSON is invalid",
+1137 | |                 )?);
+     | |___________________^
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#needless_question_mark
+     = note: `-D clippy::needless-question-mark` implied by `-D warnings`
+     = help: to override `-D warnings` add `#[allow(clippy::needless_question_mark)]`
+help: remove the enclosing `Ok` and `?` operator
+     |
+1134 ~                 return crate::domain::stored_json(
+1135 |                     &response,
+1136 |                     "Stored schedule receipt JSON is invalid",
+1137 ~                 );
+     |
+
+error: could not compile `pctx` (lib) due to 1 previous error
+warning: build failed, waiting for other jobs to finish...
+error: could not compile `pctx` (lib test) due to 1 previous error

@@ -405,7 +405,10 @@ fn receipt(db: &Connection, key: &str, request: &str) -> Result<Option<Value>> {
         if old != request {
             return Err(conflict("Idempotency key already has a different request"));
         }
-        return Ok(Some(serde_json::from_str(&response)?));
+        return Ok(Some(crate::domain::stored_json(
+            &response,
+            "Stored quota receipt JSON is invalid",
+        )?));
     }
     Ok(None)
 }
@@ -444,7 +447,10 @@ fn ingest(p: &Project, path: &PathBuf, key: &str) -> Result<Value> {
         if o.kind == "request" && o.status == "actual" {
             let previous:Option<String>=tx.query_row("SELECT payload FROM quota_observations WHERE pool=?1 AND provider=?2 AND metric=?3 AND json_extract(payload,'$.request_id')=?4 ORDER BY observed DESC LIMIT 1",params![o.pool_id,o.provider,o.metric,o.request_id],|r|r.get(0)).optional()?;
             if let Some(previous) = previous {
-                let old: Observation = serde_json::from_str(&previous)?;
+                let old: Observation = crate::domain::stored_json(
+                    &previous,
+                    "Stored usage observation JSON is invalid",
+                )?;
                 if old.amount.zip(o.amount).is_some_and(|(a, b)| a != b)
                     || old.model != o.model
                     || old.unit != o.unit
@@ -477,7 +483,10 @@ fn ingest(p: &Project, path: &PathBuf, key: &str) -> Result<Value> {
         if o.kind == "cumulative" && o.status == "actual" {
             let previous:Option<String>=tx.query_row("SELECT payload FROM quota_observations WHERE pool=?1 AND provider=?2 AND model=?3 AND metric=?4 AND source=?5 AND session=?6 AND context_epoch=?7 AND counter_epoch=?8 ORDER BY observed DESC,rowid DESC LIMIT 1",params![o.pool_id,o.provider,o.model,o.metric,o.source,o.session_id,o.context_epoch,o.counter_epoch],|r|r.get(0)).optional()?;
             if let Some(previous) = previous {
-                let prev: Observation = serde_json::from_str(&previous)?;
+                let prev: Observation = crate::domain::stored_json(
+                    &previous,
+                    "Stored usage observation JSON is invalid",
+                )?;
                 if stamp(&o.observed_at)? < stamp(&prev.observed_at)?
                     || o.amount
                         .zip(prev.amount)
@@ -528,7 +537,8 @@ fn observations(p: &Project, db: &Connection, pool: Option<&str>) -> Result<Vec<
             break;
         };
         let (rowid, payload) = row.map_err(|e| p.map_sqlite_error(e))?;
-        let mut o: Observation = serde_json::from_str(&payload)?;
+        let mut o: Observation =
+            crate::domain::stored_json(&payload, "Stored usage observation JSON is invalid")?;
         p.check_deadline()?;
         if rowid <= cutoff && o.kind == "quota" {
             o.status = "unknown".into();

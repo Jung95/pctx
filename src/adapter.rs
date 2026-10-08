@@ -929,7 +929,8 @@ fn execute_inner(p: &Project, c: &AdapterCommand) -> Result<Value> {
             if hash(&bytes) != *expect_hash {
                 return Err(Error::new("PLAN_MISMATCH", "Plan bytes changed", 4));
             }
-            let plan: Plan = serde_json::from_slice(&bytes)?;
+            let plan: Plan =
+                crate::domain::stored_json_bytes(&bytes, "Stored adapter plan JSON is invalid")?;
             if plan.schema != 1 {
                 return Err(Error::new(
                     "PLAN_MISMATCH",

@@ -1,0 +1,15 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.77s
+     Running tests/persisted_error_contract.rs (target/debug/deps/persisted_error_contract-257962e0e1215410)
+
+running 7 tests
+test grouped_decision_payloads_preserve_caller_errors_and_safe_storage_refusal ... ok
+test grouped_index_metadata_and_checksum_matched_checkpoint_json_are_storage_errors ... ok
+test grouped_broker_saved_snapshot_preserves_parser_priority ... ok
+test grouped_registry_pack_output_and_helper_metadata_refuse_without_publication ... ok
+test grouped_quota_observation_syntax_and_shape_are_storage_errors ... ok
+test grouped_schedule_stored_definition_and_receipt_preserve_replay_conflict ... ok
+test grouped_context_selection_and_capsule_keep_identity_conflict_before_storage_decode ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 7 filtered out; finished in 1.04s
+

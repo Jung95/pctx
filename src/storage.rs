@@ -143,7 +143,7 @@ pub fn update(p: &Project) -> Result<Value> {
             .map_err(|e| sql_error(p, e))?;
         let entry = if let Some(c) = cached {
             reused += 1;
-            serde_json::from_str::<FileEntry>(&c)?
+            crate::domain::stored_json::<FileEntry>(&c, "Stored index entry JSON is invalid")?
         } else {
             crate::search::analyze_with_deadline(&path, &file.hash, &file.text, p.deadline)?
         };
@@ -252,7 +252,10 @@ fn snapshot_rows(p: &Project, physical: bool) -> Result<(Option<String>, Vec<Fil
     let mut entries = Vec::new();
     for row in rows {
         p.check_deadline()?;
-        let f: FileEntry = serde_json::from_str(&row.map_err(|e| sql_error(p, e))?)?;
+        let f: FileEntry = crate::domain::stored_json(
+            &row.map_err(|e| sql_error(p, e))?,
+            "Stored index entry JSON is invalid",
+        )?;
         let access = if physical {
             reader::authorize(p, &f.path).map(|_| ())
         } else {
@@ -407,7 +410,8 @@ pub fn checkpoint_get(p: &Project, key: &str) -> Result<Value> {
                 7,
             ));
         }
-        let mut value: Value = serde_json::from_str(&body)?;
+        let mut value: Value =
+            crate::domain::stored_json(&body, "Stored checkpoint manifest JSON is invalid")?;
         filter_checkpoint(p, &mut value)?;
         Ok(value)
     }
@@ -434,7 +438,10 @@ pub fn checkpoint_list(p: &Project) -> Result<Value> {
                 7,
             ));
         }
-        let mut value = serde_json::from_str::<Value>(&body)?;
+        let mut value = crate::domain::stored_json::<Value>(
+            &body,
+            "Stored checkpoint manifest JSON is invalid",
+        )?;
         filter_checkpoint(p, &mut value)?;
         items.push(value);
     }
