@@ -7,8 +7,9 @@
 ## Latest integration boundary
 
 PCTX01-G02/G04/G05 refusal-envelope consistency, base
-3ca728ef41a5ca0a763db174971be38d8cf40900. Runtime revision follows the development
-commit. src/domain.rs shares error status/partial coverage/code reason; src/main.rs
+3ca728ef41a5ca0a763db174971be38d8cf40900. Runtime revision
+3a08146e2ea1eac23bc1f82d25ee5b54345f06f9, normally published by push11290 terminal0
+(3ca728e..3a08146) to origin/main, [skip ci]. src/domain.rs shares error status/partial coverage/code reason; src/main.rs
 five consumers keep original data/error/exits/clock/routing. tests/
 cli_refusal_envelope.rs verifies618 native refusal attempts:560 frozen140-leaf
 unknown-option cases (280 JSON/280 compact stderr),16 C004 required/duplicate

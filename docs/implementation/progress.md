@@ -957,3 +957,7 @@ Final native full51862 terminal101:566PASS3FAIL. Captured-command-path passed
 without startup repair; all four historical startup conditions remain unresolved
 and original budgets unchanged. Full failures/source hashes in manifest. All
 jobs terminal, no heavy job live. PCTX01 remains incomplete0/10.
+
+Runtime3a08146e2ea1eac23bc1f82d25ee5b54345f06f9 normally published by11290 terminal0
+(3ca728e..3a08146) to origin/main, [skip ci]. All jobs terminal, no Actions.
+Only PCTX01 active; next local G03-C001 existing Activity cursor admission.

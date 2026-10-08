@@ -199,5 +199,14 @@
       "src/watch.rs run since<0 guard before stdout; entry supplied-expiry handling unqualified"
     ],
     "independent_review": "/root/work_control confirmed missing admission and exact Work/Watch clock/stream boundaries; no edits/tests"
+  },
+  "runtime_revision": "3a08146e2ea1eac23bc1f82d25ee5b54345f06f9",
+  "publication": {
+    "session": 11290,
+    "exit": 0,
+    "remote": "https://github.com/Jung95/pctx.git",
+    "branch": "main",
+    "range": "3ca728e..3a08146",
+    "actions_dispatched": false
   }
 }
