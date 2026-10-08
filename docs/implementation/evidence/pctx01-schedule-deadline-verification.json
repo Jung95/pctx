@@ -98,5 +98,6 @@
     "Original native startup failures remain unresolved; no retry promotion",
     "No Actions dispatched; no operational OS schedule installation or start",
     "Historical original startup failures remain unresolved even when a particular latest run passes them; this result does not promote retries or establish their root cause."
-  ]
+  ],
+  "runtime_commit": "59cdc41268a59d844c6741d3734ca5856e8adc2e"
 }
