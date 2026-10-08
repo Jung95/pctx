@@ -703,6 +703,16 @@ fn validate_delivery(p: &Project, plan: &Plan) -> Result<()> {
     p.check_deadline()
 }
 fn validate_inputs(p: &Project, plan: &Plan) -> Result<(Vec<Value>, Value)> {
+    validate_inputs_observed(p, plan, || Ok(()))
+}
+// The observer is private and synchronous. Production supplies a no-op; tests
+// coordinate a real control writer after inventory admission, before source
+// reconstruction and the final consumer check.
+fn validate_inputs_observed(
+    p: &Project,
+    plan: &Plan,
+    after_inventory: impl FnOnce() -> Result<()>,
+) -> Result<(Vec<Value>, Value)> {
     validate_delivery(p, plan)?;
     if plan.project_id != p.project_id
         || plan.workspace_id != p.workspace_id
@@ -720,14 +730,15 @@ fn validate_inputs(p: &Project, plan: &Plan) -> Result<(Vec<Value>, Value)> {
         return Err(stale("Task definition or operational state changed"));
     }
     let manifest = source_set(p, &plan.scopes)
-        .map_err(|_| stale("Source scope is no longer safely readable"))?;
+        .map_err(|e| source_validation_error(e, "Source scope is no longer safely readable"))?;
     if hash(serde_json::to_vec(&manifest)?) != plan.manifest_hash {
         return Err(stale("Source scope inventory or content changed"));
     }
+    after_inventory()?;
     let mut values = Vec::new();
     for item in &plan.items {
         let f = reader::read(p, &item.path)
-            .map_err(|_| stale("Planned source is no longer accessible"))?;
+            .map_err(|e| source_validation_error(e, "Planned source is no longer accessible"))?;
         if f.hash != item.source_hash {
             return Err(stale("Source hash changed"));
         }
@@ -739,6 +750,13 @@ fn validate_inputs(p: &Project, plan: &Plan) -> Result<(Vec<Value>, Value)> {
     }
     validate_delivery(p, plan)?;
     Ok((values, task))
+}
+fn source_validation_error(error: Error, message: &str) -> Error {
+    if error.code == "TIMEOUT" {
+        error
+    } else {
+        stale(message)
+    }
 }
 #[cfg(unix)]
 fn pinned_publish(
@@ -1721,4 +1739,164 @@ fn create_output_parents(_p: &Project, _path: &Path) -> Result<()> {
         "Pinned output parent creation is unavailable on this platform",
         6,
     ))
+}
+
+#[cfg(test)]
+mod validation_tests {
+    use super::*;
+    use crate::project::{Config, ProjectConfig};
+    use crate::work::{TaskCommand, WorkCommand};
+    fn fixture() -> (tempfile::TempDir, Project, String) {
+        let t = tempfile::tempdir().unwrap();
+        let base = t.path().canonicalize().unwrap();
+        std::fs::create_dir_all(base.join("project")).unwrap();
+        let p = Project {
+            deadline: None,
+            root_anchor: crate::project::RootAnchor::capture(&base.join("project")).unwrap(),
+            root: base.join("project"),
+            data_dir: base.join("data"),
+            workspace_dir: base.join("data/ws"),
+            control_dir: base.join("data/control"),
+            project_id: "project".into(),
+            workspace_id: "ws".into(),
+            coordination_id: "coord".into(),
+            config: Config {
+                schema_version: 1,
+                project: ProjectConfig {
+                    id: "project".into(),
+                    name: "test".into(),
+                },
+                index: Default::default(),
+                policy: Default::default(),
+                search: Default::default(),
+                context: Default::default(),
+                roles: Default::default(),
+            },
+        };
+        std::fs::create_dir_all(p.root.join("src")).unwrap();
+        std::fs::create_dir_all(&p.control_dir).unwrap();
+        std::fs::create_dir_all(&p.workspace_dir).unwrap();
+        let task_json = p.root.join("task.json");
+        std::fs::write(&task_json,json!({"schema_version":1,"title":"Review auth","scope":["src/**"],"acceptance":[{"id":"AC1","description":"Review complete","evidence_check_keys":["unit"]}],"checks":[{"key":"unit","kind":"test"}]}).to_string()).unwrap();
+        let task = work::execute(
+            &p,
+            &WorkCommand::Task {
+                command: TaskCommand::Create {
+                    from_file: task_json,
+                    idempotency_key: None,
+                },
+            },
+        )
+        .unwrap()["task_id"]
+            .as_str()
+            .unwrap()
+            .into();
+        (t, p, task)
+    }
+
+    #[test]
+    fn committed_pause_during_source_validation_prevents_delivery_and_publication() {
+        use crate::operations::{OperationCommand, RoleCommand};
+        for topic in [None, Some("quiet")] {
+            let (_temp, p, task) = fixture();
+            fs::write(p.root.join("src/auth.ts"), "export const auth=1;\n").unwrap();
+            let planned = create_plan(
+                &p,
+                &task,
+                (None, topic),
+                &["src".into()],
+                "full",
+                64000,
+                None,
+            )
+            .unwrap();
+            let plan = load_plan(&p, planned["plan_id"].as_str().unwrap()).unwrap();
+            let writer_project = p.clone();
+            let (start_tx, start_rx) = std::sync::mpsc::sync_channel(0);
+            let writer = std::thread::spawn(move || {
+                start_rx.recv().unwrap();
+                crate::operations::execute(
+                    &writer_project,
+                    &OperationCommand::Role {
+                        command: RoleCommand::Pause {
+                            role: "implementer".into(),
+                            reason: "controlled source-pass change".into(),
+                            topic: topic.map(str::to_owned),
+                            recipient: topic.map(|_| "owner".into()),
+                        },
+                    },
+                )
+            });
+            let result = validate_inputs_observed(&p, &plan, || {
+                start_tx.send(()).unwrap();
+                writer.join().unwrap()?;
+                Ok(())
+            });
+            assert_eq!(
+                result.unwrap_err().code,
+                if topic.is_some() {
+                    "TOPIC_SILENCED"
+                } else {
+                    "ROLE_PAUSED"
+                }
+            );
+            let denied = execute(
+                &p,
+                &PackCommand::Create {
+                    plan: plan.id.clone(),
+                    expect_hash: plan.plan_hash.clone(),
+                    output: "never-created/pack".into(),
+                },
+            )
+            .unwrap_err();
+            assert_eq!(denied.exit, 5);
+            assert!(!p.root.join("never-created").exists());
+        }
+    }
+    #[test]
+    fn source_read_expiry_keeps_original_timeout_in_library_validation() {
+        let (_temp, mut p, task) = fixture();
+        fs::write(p.root.join("src/auth.ts"), "export const auth=1;\n").unwrap();
+        let planned = create_plan(
+            &p,
+            &task,
+            (None, None),
+            &["src".into()],
+            "full",
+            64000,
+            None,
+        )
+        .unwrap();
+        let plan = load_plan(&p, planned["plan_id"].as_str().unwrap()).unwrap();
+        p.deadline = Some(crate::deadline::Deadline::from_millis(500).unwrap());
+        let mut reached = false;
+        let error = validate_inputs_observed(&p, &plan, || {
+            reached = true;
+            std::thread::sleep(
+                p.deadline.unwrap().remaining()? + std::time::Duration::from_millis(10),
+            );
+            Ok(())
+        })
+        .unwrap_err();
+        assert!(
+            reached,
+            "expiry must occur after inventory, not at admission"
+        );
+        assert_eq!(error.code, "TIMEOUT");
+        assert_eq!(error.exit, 7);
+        assert_eq!(
+            execute(
+                &p,
+                &PackCommand::Create {
+                    plan: plan.id,
+                    expect_hash: plan.plan_hash,
+                    output: "never-created/timeout".into()
+                }
+            )
+            .unwrap_err()
+            .code,
+            "TIMEOUT"
+        );
+        assert!(!p.root.join("never-created").exists());
+    }
 }

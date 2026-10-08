@@ -1,0 +1,63 @@
+{
+  "decision": "D043-follow-up",
+  "base_commit": "cb2ec2247a7674bdaa2d50c6b8de9c3023dbe582",
+  "platform": "native macOS arm64",
+  "source_sha256": {
+    "src/pack.rs": "3c072788965c4943e9fc88adfc2a4dd087f4b1ae859f5d209ecac41cc6c09a89"
+  },
+  "verification": {
+    "full": {
+      "handle": 63547,
+      "exit": 101,
+      "passed": 329,
+      "failed": 3,
+      "ignored": 0,
+      "failed_target": "project_deadline"
+    },
+    "final_related": {
+      "controlled_validation": 2,
+      "pack": 11,
+      "session_render_budget": 9,
+      "failed": 0
+    },
+    "format_exit": 0,
+    "locked_all_target_clippy_exit": 0
+  },
+  "logs": {
+    "full": {
+      "path": "docs/implementation/evidence/pack-validation-race-full.log",
+      "sha256": "71e9f99f817971831632d4750544961daa8efa7918babc5a6f1118259879e390"
+    },
+    "static": {
+      "path": "docs/implementation/evidence/pack-validation-race-static.log",
+      "sha256": "5ef59fd0ff38458844fa75b45396aaa7d3f83bb02feb98855ffaad4570fe872c"
+    },
+    "format": {
+      "path": "docs/implementation/evidence/pack-validation-race-format.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "direct": {
+      "path": "docs/implementation/evidence/pack-validation-race-direct.log",
+      "sha256": "65370441ad80655b2a9f34e356a17f5b2d443fd19acfde77f467d57fd8310e5f"
+    },
+    "initial-compile-failure": {
+      "path": "docs/implementation/evidence/pack-validation-race-initial-compile-failure.log",
+      "sha256": "36ffaaa09651383b5e0f25dd922982610e33f51e077822b265508a3c34524463"
+    }
+  },
+  "proof": [
+    "Real SQLite writer commits whole-role or declared-topic pause after inventory admission and before source reconstruction/final check; validation returnsROLE_PAUSED orTOPIC_SILENCED",
+    "Subsequent public Create rejects and does not create output parent",
+    "Original deadline expires after inventory admission; planned-source reader TIMEOUT preserved with exit7 in library; expired Create creates no output parent"
+  ],
+  "test_seam": "Private synchronous observer after inventory. Production supplies no-op. This is deterministic source-pass ordering with a real joined writer thread, not a native publication syscall race.",
+  "review": "Independent requirements review: source timeout mapping and observer correct; crate-reference and temporary-root canonicalization corrected. No agent tests substituted for runtime evidence.",
+  "remaining": [
+    "Native check-to-publication interval is not transactionally excluded",
+    "Actual agent epoch change during final validation and Windows publication unqualified",
+    "Per-item source topics and owner exception conflicts, handoff/task/approval variants",
+    "Three original1s startup failures unresolved",
+    "Full mandatory PCTX goal incomplete"
+  ],
+  "actions_dispatched": 0
+}

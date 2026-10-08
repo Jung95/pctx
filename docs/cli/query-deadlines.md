@@ -1,6 +1,6 @@
 # Query deadlines
 
-The current development source starts one monotonic budget after argument validation and before project discovery. Supported finite queries default to 10 seconds: `find`, `query`, `extract`, `graph`, `outline`, `read`, `changes`, `status`, `doctor`, `repo`, `cache`, finite `board`, finite `activity`, `handoff show`, `output show/find/render`, existing `savings report/opportunities`, all `session` operations, and `context get/ack`. `index`, `build` and `checkpoint` default to 120 seconds.
+The current development source starts one monotonic budget after argument validation and before project discovery. Supported finite queries default to 10 seconds: `find`, `query`, `extract`, `graph`, `outline`, `read`, `changes`, `status`, `doctor`, `repo`, `cache`, finite `board`, finite `activity`, `handoff show`, `output show/find/render`, existing `savings report/opportunities`, all `session` operations, `context get/ack`, and `pack plan/create/inspect/verify`. `index`, `build` and `checkpoint` default to 120 seconds.
 
 ```sh
 pctx --root /path/to/project --timeout-ms 3000 --format json find auth
@@ -22,3 +22,5 @@ After a successful output write, delivery accounting reuses the original project
 Native macOS CLI regressions verify exact newline-inclusive byte accounting and a complete output write followed by accounting timeout when the reader stalls past the original budget. The latter demonstrates cooperative pipe behavior; it does not guarantee hard cancellation of a blocked stdout write.
 
 Session/context library calls also receive a 10-second budget when their project has no outer deadline; an existing deadline is retained. Selection, source revalidation and receipt/session transaction commits check that same budget. Native macOS tests verify that an already expired request cannot attach, change an epoch, suspend/reconcile, emit context or acknowledge it; CLI writer contention verifies no session/receipt/event/capsule changes and no renewed five-second wait. Lock admission may report `INDEX_BUSY` immediately before expiry; actual expiry reports `TIMEOUT`. An individual SQLite commit or filesystem call remains cooperative, so this does not promise rollback of an already completed commit if response preparation later expires.
+
+Pack library entry supplies the same 10-second default when no deadline exists. Selected Pack builds keep that outer budget. Inventory/planned-source expiry returns TIMEOUT rather than a stale-plan error. A controlled fixture expires after inventory admission and verifies that Create publishes no output or parent. Delivery controls are checked after source reconstruction and immediately before Unix publication; this remains cooperative across native calls.

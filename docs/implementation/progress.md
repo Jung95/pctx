@@ -185,3 +185,9 @@ Pack shares registered consumer/declared-topic controls across metadata, signatu
 Native final gate16627 terminal101:327 PASS/3 original startup FAIL. Pack11+session_render_budget9 PASS, format and locked all-target Clippy PASS. pack-consumer-verification.json binds final sources and retains capability/option/grammar intermediate failures. Independent review found the missing post-source barrier check; fixed, rechecked and integrated. No Actions dispatched.
 
 Concurrent final-pass policy/epoch changes still lack runtime proof; final check and filesystem publication are not one transaction. Direct library source-validation timeout classification, Windows publication, source-topic attribution/owner exceptions and memory variants remain required. Entire mandatory goal stays active.
+
+## D043 source-pass control races and library timeouts
+
+Final native gate63547 terminal101: 329 PASS/3 original startup FAIL. Controlled validation2, Pack11 and session_render_budget9 PASS; format and locked all-target Clippy PASS. Evidence pack-validation-race-verification.json binds final source and retained initial unit-fixture compilation failure.
+
+Real committed role/topic changes coordinated after inventory admission are rejected by the final delivery check. Original deadline expiry during planned-source reading preserves TIMEOUT7 in library calls; stale mapping remains for access/content changes. Public Create after denial/expiry creates no output parent. Private observer is synchronous/no-op in production. Test temp roots are canonicalized. No native publication atomicity, actual mid-validation agent epoch or Windows proof is claimed. Next mandatory work includes source-topic/owner exception attribution, memory variants and unresolved startup repair. No Actions dispatched; full goal remains active.
