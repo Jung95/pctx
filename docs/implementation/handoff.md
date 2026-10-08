@@ -6,7 +6,7 @@
 
 ## Source, evidence and environment
 
-Base b0eea9401005cdfb4539cca0eb9916abee5a0f50; aggregation runtime commit to be bound after commit. Native full14811 terminal101:395 PASS/4 original startup FAIL across48 suites. Aggregation targeted1 PASS, guarded SQL5 PASS, format/locked all-target Clippy PASS. Independent scoped review no blocker. No live heavy job or new CI. Confirm Git/process state on resume.
+Base b0eea9401005cdfb4539cca0eb9916abee5a0f50; aggregation runtime d0acc2a2ced86cd6b215077106816ac848235cfb. Native full14811 terminal101:395 PASS/4 original startup FAIL across48 suites. Aggregation targeted1 PASS, guarded SQL5 PASS, format/locked all-target Clippy PASS. Independent scoped review no blocker. No live heavy job or new CI. Confirm Git/process state on resume.
 
 Public quota Report parses10000 validated stored observations; positive20000 tokens/10000 observations/0 duplicates. Under original2s,100 real aggregate iterations complete, then expiry before101 work requires TIMEOUT7/no later entries/work, same instant and unchanged observation/event snapshot. Removing guard makes10000 entered iterations and regression fails despite outer timeout. SQL50ms tests use emergency2s test-only interrupt which explicitly fails if activated; handler-loss mutation proves sensitivity. Driver71925 terminal0, exact quota/project sources restored. Final other_windows scan checks each row. See pctx01-aggregation-deadline-verification.json; this proves one command aggregation phase, not all CPU phases/platforms.
 
