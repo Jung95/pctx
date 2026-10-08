@@ -13,7 +13,7 @@ an audit denominator, not completed acceptance gates. Official PCTX01 remains
 closed0/10, denominator unchanged. No independent business features added.
 Source review classified every leaf by producer family and separated raw-input,
 authority/state and pure grammar. R01–R12 below freeze currently identified
-residual groups; R01–R10 and R12 now have local evidence (11/12 groups). None is whole
+residual groups; R01–R12 now have local evidence (12/12 groups). None is whole
 required-platform qualified. Native Linux/Windows and broader common gates remain.
 
 | Residual ID | Existing pure contract / exact source boundary | Status and scope |
@@ -28,7 +28,7 @@ required-platform qualified. Native Linux/Windows and broader common gates remai
 | R08 | output binding argv nonempty/count256/bytes65536 (525), Run modes already Clap-protected | Local native24 CLI/direct invalid+expiry/isolated nonowner and actual TrustPlan boundaries, related34 outerPASS; pctx01-execution-admission-verification.json; binding/authority/state remain producer-owned; platforms open |
 | R09 | filter Activate private identifier (727), Explain argv1..256 (1244), non-UTF8 explicit paths (relative helper208) | Local native32 CLI/nine direct expiry/actual ID+path+absolute preview/Explain256 and state-denial proofs, related18PASS; pctx01-filter-admission-verification.json; Apply ID-or-path preserved, absolute opacity deferred; platforms open |
 | R10 | adapter Plan/Event agent, Uninstall plan, Statusline task/pool/session/counter/key labels; Event explicit key is input-dependent | Local native36 CLI/nine direct expiry/isolated nonowner/bounds/actual PreToolUse key exemption and receipt replay, related26PASS; pctx01-adapter-admission-verification.json; Event key validates after parse/PreToolUse branch and before receipt lock/DB; platforms open |
-| R11 | schedule Add key, Update/Remove/Recover labels/reason, List/Reconcile/Tick namespace, RFC3339 --at, RunLoop intervals/ticks/TTL/conditional purpose (1033/1088/1165/2420/978/991/2020/947/2312) | Open; future-time prohibition and current native schedule ownership stay producer-owned |
+| R11 | schedule Add key, Update/Remove/Recover labels/reason, List/Reconcile/Tick namespace, RFC3339 --at, RunLoop intervals/ticks/TTL/conditional purpose | Local native92 refusal combinations/23 direct+expiry/nonowner/bounds/Add256 replay and no-tick namespace exception, related28PASS; pctx01-schedule-admission-verification.json; RunLoop namespace conditional, Inspect/Uninstall unrestricted lookup keys, future-time/ownership remain producer-owned; platforms open |
 | R12 | runner job/helper IDs and HelperRequest mode/scope count/nonsecret/nonlocal explicit scope (job_path/helper_read_path/helper_request) | Local44 refusal combinations/direct expiry/boundaries/non-owner/queued policy proofs,44 relatedPASS+intent1PASS+timeout/control21PASS;3 loss failures/exact restore;staticPASS; no whole platform closure |
 
 Read-only independent audit /root/work_control inspected all Operations/Work/

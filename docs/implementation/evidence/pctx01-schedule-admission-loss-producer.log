@@ -1,0 +1,25 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.56s
+     Running tests/schedule_preflight.rs (target/debug/deps/schedule_preflight-d777e2d31ef63d03)
+
+running 1 test
+
+thread 'isolated_nonowner_schedule_admission_keeps_authority_and_expiry' (8833464) panicked at tests/schedule_preflight.rs:572:9:
+assertion `left == right` failed
+  left: ("POLICY_DENIED", 5)
+ right: ("INVALID_ARGUMENT", 2)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+thread 'isolated_nonowner_schedule_admission_keeps_authority_and_expiry' (8833462) panicked at tests/schedule_preflight.rs:556:17:
+exit status: 101
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test isolated_nonowner_schedule_admission_keeps_authority_and_expiry ... FAILED
+
+failures:
+
+failures:
+    isolated_nonowner_schedule_admission_keeps_authority_and_expiry
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 4 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `--test schedule_preflight`

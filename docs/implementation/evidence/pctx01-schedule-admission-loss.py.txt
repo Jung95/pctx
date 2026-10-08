@@ -1,0 +1,32 @@
+import hashlib,json,os,pathlib,subprocess
+root=pathlib.Path("/Users/dev/PCTX")
+paths={name:root/name for name in ["src/main.rs","src/schedule.rs"]}
+original={name:path.read_bytes() for name,path in paths.items()}
+env=dict(os.environ,RUSTUP_HOME=str(root/".toolchain/rustup"),CARGO_HOME=str(root/".toolchain/cargo"),SDKROOT="/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",PATH=str(root/".toolchain/cargo/bin")+":/Library/Developer/CommandLineTools/usr/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin")
+prefix=root/"docs/implementation/evidence/pctx01-schedule-admission"
+cases=[
+("frontend","src/main.rs",'Command::Schedule { command } => schedule::validate_schedule_request(command),','Command::Schedule { .. } => Ok(()),',"schedule_arguments_precede_project_and_response_effects"),
+("producer","src/schedule.rs",'    validate_schedule_request(c)?;','',"isolated_nonowner_schedule_admission_keeps_authority_and_expiry"),
+("loop","src/schedule.rs",'            loop_arguments(\n                *interval_seconds,\n                *max_ticks,\n                *ttl_seconds,\n                *keep_awake,\n                purpose.as_deref(),\n            )?;','            let _ = (interval_seconds, max_ticks, ttl_seconds, keep_awake, purpose);',"schedule_arguments_precede_project_and_response_effects"),
+("namespace-exemption","src/schedule.rs",'            // Namespace is checked only if an eligible tick is reached.','            if let ScheduleCommand::RunLoop { namespace: Some(n), .. } = c { label(n)?; }\n            // Namespace is checked only if an eligible tick is reached.',"native_schedule_boundaries_replay_and_future_tick_preserve_contracts"),
+("purpose-exemption","src/schedule.rs",'purpose.len() > 256 || reader::redact(purpose).1','purpose.len() > 256 || purpose.chars().any(char::is_control) || reader::redact(purpose).1',"schedule_boundaries_preserve_existing_exceptions")]
+results=[]
+try:
+ for name,source,old,new,test in cases:
+  for file,data in original.items(): paths[file].write_bytes(data)
+  text=original[source].decode()
+  assert text.count(old)==1,(name,text.count(old))
+  paths[source].write_text(text.replace(old,new,1))
+  log=pathlib.Path(str(prefix)+"-loss-"+name+".log")
+  with log.open("wb") as output:
+   run=subprocess.run(["cargo","test","--locked","--test","schedule_preflight",test,"--","--exact","--nocapture"],cwd=root,env=env,stdout=output,stderr=subprocess.STDOUT)
+  data=log.read_text()
+  results.append(dict(case=name,test=test,exit=run.returncode,actual_test_failed="test result: FAILED. 0 passed; 1 failed;" in data))
+  assert run.returncode==101 and results[-1]["actual_test_failed"],results[-1]
+finally:
+ for file,data in original.items(): paths[file].write_bytes(data)
+ restored=all(paths[file].read_bytes()==data for file,data in original.items())
+ pathlib.Path(str(prefix)+"-loss-results.json").write_text(json.dumps(dict(results=results,exact_source_restored=restored,source_sha256={file:hashlib.sha256(data).hexdigest() for file,data in original.items()}),indent=2)+"\n")
+ assert restored
+print(json.dumps(results))
+

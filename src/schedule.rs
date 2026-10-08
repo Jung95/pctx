@@ -859,8 +859,82 @@ fn schedule_plan_arguments(namespace: &str, id: &str, provider: &str, root: &str
     }
     Ok(())
 }
+fn loop_arguments(
+    interval: u64,
+    max_ticks: u32,
+    ttl: u64,
+    keep_awake: bool,
+    purpose: Option<&str>,
+) -> Result<()> {
+    if !(1..=3600).contains(&interval)
+        || !(1..=10000).contains(&max_ticks)
+        || !(1..=86400).contains(&ttl)
+    {
+        return Err(invalid(
+            "Managed loop requires bounded interval, tick count and TTL",
+        ));
+    }
+    let purpose = purpose.unwrap_or("");
+    if keep_awake && (purpose.trim().is_empty() || purpose.len() > 256 || reader::redact(purpose).1)
+    {
+        return Err(invalid(
+            "Keep-awake requires a bounded non-sensitive purpose",
+        ));
+    }
+    Ok(())
+}
 pub fn validate_schedule_request(c: &ScheduleCommand) -> Result<()> {
     match c {
+        ScheduleCommand::Add {
+            idempotency_key, ..
+        } => label(idempotency_key)?,
+        ScheduleCommand::Update { namespace, id, .. }
+        | ScheduleCommand::Remove { namespace, id, .. } => {
+            label(namespace)?;
+            label(id)?;
+        }
+        ScheduleCommand::Recover {
+            namespace,
+            id,
+            reason,
+            ..
+        } => {
+            label(namespace)?;
+            label(id)?;
+            if reason.trim().is_empty() || reason.len() > 2048 {
+                return Err(invalid("Recovery requires a bounded reason"));
+            }
+        }
+        ScheduleCommand::List {
+            namespace: Some(namespace),
+        } => label(namespace)?,
+        ScheduleCommand::Reconcile { namespace, at }
+        | ScheduleCommand::Tick { namespace, at, .. } => {
+            if let Some(namespace) = namespace {
+                label(namespace)?;
+            }
+            if let Some(at) = at {
+                instant(at)?;
+            }
+        }
+        ScheduleCommand::RunLoop {
+            interval_seconds,
+            max_ticks,
+            ttl_seconds,
+            keep_awake,
+            purpose,
+            ..
+        } => {
+            loop_arguments(
+                *interval_seconds,
+                *max_ticks,
+                *ttl_seconds,
+                *keep_awake,
+                purpose.as_deref(),
+            )?;
+            // Namespace is checked only if an eligible tick is reached. Unmatched
+            // namespaces and ignored purposes retain the existing no-tick behavior.
+        }
         ScheduleCommand::Plan {
             namespace,
             id,
@@ -2310,21 +2384,8 @@ fn run_loop(
     purpose: Option<&str>,
 ) -> Result<Value> {
     owner()?;
-    if !(1..=3600).contains(&interval)
-        || !(1..=10000).contains(&max_ticks)
-        || !(1..=86400).contains(&ttl)
-    {
-        return Err(invalid(
-            "Managed loop requires bounded interval, tick count and TTL",
-        ));
-    }
+    loop_arguments(interval, max_ticks, ttl, keep_awake, purpose)?;
     let purpose = purpose.unwrap_or("");
-    if keep_awake && (purpose.trim().is_empty() || purpose.len() > 256 || reader::redact(purpose).1)
-    {
-        return Err(invalid(
-            "Keep-awake requires a bounded non-sensitive purpose",
-        ));
-    }
     let start = Instant::now();
     let mut awake = None;
     let mut runs = Vec::new();

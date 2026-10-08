@@ -1,0 +1,23 @@
+    Checking pctx v0.1.0-dev (/Users/dev/PCTX)
+error: this `if let` can be collapsed into the outer `match`
+   --> src/schedule.rs:909:13
+    |
+909 | /             if let Some(namespace) = namespace {
+910 | |                 label(namespace)?;
+911 | |             }
+    | |_____________^
+    |
+help: the outer pattern can be modified to include the inner pattern
+   --> src/schedule.rs:908:33
+    |
+908 |         ScheduleCommand::List { namespace } => {
+    |                                 ^^^^^^^^^ replace this binding
+909 |             if let Some(namespace) = namespace {
+    |                    ^^^^^^^^^^^^^^^ with this pattern, prefixed by `namespace: `
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#collapsible_match
+    = note: `-D clippy::collapsible-match` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::collapsible_match)]`
+
+error: could not compile `pctx` (lib) due to 1 previous error
+warning: build failed, waiting for other jobs to finish...
+error: could not compile `pctx` (lib test) due to 1 previous error

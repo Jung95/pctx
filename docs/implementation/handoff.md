@@ -6,24 +6,23 @@
 
 ## Latest integration boundary
 
-PCTX01-G03-R10/G08 adapter admission, runtime
-dce6ad2b2fabdc9e3ab771b38035f6c2edfd4685, base
-ec0b2f534a897ec521e29828d863c65d999d0607. Normal push49732 terminal0 published
-ec0b2f5..dce6ad2 to origin/main. Runtime edits: src/adapter.rs, src/main.rs,
-tests/adapter_preflight.rs and adapter-admission evidence/docs.
-Exact existing identities before discovery/owner/input effects; original supplied
-expiry first. Event explicit key stays input-dependent after parse/PreToolUse
-branch before receipts. No config installation, clock or independent feature.
-Baseline39373 terminal101:0PASS2FAIL; initial related83452 terminal0:22PASS;
-final related3814 terminal0:26PASS; loss driver45068 terminal0 with four actual
-0PASS1FAIL/exact restoration; format terminal0, Clippy1683 terminal0. Independent
-/root/work_control read-only review no blocker; accepted Statusline boundaries
-and valid nonowner Event/Statusline/Uninstall not separately demonstrated.
-Full native macOS98442 terminal101:541PASS4FAIL; all four historical startup
-conditions fail at unchanged budgets/no-fail-fast. All jobs terminal; no heavy
-job live. Manifest pctx01-adapter-admission-verification.json. Local residual
-11/12(R01–R10,R12), required-platform0/12; PCTX01 whole0/10. Linux/Windows and
-four historical startup conditions remain unverified/unresolved. No Actions.
+PCTX01-G03-R11/G08 schedule admission, base
+9315627c104a5df6bf9f3718b32627d9ebd3be3a. Uncommitted: src/schedule.rs,
+tests/schedule_preflight.rs and schedule-admission evidence/docs. Existing pure
+checks before discovery/owner/input/storage; original expiry first, private loop
+helper shared. Conditional namespace/purpose, unrestricted lookups and future
+state checks preserved. No business feature, OS registration, model or wake call.
+Baseline47943 terminal101:1PASS1FAIL; related53185 terminal0:25PASS; final
+related10944 terminal0:28PASS; loss driver73664 terminal0 (five actual
+0PASS1FAIL/exact restore). Initial Clippy75098 terminal101, equivalent List
+Some-pattern fix; final format0/Clippy96799 terminal0. Independent read-only
+/root/work_control no blocker. Related/loss source precedes style-only fix.
+Full native macOS98360 terminal101: 547PASS3FAIL at final source, unchanged
+budgets/no-fail-fast. Three historical startup conditions fail; captured-path
+passes without a repair, all four conditions remain unresolved. All jobs terminal;
+no heavy job live. Manifest pctx01-schedule-admission-verification.json. Local residual
+12/12, required-platform0/12, whole PCTX01 gates0/10. Linux/Windows and four
+historical startup conditions remain open. No next official task or Actions.
 
 ## Source, evidence and environment
 
@@ -71,18 +70,18 @@ Original ignored specification SHA256 8914faad57432f524aec0a06aa90c43c18c23f8c19
 
 ## Exact next action
 
-Full native macOS98442 and normal push49732 are terminal, source hashes recorded.
-Resume the fixed same-task boundary from published runtime dce6ad2.
-Remain on PCTX01; fixed R11 existing schedule grammar is the next local boundary
-after R10 integration. Other whole gates remain open, including the source/spec discrepancy: adapter
-POLICY_DENIED currently9 versus required §14 policy5. R10 preserves baseline only;
-G05 needs exact classification/transport evidence. No next official task.
-External blockers require exact needed action while retaining the current task.
-Native G09 requires actual Linux and Windows hosts at the current source: run
-`cargo test --locked --all-targets --no-fail-fast` and the required native CLI
-input/transport/platform matrix, retaining full logs and source/environment IDs.
-Cross-builds or fixture mocks do not close G09. No Actions dispatch is authorized
-by this record; the monthly limit remains respected. Local PCTX01 work remains.
+Native full98360 is terminal, exact counts/failures/hashes recorded. Publish
+development integration with [skip ci], then remain on PCTX01. The fixed
+R01–R12 local residual register has evidence12/12; whole gates remain0/10. Next
+same-task boundary is G05: reconcile adapter POLICY_DENIED9 and other error
+classifications with specification §14 policy5/stable statuses, using actual
+CLI+library error/representation/no-effects matrix. Preserve initial behavior
+evidence rather than qualifying it as conformance. No next official task.
+External blockers require exact needed action while retaining current task. G09
+requires actual Linux/Windows hosts at current source: cargo test --locked
+--all-targets --no-fail-fast plus required native CLI input/transport matrix and
+full logs/source/environment IDs. Cross-builds are not native proof. No Actions
+dispatch authorized by this record; monthly limit respected. Local work remains.
 
 ## Retained historical results and inactive backlog
 

@@ -877,3 +877,19 @@ Development runtime dce6ad2b2fabdc9e3ab771b38035f6c2edfd4685 published by normal
 push49732 terminal0, ec0b2f5..dce6ad2 to origin/main, [skip ci]. All jobs
 terminal, no Actions. PCTX01 remains the only active official task; next local
 boundary R11, with adapter stable-error G05 discrepancy and other gates retained.
+
+
+## PCTX01 R11 integration — 2026-10-08
+
+Only PCTX01 active. Existing schedule pure contracts now share admission before
+discovery/owner/input/storage, original expiry first. Conditional RunLoop
+namespace/purpose and unrestricted lookup exceptions preserved. See requirements
+“PCTX01 schedule admission” and evidence/pctx01-schedule-admission-verification.json.
+Related28PASS, five actual loss failures/exact restoration, final static PASS
+after retained collapsible-match lint failure; independent review no blocker.
+Local residual12/12, required-platform0/12, whole gates0/10. Full native integration
+terminal (547 PASS / 3 FAIL); no new feature, OS registration, Actions or next official task. Next
+same-task boundary G05 adapter error classification against §14.
+
+
+Final native full98360 terminal101: 547 PASS / 3 FAIL. Failed tests: relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry, simultaneous_streams_are_collected_and_overflow_never_infers_success, concurrent_query_startup_preserves_group_streams_and_original_one_second_budget. Captured-command-path passed incidentally without a startup/resolution repair; all four historical conditions remain unresolved and original budgets unchanged. All jobs terminal; no heavy job live. PCTX01 remains incomplete0/10.

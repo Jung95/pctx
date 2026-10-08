@@ -931,3 +931,20 @@ the current behavior, not specification conformance. This is a mandatory current
 PCTX01-G05 residual; do not mark stable-error completion or move to another task.
 Resolve the shared producer error classification with a complete error/transport
 matrix after the pending integration, preserving the recorded initial behavior.
+
+
+## PCTX01 R11: retain conditional schedule admission — 2026-10-08
+
+Specification §14/§38 admission must preserve existing producer predicates.
+RunLoop namespace is validated only by tick after eligible schedule lookup, so
+adding unconditional label admission would reject accepted no-tick requests.
+Purpose is checked only for keep-awake, and its predicate permits embedded
+controls; Recover reasons likewise only require trim-nonempty/2048-byte bound.
+Inspect/Uninstall keys and occurrence/revision/attempt are state lookups without
+new lexical restrictions. RFC3339 parsing is pure; future Tick rejection depends
+on current time and stays producer-side. Native no-tick/future/replay and pure
+exception tests plus controlled narrowing losses preserve these distinctions.
+The frozen residual denominator12 is unchanged; local12/12 does not close whole
+platform or official PCTX01 gates. Latest serial rule prohibits switching official
+tasks for external blockers. No schedule feature, native registration or clock
+was added.

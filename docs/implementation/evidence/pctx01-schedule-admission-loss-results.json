@@ -1,0 +1,39 @@
+{
+  "results": [
+    {
+      "case": "frontend",
+      "test": "schedule_arguments_precede_project_and_response_effects",
+      "exit": 101,
+      "actual_test_failed": true
+    },
+    {
+      "case": "producer",
+      "test": "isolated_nonowner_schedule_admission_keeps_authority_and_expiry",
+      "exit": 101,
+      "actual_test_failed": true
+    },
+    {
+      "case": "loop",
+      "test": "schedule_arguments_precede_project_and_response_effects",
+      "exit": 101,
+      "actual_test_failed": true
+    },
+    {
+      "case": "namespace-exemption",
+      "test": "native_schedule_boundaries_replay_and_future_tick_preserve_contracts",
+      "exit": 101,
+      "actual_test_failed": true
+    },
+    {
+      "case": "purpose-exemption",
+      "test": "schedule_boundaries_preserve_existing_exceptions",
+      "exit": 101,
+      "actual_test_failed": true
+    }
+  ],
+  "exact_source_restored": true,
+  "source_sha256": {
+    "src/main.rs": "fbef4ac56f55b13afbce583cb1917072846d35c2f0b7c186c35351cd5be9142b",
+    "src/schedule.rs": "995c6087ad59a10cd76d25300d3d71499fd753229be0bcfedeab3f6b55afe634"
+  }
+}

@@ -1,0 +1,27 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.56s
+     Running tests/schedule_preflight.rs (target/debug/deps/schedule_preflight-d777e2d31ef63d03)
+
+running 2 tests
+test direct_schedule_arguments_keep_original_expiry_and_no_effects ... ok
+test schedule_arguments_precede_project_and_response_effects ... FAILED
+
+failures:
+
+---- schedule_arguments_precede_project_and_response_effects stdout ----
+
+thread 'schedule_arguments_precede_project_and_response_effects' (8828215) panicked at tests/schedule_preflight.rs:337:17:
+assertion `left == right` failed: Output { status: ExitStatus(unix_wait_status(1792)), stdout: "", stderr: "" }
+  left: Some(7)
+ right: Some(2)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    schedule_arguments_precede_project_and_response_effects
+
+test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.83s
+
+error: test failed, to rerun pass `--test schedule_preflight`
+error: 1 target failed:
+    `--test schedule_preflight`

@@ -1,0 +1,21 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.16s
+     Running tests/schedule_preflight.rs (target/debug/deps/schedule_preflight-d777e2d31ef63d03)
+
+running 1 test
+
+thread 'native_schedule_boundaries_replay_and_future_tick_preserve_contracts' (8834668) panicked at tests/schedule_preflight.rs:501:5:
+assertion `left == right` failed: Output { status: ExitStatus(unix_wait_status(512)), stdout: "{\"command\":\"schedule\",\"coverage\":{\"reasons\":[],\"status\":\"complete\"},\"data\":null,\"errors\":[{\"code\":\"INVALID_ARGUMENT\",\"message\":\"Invalid or sensitive schedule identity field\",\"retryable\":false}],\"generation_id\":null,\"project_id\":null,\"schema_version\":\"1.0\",\"status\":\"error\",\"truncation\":{\"reasons\":[],\"truncated\":false},\"validation\":{\"checked_at\":\"2026-10-08T21:03:51.219Z\",\"mode\":\"matched\",\"scope\":[],\"workspace_atomic\":false},\"warnings\":[],\"workspace_id\":null}\n", stderr: "" }
+  left: Some(2)
+ right: Some(0)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test native_schedule_boundaries_replay_and_future_tick_preserve_contracts ... FAILED
+
+failures:
+
+failures:
+    native_schedule_boundaries_replay_and_future_tick_preserve_contracts
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 4 filtered out; finished in 1.00s
+
+error: test failed, to rerun pass `--test schedule_preflight`

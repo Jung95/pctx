@@ -1,0 +1,19 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.86s
+     Running tests/schedule_preflight.rs (target/debug/deps/schedule_preflight-d777e2d31ef63d03)
+
+running 1 test
+
+thread 'schedule_boundaries_preserve_existing_exceptions' (8835270) panicked at tests/schedule_preflight.rs:440:14:
+called `Result::unwrap()` on an `Err` value: Error { code: "INVALID_ARGUMENT", message: "Keep-awake requires a bounded non-sensitive purpose", retryable: false, exit: 2 }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test schedule_boundaries_preserve_existing_exceptions ... FAILED
+
+failures:
+
+failures:
+    schedule_boundaries_preserve_existing_exceptions
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 4 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `--test schedule_preflight`

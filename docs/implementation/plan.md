@@ -691,3 +691,19 @@ task, independent adapter feature or Actions.
 
 
 Final native full98442 terminal101: 541 PASS / 4 FAIL. All four historical startup conditions fail at unchanged budgets: query_program_resolution_uses_captured_command_path, relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry, simultaneous_streams_are_collected_and_overflow_never_infers_success, concurrent_query_startup_preserves_group_streams_and_original_one_second_budget. All jobs terminal; no heavy job live. PCTX01 remains incomplete0/10.
+
+
+## PCTX01 R11 integration — 2026-10-08
+
+Only PCTX01 active. Existing schedule pure contracts now share admission before
+discovery/owner/input/storage, original expiry first. Conditional RunLoop
+namespace/purpose and unrestricted lookup exceptions preserved. See requirements
+“PCTX01 schedule admission” and evidence/pctx01-schedule-admission-verification.json.
+Related28PASS, five actual loss failures/exact restoration, final static PASS
+after retained collapsible-match lint failure; independent review no blocker.
+Local residual12/12, required-platform0/12, whole gates0/10. Full native integration
+terminal (547 PASS / 3 FAIL); no new feature, OS registration, Actions or next official task. Next
+same-task boundary G05 adapter error classification against §14.
+
+
+Final native full98360 terminal101: 547 PASS / 3 FAIL. Failed tests: relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry, simultaneous_streams_are_collected_and_overflow_never_infers_success, concurrent_query_startup_preserves_group_streams_and_original_one_second_budget. Captured-command-path passed incidentally without a startup/resolution repair; all four historical conditions remain unresolved and original budgets unchanged. All jobs terminal; no heavy job live. PCTX01 remains incomplete0/10.

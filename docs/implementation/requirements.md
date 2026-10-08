@@ -941,3 +941,58 @@ matrix after the pending integration, preserving the recorded initial behavior.
 
 
 Final native full98442 terminal101: 541 PASS / 4 FAIL. All four historical startup conditions fail at unchanged budgets: query_program_resolution_uses_captured_command_path, relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry, simultaneous_streams_are_collected_and_overflow_never_infers_success, concurrent_query_startup_preserves_group_streams_and_original_one_second_budget. All jobs terminal; no heavy job live. PCTX01 remains incomplete0/10.
+
+
+## PCTX01 schedule admission — 2026-10-08
+
+Only PCTX01 remains active, fixed G03-R11/G08, specification §14/§38. Existing
+Add key, Update/Remove/Recover namespace/id/reason, List/Reconcile/Tick optional
+namespace, RFC3339 --at and RunLoop interval/ticks/TTL/conditional purpose checks
+now share admission before discovery/owner/input/storage. The private RunLoop
+reuses the same helper. Original supplied expiry remains first, with no new
+mutation clock or change to the existing finite read scope. Definition schemas,
+revisions, ownership, eligible schedules, native registration and future Tick
+prohibition stay producer-owned. No schedule business feature or OS mutation.
+
+Exact labels remain nonempty, at most256 UTF-8 bytes, no controls/detected secret,
+with whitespace accepted. Recovery reasons remain trim-nonempty and at most2048
+bytes, without a new control/secret restriction. Loop bounds remain interval
+1..3600, ticks1..10000, TTL1..86400. Purpose is trim-nonempty, at most256 bytes and
+non-sensitive only when keep-awake is true; embedded controls remain accepted
+by this predicate and ignored purpose when false is not newly constrained.
+RunLoop namespace validation stays conditional on reaching an eligible tick.
+An unmatched empty namespace can finish with no tick. Inspect/Uninstall lookup
+keys and Recover occurrence/revision/attempt gain no invented grammar.
+
+Native macOS:23 invalid forms ×4 missing/initialized and JSON/compact variants
+(92 combinations) refuse INVALID_ARGUMENT2/null project ID before effects,
+preserving project/data and absent/existing absolute response bytes. Direct23
+invalid+23 expired calls preserve state and original Instant/TIMEOUT7. Isolated
+nonowner admission proves grammar before authority; six valid mutations retain
+POLICY_DENIED5 without state effects, expired invalid/valid calls retain timeout.
+Pure boundaries qualify labels256/multibyte256/whitespace, reason2048 with
+controls, all numeric maxima/minima, RFC3339 offsets/fractions/future syntax,
+conditional purposes, and unrestricted lookup exceptions. Actual List256 and
+whitespace return empty without writes; future Tick refuses before execution;
+unmatched empty-namespace loop performs no tick/model/native wake assertion;
+actual Add256 same-key replay preserves data and exact durable bytes.
+
+Baseline1PASS1FAIL (missing-root7 masks2) retained; related25PASS then28PASS.
+Five controlled losses each0PASS1FAIL, exact source restored. Initial Clippy
+collapsible-match failure retained; equivalent List Some-pattern repair passed
+final format/locked all-target Clippy. Loss and related evidence precede that
+style-only change; final native full covers final source. Independent read-only
+review no scoped blocker. Numeric maxima/purpose acceptance are grammar proofs,
+not a long runtime/native wake assertion; successful Recover/Update/Remove
+transitions remain outside this admission fixture. Evidence:
+`evidence/pctx01-schedule-admission-verification.json`.
+
+Fixed residual denominator12 unchanged: local12/12(R01–R12), whole required
+platform0/12; whole PCTX01 gates0/10. This closes the identified local residual
+register only, not all CLI matrices/gates or required native platforms.
+Linux/Windows and historical startup conditions remain open. Next same-task
+boundary: PCTX01-G05 adapter source/spec stable-error discrepancy. No next
+official task or Actions. Full native integration is terminal (547 PASS / 3 FAIL).
+
+
+Final native full98360 terminal101: 547 PASS / 3 FAIL. Failed tests: relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry, simultaneous_streams_are_collected_and_overflow_never_infers_success, concurrent_query_startup_preserves_group_streams_and_original_one_second_budget. Captured-command-path passed incidentally without a startup/resolution repair; all four historical conditions remain unresolved and original budgets unchanged. All jobs terminal; no heavy job live. PCTX01 remains incomplete0/10.

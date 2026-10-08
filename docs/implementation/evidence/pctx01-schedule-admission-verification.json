@@ -1,0 +1,177 @@
+{
+  "official_task": "PCTX01",
+  "gates": [
+    "PCTX01-G03",
+    "PCTX01-G08"
+  ],
+  "residuals": [
+    "R11"
+  ],
+  "baseline_sections": [
+    "\u00a714",
+    "\u00a738"
+  ],
+  "base_revision": "9315627c104a5df6bf9f3718b32627d9ebd3be3a",
+  "source_sha256": {
+    "src/schedule.rs": "cc8a6bf0731be2d29fcba174947c10ba53731eed83b048b2b235208a36bf7ef4",
+    "src/main.rs": "fbef4ac56f55b13afbce583cb1917072846d35c2f0b7c186c35351cd5be9142b",
+    "tests/schedule_preflight.rs": "6e2835e8be39ee90627a576fa2f1e6002d199be5a1b49b4f8b131ba6a6626170"
+  },
+  "platform": "native macOS arm64",
+  "cli": {
+    "invalid_forms": 23,
+    "combinations": 92,
+    "qualification": "JSON/compact \u00d7 missing/initialized, response absent/existing tied to initialization, nonowner actor, typed2/null project ID/exact state preservation"
+  },
+  "direct": {
+    "invalid_commands": 23,
+    "expired_commands": 23,
+    "proof": "Typed2 before effects, original Instant/TIMEOUT7; isolated nonowner invalid/expired plus six valid authority denials5, parent5s bound"
+  },
+  "positive": [
+    "Pure label256/multibyte256/whitespace and Recover reason2048/controls",
+    "Pure numeric endpoints, conditional purpose controls/256/ignored257/whitespace, RFC3339 offsets/fractions/future syntax",
+    "Inspect/Uninstall and Recover occurrence/revision/attempt do not gain invented grammar",
+    "Actual List256/whitespace empty unchanged state",
+    "Actual future Tick2 before effects",
+    "Actual unmatched empty-namespace loop no tick/model/native wake assertion",
+    "Actual Add256 same-key replay equal data/exact durable bytes"
+  ],
+  "related": {
+    "session": 10944,
+    "log": "pctx01-schedule-admission-related-final.log",
+    "exit": 0,
+    "passed": 28,
+    "failed": 0,
+    "source_qualification": "Before equivalent List Some-pattern Clippy repair; final full tests final source"
+  },
+  "controlled_losses": {
+    "session": 73664,
+    "driver": "pctx01-schedule-admission-loss.py.txt",
+    "results": "pctx01-schedule-admission-loss-results.json",
+    "count": 5,
+    "each_exit": 101,
+    "each_passed": 0,
+    "each_failed": 1,
+    "exact_source_restored": true,
+    "source_qualification": "Before equivalent List Some-pattern Clippy repair; hash bound in results"
+  },
+  "static": {
+    "initial_clippy": {
+      "session": 75098,
+      "exit": 101,
+      "log": "pctx01-schedule-admission-clippy.log",
+      "reason": "collapsible_match"
+    },
+    "final_clippy": {
+      "session": 96799,
+      "exit": 0,
+      "log": "pctx01-schedule-admission-clippy-final.log"
+    },
+    "final_format": {
+      "exit": 0,
+      "log": "pctx01-schedule-admission-format-final.log"
+    }
+  },
+  "full": {
+    "session": 98360,
+    "log": "pctx01-schedule-admission-full-macos.log",
+    "command": "cargo test --locked --all-targets --no-fail-fast",
+    "status": "terminal",
+    "exit": 101,
+    "passed": 547,
+    "failed": 3,
+    "failed_tests": [
+      "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+      "simultaneous_streams_are_collected_and_overflow_never_infers_success",
+      "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget"
+    ],
+    "qualification": "Final source. All four historical startup conditions remain unresolved; captured-command-path pass is incidental without a resolution/startup repair. Original budgets retained."
+  },
+  "review": "pctx01-schedule-admission-review.md",
+  "status": {
+    "local_residuals_closed": 12,
+    "fixed_residuals_total": 12,
+    "required_platform_residuals_closed": 0,
+    "whole_task_gates_closed": 0,
+    "fixed_whole_task_gates_total": 10,
+    "official": "implementing",
+    "next_local_boundary": "PCTX01-G05 adapter errors",
+    "next_official_task": null
+  },
+  "limitations": [
+    "Linux/Windows unverified",
+    "Four historical native startup conditions unresolved; incidental passes not repairs",
+    "Numeric maxima/purpose grammar does not qualify long loop or native wake assertion",
+    "Successful Recover/Update/Remove state transitions not qualified in new admission fixture",
+    "Adapter POLICY_DENIED9 versus spec5 is next mandatory G05 residual",
+    "No native registration/model/wake call or Actions; no mutation clock or independent schedule feature"
+  ],
+  "logs": {
+    "pctx01-schedule-admission-baseline.log": {
+      "passed": 1,
+      "failed": 1,
+      "sha256": "e58b518f4189dffefcf75b6e78f34f4ed259f43cc64b9e4271753bddccbad5c2"
+    },
+    "pctx01-schedule-admission-clippy-final.log": {
+      "passed": 0,
+      "failed": 0,
+      "sha256": "dc327164b13d127e664c223a8b21d837e9ad8285d6974105895fd50391f1e0ff"
+    },
+    "pctx01-schedule-admission-clippy.log": {
+      "passed": 0,
+      "failed": 0,
+      "sha256": "89e29d1bdb832ee29732bbde82d17c66c972a39c5d7d02e92a49987cc154fc01"
+    },
+    "pctx01-schedule-admission-format-final.log": {
+      "passed": 0,
+      "failed": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "pctx01-schedule-admission-format.log": {
+      "passed": 0,
+      "failed": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "pctx01-schedule-admission-full-macos.log": {
+      "passed": 547,
+      "failed": 3,
+      "sha256": "bd3bbe9621c0cb0a145fa4e32a9eb252793489e8d65d33e234b7f58e12e3a46d"
+    },
+    "pctx01-schedule-admission-loss-frontend.log": {
+      "passed": 0,
+      "failed": 1,
+      "sha256": "77ef494f436c5f2dc890721c0204afd7a09661a61aa217a73017205ed27a7224"
+    },
+    "pctx01-schedule-admission-loss-loop.log": {
+      "passed": 0,
+      "failed": 1,
+      "sha256": "b46fb3735a867428f65e640c4fbcd84ca64639af7ced66c05123ce4841bbd499"
+    },
+    "pctx01-schedule-admission-loss-namespace-exemption.log": {
+      "passed": 0,
+      "failed": 1,
+      "sha256": "ae952215dc4cfdbb3f7cd1f772d09803b3a298de4a357ba71f5456f5fdbbe1e2"
+    },
+    "pctx01-schedule-admission-loss-producer.log": {
+      "passed": 0,
+      "failed": 1,
+      "sha256": "48332a2e1d87ed20d0fb87d74fa3ed029f3083129770de83d0ae01cd9ec39f45"
+    },
+    "pctx01-schedule-admission-loss-purpose-exemption.log": {
+      "passed": 0,
+      "failed": 1,
+      "sha256": "920ca9fd5c306cafdfd84a3fb144f8688d8337be1dd7ca598cc3b5780c688b1d"
+    },
+    "pctx01-schedule-admission-related-final.log": {
+      "passed": 28,
+      "failed": 0,
+      "sha256": "1200a79695e39010791d8a0774c1c01b94e20643dad8cf13df1cb7798af1c5ff"
+    },
+    "pctx01-schedule-admission-related.log": {
+      "passed": 25,
+      "failed": 0,
+      "sha256": "8262278bc0f273e50a4b36fc6a5448c23de8f5c2d7c7b963aa2d2bea9baa6848"
+    }
+  }
+}
