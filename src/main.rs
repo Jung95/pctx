@@ -300,7 +300,33 @@ enum HandoffCommand {
         validate: bool,
     },
 }
+fn encoded(value: &mut Value, format: &Format, exit: &mut i32) -> Vec<u8> {
+    let format = match format {
+        Format::Compact => pctx::render::Format::Compact,
+        Format::Json | Format::Ndjson => pctx::render::Format::Json,
+        Format::Markdown => pctx::render::Format::Markdown,
+    };
+    match pctx::render::render(value, format) {
+        Ok(bytes) => bytes,
+        Err(error) => {
+            *exit = error.exit;
+            *value = domain::envelope("render", None, Value::Null);
+            value["status"] = json!("error");
+            value["errors"] = json!([error]);
+            let mut bytes = value.to_string().into_bytes();
+            bytes.push(b'\n');
+            bytes
+        }
+    }
+}
 fn execute(cli: &Cli) -> Result<(String, Project, Value)> {
+    if matches!(cli.format, Format::Markdown) && !pctx::render::supports(cli.command.name()) {
+        return Err(Error::new(
+            "INVALID_ARGUMENT",
+            "Markdown supports build, outline, read and handoff",
+            2,
+        ));
+    }
     let root = project::detect_root(cli.root.as_deref())?;
     if matches!(cli.command, Command::Init) {
         let p = Project::init(&root)?;
@@ -602,10 +628,18 @@ fn main() {
         println!("{}", response["data"]["hook_output"]);
         return;
     }
-    let bytes = match &cli.format {
-        Format::Json => serde_json::to_vec(&response).unwrap(),
-        _ => serde_json::to_vec_pretty(&response).unwrap(),
+    let render_format = if response["errors"].as_array().is_some_and(|errors| {
+        errors
+            .iter()
+            .any(|error| error["code"] == "BUDGET_TOO_SMALL")
+    }) || matches!(cli.format, Format::Markdown)
+        && !pctx::render::supports(cli.command.name())
+    {
+        Format::Json
+    } else {
+        cli.format.clone()
     };
+    let bytes = encoded(&mut response, &render_format, &mut exit);
     // Budget always applies to the format actually emitted, including the newline.
     let limit = match &cli.command {
         Command::Build(r) => Some(r.budget_bytes),
@@ -622,10 +656,11 @@ fn main() {
             command: work::CheckCommand::Run { budget_bytes, .. },
         }) => Some(*budget_bytes),
         Command::Extract(r) => Some(r.budget_bytes),
+        Command::Read { .. } => Some(65536),
         _ => None,
     };
     let mut bytes = bytes;
-    let execution_pointer = if response["data"]["execution"].is_object() {
+    let mut execution_pointer = if response["data"]["execution"].is_object() {
         "/data/execution"
     } else {
         "/data"
@@ -636,7 +671,7 @@ fn main() {
         && let Some(limit) = limit
     {
         let records_pointer = format!("{execution_pointer}/records");
-        while bytes.len() + 1 > limit
+        while bytes.len() > limit
             && response
                 .pointer(&records_pointer)
                 .unwrap()
@@ -648,27 +683,48 @@ fn main() {
             let count = execution["records_omitted"].as_u64().unwrap_or(0) + 1;
             execution["records_omitted"] = json!(count);
             execution["records_included"] = json!(execution["records"].as_array().unwrap().len());
-            bytes = match &cli.format {
-                Format::Json => serde_json::to_vec(&response).unwrap(),
-                _ => serde_json::to_vec_pretty(&response).unwrap(),
-            };
+            bytes = encoded(&mut response, &render_format, &mut exit);
         }
     }
     if let Some(limit) = limit
-        && bytes.len() + 1 > limit
+        && bytes.len() > limit
     {
         let e = Error::new(
             "BUDGET_TOO_SMALL",
             "Rendered context exceeds requested budget; use JSON or increase budget",
             8,
         );
-        response = domain::envelope(cli.command.name(), None, Value::Null);
+        // Keep the durable reread handle and original execution outcome even when
+        // presentation cannot fit. The wrapper failure never replaces child truth.
+        let mut proof = serde_json::Map::new();
+        if let Some(execution) = response.pointer(execution_pointer)
+            && execution["output_id"].is_string()
+        {
+            for key in [
+                "output_id",
+                "query_ref",
+                "spawned",
+                "child_exit_code",
+                "signal",
+                "execution_status",
+                "delivery_kind",
+            ] {
+                if let Some(value) = execution.get(key) {
+                    proof.insert(key.into(), value.clone());
+                }
+            }
+        }
+        response = domain::envelope(cli.command.name(), None, Value::Object(proof));
+        execution_pointer = "/data";
         response["status"] = json!("error");
         response["errors"] = json!([e]);
-        bytes = serde_json::to_vec(&response).unwrap();
+        // The complete JSON error is the smallest reversible fallback. Budgets
+        // smaller than that envelope cannot hold a valid error document.
+        bytes = encoded(&mut response, &Format::Json, &mut exit);
         exit = 8;
     }
     if let Command::Run(r) = &cli.command
+        && response["status"] != "error"
         && response["data"]["spawned"] == true
         && r.exit_policy == "child"
     {
@@ -678,7 +734,6 @@ fn main() {
             .or_else(|| response["data"]["signal"].as_i64().map(|s| 128 + s as i32))
             .unwrap_or(exit);
     }
-    bytes.push(b'\n');
     let delivered = if let Some(output) = &cli.output {
         match project::atomic_write(output, &bytes, false) {
             Ok(()) => true,

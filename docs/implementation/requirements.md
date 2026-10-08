@@ -246,3 +246,11 @@ Mandatory prose audit leaves three substantial independent next slices:
 3. Finish measured adoption evidence (§18–19/38/45, PCTX17/39/48/56/57): repair recorded smoke misses, include all packet/output retrieval and delivery bytes, run normative M/30 on disclosed environments and real platform CI, then separately authorized task-level provider/quality trials. Keep tokens, prices, quota, emitted bytes and accepted provider receipt separate.
 
 Immediate integration debt is also explicit: runner guardian synchronization is locally resolved; canonical command aliases/capability help need conformance, and nested runner budgets plus delivery metering remain incomplete. None of these gaps is an exclusion from the active full goal.
+
+### Third development integration evidence (partial contracts)
+
+PCTX04/PCTX10: Unix no-follow project-root and ancestor validation, current-policy glob compilation without permission/source caching, and metadata candidate-first search are implemented. `tests/reader_policy_cache.rs` (4), `tests/search.rs` (12), and `evidence/third-full-macos-tests.log` establish these fixture contracts on macOS only. General changing-file races, Windows reparse-point protection, multi-root support and normative search performance remain incomplete/unverified; these tests do not promote the entire requirements.
+
+PCTX01/AC63: `src/render.rs`, `tests/render.rs` (8) and actual CLI fixtures verify minified Compact/JSON, safe reversible Markdown and complete budget-error presentation. NDJSON remains governed by its separate streaming implementation. Tiny error-envelope minimum size is disclosed in `docs/cli/formats.md`. Broader final-budget boundaries remain subject to the full acceptance audit.
+
+PCTX27/PCTX34/PCTX40: Windows native identity/Job Object foundation has code and seven platform fixtures, but it is unverified until actual Windows CI executes them. It is not the full launch/guardian/lease backend. macOS full gate passed 209 tests and all-target static checks; second CI proved published second macOS source only, while Linux/Windows failed. Third release M/30 remains pending; baseline target misses and unknown accuracy are retained in evaluation-m30-baseline.json/.md. No token, paid usage or release acceptance claim follows from these local results.

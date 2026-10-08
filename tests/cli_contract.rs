@@ -267,3 +267,53 @@ fn inventory_cli_reports_static_candidates_without_execution_or_authority() {
     assert!(!unavailable.status.success());
     assert_eq!(result["command"], "job");
 }
+
+#[test]
+fn markdown_is_a_safe_document_and_unsupported_formats_precede_writes() {
+    let f = Fixture::new();
+    let invoke = |args: &[&str]| {
+        Command::new(env!("CARGO_BIN_EXE_pctx"))
+            .args(["--root", f.root.to_str().unwrap(), "--format", "markdown"])
+            .args(args)
+            .env("PCTX_DATA_DIR", &f.data)
+            .output()
+            .unwrap()
+    };
+    let denied = invoke(&["init"]);
+    assert_eq!(denied.status.code(), Some(2));
+    assert_eq!(
+        serde_json::from_slice::<Value>(&denied.stdout).unwrap()["errors"][0]["code"],
+        "INVALID_ARGUMENT"
+    );
+    assert!(!f.root.join(".pctx").exists());
+    f.ok(&["init"]);
+    fs::write(
+        f.root.join("source.py"),
+        "def hello():\n    return '```'\n# ghp_abcdefghijklmnop123456789\n",
+    )
+    .unwrap();
+    f.ok(&["index", "update"]);
+    let result = invoke(&["read", "source.py", "--lines", "1:3"]);
+    assert_eq!(result.status.code(), Some(0));
+    let text = String::from_utf8(result.stdout).unwrap();
+    assert!(text.starts_with("# PCTX read"));
+    assert!(text.contains("def hello()"));
+    assert!(text.contains("Complete envelope metadata"));
+    assert!(!text.contains("ghp_abcdefghijklmnop123456789"));
+    assert!(text.contains("[REDACTED]"));
+    assert!(text.len() <= 65536);
+    fs::create_dir_all(f.root.join(".pctx/rules")).unwrap();
+    fs::write(
+        f.root.join(".pctx/rules/required.md"),
+        format!(
+            "---\nschema_version: 1\nid: required\nscope: ['**']\nrequired: true\n---\n{}",
+            "Mandatory: ".repeat(500)
+        ),
+    )
+    .unwrap();
+    let oversized = invoke(&["build", "--task", "inspect hello", "--budget-bytes", "2000"]);
+    assert_eq!(oversized.status.code(), Some(8));
+    assert!(oversized.stdout.len() <= 2000);
+    let error: Value = serde_json::from_slice(&oversized.stdout).unwrap();
+    assert_eq!(error["errors"][0]["code"], "BUDGET_TOO_SMALL");
+}

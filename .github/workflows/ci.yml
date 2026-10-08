@@ -20,6 +20,9 @@ jobs:
           components: rustfmt, clippy
       - name: Formatting
         run: cargo fmt --all -- --check
+      - name: Native Windows containment primitives
+        if: runner.os == 'Windows'
+        run: cargo test --locked --test windows_process
       - name: Static checks
         run: cargo clippy --all-targets --locked -- -D warnings
       - name: Unit and integration tests

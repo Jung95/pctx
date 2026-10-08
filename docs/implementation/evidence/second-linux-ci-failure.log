@@ -1,0 +1,16 @@
+2026-10-08T01:27:56.8375338Z error[E0596]: cannot borrow `env` as mutable, as it is not declared as mutable
+2026-10-08T01:27:56.8376226Z     --> src/schedule.rs:1087:17
+2026-10-08T01:27:56.8376706Z      |
+2026-10-08T01:27:56.8377318Z 1087 |                 env.insert("XDG_RUNTIME_DIR".into(), v);
+2026-10-08T01:27:56.8378180Z      |                 ^^^ cannot borrow as mutable
+2026-10-08T01:27:56.8378776Z      |
+2026-10-08T01:27:56.8379271Z help: consider changing this to be mutable
+2026-10-08T01:27:56.8379787Z      |
+2026-10-08T01:27:56.8387658Z 1075 |     let mut env = BTreeMap::from([
+2026-10-08T01:27:56.8388444Z      |         +++
+2026-10-08T01:27:56.8388806Z
+2026-10-08T01:27:57.1068285Z For more information about this error, try `rustc --explain E0596`.
+2026-10-08T01:27:57.1122683Z error: could not compile `pctx` (lib) due to 1 previous error
+2026-10-08T01:27:57.1123646Z warning: build failed, waiting for other jobs to finish...
+2026-10-08T01:27:57.1441363Z error: could not compile `pctx` (lib test) due to 1 previous error
+2026-10-08T01:27:57.1715608Z ##[error]Process completed with exit code 101.

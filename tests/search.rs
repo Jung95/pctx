@@ -183,3 +183,226 @@ fn cached_policy_change_hides_metadata_and_boolean_remains_explicit() {
             .is_empty()
     );
 }
+
+fn metadata_request(kind: &str, query: &str) -> pctx::search::FindRequest {
+    pctx::search::FindRequest {
+        query: Some(query.into()),
+        boolean_query: None,
+        kind: kind.into(),
+        regex: false,
+        snippet_lines: None,
+        limit: 20,
+        scopes: vec![],
+        freshness: "matched".into(),
+        language: None,
+        explain: false,
+    }
+}
+
+#[test]
+fn metadata_non_candidates_are_not_opened_as_source() {
+    use pctx::search::find;
+    for (kind, candidate_path, candidate, other_path, other) in [
+        (
+            "path",
+            "auth.py",
+            "def login():\n    pass\n",
+            "legacy.py",
+            "def legacy():\n    pass\n",
+        ),
+        (
+            "symbol",
+            "current.py",
+            "def auth():\n    pass\n",
+            "legacy.py",
+            "def legacy():\n    pass\n",
+        ),
+        (
+            "document",
+            "current.md",
+            "# auth\n",
+            "legacy.md",
+            "# legacy\n",
+        ),
+    ] {
+        let temp = tempfile::tempdir().unwrap();
+        let p = project(temp.path());
+        std::fs::write(temp.path().join(candidate_path), candidate).unwrap();
+        // A real read of this authorized noncandidate would fail, so success
+        // demonstrates a source-read boundary rather than just matching output.
+        std::fs::write(temp.path().join(other_path), [0xff, 0xfe]).unwrap();
+        let files = vec![
+            analyze(other_path, &hash(other), other).unwrap(),
+            analyze(candidate_path, &hash(candidate), candidate).unwrap(),
+        ];
+        assert_eq!(
+            pctx::reader::read(&p, other_path).unwrap_err().code,
+            "UNSUPPORTED_ENCODING"
+        );
+        let value = find(&p, &files, &metadata_request(kind, "auth")).unwrap();
+        assert_eq!(value["items"].as_array().unwrap().len(), 1, "{kind}");
+        assert_eq!(value["items"][0]["path"], candidate_path);
+        assert_eq!(value["items"][0]["freshness"], "current");
+        assert_eq!(value["coverage"]["universe"], "provided_index");
+        assert_eq!(
+            value["coverage"]["source_validation"],
+            "matching_metadata_candidates"
+        );
+    }
+}
+
+#[test]
+fn matched_metadata_validates_stale_candidates_without_discovering_new_names() {
+    use pctx::search::{find, read_selection};
+    let temp = tempfile::tempdir().unwrap();
+    let p = project(temp.path());
+    let old_match = "def auth():\n    return 1\n";
+    let old_other = "def legacy():\n    pass\n";
+    let current_match = "def renamed():\n    return 2\n";
+    let current_other = "def auth():\n    pass\n";
+    std::fs::write(temp.path().join("matched.py"), current_match).unwrap();
+    std::fs::write(temp.path().join("other.py"), current_other).unwrap();
+    let files = vec![
+        analyze("matched.py", &hash(old_match), old_match).unwrap(),
+        analyze("other.py", &hash(old_other), old_other).unwrap(),
+        analyze("deleted.py", &hash(old_other), old_other).unwrap(),
+    ];
+    let value = find(&p, &files, &metadata_request("symbol", "auth")).unwrap();
+    assert_eq!(value["items"].as_array().unwrap().len(), 1);
+    let item = &value["items"][0];
+    assert_eq!(item["path"], "matched.py");
+    assert_eq!(item["freshness"], "stale");
+    assert_eq!(item["file_hash"], hash(current_match));
+    assert!(item["line_numbers"].as_array().unwrap().is_empty());
+    assert!(item.get("symbols").is_none());
+    assert_eq!(
+        value["coverage"]["new_candidate_discovery"],
+        "not_performed_by_find"
+    );
+    assert_eq!(
+        read_selection(&p, &files, None, None, Some(&files[0].symbols[0].id), None)
+            .unwrap_err()
+            .code,
+        "STALE_INDEX"
+    );
+    // A refreshed index, as supplied by the CLI's strict update, discovers the
+    // new candidate and removes the stale match and deleted file.
+    let refreshed = vec![
+        analyze("matched.py", &hash(current_match), current_match).unwrap(),
+        analyze("other.py", &hash(current_other), current_other).unwrap(),
+    ];
+    let mut strict = metadata_request("symbol", "auth");
+    strict.freshness = "strict".into();
+    let value = find(&p, &refreshed, &strict).unwrap();
+    assert_eq!(value["items"].as_array().unwrap().len(), 1);
+    assert_eq!(value["items"][0]["path"], "other.py");
+    assert_eq!(value["items"][0]["freshness"], "current");
+}
+
+#[test]
+fn boolean_complements_validate_candidates_without_positive_hits() {
+    use pctx::search::find;
+    let temp = tempfile::tempdir().unwrap();
+    let p = project(temp.path());
+    let old_clean = "def clean():\n    pass\n";
+    let new_clean = "def clean():\n    return 2\n";
+    let old_legacy = "def legacy():\n    pass\n";
+    std::fs::write(temp.path().join("clean.py"), new_clean).unwrap();
+    std::fs::write(temp.path().join("legacy.py"), [0xff]).unwrap();
+    let files = vec![
+        analyze("clean.py", &hash(old_clean), old_clean).unwrap(),
+        analyze("legacy.py", &hash(old_legacy), old_legacy).unwrap(),
+    ];
+    let mut req = metadata_request("symbol", "unused");
+    req.query = None;
+    req.boolean_query = Some("auth OR NOT legacy".into());
+    let value = find(&p, &files, &req).unwrap();
+    assert_eq!(value["items"].as_array().unwrap().len(), 1);
+    assert_eq!(value["items"][0]["path"], "clean.py");
+    assert_eq!(value["items"][0]["score"], 0);
+    assert_eq!(value["items"][0]["freshness"], "stale");
+    // A complement-only candidate is still read, and its read errors propagate.
+    std::fs::write(temp.path().join("clean.py"), [0xff]).unwrap();
+    assert_eq!(
+        find(&p, &files, &req).unwrap_err().code,
+        "UNSUPPORTED_ENCODING"
+    );
+    req.boolean_query = Some("NOT legacy".into());
+    assert!(find(&p, &files, &req).is_err());
+}
+
+#[test]
+fn alias_and_aggregate_regex_candidates_use_current_validation() {
+    use pctx::search::find;
+    let temp = tempfile::tempdir().unwrap();
+    let p = project(temp.path());
+    std::fs::create_dir(temp.path().join(".pctx")).unwrap();
+    std::fs::write(
+        temp.path().join(".pctx/glossary.toml"),
+        "[aliases]\nauth = [\"login\"]\n",
+    )
+    .unwrap();
+    let old_match = "def login():\n    pass\ndef logout():\n    pass\n";
+    let changed = "def login():\n    return 2\ndef logout():\n    pass\n";
+    let other = "def unrelated():\n    pass\n";
+    std::fs::write(temp.path().join("match.py"), changed).unwrap();
+    std::fs::write(temp.path().join("other.py"), [0xff]).unwrap();
+    let files = vec![
+        analyze("other.py", &hash(other), other).unwrap(),
+        analyze("match.py", &hash(old_match), old_match).unwrap(),
+    ];
+    let value = find(&p, &files, &metadata_request("symbol", "auth")).unwrap();
+    assert_eq!(value["items"][0]["path"], "match.py");
+    assert_eq!(value["items"][0]["freshness"], "stale");
+    let mut regex = metadata_request("symbol", "^login\\nlogout$");
+    regex.regex = true;
+    let value = find(&p, &files, &regex).unwrap();
+    assert_eq!(value["items"].as_array().unwrap().len(), 1);
+    assert_eq!(value["items"][0]["file_hash"], hash(changed));
+}
+
+#[test]
+fn oversized_non_candidate_is_skipped_but_matching_candidate_fails() {
+    use pctx::search::find;
+    let temp = tempfile::tempdir().unwrap();
+    let mut p = project(temp.path());
+    p.config.index.max_file_bytes = 64;
+    let cached = "def legacy():\n    pass\n";
+    std::fs::write(temp.path().join("legacy.py"), vec![b'x'; 65]).unwrap();
+    let files = vec![analyze("legacy.py", &hash(cached), cached).unwrap()];
+    let value = find(&p, &files, &metadata_request("symbol", "auth")).unwrap();
+    assert!(value["items"].as_array().unwrap().is_empty());
+    assert_eq!(
+        find(&p, &files, &metadata_request("symbol", "legacy"))
+            .unwrap_err()
+            .code,
+        "FILE_TOO_LARGE"
+    );
+}
+
+#[test]
+fn text_and_all_still_read_sources_without_metadata_hits_and_policy_hides_candidates() {
+    use pctx::search::find;
+    let temp = tempfile::tempdir().unwrap();
+    let mut p = project(temp.path());
+    let original = "def unrelated():\n    return 'auth'\n";
+    std::fs::write(temp.path().join("other.py"), original).unwrap();
+    let files = vec![analyze("other.py", &hash(original), original).unwrap()];
+    for kind in ["text", "all"] {
+        let value = find(&p, &files, &metadata_request(kind, "auth")).unwrap();
+        assert_eq!(value["items"][0]["path"], "other.py");
+        std::fs::write(temp.path().join("other.py"), [0xff]).unwrap();
+        assert_eq!(
+            find(&p, &files, &metadata_request(kind, "auth"))
+                .unwrap_err()
+                .code,
+            "UNSUPPORTED_ENCODING"
+        );
+        std::fs::write(temp.path().join("other.py"), original).unwrap();
+    }
+    p.config.policy.exclude.push("other.py".into());
+    std::fs::write(temp.path().join("other.py"), [0xff]).unwrap();
+    let value = find(&p, &files, &metadata_request("symbol", "unrelated")).unwrap();
+    assert!(value["items"].as_array().unwrap().is_empty());
+    assert!(!serde_json::to_string(&value).unwrap().contains("other.py"));
+}

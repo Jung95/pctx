@@ -553,6 +553,7 @@ dependencies = [
  "tree-sitter-python",
  "tree-sitter-typescript",
  "uuid",
+ "windows-sys",
 ]
 
 [[package]]

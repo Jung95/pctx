@@ -1,0 +1,344 @@
+//! Pure final-document rendering. Budgets are enforced by the caller on returned bytes.
+//! Source strings are already masked by producers; this module never reads or executes them.
+use crate::domain::{Error, Result};
+use serde_json::{Map, Value};
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum Format {
+    Compact,
+    Json,
+    Markdown,
+}
+
+/// The Markdown contract is deliberately limited to these exact CLI command names.
+/// Call before executing the command so an unsupported format cannot cause side effects.
+pub fn supports(command: &str) -> bool {
+    matches!(
+        command,
+        "build"
+            | "outline"
+            | "read"
+            | "handoff"
+            | "handoff create"
+            | "handoff update"
+            | "handoff show"
+    )
+}
+
+/// Returns the entire UTF-8 document, including its final newline. Never truncates data.
+pub fn render(envelope: &Value, format: Format) -> Result<Vec<u8>> {
+    let mut document = match format {
+        Format::Compact => json_text(envelope, false)?,
+        Format::Json => json_text(envelope, false)?,
+        Format::Markdown => markdown(envelope)?,
+    };
+    if !document.ends_with('\n') {
+        document.push('\n');
+    }
+    Ok(document.into_bytes())
+}
+
+// JSON C0 escapes come from serde_json. Escape C1, bidi formatting and line separators
+// too: they are valid JSON characters, but should not control a terminal or review UI.
+// These JSON escapes round-trip to the identical original Value.
+fn hidden(c: char) -> bool {
+    matches!(c, '\u{7f}'..='\u{9f}' | '\u{200e}' | '\u{200f}' | '\u{2028}'..='\u{202e}' | '\u{2066}'..='\u{2069}')
+}
+fn json_text(value: &Value, pretty: bool) -> Result<String> {
+    let serialized = if pretty {
+        serde_json::to_string_pretty(value)?
+    } else {
+        serde_json::to_string(value)?
+    };
+    let mut text = String::with_capacity(serialized.len());
+    for c in serialized.chars() {
+        if hidden(c) {
+            text.push_str(&format!("\\u{:04x}", c as u32));
+        } else {
+            text.push(c);
+        }
+    }
+    Ok(text)
+}
+fn literal_source(source: &str) -> String {
+    let mut text = String::with_capacity(source.len());
+    for c in source.chars() {
+        if (c.is_control() && c != '\n' && c != '\t') || hidden(c) {
+            text.push_str(&format!("\\u{{{:04x}}}", c as u32));
+        } else {
+            text.push(c);
+        }
+    }
+    text
+}
+fn longest_run(text: &str, marker: char) -> usize {
+    let mut run = 0;
+    let mut longest = 0;
+    for c in text.chars() {
+        if c == marker {
+            run += 1;
+            longest = longest.max(run);
+        } else {
+            run = 0;
+        }
+    }
+    longest
+}
+fn fence(out: &mut String, text: &str, language: &str) {
+    // Fixed info strings only; source cannot choose a language or close the fence.
+    let length = 3.max(
+        longest_run(text, '`')
+            .max(longest_run(text, '~'))
+            .saturating_add(1),
+    );
+    let delimiter = "`".repeat(length);
+    out.push_str(&delimiter);
+    out.push_str(language);
+    out.push('\n');
+    out.push_str(text);
+    if !text.ends_with('\n') {
+        out.push('\n');
+    }
+    out.push_str(&delimiter);
+    out.push_str("\n\n");
+}
+fn inline(value: &Value) -> Result<String> {
+    let text = json_text(value, false)?;
+    let delimiter = "`".repeat(longest_run(&text, '`').saturating_add(1));
+    // Padding protects literal leading/trailing backticks in CommonMark code spans.
+    Ok(format!("{delimiter} {text} {delimiter}"))
+}
+fn field(out: &mut String, label: &str, value: Option<&Value>) -> Result<()> {
+    if let Some(value) = value {
+        out.push_str("- ");
+        out.push_str(label);
+        out.push_str(": ");
+        out.push_str(&inline(value)?);
+        out.push('\n');
+    }
+    Ok(())
+}
+fn json_section(out: &mut String, title: &str, value: &Value) -> Result<()> {
+    out.push_str("## ");
+    out.push_str(title);
+    out.push_str("\n\n");
+    fence(out, &json_text(value, true)?, "json");
+    Ok(())
+}
+fn indicators(value: &Value, partial: &mut bool, failure: &mut bool) {
+    match value {
+        Value::Object(fields) => {
+            for (key, child) in fields {
+                if matches!(key.as_str(), "status" | "completeness" | "coverage")
+                    && child.as_str() == Some("partial")
+                    || matches!(
+                        key.as_str(),
+                        "truncated" | "body_omitted" | "returned_excerpt"
+                    ) && child == &Value::Bool(true)
+                    || matches!(
+                        key.as_str(),
+                        "selection_complete" | "required_minimum_complete" | "capture_complete"
+                    ) && child == &Value::Bool(false)
+                {
+                    *partial = true;
+                }
+                if matches!(key.as_str(), "status" | "result" | "state")
+                    && child
+                        .as_str()
+                        .is_some_and(|s| matches!(s, "error" | "failed" | "timed_out"))
+                    || matches!(key.as_str(), "child_exit_code" | "exit_code")
+                        && child.as_i64().is_some_and(|n| n != 0)
+                    || key == "pctx_error" && !child.is_null()
+                {
+                    *failure = true;
+                }
+                indicators(child, partial, failure);
+            }
+        }
+        Value::Array(values) => {
+            for child in values {
+                indicators(child, partial, failure);
+            }
+        }
+        _ => {}
+    }
+}
+fn provenance(out: &mut String, item: &Value) -> Result<()> {
+    for (key, label) in [
+        ("path", "Source path"),
+        ("file_hash", "Source SHA-256"),
+        ("hash", "Hash (reported)"),
+        ("range", "Source range (reported)"),
+        ("symbol_id", "Symbol ID"),
+        ("representation", "Representation"),
+        ("reason", "Selection reason"),
+        ("freshness", "Freshness"),
+        ("evidence_status", "Evidence status"),
+        ("evidence_origin", "Evidence origin"),
+        ("source", "Source (reported)"),
+        ("parse_status", "Parser status"),
+        ("language", "Language"),
+        ("completeness", "Completeness"),
+        ("coverage", "Coverage"),
+        ("truncated", "Truncated"),
+        ("body_omitted", "Body omitted"),
+        ("redacted", "Redaction applied"),
+        ("next_read", "Follow-up read reference"),
+        ("query_ref", "Follow-up query reference"),
+        ("checkpoint_id", "Checkpoint ID"),
+        ("start_byte", "Start byte (zero based)"),
+        ("end_byte", "End byte (exclusive)"),
+        ("start_line", "Start line (one based)"),
+        ("end_line", "End line (inclusive)"),
+    ] {
+        field(out, label, item.get(key))?;
+    }
+    out.push('\n');
+    Ok(())
+}
+fn source_section(out: &mut String, item: &Value) -> Result<()> {
+    provenance(out, item)?;
+    for key in ["content", "text"] {
+        if let Some(text) = item.get(key).and_then(Value::as_str) {
+            out.push_str("Source/content (literal, already masked):\n\n");
+            fence(out, &literal_source(text), "text");
+        }
+    }
+    Ok(())
+}
+fn markdown(envelope: &Value) -> Result<String> {
+    let command = envelope
+        .get("command")
+        .and_then(Value::as_str)
+        .ok_or_else(|| {
+            Error::new(
+                "INVALID_ARGUMENT",
+                "Markdown requires an envelope command",
+                2,
+            )
+        })?;
+    if !supports(command) {
+        return Err(Error::new(
+            "INVALID_ARGUMENT",
+            "Markdown is supported only for build, outline, read and handoff",
+            2,
+        ));
+    }
+    let mut out = format!("# PCTX {command}\n\n");
+    field(
+        &mut out,
+        "Request status (reported)",
+        envelope.get("status"),
+    )?;
+    for (key, label) in [
+        ("schema_version", "Schema version"),
+        ("project_id", "Project ID"),
+        ("workspace_id", "Workspace ID"),
+        ("generation_id", "Generation ID"),
+    ] {
+        field(&mut out, label, envelope.get(key))?;
+    }
+    let mut partial = false;
+    let mut failure = false;
+    indicators(envelope, &mut partial, &mut failure);
+    if envelope
+        .get("errors")
+        .and_then(Value::as_array)
+        .is_some_and(|e| !e.is_empty())
+    {
+        failure = true;
+    }
+    out.push('\n');
+    if failure {
+        out.push_str("**Failure/error indicators are present in the supplied envelope.**\n\n");
+    }
+    if partial {
+        out.push_str("**Partial, truncated or omitted content is reported.**\n\n");
+    }
+    out.push_str("Rendering preserves reported evidence; it does not establish test pass, task completion or source freshness.\n\n");
+    let status_metadata = Value::Object(
+        ["validation", "coverage", "truncation", "warnings", "errors"]
+            .into_iter()
+            .filter_map(|key| {
+                envelope
+                    .get(key)
+                    .map(|value| (key.to_owned(), value.clone()))
+            })
+            .collect::<Map<String, Value>>(),
+    );
+    json_section(
+        &mut out,
+        "Validation, coverage, warnings and errors",
+        &status_metadata,
+    )?;
+    if let Some(data) = envelope.get("data") {
+        match command {
+            "read" => {
+                out.push_str("## Selected source\n\n");
+                source_section(&mut out, data)?;
+            }
+            "build" => {
+                out.push_str("## Context selection\n\n");
+                for (key, label) in [
+                    ("task", "Task"),
+                    ("role", "Role"),
+                    ("selection_complete", "Selection complete"),
+                    ("context_fingerprint", "Context fingerprint"),
+                    ("source_versions", "Source versions"),
+                    ("budget", "Reported budget"),
+                ] {
+                    field(&mut out, label, data.get(key))?;
+                }
+                out.push('\n');
+                if let Some(items) = data.get("items").and_then(Value::as_array) {
+                    for (index, item) in items.iter().enumerate() {
+                        out.push_str(&format!("### Context item {}\n\n", index + 1));
+                        source_section(&mut out, item)?;
+                    }
+                }
+                if let Some(omissions) = data.get("omitted_items") {
+                    json_section(&mut out, "Omitted context items", omissions)?;
+                }
+            }
+            "outline" => {
+                out.push_str("## Structure\n\n");
+                if let Some(files) = data.get("files").and_then(Value::as_array) {
+                    for (index, file) in files.iter().enumerate() {
+                        out.push_str(&format!("### Source file {}\n\n", index + 1));
+                        provenance(&mut out, file)?;
+                        if let Some(symbols) = file.get("symbols").and_then(Value::as_array) {
+                            if symbols.is_empty() {
+                                out.push_str("No symbols returned. Parser and coverage status remain as reported above.\n\n");
+                            }
+                            for symbol in symbols {
+                                for (key, label) in [
+                                    ("name", "Symbol"),
+                                    ("qualified_name", "Qualified name"),
+                                    ("kind", "Kind"),
+                                    ("id", "ID"),
+                                    ("parent_symbol_id", "Parent symbol ID"),
+                                ] {
+                                    field(&mut out, label, symbol.get(key))?;
+                                }
+                                provenance(&mut out, symbol)?;
+                            }
+                        }
+                    }
+                }
+            }
+            _ => {
+                out.push_str("## Handoff\n\n");
+                source_section(&mut out, data)?;
+                if let Some(metadata) = data.get("metadata") {
+                    json_section(&mut out, "Handoff metadata", metadata)?;
+                }
+                if let Some(validation) = data.get("validation") {
+                    json_section(&mut out, "Handoff validation", validation)?;
+                }
+            }
+        }
+    }
+    out.push_str("## Complete envelope metadata\n\nThis JSON appendix preserves every supplied field and the exact source strings. Control escapes in the readable source display are presentation only. No fields are silently dropped.\n\n");
+    fence(&mut out, &json_text(envelope, true)?, "json");
+    Ok(out)
+}

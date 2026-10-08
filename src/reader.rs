@@ -5,9 +5,11 @@ use crate::{
 use globset::{Glob, GlobSetBuilder};
 use serde::Serialize;
 use std::{
+    collections::BTreeMap,
     fs,
     io::Read,
     path::{Component, Path, PathBuf},
+    sync::{Arc, LazyLock, Mutex},
 };
 #[derive(Debug, Clone)]
 pub struct VerifiedFile {
@@ -21,7 +23,23 @@ pub struct Inventory {
     pub paths: Vec<String>,
     pub skipped: Vec<serde_json::Value>,
 }
-fn security_globs(p: &Project) -> Result<globset::GlobSet> {
+// Cache only compiled pattern programs, never a path's authorization or source result.
+// Exact current exclusion vectors are keys; a policy edit cannot reuse an older program.
+static SECURITY_GLOBS: LazyLock<Mutex<BTreeMap<Vec<String>, Arc<globset::GlobSet>>>> =
+    LazyLock::new(|| Mutex::new(BTreeMap::new()));
+fn security_globs(p: &Project) -> Result<Arc<globset::GlobSet>> {
+    {
+        let cache = SECURITY_GLOBS.lock().map_err(|_| {
+            Error::new(
+                "POLICY_UNAVAILABLE",
+                "Security pattern cache unavailable",
+                7,
+            )
+        })?;
+        if let Some(program) = cache.get(&p.config.policy.exclude) {
+            return Ok(Arc::clone(program));
+        }
+    }
     let mut b = GlobSetBuilder::new();
     for s in [
         "**/.git/**",
@@ -37,8 +55,22 @@ fn security_globs(p: &Project) -> Result<globset::GlobSet> {
     {
         b.add(Glob::new(&s).map_err(|_| Error::new("INVALID_CONFIG", "Invalid security glob", 2))?);
     }
-    b.build()
-        .map_err(|_| Error::new("INVALID_CONFIG", "Invalid security policy", 2))
+    let program = Arc::new(
+        b.build()
+            .map_err(|_| Error::new("INVALID_CONFIG", "Invalid security policy", 2))?,
+    );
+    let mut cache = SECURITY_GLOBS.lock().map_err(|_| {
+        Error::new(
+            "POLICY_UNAVAILABLE",
+            "Security pattern cache unavailable",
+            7,
+        )
+    })?;
+    if cache.len() >= 8 {
+        cache.clear();
+    }
+    cache.insert(p.config.policy.exclude.clone(), Arc::clone(&program));
+    Ok(program)
 }
 pub fn policy_allows(p: &Project, path: &str) -> Result<()> {
     let rel = Path::new(path);
@@ -54,8 +86,27 @@ pub fn policy_allows(p: &Project, path: &str) -> Result<()> {
     }
     Ok(())
 }
+pub(crate) fn validate_root(p: &Project) -> Result<()> {
+    #[cfg(unix)]
+    let _root = secure_root(p)?;
+    #[cfg(not(unix))]
+    if fs::symlink_metadata(&p.root)?.file_type().is_symlink() || !p.root.is_dir() {
+        return Err(Error::new(
+            "POLICY_DENIED",
+            "Project root is a link or unavailable",
+            5,
+        ));
+    }
+    Ok(())
+}
 pub fn authorize(p: &Project, path: &str) -> Result<PathBuf> {
     policy_allows(p, path)?;
+    #[cfg(unix)]
+    let _root = secure_root(p)?;
+    #[cfg(not(unix))]
+    if fs::symlink_metadata(&p.root)?.file_type().is_symlink() {
+        return Err(Error::new("POLICY_DENIED", "Project root is a link", 5));
+    }
     let rel = Path::new(path);
     if path.is_empty()
         || path.contains('\\')
@@ -204,6 +255,12 @@ pub fn redact_span(text: &str, start: usize, end: usize) -> (String, bool) {
     (result, !merged.is_empty())
 }
 pub fn inventory(p: &Project, include_ignored: bool) -> Result<Inventory> {
+    #[cfg(unix)]
+    let _root = secure_root(p)?;
+    #[cfg(not(unix))]
+    if fs::symlink_metadata(&p.root)?.file_type().is_symlink() {
+        return Err(Error::new("POLICY_DENIED", "Project root is a link", 5));
+    }
     let mut walker = ignore::WalkBuilder::new(&p.root);
     walker
         .follow_links(false)
@@ -306,12 +363,80 @@ pub fn manifest(p: &Project) -> Result<std::collections::BTreeMap<String, String
 }
 
 #[cfg(unix)]
+fn secure_root(p: &Project) -> Result<fs::File> {
+    use std::{
+        ffi::CString,
+        os::{
+            fd::{AsRawFd, FromRawFd},
+            unix::ffi::OsStrExt,
+        },
+    };
+    let root = p.root.clone();
+    // macOS exposes these fixed system aliases to tempfile. Do not resolve arbitrary
+    // project aliases: every project-owned ancestor is opened without following links.
+    #[cfg(target_os = "macos")]
+    let root = {
+        let mut root = root;
+        for (alias, physical) in [("/var", "/private/var"), ("/tmp", "/private/tmp")] {
+            if let Ok(tail) = root.strip_prefix(alias)
+                && fs::read_link(alias)
+                    .is_ok_and(|target| Path::new("/").join(target) == Path::new(physical))
+            {
+                root = Path::new(physical).join(tail);
+                break;
+            }
+        }
+        root
+    };
+    if !root.is_absolute() {
+        return Err(Error::new(
+            "PATH_OUTSIDE_ROOT",
+            "Project root must be absolute",
+            5,
+        ));
+    }
+    let mut dir = fs::File::open("/")?;
+    for component in root.components() {
+        match component {
+            Component::RootDir => continue,
+            Component::Normal(name) => {
+                let name = CString::new(name.as_bytes())
+                    .map_err(|_| Error::new("INVALID_ARGUMENT", "NUL in root path", 2))?;
+                let fd = unsafe {
+                    libc::openat(
+                        dir.as_raw_fd(),
+                        name.as_ptr(),
+                        libc::O_RDONLY | libc::O_DIRECTORY | libc::O_NOFOLLOW | libc::O_CLOEXEC,
+                    )
+                };
+                if fd < 0 {
+                    return Err(Error::new(
+                        "POLICY_DENIED",
+                        "Project root changed or contains a link",
+                        5,
+                    ));
+                }
+                dir = unsafe { fs::File::from_raw_fd(fd) };
+            }
+            _ => {
+                return Err(Error::new(
+                    "PATH_OUTSIDE_ROOT",
+                    "Invalid project root component",
+                    5,
+                ));
+            }
+        }
+    }
+    Ok(dir)
+}
+
+#[cfg(unix)]
 pub(crate) fn secure_open(p: &Project, path: &str) -> Result<fs::File> {
     use std::{
         ffi::CString,
         os::fd::{AsRawFd, FromRawFd},
     };
-    let mut dir = fs::File::open(&p.root)?;
+    let mut dir = secure_root(p)?;
     let components = Path::new(path).components().collect::<Vec<_>>();
     for (i, c) in components.iter().enumerate() {
         use std::os::unix::ffi::OsStrExt;

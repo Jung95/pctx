@@ -483,6 +483,7 @@ fn aliases(p: &Project, terms: &[String]) -> Result<AliasExpansion> {
     Ok((map, expanded))
 }
 pub fn find(p: &Project, files: &[FileEntry], req: &FindRequest) -> Result<Value> {
+    reader::validate_root(p)?;
     if req.regex && req.boolean_query.is_some() {
         return Err(invalid("Regex and Boolean modes cannot be combined"));
     }
@@ -547,7 +548,7 @@ pub fn find(p: &Project, files: &[FileEntry], req: &FindRequest) -> Result<Value
     for f in files {
         if !scope(&f.path, &req.scopes)
             || req.language.as_ref().is_some_and(|l| l != &f.language)
-            || reader::authorize(p, &f.path).is_err()
+            || reader::policy_allows(p, &f.path).is_err()
         {
             continue;
         }
@@ -556,6 +557,31 @@ pub fn find(p: &Project, files: &[FileEntry], req: &FindRequest) -> Result<Value
             break;
         }
         scanned += 1;
+        // Evaluate the whole cached corpus, including Boolean complements, before
+        // opening metadata-search candidates. Positive terms alone are not a filter.
+        let metadata_corpus = match req.kind.as_str() {
+            "path" => Some(f.path.clone()),
+            "symbol" | "document" => Some(
+                f.symbols
+                    .iter()
+                    .filter(|s| (s.kind == "heading") == (req.kind == "document"))
+                    .map(|s| s.name.as_str())
+                    .collect::<Vec<_>>()
+                    .join("\n"),
+            ),
+            _ => None,
+        };
+        if metadata_corpus
+            .as_ref()
+            .is_some_and(|corpus| !expr.matches(&|term| matches(corpus, term)))
+        {
+            continue;
+        }
+        // Policy filters index metadata first; physical path checks happen before
+        // any candidate is emitted, including freshness=off and negative matches.
+        if reader::authorize(p, &f.path).is_err() {
+            continue;
+        }
         let body = if matches!(req.kind.as_str(), "text" | "all") || req.freshness != "off" {
             Some(reader::read(p, &f.path)?)
         } else {
@@ -572,36 +598,26 @@ pub fn find(p: &Project, files: &[FileEntry], req: &FindRequest) -> Result<Value
         let mut score = 0i64;
         let mut lines = Vec::new();
         let mut count = 0usize;
-        let corpus = match req.kind.as_str() {
-            "path" => f.path.clone(),
-            "symbol" => f
-                .symbols
-                .iter()
-                .filter(|s| s.kind != "heading")
-                .map(|s| s.name.as_str())
-                .collect::<Vec<_>>()
-                .join("\n"),
-            "document" => f
-                .symbols
-                .iter()
-                .filter(|s| s.kind == "heading")
-                .map(|s| s.name.as_str())
-                .collect::<Vec<_>>()
-                .join("\n"),
-            "text" => body.as_ref().map(|b| b.text.clone()).unwrap_or_default(),
-            _ => format!(
-                "{}\n{}\n{}",
-                f.path,
-                f.symbols
-                    .iter()
-                    .map(|s| s.name.as_str())
-                    .collect::<Vec<_>>()
-                    .join("\n"),
-                body.as_ref().map(|b| b.text.as_str()).unwrap_or("")
-            ),
-        };
-        if !expr.matches(&|term| matches(&corpus, term)) {
-            continue;
+        // Text and combined searches require current source even if metadata has
+        // no positive hit: the body may match, or negate a Boolean expression.
+        if metadata_corpus.is_none() {
+            let corpus = if req.kind == "text" {
+                body.as_ref().map(|b| b.text.clone()).unwrap_or_default()
+            } else {
+                format!(
+                    "{}\n{}\n{}",
+                    f.path,
+                    f.symbols
+                        .iter()
+                        .map(|s| s.name.as_str())
+                        .collect::<Vec<_>>()
+                        .join("\n"),
+                    body.as_ref().map(|b| b.text.as_str()).unwrap_or("")
+                )
+            };
+            if !expr.matches(&|term| matches(&corpus, term)) {
+                continue;
+            }
         }
         for term in &positive {
             if matches!(req.kind.as_str(), "path" | "all") && matches(&f.path, term) {
@@ -714,9 +730,27 @@ pub fn find(p: &Project, files: &[FileEntry], req: &FindRequest) -> Result<Value
     });
     let omitted = results.len().saturating_sub(req.limit);
     results.truncate(req.limit);
-    Ok(
-        json!({"items":results,"expanded_terms":expanded,"coverage":{"status":if reasons.is_empty(){"complete"}else{"partial"},"reasons":reasons},"omitted_count":if reasons.is_empty(){json!(omitted)}else{Value::Null},"scanned_files":scanned}),
-    )
+    let source_validation =
+        if req.freshness == "off" && !matches!(req.kind.as_str(), "text" | "all") {
+            "none"
+        } else if matches!(req.kind.as_str(), "path" | "symbol" | "document") {
+            "matching_metadata_candidates"
+        } else {
+            "in_scope_files"
+        };
+    Ok(json!({
+        "items": results,
+        "expanded_terms": expanded,
+        "coverage": {
+            "status": if reasons.is_empty() { "complete" } else { "partial" },
+            "reasons": reasons,
+            "universe": "provided_index",
+            "source_validation": source_validation,
+            "new_candidate_discovery": "not_performed_by_find"
+        },
+        "omitted_count": if reasons.is_empty() { json!(omitted) } else { Value::Null },
+        "scanned_files": scanned
+    }))
 }
 
 pub fn outline(

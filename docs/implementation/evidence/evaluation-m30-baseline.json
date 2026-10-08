@@ -1,0 +1,1585 @@
+{
+  "schema_version": 1,
+  "status": "measured_not_complete_product_validation",
+  "config": {
+    "schema_version": 1,
+    "profile": "M",
+    "seed": 1048,
+    "repetitions": 30,
+    "context_budget_bytes": 12000,
+    "extract_budget_bytes": 10000,
+    "timeout_seconds": 150,
+    "output_fixtures": true,
+    "session_workloads": true,
+    "local_git_broker": true,
+    "cold_cache_control": "unknown",
+    "reference_environment": {
+      "cpu_cores": 8,
+      "memory_bytes": 17179869184,
+      "storage": "local_ssd",
+      "network": "not_used"
+    }
+  },
+  "specification_sha256": "57371b0559283d65316aebbd39f3ccf98a5597a305e783504e6e9e03fe291152",
+  "binary_sha256": "69c9af423d5372f12bf328318443370689c96518d2f117dad9f0e80a28fc8f7d",
+  "binary_name": "pctx",
+  "started_at_unix": 1791422768.123225,
+  "platform": {
+    "system": "Darwin",
+    "release": "25.6.0",
+    "machine": "arm64",
+    "cpu_logical_count": 10,
+    "memory_bytes": null,
+    "filesystem": null,
+    "storage_type": null,
+    "network": "not_used",
+    "python": "3.9.6"
+  },
+  "limits": {
+    "model_calls": 0,
+    "provider_tokens": null,
+    "provider_cost": null,
+    "subscription_quota": null,
+    "context_selection_only_ms": null,
+    "reference_hardware_equivalent": null,
+    "real_task_success_noninferiority": null
+  },
+  "corpus_generation_seconds": 39.956116208000005,
+  "corpus": {
+    "schema_version": 1,
+    "seed": 1048,
+    "profile": "M",
+    "normative_shape": true,
+    "file_count": 10000,
+    "total_bytes": 209715200,
+    "categories": {
+      "supported_language": 6000,
+      "document": 2000,
+      "other_text": 2000
+    },
+    "language_variants": [
+      "py",
+      "js",
+      "jsx",
+      "ts",
+      "tsx"
+    ],
+    "declared_symbols": 18000,
+    "symbol_distribution": {
+      "function": 6000,
+      "class": 6000,
+      "method": 6000
+    },
+    "document_sections": 4000,
+    "max_line_bytes": 80,
+    "mean_line_bytes": 79.377441332324,
+    "line_count": 2642000,
+    "max_file_bytes": 20972,
+    "mean_file_bytes": 20971.52,
+    "generation_manifest_hash": "810c9a60fa4090965a64e0dbf7caf166e0b7a595a4c522aa44c59e1503f0a66d"
+  },
+  "binary_version_output_sha256": "0fd17ca42711b207bcc371139d47cb6bdf4d6c9b471d04bb799892461b578d67",
+  "initial_index": {
+    "samples": 1,
+    "p50_ms": 16633.338417,
+    "p95_ms": 16633.338417,
+    "max_ms": 16633.338417,
+    "errors": 0,
+    "peak_rss_bytes": 38780928,
+    "indexed_files_observed": 10002,
+    "skipped_observed": []
+  },
+  "cold_cache": {
+    "status": "unknown",
+    "new_index_and_new_process": true,
+    "os_cache_eviction_performed": false,
+    "reason": "Generation writes warm OS pages; new process/index is not a cold filesystem cache"
+  },
+  "warm": {
+    "metadata_search": {
+      "samples": 30,
+      "p50_ms": 1233.915291,
+      "p95_ms": 1255.832459,
+      "max_ms": 1258.513959,
+      "errors": 0,
+      "peak_rss_bytes": 32866304
+    },
+    "matched_symbol_search": {
+      "samples": 30,
+      "p50_ms": 2633.320541,
+      "p95_ms": 2644.441417,
+      "max_ms": 2654.589542,
+      "errors": 30,
+      "peak_rss_bytes": 32899072
+    },
+    "body_scan": {
+      "samples": 30,
+      "p50_ms": 2633.197792,
+      "p95_ms": 2656.194333,
+      "max_ms": 2659.88525,
+      "errors": 30,
+      "peak_rss_bytes": 32931840
+    },
+    "strict_build": {
+      "samples": 30,
+      "p50_ms": 3861.067042,
+      "p95_ms": 3958.731958,
+      "max_ms": 4070.337292,
+      "errors": 0,
+      "peak_rss_bytes": 37699584
+    }
+  },
+  "context_checks": {
+    "successful_samples": 30,
+    "deterministic_body": true,
+    "all_outputs_within_budget": true,
+    "budget_bytes": 12000,
+    "source_bytes_baseline": 20971,
+    "mean_context_emitted_bytes": 7657.0
+  },
+  "search_queries": [
+    {
+      "id": "Q01",
+      "category": "exact_identifier",
+      "measured": false,
+      "expected_paths": [
+        "src/group0055/module005568.ts"
+      ],
+      "observed_paths": [],
+      "recall_at_20": null,
+      "reciprocal_rank": null,
+      "empty_correct": null,
+      "wrong_hash_paths": [],
+      "elapsed_ms": 2637.657125
+    },
+    {
+      "id": "Q02",
+      "category": "exact_identifier",
+      "measured": false,
+      "expected_paths": [
+        "src/group0054/module005494.tsx"
+      ],
+      "observed_paths": [],
+      "recall_at_20": null,
+      "reciprocal_rank": null,
+      "empty_correct": null,
+      "wrong_hash_paths": [],
+      "elapsed_ms": 2637.068208
+    },
+    {
+      "id": "Q03",
+      "category": "exact_identifier",
+      "measured": false,
+      "expected_paths": [
+        "src/group0047/module004796.js"
+      ],
+      "observed_paths": [],
+      "recall_at_20": null,
+      "reciprocal_rank": null,
+      "empty_correct": null,
+      "wrong_hash_paths": [],
+      "elapsed_ms": 2632.078375
+    },
+    {
+      "id": "Q04",
+      "category": "exact_identifier",
+      "measured": false,
+      "expected_paths": [
+        "src/group0037/module003704.tsx"
+      ],
+      "observed_paths": [
+        "src/group0037/module003704.tsx"
+      ],
+      "recall_at_20": null,
+      "reciprocal_rank": null,
+      "empty_correct": null,
+      "wrong_hash_paths": [],
+      "elapsed_ms": 2640.16575
+    },
+    {
+      "id": "Q05",
+      "category": "exact_identifier",
+      "measured": false,
+      "expected_paths": [
+        "src/group0005/module000510.py"
+      ],
+      "observed_paths": [
+        "src/group0005/module000510.py"
+      ],
+      "recall_at_20": null,
+      "reciprocal_rank": null,
+      "empty_correct": null,
+      "wrong_hash_paths": [],
+      "elapsed_ms": 2633.880958
+    },
+    {
+      "id": "Q06",
+      "category": "exact_identifier",
+      "measured": false,
+      "expected_paths": [
+        "src/group0019/module001951.js"
+      ],
+      "observed_paths": [
+        "src/group0019/module001951.js"
+      ],
+      "recall_at_20": null,
+      "reciprocal_rank": null,
+      "empty_correct": null,
+      "wrong_hash_paths": [],
+      "elapsed_ms": 2629.703083
+    },
+    {
+      "id": "Q07",
+      "category": "exact_identifier",
+      "measured": false,
+      "expected_paths": [
+        "src/group0039/module003918.ts"
+      ],
+      "observed_paths": [
+        "src/group0039/module003918.ts"
+      ],
+      "recall_at_20": null,
+      "reciprocal_rank": null,
+      "empty_correct": null,
+      "wrong_hash_paths": [],
+      "elapsed_ms": 2636.6555
+    },
+    {
+      "id": "Q08",
+      "category": "exact_identifier",
+      "measured": false,
+      "expected_paths": [
+        "src/group0027/module002737.jsx"
+      ],
+      "observed_paths": [
+        "src/group0027/module002737.jsx"
+      ],
+      "recall_at_20": null,
+      "reciprocal_rank": null,
+      "empty_correct": null,
+      "wrong_hash_paths": [],
+      "elapsed_ms": 2640.038792
+    },
+    {
+      "id": "Q09",
+      "category": "exact_identifier",
+      "measured": false,
+      "expected_paths": [
+        "src/group0045/module004507.jsx"
+      ],
+      "observed_paths": [],
+      "recall_at_20": null,
+      "reciprocal_rank": null,
+      "empty_correct": null,
+      "wrong_hash_paths": [],
+      "elapsed_ms": 2654.906417
+    },
+    {
+      "id": "Q10",
+      "category": "exact_identifier",
+      "measured": false,
+      "expected_paths": [
+        "src/group0021/module002132.jsx"
+      ],
+      "observed_paths": [
+        "src/group0021/module002132.jsx"
+      ],
+      "recall_at_20": null,
+      "reciprocal_rank": null,
+      "empty_correct": null,
+      "wrong_hash_paths": [],
+      "elapsed_ms": 2627.566042
+    },
+    {
+      "id": "Q11",
+      "category": "exact_identifier",
+      "measured": false,
+      "expected_paths": [
+        "src/group0047/module004745.py"
+      ],
+      "observed_paths": [],
+      "recall_at_20": null,
+      "reciprocal_rank": null,
+      "empty_correct": null,
+      "wrong_hash_paths": [],
+      "elapsed_ms": 2632.013166
+    },
+    {
+      "id": "Q12",
+      "category": "exact_identifier",
+      "measured": false,
+      "expected_paths": [
+        "src/group0014/module001465.py"
+      ],
+      "observed_paths": [
+        "src/group0014/module001465.py"
+      ],
+      "recall_at_20": null,
+      "reciprocal_rank": null,
+      "empty_correct": null,
+      "wrong_hash_paths": [],
+      "elapsed_ms": 2634.233083
+    },
+    {
+      "id": "Q13",
+      "category": "exact_identifier",
+      "measured": false,
+      "expected_paths": [
+        "src/group0004/module000417.jsx"
+      ],
+      "observed_paths": [
+        "src/group0004/module000417.jsx"
+      ],
+      "recall_at_20": null,
+      "reciprocal_rank": null,
+      "empty_correct": null,
+      "wrong_hash_paths": [],
+      "elapsed_ms": 2634.357416
+    },
+    {
+      "id": "Q14",
+      "category": "exact_identifier",
+      "measured": false,
+      "expected_paths": [
+        "src/group0001/module000122.jsx"
+      ],
+      "observed_paths": [
+        "src/group0001/module000122.jsx"
+      ],
+      "recall_at_20": null,
+      "reciprocal_rank": null,
+      "empty_correct": null,
+      "wrong_hash_paths": [],
+      "elapsed_ms": 2641.574084
+    },
+    {
+      "id": "Q15",
+      "category": "exact_identifier",
+      "measured": false,
+      "expected_paths": [
+        "src/group0007/module000743.ts"
+      ],
+      "observed_paths": [
+        "src/group0007/module000743.ts"
+      ],
+      "recall_at_20": null,
+      "reciprocal_rank": null,
+      "empty_correct": null,
+      "wrong_hash_paths": [],
+      "elapsed_ms": 2630.712125
+    },
+    {
+      "id": "Q16",
+      "category": "exact_identifier",
+      "measured": false,
+      "expected_paths": [
+        "src/group0009/module000934.tsx"
+      ],
+      "observed_paths": [
+        "src/group0009/module000934.tsx"
+      ],
+      "recall_at_20": null,
+      "reciprocal_rank": null,
+      "empty_correct": null,
+      "wrong_hash_paths": [],
+      "elapsed_ms": 2626.952958
+    },
+    {
+      "id": "Q17",
+      "category": "exact_identifier",
+      "measured": false,
+      "expected_paths": [
+        "src/group0025/module002517.jsx"
+      ],
+      "observed_paths": [
+        "src/group0025/module002517.jsx"
+      ],
+      "recall_at_20": null,
+      "reciprocal_rank": null,
+      "empty_correct": null,
+      "wrong_hash_paths": [],
+      "elapsed_ms": 2631.02675
+    },
+    {
+      "id": "Q18",
+      "category": "exact_identifier",
+      "measured": false,
+      "expected_paths": [
+        "src/group0009/module000966.js"
+      ],
+      "observed_paths": [
+        "src/group0009/module000966.js"
+      ],
+      "recall_at_20": null,
+      "reciprocal_rank": null,
+      "empty_correct": null,
+      "wrong_hash_paths": [],
+      "elapsed_ms": 2627.237917
+    },
+    {
+      "id": "Q19",
+      "category": "exact_identifier",
+      "measured": false,
+      "expected_paths": [
+        "src/group0015/module001595.py"
+      ],
+      "observed_paths": [
+        "src/group0015/module001595.py"
+      ],
+      "recall_at_20": null,
+      "reciprocal_rank": null,
+      "empty_correct": null,
+      "wrong_hash_paths": [],
+      "elapsed_ms": 2626.368875
+    },
+    {
+      "id": "Q20",
+      "category": "exact_identifier",
+      "measured": false,
+      "expected_paths": [
+        "src/group0017/module001708.ts"
+      ],
+      "observed_paths": [
+        "src/group0017/module001708.ts"
+      ],
+      "recall_at_20": null,
+      "reciprocal_rank": null,
+      "empty_correct": null,
+      "wrong_hash_paths": [],
+      "elapsed_ms": 2632.690875
+    },
+    {
+      "id": "Q21",
+      "category": "partial_name",
+      "measured": false,
+      "expected_paths": [
+        "src/group0001/module000170.py"
+      ],
+      "observed_paths": [
+        "src/group0001/module000170.py"
+      ],
+      "recall_at_20": null,
+      "reciprocal_rank": null,
+      "empty_correct": null,
+      "wrong_hash_paths": [],
+      "elapsed_ms": 2631.896583
+    },
+    {
+      "id": "Q22",
+      "category": "partial_name",
+      "measured": false,
+      "expected_paths": [
+        "src/group0028/module002840.py"
+      ],
+      "observed_paths": [
+        "src/group0028/module002840.py"
+      ],
+      "recall_at_20": null,
+      "reciprocal_rank": null,
+      "empty_correct": null,
+      "wrong_hash_paths": [],
+      "elapsed_ms": 2653.817958
+    },
+    {
+      "id": "Q23",
+      "category": "partial_name",
+      "measured": false,
+      "expected_paths": [
+        "src/group0055/module005530.py"
+      ],
+      "observed_paths": [],
+      "recall_at_20": null,
+      "reciprocal_rank": null,
+      "empty_correct": null,
+      "wrong_hash_paths": [],
+      "elapsed_ms": 2635.693583
+    },
+    {
+      "id": "Q24",
+      "category": "partial_name",
+      "measured": false,
+      "expected_paths": [
+        "src/group0051/module005128.ts"
+      ],
+      "observed_paths": [],
+      "recall_at_20": null,
+      "reciprocal_rank": null,
+      "empty_correct": null,
+      "wrong_hash_paths": [],
+      "elapsed_ms": 2661.384542
+    },
+    {
+      "id": "Q25",
+      "category": "partial_name",
+      "measured": false,
+      "expected_paths": [
+        "src/group0032/module003238.ts"
+      ],
+      "observed_paths": [
+        "src/group0032/module003238.ts"
+      ],
+      "recall_at_20": null,
+      "reciprocal_rank": null,
+      "empty_correct": null,
+      "wrong_hash_paths": [],
+      "elapsed_ms": 2640.696791
+    },
+    {
+      "id": "Q26",
+      "category": "partial_name",
+      "measured": false,
+      "expected_paths": [
+        "src/group0051/module005125.py"
+      ],
+      "observed_paths": [],
+      "recall_at_20": null,
+      "reciprocal_rank": null,
+      "empty_correct": null,
+      "wrong_hash_paths": [],
+      "elapsed_ms": 2632.303917
+    },
+    {
+      "id": "Q27",
+      "category": "partial_name",
+      "measured": false,
+      "expected_paths": [
+        "src/group0047/module004776.js"
+      ],
+      "observed_paths": [],
+      "recall_at_20": null,
+      "reciprocal_rank": null,
+      "empty_correct": null,
+      "wrong_hash_paths": [],
+      "elapsed_ms": 2632.704459
+    },
+    {
+      "id": "Q28",
+      "category": "partial_name",
+      "measured": false,
+      "expected_paths": [
+        "src/group0049/module004919.tsx"
+      ],
+      "observed_paths": [],
+      "recall_at_20": null,
+      "reciprocal_rank": null,
+      "empty_correct": null,
+      "wrong_hash_paths": [],
+      "elapsed_ms": 2663.0665
+    },
+    {
+      "id": "Q29",
+      "category": "partial_name",
+      "measured": false,
+      "expected_paths": [
+        "src/group0047/module004706.js"
+      ],
+      "observed_paths": [],
+      "recall_at_20": null,
+      "reciprocal_rank": null,
+      "empty_correct": null,
+      "wrong_hash_paths": [],
+      "elapsed_ms": 2639.084916
+    },
+    {
+      "id": "Q30",
+      "category": "partial_name",
+      "measured": false,
+      "expected_paths": [
+        "src/group0055/module005595.py"
+      ],
+      "observed_paths": [],
+      "recall_at_20": null,
+      "reciprocal_rank": null,
+      "empty_correct": null,
+      "wrong_hash_paths": [],
+      "elapsed_ms": 2633.01325
+    },
+    {
+      "id": "Q31",
+      "category": "korean_alias",
+      "measured": false,
+      "expected_paths": [
+        "src/group0003/module000375.py"
+      ],
+      "observed_paths": [
+        "src/group0003/module000375.py"
+      ],
+      "recall_at_20": null,
+      "reciprocal_rank": null,
+      "empty_correct": null,
+      "wrong_hash_paths": [],
+      "elapsed_ms": 2625.382
+    },
+    {
+      "id": "Q32",
+      "category": "korean_alias",
+      "measured": false,
+      "expected_paths": [
+        "src/group0027/module002721.js"
+      ],
+      "observed_paths": [
+        "src/group0027/module002721.js"
+      ],
+      "recall_at_20": null,
+      "reciprocal_rank": null,
+      "empty_correct": null,
+      "wrong_hash_paths": [],
+      "elapsed_ms": 2628.51725
+    },
+    {
+      "id": "Q33",
+      "category": "korean_alias",
+      "measured": false,
+      "expected_paths": [
+        "src/group0043/module004367.jsx"
+      ],
+      "observed_paths": [],
+      "recall_at_20": null,
+      "reciprocal_rank": null,
+      "empty_correct": null,
+      "wrong_hash_paths": [],
+      "elapsed_ms": 2637.416167
+    },
+    {
+      "id": "Q34",
+      "category": "korean_alias",
+      "measured": false,
+      "expected_paths": [
+        "src/group0042/module004231.js"
+      ],
+      "observed_paths": [],
+      "recall_at_20": null,
+      "reciprocal_rank": null,
+      "empty_correct": null,
+      "wrong_hash_paths": [],
+      "elapsed_ms": 2626.981625
+    },
+    {
+      "id": "Q35",
+      "category": "korean_alias",
+      "measured": false,
+      "expected_paths": [
+        "src/group0008/module000881.js"
+      ],
+      "observed_paths": [
+        "src/group0008/module000881.js"
+      ],
+      "recall_at_20": null,
+      "reciprocal_rank": null,
+      "empty_correct": null,
+      "wrong_hash_paths": [],
+      "elapsed_ms": 2635.972791
+    },
+    {
+      "id": "Q36",
+      "category": "korean_alias",
+      "measured": false,
+      "expected_paths": [
+        "src/group0045/module004510.py"
+      ],
+      "observed_paths": [],
+      "recall_at_20": null,
+      "reciprocal_rank": null,
+      "empty_correct": null,
+      "wrong_hash_paths": [],
+      "elapsed_ms": 2634.732625
+    },
+    {
+      "id": "Q37",
+      "category": "korean_alias",
+      "measured": false,
+      "expected_paths": [
+        "src/group0039/module003990.py"
+      ],
+      "observed_paths": [],
+      "recall_at_20": null,
+      "reciprocal_rank": null,
+      "empty_correct": null,
+      "wrong_hash_paths": [],
+      "elapsed_ms": 2680.542125
+    },
+    {
+      "id": "Q38",
+      "category": "korean_alias",
+      "measured": false,
+      "expected_paths": [
+        "src/group0017/module001747.jsx"
+      ],
+      "observed_paths": [
+        "src/group0017/module001747.jsx"
+      ],
+      "recall_at_20": null,
+      "reciprocal_rank": null,
+      "empty_correct": null,
+      "wrong_hash_paths": [],
+      "elapsed_ms": 2627.214583
+    },
+    {
+      "id": "Q39",
+      "category": "korean_alias",
+      "measured": false,
+      "expected_paths": [
+        "src/group0009/module000902.jsx"
+      ],
+      "observed_paths": [
+        "src/group0009/module000902.jsx"
+      ],
+      "recall_at_20": null,
+      "reciprocal_rank": null,
+      "empty_correct": null,
+      "wrong_hash_paths": [],
+      "elapsed_ms": 2631.025209
+    },
+    {
+      "id": "Q40",
+      "category": "korean_alias",
+      "measured": false,
+      "expected_paths": [
+        "src/group0059/module005981.js"
+      ],
+      "observed_paths": [],
+      "recall_at_20": null,
+      "reciprocal_rank": null,
+      "empty_correct": null,
+      "wrong_hash_paths": [],
+      "elapsed_ms": 2634.288209
+    },
+    {
+      "id": "Q41",
+      "category": "no_answer",
+      "measured": false,
+      "expected_paths": [],
+      "observed_paths": [],
+      "recall_at_20": null,
+      "reciprocal_rank": null,
+      "empty_correct": null,
+      "wrong_hash_paths": [],
+      "elapsed_ms": 2628.879625
+    },
+    {
+      "id": "Q42",
+      "category": "no_answer",
+      "measured": false,
+      "expected_paths": [],
+      "observed_paths": [],
+      "recall_at_20": null,
+      "reciprocal_rank": null,
+      "empty_correct": null,
+      "wrong_hash_paths": [],
+      "elapsed_ms": 2630.158208
+    },
+    {
+      "id": "Q43",
+      "category": "no_answer",
+      "measured": false,
+      "expected_paths": [],
+      "observed_paths": [],
+      "recall_at_20": null,
+      "reciprocal_rank": null,
+      "empty_correct": null,
+      "wrong_hash_paths": [],
+      "elapsed_ms": 2632.872125
+    },
+    {
+      "id": "Q44",
+      "category": "no_answer",
+      "measured": false,
+      "expected_paths": [],
+      "observed_paths": [],
+      "recall_at_20": null,
+      "reciprocal_rank": null,
+      "empty_correct": null,
+      "wrong_hash_paths": [],
+      "elapsed_ms": 2624.766542
+    },
+    {
+      "id": "Q45",
+      "category": "no_answer",
+      "measured": false,
+      "expected_paths": [],
+      "observed_paths": [],
+      "recall_at_20": null,
+      "reciprocal_rank": null,
+      "empty_correct": null,
+      "wrong_hash_paths": [],
+      "elapsed_ms": 2629.615625
+    },
+    {
+      "id": "Q46",
+      "category": "no_answer",
+      "measured": false,
+      "expected_paths": [],
+      "observed_paths": [],
+      "recall_at_20": null,
+      "reciprocal_rank": null,
+      "empty_correct": null,
+      "wrong_hash_paths": [],
+      "elapsed_ms": 2637.2385
+    },
+    {
+      "id": "Q47",
+      "category": "no_answer",
+      "measured": false,
+      "expected_paths": [],
+      "observed_paths": [],
+      "recall_at_20": null,
+      "reciprocal_rank": null,
+      "empty_correct": null,
+      "wrong_hash_paths": [],
+      "elapsed_ms": 2625.343209
+    },
+    {
+      "id": "Q48",
+      "category": "no_answer",
+      "measured": false,
+      "expected_paths": [],
+      "observed_paths": [],
+      "recall_at_20": null,
+      "reciprocal_rank": null,
+      "empty_correct": null,
+      "wrong_hash_paths": [],
+      "elapsed_ms": 2638.3715
+    },
+    {
+      "id": "Q49",
+      "category": "no_answer",
+      "measured": false,
+      "expected_paths": [],
+      "observed_paths": [],
+      "recall_at_20": null,
+      "reciprocal_rank": null,
+      "empty_correct": null,
+      "wrong_hash_paths": [],
+      "elapsed_ms": 2642.646541
+    },
+    {
+      "id": "Q50",
+      "category": "no_answer",
+      "measured": false,
+      "expected_paths": [],
+      "observed_paths": [],
+      "recall_at_20": null,
+      "reciprocal_rank": null,
+      "empty_correct": null,
+      "wrong_hash_paths": [],
+      "elapsed_ms": 2633.866125
+    },
+    {
+      "id": "Q51",
+      "category": "unsupported_language",
+      "measured": false,
+      "expected_paths": [
+        "legacy/note008000.xyz"
+      ],
+      "observed_paths": [
+        "legacy/note008000.xyz"
+      ],
+      "recall_at_20": null,
+      "reciprocal_rank": null,
+      "empty_correct": null,
+      "wrong_hash_paths": [],
+      "elapsed_ms": 2653.264041
+    },
+    {
+      "id": "Q52",
+      "category": "unsupported_language",
+      "measured": false,
+      "expected_paths": [
+        "legacy/note008001.xyz"
+      ],
+      "observed_paths": [
+        "legacy/note008001.xyz"
+      ],
+      "recall_at_20": null,
+      "reciprocal_rank": null,
+      "empty_correct": null,
+      "wrong_hash_paths": [],
+      "elapsed_ms": 2631.076667
+    },
+    {
+      "id": "Q53",
+      "category": "unsupported_language",
+      "measured": false,
+      "expected_paths": [
+        "legacy/note008002.xyz"
+      ],
+      "observed_paths": [
+        "legacy/note008002.xyz"
+      ],
+      "recall_at_20": null,
+      "reciprocal_rank": null,
+      "empty_correct": null,
+      "wrong_hash_paths": [],
+      "elapsed_ms": 2624.9735
+    },
+    {
+      "id": "Q54",
+      "category": "unsupported_language",
+      "measured": false,
+      "expected_paths": [
+        "legacy/note008003.xyz"
+      ],
+      "observed_paths": [
+        "legacy/note008003.xyz"
+      ],
+      "recall_at_20": null,
+      "reciprocal_rank": null,
+      "empty_correct": null,
+      "wrong_hash_paths": [],
+      "elapsed_ms": 2638.012
+    },
+    {
+      "id": "Q55",
+      "category": "unsupported_language",
+      "measured": false,
+      "expected_paths": [
+        "legacy/note008004.xyz"
+      ],
+      "observed_paths": [
+        "legacy/note008004.xyz"
+      ],
+      "recall_at_20": null,
+      "reciprocal_rank": null,
+      "empty_correct": null,
+      "wrong_hash_paths": [],
+      "elapsed_ms": 2630.935167
+    },
+    {
+      "id": "Q56",
+      "category": "unsupported_language",
+      "measured": false,
+      "expected_paths": [
+        "legacy/note008005.xyz"
+      ],
+      "observed_paths": [
+        "legacy/note008005.xyz"
+      ],
+      "recall_at_20": null,
+      "reciprocal_rank": null,
+      "empty_correct": null,
+      "wrong_hash_paths": [],
+      "elapsed_ms": 2631.895625
+    },
+    {
+      "id": "Q57",
+      "category": "unsupported_language",
+      "measured": false,
+      "expected_paths": [
+        "legacy/note008006.xyz"
+      ],
+      "observed_paths": [
+        "legacy/note008006.xyz"
+      ],
+      "recall_at_20": null,
+      "reciprocal_rank": null,
+      "empty_correct": null,
+      "wrong_hash_paths": [],
+      "elapsed_ms": 2629.704375
+    },
+    {
+      "id": "Q58",
+      "category": "unsupported_language",
+      "measured": false,
+      "expected_paths": [
+        "legacy/note008007.xyz"
+      ],
+      "observed_paths": [
+        "legacy/note008007.xyz"
+      ],
+      "recall_at_20": null,
+      "reciprocal_rank": null,
+      "empty_correct": null,
+      "wrong_hash_paths": [],
+      "elapsed_ms": 2654.298542
+    },
+    {
+      "id": "Q59",
+      "category": "unsupported_language",
+      "measured": false,
+      "expected_paths": [
+        "legacy/note008008.xyz"
+      ],
+      "observed_paths": [
+        "legacy/note008008.xyz"
+      ],
+      "recall_at_20": null,
+      "reciprocal_rank": null,
+      "empty_correct": null,
+      "wrong_hash_paths": [],
+      "elapsed_ms": 2647.509833
+    },
+    {
+      "id": "Q60",
+      "category": "unsupported_language",
+      "measured": false,
+      "expected_paths": [
+        "legacy/note008009.xyz"
+      ],
+      "observed_paths": [
+        "legacy/note008009.xyz"
+      ],
+      "recall_at_20": null,
+      "reciprocal_rank": null,
+      "empty_correct": null,
+      "wrong_hash_paths": [],
+      "elapsed_ms": 2649.749125
+    }
+  ],
+  "search_metrics": {
+    "exact_identifier": {
+      "queries": 20,
+      "measured": 0,
+      "recall_at_20": null,
+      "mrr": null,
+      "wrong_hash_results": 0
+    },
+    "korean_alias": {
+      "queries": 10,
+      "measured": 0,
+      "recall_at_20": null,
+      "mrr": null,
+      "wrong_hash_results": 0
+    },
+    "no_answer": {
+      "queries": 10,
+      "measured": 0,
+      "recall_at_20": null,
+      "mrr": null,
+      "wrong_hash_results": 0
+    },
+    "partial_name": {
+      "queries": 10,
+      "measured": 0,
+      "recall_at_20": null,
+      "mrr": null,
+      "wrong_hash_results": 0
+    },
+    "unsupported_language": {
+      "queries": 10,
+      "measured": 0,
+      "recall_at_20": null,
+      "mrr": null,
+      "wrong_hash_results": 0
+    }
+  },
+  "symbol_read": {
+    "status": "met",
+    "range": {
+      "end_byte": 67,
+      "end_line": 1,
+      "start_byte": 7,
+      "start_line": 1
+    },
+    "expected_symbol": "benchFunction005568"
+  },
+  "extract_check": {
+    "status": "met",
+    "source_hash_matches": true,
+    "within_budget": true
+  },
+  "unsupported_not_empty": true,
+  "incremental_20_files": {
+    "samples": 30,
+    "p50_ms": 2723.21325,
+    "p95_ms": 2822.097167,
+    "max_ms": 2835.184333,
+    "errors": 0,
+    "peak_rss_bytes": 38928384
+  },
+  "stale_symbol_rejected": true,
+  "index_retention_cleanup": {
+    "returncode": 0,
+    "data": {
+      "checkpoints_preserved": true,
+      "control_preserved": true,
+      "dry_run": false,
+      "generations": [
+        "GEN-03ab1f54-0bc2-4ecf-8e00-16115b2c8ac8",
+        "GEN-0c75134b-75ae-4453-8ec5-f918d2d455c2",
+        "GEN-0eebdddd-6f27-4a45-9e15-539139d73e99",
+        "GEN-121f8c06-e520-4c3b-9f67-10597026cd3b",
+        "GEN-169b3a61-9045-4c82-9de7-b4b602db7a4c",
+        "GEN-19519a31-31ec-4f9f-a33c-1c4bcb51b882",
+        "GEN-1b789308-d90c-42f8-982c-379f0a9b23ec",
+        "GEN-1bbaca70-2069-448d-bec0-55ab37252ee8",
+        "GEN-1d8f091e-b9f4-4d9f-b6aa-6f894b40f641",
+        "GEN-2cb3c221-2e52-4bcb-8188-935886fd2e33",
+        "GEN-2d5601a9-9b5b-464f-9af5-b12d321a26c6",
+        "GEN-345aeebc-4348-4ac1-8943-3e1d0b40a0c7",
+        "GEN-3ec145d0-9f84-4296-8394-192cf42e7e03",
+        "GEN-407f18d0-b220-4f26-94df-6a206c2dda46",
+        "GEN-45ee0f2e-d5f8-40a7-9996-b680e11c97df",
+        "GEN-468a651a-9084-40d5-b0c3-6249c483953a",
+        "GEN-473d3c1e-12ca-4fcc-a839-25f498695b9f",
+        "GEN-4d181a7f-05bf-40f1-94e5-9b9e172a991e",
+        "GEN-4fe27af4-dc7e-40bd-a906-edffcc7f6d11",
+        "GEN-501a5589-11e7-49aa-a00c-95611cac41b3",
+        "GEN-73d44c9a-353e-430c-9b60-137ce77b2c4c",
+        "GEN-76372f3a-e985-4e14-a40c-bfd1aaa4a3ad",
+        "GEN-7a550963-b04f-4b5f-a8d6-b36727dcb40d",
+        "GEN-802b185c-b234-4f59-90e8-ce37dd99587d",
+        "GEN-821d2c96-4546-43cc-bd35-0a18df35d052",
+        "GEN-822b60c3-555d-44c5-9650-da1970218f40",
+        "GEN-84ee309f-b8d7-4717-910b-fec87d48cbae",
+        "GEN-852e3fa8-0593-4b9f-9971-bba57fefe3e2",
+        "GEN-89636acf-11ba-412d-93b4-cccce60ebff0",
+        "GEN-8b0e7fd0-1a95-4f3d-87f4-3719c8f4e188",
+        "GEN-9794d582-fb77-4729-88fd-d6b4d96d0e7d",
+        "GEN-9a940175-f6f0-4a86-a830-d30c2afd25e5",
+        "GEN-9b8359a9-ab32-4814-8109-7627fd65fa8d",
+        "GEN-9c3f9eeb-1b68-42ed-a83b-6b6a5bdb3f3c",
+        "GEN-9c4a36a8-4851-4232-bdb9-69bfd4c8e075",
+        "GEN-9c631321-a393-4337-a105-bf368ad9ccb0",
+        "GEN-a0bfd4e2-3f66-4d04-8c7d-e220cad66afc",
+        "GEN-a22e54b4-e07a-48f6-b3d2-f7a4f41585f7",
+        "GEN-a93ad426-14c3-4d05-b3ff-f63977b55bbc",
+        "GEN-acd2c99d-9237-464c-8fd1-fb0ad8ce7647",
+        "GEN-aed752fa-aa5e-4ef8-a6e9-1b87fb745cc9",
+        "GEN-b3c2e56f-fcaf-479a-91f2-fb3a3c8210b0",
+        "GEN-b476a6a5-a097-47cd-9b56-fe30a3d1d68c",
+        "GEN-c4c4ca91-6cbf-4da1-bacf-4210c95bf205",
+        "GEN-c5346de8-22d5-4bbc-8333-64dd17ec62b9",
+        "GEN-c6caf5f4-d03c-40e5-bc62-d45cadaaba6d",
+        "GEN-c6cdd898-0ec5-4c77-99eb-221855493dfb",
+        "GEN-c73927ce-cf84-40f3-9ac1-c158cc2f0ae4",
+        "GEN-ca07cc7d-875e-41c2-b5b8-9b7cbbfadc09",
+        "GEN-d1384544-0d68-4e76-9bfb-2341a6f741d9",
+        "GEN-d14da018-78e3-460f-9839-062dd834913d",
+        "GEN-d7667f03-58d9-4ae0-ab98-6b96650c3583",
+        "GEN-d859e2b5-f62c-4416-8fd2-443074868364",
+        "GEN-da45b38e-fe92-4a26-b0d4-22ca2048fa03",
+        "GEN-e5c888a1-4c08-4eb8-8d2a-2699a9384fb8",
+        "GEN-e72679c0-aa1c-47e8-894b-a8b5fd9343be",
+        "GEN-e97945d2-5062-4b5f-9215-ded3a6b1f97d",
+        "GEN-ea7bc42f-c5e1-4c21-8f97-c4b43ba6b536",
+        "GEN-ec7924ee-cddf-47bb-8f14-a59aeef00ea7",
+        "GEN-eef7b4f3-1d43-4e7a-8d47-81750bf2b37f",
+        "GEN-f9964f4c-da4c-4033-b62a-089c4e233ccf"
+      ]
+    }
+  },
+  "index_bytes_before_later_functional_workloads": 162615296,
+  "shared_query": {
+    "status": "met",
+    "value": 1,
+    "reason": "Five actual CLI processes; local Git only",
+    "source_revisions": [
+      "4f45a4ecc6907112b506d824c3235841bc74611dd7a4ee9445d2d4f614cdbd85"
+    ],
+    "permission_scopes": [
+      "4c1029697ee358715d3a14a2add817c4b01651440de808371f78165ac90dc581"
+    ],
+    "external_issue_calls": null
+  },
+  "sessions": {
+    "status": "measured",
+    "value": [
+      {
+        "status": "met",
+        "full_emitted_bytes": 1992,
+        "delta_emitted_bytes": 1106,
+        "local_saved_bytes": 886
+      },
+      {
+        "status": "met",
+        "full_emitted_bytes": 1992,
+        "delta_emitted_bytes": 1106,
+        "local_saved_bytes": 886
+      },
+      {
+        "status": "met",
+        "full_emitted_bytes": 1992,
+        "delta_emitted_bytes": 1106,
+        "local_saved_bytes": 886
+      },
+      {
+        "status": "met",
+        "full_emitted_bytes": 1992,
+        "delta_emitted_bytes": 1106,
+        "local_saved_bytes": 886
+      },
+      {
+        "status": "met",
+        "full_emitted_bytes": 1992,
+        "delta_emitted_bytes": 1106,
+        "local_saved_bytes": 886
+      }
+    ],
+    "reason": "Local packet correctness/bytes only; no model success or quota measurement",
+    "fixture": {
+      "scope": [
+        "src/group0055/module005568.ts"
+      ],
+      "query": "benchFunction005568",
+      "expected_symbol": "benchFunction005568",
+      "budget_bytes": 12000,
+      "purpose": "five sessions receive one declared symbol task and acknowledge unchanged context"
+    },
+    "compact_baseline_rejected": true,
+    "boundary_applied": true,
+    "recovery_tokens_to_first_valid_action": null,
+    "model_wakes": null
+  },
+  "output": {
+    "status": "measured",
+    "value": [
+      {
+        "case": "tiny",
+        "status": "measured",
+        "baseline_semantics": "redacted_uncompressed",
+        "source_input_bytes": 10,
+        "redacted_baseline_bytes": 10,
+        "compact_emitted_bytes": 1315,
+        "retrieval_emitted_bytes": 1706,
+        "total_emitted_bytes": 3021,
+        "net_saved_bytes": -3011,
+        "net_reduction_fraction": -301.1,
+        "input_stage": "captured",
+        "child_exit_code": 0,
+        "child_exit_preserved": true,
+        "fixture_semantics": "tiny",
+        "expected_nonzero": false,
+        "expected_exact_child_exit": 0,
+        "capture_complete": true,
+        "parse_status": "unsupported",
+        "omitted_bytes": 0,
+        "provider_receipt": "unknown",
+        "reread_same_records": true,
+        "artifact_identity_preserved": true,
+        "source_removed_before_repeated_reread": true,
+        "source_reread_check_applicable": true,
+        "reread_succeeded_without_source": true,
+        "diagnostic_found": null,
+        "presentation_not_test_pass": true
+      },
+      {
+        "case": "verbose_success",
+        "status": "measured",
+        "baseline_semantics": "redacted_uncompressed",
+        "source_input_bytes": 560024,
+        "redacted_baseline_bytes": 560024,
+        "compact_emitted_bytes": 2141,
+        "retrieval_emitted_bytes": 151364,
+        "total_emitted_bytes": 153505,
+        "net_saved_bytes": 406519,
+        "net_reduction_fraction": 0.7258956758996044,
+        "input_stage": "captured",
+        "child_exit_code": 0,
+        "child_exit_preserved": true,
+        "fixture_semantics": "success",
+        "expected_nonzero": false,
+        "expected_exact_child_exit": 0,
+        "capture_complete": true,
+        "parse_status": "unsupported",
+        "omitted_bytes": 0,
+        "provider_receipt": "unknown",
+        "reread_same_records": true,
+        "artifact_identity_preserved": true,
+        "source_removed_before_repeated_reread": true,
+        "source_reread_check_applicable": true,
+        "reread_succeeded_without_source": true,
+        "diagnostic_found": null,
+        "presentation_not_test_pass": true
+      },
+      {
+        "case": "multiple_failures",
+        "status": "measured",
+        "baseline_semantics": "redacted_uncompressed",
+        "source_input_bytes": 210060,
+        "redacted_baseline_bytes": 210060,
+        "compact_emitted_bytes": 2327,
+        "retrieval_emitted_bytes": 152031,
+        "total_emitted_bytes": 154358,
+        "net_saved_bytes": 55702,
+        "net_reduction_fraction": 0.26517185566028756,
+        "input_stage": "captured",
+        "child_exit_code": 0,
+        "child_exit_preserved": true,
+        "fixture_semantics": "failures",
+        "expected_nonzero": false,
+        "expected_exact_child_exit": 0,
+        "capture_complete": true,
+        "parse_status": "unsupported",
+        "omitted_bytes": 0,
+        "provider_receipt": "unknown",
+        "reread_same_records": true,
+        "artifact_identity_preserved": true,
+        "source_removed_before_repeated_reread": true,
+        "source_reread_check_applicable": true,
+        "reread_succeeded_without_source": true,
+        "diagnostic_found": true,
+        "presentation_not_test_pass": true
+      },
+      {
+        "case": "parser_drift",
+        "status": "measured",
+        "baseline_semantics": "redacted_uncompressed",
+        "source_input_bytes": 50,
+        "redacted_baseline_bytes": 50,
+        "compact_emitted_bytes": 1416,
+        "retrieval_emitted_bytes": 2570,
+        "total_emitted_bytes": 3986,
+        "net_saved_bytes": -3936,
+        "net_reduction_fraction": -78.72,
+        "input_stage": "captured",
+        "child_exit_code": 0,
+        "child_exit_preserved": true,
+        "fixture_semantics": "malformed",
+        "expected_nonzero": false,
+        "expected_exact_child_exit": 0,
+        "capture_complete": true,
+        "parse_status": "unsupported",
+        "omitted_bytes": 0,
+        "provider_receipt": "unknown",
+        "reread_same_records": true,
+        "artifact_identity_preserved": true,
+        "source_removed_before_repeated_reread": true,
+        "source_reread_check_applicable": true,
+        "reread_succeeded_without_source": true,
+        "diagnostic_found": true,
+        "presentation_not_test_pass": true
+      },
+      {
+        "case": "unicode_cr",
+        "status": "measured",
+        "baseline_semantics": "redacted_uncompressed",
+        "source_input_bytes": 75,
+        "redacted_baseline_bytes": 75,
+        "compact_emitted_bytes": 1557,
+        "retrieval_emitted_bytes": 2851,
+        "total_emitted_bytes": 4408,
+        "net_saved_bytes": -4333,
+        "net_reduction_fraction": -57.77333333333333,
+        "input_stage": "captured",
+        "child_exit_code": 0,
+        "child_exit_preserved": true,
+        "fixture_semantics": "unicode_cr",
+        "expected_nonzero": false,
+        "expected_exact_child_exit": 0,
+        "capture_complete": true,
+        "parse_status": "unsupported",
+        "omitted_bytes": 0,
+        "provider_receipt": "unknown",
+        "reread_same_records": true,
+        "artifact_identity_preserved": true,
+        "source_removed_before_repeated_reread": true,
+        "source_reread_check_applicable": true,
+        "reread_succeeded_without_source": true,
+        "diagnostic_found": true,
+        "presentation_not_test_pass": true
+      },
+      {
+        "case": "large_record",
+        "status": "measured",
+        "baseline_semantics": "redacted_uncompressed",
+        "source_input_bytes": 307201,
+        "redacted_baseline_bytes": 0,
+        "compact_emitted_bytes": 1254,
+        "retrieval_emitted_bytes": 1582,
+        "total_emitted_bytes": 2836,
+        "net_saved_bytes": -2836,
+        "net_reduction_fraction": null,
+        "input_stage": "captured",
+        "child_exit_code": 0,
+        "child_exit_preserved": true,
+        "fixture_semantics": "large_record",
+        "expected_nonzero": false,
+        "expected_exact_child_exit": 0,
+        "capture_complete": false,
+        "parse_status": "unsupported",
+        "omitted_bytes": 307200,
+        "provider_receipt": "unknown",
+        "reread_same_records": true,
+        "artifact_identity_preserved": true,
+        "source_removed_before_repeated_reread": true,
+        "source_reread_check_applicable": true,
+        "reread_succeeded_without_source": true,
+        "diagnostic_found": null,
+        "presentation_not_test_pass": true
+      },
+      {
+        "case": "binary",
+        "status": "unknown",
+        "reason": "Execution trust not available"
+      },
+      {
+        "case": "nonzero_missing_input",
+        "status": "measured",
+        "baseline_semantics": "redacted_uncompressed",
+        "source_input_bytes": 0,
+        "redacted_baseline_bytes": 64,
+        "compact_emitted_bytes": 1428,
+        "retrieval_emitted_bytes": 1932,
+        "total_emitted_bytes": 3360,
+        "net_saved_bytes": -3296,
+        "net_reduction_fraction": -51.5,
+        "input_stage": "captured",
+        "child_exit_code": 1,
+        "child_exit_preserved": true,
+        "fixture_semantics": "cat_invalid_option_no_input",
+        "expected_nonzero": true,
+        "expected_exact_child_exit": null,
+        "capture_complete": true,
+        "parse_status": "unsupported",
+        "omitted_bytes": 0,
+        "provider_receipt": "unknown",
+        "reread_same_records": true,
+        "artifact_identity_preserved": true,
+        "source_removed_before_repeated_reread": false,
+        "source_reread_check_applicable": false,
+        "reread_succeeded_without_source": null,
+        "diagnostic_found": null,
+        "presentation_not_test_pass": true
+      }
+    ],
+    "reason": "Emitted bytes include repeated original retrieval; model receipt is unobserved",
+    "aggregate": {
+      "redacted_baseline_bytes": 770084,
+      "total_emitted_bytes": 307863,
+      "net_saved_bytes": 462221,
+      "net_reduction_fraction": 0.6002215342741831,
+      "supported_parser_bundle": false,
+      "target_reduction_fraction": 0.5,
+      "mandatory_diagnostic_misses": 0,
+      "observed_presentation_false_passes": 0,
+      "model_diagnostic_fix_success_rate": null,
+      "normative_status": "unknown"
+    },
+    "tokenizer_tokens": null,
+    "provider_cost": null,
+    "diagnostic_fix_success_rate": null
+  },
+  "measurements": {
+    "initial_index": {
+      "status": "met",
+      "value": 16633.338417,
+      "reason": null,
+      "target_ms": 90000,
+      "statistic": "maximum",
+      "specification": "§18",
+      "normative_corpus_and_repetition_eligible": true,
+      "reference_hardware_equivalent": "unknown",
+      "scope": "observed_host_not_release_certification"
+    },
+    "incremental_20_files": {
+      "status": "met",
+      "value": 2822.097167,
+      "reason": null,
+      "target_ms": 3000,
+      "statistic": "p95",
+      "specification": "§18",
+      "normative_corpus_and_repetition_eligible": true,
+      "reference_hardware_equivalent": "unknown",
+      "scope": "observed_host_not_release_certification"
+    },
+    "metadata_search": {
+      "status": "miss",
+      "value": 1255.832459,
+      "reason": null,
+      "target_ms": 250,
+      "statistic": "p95",
+      "specification": "§18",
+      "normative_corpus_and_repetition_eligible": true,
+      "reference_hardware_equivalent": "unknown",
+      "scope": "observed_host_not_release_certification"
+    },
+    "matched_symbol_search": {
+      "status": "miss",
+      "value": 2644.441417,
+      "reason": null,
+      "target_ms": 700,
+      "statistic": "p95",
+      "specification": "§18",
+      "normative_corpus_and_repetition_eligible": true,
+      "reference_hardware_equivalent": "unknown",
+      "scope": "observed_host_not_release_certification"
+    },
+    "body_scan": {
+      "status": "miss",
+      "value": 2656.194333,
+      "reason": null,
+      "target_ms": 2000,
+      "statistic": "p95",
+      "specification": "§18",
+      "normative_corpus_and_repetition_eligible": true,
+      "reference_hardware_equivalent": "unknown",
+      "scope": "observed_host_not_release_certification"
+    },
+    "strict_build": {
+      "status": "met",
+      "value": 3958.731958,
+      "reason": null,
+      "target_ms": 15000,
+      "statistic": "p95",
+      "specification": "§18",
+      "normative_corpus_and_repetition_eligible": true,
+      "reference_hardware_equivalent": "unknown",
+      "scope": "observed_host_not_release_certification"
+    },
+    "cli_peak_memory": {
+      "status": "met",
+      "value": 38928384,
+      "reason": null,
+      "target_bytes": 536870912,
+      "includes_harness": false,
+      "includes_descendant_jobs": false
+    },
+    "active_db_and_wal": {
+      "status": "met",
+      "value": 162615296,
+      "reason": null,
+      "target_bytes": 419430400,
+      "retained_generations": "not_independently_verified"
+    },
+    "exact_identifier_file_recall_at_20": {
+      "status": "unknown",
+      "value": null,
+      "reason": null,
+      "target": 1.0,
+      "specification": "§19",
+      "scope": "labeled_synthetic_files_not_all_symbols"
+    },
+    "AC15_context_determinism": {
+      "status": "met",
+      "value": true,
+      "reason": null
+    },
+    "context_selection_serialization_only": {
+      "status": "unknown",
+      "value": null,
+      "reason": "CLI strict build combines hashing/selection/serialization; no separate800ms observation"
+    },
+    "wrapper_additional_latency": {
+      "status": "unknown",
+      "value": null,
+      "reason": "No matched direct-child timing subtraction;50ms target not inferred from total latency"
+    },
+    "masked_1mib_postprocessing": {
+      "status": "unknown",
+      "value": null,
+      "reason": "No isolated postprocessing instrumentation;100ms target not inferred"
+    },
+    "model_input_token_reduction": {
+      "status": "unknown",
+      "value": null,
+      "reason": "No provider usage or model execution"
+    },
+    "model_task_success_noninferiority": {
+      "status": "unknown",
+      "value": null,
+      "reason": "No real task/model trials;AC82 not verified by bytes alone"
+    },
+    "new_session_recovery_token_reduction": {
+      "status": "unknown",
+      "value": null,
+      "reason": "Local packet bytes are not observed recovery tokens"
+    },
+    "idle_model_wakes": {
+      "status": "unknown",
+      "value": null,
+      "reason": "No elapsed idle scheduler/model transport experiment"
+    }
+  },
+  "finished_at_unix": 1791423429.222723,
+  "temporary_corpus_retained": false
+}

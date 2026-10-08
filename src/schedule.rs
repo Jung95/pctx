@@ -1080,14 +1080,16 @@ fn environment(p: &Project) -> BTreeMap<String, String> {
         ("PCTX_ACTOR".into(), "owner".into()),
     ]);
     #[cfg(target_os = "linux")]
-    {
+    let env = {
+        let mut env = env;
         // Native user systemd requires the explicit local user bus, never credentials.
-        if let Ok(v) = std::env::var("XDG_RUNTIME_DIR") {
-            if v == format!("/run/user/{}", user_id()) {
-                env.insert("XDG_RUNTIME_DIR".into(), v);
-            }
+        if let Ok(v) = std::env::var("XDG_RUNTIME_DIR")
+            && v == format!("/run/user/{}", user_id())
+        {
+            env.insert("XDG_RUNTIME_DIR".into(), v);
         }
-    }
+        env
+    };
     env
 }
 fn plan(p: &Project, namespace: &str, id: &str, provider: &str, root: &str) -> Result<Value> {

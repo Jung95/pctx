@@ -60,3 +60,11 @@ Rebuild creates an independent index, verifies source hashes and database integr
 Explicit profile schema 1 records current file hashes and observed static selectors. A project file claiming owner confirmation proves only the observed claim/hash; it never grants local owner or operation authority. Document source_refs use exact section, rendered template, source/document hash, and deterministic coordination-scoped proposal IDs; proposals require later authorized task/decision integration. Dynamic configuration is not executed for discovery.
 
 Schedule schema 2 adds local execution bindings, attempt history and reviewed installation metadata. Portable backups strip bindings and private installation paths/environment. Restores invalidate bindings, retain finished attempt/results and durable pauses, mark live attempts interrupted_unknown and installation state unknown_restored. Restore never registers an OS bridge or revives execution permission. Migration and restore regressions must pass before verification status is promoted.
+
+## D021 — Policy programs and current root identity
+
+Only compiled glob programs are shared, keyed by the exact current exclusion vector plus fixed security exclusions. An eight-entry eviction bound controls entry count, not bytes or RSS. Permission, source contents and root identity are never cached. Unix root opening walks every absolute component with no-follow directory descriptors; only the fixed macOS /tmp and /var aliases are accepted when their actual link target exactly matches the corresponding /private path. Metadata searches filter current policy before candidate evaluation and validate physical candidate paths before output. Unmatched indexed metadata is not a source-discovery guarantee.
+
+## D022 — Presentation budgets and execution truth
+
+Compact and JSON retain one minified complete envelope; Markdown has readable evidence plus a reversible full JSON appendix. A final budget overflow produces a JSON error instead of truncated source/JSON, retaining available output handle and child outcome. Wrapper budget failure exits 8 even under child exit policy. Complete error documents have a minimum representable size, so arbitrarily tiny requests cannot be represented as successful bounded context. Renderer tests and CLI fixtures are separate evidence; neither establishes model-token savings.

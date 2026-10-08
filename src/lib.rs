@@ -31,3 +31,8 @@ pub mod watch;
 pub mod parsers;
 
 pub mod inventory;
+
+#[cfg(windows)]
+pub mod windows_process;
+
+pub mod render;
