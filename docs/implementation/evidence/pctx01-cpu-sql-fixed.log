@@ -1,0 +1,13 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.62s
+     Running tests/work_quota_deadline.rs (target/debug/deps/work_quota_deadline-b12539874124d6ff)
+
+running 5 tests
+test already_expired_reads_do_not_initialize_control_storage_or_validate_missing_targets ... ok
+test cpu_bound_sql_expires_inside_the_engine_under_the_original_budget ... ok
+test reused_sql_connection_does_not_inherit_an_expired_prior_request_handler ... ok
+test work_read_transaction_contention_uses_remaining_budget_without_control_events ... ok
+test quota_read_exclusive_contention_returns_timeout_instead_of_empty_unknown_success ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.23s
+

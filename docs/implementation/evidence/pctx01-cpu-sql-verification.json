@@ -1,0 +1,81 @@
+{
+  "official_task": "PCTX01",
+  "status": "implementing_not_complete",
+  "base_commit": "efe10fbd8f21153cec258e3009f452bc00ccc018",
+  "platform": "native macOS arm64",
+  "source_sha256": {
+    "src/project.rs": "2834ebf3a4c608c90bdaf3284fb8a8c23a7e8fb33a2d2dca2c7b7246f03abbd3",
+    "tests/work_quota_deadline.rs": "d7c509c1e724db35b8211f3dc8dc95a726936316f27bd163d1ca81f57a6bc1c3"
+  },
+  "verification": {
+    "full": {
+      "handle": 14793,
+      "exit": 101,
+      "passed": 384,
+      "failed": 4,
+      "suites": 46,
+      "failures": [
+        "query_program_resolution_uses_captured_command_path",
+        "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+        "simultaneous_streams_are_collected_and_overflow_never_infers_success",
+        "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget"
+      ]
+    },
+    "direct_sql_and_read_deadline": {
+      "passed": 5,
+      "failed": 0,
+      "proof": "Recursive SQL enters >=1000 measured VM steps; original50ms deadline expires with TIMEOUT/exit7 and remains unchanged. Distinct deadline-free caller on reused connection completes100000-row sum5000050000 after stale prior handler is cleared. Existing expiry and contention fixtures preserved."
+    },
+    "initial": {
+      "handle": 29470,
+      "exit": 101,
+      "passed": 4,
+      "failed": 1,
+      "defect": "Expired previous progress callback interrupted a distinct deadline-free caller, reported DB_ERROR. Preserved initial failure."
+    },
+    "fixed": {
+      "handle": 45355,
+      "exit": 0,
+      "passed": 5,
+      "failed": 0
+    },
+    "format_exit": 0,
+    "locked_all_target_clippy_exit": 0
+  },
+  "review": {
+    "agent": "requirements",
+    "scoped_blockers": 0,
+    "proof_limit": "Engine interruption/callback isolation only, not all command-level CPU phases or auxiliary discovery expiry."
+  },
+  "remaining_required_gates": [
+    "Auxiliary discovery/fingerprint phase-expiry and command-level large-row aggregation",
+    "Remaining finite routes with native probe/lock/stdin deadline handling",
+    "Full semantic pre-effect argument/envelope/representation/error/exit/budget matrix",
+    "Unresolved original native startup failures",
+    "Required native Linux/Windows executions"
+  ],
+  "logs": {
+    "initial": {
+      "path": "docs/implementation/evidence/pctx01-cpu-sql-initial.log",
+      "sha256": "d740fe89f8ca0eed0dc44da069f574cfa9c23987992c857af2d2273110a2fd4d"
+    },
+    "fixed": {
+      "path": "docs/implementation/evidence/pctx01-cpu-sql-fixed.log",
+      "sha256": "d450b52635fa9524b3053085da653e58ca1b29ddd3cd5b41db0a23ea95059aaf"
+    },
+    "full-native": {
+      "path": "docs/implementation/evidence/pctx01-cpu-sql-full-native.log",
+      "sha256": "0f97e773d6ffcc886f2217e6ed657a25b71de64eceeb5ca6ec19aea5df86b50b"
+    },
+    "clippy": {
+      "path": "docs/implementation/evidence/pctx01-cpu-sql-clippy.log",
+      "sha256": "73ce0b8c23b6d8ec844babe51d3048e584fbe4028ed26e8f3efb077c597f8508"
+    },
+    "format": {
+      "path": "docs/implementation/evidence/pctx01-cpu-sql-format.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "actions_dispatched": 0,
+  "other_active_official_tasks": []
+}

@@ -900,6 +900,10 @@ impl Project {
         )?;
         if let Some(deadline) = self.deadline {
             db.progress_handler(1000, Some(move || deadline.check().is_err()))?;
+        } else {
+            // A reused connection belongs to this caller scope, not to a prior
+            // request's expired callback. This does not renew that old request.
+            db.progress_handler(0, None::<fn() -> bool>)?;
         }
         self.check_deadline()
     }

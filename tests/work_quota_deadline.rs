@@ -186,3 +186,40 @@ fn quota_read_exclusive_contention_returns_timeout_instead_of_empty_unknown_succ
         .unwrap();
     assert_eq!(observations, 0);
 }
+
+#[test]
+fn cpu_bound_sql_expires_inside_the_engine_under_the_original_budget() {
+    let (_temp, mut p) = fixture();
+    let db = rusqlite::Connection::open_in_memory().unwrap();
+    let mut statement = db.prepare("WITH RECURSIVE numbers(n) AS (VALUES(1) UNION ALL SELECT n+1 FROM numbers WHERE n<1000000000) SELECT sum(n) FROM numbers").unwrap();
+    p.deadline = Some(Deadline::from_millis(50).unwrap());
+    let original = p.deadline.unwrap().instant();
+    let started = Instant::now();
+    let error = p
+        .sqlite_call(&db, || statement.query_row([], |row| row.get::<_, i64>(0)))
+        .unwrap_err();
+    assert_eq!(error.code, "TIMEOUT");
+    assert_eq!(error.exit, 7);
+    assert!(
+        statement.get_status(rusqlite::StatementStatus::VmStep) >= 1000,
+        "SQL never entered the controlled long computation"
+    );
+    assert!(
+        started.elapsed() < Duration::from_secs(2),
+        "SQL did not interrupt within the original budget tolerance"
+    );
+    assert_eq!(p.deadline.unwrap().instant(), original);
+}
+
+#[test]
+fn reused_sql_connection_does_not_inherit_an_expired_prior_request_handler() {
+    let (_temp, mut p) = fixture();
+    let db = rusqlite::Connection::open_in_memory().unwrap();
+    p.deadline = Some(Deadline::from_millis(50).unwrap());
+    let error = p.sqlite_call(&db, || db.query_row("WITH RECURSIVE numbers(n) AS (VALUES(1) UNION ALL SELECT n+1 FROM numbers WHERE n<1000000000) SELECT sum(n) FROM numbers", [], |row| row.get::<_, i64>(0))).unwrap_err();
+    assert_eq!(error.code, "TIMEOUT");
+    // This is a distinct caller scope, not a renewal of the expired query.
+    p.deadline = None;
+    let total: i64 = p.sqlite_call(&db, || db.query_row("WITH RECURSIVE numbers(n) AS (VALUES(1) UNION ALL SELECT n+1 FROM numbers WHERE n<100000) SELECT sum(n) FROM numbers", [], |row| row.get(0))).unwrap();
+    assert_eq!(total, 5_000_050_000);
+}
