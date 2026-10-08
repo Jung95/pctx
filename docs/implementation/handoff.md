@@ -4,24 +4,23 @@
 
 **PCTX01 — CLI, envelope and stable errors** is the only active task (`implementing`). It is lowest incomplete with no prerequisites. The latest user goal supersedes historical next-action lists: finish all current-task mandatory implementation, validation, documentation and platform gates before choosing another task. Read docs/implementation/tasks/PCTX01.md, requirements.md and progress.md, then inspect actual Git/code/jobs. Other official items and D-series future slices are backlog. A subset/macOS pass is not task completion. No next official task is selected.
 
-## Latest verified integration boundary
+## Latest integration boundary
 
-PCTX01 only active (`implementing`), base000d933. Checkpoint common name/glob
-validation shared before CLI discovery/response and producer writer/manifest;
-original bounded clock checked first in producer. Existing display-name/redact/
-256-byte/glob grammar unchanged, dot scope retained. Actual12-case missing/
-initialized root and absent/existing absolute response snapshots; library invalid/
-original-expiry no-writer and valid display-name/dot/glob pass. Related12PASS.
-Initial1PASS2FAIL(IO7mask2) retained; prepared-workspace initial0PASS1FAIL proves
-actualnewwriter.lock. Two controlled losses0PASS1FAIL each/exact restore. Static
-PASS, independent read-only review no scoped blocker.
-Final native full97981 terminal101: 493 PASS/3 FAIL; original relative resolution/concurrent startup/simultaneous-stream failures retained without budget relaxation. All jobs terminal; PCTX01 incomplete.
-Manifest evidence/pctx01-checkpoint-admission-verification.json. Public deadline
-and admission-audit docs updated; next ContextGet common pure mode/since/explicit
-normalized scope before sessionDB. No independent PCTX14/session task activated.
-Required nativeLinuxWindows/remaining PCTX01 gates and startup failures remain
-open. No next official task, Actions or rejected-push retry; prior main push
-pending explicit approval. All jobs terminal; no heavy job live.
+PCTX01 only, base dfde21c. ContextGet existing pure mode/full+since/explicit
+normalized scope/budget shared before main discovery and producer DB; original
+library deadline first, valid session/delivery authorization retained. Native18
+no-effects cases, direct producer/expiry, valid full/delta absent-session refusal
+and existing session flows: final related10 PASS. Initial0PASS2FAIL retained;
+additional fixture error-project_id assertion failure retained and corrected.
+Two intentional losses fail/exact restoration. Static PASS, independent read-only
+review no blocker. Manifest evidence/pctx01-context-admission-verification.json.
+Final native full21292 terminal101: 496PASS/3FAIL, original startup
+failures retained; all jobs terminal, no heavy job live. PCTX01 incomplete; fixed existing checklist0/10 whole gates,
+IDs G01–G10, denominator unchanged. Next local existing gap Repo Status grammar
+before discovery; no independent PCTX28 feature and no next official task.
+Latest user goal explicitly authorizes development commits/pushes to Jung95/pctx;
+previous rejection remains historical until a newly authorized push is reviewed.
+No Actions, paid calls or policy/deadline changes.
 
 ## Source, evidence and environment
 
@@ -65,22 +64,20 @@ Finite Work read execute (task list/show/complete --dry-run, agent list/show, ch
 
 Use RUSTUP_HOME=/Users/dev/PCTX/.toolchain/rustup, CARGO_HOME=/Users/dev/PCTX/.toolchain/cargo, SDKROOT=/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk and local cargo/CLT/Homebrew/system PATH. Rust1.99, macOS arm64,10 CPUs/16GiB. One heavy build/test/benchmark at a time. Native process fixtures require native execution. GitHub auth Jung95; origin https://github.com/Jung95/pctx.git. Development commits use [skip ci]; no additional Actions dispatched. Node24 action pins are already qualified by actions-node24-pins.json. No paid calls/operational mutations/global hooks/OS schedules solely from specification.
 
-Original ignored specification SHA256 8914faad57432f524aec0a06aa90c43c18c23f8c19e9f54fe69d9ad185db6523. Objective file remains /Users/dev/.codex/attachments/a70cb63d-6864-42d0-b70f-dcd339aa73fd/goal-objective.md; latest user goal adds sequential whole-task completion. Public documents are English. No AGENTS.md found in current project/ancestor scans.
+Original ignored specification SHA256 8914faad57432f524aec0a06aa90c43c18c23f8c19e9f54fe69d9ad185db6523. The original objective attachment exists at /Users/dev/.codex/attachments/a70cb63d-6864-42d0-b70f-dcd339aa73fd/goal-objective.md (historical input). The latest user-provided goal in this thread supersedes it; specification v0.6 is the current baseline. Public documents are English. No AGENTS.md found in current project/ancestor scans.
 
 ## Exact next action
 
-Stay on PCTX01. Next fix ContextGet existing pure mode/full+since/explicit
-normalized-scope admission before main discovery and producer session DB;
-preserve dot-component prohibition, capacity-first order and project-dependent
-session authorization. Checkpoint common argument defect is locally qualified;
-do not expand independent PCTX14 features. Read tasks/PCTX01-admission-audit.md,
-requirements/current source first. Author native missingroot/initialized-state/
-response no-effects and valid flow; preserve original deadlines. Remaining common
-frontend/phase/native callback publication-fault/platform gates and startup
-failures remain open. No unchanged full/startup reruns to seek green, relaxed
-budgets, interpreter substitution or OS policy changes. Finish all PCTX01
-conditions before another official task. Main push rejected/pending explicit
-approval; no retry/alternate mechanism. All jobs terminal.
+Finish this integration's full gate/evidence and commit first. Stay on PCTX01-G03:
+share Repo Status existing workspace/field grammar between broker and main before
+discovery; native missing/initialized tree and absolute response snapshots.
+Common source fix only, no independent PCTX28 features. Required platform,
+startup and remaining PCTX01 gates stay open. No unchanged expensive rerun to
+seek green. Latest goal authorizes development push to the configured repository;
+review exact pending commits and submit normal push for approval review, preserving
+any renewed rejection. Never bypass a rejection. After local work is exhausted,
+external-only blocker may be recorded and one ready task selected per latest goal;
+that condition is not met now.
 
 ## Retained historical results and inactive backlog
 

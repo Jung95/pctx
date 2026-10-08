@@ -627,6 +627,41 @@ impl ReceiptSpec<'_> {
         Ok((value, metadata))
     }
 }
+/// Existing pure context arguments, shared with CLI admission before discovery.
+pub fn validate_context_request(c: &ContextCommand) -> Result<()> {
+    if let ContextCommand::Get {
+        mode,
+        since,
+        scope,
+        budget_bytes,
+        ..
+    } = c
+    {
+        if !["full", "delta"].contains(&mode.as_str()) {
+            return Err(invalid("Unknown context mode"));
+        }
+        if mode == "full" && since.is_some() {
+            return Err(invalid("Full context does not accept --since"));
+        }
+        if *budget_bytes < 512 {
+            return Err(Error::new(
+                "BUDGET_TOO_SMALL",
+                "Minimum context cannot fit",
+                8,
+            ));
+        }
+        for s in scope {
+            if s.is_empty()
+                || s.starts_with('/')
+                || s.contains('\\')
+                || s.split('/').any(|x| x == ".." || x == "." || x.is_empty())
+            {
+                return Err(invalid("Scope must be a normalized relative path"));
+            }
+        }
+    }
+    Ok(())
+}
 pub fn context(p: &Project, c: &ContextCommand) -> Result<Value> {
     request(p, |p| context_inner(p, c))
 }
@@ -693,32 +728,8 @@ fn context_inner(p: &Project, c: &ContextCommand) -> Result<Value> {
             scope,
             budget_bytes,
         } => {
-            let authorization_db = connect(p)?;
-            get(&authorization_db, p, session)?;
-            drop(authorization_db);
-            if !["full", "delta"].contains(&mode.as_str()) {
-                return Err(invalid("Unknown context mode"));
-            }
-            if mode == "full" && since.is_some() {
-                return Err(invalid("Full context does not accept --since"));
-            }
-            if *budget_bytes < 512 {
-                return Err(Error::new(
-                    "BUDGET_TOO_SMALL",
-                    "Minimum context cannot fit",
-                    8,
-                ));
-            }
+            validate_context_request(c)?;
             let mut scope = scope.clone();
-            for s in &scope {
-                if s.is_empty()
-                    || s.starts_with('/')
-                    || s.contains('\\')
-                    || s.split('/').any(|x| x == ".." || x == "." || x.is_empty())
-                {
-                    return Err(invalid("Scope must be a normalized relative path"));
-                }
-            }
             scope.sort();
             scope.dedup();
             let authorization_db = connect(p)?;

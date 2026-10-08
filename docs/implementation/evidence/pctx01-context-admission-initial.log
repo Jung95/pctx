@@ -1,0 +1,33 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.81s
+     Running tests/context_preflight.rs (target/debug/deps/context_preflight-8e4a1d8597c82b95)
+
+running 2 tests
+test context_producer_validation_precedes_session_database ... FAILED
+test invalid_context_arguments_have_no_project_or_response_effects ... FAILED
+
+failures:
+
+---- context_producer_validation_precedes_session_database stdout ----
+
+thread 'context_producer_validation_precedes_session_database' (8540083) panicked at tests/context_preflight.rs:142:9:
+assertion `left == right` failed
+  left: ("SESSION_NOT_FOUND", 6)
+ right: ("INVALID_ARGUMENT", 2)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- invalid_context_arguments_have_no_project_or_response_effects stdout ----
+
+thread 'invalid_context_arguments_have_no_project_or_response_effects' (8540084) panicked at tests/context_preflight.rs:80:5:
+assertion `left == right` failed: Output { status: ExitStatus(unix_wait_status(1792)), stdout: "", stderr: "" }
+  left: Some(7)
+ right: Some(2)
+
+
+failures:
+    context_producer_validation_precedes_session_database
+    invalid_context_arguments_have_no_project_or_response_effects
+
+test result: FAILED. 0 passed; 2 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.75s
+
+error: test failed, to rerun pass `--test context_preflight`

@@ -576,3 +576,32 @@ static review no scoped blocker. Next common defect is ContextGet pure admission
 PCTX01 stays implementing, no other official task, Actions or rejected-push retry.
 
 Final format/locked all-target Clippy PASS. Final native full97981 terminal101: 493 PASS/3 FAIL; original relative resolution/concurrent startup/simultaneous-stream failures retained without budget relaxation. All jobs terminal; PCTX01 incomplete.
+
+## PCTX01 ContextGet pure admission
+
+Only PCTX01 remains active and incomplete (PCTX01-G03). Shared existing
+mode/full+since/explicit normalized relative path/budget rules now precede CLI
+discovery/response paths and producer session DB. The original request deadline
+is checked first for library callers, and valid requests retain project-session
+and delivery authorization. Explicit dot components remain forbidden; Checkpoint
+glob grammar is separate. No independent session feature was added.
+Native18-case missing/initialized root plus absent/existing absolute response
+snapshots pass; direct producer/original-expiry proof and normal full/delta
+absent-session rejection pass. Existing seven session tests cover receipt/ack/
+delta/epoch/policy. Final related10 PASS. Initial0PASS2FAIL and the extra fixture's
+incorrect error-project_id assertion failure are retained. Two intentional losses
+fail, exact source restored; format/locked all-target Clippy PASS. Independent
+read-only review found no scoped blocker. Native Linux/Windows and the remaining
+whole PCTX01 gates are open. See
+[evidence](evidence/pctx01-context-admission-verification.json).
+
+The existing ten completion rows now have stable IDs PCTX01-G01–G10; previous
+and current denominator10, no scope added, whole gates closed0/10. This counts
+whole mandatory gates, not effort, local passes or elapsed time. Source boundary
+review identifies Repo Status workspace/fields as the next existing G03 admission
+gap. Reuse its current grammar before discovery; do not activate PCTX28 features.
+The latest goal permits an externally blocked task switch only after available
+local work is exhausted and exact resume conditions recorded. PCTX01 has local
+work remaining, so no switch is justified. No next official task or Actions.
+
+Final native full21292 terminal101: 496 PASS/3 FAIL; original native startup failures retained at unchanged budgets. All jobs terminal; PCTX01 incomplete.

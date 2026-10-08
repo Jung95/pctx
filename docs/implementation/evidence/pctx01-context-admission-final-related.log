@@ -1,0 +1,24 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.34s
+     Running tests/context_preflight.rs (target/debug/deps/context_preflight-8e4a1d8597c82b95)
+
+running 3 tests
+test context_producer_validation_precedes_session_database ... ok
+test valid_context_arguments_still_require_a_project_session ... ok
+test invalid_context_arguments_have_no_project_or_response_effects ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.87s
+
+     Running tests/session.rs (target/debug/deps/session-e37e24e280aa64af)
+
+running 7 tests
+test identity_secrets_are_rejected_before_persistence ... ok
+test suspend_reconcile_preserves_task_pause_and_never_revives_run ... ok
+test expired_outer_budget_cannot_emit_ack_attach_or_change_epoch ... ok
+test minimum_budget_failure_creates_no_emission ... ok
+test independent_sessions_boundaries_and_policy_reject_old_baselines ... ok
+test rule_changes_and_deleted_paths_are_explicit ... ok
+test explicit_ack_unchanged_delta_and_no_source_ledger ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.15s
+

@@ -1,0 +1,117 @@
+{
+  "task": "PCTX01",
+  "status": "implementing; incomplete; only active official task",
+  "base_revision": "dfde21c2cfb161f4fa384088f9384fdd78c19bf2",
+  "platform": "native macOS arm64",
+  "specification_sections": [
+    "14 argument admission before effects",
+    "8/38 original clock and stable errors"
+  ],
+  "fixed_gate": "PCTX01-G03",
+  "checklist_whole_gates_closed": "0/10; IDs assigned to existing ten rows; denominator unchanged",
+  "source_sha256": {
+    "src/main.rs": "1b891aa29c8ba0a6851bc9c33aca1f72edc510369b7c71bfb623b6b5a9d48c2f",
+    "src/session.rs": "d5e16ce58a2867920e06841f51e79a7c684c1d47ab6b3a0fd929f22aae90ee66",
+    "tests/context_preflight.rs": "f4da9043bca8194ecbe7e1ca086db5b5019852591926fceaba7429f7619368d3",
+    "src/query_process.rs": "2faee00ffc82534c41942adae00e52f81a271072b47338f33cab7b67c43bc5b9",
+    "tests/project_deadline.rs": "8b9fbc97fbd5acaf612b2d75b94cf810faa2b61614b654495082462b1941a8dc"
+  },
+  "runs": [
+    {
+      "path": "pctx01-context-admission-initial.log",
+      "sha256": "29711f7d3cf78d74ec1bf42b3a8a49fa65b9a61a2976dab7837674e04170bf2b",
+      "exit": 101,
+      "counts": {
+        "passed": 0,
+        "failed": 2
+      }
+    },
+    {
+      "path": "pctx01-context-admission-related.log",
+      "sha256": "8c6a329df898a0852217a41f583adf460b853ab966b0fc0a8ce6937bffa910b3",
+      "exit": 0,
+      "counts": {
+        "passed": 9,
+        "failed": 0
+      }
+    },
+    {
+      "path": "pctx01-context-admission-fixture.log",
+      "sha256": "a71e2fa6954bf845c208ceafa2f10f2d45abdbe688d4c072ce873d5f0fe429f4",
+      "exit": 101,
+      "counts": {
+        "passed": 2,
+        "failed": 1
+      }
+    },
+    {
+      "path": "pctx01-context-admission-final-related.log",
+      "sha256": "22306ceb30ba20fd5936a1d48a144e09ce75f35563f3ef386b385726326b9f6f",
+      "exit": 0,
+      "counts": {
+        "passed": 10,
+        "failed": 0
+      }
+    },
+    {
+      "path": "pctx01-context-admission-loss-frontend.log",
+      "sha256": "52f0c8fbaf824da547297a908e3bc92136b09fb233f9f9150f01f73bfa6e54be",
+      "exit": 101,
+      "counts": {
+        "passed": 0,
+        "failed": 1
+      }
+    },
+    {
+      "path": "pctx01-context-admission-loss-producer.log",
+      "sha256": "e5416b4b6212335e0835ee5b05eb60e59600919e26bdd3fd3bc721938ed4e825",
+      "exit": 101,
+      "counts": {
+        "passed": 0,
+        "failed": 1
+      }
+    },
+    {
+      "path": "pctx01-context-admission-static.log",
+      "sha256": "2ca48d877fe631594ef6584ce77fe91404f2b7f3314b4ac3377e6d99c95fbd55",
+      "exit": 0,
+      "counts": {
+        "passed": 0,
+        "failed": 0
+      }
+    }
+  ],
+  "qualifications": [
+    "Shared existing mode/full+since/explicit normalized path/budget grammar before main discovery and producer DB; no new session feature. Existing first duplicate session read removed; remaining authorized read and operational delivery checks stay mandatory.",
+    "18 native CLI refusals across missing/initialized project and absent/existing absolute response, unchanged tree bytes and response. Direct producer rejects unknown mode/full+since/dot/empty-component paths before DB, expired original Instant remains TIMEOUT.",
+    "Valid full/delta CLI arguments still require a project session (SESSION_NOT_FOUND6); existing seven session tests exercise real library receipts/ack/delta/epoch/policy. No new successful native CLI receipt fixture authored.",
+    "Initial0PASS2FAIL retained: IO7 and SESSION_NOT_FOUND6 mask argument2. Added authorization fixture2PASS1FAIL retained because it incorrectly expected project_id on error; only that unsupported assertion removed.",
+    "Both intentional validator losses0PASS1FAIL; exact original source bytes restored in driver JSON. Format check and locked all-target Clippy -Dwarnings pass.",
+    "Independent read-only requirements agent found no scoped blocker, did not edit/run tests. Next existing pure frontend gap Repo Status workspace/fields; independent PCTX28 remains inactive."
+  ],
+  "limitations": [
+    "Required native Linux/Windows not executed. Whole PCTX01 not complete; remaining completion gates and original startup failures remain open.",
+    "Filesystem calls cooperative; no new syscall-preemption or universal no-effects qualification.",
+    "No Actions dispatched, paid calls, OS/security policy changes, interpreter substitutions or original test budget relaxation."
+  ],
+  "full_gate": {
+    "path": "pctx01-context-admission-full.log",
+    "sha256": "19e6d0f30cfb8bd3d591143bb14d538d93b0b9f05b13b2a4ffb5d8e48426a3aa",
+    "session": 21292,
+    "exit": 101,
+    "counts": {
+      "passed": 496,
+      "failed": 3
+    },
+    "failed_tests": [
+      "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget",
+      "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+      "simultaneous_streams_are_collected_and_overflow_never_infers_success"
+    ],
+    "qualification": "Original native startup failures retained, no retry promotion or original budget relaxation."
+  },
+  "review": {
+    "path": "pctx01-context-admission-review.md",
+    "sha256": "793201f0e1c8b193ef6554edb685540d8eb6b77b4920982a0236f72c67401e86"
+  }
+}

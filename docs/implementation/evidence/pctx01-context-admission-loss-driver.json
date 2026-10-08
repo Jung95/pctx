@@ -1,0 +1,12 @@
+[
+  {
+    "loss": "frontend",
+    "exit": 101,
+    "source_restored_sha256": "1b891aa29c8ba0a6851bc9c33aca1f72edc510369b7c71bfb623b6b5a9d48c2f"
+  },
+  {
+    "loss": "producer",
+    "exit": 101,
+    "source_restored_sha256": "d5e16ce58a2867920e06841f51e79a7c684c1d47ab6b3a0fd929f22aae90ee66"
+  }
+]

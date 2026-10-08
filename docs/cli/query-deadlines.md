@@ -32,3 +32,11 @@ Work/quota read phases recompute SQLite busy waits from the original remaining b
 Handoff create/update reuse the bounded explicit regular-file reader, preserving the existing 1MiB input cap and original internal request clock before checkpoint creation. `--from-file -` names a literal file in this route. Create/update do not acquire query `--timeout-ms` support; Show remains the finite-query route. Explicit source encoding or file failures precede checkpoints, while source-dependent error output keeps the normal command transport.
 
 Checkpoint Create checks its optional nonempty display name (at most 256 UTF-8 bytes, without detected secret patterns) and project-relative glob scopes before project access. Names may contain spaces; scope `.` covers all allowed files. Absolute, backslash, parent-traversal and malformed glob scopes return `INVALID_ARGUMENT` (exit 2) before checkpoint or response-file changes.
+
+Context Get checks mode, rejects `--since` in full mode, and validates explicit
+scopes before project/session storage access. Explicit scopes must be normalized
+relative paths: empty, absolute, backslash, empty components, `.` and `..`
+components return `INVALID_ARGUMENT` (exit 2). Context scopes differ from
+Checkpoint glob scopes. Valid requests still require an authorized project
+session. CLI capacity admission runs first; an expired library request retains
+its original timeout before argument validation.

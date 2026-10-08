@@ -1,0 +1,24 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.10s
+     Running tests/context_preflight.rs (target/debug/deps/context_preflight-8e4a1d8597c82b95)
+
+running 1 test
+test context_producer_validation_precedes_session_database ... FAILED
+
+failures:
+
+---- context_producer_validation_precedes_session_database stdout ----
+
+thread 'context_producer_validation_precedes_session_database' (8543194) panicked at tests/context_preflight.rs:193:9:
+assertion `left == right` failed
+  left: ("SESSION_NOT_FOUND", 6)
+ right: ("INVALID_ARGUMENT", 2)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    context_producer_validation_precedes_session_database
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.02s
+
+error: test failed, to rerun pass `--test context_preflight`
