@@ -1,0 +1,167 @@
+[
+  {
+    "timestamp": "2026-10-08 16:50:57.455695+0200",
+    "process": "syspolicyd",
+    "message": "GK evaluateScanResult: 2, PST: (path: e8d4e9a414ae0b93), (team: (null)), (id: pctx-startup-groups), (bundle_id: NOT_A_BUNDLE), 0, 0, 1, 0, 0, 0, 0"
+  },
+  {
+    "timestamp": "2026-10-08 16:50:57.569135+0200",
+    "process": "syspolicyd",
+    "message": "GK performScan: PST: (path: 6a20155dee4fcbe2), (team: (null)), (id: (null)), (bundle_id: (null))"
+  },
+  {
+    "timestamp": "2026-10-08 16:50:57.831781+0200",
+    "process": "syspolicyd",
+    "message": "GK evaluateScanResult: 2, PST: (path: 6a20155dee4fcbe2), (team: (null)), (id: (null)), (bundle_id: NOT_A_BUNDLE), 0, 0, 1, 0, 7, 7, 0"
+  },
+  {
+    "timestamp": "2026-10-08 16:50:57.832039+0200",
+    "process": "syspolicyd",
+    "message": "GK performScan: PST: (path: 6a20155e168bf3ec), (team: (null)), (id: (null)), (bundle_id: (null))"
+  },
+  {
+    "timestamp": "2026-10-08 16:50:57.934299+0200",
+    "process": "syspolicyd",
+    "message": "GK evaluateScanResult: 2, PST: (path: 6a20155e168bf3ec), (team: (null)), (id: (null)), (bundle_id: NOT_A_BUNDLE), 0, 0, 1, 0, 7, 7, 0"
+  },
+  {
+    "timestamp": "2026-10-08 16:50:57.934540+0200",
+    "process": "syspolicyd",
+    "message": "GK performScan: PST: (path: 6a20155df65bd3e4), (team: (null)), (id: (null)), (bundle_id: (null))"
+  },
+  {
+    "timestamp": "2026-10-08 16:50:58.038145+0200",
+    "process": "syspolicyd",
+    "message": "GK evaluateScanResult: 2, PST: (path: 6a20155df65bd3e4), (team: (null)), (id: (null)), (bundle_id: NOT_A_BUNDLE), 0, 0, 1, 0, 7, 7, 0"
+  },
+  {
+    "timestamp": "2026-10-08 16:50:58.038393+0200",
+    "process": "syspolicyd",
+    "message": "GK performScan: PST: (path: 6a20155e0673e3e8), (team: (null)), (id: (null)), (bundle_id: (null))"
+  },
+  {
+    "timestamp": "2026-10-08 16:50:58.219333+0200",
+    "process": "syspolicyd",
+    "message": "GK evaluateScanResult: 2, PST: (path: 6a20155e0673e3e8), (team: (null)), (id: (null)), (bundle_id: NOT_A_BUNDLE), 0, 0, 1, 0, 7, 7, 0"
+  },
+  {
+    "timestamp": "2026-10-08 16:50:58.219584+0200",
+    "process": "syspolicyd",
+    "message": "GK performScan: PST: (path: 6a20155dfe67dbe6), (team: (null)), (id: (null)), (bundle_id: (null))"
+  },
+  {
+    "timestamp": "2026-10-08 16:50:58.320362+0200",
+    "process": "syspolicyd",
+    "message": "GK evaluateScanResult: 2, PST: (path: 6a20155dfe67dbe6), (team: (null)), (id: (null)), (bundle_id: NOT_A_BUNDLE), 0, 0, 1, 0, 7, 7, 0"
+  },
+  {
+    "timestamp": "2026-10-08 16:50:58.320653+0200",
+    "process": "syspolicyd",
+    "message": "GK performScan: PST: (path: 6a20155e0e7febea), (team: (null)), (id: (null)), (bundle_id: (null))"
+  },
+  {
+    "timestamp": "2026-10-08 16:50:58.426206+0200",
+    "process": "syspolicyd",
+    "message": "GK evaluateScanResult: 2, PST: (path: 6a20155e0e7febea), (team: (null)), (id: (null)), (bundle_id: NOT_A_BUNDLE), 0, 0, 1, 0, 7, 7, 0"
+  },
+  {
+    "timestamp": "2026-10-08 16:50:58.426456+0200",
+    "process": "syspolicyd",
+    "message": "GK performScan: PST: (path: 6a20155dde37bbde), (team: (null)), (id: (null)), (bundle_id: (null))"
+  },
+  {
+    "timestamp": "2026-10-08 16:50:58.529031+0200",
+    "process": "syspolicyd",
+    "message": "GK evaluateScanResult: 2, PST: (path: 6a20155dde37bbde), (team: (null)), (id: (null)), (bundle_id: NOT_A_BUNDLE), 0, 0, 1, 0, 7, 7, 0"
+  },
+  {
+    "timestamp": "2026-10-08 16:50:58.529287+0200",
+    "process": "syspolicyd",
+    "message": "GK performScan: PST: (path: 6a20155de643c3e0), (team: (null)), (id: (null)), (bundle_id: (null))"
+  },
+  {
+    "timestamp": "2026-10-08 16:50:58.723203+0200",
+    "process": "syspolicyd",
+    "message": "GK evaluateScanResult: 2, PST: (path: 6a20155de643c3e0), (team: (null)), (id: (null)), (bundle_id: NOT_A_BUNDLE), 0, 0, 1, 0, 7, 7, 0"
+  },
+  {
+    "timestamp": "2026-10-08 16:50:58.723458+0200",
+    "process": "syspolicyd",
+    "message": "GK performScan: PST: (path: 6e64f05c6515c366), (team: (null)), (id: (null)), (bundle_id: (null))"
+  },
+  {
+    "timestamp": "2026-10-08 16:50:58.824019+0200",
+    "process": "syspolicyd",
+    "message": "GK evaluateScanResult: 2, PST: (path: 6e64f05c6515c366), (team: (null)), (id: (null)), (bundle_id: NOT_A_BUNDLE), 0, 0, 1, 0, 7, 7, 0"
+  },
+  {
+    "timestamp": "2026-10-08 16:50:58.824272+0200",
+    "process": "syspolicyd",
+    "message": "GK performScan: PST: (path: 6e64f05d3e5a9b9c), (team: (null)), (id: (null)), (bundle_id: (null))"
+  },
+  {
+    "timestamp": "2026-10-08 16:50:58.919752+0200",
+    "process": "syspolicyd",
+    "message": "GK evaluateScanResult: 2, PST: (path: 6e64f05d3e5a9b9c), (team: (null)), (id: (null)), (bundle_id: NOT_A_BUNDLE), 0, 0, 1, 0, 7, 7, 0"
+  },
+  {
+    "timestamp": "2026-10-08 16:50:58.919998+0200",
+    "process": "syspolicyd",
+    "message": "GK performScan: PST: (path: 6e64f05cad820b78), (team: (null)), (id: (null)), (bundle_id: (null))"
+  },
+  {
+    "timestamp": "2026-10-08 16:50:59.016494+0200",
+    "process": "syspolicyd",
+    "message": "GK evaluateScanResult: 2, PST: (path: 6e64f05cad820b78), (team: (null)), (id: (null)), (bundle_id: NOT_A_BUNDLE), 0, 0, 1, 0, 7, 7, 0"
+  },
+  {
+    "timestamp": "2026-10-08 16:50:59.016744+0200",
+    "process": "syspolicyd",
+    "message": "GK performScan: PST: (path: 6e64f05c894be76f), (team: (null)), (id: (null)), (bundle_id: (null))"
+  },
+  {
+    "timestamp": "2026-10-08 16:50:59.115836+0200",
+    "process": "syspolicyd",
+    "message": "GK evaluateScanResult: 2, PST: (path: 6e64f05c894be76f), (team: (null)), (id: (null)), (bundle_id: NOT_A_BUNDLE), 0, 0, 1, 0, 7, 7, 0"
+  },
+  {
+    "timestamp": "2026-10-08 16:50:59.116092+0200",
+    "process": "syspolicyd",
+    "message": "GK performScan: PST: (path: 6e64f05d6290bfa5), (team: (null)), (id: (null)), (bundle_id: (null))"
+  },
+  {
+    "timestamp": "2026-10-08 16:50:59.263418+0200",
+    "process": "syspolicyd",
+    "message": "GK evaluateScanResult: 2, PST: (path: 6e64f05d6290bfa5), (team: (null)), (id: (null)), (bundle_id: NOT_A_BUNDLE), 0, 0, 1, 0, 7, 7, 0"
+  },
+  {
+    "timestamp": "2026-10-08 16:50:59.263677+0200",
+    "process": "syspolicyd",
+    "message": "GK performScan: PST: (path: 6e64f05cf5ee538a), (team: (null)), (id: (null)), (bundle_id: (null))"
+  },
+  {
+    "timestamp": "2026-10-08 16:50:59.372755+0200",
+    "process": "syspolicyd",
+    "message": "GK evaluateScanResult: 2, PST: (path: 6e64f05cf5ee538a), (team: (null)), (id: (null)), (bundle_id: NOT_A_BUNDLE), 0, 0, 1, 0, 7, 7, 0"
+  },
+  {
+    "timestamp": "2026-10-08 16:50:59.373020+0200",
+    "process": "syspolicyd",
+    "message": "GK performScan: PST: (path: 6e64f05d1a247793), (team: (null)), (id: (null)), (bundle_id: (null))"
+  },
+  {
+    "timestamp": "2026-10-08 16:50:59.473108+0200",
+    "process": "syspolicyd",
+    "message": "GK evaluateScanResult: 2, PST: (path: 6e64f05d1a247793), (team: (null)), (id: (null)), (bundle_id: NOT_A_BUNDLE), 0, 0, 1, 0, 7, 7, 0"
+  },
+  {
+    "timestamp": "2026-10-08 16:50:59.473366+0200",
+    "process": "syspolicyd",
+    "message": "GK performScan: PST: (path: 6e64f05cd1b82f81), (team: (null)), (id: (null)), (bundle_id: (null))"
+  },
+  {
+    "timestamp": "2026-10-08 16:50:59.572475+0200",
+    "process": "syspolicyd",
+    "message": "GK evaluateScanResult: 2, PST: (path: 6e64f05cd1b82f81), (team: (null)), (id: (null)), (bundle_id: NOT_A_BUNDLE), 0, 0, 1, 0, 7, 7, 0"
+  }
+]

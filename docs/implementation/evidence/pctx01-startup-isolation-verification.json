@@ -1,0 +1,379 @@
+{
+  "official_task": "PCTX01",
+  "status": "implementing_not_complete",
+  "base_commit": "fc1849d18df11e9f21f1dad2bf9d550ac580f03d",
+  "platform": "native macOS arm64",
+  "production_changes": false,
+  "source_sha256": {
+    "src/query_process.rs": "2faee00ffc82534c41942adae00e52f81a271072b47338f33cab7b67c43bc5b9",
+    "tests/project_deadline.rs": "8b9fbc97fbd5acaf612b2d75b94cf810faa2b61614b654495082462b1941a8dc"
+  },
+  "experiments": [
+    {
+      "name": "isolation",
+      "terminal_handle": 33724,
+      "driver_exit": 0,
+      "source": "pctx-startup-isolation.rs.txt",
+      "build_log": "pctx-startup-isolation-build.log",
+      "results": "pctx-startup-isolation.jsonl",
+      "modes": [
+        {
+          "mode": "script-empty",
+          "attempted": 98,
+          "passed": 96,
+          "expired": 2,
+          "failed_without_expiry": 0,
+          "max_elapsed_ms": 1003,
+          "max_spawn_us": null,
+          "failures": [
+            {
+              "worker": 1,
+              "iteration": 0,
+              "pid": 43559,
+              "expired": true,
+              "ok": false,
+              "stdout_bytes": 0,
+              "stderr_bytes": 0,
+              "elapsed_ms": 1001
+            },
+            {
+              "worker": 5,
+              "iteration": 0,
+              "pid": 43554,
+              "expired": true,
+              "ok": false,
+              "stdout_bytes": 0,
+              "stderr_bytes": 0,
+              "elapsed_ms": 1003
+            }
+          ]
+        },
+        {
+          "mode": "script-minimal",
+          "attempted": 113,
+          "passed": 112,
+          "expired": 1,
+          "failed_without_expiry": 0,
+          "max_elapsed_ms": 1001,
+          "max_spawn_us": null,
+          "failures": [
+            {
+              "worker": 3,
+              "iteration": 0,
+              "pid": 43657,
+              "expired": true,
+              "ok": false,
+              "stdout_bytes": 0,
+              "stderr_bytes": 0,
+              "elapsed_ms": 1001
+            }
+          ]
+        },
+        {
+          "mode": "interpreter-empty",
+          "attempted": 128,
+          "passed": 128,
+          "expired": 0,
+          "failed_without_expiry": 0,
+          "max_elapsed_ms": 6,
+          "max_spawn_us": null,
+          "failures": []
+        }
+      ]
+    },
+    {
+      "name": "groups",
+      "terminal_handle": 26398,
+      "driver_exit": 0,
+      "source": "pctx-startup-groups.rs.txt",
+      "build_log": "pctx-startup-groups-build.log",
+      "results": "pctx-startup-groups.jsonl",
+      "modes": [
+        {
+          "mode": "interpreter-group",
+          "attempted": 128,
+          "passed": 128,
+          "expired": 0,
+          "failed_without_expiry": 0,
+          "max_elapsed_ms": 16,
+          "max_spawn_us": 1151,
+          "failures": []
+        },
+        {
+          "mode": "script-group",
+          "attempted": 113,
+          "passed": 112,
+          "expired": 1,
+          "failed_without_expiry": 0,
+          "max_elapsed_ms": 1001,
+          "max_spawn_us": 762,
+          "failures": [
+            {
+              "worker": 1,
+              "iteration": 0,
+              "pid": 44203,
+              "spawn_us": 127,
+              "expired": true,
+              "ok": false,
+              "stdout_bytes": 0,
+              "stderr_bytes": 0,
+              "elapsed_ms": 1001
+            }
+          ]
+        },
+        {
+          "mode": "script-no-group",
+          "attempted": 128,
+          "passed": 128,
+          "expired": 0,
+          "failed_without_expiry": 0,
+          "max_elapsed_ms": 985,
+          "max_spawn_us": 846,
+          "failures": []
+        },
+        {
+          "mode": "interpreter-no-group",
+          "attempted": 128,
+          "passed": 128,
+          "expired": 0,
+          "failed_without_expiry": 0,
+          "max_elapsed_ms": 6,
+          "max_spawn_us": 474,
+          "failures": []
+        }
+      ]
+    },
+    {
+      "name": "native-controls",
+      "terminal_handle": 3791,
+      "driver_exit": 0,
+      "source": "pctx-startup-native-controls.rs.txt",
+      "build_log": "pctx-startup-native-controls-build.log",
+      "results": "pctx-startup-native-controls.jsonl",
+      "modes": [
+        {
+          "mode": "script-no-group",
+          "attempted": 98,
+          "passed": 96,
+          "expired": 2,
+          "failed_without_expiry": 0,
+          "max_elapsed_ms": 1001,
+          "max_spawn_us": 969,
+          "failures": [
+            {
+              "worker": 3,
+              "iteration": 0,
+              "pid": 44701,
+              "wall_us": 1791471364473645,
+              "exit_code": -1,
+              "spawn_us": 944,
+              "expired": true,
+              "ok": false,
+              "stdout_bytes": 0,
+              "stderr_bytes": 0,
+              "elapsed_ms": 1001
+            },
+            {
+              "worker": 4,
+              "iteration": 0,
+              "pid": 44700,
+              "wall_us": 1791471364473640,
+              "exit_code": -1,
+              "spawn_us": 807,
+              "expired": true,
+              "ok": false,
+              "stdout_bytes": 0,
+              "stderr_bytes": 0,
+              "elapsed_ms": 1000
+            }
+          ]
+        },
+        {
+          "mode": "native-group",
+          "attempted": 128,
+          "passed": 128,
+          "expired": 0,
+          "failed_without_expiry": 0,
+          "max_elapsed_ms": 5,
+          "max_spawn_us": 1106,
+          "failures": []
+        },
+        {
+          "mode": "copied-native-group",
+          "attempted": 8,
+          "passed": 0,
+          "expired": 6,
+          "failed_without_expiry": 2,
+          "max_elapsed_ms": 6722,
+          "max_spawn_us": 674,
+          "failures": [
+            {
+              "worker": 0,
+              "iteration": 0,
+              "pid": 44927,
+              "wall_us": 1791471365525070,
+              "exit_code": -1,
+              "spawn_us": 395,
+              "expired": true,
+              "ok": false,
+              "stdout_bytes": 0,
+              "stderr_bytes": 0,
+              "elapsed_ms": 1686
+            },
+            {
+              "worker": 1,
+              "iteration": 0,
+              "pid": 44928,
+              "wall_us": 1791471365525075,
+              "exit_code": -1,
+              "spawn_us": 554,
+              "expired": true,
+              "ok": false,
+              "stdout_bytes": 0,
+              "stderr_bytes": 0,
+              "elapsed_ms": 6722
+            },
+            {
+              "worker": 2,
+              "iteration": 0,
+              "pid": 44926,
+              "wall_us": 1791471365525067,
+              "exit_code": -1,
+              "spawn_us": 400,
+              "expired": false,
+              "ok": false,
+              "stdout_bytes": 0,
+              "stderr_bytes": 0,
+              "elapsed_ms": 680
+            },
+            {
+              "worker": 3,
+              "iteration": 0,
+              "pid": 44929,
+              "wall_us": 1791471365525077,
+              "exit_code": -1,
+              "spawn_us": 616,
+              "expired": true,
+              "ok": false,
+              "stdout_bytes": 0,
+              "stderr_bytes": 0,
+              "elapsed_ms": 2687
+            },
+            {
+              "worker": 4,
+              "iteration": 0,
+              "pid": 44925,
+              "wall_us": 1791471365525061,
+              "exit_code": -1,
+              "spawn_us": 406,
+              "expired": true,
+              "ok": false,
+              "stdout_bytes": 0,
+              "stderr_bytes": 0,
+              "elapsed_ms": 5722
+            },
+            {
+              "worker": 5,
+              "iteration": 0,
+              "pid": 44930,
+              "wall_us": 1791471365525067,
+              "exit_code": -1,
+              "spawn_us": 674,
+              "expired": true,
+              "ok": false,
+              "stdout_bytes": 0,
+              "stderr_bytes": 0,
+              "elapsed_ms": 4722
+            },
+            {
+              "worker": 6,
+              "iteration": 0,
+              "pid": 44931,
+              "wall_us": 1791471365525070,
+              "exit_code": -1,
+              "spawn_us": 629,
+              "expired": true,
+              "ok": false,
+              "stdout_bytes": 0,
+              "stderr_bytes": 0,
+              "elapsed_ms": 3716
+            },
+            {
+              "worker": 7,
+              "iteration": 0,
+              "pid": 44924,
+              "wall_us": 1791471365525054,
+              "exit_code": -1,
+              "spawn_us": 350,
+              "expired": false,
+              "ok": false,
+              "stdout_bytes": 0,
+              "stderr_bytes": 0,
+              "elapsed_ms": 570
+            }
+          ]
+        },
+        {
+          "mode": "script-group",
+          "attempted": 128,
+          "passed": 128,
+          "expired": 0,
+          "failed_without_expiry": 0,
+          "max_elapsed_ms": 891,
+          "max_spawn_us": 319,
+          "failures": []
+        }
+      ]
+    }
+  ],
+  "policy_logs": [
+    {
+      "file": "pctx-startup-policy-window-selected.json",
+      "query_result_records": 105,
+      "selected_records": 33,
+      "selection": "Only Gatekeeper scan/evaluation timestamp, process basename and already privacy-redacted message; other OS records are not published."
+    },
+    {
+      "file": "pctx-startup-native-policy-window-selected.json",
+      "query_result_records": 158,
+      "selected_records": 50,
+      "selection": "Only Gatekeeper scan/evaluation timestamp, process basename and already privacy-redacted message; other OS records are not published."
+    }
+  ],
+  "original_full_gate": {
+    "handle": 39587,
+    "exit": 101,
+    "passed": 452,
+    "failed": 1,
+    "log": "pctx-handoff-full.log",
+    "unchanged_source": true
+  },
+  "limitations": [
+    "Raw drivers terminate successfully even when child attempts fail; driver exit0 is not a test pass.",
+    "Eight concurrent workers with up to16 attempts each; a worker stops on its first failure. Counts are censored and not a fixed128-trial failure rate.",
+    "All modes keep original1000ms from before spawn; root kill/reap and blocking post-exit pipe reads apply only to tiny inert descendant-free fixtures. Post-kill wait can exceed budget, so this does not qualify production cleanup.",
+    "Fixed mode order, distinct fresh paths and host/cache state confound causal inference. Subsequent passing attempts are not repairs or qualification of the original regression.",
+    "Copied /bin/echo changes executable path/trust context. All copied-image attempts failed; actual signals were not captured (exit_code -1). This control is not equivalent to the system binary.",
+    "Privacy-redacted path hashes in syspolicyd records are not bound to exact child paths/PIDs. Scan timing is correlation, not proven root cause.",
+    "No security policy changes, interpreter substitution in production, increased budgets, retries, Actions or full gate rerun. Native Linux/Windows and complete frontend gates remain open."
+  ],
+  "artifact_sha256": {
+    "pctx-startup-native-controls.jsonl": "21d28e7b3110d0889b03c76d76ed47276493607472bb56b07ad454533c95c367",
+    "pctx-startup-native-controls.rs.txt": "a366668c6deac3ff220d4611b2a2002e348192317a29f4261b04633a2e7b9597",
+    "pctx-startup-groups.rs.txt": "b22baa7adda509910bd8cb698acae8b0de2c3141ee6e77605492274f957d4cf8",
+    "pctx-startup-native-policy-window-selected.json": "7aa5c7f0a7b29fdc65d6c4d647c86cddbdbdf3010f67a7705a5dbb3f823220f5",
+    "pctx-startup-groups.jsonl": "448ad2bc9cbe4ec35a4ea43c96fc16180c781e6f611a8472079ab9c361ebb77d",
+    "pctx-startup-isolation.rs.txt": "3f5cc45f858bb4ca5bf03f1ed97a06e3a84deb20b91b813ae1f58d20228c16cb",
+    "pctx-startup-policy-window-selected.json": "556b14510518c5cc234ce6da661c3c4950ad8192a81c9dda709e6a9e87e621b1",
+    "pctx-startup-native-controls-build.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "pctx-startup-isolation.jsonl": "e0157018e4506a422aec6b1a1d25f665e07424a12cc57e1d87ef2da63f2f721e",
+    "pctx-startup-groups-build.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "pctx-startup-isolation-build.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "independent_review": {
+    "agent": "requirements",
+    "scope": "Read-only source/results/manifest review; no builds, tests or edits.",
+    "result": "No blocker; recomputed counts, maxima, artifact hashes and selected-log counts match.",
+    "next_causal_condition": "Counterbalance fresh versus reused byte-identical script paths; group/no-group as separate factor; record spawn, actual signal and expiry separately. Warm-up remains an explicit diagnostic condition, never production retry/repair."
+  }
+}
