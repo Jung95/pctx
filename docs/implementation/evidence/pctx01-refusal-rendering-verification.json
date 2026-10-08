@@ -118,5 +118,6 @@
     "src/main.rs": "33341be6d69c5dfc3cf050745d2173270c3d9fa5377c221fa834c8a823383efc",
     "tests/cli_frontend.rs": "3cc9007ddd9a104f45a5517df54a5b41985bc7f7c1ab05f9ed1464a893d87c1a",
     "docs/cli/formats.md": "02e5533b47e534b0aa8410404086489c5a578837d182e0b9399b62cb157a142e"
-  }
+  },
+  "runtime_commit": "95c09f2a52ce5debb79ec15d210ca7b045ae5e79"
 }
