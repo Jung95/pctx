@@ -915,3 +915,8 @@ before lock; no new task/feature/Actions. Native platforms/startup gates remain.
 
 
 Final native full4105 terminal101: 555 PASS / 4 FAIL. Failed tests: query_program_resolution_uses_captured_command_path, relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry, simultaneous_streams_are_collected_and_overflow_never_infers_success, concurrent_query_startup_preserves_group_streams_and_original_one_second_budget. All four historical startup conditions remain unresolved, original budgets unchanged. All jobs terminal; no heavy job live. PCTX01 remains incomplete0/10.
+
+
+Runtime064ab5597af2b5ce35f8f8412931aec4c0335c49 normally pushed to origin/main
+by75577 terminal0 (352186b..064ab55), [skip ci]. All jobs terminal, no Actions.
+Only PCTX01 active, next local G03-C004 Install admission; whole task0/10.

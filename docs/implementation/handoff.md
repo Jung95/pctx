@@ -6,8 +6,10 @@
 
 ## Latest integration boundary
 
-PCTX01-G05/G06 adapter error classification, base
-352186bce081af6907f685bb929ead524996d683. Uncommitted src/adapter.rs,
+PCTX01-G05/G06 adapter error classification, runtime
+064ab5597af2b5ce35f8f8412931aec4c0335c49, base
+352186bce081af6907f685bb929ead524996d683. Normal push75577 terminal0 published
+352186b..064ab55 to origin/main. Runtime edits: src/adapter.rs,
 tests/adapter_errors.rs, tests/adapter_preflight.rs policy5 assertion, docs/evidence.
 §14 classes2/4/5/6/7 with §27/§38 state9 preserved; contextual plan/config errors;
 persisted DB JSON/shape corruption7, no ownership-array panic. No clock/owner/
@@ -73,8 +75,8 @@ Original ignored specification SHA256 8914faad57432f524aec0a06aa90c43c18c23f8c19
 
 ## Exact next action
 
-Final full4105 is terminal, counts/failures/source hashes recorded. Publish
-verified development integration with [skip ci], then remain on PCTX01. Next is
+Final full4105 and normal push75577 are terminal, counts/failures/hashes recorded.
+Resume published runtime064ab55 and remain on PCTX01. Next is
 G03-C004: extract existing Install provided hash length/hex/equality before
 CLI discovery/producer lock, keep stored-byte/identity comparisons stateful and
 original expiry first. Fixed leaf140 and historical label groups12 unchanged;
