@@ -1,0 +1,22 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.61s
+     Running tests/cli_contract.rs (target/debug/deps/cli_contract-b5c67c1361178a48)
+
+running 5 tests
+test invalid_json_cli_inputs_still_return_one_json_document ... ok
+test security_applies_to_direct_reads_and_cached_metadata ... ok
+test non_git_exploration_changes_and_idempotent_init ... ok
+test context_budget_is_exact_json_and_required_rules_are_not_cut ... ok
+test ndjson_snapshot_follow_and_resume_have_no_event_gap ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.80s
+
+     Running tests/watch.rs (target/debug/deps/watch-0adb9f97d552b880)
+
+running 4 tests
+test closed_stdout_returns_controlled_error_without_panic ... ok
+test heartbeat_and_expiry_appear_as_ephemeral_observations ... ok
+test compact_watch_renders_essential_columns_and_refreshes ... ok
+test finite_ndjson_drains_all_pages_and_resumes_after_cursor ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 6.65s

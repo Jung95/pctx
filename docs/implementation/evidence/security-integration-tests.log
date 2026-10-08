@@ -1,0 +1,19 @@
+   Compiling equivalent v1.0.2
+   Compiling ryu v1.0.23
+   Compiling unsafe-libyaml v0.2.11
+   Compiling indexmap v2.14.2
+   Compiling serde_json v1.0.151
+   Compiling serde_yaml_ng v0.10.0
+   Compiling tree-sitter v0.25.10
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+error[E0560]: struct `RunRequest` has no field named `task`
+   --> tests/filters.rs:102:22
+    |
+102 |     let r=RunRequest{task:None,session:None,retain:"temporary".into(),execution_timeout_ms:Some(5000),budget_bytes:8192,exit_policy...
+    |                      ^^^^ `RunRequest` does not have this field
+    |
+    = note: available fields are: `task_id`
+
+For more information about this error, try `rustc --explain E0560`.
+error: could not compile `pctx` (test "filters") due to 1 previous error
+warning: build failed, waiting for other jobs to finish...

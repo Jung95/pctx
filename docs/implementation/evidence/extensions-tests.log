@@ -1,0 +1,46 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+warning: value assigned to `single` is never read
+  --> src/pack.rs:54:20
+   |
+54 | ...le=Vec::new();for _ in 0..8 {let mut digest=manifest.clone();digest.as_object_mut().unwrap().remove("manifest_integrity_hash");manifest["manifest_integrity_hash"]=json!(hash(serde_json::to_vec(&digest)?));let manifest_bytes=serde_json::to_vec(&manifest)?;let total=manifest_bytes.len()+files.values().map(Vec::len).sum::<usize>();let data:BTreeMap<_,_>=files.iter().map(|(name,bytes)|Ok((name.clone(),serde_json::from_slice::<Value>(bytes)?))).collect::<Result<_>>()?;single=se...
+   |       ^^^^^^^^^^ this value is reassigned later and never used                                                                                                                                                                                                                                                                                                                                                                                                                         ------ `single` is overwritten here before the previous value is read
+   |
+   = note: `#[warn(unused_assignments)]` (part of `#[warn(unused)]`) on by default
+
+warning: `pctx` (lib) generated 1 warning
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.24s
+     Running tests/filters.rs (target/debug/deps/filters-0185a131c4bd8ffb)
+
+running 6 tests
+test strict_keys_operations_and_regex_no_code_execution ... ok
+test secrets_cr_and_unicode_are_safe_and_protected_survives_excerpt ... ok
+test structured_fields_grouping_and_excerpt_keep_protected_metadata ... ok
+test protect_beats_drop_dedup_keeps_occurrences_ranges_and_no_pass_claim ... ok
+test changed_fixture_cannot_activate_old_report_and_bounds_are_explicit ... ok
+test full_fixture_activation_hash_invalidation_and_exact_match_ambiguity ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.88s
+
+     Running tests/operations.rs (target/debug/deps/operations-4c0bf4df71653ca2)
+
+running 6 tests
+test silence_hides_topic_and_body_before_inbox_ranking ... ok
+test mailbox_retry_is_queued_once_and_ack_is_recipient_bound ... ok
+test backup_restore_preserves_pause_silence_and_messages_but_revokes_grants ... ok
+test unknown_cost_pause_and_silence_override_valid_grant ... ok
+test exact_decisions_deduplicate_but_changed_environment_amount_artifact_do_not ... ok
+test forged_agent_owner_decision_does_not_generate_grant ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.67s
+
+     Running tests/pack.rs (target/debug/deps/pack-267923e987d5ff82)
+
+running 6 tests
+test giant_item_and_total_budget_fail_without_plans_or_publication ... ok
+test integrity_tamper_missing_parts_and_missing_original_are_distinct ... ok
+test stale_source_policy_task_and_wrong_expected_hash_do_not_publish ... ok
+test signatures_keep_notices_and_single_json_verifies ... ok
+test symlink_output_input_overlap_and_overwrite_are_denied ... ok
+test immutable_plan_has_no_source_metadata_default_and_full_masks_preserves_license ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.72s

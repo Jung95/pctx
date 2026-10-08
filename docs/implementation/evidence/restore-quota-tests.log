@@ -1,0 +1,28 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.91s
+     Running tests/quota.rs (target/debug/deps/quota-9060f337f9edcafd)
+
+running 7 tests
+test first_unknown_baseline_and_missing_provider_do_not_become_zero_or_normal ... ok
+test reservations_share_pool_same_unit_and_are_soft_idempotent ... ok
+test cumulative_counters_are_deltas_and_collector_sources_do_not_double_count ... ok
+test quota_thresholds_reset_reobservation_and_persistent_pause_silence ... ok
+test restored_quota_requires_fresh_observation_and_event_ledgers_stay_immutable ... ok
+test pools_are_isolated_and_manual_estimates_do_not_change_actual_usage ... ok
+test epochs_resets_and_stale_counters_are_not_inherited ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.33s
+
+     Running tests/work_control.rs (target/debug/deps/work_control-42e8d2df30461b41)
+
+running 8 tests
+test database_rejects_event_modification_and_receipt_conflict ... ok
+test claims_reports_reassignment_and_cursor ... ok
+test zero_minimum_cannot_make_zero_tests_pass ... ok
+test evidence_gate_and_historical_completion ... ok
+test backup_restore_revokes_live_leases_and_preserves_pause ... ok
+test zero_tests_and_revision_conflict ... ok
+test current_source_change_blocks_completion ... ok
+test restore_preserves_session_history_without_ack_or_epoch_reuse ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.44s

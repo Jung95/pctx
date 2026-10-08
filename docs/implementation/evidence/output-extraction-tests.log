@@ -1,0 +1,15 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.07s
+     Running tests/output.rs (target/debug/deps/output-a63d2159d5d69d4f)
+
+running 8 tests
+test opaque_shell_heavy_and_bad_identifiers_rejected ... ok
+test masking_is_before_storage_and_cr_preserves_error ... ok
+test typed_full_report_preserves_failed_counts_without_becoming_gate_evidence ... ok
+test exact_trust_child_exit_and_reread_without_execution ... ok
+test none_expiry_tamper_and_policy_change_cannot_restore_records ... ok
+test diagnostic_extract_binds_original_source_and_rereads_without_execution ... ok
+test nonzero_and_timeout_are_not_filter_success ... ok
+test agent_cannot_mint_execution_trust_and_git_helpers_are_unavailable ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.72s

@@ -1,0 +1,50 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+warning: linker stderr: cc: error: couldn't create cache file '/var/folders/zz/zyxvpxvq6csfxvn_n00001yr0000gp/T/xcrun_db-ZzCo0GqQ' (errno=Operation not permitted)
+         cc: error: couldn't create cache file '/var/folders/zz/zyxvpxvq6csfxvn_n00001yr0000gp/T/xcrun_db-IL33X4an' (errno=Operation not permitted)
+  |
+  = note: `#[warn(linker_messages)]` on by default
+
+warning: `pctx` (test "session") generated 1 warning
+warning: linker stderr: cc: error: couldn't create cache file '/var/folders/zz/zyxvpxvq6csfxvn_n00001yr0000gp/T/xcrun_db-7uKemJd2' (errno=Operation not permitted)
+         cc: error: couldn't create cache file '/var/folders/zz/zyxvpxvq6csfxvn_n00001yr0000gp/T/xcrun_db-sq6JkSOu' (errno=Operation not permitted)
+  |
+  = note: `#[warn(linker_messages)]` on by default
+
+warning: `pctx` (bin "pctx") generated 1 warning
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.00s
+     Running tests/session.rs (target/debug/deps/session-c178c74e0c3395d5)
+
+running 5 tests
+test independent_sessions_boundaries_and_policy_reject_old_baselines ... FAILED
+test explicit_ack_unchanged_delta_and_no_source_ledger ... FAILED
+test rule_changes_and_deleted_paths_are_explicit ... FAILED
+test minimum_budget_failure_creates_no_emission ... ok
+test suspend_reconcile_preserves_task_pause_and_never_revives_run ... ok
+
+failures:
+
+---- independent_sessions_boundaries_and_policy_reject_old_baselines stdout ----
+
+thread 'independent_sessions_boundaries_and_policy_reject_old_baselines' (7024048) panicked at tests/session.rs:23:95:
+called `Result::unwrap()` on an `Err` value: Error { code: "DB_ERROR", message: "Context task revision lookup failed", retryable: false, exit: 7 }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- explicit_ack_unchanged_delta_and_no_source_ledger stdout ----
+
+thread 'explicit_ack_unchanged_delta_and_no_source_ledger' (7024047) panicked at tests/session.rs:16:91:
+called `Result::unwrap()` on an `Err` value: Error { code: "DB_ERROR", message: "Context task revision lookup failed", retryable: false, exit: 7 }
+
+---- rule_changes_and_deleted_paths_are_explicit stdout ----
+
+thread 'rule_changes_and_deleted_paths_are_explicit' (7024050) panicked at tests/session.rs:30:91:
+called `Result::unwrap()` on an `Err` value: Error { code: "DB_ERROR", message: "Context task revision lookup failed", retryable: false, exit: 7 }
+
+
+failures:
+    explicit_ack_unchanged_delta_and_no_source_ledger
+    independent_sessions_boundaries_and_policy_reject_old_baselines
+    rule_changes_and_deleted_paths_are_explicit
+
+test result: FAILED. 2 passed; 3 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.26s
+
+error: test failed, to rerun pass `--test session`

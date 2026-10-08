@@ -1,0 +1,11 @@
+/target/
+/.toolchain/
+/.pctx-dev-data/
+.DS_Store
+/dist/
+
+# Preserve the supplied Korean design input locally; publish the faithful English edition separately.
+/docs/PCTX-implementation-spec-v0.6.md
+
+__pycache__/
+*.pyc

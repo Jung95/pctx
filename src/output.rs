@@ -1,0 +1,1365 @@
+//! Explicit noninteractive execution and masked, expiring output artifacts.
+//! Presentation is never completion evidence; registered runner owns host admission.
+use crate::{
+    domain::{Error, Result, hash, id, now},
+    project::{Project, atomic_write, private_dir},
+    reader,
+};
+use clap::{Args, Subcommand};
+use fs2::FileExt;
+use serde::{Deserialize, Serialize};
+use serde_json::{Value, json};
+use std::{
+    collections::BTreeMap,
+    fs,
+    io::Read,
+    path::{Path, PathBuf},
+    process::{Command, Stdio},
+    sync::{
+        Arc,
+        atomic::{AtomicBool, Ordering},
+    },
+    thread,
+    time::{Duration, Instant},
+};
+
+const RECORD_LIMIT: usize = 256 * 1024;
+const STREAM_LIMIT: usize = 8 * 1024 * 1024;
+const PROJECT_LIMIT: u64 = 256 * 1024 * 1024;
+const HOST_LIMIT: u64 = 1024 * 1024 * 1024;
+
+#[derive(Debug, Args)]
+pub struct RunRequest {
+    #[arg(long)]
+    pub task_id: Option<String>,
+    #[arg(long)]
+    pub session: Option<String>,
+    #[arg(long, default_value="temporary", value_parser=["temporary","none"])]
+    pub retain: String,
+    #[arg(long)]
+    pub execution_timeout_ms: Option<u64>,
+    #[arg(long, default_value_t = 8192)]
+    pub budget_bytes: usize,
+    #[arg(long, default_value="child", value_parser=["child","pctx"])]
+    pub exit_policy: String,
+    #[arg(long, default_value="closed", value_parser=["closed"])]
+    pub stdin: String,
+    #[arg(last = true, required = true)]
+    pub argv: Vec<String>,
+}
+#[derive(Debug, Subcommand)]
+pub enum TrustCommand {
+    /// Inspect exact executable, arguments and script hashes without executing.
+    Plan {
+        #[arg(last = true, required = true)]
+        argv: Vec<String>,
+    },
+    /// Explicitly bind this exact non-heavy execution in private local user trust.
+    Add {
+        #[arg(long)]
+        expect_hash: String,
+        #[arg(last = true, required = true)]
+        argv: Vec<String>,
+    },
+}
+#[derive(Debug, Subcommand)]
+pub enum OutputCommand {
+    Show {
+        id: String,
+        #[arg(long, default_value="compact", value_parser=["compact","full"])]
+        view: String,
+        #[arg(long, value_parser=["stdout","stderr"])]
+        stream: Option<String>,
+        #[arg(long)]
+        lines: Option<String>,
+    },
+    Find {
+        id: String,
+        #[arg(long)]
+        literal: String,
+        #[arg(long, default_value_t = 5)]
+        limit: usize,
+    },
+    Render {
+        id: String,
+        #[arg(long, default_value = "builtin")]
+        filter: String,
+    },
+}
+#[derive(Clone, Serialize, Deserialize)]
+struct Binding {
+    executable: String,
+    executable_hash: String,
+    scripts: BTreeMap<String, String>,
+    argv_hash: String,
+    workspace_id: String,
+    policy_hash: String,
+    fingerprint: String,
+}
+#[derive(Clone, Serialize, Deserialize)]
+struct Record {
+    stream: String,
+    sequence: u64,
+    text: String,
+    redacted: bool,
+}
+#[derive(Clone, Default, Serialize, Deserialize)]
+struct Capture {
+    records: Vec<Record>,
+    captured_bytes: u64,
+    normalized_bytes: u64,
+    redacted_bytes: u64,
+    omitted_bytes: u64,
+    complete: bool,
+    redacted: bool,
+    io_error: bool,
+}
+#[derive(Serialize, Deserialize)]
+struct Artifact {
+    schema_version: u32,
+    output_id: String,
+    execution_id: String,
+    workspace_id: String,
+    policy_hash: String,
+    input_fingerprint: String,
+    #[serde(default)]
+    input_manifest: BTreeMap<String, String>,
+    created_at: i64,
+    expires_at: i64,
+    records_hash: String,
+    records: Vec<Record>,
+    captured_bytes: u64,
+    normalized_bytes: u64,
+    redacted_bytes: u64,
+    omitted_bytes: u64,
+    capture_complete: bool,
+    retained: bool,
+    spawned: bool,
+    termination: String,
+    child_exit_code: Option<i32>,
+    signal: Option<i32>,
+    pctx_error: Option<String>,
+    input_stage: String,
+    emitted_bytes: u64,
+    retrieval_bytes: u64,
+    delivery_attempts: u64,
+}
+fn err(code: &str, msg: &str, exit: i32) -> Error {
+    Error::new(code, msg, exit)
+}
+fn output_dir(p: &Project) -> PathBuf {
+    p.data_dir.join("outputs").join(&p.workspace_id)
+}
+fn safe_id(value: &str) -> Result<()> {
+    if !value.starts_with("OUT-")
+        || value.len() > 64
+        || !value
+            .bytes()
+            .all(|b| b.is_ascii_alphanumeric() || b == b'-')
+    {
+        return Err(err("INVALID_ARGUMENT", "Invalid output identifier", 2));
+    }
+    Ok(())
+}
+fn checked_private(path: &Path) -> Result<()> {
+    for c in path.ancestors() {
+        if fs::symlink_metadata(c).is_ok_and(|m| m.file_type().is_symlink()) {
+            return Err(err(
+                "POLICY_DENIED",
+                "Linked local artifact/trust path denied",
+                5,
+            ));
+        }
+    }
+    Ok(())
+}
+fn artifact_path(p: &Project, value: &str) -> Result<PathBuf> {
+    safe_id(value)?;
+    let path = output_dir(p).join(format!("{value}.json"));
+    checked_private(&path)?;
+    Ok(path)
+}
+fn resolve(program: &str) -> Result<PathBuf> {
+    let candidate = if Path::new(program).is_absolute() {
+        PathBuf::from(program)
+    } else if program.contains('/') || program.contains('\\') {
+        return Err(err(
+            "POLICY_DENIED",
+            "Use an absolute executable path or PATH program",
+            5,
+        ));
+    } else {
+        std::env::split_paths(&std::env::var_os("PATH").unwrap_or_default())
+            .map(|d| d.join(program))
+            .find(|f| f.is_file())
+            .ok_or_else(|| err("CAPABILITY_UNAVAILABLE", "Executable not found", 6))?
+    };
+    let path = fs::canonicalize(candidate)?;
+    let m = fs::metadata(&path)?;
+    if !m.is_file() || m.len() > 128 * 1024 * 1024 {
+        return Err(err(
+            "POLICY_DENIED",
+            "Executable is not a bounded regular file",
+            5,
+        ));
+    }
+    Ok(path)
+}
+fn classification(_argv: &[String], executable: &Path) -> Result<()> {
+    let name = executable
+        .file_name()
+        .and_then(|s| s.to_str())
+        .unwrap_or("")
+        .to_ascii_lowercase();
+    let denied = [
+        "sh",
+        "bash",
+        "zsh",
+        "dash",
+        "fish",
+        "cmd",
+        "cmd.exe",
+        "powershell",
+        "pwsh",
+        "python",
+        "python3",
+        "node",
+        "ruby",
+        "perl",
+        "cargo",
+        "rustc",
+        "make",
+        "cmake",
+        "ninja",
+        "xcodebuild",
+        "npm",
+        "pnpm",
+        "yarn",
+        "npx",
+        "docker",
+        "terraform",
+        "az",
+        "kubectl",
+        "gh",
+        "eas",
+        "rtk",
+        "tokf",
+    ];
+    if denied.iter().any(|n| {
+        name == *n || name.starts_with(&format!("{n}-")) || name.starts_with(&format!("{n}."))
+    }) {
+        return Err(err(
+            "CAPABILITY_UNAVAILABLE",
+            "Shells, opaque interpreters, compressors and heavy/operational runners need a registered execution profile",
+            6,
+        ));
+    }
+    if name == "git" {
+        return Err(err(
+            "CAPABILITY_UNAVAILABLE",
+            "Git helpers/configuration require a validated execution profile",
+            6,
+        ));
+    }
+    // Exact user trust is required for other programs; it is not broad host permission.
+    Ok(())
+}
+fn binding(p: &Project, argv: &[String]) -> Result<Binding> {
+    binding_inner(p, argv, false, ".")
+}
+fn binding_inner(p: &Project, argv: &[String], registered: bool, cwd: &str) -> Result<Binding> {
+    if argv.is_empty() || argv.len() > 256 || argv.iter().map(String::len).sum::<usize>() > 65536 {
+        return Err(err("INVALID_ARGUMENT", "Bounded nonempty argv required", 2));
+    }
+    let executable = resolve(&argv[0])?;
+    if !registered {
+        classification(argv, &executable)?;
+    }
+    let mut scripts = BTreeMap::new();
+    for arg in argv.iter().skip(1) {
+        let path = Path::new(arg);
+        if path.is_absolute() && path.exists() {
+            return Err(err(
+                "POLICY_DENIED",
+                "Absolute file inputs require a registered execution profile",
+                5,
+            ));
+        }
+        let input = if cwd == "." {
+            arg.clone()
+        } else {
+            format!("{cwd}/{arg}")
+        };
+        if !arg.starts_with('-') && p.root.join(&input).is_file() {
+            let f = reader::read(p, &input)?;
+            scripts.insert(input, f.hash);
+        }
+    }
+    let executable_hash = hash(fs::read(&executable)?);
+    let argv_hash = hash(serde_json::to_vec(argv)?);
+    let workspace_id = p.workspace_id.clone();
+    let policy_hash = p.policy_hash();
+    let fingerprint = hash(serde_json::to_vec(
+        &json!({"executable":executable.to_string_lossy(),"executable_hash":executable_hash,"scripts":scripts,"argv_hash":argv_hash,"workspace":workspace_id,"policy":policy_hash,"cwd":cwd}),
+    )?);
+    Ok(Binding {
+        executable: executable.to_string_lossy().into_owned(),
+        executable_hash,
+        scripts,
+        argv_hash,
+        workspace_id,
+        policy_hash,
+        fingerprint,
+    })
+}
+pub fn trust(p: &Project, command: &TrustCommand) -> Result<Value> {
+    if matches!(command, TrustCommand::Add { .. })
+        && std::env::var("PCTX_ACTOR").unwrap_or_else(|_| "owner".into()) != "owner"
+    {
+        return Err(err(
+            "POLICY_DENIED",
+            "Execution trust requires local owner authority",
+            5,
+        ));
+    }
+    let argv = match command {
+        TrustCommand::Plan { argv } | TrustCommand::Add { argv, .. } => argv,
+    };
+    let b = binding(p, argv)?;
+    if let TrustCommand::Add { expect_hash, .. } = command {
+        if *expect_hash != b.fingerprint {
+            return Err(err(
+                "CONFIG_CHANGED",
+                "Execution binding changed since plan",
+                9,
+            ));
+        }
+        let dir = p.data_dir.join("trust").join("executions");
+        checked_private(&dir)?;
+        private_dir(&dir)?;
+        atomic_write(
+            &dir.join(format!("{}.json", b.fingerprint)),
+            &serde_json::to_vec(&b)?,
+            true,
+        )?;
+    }
+    Ok(
+        json!({"fingerprint":b.fingerprint,"executable_hash":b.executable_hash,"script_hashes":b.scripts,"argv_hash":b.argv_hash,"workspace_id":b.workspace_id,"policy_hash":b.policy_hash,"trusted":matches!(command,TrustCommand::Add{..}),"execution_started":false,"classification":"explicit_non_heavy","host_permission":"separate"}),
+    )
+}
+fn validate_trust(p: &Project, b: &Binding) -> Result<()> {
+    let path = p
+        .data_dir
+        .join("trust/executions")
+        .join(format!("{}.json", b.fingerprint));
+    checked_private(&path)?;
+    let raw = fs::read(path).map_err(|_| {
+        err(
+            "OWNER_DECISION_REQUIRED",
+            "Exact executable/argv/script binding requires explicit trust plan and add",
+            5,
+        )
+    })?;
+    let old: Binding = serde_json::from_slice(&raw)?;
+    if old.fingerprint != b.fingerprint
+        || old.executable_hash != b.executable_hash
+        || old.scripts != b.scripts
+        || old.argv_hash != b.argv_hash
+        || old.workspace_id != p.workspace_id
+        || old.policy_hash != p.policy_hash()
+    {
+        return Err(err(
+            "CONFIG_CHANGED",
+            "Execution trust binding no longer matches",
+            9,
+        ));
+    }
+    Ok(())
+}
+fn normalize(bytes: &[u8]) -> Option<String> {
+    if bytes.contains(&0) {
+        return None;
+    }
+    let text = std::str::from_utf8(bytes).ok()?;
+    // Remove ANSI controls before masking, including split escape sequences in a record.
+    static ANSI: std::sync::OnceLock<regex::Regex> = std::sync::OnceLock::new();
+    let ansi = ANSI.get_or_init(|| {
+        regex::Regex::new(r"\x1b(?:\[[0-?]*[ -/]*[@-~]|\][^\x07]*(?:\x07|\x1b\\))")
+            .expect("fixed ANSI pattern")
+    });
+    let clean = ansi.replace_all(text, "");
+    Some(
+        clean
+            .chars()
+            .filter(|c| *c == '\t' || !c.is_control())
+            .collect(),
+    )
+}
+fn push_record(c: &mut Capture, bytes: &[u8], stream: &str) {
+    if c.records.len() >= 8192 {
+        c.omitted_bytes += bytes.len() as u64;
+        c.complete = false;
+        return;
+    }
+    if let Some(text) = normalize(bytes) {
+        c.normalized_bytes += text.len() as u64 + 1;
+        if text.contains("-----BEGIN") && text.contains("PRIVATE KEY-----") {
+            c.omitted_bytes += bytes.len() as u64;
+            c.complete = false;
+            return;
+        }
+        let (text, redacted) = if text.is_empty() {
+            (text, false)
+        } else {
+            reader::redact(&text)
+        };
+        if c.records.len() >= 8192
+            || c.redacted_bytes + text.len() as u64 + (c.records.len() as u64 + 1) * 128
+                > STREAM_LIMIT as u64
+        {
+            c.omitted_bytes += bytes.len() as u64;
+            c.complete = false;
+            return;
+        }
+        c.redacted_bytes += text.len() as u64 + 1;
+        c.redacted |= redacted;
+        c.records.push(Record {
+            stream: stream.into(),
+            sequence: c.records.len() as u64,
+            text,
+            redacted,
+        });
+    } else {
+        c.omitted_bytes += bytes.len() as u64;
+        c.complete = false;
+    }
+}
+fn capture<R: Read + Send + 'static>(
+    mut pipe: R,
+    stream: &'static str,
+    stop: Arc<AtomicBool>,
+) -> thread::JoinHandle<Capture> {
+    thread::spawn(move || {
+        let mut c = Capture {
+            complete: true,
+            ..Default::default()
+        };
+        let mut record = Vec::new();
+        let mut chunk = [0u8; 8192];
+        let mut dropping = false;
+        let mut pem_block = false;
+        let mut stopped_at = None;
+        loop {
+            if stop.load(Ordering::Relaxed) && stopped_at.is_none() {
+                stopped_at = Some(Instant::now());
+            }
+            match pipe.read(&mut chunk) {
+                Ok(0) => break,
+                Ok(n) => {
+                    c.captured_bytes += n as u64;
+                    for byte in &chunk[..n] {
+                        if *byte == b'\n' || *byte == b'\r' {
+                            if !dropping {
+                                let marker = String::from_utf8_lossy(&record);
+                                if marker.contains("-----BEGIN")
+                                    && marker.contains("PRIVATE KEY-----")
+                                {
+                                    pem_block = true;
+                                }
+                                if pem_block {
+                                    c.omitted_bytes += record.len() as u64;
+                                    c.complete = false;
+                                    if marker.contains("-----END")
+                                        && marker.contains("PRIVATE KEY-----")
+                                    {
+                                        pem_block = false;
+                                    }
+                                } else {
+                                    push_record(&mut c, &record, stream);
+                                }
+                            }
+                            record.clear();
+                            dropping = false;
+                        } else if dropping {
+                            c.omitted_bytes += 1;
+                        } else if record.len() >= RECORD_LIMIT {
+                            if std::str::from_utf8(&record).is_ok_and(|s| {
+                                s.contains("-----BEGIN") && s.contains("PRIVATE KEY-----")
+                            }) {
+                                pem_block = true;
+                            }
+                            c.omitted_bytes += record.len() as u64 + 1;
+                            record.clear();
+                            dropping = true;
+                            c.complete = false;
+                        } else {
+                            record.push(*byte);
+                        }
+                    }
+                }
+                Err(e) if e.kind() == std::io::ErrorKind::WouldBlock => {
+                    if stopped_at.is_some_and(|t| t.elapsed() > Duration::from_millis(250)) {
+                        c.complete = false;
+                        break;
+                    }
+                    thread::sleep(Duration::from_millis(2));
+                }
+                Err(e) if e.kind() == std::io::ErrorKind::Interrupted => continue,
+                Err(_) => {
+                    c.complete = false;
+                    c.io_error = true;
+                    break;
+                }
+            }
+        }
+        if !dropping && !record.is_empty() {
+            if pem_block {
+                c.omitted_bytes += record.len() as u64;
+                c.complete = false;
+            } else {
+                push_record(&mut c, &record, stream);
+            }
+        }
+        c
+    })
+}
+#[cfg(unix)]
+fn nonblocking<T: std::os::fd::AsRawFd>(pipe: &T) -> Result<()> {
+    let fd = pipe.as_raw_fd();
+    // SAFETY: valid owned pipe descriptor; these fcntl operations do not transfer ownership.
+    let flags = unsafe { libc::fcntl(fd, libc::F_GETFL) };
+    if flags < 0 || unsafe { libc::fcntl(fd, libc::F_SETFL, flags | libc::O_NONBLOCK) } < 0 {
+        return Err(err("IO_ERROR", "Cannot configure bounded pipe capture", 7));
+    }
+    Ok(())
+}
+fn total_size(path: &Path) -> u64 {
+    fs::read_dir(path)
+        .map(|entries| {
+            entries
+                .flatten()
+                .map(|e| {
+                    let m = e.file_type().ok();
+                    if m.is_some_and(|t| t.is_dir()) {
+                        total_size(&e.path())
+                    } else if m.is_some_and(|t| t.is_file()) {
+                        e.metadata().map(|m| m.len()).unwrap_or(0)
+                    } else {
+                        0
+                    }
+                })
+                .sum()
+        })
+        .unwrap_or(0)
+}
+// Explicit unlock prevents a concurrent fork in another thread from briefly
+// retaining an inherited open-file-description lock after this scope returns.
+struct UnlockGuard(fs::File);
+impl Drop for UnlockGuard {
+    fn drop(&mut self) {
+        let _ = fs2::FileExt::unlock(&self.0);
+    }
+}
+fn save(p: &Project, a: &Artifact) -> Result<()> {
+    let top = p.data_dir.join("outputs");
+    checked_private(&top)?;
+    private_dir(&top)?;
+    private_dir(&output_dir(p))?;
+    let lock_path = top.join("store.lock");
+    checked_private(&lock_path)?;
+    let mut opts = fs::OpenOptions::new();
+    opts.create(true).truncate(false).read(true).write(true);
+    #[cfg(unix)]
+    {
+        use std::os::unix::fs::OpenOptionsExt;
+        opts.mode(0o600);
+    }
+    let lock = UnlockGuard(opts.open(lock_path)?);
+    lock.0
+        .try_lock_exclusive()
+        .map_err(|_| err("RESOURCE_BUSY", "Output publication is busy", 7))?;
+    let path = artifact_path(p, &a.output_id)?;
+    let bytes = serde_json::to_vec(a)?;
+    let previous = fs::metadata(&path).map(|m| m.len()).unwrap_or(0);
+    if total_size(&output_dir(p)).saturating_sub(previous) + bytes.len() as u64 > PROJECT_LIMIT
+        || total_size(&top).saturating_sub(previous) + bytes.len() as u64 > HOST_LIMIT
+    {
+        return Err(err(
+            "OUTPUT_PARTIAL",
+            "Output store quota reached; captured body is unavailable",
+            3,
+        ));
+    }
+    atomic_write(&path, &bytes, true)?;
+    Ok(())
+}
+fn load(p: &Project, value: &str) -> Result<Artifact> {
+    let path = artifact_path(p, value)?;
+    let m =
+        fs::metadata(&path).map_err(|_| err("OUTPUT_EXPIRED", "Output artifact unavailable", 6))?;
+    if m.len() > 64 * 1024 * 1024 {
+        return Err(err(
+            "OUTPUT_PARTIAL",
+            "Output artifact exceeds safe read limit",
+            3,
+        ));
+    }
+    let a: Artifact = serde_json::from_slice(&fs::read(path)?)?;
+    if a.schema_version != 1 || a.output_id != value || a.workspace_id != p.workspace_id {
+        return Err(err(
+            "POLICY_DENIED",
+            "Output identity or workspace mismatch",
+            5,
+        ));
+    }
+    if a.policy_hash != p.policy_hash() {
+        return Err(err(
+            "POLICY_DENIED",
+            "Output policy changed; old records require refiltering",
+            5,
+        ));
+    }
+    if a.expires_at <= now() {
+        return Err(err("OUTPUT_EXPIRED", "Output retention has expired", 6));
+    }
+    if a.records_hash != hash(serde_json::to_vec(&a.records)?) {
+        return Err(err("OUTPUT_PARTIAL", "Output integrity check failed", 3));
+    }
+    Ok(a)
+}
+fn typed_report(a: &Artifact) -> Option<Value> {
+    if !a.capture_complete || a.pctx_error.is_some() {
+        return None;
+    }
+    let text = a
+        .records
+        .iter()
+        .filter(|r| r.stream == "stdout")
+        .map(|r| r.text.as_str())
+        .collect::<Vec<_>>()
+        .join("\n");
+    if text.len() > STREAM_LIMIT {
+        return None;
+    }
+    let r: crate::work::CheckReport = serde_json::from_str(&text).ok()?;
+    if r.schema_version != 1
+        || r.check_key.trim().is_empty()
+        || r.producer.trim().is_empty()
+        || r.finished_at < r.started_at
+        || r.passed
+            .checked_add(r.failed)
+            .and_then(|n| n.checked_add(r.skipped))
+            != Some(r.tests)
+        || !["passed", "failed", "cancelled", "timed_out", "unverified"]
+            .contains(&r.result.as_str())
+        || a.child_exit_code != Some(r.exit_code)
+    {
+        return None;
+    }
+    Some(
+        json!({"parser":"pctx-check-report-v1","summary":{"tests":r.tests,"passed":r.passed,"failed":r.failed,"errors":r.errors,"skipped":r.skipped},"reported_result":r.result,"report_origin":"child_stdout_claim","report_digest":hash(text.as_bytes()),"gate_evidence":false}),
+    )
+}
+fn compact(a: &Artifact, budget: usize) -> Value {
+    let mut protected = Vec::new();
+    let mut normal = Vec::new();
+    let protect =
+        regex::Regex::new(r"(?i)error|failed|failure|warning|denied|timeout|panic").unwrap();
+    for r in &a.records {
+        if protect.is_match(&r.text) {
+            protected.push(r)
+        } else {
+            normal.push(r)
+        }
+    }
+    let total = a.records.len();
+    let mut included = Vec::new();
+    let mut used = 0;
+    // Reserve metadata/envelope first; UTF-8 is never byte-truncated.
+    let room = budget.saturating_sub(2500);
+    for r in protected.iter().chain(normal.iter().take(12)) {
+        let value =
+            json!({"stream":r.stream,"sequence":r.sequence,"text":r.text,"redacted":r.redacted});
+        let cost = serde_json::to_vec(&value)
+            .map(|v| v.len())
+            .unwrap_or(room + 1);
+        if used + cost <= room {
+            used += cost;
+            included.push(value);
+        }
+    }
+    let mut value = json!({"execution_id":a.execution_id,"output_id":a.output_id,"spawned":a.spawned,"termination":a.termination,"child_exit_code":a.child_exit_code,"signal":a.signal,"pctx_error":a.pctx_error,"parse_status":"unsupported","capture_complete":a.capture_complete,"redaction_applied":true,"redaction_changed_content":a.records.iter().any(|r|r.redacted),"input_stage":a.input_stage,"raw_available":a.retained && a.expires_at>now(),"raw_semantics":"redacted_uncompressed","records":included,"records_included":included.len(),"records_omitted":total.saturating_sub(included.len()),"protected_records":protected.len(),"captured_bytes":a.captured_bytes,"normalized_bytes":a.normalized_bytes,"redacted_bytes":a.redacted_bytes,"omitted_bytes":a.omitted_bytes,"query_ref":format!("pctx output show {} --view full",a.output_id),"evidence_origin":"runner_observed","task_completion":"not_evaluated","test_result":"not_evaluated","budget_bytes":budget});
+    if let Some(report) = typed_report(a) {
+        value["parse_status"] = json!("complete");
+        value["typed_report"] = report;
+    }
+    value
+}
+pub fn run(p: &Project, r: &RunRequest) -> Result<Value> {
+    run_inner(p, r, ".", &BTreeMap::new(), None, None, None)
+}
+pub(crate) fn registered_binding_at(p: &Project, argv: &[String], cwd: &str) -> Result<Value> {
+    Ok(serde_json::to_value(binding_inner(p, argv, true, cwd)?)?)
+}
+pub(crate) fn run_registered_monitored(
+    p: &Project,
+    r: &RunRequest,
+    cwd: &str,
+    environment: &BTreeMap<String, String>,
+    expected_binding: &str,
+    on_spawn: &mut dyn FnMut(u32) -> Result<()>,
+    on_poll: &mut dyn FnMut() -> Result<()>,
+) -> Result<Value> {
+    run_inner(
+        p,
+        r,
+        cwd,
+        environment,
+        Some(expected_binding),
+        Some(on_spawn),
+        Some(on_poll),
+    )
+}
+fn run_inner(
+    p: &Project,
+    r: &RunRequest,
+    cwd: &str,
+    environment: &BTreeMap<String, String>,
+    expected_binding: Option<&str>,
+    mut on_spawn: Option<&mut dyn FnMut(u32) -> Result<()>>,
+    mut on_poll: Option<&mut dyn FnMut() -> Result<()>>,
+) -> Result<Value> {
+    if r.budget_bytes < 3000 {
+        return Err(err(
+            "BUDGET_TOO_SMALL",
+            "Run metadata requires at least 3000 bytes before execution",
+            8,
+        ));
+    }
+    if r.stdin != "closed"
+        || !["temporary", "none"].contains(&r.retain.as_str())
+        || !["child", "pctx"].contains(&r.exit_policy.as_str())
+    {
+        return Err(err("INVALID_ARGUMENT", "Unsupported run mode", 2));
+    }
+    #[cfg(not(unix))]
+    {
+        return Err(err(
+            "CAPABILITY_UNAVAILABLE",
+            "Supervised manual capture is currently verified only on Unix",
+            6,
+        ));
+    }
+    let registered = expected_binding.is_some();
+    let b = binding_inner(p, &r.argv, registered, cwd)?;
+    if let Some(expected) = expected_binding {
+        if b.fingerprint != expected {
+            return Err(err(
+                "CONFIG_CHANGED",
+                "Registered binding changed before spawn",
+                9,
+            ));
+        }
+    } else {
+        validate_trust(p, &b)?;
+    }
+    let input_manifest = reader::manifest(p)?;
+    let input_fingerprint = hash(serde_json::to_vec(&input_manifest)?);
+    let execution_id = id("EXEC");
+    let output_id = id("OUT");
+    let job_dir = p.data_dir.join("output-jobs");
+    checked_private(&job_dir)?;
+    private_dir(&job_dir)?;
+    let job_path = job_dir.join(format!("{execution_id}.json"));
+    atomic_write(
+        &job_path,
+        &serde_json::to_vec(
+            &json!({"execution_id":execution_id,"state":"starting","workspace_id":p.workspace_id,"input_fingerprint":input_fingerprint,"resource_admission":if registered{"registered_profile_external_resource_ledger"}else{"non_heavy_manual"}}),
+        )?,
+        false,
+    )?;
+    let mut cmd = Command::new(&b.executable);
+    cmd.args(&r.argv[1..])
+        .current_dir(&p.root)
+        .stdin(Stdio::null())
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped())
+        .env_clear();
+    // Git metadata reads must not invoke external pagers, diff helpers or textconv.
+    cmd.env("PATH", std::env::var_os("PATH").unwrap_or_default())
+        .env("LANG", "C.UTF-8")
+        .env("GIT_PAGER", "cat")
+        .env("PAGER", "cat")
+        .env("GIT_EXTERNAL_DIFF", "")
+        .env("GIT_CONFIG_COUNT", "0");
+    for (key, value) in environment {
+        cmd.env(key, value);
+    }
+    #[cfg(unix)]
+    let cwd_handle = if cwd == "." {
+        fs::File::open(&p.root)?
+    } else {
+        reader::secure_open(p, cwd)?
+    };
+    #[cfg(unix)]
+    {
+        use std::{os::fd::AsRawFd, os::unix::process::CommandExt};
+        let fd = cwd_handle.as_raw_fd();
+        cmd.process_group(0);
+        unsafe {
+            cmd.pre_exec(move || {
+                if libc::fchdir(fd) != 0 {
+                    return Err(std::io::Error::last_os_error());
+                }
+                Ok(())
+            });
+        }
+    }
+    let mut child = match cmd.spawn() {
+        Ok(c) => c,
+        Err(_) => {
+            let data = json!({"execution_id":execution_id,"spawned":false,"termination":"not_started","child_exit_code":null,"pctx_error":"SPAWN_FAILED","task_completion":"not_evaluated"});
+            let _ = atomic_write(&job_path, &serde_json::to_vec(&data)?, true);
+            return Ok(data);
+        }
+    };
+    let pid = child.id();
+    if let Some(callback) = on_spawn.as_mut()
+        && let Err(e) = callback(pid)
+    {
+        #[cfg(unix)]
+        unsafe {
+            libc::kill(-(pid as i32), libc::SIGKILL);
+        }
+        let _ = child.kill();
+        let _ = child.wait();
+        return Err(e);
+    }
+    // If this parent dies, this durable receipt remains active_or_unknown; TTL never frees resources.
+    let _ = atomic_write(
+        &job_path,
+        &serde_json::to_vec(
+            &json!({"execution_id":execution_id,"pid":pid,"process_group":pid,"state":"active_or_unknown","started_at":now(),"resource_admission":if registered{"registered_profile_external_resource_ledger"}else{"non_heavy_manual"}}),
+        )?,
+        true,
+    );
+    let stdout = child
+        .stdout
+        .take()
+        .ok_or_else(|| err("IO_ERROR", "Missing child stdout pipe", 7))?;
+    let stderr = child
+        .stderr
+        .take()
+        .ok_or_else(|| err("IO_ERROR", "Missing child stderr pipe", 7))?;
+    #[cfg(unix)]
+    if nonblocking(&stdout)
+        .and_then(|_| nonblocking(&stderr))
+        .is_err()
+    {
+        let _ = child.kill();
+        let _ = child.wait();
+        return Err(err("IO_ERROR", "Pipe capture setup failed after spawn", 7));
+    }
+    let stop = Arc::new(AtomicBool::new(false));
+    let out_thread = capture(stdout, "stdout", stop.clone());
+    let err_thread = capture(stderr, "stderr", stop.clone());
+    let start = Instant::now();
+    let mut timed_out = false;
+    let mut monitor_error = None;
+    let status = loop {
+        if let Some(status) = child.try_wait()? {
+            break status;
+        }
+        if let Some(callback) = on_poll.as_mut()
+            && let Err(e) = callback()
+        {
+            monitor_error = Some(e.code);
+            #[cfg(unix)]
+            unsafe {
+                libc::kill(-(pid as i32), libc::SIGKILL);
+            }
+            let _ = child.kill();
+            break child.wait()?;
+        }
+        if r.execution_timeout_ms
+            .is_some_and(|ms| start.elapsed() >= Duration::from_millis(ms))
+        {
+            timed_out = true;
+            #[cfg(unix)]
+            {
+                // SAFETY: signal targets the new child process group, never this parent group.
+                unsafe {
+                    libc::kill(-(pid as i32), libc::SIGTERM);
+                }
+            }
+            thread::sleep(Duration::from_millis(100));
+            #[cfg(unix)]
+            unsafe {
+                libc::kill(-(pid as i32), libc::SIGKILL);
+            }
+            let _ = child.kill();
+            break child.wait()?;
+        }
+        thread::sleep(Duration::from_millis(5));
+    };
+    stop.store(true, Ordering::Relaxed);
+    let out = out_thread
+        .join()
+        .map_err(|_| err("IO_ERROR", "Stdout capture panicked", 7))?;
+    let stderr = err_thread
+        .join()
+        .map_err(|_| err("IO_ERROR", "Stderr capture panicked", 7))?;
+    let mut records = out.records;
+    records.extend(stderr.records);
+    // Bound serialized record storage too: JSON escaping must not expand a 16MiB
+    // logical capture into an unbounded artifact.
+    let mut serialized_size = records
+        .iter()
+        .map(|r| {
+            serde_json::to_vec(r)
+                .map(|v| v.len() + 1)
+                .unwrap_or(RECORD_LIMIT)
+        })
+        .sum::<usize>();
+    let mut store_omitted = 0u64;
+    while serialized_size + 4096 > 16 * 1024 * 1024 {
+        if let Some(record) = records.pop() {
+            serialized_size = serialized_size.saturating_sub(
+                serde_json::to_vec(&record)
+                    .map(|v| v.len() + 1)
+                    .unwrap_or(0),
+            );
+            store_omitted += record.text.len() as u64;
+        } else {
+            break;
+        }
+    }
+    let retained = r.retain != "none";
+    #[cfg(unix)]
+    let signal = {
+        use std::os::unix::process::ExitStatusExt;
+        status.signal()
+    };
+    #[cfg(not(unix))]
+    let signal: Option<i32> = None;
+    let termination = if timed_out {
+        "timed_out"
+    } else if signal.is_some() {
+        "signaled"
+    } else {
+        "exited"
+    }
+    .to_string();
+    let mut a = Artifact {
+        schema_version: 1,
+        output_id: output_id.clone(),
+        execution_id: execution_id.clone(),
+        workspace_id: p.workspace_id.clone(),
+        policy_hash: p.policy_hash(),
+        input_fingerprint,
+        input_manifest,
+        created_at: now(),
+        expires_at: now() + 86400,
+        records_hash: hash(serde_json::to_vec(&records)?),
+        records,
+        captured_bytes: out.captured_bytes + stderr.captured_bytes,
+        normalized_bytes: out.normalized_bytes + stderr.normalized_bytes,
+        redacted_bytes: out.redacted_bytes + stderr.redacted_bytes,
+        omitted_bytes: out.omitted_bytes + stderr.omitted_bytes + store_omitted,
+        capture_complete: out.complete && stderr.complete && store_omitted == 0,
+        retained,
+        spawned: true,
+        termination,
+        child_exit_code: status.code(),
+        signal,
+        pctx_error: if monitor_error.is_some() {
+            monitor_error
+        } else if timed_out {
+            Some("TIMEOUT".into())
+        } else if out.io_error || stderr.io_error {
+            Some("CAPTURE_FAILED".into())
+        } else {
+            None
+        },
+        input_stage: "captured".into(),
+        emitted_bytes: 0,
+        retrieval_bytes: 0,
+        delivery_attempts: 0,
+    };
+    let mut data = compact(&a, r.budget_bytes);
+    data["exit_policy"] = json!(r.exit_policy);
+    if !retained {
+        a.records.clear();
+        a.records_hash = hash(serde_json::to_vec(&a.records)?);
+    }
+    if let Err(e) = save(p, &a) {
+        data["pctx_error"] = json!(e.code);
+        data["raw_available"] = json!(false);
+    }
+    let _ = atomic_write(
+        &job_path,
+        &serde_json::to_vec(
+            &json!({"execution_id":execution_id,"pid":pid,"state":if a.capture_complete{"child_exited"}else{"child_exited_descendants_unknown"},"termination":a.termination,"child_exit_code":a.child_exit_code,"signal":a.signal}),
+        )?,
+        true,
+    );
+    Ok(data)
+}
+
+/// Called by the frontend with the exact bytes actually emitted (including its envelope).
+/// Emitted is an observation, not proof of receipt or provider token/cost usage.
+pub fn record_delivery(p: &Project, value: &str, bytes: u64, kind: &str) -> Result<()> {
+    let metrics = p.data_dir.join("output-metrics.lock");
+    checked_private(&metrics)?;
+    let mut opts = fs::OpenOptions::new();
+    opts.create(true).truncate(false).read(true).write(true);
+    #[cfg(unix)]
+    {
+        use std::os::unix::fs::OpenOptionsExt;
+        opts.mode(0o600);
+    }
+    let lock = UnlockGuard(opts.open(metrics)?);
+    lock.0
+        .try_lock_exclusive()
+        .map_err(|_| err("RESOURCE_BUSY", "Output measurement is busy", 7))?;
+    let mut a = load(p, value)?;
+    if kind == "retrieval" {
+        a.retrieval_bytes = a.retrieval_bytes.saturating_add(bytes);
+    } else if kind == "compact" {
+        a.emitted_bytes = a.emitted_bytes.saturating_add(bytes);
+    } else {
+        return Err(err("INVALID_ARGUMENT", "Unknown output delivery stage", 2));
+    }
+    a.delivery_attempts = a.delivery_attempts.saturating_add(1);
+    save(p, &a)
+}
+pub fn output(p: &Project, command: &OutputCommand) -> Result<Value> {
+    let value = match command {
+        OutputCommand::Show { id, .. }
+        | OutputCommand::Find { id, .. }
+        | OutputCommand::Render { id, .. } => id,
+    };
+    let a = load(p, value)?;
+    if !a.retained {
+        return Err(err(
+            "OUTPUT_EXPIRED",
+            "Retention was disabled for this execution",
+            6,
+        ));
+    }
+    match command {
+        OutputCommand::Show {
+            view,
+            stream,
+            lines,
+            ..
+        } => {
+            if view == "compact" {
+                return Ok(compact(&a, 8192));
+            }
+            if view != "full" {
+                return Err(err("INVALID_ARGUMENT", "Unknown output view", 2));
+            }
+            let (first, last) = if let Some(s) = lines {
+                let (x, y) = s
+                    .split_once(':')
+                    .ok_or_else(|| err("INVALID_ARGUMENT", "Lines must be A:B", 2))?;
+                let x = x
+                    .parse::<usize>()
+                    .map_err(|_| err("INVALID_ARGUMENT", "Invalid line", 2))?;
+                let y = y
+                    .parse::<usize>()
+                    .map_err(|_| err("INVALID_ARGUMENT", "Invalid line", 2))?;
+                if x == 0 || y < x || y - x > 1000 {
+                    return Err(err(
+                        "INVALID_ARGUMENT",
+                        "Invalid or excessive line range",
+                        2,
+                    ));
+                }
+                (x, y)
+            } else {
+                (1, 80)
+            };
+            let all = a
+                .records
+                .iter()
+                .filter(|r| stream.as_ref().is_none_or(|s| s == &r.stream))
+                .collect::<Vec<_>>();
+            let records=all.iter().skip(first-1).take(last-first+1).map(|r|json!({"stream":r.stream,"sequence":r.sequence,"text":r.text,"redacted":r.redacted})).collect::<Vec<_>>();
+            Ok(
+                json!({"output_id":a.output_id,"execution_id":a.execution_id,"view":"full","raw_semantics":"redacted_uncompressed","records":records,"total_records":all.len(),"omitted_records":all.len().saturating_sub(records.len()),"capture_complete":a.capture_complete,"omitted_bytes":a.omitted_bytes,"child_exit_code":a.child_exit_code,"termination":a.termination,"command_rerun":false,"delivery_kind":"retrieval"}),
+            )
+        }
+        OutputCommand::Find { literal, limit, .. } => {
+            if literal.is_empty() || *limit == 0 || *limit > 1000 {
+                return Err(err(
+                    "INVALID_ARGUMENT",
+                    "Literal and bounded limit required",
+                    2,
+                ));
+            }
+            let records = a
+                .records
+                .iter()
+                .filter(|r| r.text.contains(literal))
+                .take(*limit)
+                .cloned()
+                .collect::<Vec<_>>();
+            Ok(
+                json!({"output_id":a.output_id,"records":records,"command_rerun":false,"capture_complete":a.capture_complete,"delivery_kind":"retrieval"}),
+            )
+        }
+        OutputCommand::Render { filter, .. } => {
+            let mut v = if filter == "builtin" {
+                compact(&a, 8192)
+            } else {
+                let mut offset = 0;
+                let records = a
+                    .records
+                    .iter()
+                    .map(|r| {
+                        let start = offset;
+                        offset += r.text.len() + 1;
+                        crate::filters::FilterRecord {
+                            stream: r.stream.clone(),
+                            sequence: r.sequence,
+                            text: r.text.clone(),
+                            start_byte: start,
+                            end_byte: offset,
+                        }
+                    })
+                    .collect::<Vec<_>>();
+                crate::filters::apply_observed(
+                    p,
+                    filter,
+                    &records,
+                    a.child_exit_code,
+                    &a.termination,
+                )?
+            };
+            v["output_id"] = json!(a.output_id);
+            v["execution_id"] = json!(a.execution_id);
+            v["child_exit_code"] = json!(a.child_exit_code);
+            v["signal"] = json!(a.signal);
+            v["termination"] = json!(a.termination);
+            v["pctx_error"] = json!(a.pctx_error);
+            v["capture_complete"] = json!(a.capture_complete);
+            v["omitted_bytes"] = json!(a.omitted_bytes);
+            v["command_rerun"] = json!(false);
+            v["delivery_kind"] = json!("compact");
+            Ok(v)
+        }
+    }
+}
+pub fn savings(p: &Project) -> Result<Value> {
+    let mut samples = Vec::new();
+    let mut baseline = 0u64;
+    let mut emitted = 0u64;
+    let mut retrieval = 0u64;
+    if let Ok(entries) = fs::read_dir(output_dir(p)) {
+        for entry in entries.flatten() {
+            let Some(value) = entry
+                .path()
+                .file_stem()
+                .and_then(|s| s.to_str())
+                .map(str::to_owned)
+            else {
+                continue;
+            };
+            if !value.starts_with("OUT-") {
+                continue;
+            }
+            if let Ok(a) = load(p, &value) {
+                if a.input_stage == "already_compacted" {
+                    samples.push(
+                        json!({"output_id":value,"baseline":"unknown","input_stage":a.input_stage}),
+                    );
+                    continue;
+                }
+                if a.delivery_attempts == 0 {
+                    samples.push(json!({"output_id":value,"metric_status":"not_emitted","redacted_uncompressed_bytes":a.redacted_bytes}));
+                    continue;
+                }
+                baseline += a.redacted_bytes;
+                emitted += a.emitted_bytes;
+                retrieval += a.retrieval_bytes;
+                samples.push(json!({"output_id":value,"redacted_uncompressed_bytes":a.redacted_bytes,"emitted_compact_bytes":a.emitted_bytes,"emitted_retrieval_bytes":a.retrieval_bytes,"delivery_attempts":a.delivery_attempts,"capture_complete":a.capture_complete}));
+            }
+        }
+    }
+    let net = baseline as i128 - emitted as i128 - retrieval as i128;
+    Ok(
+        json!({"scope":"workspace","metric":"observed_emitted_bytes","samples":samples,"redacted_uncompressed_bytes":baseline,"emitted_compact_bytes":emitted,"emitted_retrieval_bytes":retrieval,"net_bytes_saved":net as i64,"net_percent":if baseline==0 {Value::Null}else{json!(net as f64*100.0/baseline as f64)},"tokenizer_tokens":"unknown","provider_usage":"unknown","subscription_quota":"unknown","api_cost":"unknown","delivery_receipt":"not_observed","metrics_available":emitted+retrieval>0}),
+    )
+}
+
+pub(crate) fn observed_report(
+    p: &Project,
+    output_id: &str,
+) -> Result<Option<crate::work::CheckReport>> {
+    let artifact = load(p, output_id)?;
+    if typed_report(&artifact).is_none() || artifact.termination != "exited" {
+        return Ok(None);
+    }
+    let text = artifact
+        .records
+        .iter()
+        .filter(|r| r.stream == "stdout")
+        .map(|r| r.text.as_str())
+        .collect::<Vec<_>>()
+        .join("\n");
+    let mut report: crate::work::CheckReport = serde_json::from_str(&text)?;
+    report.source = "runner_observed".into();
+    Ok(Some(report))
+}
+
+/// Recognized location candidates retain per-file execution-input hashes.
+pub fn diagnostic_locations(p: &Project, output_id: &str) -> Result<Value> {
+    let artifact = load(p, output_id)?;
+    if !artifact.retained {
+        return Err(err("OUTPUT_EXPIRED", "Output records not retained", 6));
+    }
+    let pattern = regex::Regex::new(r#"([^\s:"'()]+):(\d+)(?::(\d+))?"#)
+        .map_err(|_| err("PARSER_FAILED", "Location parser unavailable", 3))?;
+    let mut locations = Vec::new();
+    let mut seen = std::collections::BTreeSet::new();
+    let mut skipped = 0;
+    for record in &artifact.records {
+        for capture in pattern.captures_iter(&record.text) {
+            let path = &capture[1];
+            let Ok(line) = capture[2].parse::<usize>() else {
+                skipped += 1;
+                continue;
+            };
+            if line == 0 || reader::policy_allows(p, path).is_err() || reader::redact(path).1 {
+                skipped += 1;
+                continue;
+            }
+            if !seen.insert((path.to_string(), line)) {
+                continue;
+            }
+            let Some(expected) = artifact.input_manifest.get(path) else {
+                return Err(err(
+                    "STALE_RESULT",
+                    "Diagnostic source has no execution-input hash",
+                    4,
+                ));
+            };
+            if reader::read(p, path)?.hash != *expected {
+                return Err(err(
+                    "STALE_RESULT",
+                    "Diagnostic source changed after execution",
+                    4,
+                ));
+            }
+            if locations.len() >= 1000 {
+                return Err(err(
+                    "PARTIAL_RESULT",
+                    "Diagnostic location count exceeds bound",
+                    3,
+                ));
+            }
+            locations.push(json!({"path":path,"line":line,"source_hash":expected,"stream":record.stream,"record_sequence":record.sequence,"location_semantics":"reported_candidate"}));
+        }
+    }
+    Ok(
+        json!({"output_id":output_id,"locations":locations,"capture_complete":artifact.capture_complete,"unrecognized_or_denied_locations":skipped,"parser":"path_line_candidates","command_rerun":false}),
+    )
+}
+
+pub(crate) fn unverified_report(p: &Project, output_id: &str) -> Result<crate::work::CheckReport> {
+    let artifact = load(p, output_id)?;
+    let result = if artifact.termination == "timed_out" {
+        "timed_out"
+    } else if artifact.child_exit_code.is_some_and(|c| c != 0) || artifact.signal.is_some() {
+        "failed"
+    } else {
+        "unverified"
+    };
+    Ok(crate::work::CheckReport {
+        schema_version: 1,
+        check_key: String::new(),
+        producer: "pctx-supervisor".into(),
+        source: "runner_observed".into(),
+        exit_code: artifact.child_exit_code.unwrap_or(128),
+        tests: 0,
+        passed: 0,
+        failed: 0,
+        errors: 0,
+        skipped: 0,
+        result: result.into(),
+        started_at: artifact.created_at,
+        finished_at: artifact.created_at,
+        environment: json!({"test_counts_status":"unknown","report_parse_status":"incomplete_or_unsupported","observed_termination":artifact.termination,"capture_complete":artifact.capture_complete,"signal":artifact.signal}),
+    })
+}
+
+#[cfg(test)]
+mod capture_tests {
+    use super::*;
+    struct Fragmented {
+        data: Vec<u8>,
+        offset: usize,
+    }
+    impl Read for Fragmented {
+        fn read(&mut self, b: &mut [u8]) -> std::io::Result<usize> {
+            let n = 7.min(b.len()).min(self.data.len() - self.offset);
+            b[..n].copy_from_slice(&self.data[self.offset..self.offset + n]);
+            self.offset += n;
+            Ok(n)
+        }
+    }
+    #[test]
+    fn split_secret_and_ansi_never_survive_normalization() {
+        let data = b"\x1b[31merror ghp_abcdefghijklmnop123456789\x1b[0m\rprogress 50%\n".to_vec();
+        let c = capture(
+            Fragmented { data, offset: 0 },
+            "stderr",
+            Arc::new(AtomicBool::new(false)),
+        )
+        .join()
+        .unwrap();
+        assert_eq!(c.records[0].text, "error [REDACTED]");
+        assert_eq!(c.records[1].text, "progress 50%");
+        assert!(c.redacted);
+        assert!(c.complete);
+    }
+    #[test]
+    fn oversize_binary_invalid_utf8_and_record_counts_are_bounded() {
+        let mut data = vec![b'x'; RECORD_LIMIT + 100];
+        data.extend_from_slice(b"\n\x00hidden\n\xffinvalid\nerror retained\n");
+        let c = capture(
+            std::io::Cursor::new(data),
+            "stdout",
+            Arc::new(AtomicBool::new(false)),
+        )
+        .join()
+        .unwrap();
+        assert!(!c.complete);
+        assert!(c.omitted_bytes >= RECORD_LIMIT as u64);
+        assert_eq!(c.records.len(), 1);
+        assert_eq!(c.records[0].text, "error retained");
+        let c = capture(
+            std::io::Cursor::new(vec![b'\n'; 100000]),
+            "stdout",
+            Arc::new(AtomicBool::new(false)),
+        )
+        .join()
+        .unwrap();
+        assert!(c.records.len() <= 8192);
+        assert!(!c.complete);
+    }
+    #[test]
+    fn incomplete_private_key_never_reaches_records() {
+        let c = capture(
+            std::io::Cursor::new(b"-----BEGIN PRIVATE KEY-----\nsensitivevalue"),
+            "stdout",
+            Arc::new(AtomicBool::new(false)),
+        )
+        .join()
+        .unwrap();
+        assert!(!c.complete);
+        assert!(c.records.is_empty());
+    }
+}

@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "cases": [
+    {
+      "id": "tiny",
+      "kind": "tiny",
+      "required_diagnostic": null
+    },
+    {
+      "id": "verbose_success",
+      "kind": "success",
+      "required_diagnostic": null
+    },
+    {
+      "id": "multiple_failures",
+      "kind": "failures",
+      "required_diagnostic": "BENCH_DIAG_002"
+    },
+    {
+      "id": "parser_drift",
+      "kind": "malformed",
+      "required_diagnostic": "BENCH_DIAG_003"
+    },
+    {
+      "id": "unicode_cr",
+      "kind": "unicode_cr",
+      "required_diagnostic": "BENCH_DIAG_004"
+    },
+    {
+      "id": "large_record",
+      "kind": "large_record",
+      "required_diagnostic": null
+    },
+    {
+      "id": "binary",
+      "kind": "binary",
+      "required_diagnostic": null
+    },
+    {
+      "id": "nonzero_missing_input",
+      "kind": "missing",
+      "required_diagnostic": null
+    }
+  ],
+  "interpretation": "Fixture words are presentation inputs, never test-execution proof. Child exit and capture state come from the observed runner."
+}

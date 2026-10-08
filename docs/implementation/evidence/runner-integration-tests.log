@@ -1,0 +1,44 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+warning: function `registered_binding` is never used
+   --> src/output.rs:692:15
+    |
+692 | pub(crate) fn registered_binding(p: &Project, argv: &[String]) -> Result<Value> {
+    |               ^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `pctx` (lib) generated 1 warning
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.36s
+     Running tests/output.rs (target/debug/deps/output-a63d2159d5d69d4f)
+
+running 8 tests
+test opaque_shell_heavy_and_bad_identifiers_rejected ... ok
+test typed_full_report_preserves_failed_counts_without_becoming_gate_evidence ... ok
+test diagnostic_extract_binds_original_source_and_rereads_without_execution ... FAILED
+test masking_is_before_storage_and_cr_preserves_error ... ok
+test exact_trust_child_exit_and_reread_without_execution ... FAILED
+test none_expiry_tamper_and_policy_change_cannot_restore_records ... ok
+test nonzero_and_timeout_are_not_filter_success ... ok
+test agent_cannot_mint_execution_trust_and_git_helpers_are_unavailable ... ok
+
+failures:
+
+---- diagnostic_extract_binds_original_source_and_rereads_without_execution stdout ----
+
+thread 'diagnostic_extract_binds_original_source_and_rereads_without_execution' (7069153) panicked at tests/output.rs:340:58:
+called `Result::unwrap()` on an `Err` value: Error { code: "IO_ERROR", message: "Filesystem operation failed", retryable: false, exit: 7 }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- exact_trust_child_exit_and_reread_without_execution stdout ----
+
+thread 'exact_trust_child_exit_and_reread_without_execution' (7069154) panicked at tests/output.rs:100:57:
+called `Result::unwrap()` on an `Err` value: Error { code: "RESOURCE_BUSY", message: "Output measurement is busy", retryable: false, exit: 7 }
+
+
+failures:
+    diagnostic_extract_binds_original_source_and_rereads_without_execution
+    exact_trust_child_exit_and_reread_without_execution
+
+test result: FAILED. 6 passed; 2 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.76s
+
+error: test failed, to rerun pass `--test output`

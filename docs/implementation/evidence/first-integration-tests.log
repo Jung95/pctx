@@ -1,0 +1,101 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.71s
+     Running unittests src/lib.rs (target/debug/deps/pctx-7201502c5f808ea1)
+
+running 6 tests
+test search::tests::literal_smart_case ... ok
+test output::capture_tests::incomplete_private_key_never_reaches_records ... ok
+test search::tests::boolean_precedence_and_bounds ... ok
+test broker::tests::nul_names_rename_and_unborn_metadata_are_machine_parsed ... ok
+test output::capture_tests::split_secret_and_ansi_never_survive_normalization ... ok
+test output::capture_tests::oversize_binary_invalid_utf8_and_record_counts_are_bounded ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/broker.rs (target/debug/deps/broker-c692e102afad3696)
+
+running 7 tests
+test non_git_is_unsupported_and_corrupt_git_is_never_empty_or_clean ... ok
+test field_selection_and_nul_filenames_do_not_emit_paths_or_source ... ok
+test repo_fsmonitor_script_is_never_executed ... ok
+test proven_dead_refresh_owner_can_be_reclaimed_without_ttl_guessing ... ok
+test concurrent_refresh_is_shared_but_workspace_and_policy_keys_are_isolated ... ok
+test live_refresh_owner_is_not_stolen_by_age_and_returns_pending ... ok
+test five_actual_cli_processes_share_one_refresh ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.79s
+
+     Running tests/cli_contract.rs (target/debug/deps/cli_contract-c8c5ac0795d64eeb)
+
+running 4 tests
+test invalid_json_cli_inputs_still_return_one_json_document ... ok
+test security_applies_to_direct_reads_and_cached_metadata ... ok
+test non_git_exploration_changes_and_idempotent_init ... ok
+test context_budget_is_exact_json_and_required_rules_are_not_cut ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.20s
+
+     Running tests/concurrency.rs (target/debug/deps/concurrency-14fb601325829220)
+
+running 8 tests
+test agent_cannot_authorize_execution_trust ... ok
+test git_status_does_not_run_unbound_repository_fsmonitor ... ok
+test agent_capability_cannot_grant_owner_authority ... ok
+test two_process_claims_have_one_winner ... ok
+test ten_readers_and_two_writers_see_published_generations ... ok
+test report_replay_and_revision_conflict_are_visible_at_cli ... ok
+test check_changed_during_external_execution_stays_stale ... ok
+test changed_source_and_definition_do_not_reuse_check_evidence ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.40s
+
+     Running tests/core_security.rs (target/debug/deps/core_security-eaa66f8990b7f622)
+
+running 8 tests
+test cr06_equals_format_errors_are_single_json_documents ... ok
+test cr01_handoff_symlink_cannot_write_outside_project ... ok
+test cr08_checkpoint_metadata_obeys_new_security_exclusions ... ok
+test cr04_require_complete_does_not_hide_skipped_input ... ok
+test cr09_freshness_is_validated_and_off_is_visible ... ok
+test cr05_public_envelope_reports_truncation_and_parser_partial ... ok
+test cr02_embedded_private_key_fragments_are_masked ... ok
+test cr10_explicit_seed_limit_is_reported ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.78s
+
+     Running tests/graph.rs (target/debug/deps/graph-b3e9fe80e2d7a3e7)
+
+running 4 tests
+test workspaces_and_policy_are_never_cross_used ... ok
+test workspace_exports_and_dynamic_import_are_explicit ... ok
+test alias_configuration_changes_invalidate_without_index_refresh ... ok
+test import_cycles_have_bounded_traversal_and_reverse_impact_is_inferred ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+
+     Running tests/output.rs (target/debug/deps/output-7088fb71d88dfdd3)
+
+running 7 tests
+test opaque_shell_heavy_and_bad_identifiers_rejected ... ok
+test agent_cannot_mint_execution_trust_and_git_helpers_are_unavailable ... ok
+test typed_full_report_preserves_failed_counts_without_becoming_gate_evidence ... ok
+test masking_is_before_storage_and_cr_preserves_error ... FAILED
+test none_expiry_tamper_and_policy_change_cannot_restore_records ... ok
+test exact_trust_child_exit_and_reread_without_execution ... ok
+test nonzero_and_timeout_are_not_filter_success ... ok
+
+failures:
+
+---- masking_is_before_storage_and_cr_preserves_error stdout ----
+
+thread 'masking_is_before_storage_and_cr_preserves_error' (7040732) panicked at tests/output.rs:43:59:
+assertion failed: serde_json::to_string(&a).unwrap().contains("[REDACTED]")
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    masking_is_before_storage_and_cr_preserves_error
+
+test result: FAILED. 6 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.49s
+
+error: test failed, to rerun pass `--test output`

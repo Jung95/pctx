@@ -1,0 +1,26 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+warning: value assigned to `single` is never read
+  --> src/pack.rs:54:20
+   |
+54 | ...le=Vec::new();for _ in 0..8 {let mut digest=manifest.clone();digest.as_object_mut().unwrap().remove("manifest_integrity_hash");manifest["manifest_integrity_hash"]=json!(hash(serde_json::to_vec(&digest)?));let manifest_bytes=serde_json::to_vec(&manifest)?;let total=manifest_bytes.len()+files.values().map(Vec::len).sum::<usize>();let data:BTreeMap<_,_>=files.iter().map(|(name,bytes)|Ok((name.clone(),serde_json::from_slice::<Value>(bytes)?))).collect::<Result<_>>()?;single=se...
+   |       ^^^^^^^^^^ this value is reassigned later and never used                                                                                                                                                                                                                                                                                                                                                                                                                         ------ `single` is overwritten here before the previous value is read
+   |
+   = note: `#[warn(unused_assignments)]` (part of `#[warn(unused)]`) on by default
+
+warning: `pctx` (lib) generated 1 warning
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.86s
+     Running tests/core_security.rs (target/debug/deps/core_security-eaa66f8990b7f622)
+
+running 10 tests
+test cr06_equals_format_errors_are_single_json_documents ... ok
+test cr01_handoff_symlink_cannot_write_outside_project ... ok
+test cr08_checkpoint_metadata_obeys_new_security_exclusions ... ok
+test cr04_require_complete_does_not_hide_skipped_input ... ok
+test rebuild_refuses_newer_schema_without_replacing_original ... ok
+test cr09_freshness_is_validated_and_off_is_visible ... ok
+test cr05_public_envelope_reports_truncation_and_parser_partial ... ok
+test cr02_embedded_private_key_fragments_are_masked ... ok
+test rebuild_preserves_checkpoints_and_quarantines_corrupt_index ... ok
+test cr10_explicit_seed_limit_is_reported ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.51s

@@ -1,0 +1,52 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.20s
+     Running tests/runner.rs (target/debug/deps/runner-bd8ce8a4c22fbc6c)
+
+running 19 tests
+test legacy_lock_fixture ... ok
+test cloud_helper_is_only_durable_intent ... ok
+test explicit_script_input_change_requires_new_trust ... ok
+test changed_script_and_agent_forged_trust_are_denied ... ok
+test legacy_bridge_absence_prevents_execution ... ok
+test linked_slot_child_directory_cannot_redirect_state ... ok
+test synthetic_low_memory_defers_heavy_admission ... ok
+test trusted_typed_check_is_real_evidence ... ok
+test timeout_is_observed_without_success_evidence ... ok
+test parent_exit_does_not_release_living_child ... ok
+test user_created_host_state_symlink_is_denied ... ok
+test unknown_memory_requires_disclosed_exact_owner_override ... ok
+test unknown_and_zero_tests_do_not_pass ... ok
+test source_mutation_during_check_is_stale ... ok
+test local_auxiliary_provider_needs_registered_linked_workspace_and_capacity ... ok
+test cross_project_heavy_capacity_is_one ... ok
+test canonical_legacy_and_pctx_exclude_each_other ... FAILED
+test canonical_mutex_survives_main_parent_death ... FAILED
+test killed_guardian_causes_negative_child_observation ... FAILED
+
+failures:
+
+---- canonical_legacy_and_pctx_exclude_each_other stdout ----
+
+thread 'canonical_legacy_and_pctx_exclude_each_other' (7094960) panicked at tests/runner.rs:375:5:
+assertion failed: String::from_utf8_lossy(&denied.stdout).contains("RESOURCE_BUSY")
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- canonical_mutex_survives_main_parent_death stdout ----
+
+thread 'canonical_mutex_survives_main_parent_death' (7094961) panicked at tests/runner.rs:135:13:
+Runner never published child identity
+
+---- killed_guardian_causes_negative_child_observation stdout ----
+
+thread 'killed_guardian_causes_negative_child_observation' (7094966) panicked at tests/runner.rs:135:13:
+Runner never published child identity
+
+
+failures:
+    canonical_legacy_and_pctx_exclude_each_other
+    canonical_mutex_survives_main_parent_death
+    killed_guardian_causes_negative_child_observation
+
+test result: FAILED. 16 passed; 3 failed; 0 ignored; 0 measured; 0 filtered out; finished in 11.98s
+
+error: test failed, to rerun pass `--test runner`

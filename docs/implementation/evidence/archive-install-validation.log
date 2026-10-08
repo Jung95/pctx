@@ -1,0 +1,11 @@
+{
+  "archive_sha256": "f99056eee7b1d31d8530b017ab89aa0d0d128536a2077da810b22a8c03439191",
+  "archive_extraction": "passed",
+  "version": "0.1.0-dev",
+  "isolated_install_exploration": "passed",
+  "same_build_atomic_reinstallation_preserves_project_and_workspace": "passed",
+  "future_version_migration": "not_tested",
+  "binary_removal_preserves_user_data": "passed",
+  "global_installation": false,
+  "platform": "macOS arm64"
+}

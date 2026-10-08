@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "profile": "M",
+  "seed": 1048,
+  "repetitions": 30,
+  "context_budget_bytes": 12000,
+  "extract_budget_bytes": 10000,
+  "timeout_seconds": 150,
+  "output_fixtures": true,
+  "session_workloads": true,
+  "local_git_broker": true,
+  "cold_cache_control": "unknown",
+  "reference_environment": {"cpu_cores": 8, "memory_bytes": 17179869184, "storage": "local_ssd", "network": "not_used"}
+}

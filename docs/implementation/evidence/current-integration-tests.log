@@ -1,0 +1,52 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.22s
+     Running tests/output.rs (target/debug/deps/output-7088fb71d88dfdd3)
+
+running 7 tests
+test opaque_shell_heavy_and_bad_identifiers_rejected ... ok
+test masking_is_before_storage_and_cr_preserves_error ... ok
+test typed_full_report_preserves_failed_counts_without_becoming_gate_evidence ... ok
+test none_expiry_tamper_and_policy_change_cannot_restore_records ... ok
+test exact_trust_child_exit_and_reread_without_execution ... ok
+test agent_cannot_mint_execution_trust_and_git_helpers_are_unavailable ... ok
+test nonzero_and_timeout_are_not_filter_success ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.50s
+
+     Running tests/search.rs (target/debug/deps/search-42343dcd61a3d9a8)
+
+running 6 tests
+test unsupported_is_distinct_from_empty_supported ... ok
+test utf8_crlf_locations_and_version_ids ... ok
+test markdown_sections_ignore_fenced_examples_and_link_parents ... ok
+test structural_variants_use_real_grammar ... ok
+test cached_policy_change_hides_metadata_and_boolean_remains_explicit ... ok
+test stale_symbol_and_ambiguous_names_never_select_code ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/session.rs (target/debug/deps/session-c178c74e0c3395d5)
+
+running 6 tests
+test identity_secrets_are_rejected_before_persistence ... ok
+test minimum_budget_failure_creates_no_emission ... ok
+test rule_changes_and_deleted_paths_are_explicit ... ok
+test suspend_reconcile_preserves_task_pause_and_never_revives_run ... ok
+test explicit_ack_unchanged_delta_and_no_source_ledger ... ok
+test independent_sessions_boundaries_and_policy_reject_old_baselines ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.37s
+
+     Running tests/work_control.rs (target/debug/deps/work_control-54258c5d2a3b8dfa)
+
+running 8 tests
+test database_rejects_event_modification_and_receipt_conflict ... ok
+test zero_tests_and_revision_conflict ... ok
+test claims_reports_reassignment_and_cursor ... ok
+test zero_minimum_cannot_make_zero_tests_pass ... ok
+test evidence_gate_and_historical_completion ... ok
+test backup_restore_revokes_live_leases_and_preserves_pause ... ok
+test current_source_change_blocks_completion ... ok
+test restore_preserves_session_history_without_ack_or_epoch_reuse ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.38s
