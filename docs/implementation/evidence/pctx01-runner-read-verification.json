@@ -117,5 +117,6 @@
     "pctx01-runner-read-targeted.log": "d160b81ba978a02fa7669972822b235e00d305fae5ea1f9aa331f4f50174caf0",
     "pctx01-runner-read-trust-scope-loss.log": "47b61eac77a2adb7c06144dacb2ffaddcc94bd4ccac293a0dc6615caf8778c90",
     "pctx01-runner-read-unit.log": "f53839641dad49ff435c92b03371370407f21c3b40d9a9c58313db7e682158c4"
-  }
+  },
+  "runtime_commit": "08996219d824647e845daac129763131044cea0b"
 }
