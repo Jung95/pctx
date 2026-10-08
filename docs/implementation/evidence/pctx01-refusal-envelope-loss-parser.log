@@ -1,0 +1,24 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.25s
+     Running tests/cli_refusal_envelope.rs (target/debug/deps/cli_refusal_envelope-e0fa1efd013109e3)
+
+running 1 test
+test all_visible_leaf_unknown_options_refuse_before_project_and_output ... FAILED
+
+failures:
+
+---- all_visible_leaf_unknown_options_refuse_before_project_and_output stdout ----
+
+thread 'all_visible_leaf_unknown_options_refuse_before_project_and_output' (8937477) panicked at tests/cli_refusal_envelope.rs:90:5:
+assertion `left == right` failed
+  left: Object {"reasons": Array [], "status": String("complete")}
+ right: Object {"reasons": Array [String("INVALID_ARGUMENT")], "status": String("partial")}
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    all_visible_leaf_unknown_options_refuse_before_project_and_output
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 3 filtered out; finished in 0.82s
+
+error: test failed, to rerun pass `--test cli_refusal_envelope`

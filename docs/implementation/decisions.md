@@ -982,3 +982,23 @@ pure predicate. The existing lock-deadline test used invalid hash input, so it n
 uses valid64 hex to test actual contention with the same50ms request. Invalid
 requests get input2 before authority/discovery/lock; valid requests retain owner5.
 Fixed denominators10/140/12 and latest serial-task rule remain unchanged.
+
+
+## PCTX01: refusal coverage is execution coverage — 2026-10-09
+
+§8 defines complete coverage by completed supported request execution. Parser/
+admission/render failure therefore cannot inherit the default successful
+envelope's complete coverage. Share error-envelope construction with partial/
+code reason, keeping status error and original typed exit. Do not globally change
+partial coverage into exit3, discard prelaunch/minimum metadata, reissue clocks
+or alter streamed native hook/watch records. Existing state/delivery predicates
+stay producer-owned. Unknown-option qualification is frozen140 leaves, not full
+required/typed argument acceptance; public denominators10/140/12 unchanged.
+
+
+Existing-leaf next-action audit: C001 Activity has an already implemented
+nonnegative cursor guard in work::activity_inner and watch::run, but CLI preflight
+has no Activity arm before discovery. This is a missing G03 admission for the
+existing leaf, not a new feature or label group. Record G03-C001 with source
+evidence; preserve finite Work original-expiry handling and separate streaming
+behavior. Frozen140/12/10 denominators remain unchanged.

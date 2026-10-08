@@ -940,3 +940,20 @@ the manifest. All jobs terminal, no heavy job live. PCTX01 remains incomplete0/1
 Runtimecdc3c6c7cf18de6d87cfd30dbd932d00fc46b96a normally published to origin/main by98209
 terminal0 (0ce593b..cdc3c6c), [skip ci]. All jobs terminal, no Actions.
 PCTX01 only; next local G02/G04 C004 refusal/option matrix, no next official task.
+
+
+## PCTX01 refusal envelope consistency — 2026-10-09
+
+Only PCTX01 active. Shared refusal envelope corrects coverage for parser/
+admission/render, retaining exits/data/clock and minimum/outererror contracts.
+Manifest evidence/pctx01-refusal-envelope-verification.json: baseline1PASS3FAIL,
+related66PASS, renderer1PASS, final target4PASS;618 native attempts include
+560 frozen-leaf option refusals. Four sensitivity failures/restoration, one
+inconclusive Run loss retained, final static PASS after fixture style failure;
+independent review no blocker. Whole0/10/native platforms/startup remain open.
+Final full/publication status in current handoff; no Actions/next official task.
+
+Final native full51862 terminal101:566PASS3FAIL. Captured-command-path passed
+without startup repair; all four historical startup conditions remain unresolved
+and original budgets unchanged. Full failures/source hashes in manifest. All
+jobs terminal, no heavy job live. PCTX01 remains incomplete0/10.

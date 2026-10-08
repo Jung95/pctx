@@ -1086,3 +1086,39 @@ current handoff. No next official task or Actions.
 Final native full32591 terminal101: 560 PASS / 4 FAIL. All four historical
 startup conditions fail at unchanged budgets; failure names/source hashes in
 the manifest. All jobs terminal, no heavy job live. PCTX01 remains incomplete0/10.
+
+
+## PCTX01 refusal envelope consistency — 2026-10-09
+
+PCTX01-G02/G04/G05 only, §8/§14. Actual parser/admission/render errors inherited
+coverage=complete despite refused execution. Shared domain::error_envelope now
+uses error status, partial coverage/code reason while preserving supplied data,
+identity, error/retryable and timestamp. Parser/admission/render consume it;
+minimum-budget/outerexecute are equivalent refactors. Exits/clock/authority/
+success/stream/delivery semantics unchanged. Partial coverage does not imply3.
+
+Manifest evidence/pctx01-refusal-envelope-verification.json: baseline1PASS3FAIL,
+related66PASS, renderer1PASS (no clock input2/original expired TIMEOUT7), final
+target4PASS. Native618 attempts: frozen140 leaves × format/destination560 (280
+JSON envelopes,280 compact plain stderr), C004 required/duplicate options16,
+semantic/representation6 and admitted state/destination36. Producer classes
+5/4/2/9/4/7 retained;24 error envelopes delivered,12 existing-response attempts
+refuse publication9 and preserve original bytes. All root/data bytes unchanged
+after prepared fixture state; pre-created lock is not first-use rollback.
+
+Coverage guard loss yields three actual failures/exact restoration; data loss
+fails real minimum-budget metadata test. An initial Run data-loss probe passed
+because later facade reconstructs prelaunch evidence; retained as inconclusive,
+not mutation sensitivity. Initial generation/target-selection and Clippy
+collapsible-if failure retained; equivalent fixture style fix/final static PASS.
+Independent read-only review no blocker. Full final results in manifest/handoff.
+
+Whole gates0/10, visible leaves140 and historical local groups12/12/platform0/12
+unchanged. Complete remaining argument/representation/budget/phase/platform
+conditions remain mandatory. Native Linux/Windows and four historical startup
+conditions remain open. No Actions/next official task.
+
+Final native full51862 terminal101:566PASS3FAIL. Captured-command-path passed
+without startup repair; all four historical startup conditions remain unresolved
+and original budgets unchanged. Full failures/source hashes in manifest. All
+jobs terminal, no heavy job live. PCTX01 remains incomplete0/10.

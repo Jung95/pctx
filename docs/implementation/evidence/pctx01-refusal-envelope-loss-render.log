@@ -1,0 +1,24 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.23s
+     Running unittests src/main.rs (target/debug/deps/pctx-5861ab217462b7f0)
+
+running 1 test
+test finite_route_tests::renderer_refusal_keeps_typed_error_and_incomplete_coverage ... FAILED
+
+failures:
+
+---- finite_route_tests::renderer_refusal_keeps_typed_error_and_incomplete_coverage stdout ----
+
+thread 'finite_route_tests::renderer_refusal_keeps_typed_error_and_incomplete_coverage' (8937807) panicked at src/main.rs:1310:13:
+assertion `left == right` failed
+  left: Object {"reasons": Array [], "status": String("complete")}
+ right: Object {"reasons": Array [String("INVALID_ARGUMENT")], "status": String("partial")}
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    finite_route_tests::renderer_refusal_keeps_typed_error_and_incomplete_coverage
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 5 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--bin pctx`

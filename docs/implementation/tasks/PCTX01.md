@@ -516,3 +516,17 @@ historical groups unchanged. PCTX01 remains implementing; no next official task.
 Final native full32591 terminal101: 560 PASS / 4 FAIL. All four historical
 startup conditions fail at unchanged budgets; failure names/source hashes in
 the manifest. All jobs terminal, no heavy job live. PCTX01 remains incomplete0/10.
+
+
+## PCTX01 refusal envelope consistency — 2026-10-09
+
+G02/G04/G05 local refusal-envelope proof now covers frozen140-leaf unknown-option
+transport and C004 required flags/producer errors/destination boundaries:
+evidence/pctx01-refusal-envelope-verification.json. This does not qualify all
+remaining flags/types/representations/byte budgets/native platforms. Whole0/10,
+140 leaves and historical12 groups unchanged. PCTX01 remains implementing.
+
+Final native full51862 terminal101:566PASS3FAIL. Captured-command-path passed
+without startup repair; all four historical startup conditions remain unresolved
+and original budgets unchanged. Full failures/source hashes in manifest. All
+jobs terminal, no heavy job live. PCTX01 remains incomplete0/10.

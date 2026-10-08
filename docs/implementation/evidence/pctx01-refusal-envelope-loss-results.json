@@ -1,0 +1,46 @@
+{
+  "results": [
+    {
+      "guard": "parser",
+      "exit": 101,
+      "passed": 0,
+      "failed": 1,
+      "log": "pctx01-refusal-envelope-loss-parser.log"
+    },
+    {
+      "guard": "admission",
+      "exit": 101,
+      "passed": 0,
+      "failed": 1,
+      "log": "pctx01-refusal-envelope-loss-admission.log"
+    },
+    {
+      "guard": "render",
+      "exit": 101,
+      "passed": 0,
+      "failed": 1,
+      "log": "pctx01-refusal-envelope-loss-render.log"
+    },
+    {
+      "guard": "minimum-data",
+      "exit": 101,
+      "passed": 0,
+      "failed": 1,
+      "log": "pctx01-refusal-envelope-loss-minimum-data.log"
+    }
+  ],
+  "exact_restoration": true,
+  "initial_driver": {
+    "session": 28929,
+    "exit": 1,
+    "inconclusive_probe": "pctx01-refusal-envelope-loss-prelaunch-data.log",
+    "passed": 1,
+    "failed": 0,
+    "reason": "Run facade reconstructs prelaunch evidence after envelope generation; this probe does not detect helper-data omission. It is not sensitivity evidence. Minimum-budget metadata probe above detects actual data loss."
+  },
+  "source_sha256": {
+    "src/domain.rs": "26506941f9bfe294e782c3a45ba632d7c9198e649a133d5214df992c3063e3ba",
+    "src/main.rs": "170a5c9b5f82577c62f3c6b8f0c9786e503ebbfced7f8865f4a3c550aa3cb56b",
+    "tests/cli_refusal_envelope.rs": "84f8cb8c182f2d548a57d1886cd2fe3335e4506c66092b456097ee8b47f26fd8"
+  }
+}

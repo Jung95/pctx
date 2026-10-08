@@ -1,0 +1,43 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.03s
+     Running tests/cli_refusal_envelope.rs (target/debug/deps/cli_refusal_envelope-e0fa1efd013109e3)
+
+running 4 tests
+test admitted_install_failures_keep_state_classification_and_response_destination ... ok
+test all_visible_leaf_unknown_options_refuse_before_project_and_output ... FAILED
+test install_required_and_duplicate_options_keep_parser_envelope_and_no_effects ... FAILED
+test semantic_and_representation_refusals_do_not_claim_completed_execution ... FAILED
+
+failures:
+
+---- all_visible_leaf_unknown_options_refuse_before_project_and_output stdout ----
+
+thread 'all_visible_leaf_unknown_options_refuse_before_project_and_output' (8930108) panicked at tests/cli_refusal_envelope.rs:85:5:
+assertion `left == right` failed
+  left: Object {"reasons": Array [], "status": String("complete")}
+ right: Object {"reasons": Array [String("INVALID_ARGUMENT")], "status": String("partial")}
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- install_required_and_duplicate_options_keep_parser_envelope_and_no_effects stdout ----
+
+thread 'install_required_and_duplicate_options_keep_parser_envelope_and_no_effects' (8930110) panicked at tests/cli_refusal_envelope.rs:85:5:
+assertion `left == right` failed
+  left: Object {"reasons": Array [], "status": String("complete")}
+ right: Object {"reasons": Array [String("INVALID_ARGUMENT")], "status": String("partial")}
+
+---- semantic_and_representation_refusals_do_not_claim_completed_execution stdout ----
+
+thread 'semantic_and_representation_refusals_do_not_claim_completed_execution' (8930112) panicked at tests/cli_refusal_envelope.rs:85:5:
+assertion `left == right` failed
+  left: Object {"reasons": Array [], "status": String("complete")}
+ right: Object {"reasons": Array [String("PLAN_MISMATCH")], "status": String("partial")}
+
+
+failures:
+    all_visible_leaf_unknown_options_refuse_before_project_and_output
+    install_required_and_duplicate_options_keep_parser_envelope_and_no_effects
+    semantic_and_representation_refusals_do_not_claim_completed_execution
+
+test result: FAILED. 1 passed; 3 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.14s
+
+error: test failed, to rerun pass `--test cli_refusal_envelope`

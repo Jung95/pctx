@@ -1,0 +1,12 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.52s
+     Running tests/cli_refusal_envelope.rs (target/debug/deps/cli_refusal_envelope-e0fa1efd013109e3)
+
+running 4 tests
+test semantic_and_representation_refusals_do_not_claim_completed_execution ... ok
+test install_required_and_duplicate_options_keep_parser_envelope_and_no_effects ... ok
+test admitted_install_failures_keep_state_classification_and_response_destination ... ok
+test all_visible_leaf_unknown_options_refuse_before_project_and_output ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.44s
+

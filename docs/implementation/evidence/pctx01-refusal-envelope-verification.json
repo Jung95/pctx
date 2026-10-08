@@ -1,0 +1,203 @@
+{
+  "official_task": "PCTX01",
+  "gates": [
+    "PCTX01-G02",
+    "PCTX01-G04",
+    "PCTX01-G05"
+  ],
+  "baseline_sections": [
+    "\u00a78 coverage and envelope",
+    "\u00a714 CLI parser/format/exit",
+    "\u00a721 PCTX01"
+  ],
+  "base_revision": "3ca728ef41a5ca0a763db174971be38d8cf40900",
+  "source_sha256": {
+    "src/domain.rs": "26506941f9bfe294e782c3a45ba632d7c9198e649a133d5214df992c3063e3ba",
+    "src/main.rs": "170a5c9b5f82577c62f3c6b8f0c9786e503ebbfced7f8865f4a3c550aa3cb56b",
+    "tests/cli_refusal_envelope.rs": "a4be729788101a2d31248c4a495a7433feeb41360a086e5392d51d1cb1e8466d"
+  },
+  "platform": "native macOS arm64",
+  "contract": "Refused execution has status=error, coverage=partial with original code reason; typed exit/data/identity/retryable/timestamp/clock and representation/delivery rules preserved. Five CLI consumers share domain::error_envelope; success/partial/native stream contracts unchanged.",
+  "initial_generation": {
+    "result": "Python string-literal UnicodeSyntaxError; test file not written. Subsequent Cargo absent-target selection ran no tests.",
+    "selection_log": "pctx01-refusal-envelope-initial-selection.log",
+    "exit": 101,
+    "tests_run": 0
+  },
+  "baseline": {
+    "session": 49432,
+    "exit": 101,
+    "passed": 1,
+    "failed": 3,
+    "log": "pctx01-refusal-envelope-baseline.log",
+    "observation": "parser/required-option/semantic refusal coverage complete instead of partial; admitted state error path already correct"
+  },
+  "related": {
+    "session": 58268,
+    "exit": 0,
+    "passed": 66,
+    "failed": 0,
+    "log": "pctx01-refusal-envelope-related.log",
+    "scope": "adapter errors/install preflight, CLI contract/frontend/child-outcome and initial refusal matrix"
+  },
+  "final_native_target": {
+    "session": 79953,
+    "exit": 0,
+    "passed": 4,
+    "failed": 0,
+    "log": "pctx01-refusal-envelope-target-final.log",
+    "source_note": "Equivalent find-helper collapsible-if style fix follows; final full runs final source."
+  },
+  "renderer": {
+    "session": 79962,
+    "exit": 0,
+    "passed": 1,
+    "failed": 0,
+    "log": "pctx01-refusal-envelope-render.log",
+    "scope": "actual encoded Markdown refusal, no-clock input2 and same original expired clock TIMEOUT7; unit boundary, not naturally triggered CLI fallback"
+  },
+  "native_matrix": {
+    "attempts": 618,
+    "unknown_options": {
+      "leaves": 140,
+      "combinations": 560,
+      "json_envelopes": 280,
+      "compact_stderr_refusals": 280,
+      "dimensions": "frozen visible leaf \u00d7 JSON/compact \u00d7 absent/existing response; missing root/data remain absent"
+    },
+    "C004_parser": {
+      "forms": 8,
+      "combinations": 16,
+      "dimensions": "missing/initialized root; absent required flag/value, duplicate provided flags, unsupported epoch; existing response bytes unchanged"
+    },
+    "C004_semantic_representation": {
+      "combinations": 6,
+      "dimensions": "missing/initialized \u00d7 JSON/compact/Markdown; semantic PLAN_MISMATCH2 or unsupported Markdown INVALID_ARGUMENT2; snapshots unchanged"
+    },
+    "C004_admitted_state": {
+      "producer_cases": 6,
+      "combinations": 36,
+      "delivered_error_envelopes": 24,
+      "existing_file_publication_refusals": 12,
+      "classes": {
+        "policy": 5,
+        "changed_plan_bytes": 4,
+        "unsupported_saved_schema": 2,
+        "workspace_binding": 9,
+        "config_stale": 4,
+        "missing_plan": 7
+      },
+      "dimensions": "JSON/compact \u00d7 stdout/absent response/existing response; pre-created lock/full root-data byte snapshot. Existing response returns publication9 with empty stdout, REVISION_CONFLICT stderr and original bytes unchanged."
+    }
+  },
+  "controlled_loss": {
+    "results": [
+      {
+        "guard": "parser",
+        "exit": 101,
+        "passed": 0,
+        "failed": 1,
+        "log": "pctx01-refusal-envelope-loss-parser.log"
+      },
+      {
+        "guard": "admission",
+        "exit": 101,
+        "passed": 0,
+        "failed": 1,
+        "log": "pctx01-refusal-envelope-loss-admission.log"
+      },
+      {
+        "guard": "render",
+        "exit": 101,
+        "passed": 0,
+        "failed": 1,
+        "log": "pctx01-refusal-envelope-loss-render.log"
+      },
+      {
+        "guard": "minimum-data",
+        "exit": 101,
+        "passed": 0,
+        "failed": 1,
+        "log": "pctx01-refusal-envelope-loss-minimum-data.log"
+      }
+    ],
+    "exact_restoration": true,
+    "initial_driver": {
+      "session": 28929,
+      "exit": 1,
+      "inconclusive_probe": "pctx01-refusal-envelope-loss-prelaunch-data.log",
+      "passed": 1,
+      "failed": 0,
+      "reason": "Run facade reconstructs prelaunch evidence after envelope generation; this probe does not detect helper-data omission. It is not sensitivity evidence. Minimum-budget metadata probe above detects actual data loss."
+    },
+    "source_sha256": {
+      "src/domain.rs": "26506941f9bfe294e782c3a45ba632d7c9198e649a133d5214df992c3063e3ba",
+      "src/main.rs": "170a5c9b5f82577c62f3c6b8f0c9786e503ebbfced7f8865f4a3c550aa3cb56b",
+      "tests/cli_refusal_envelope.rs": "84f8cb8c182f2d548a57d1886cd2fe3335e4506c66092b456097ee8b47f26fd8"
+    }
+  },
+  "static_initial": {
+    "session": 76155,
+    "exit": 101,
+    "log": "pctx01-refusal-envelope-static.log",
+    "reason": "collapsible_if in recursive fixture plan lookup; equivalent style repair, no criterion change"
+  },
+  "static": {
+    "session": 70037,
+    "exit": 0,
+    "format_log": "pctx01-refusal-envelope-format-final.log",
+    "clippy_log": "pctx01-refusal-envelope-static-final.log",
+    "commands": [
+      "cargo fmt --all -- --check",
+      "cargo clippy --locked --all-targets -- -D warnings"
+    ]
+  },
+  "full": {
+    "session": 51862,
+    "status": "terminal",
+    "log": "pctx01-refusal-envelope-full-macos.log",
+    "command": "cargo test --locked --all-targets --no-fail-fast",
+    "exit": 101,
+    "passed": 566,
+    "failed": 3,
+    "failed_tests": [
+      "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+      "simultaneous_streams_are_collected_and_overflow_never_infers_success",
+      "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget"
+    ],
+    "incidental_pass": "query_program_resolution_uses_captured_command_path passed without startup repair; all four historical conditions remain unresolved."
+  },
+  "independent_review": {
+    "agent": "/root/work_control",
+    "mode": "read-only",
+    "result": "no scoped blocker; exact contracts/data/exit/clock retained; final producer/destination counts correct"
+  },
+  "status": {
+    "whole_gates_closed": 0,
+    "whole_gates_total": 10,
+    "visible_leaves": 140,
+    "historical_bounded_local_groups": "12/12",
+    "historical_required_platform_groups": "0/12",
+    "next_official_task": null
+  },
+  "limits": [
+    "Required flags/typed values for remaining leaves and complete representation/byte-budget/phase matrices remain",
+    "No native Linux/Windows qualification; no Actions",
+    "Four historical macOS startup conditions unresolved; no retry/budget weakening",
+    "JSON parser errors structured; compact parser errors intentionally plain stderr",
+    "Precreated lock/state snapshots are not first-use rollback",
+    "Successful upper/mixed stored-plan install not claimed",
+    "Native streaming hooks/watch use their existing separate record contract"
+  ],
+  "integration_date": "2026-10-09",
+  "next_local_boundary": {
+    "id": "PCTX01-G03-C001",
+    "contract": "Reuse existing since>=0 cursor predicate before CLI discovery and both Work/Watch entries, preserving Work supplied expiry-first and original clocks/stream representation priority. No new clock/default for follow.",
+    "source_evidence": [
+      "src/main.rs Activity i64 since_seq and no preflight arm; ordinary execute/stream discover/open first",
+      "src/work.rs activity request_phase then activity_inner since<0 guard before DB",
+      "src/watch.rs run since<0 guard before stdout; entry supplied-expiry handling unqualified"
+    ],
+    "independent_review": "/root/work_control confirmed missing admission and exact Work/Watch clock/stream boundaries; no edits/tests"
+  }
+}

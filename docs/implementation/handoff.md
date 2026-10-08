@@ -6,27 +6,31 @@
 
 ## Latest integration boundary
 
-PCTX01-G03-C004 existing Install pure hash admission, base
-0ce593bd0f57271be98f7c22d33ed141772b4885. Runtime revision
-cdc3c6c7cf18de6d87cfd30dbd932d00fc46b96a, normally pushed to origin/main by98209
-terminal0 (0ce593b..cdc3c6c), [skip ci]. Shared exact64 ASCII hex and byte-equality predicate precedes
-CLI discovery and direct authority/lock; upper/mixed case accepted unchanged.
-Original expiry first; saved bytes/schema/identity/config/owner checks retained.
-Files: src/adapter.rs, tests/adapter_install_preflight.rs, strengthened
-tests/adapter_errors.rs, valid-hash held-lock fixture tests/adapter_deadline.rs.
-Baseline97591 terminal101:1PASS4FAIL. Initial target selection101 ran no tests;
-related4408 terminal101 retains invalid-hash contention fixture failure. Fixture
-now reaches held-lock path with same50ms deadline/no config/DB effects.
-Repaired related83436 terminal0:38PASS; loss28056 terminal0:three individual
-0PASS1FAIL/exact restoration; static64074 terminal0/formatPASS. Independent
-/root/work_control read-only review no scoped blocker/no criterion weakening.
-Final full32591 terminal101:560PASS4FAIL, all four historical startup tests
-failed with original budgets. All jobs terminal; no heavy job live.
-Manifest evidence/pctx01-install-admission-verification.json; exact source hashes
-and all failed observations retained. Uppercase success is pure grammar proof,
-not actual saved-plan installation. Native Linux/Windows remain unverified.
-Whole gates0/10; visible leaves140 and historical label groups12/12/platform0/12
-unchanged. PCTX01 is the only active official task. No Actions/next official task.
+PCTX01-G02/G04/G05 refusal-envelope consistency, base
+3ca728ef41a5ca0a763db174971be38d8cf40900. Runtime revision follows the development
+commit. src/domain.rs shares error status/partial coverage/code reason; src/main.rs
+five consumers keep original data/error/exits/clock/routing. tests/
+cli_refusal_envelope.rs verifies618 native refusal attempts:560 frozen140-leaf
+unknown-option cases (280 JSON/280 compact stderr),16 C004 required/duplicate
+flags,6 semantic/representation and36 admitted state/destination attempts.
+24 producer error envelopes delivered/12 existing-file publication9 refusals;
+precreated lock/full root-data bytes, not first-use rollback.
+Initial Python generation syntax/absent target101 ran no tests, log retained.
+Baseline49432 terminal101:1PASS3FAIL; related58268 terminal0:66PASS.
+Renderer79962 terminal0:1PASS includes no clock input2/original expired TIMEOUT7.
+Expanded target79953 terminal0:4PASS. Loss28929 terminal1:three actual coverage
+failures/restoration plus inconclusive passing Run data-loss probe (facade
+reconstruction), not sensitivity proof. Repaired selection34833 terminal0:
+actual minimum-metadata loss failure/restoration. Static76155 terminal101 fixture
+collapsible-if style, equivalent fix; final70037 terminal0/formatPASS.
+Independent /root/work_control read-only review no scoped blocker; counts/routing
+confirmed. Final full51862 terminal101:566PASS3FAIL: relative resolution,
+simultaneous streams and concurrent startup fail at original budgets.
+Captured-command-path passes incidentally, no repair. All four historical
+startup conditions unresolved; Linux/Windows unverified. All jobs terminal,
+no heavy job live. Manifest evidence/pctx01-refusal-envelope-verification.json.
+Whole0/10,140 visible leaves and historical local12/12/platform0/12 unchanged.
+Only PCTX01 active; no Actions/next official task.
 
 ## Source, evidence and environment
 
@@ -74,21 +78,26 @@ Original ignored specification SHA256 8914faad57432f524aec0a06aa90c43c18c23f8c19
 
 ## Exact next action
 
-Remain on PCTX01. C004 pure Install predicate is locally integrated, not whole
-leaf/task completion. Next same-task G02/G04 action: verify C004 required flags
-and malformed/duplicate CLI options plus complete JSON/compact refusal envelopes
-for input2, policy5, saved bytes4 and storage7/state9, distinguishing preflight
-no-output effects from valid admitted requests. Reuse exact existing contracts,
-not new adapter features or grammars. Frozen140-leaf/10-gate/12-group denominators
-remain; no next official task.
+Remain on PCTX01. Next G03-C001 Activity: reuse its existing nonnegative i64
+cursor predicate before CLI project discovery and both Work/Watch entries.
+Current work::activity wraps original request_phase then rejects before DB;
+watch::run rejects before stdout but has no entry supplied-expiry check.
+Frontend normal/stream discovery precedes both. Independent read-only source
+audit confirms this existing-leaf admission gap; fixed140/12/10 denominators
+unchanged. Implement no new streaming feature or cursor grammar. Preserve Work
+original expiry first, finite non-follow one10s scope, follow no default query
+clock/explicit query timeout refusal, representation/stream-output priority.
+Prove negative/zero/i64-max, direct original-expired negative, missing/initialized
+snapshots and JSON/compact/NDJSON/follow paths. Never block on valid follow during
+tests; own child cleanup and existing delivery helpers as applicable.
 
-Four original startup tests remain unresolved; do not retry to promote a pass or
-weaken original1000ms/stream/group checks. G09 requires native Linux and Windows
-current-source all-target tests plus required CLI input/transport matrix, complete
-logs/source/environment IDs. Those environments are unavailable here. Provision
-native runners with the existing workflows or supply native execution evidence;
-Actions remain undispatched under monthly3000-minute constraint. External
-blockers do not authorize switching official tasks. Local matrix work remains.
+Four original startup tests remain unresolved; no retry-green or original1000ms/
+stream/group weakening. G09 needs native Linux and Windows current-source
+all-target tests plus required CLI input/transport matrix with source/environment
+IDs and complete logs. Native environments are unavailable here; provision native
+runners or supply real execution evidence. Actions remain undispatched under the
+monthly3000-minute constraint. External blockers do not authorize switching
+official tasks; current local gates remain.
 
 ## Retained historical results and inactive backlog
 

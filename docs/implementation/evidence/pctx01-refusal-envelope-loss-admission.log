@@ -1,0 +1,23 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.05s
+     Running tests/cli_refusal_envelope.rs (target/debug/deps/cli_refusal_envelope-e0fa1efd013109e3)
+
+running 1 test
+test semantic_and_representation_refusals_do_not_claim_completed_execution ... FAILED
+
+failures:
+
+---- semantic_and_representation_refusals_do_not_claim_completed_execution stdout ----
+
+thread 'semantic_and_representation_refusals_do_not_claim_completed_execution' (8937503) panicked at tests/cli_refusal_envelope.rs:90:5:
+assertion `left == right` failed
+  left: Object {"reasons": Array [], "status": String("complete")}
+ right: Object {"reasons": Array [String("PLAN_MISMATCH")], "status": String("partial")}
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    semantic_and_representation_refusals_do_not_claim_completed_execution
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 3 filtered out; finished in 0.60s
+
+error: test failed, to rerun pass `--test cli_refusal_envelope`

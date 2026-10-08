@@ -85,3 +85,18 @@ pub struct FileEntry {
 pub fn envelope(command: &str, project: Option<&crate::project::Project>, data: Value) -> Value {
     json!({"schema_version":"1.0","command":command,"status":"ok","project_id":project.map(|p| &p.project_id),"workspace_id":project.map(|p| &p.workspace_id),"generation_id":null,"validation":{"mode":"matched","scope":[],"checked_at":chrono::Utc::now().to_rfc3339_opts(chrono::SecondsFormat::Millis, true),"workspace_atomic":false},"coverage":{"status":"complete","reasons":[]},"data":data,"truncation":{"truncated":false,"reasons":[]},"warnings":[],"errors":[]})
 }
+
+/// A refused request did not complete its requested execution. Keep its typed
+/// error and any independently attested data while reporting incomplete coverage.
+pub fn error_envelope(
+    command: &str,
+    project: Option<&crate::project::Project>,
+    data: Value,
+    error: Error,
+) -> Value {
+    let mut response = envelope(command, project, data);
+    response["status"] = json!("error");
+    response["coverage"] = json!({"status":"partial","reasons":[error.code.clone()]});
+    response["errors"] = json!([error]);
+    response
+}

@@ -348,9 +348,7 @@ fn encoded(
         Err(error) => {
             let error = request_error(deadline, error);
             *exit = error.exit;
-            *value = domain::envelope("render", None, Value::Null);
-            value["status"] = json!("error");
-            value["errors"] = json!([error]);
+            *value = domain::error_envelope("render", None, Value::Null, error);
             let mut bytes = value.to_string().into_bytes();
             bytes.push(b'\n');
             bytes
@@ -739,11 +737,7 @@ fn minimum_budget_error(command: &str, minimum: usize) -> Value {
         data = json!({});
     }
     data["minimum_budget_bytes"] = json!(minimum);
-    let mut response = domain::envelope(command, None, data);
-    response["status"] = json!("error");
-    response["coverage"] = json!({"status":"partial","reasons":["INVALID_ARGUMENT"]});
-    response["errors"] = json!([error]);
-    response
+    domain::error_envelope(command, None, data, error)
 }
 fn minimum_error_budget(command: &str) -> Result<usize> {
     let mut minimum = 0;
@@ -794,9 +788,8 @@ fn validate_representation(cli: &Cli) -> Result<()> {
 // through the same terminal-safe serializer as ordinary command responses.
 fn refuse_arguments(command: &str, error: Error, limit: Option<usize>) -> ! {
     let mut exit = error.exit;
-    let mut response = domain::envelope(command, None, prelaunch_data(command, &error));
-    response["status"] = json!("error");
-    response["errors"] = json!([error]);
+    let mut response =
+        domain::error_envelope(command, None, prelaunch_data(command, &error), error);
     let mut bytes = encoded(&mut response, &Format::Json, &mut exit, None);
     if let Some(limit) = limit
         && bytes.len() > limit
@@ -850,9 +843,7 @@ fn main() {
                     "Invalid command or option; see pctx --help",
                     2,
                 );
-                let mut out = domain::envelope("arguments", None, Value::Null);
-                out["status"] = json!("error");
-                out["errors"] = json!([err]);
+                let mut out = domain::error_envelope("arguments", None, Value::Null, err);
                 let mut exit = 2;
                 let bytes = encoded(&mut out, &Format::Json, &mut exit, None);
                 use std::io::Write;
@@ -1066,10 +1057,7 @@ fn main() {
             // Run's producer facade retains every post-spawn failure as data.
             // An outer execute error therefore attests failure before dispatch.
             let data = prelaunch_data(cli.command.name(), &e);
-            let mut out = domain::envelope(cli.command.name(), None, data);
-            out["status"] = json!("error");
-            out["coverage"] = json!({"status":"partial","reasons":[e.code.clone()]});
-            out["errors"] = json!([e]);
+            let out = domain::error_envelope(cli.command.name(), None, data, e);
             (out, exit)
         }
     };
@@ -1304,6 +1292,35 @@ fn main() {
 #[cfg(test)]
 mod finite_route_tests {
     use super::*;
+    #[test]
+    fn renderer_refusal_keeps_typed_error_and_incomplete_coverage() {
+        let original = std::time::Instant::now() - std::time::Duration::from_secs(1);
+        for deadline in [None, Some(pctx::deadline::Deadline::from_instant(original))] {
+            let mut response = domain::envelope("adapter", None, Value::Null);
+            let mut exit = 0;
+            let bytes = encoded(&mut response, &Format::Markdown, &mut exit, deadline);
+            let decoded: Value = serde_json::from_slice(&bytes).unwrap();
+            let (code, expected_exit) = if deadline.is_some() {
+                ("TIMEOUT", 7)
+            } else {
+                ("INVALID_ARGUMENT", 2)
+            };
+            assert_eq!(exit, expected_exit);
+            assert_eq!(decoded["status"], "error");
+            assert_eq!(
+                decoded["coverage"],
+                json!({"status":"partial","reasons":[code]})
+            );
+            assert_eq!(decoded["errors"][0]["code"], code);
+            assert!(decoded["data"].is_null());
+            assert_eq!(decoded, response);
+            assert!(bytes.ends_with(b"\n"));
+            if let Some(deadline) = deadline {
+                assert_eq!(deadline.instant(), original);
+            }
+        }
+    }
+
     #[test]
     fn finite_work_quota_adapter_reads_do_not_time_execution() {
         for values in [

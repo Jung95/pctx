@@ -1,0 +1,22 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.80s
+     Running tests/cli_contract.rs (target/debug/deps/cli_contract-7fe808194ea4872f)
+
+running 1 test
+test minimum_error_budget_boundary_is_argument_validation_before_project_access ... FAILED
+
+failures:
+
+---- minimum_error_budget_boundary_is_argument_validation_before_project_access stdout ----
+
+thread 'minimum_error_budget_boundary_is_argument_validation_before_project_access' (8939634) panicked at tests/cli_contract.rs:443:66:
+called `Option::unwrap()` on a `None` value
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    minimum_error_budget_boundary_is_argument_validation_before_project_access
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 13 filtered out; finished in 0.73s
+
+error: test failed, to rerun pass `--test cli_contract`
