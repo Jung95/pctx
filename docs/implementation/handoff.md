@@ -6,7 +6,7 @@
 
 ## Source, evidence and environment
 
-Base0c5b6a0f47b680ee5a5843003b702246dabedb2e; auxiliary runtime commit is bound in evidence/pctx01-auxiliary-deadline-verification.json after integration. Native full35833 terminal101:386 PASS/3 original startup FAIL across46 suites. Auxiliarytargeted1 PASS, format/locked all-target Clippy PASS; independent scoped review no blocker. No live heavy job or CI. Confirm Git/process state on resume.
+Base0c5b6a0f47b680ee5a5843003b702246dabedb2e; auxiliary runtime855dd70f11223daa64ca67ebc3b0d935f44dc55a. Native full35833 terminal101:386 PASS/3 original startup FAIL across46 suites. Auxiliarytargeted1 PASS, format/locked all-target Clippy PASS; independent scoped review no blocker. No live heavy job or CI. Confirm Git/process state on resume.
 
 Opened auxiliary source reads retain original1s budget: succeeds before expiry, changed source refused TIMEOUT/exit7 after expiry, no DB effects. Isolated child uses inert linked metadata/private registry and config; parent timeout10s. Original-loss mutation makes regression fail with returned post-expiry source; exact source restored. Real CLI linked-Git-worktree positive fixture stays separate. This closes opened-target source propagation proof, NOT expiry during discovery/hash. Logs/mutation driver retained.
 
