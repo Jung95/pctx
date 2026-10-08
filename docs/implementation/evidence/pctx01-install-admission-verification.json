@@ -126,5 +126,14 @@
     "Uppercase/mixed acceptance is pure validation proof, not successful stored-plan installation",
     "No live Claude/global settings or OS registration; isolated fixture publication only",
     "Remaining full error-envelope/budget/representation/phase matrices mandatory"
-  ]
+  ],
+  "runtime_revision": "cdc3c6c7cf18de6d87cfd30dbd932d00fc46b96a",
+  "publication": {
+    "session": 98209,
+    "exit": 0,
+    "remote": "https://github.com/Jung95/pctx.git",
+    "branch": "main",
+    "range": "0ce593b..cdc3c6c",
+    "actions_dispatched": false
+  }
 }

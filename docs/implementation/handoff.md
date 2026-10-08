@@ -7,8 +7,9 @@
 ## Latest integration boundary
 
 PCTX01-G03-C004 existing Install pure hash admission, base
-0ce593bd0f57271be98f7c22d33ed141772b4885. Runtime revision follows the development
-commit below. Shared exact64 ASCII hex and byte-equality predicate precedes
+0ce593bd0f57271be98f7c22d33ed141772b4885. Runtime revision
+cdc3c6c7cf18de6d87cfd30dbd932d00fc46b96a, normally pushed to origin/main by98209
+terminal0 (0ce593b..cdc3c6c), [skip ci]. Shared exact64 ASCII hex and byte-equality predicate precedes
 CLI discovery and direct authority/lock; upper/mixed case accepted unchanged.
 Original expiry first; saved bytes/schema/identity/config/owner checks retained.
 Files: src/adapter.rs, tests/adapter_install_preflight.rs, strengthened

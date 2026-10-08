@@ -936,3 +936,7 @@ publication status are in current handoff; no Actions/next official task.
 Final native full32591 terminal101: 560 PASS / 4 FAIL. All four historical
 startup conditions fail at unchanged budgets; failure names/source hashes in
 the manifest. All jobs terminal, no heavy job live. PCTX01 remains incomplete0/10.
+
+Runtimecdc3c6c7cf18de6d87cfd30dbd932d00fc46b96a normally published to origin/main by98209
+terminal0 (0ce593b..cdc3c6c), [skip ci]. All jobs terminal, no Actions.
+PCTX01 only; next local G02/G04 C004 refusal/option matrix, no next official task.
