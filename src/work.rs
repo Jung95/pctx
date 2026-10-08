@@ -1674,6 +1674,9 @@ fn control_command(project: &Project, command: &ControlCommand) -> Result<Value>
                     "adapter_receipts",
                     "adapter_capsules",
                     "adapter_installs",
+                    "ops_policy_schema",
+                    "ops_restrictions",
+                    "ops_reporting_exceptions",
                 ];
                 let mut q = db.prepare("SELECT name FROM sqlite_master WHERE type='table'")?;
                 let names = q
@@ -1731,6 +1734,29 @@ fn control_command(project: &Project, command: &ControlCommand) -> Result<Value>
                         "Incomplete operations schema in backup",
                         2,
                     ));
+                }
+                let policy_tables = [
+                    "ops_policy_schema",
+                    "ops_restrictions",
+                    "ops_reporting_exceptions",
+                ];
+                if policy_tables.iter().any(|n| names.iter().any(|v| v == n)) {
+                    if !has_ops || !policy_tables.iter().all(|n| names.iter().any(|v| v == n)) {
+                        return Err(Error::new(
+                            "INVALID_ARCHIVE",
+                            "Incomplete policy ownership schema",
+                            2,
+                        ));
+                    }
+                    let version: i64 =
+                        db.query_row("SELECT version FROM ops_policy_schema", [], |r| r.get(0))?;
+                    if version != 1 {
+                        return Err(Error::new(
+                            "INVALID_ARCHIVE",
+                            "Unsupported policy ownership schema",
+                            2,
+                        ));
+                    }
                 }
                 let quota_tables = &tables[24..29];
                 let has_quota = names.iter().any(|name| name == "quota_schema");
@@ -1796,7 +1822,7 @@ fn control_command(project: &Project, command: &ControlCommand) -> Result<Value>
                         ));
                     }
                 }
-                let adapter_tables = &tables[37..];
+                let adapter_tables = &tables[37..42];
                 let has_adapter = names.iter().any(|name| name == "adapter_schema");
                 if adapter_tables
                     .iter()
@@ -1846,6 +1872,11 @@ fn control_command(project: &Project, command: &ControlCommand) -> Result<Value>
                 if has_ops {
                     db.execute_batch("UPDATE ops_decisions SET state='expired',expires_at=0,provenance=NULL WHERE state='approved'; DELETE FROM ops_receipts; DELETE FROM ops_message_acks; UPDATE ops_messages SET state='queued' WHERE state IN ('dispatched','delivered','acknowledged'); CREATE TRIGGER ops_events_no_update BEFORE UPDATE ON ops_events BEGIN SELECT RAISE(ABORT,'append-only operations events'); END; CREATE TRIGGER ops_events_no_delete BEFORE DELETE ON ops_events BEGIN SELECT RAISE(ABORT,'append-only operations events'); END;")?;
                     db.execute("INSERT INTO ops_events(entity,kind,actor,payload,created) VALUES(?1,'control_restored','owner',?2,?3)",params![coordination,json!({"grants_invalidated":true,"pause_and_silence_preserved":true,"delivery_receipts_invalidated":true}).to_string(),now()])?;
+                }
+                if names.iter().any(|name| name == "ops_policy_schema") {
+                    db.execute("UPDATE ops_reporting_exceptions SET active=0,revision=revision+1 WHERE active=1", [])?;
+                    db.execute("INSERT INTO ops_events(entity,kind,actor,payload,created) SELECT DISTINCT role,'role_policy_changed','owner',json_object('reporting_exceptions_invalidated',json('true')),?1 FROM ops_reporting_exceptions", [now()])?;
+                    crate::policy_controls::install_triggers(&db)?;
                 }
                 if has_quota {
                     db.execute(

@@ -1,0 +1,32 @@
+    Checking pctx v0.1.0-dev (/Users/dev/PCTX)
+error: writing `&PathBuf` instead of `&Path` involves a new object where a slice will do
+   --> src/operations.rs:291:65
+    |
+291 | fn raw_input<T: serde::de::DeserializeOwned>(p: &Project, path: &PathBuf) -> Result<T> {
+    |                                                                 ^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#ptr_arg
+    = note: `-D clippy::ptr-arg` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::ptr_arg)]`
+help: change this to
+    |
+291 - fn raw_input<T: serde::de::DeserializeOwned>(p: &Project, path: &PathBuf) -> Result<T> {
+291 + fn raw_input<T: serde::de::DeserializeOwned>(p: &Project, path: &Path) -> Result<T> {
+    |
+
+error: writing `&PathBuf` instead of `&Path` involves a new object where a slice will do
+   --> src/operations.rs:294:61
+    |
+294 | fn input<T: serde::de::DeserializeOwned>(p: &Project, path: &PathBuf) -> Result<T> {
+    |                                                             ^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#ptr_arg
+help: change this to
+    |
+294 - fn input<T: serde::de::DeserializeOwned>(p: &Project, path: &PathBuf) -> Result<T> {
+294 + fn input<T: serde::de::DeserializeOwned>(p: &Project, path: &Path) -> Result<T> {
+    |
+
+error: could not compile `pctx` (lib) due to 2 previous errors
+warning: build failed, waiting for other jobs to finish...
+error: could not compile `pctx` (lib test) due to 2 previous errors

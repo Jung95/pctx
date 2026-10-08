@@ -1,0 +1,54 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.09s
+     Running tests/operations.rs (target/debug/deps/operations-530607f06d0857bd)
+
+running 11 tests
+test omitted_action_role_cannot_bypass_registered_actor_pause ... ok
+test owner_queue_honors_specific_recipients_and_owner_destination_without_globalizing_silence ... ok
+test silence_hides_topic_and_body_before_inbox_ranking ... ok
+test owner_queue_filters_oldest_hidden_actions_before_limit_without_disclosing_details ... ok
+test role_pause_blocks_claim_without_mutating_task_or_run ... ok
+test exact_decisions_deduplicate_but_changed_environment_amount_artifact_do_not ... ok
+test mailbox_retry_is_queued_once_and_ack_is_recipient_bound ... ok
+test unknown_cost_pause_and_silence_override_valid_grant ... ok
+test owner_queue_delivery_barriers_survive_control_restore ... ok
+test backup_restore_preserves_pause_silence_and_messages_but_revokes_grants ... ok
+test forged_agent_owner_decision_does_not_generate_grant ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.82s
+
+     Running tests/policy_controls_cli.rs (target/debug/deps/policy_controls_cli-526f5c770024b1b9)
+
+running 4 tests
+test legacy_owner_is_unknown_until_explicit_attestation_and_agent_run_cannot_claim_owner ... FAILED
+test original_owner_only_release_and_stale_revision_never_mutates_policy ... FAILED
+test explicitly_authored_reporting_precedence_scope_and_revocation ... ok
+test reporting_exception_delivers_mailbox_only_and_revocation_blocks_ack ... ok
+
+failures:
+
+---- legacy_owner_is_unknown_until_explicit_attestation_and_agent_run_cannot_claim_owner stdout ----
+
+thread 'legacy_owner_is_unknown_until_explicit_attestation_and_agent_run_cannot_claim_owner' (7743429) panicked at tests/policy_controls_cli.rs:281:5:
+assertion `left == right` failed
+  left: Null
+ right: true
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- original_owner_only_release_and_stale_revision_never_mutates_policy stdout ----
+
+thread 'original_owner_only_release_and_stale_revision_never_mutates_policy' (7743430) panicked at tests/policy_controls_cli.rs:78:5:
+assertion `left == right` failed
+  left: Null
+ right: "alice"
+
+
+failures:
+    legacy_owner_is_unknown_until_explicit_attestation_and_agent_run_cannot_claim_owner
+    original_owner_only_release_and_stale_revision_never_mutates_policy
+
+test result: FAILED. 2 passed; 2 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.26s
+
+error: test failed, to rerun pass `--test policy_controls_cli`
+error: 1 target failed:
+    `--test policy_controls_cli`

@@ -75,3 +75,7 @@ Next: main integration completes dependency acquisition, common contracts/scaffo
 ## D045 integration
 
 Main integrates the task-file boundary and exact-output provenance. work_control owns the bounded pinned-input primitive/direct fixture authoring; requirements independently reviews authority/deadline/alias contracts without edits or test execution. Main runs native CLI/race/static/full verification and commits/pushes development work with no Actions dispatch. Shared reader identity support stays with main. The original-owner reporting-exception/release/priority contract and broader approval/raw-input memory delivery remain subsequent mandatory work, alongside performance/native startup/platform/recovery gates.
+
+## D046 integration
+
+work_control authors the new policy-controls module/schema only; main owns operations/message/deadline and restore integration, tests, public docs and native verification. requirements independently reviews invariants without edits/tests. Follow-ups retain broader automatic source/memory/approval exception qualification, authenticated external owner input, platform/recovery, finite Work/adapter budgets, ranking and native startup/performance gates. No role/report exception slice can complete the full goal.

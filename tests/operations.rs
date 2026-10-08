@@ -407,6 +407,34 @@ fn backup_restore_preserves_pause_silence_and_messages_but_revokes_grants() {
         },
     )
     .unwrap();
+    let restrictions = operations::execute(
+        &p,
+        &Op::Role {
+            command: RoleCommand::List,
+        },
+    )
+    .unwrap()["restrictions"]
+        .clone();
+    let refs = restrictions
+        .as_array()
+        .unwrap()
+        .iter()
+        .map(|r| json!({"id":r["id"],"revision":r["revision"],"precedence":"exception"}))
+        .collect::<Vec<_>>();
+    let report_policy = file(
+        &p,
+        "restore-reporting.json",
+        json!({"schema_version":1,"restriction_refs":refs,"role":"developer","recipient":"owner","topic":"sensitive-topic","source_scope":["code.py"],"payload_hash":pctx::domain::hash("synthetic-authorized-projection"),"category":"security","not_before":pctx::domain::now()-1,"expires_at":pctx::domain::now()+600,"reason":"restore qualification","owner_evidence":"fixture:owner"}),
+    );
+    operations::execute(
+        &p,
+        &Op::Policy {
+            command: PolicyCommand::ExceptionRecord {
+                from_file: report_policy,
+            },
+        },
+    )
+    .unwrap();
     let db = p.connect(true).unwrap();
     db.execute_batch("CREATE TABLE broker_snapshots(key TEXT PRIMARY KEY,value TEXT); INSERT INTO broker_snapshots VALUES('derived','should-not-survive'); CREATE TABLE broker_refresh_jobs(key TEXT PRIMARY KEY); ").unwrap();
     drop(db);
@@ -439,6 +467,51 @@ fn backup_restore_preserves_pause_silence_and_messages_but_revokes_grants() {
     .unwrap();
     assert_eq!(policies["roles"][0]["paused"], true);
     assert_eq!(policies["silences"][0]["active"], true);
+    let policy_db = restored.connect(true).unwrap();
+    let triggers: i64 = policy_db.query_row("SELECT COUNT(*) FROM sqlite_master WHERE type='trigger' AND name IN ('ops_restrictions_identity','ops_restrictions_no_delete','ops_reporting_exceptions_identity','ops_reporting_exceptions_no_delete')", [], |r| r.get(0)).unwrap();
+    assert_eq!(triggers, 4);
+    let restored_exception: (bool, i64) = policy_db
+        .query_row(
+            "SELECT active,revision FROM ops_reporting_exceptions",
+            [],
+            |r| Ok((r.get(0)?, r.get(1)?)),
+        )
+        .unwrap();
+    assert_eq!(restored_exception, (false, 2));
+    assert!(
+        policy_db
+            .execute(
+                "UPDATE ops_reporting_exceptions SET original_owner='other',revision=revision+1",
+                []
+            )
+            .is_err()
+    );
+    assert!(
+        policy_db
+            .execute("DELETE FROM ops_reporting_exceptions", [])
+            .is_err()
+    );
+    assert!(
+        policy_db
+            .execute(
+                "UPDATE ops_restrictions SET original_owner='other',revision=revision+1",
+                []
+            )
+            .is_err()
+    );
+    assert!(
+        policy_db
+            .execute("DELETE FROM ops_restrictions", [])
+            .is_err()
+    );
+    assert!(
+        policies["restrictions"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .all(|r| r["original_owner"] == "owner")
+    );
+    drop(policy_db);
     let decision = operations::execute(
         &restored,
         &Op::Decision {

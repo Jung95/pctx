@@ -1,0 +1,19 @@
+    Checking pctx v0.1.0-dev (/Users/dev/PCTX)
+error: writing `&PathBuf` instead of `&Path` involves a new object where a slice will do
+   --> src/operations.rs:269:34
+    |
+269 | fn input_text(p: &Project, path: &PathBuf) -> Result<String> {
+    |                                  ^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#ptr_arg
+    = note: `-D clippy::ptr-arg` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::ptr_arg)]`
+help: change this to
+    |
+269 - fn input_text(p: &Project, path: &PathBuf) -> Result<String> {
+269 + fn input_text(p: &Project, path: &Path) -> Result<String> {
+    |
+
+error: could not compile `pctx` (lib) due to 1 previous error
+warning: build failed, waiting for other jobs to finish...
+error: could not compile `pctx` (lib test) due to 1 previous error

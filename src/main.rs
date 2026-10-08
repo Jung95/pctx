@@ -372,6 +372,7 @@ fn query_deadline(cli: &Cli) -> Result<Option<pctx::deadline::Deadline>> {
         | Command::Session { .. }
         | Command::Context { .. }
         | Command::Pack { .. }
+        | Command::Operations(_)
         | Command::Handoff {
             command: HandoffCommand::Show { .. },
         }

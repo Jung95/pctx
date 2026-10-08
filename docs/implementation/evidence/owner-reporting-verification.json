@@ -1,0 +1,111 @@
+{
+  "decision": "D046-original-owner-reporting-only-exceptions",
+  "base_commit": "561c20d5297fc466b4207be465584ecb94e6d98a",
+  "platform": "native macOS arm64",
+  "source_sha256": {
+    "src/policy_controls.rs": "e91e7c81a2f9db2c1eaf7b78e81024022e224ed6bfc09f62c7c81eeaa2b4daea",
+    "src/operations.rs": "6f842bffaacef51a06f4d0762a5346d8d29fca2dfd14b33ed699c4161eb131d3",
+    "src/work.rs": "da318a51aa7011f21433f91e27644d92b703b06a788c519b99ed3bdf9ea8bdb4",
+    "src/main.rs": "0bef19514dece84daacbbc1929a0790c155cb5dd0b2d3839eade3c95b452791e",
+    "src/lib.rs": "e636fe455847f82f5962d1ac8ede864f476fdb4cc80c29c58769eb7685036e9a",
+    "src/schedule.rs": "f58a2d30dfe68fffb0a6f5386a1a3bd25979a887c7d7d6eae711a63ba2347f7e",
+    "tests/policy_controls_cli.rs": "9eeb2236db25d99431c62be04cd935acdc1b3b96832c49fb8f505eba1716e690",
+    "tests/operations.rs": "5636e85aa95c56ffe26dfd1f7da81b022fbdf15ecfe8730f0b3d2990df31db0d"
+  },
+  "verification": {
+    "full": {
+      "handle": 28036,
+      "exit": 101,
+      "passed": 358,
+      "failed": 3,
+      "failed_target": "project_deadline",
+      "failures": [
+        "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+        "query_program_resolution_uses_captured_command_path",
+        "simultaneous_streams_are_collected_and_overflow_never_infers_success"
+      ]
+    },
+    "related_final_full_counts": {
+      "policy_controls_cli": 5,
+      "operations": 11,
+      "schedule": 17,
+      "session_render_budget": 13,
+      "total": 46,
+      "failed": 0
+    },
+    "format_exit": 0,
+    "locked_all_target_clippy_exit": 0
+  },
+  "logs": {
+    "full-final": {
+      "path": "docs/implementation/evidence/owner-reporting-full-final.log",
+      "sha256": "58ff74eda0f2501ef4e6f0c9a6828e3b2d7da26c4c8b8214a2b770d5eefa7f7d"
+    },
+    "full-before-pointer-fix": {
+      "path": "docs/implementation/evidence/owner-reporting-full-before-pointer-fix.log",
+      "sha256": "9111b1a8d921c585181f81c3bfb5f139c45f38d2cde787e71c7e1d6f8e880d33"
+    },
+    "initial-cli-fixture-failure": {
+      "path": "docs/implementation/evidence/owner-reporting-initial-cli-fixture-failure.log",
+      "sha256": "323b840add3610811d3bc43a754b583f381b68584660a1c16ddebab687e15400"
+    },
+    "initial-list-shape-failure": {
+      "path": "docs/implementation/evidence/owner-reporting-initial-list-shape-failure.log",
+      "sha256": "810e84d878b3bd5bd189f685c7d9764b25e8e22195590fd695524d37be373c91"
+    },
+    "owner-source-body": {
+      "path": "docs/implementation/evidence/owner-reporting-owner-source-body.log",
+      "sha256": "86255e64850448ba821158fc0dd831bdf8a926333d116a6c9eb6326b1ed6efea"
+    },
+    "full-message-projection": {
+      "path": "docs/implementation/evidence/owner-reporting-full-message-projection.log",
+      "sha256": "a6bb1ba69bc67af07d42b9e2612e0e91f5ff065339931f04f9ea6d74030c668c"
+    },
+    "initial-static-path-type": {
+      "path": "docs/implementation/evidence/owner-reporting-initial-static-path-type.log",
+      "sha256": "bd1ff775249d596e2f70aff61d2e6eeb86c5029fb9137c32afccbbbdcf58416d"
+    },
+    "static-pointer-failure": {
+      "path": "docs/implementation/evidence/owner-reporting-static-pointer-failure.log",
+      "sha256": "d07ecd7cb14117c63357b0c0cc232dfadc454fe695fdd2f0fa73a23aa273bc38"
+    },
+    "static-final": {
+      "path": "docs/implementation/evidence/owner-reporting-static-final.log",
+      "sha256": "bccff6a1675f634da160acab396004a10482783c36fa79716fefa65d6996dd05"
+    },
+    "format": {
+      "path": "docs/implementation/evidence/owner-reporting-format.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "coverage": [
+    "Original owner capture, immutable identity/revision, wrong-owner release/overwrite refusal",
+    "Optimistic stale release rollback; explicit unknown legacy attestation; agent-run evidence cannot become owner",
+    "Authored scope/category/recipient/topic/precedence + complete redacted typed Message projection digest",
+    "Actual mailbox withholding, authorized projection delivery and revoke preventing later acknowledgement",
+    "Metadata/body-hash mismatch and excluded .env path held without disclosure",
+    "Real-time reporting exception expiry does not release role pause",
+    "Actual backup/restore preserves owner/pause/silence and reinstalls four immutable identity/no-delete triggers",
+    "Restore disables active reporting exceptions, advances revisions, denies owner overwrite/deletion"
+  ],
+  "independent_review": {
+    "agent": "requirements",
+    "findings": [
+      "Restore discarded ownership triggers",
+      "Excluded source references bypassed reader policy",
+      "Body-only payload binding omitted free-form delivered metadata"
+    ],
+    "resolution": "Main repaired each and authored native regressions; independent re-review found no new blocker in the final metadata delta",
+    "test_execution": "Main executed verification; reviewers/implementer did not run tests"
+  },
+  "limitations": [
+    "Whole mandatory goal remains active; AC77 and broader automatic source/memory/approval/epoch/platform/recovery matrix not complete",
+    "Native query startup root cause remains unknown; earlier four failures and current three are retained without retry promotion",
+    "Owner principal is a trusted local operator label, not OS authentication or shared GitHub account identity proof",
+    "Reporting source paths are owner-reviewed attribution claims; no source bodies fetched/verified by this route",
+    "Native filesystem checks/deadlines and final check-to-output remain cooperative; native SQLite resource guarantees not qualified",
+    "Build/Context/Pack do not infer reporting category or gain reporting exceptions; claims/wake/schedule/host permissions remain separately enforced"
+  ],
+  "actions_dispatched": 0,
+  "spec_sha256": "8914faad57432f524aec0a06aa90c43c18c23f8c19e9f54fe69d9ad185db6523"
+}

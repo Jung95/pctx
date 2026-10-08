@@ -8,7 +8,7 @@ use clap::Subcommand;
 use rusqlite::{Connection, OptionalExtension, TransactionBehavior, params};
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 #[derive(Debug, Clone, Subcommand)]
 pub enum OperationCommand {
     Role {
@@ -63,6 +63,30 @@ pub enum PolicyCommand {
     Evaluate {
         #[arg(long)]
         action_file: PathBuf,
+    },
+    AttestOwner {
+        #[arg(long)]
+        from_file: PathBuf,
+    },
+    Release {
+        #[arg(long)]
+        from_file: PathBuf,
+    },
+    ExceptionRecord {
+        #[arg(long)]
+        from_file: PathBuf,
+    },
+    ExceptionRevoke {
+        #[arg(long)]
+        from_file: PathBuf,
+    },
+    ReportEvaluate {
+        #[arg(long)]
+        from_file: PathBuf,
+    },
+    ReportFingerprint {
+        #[arg(long)]
+        from_file: PathBuf,
     },
 }
 #[derive(Debug, Clone, Subcommand)]
@@ -191,6 +215,8 @@ pub struct Message {
     pub expires_at: Option<i64>,
     #[serde(default)]
     pub source_revision: Option<i64>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub reporting: Option<Value>,
     pub idempotency_key: String,
 }
 fn invalid(s: &str) -> Error {
@@ -244,17 +270,29 @@ fn sanitize(v: &mut Value) {
         _ => {}
     }
 }
-fn raw_input<T: serde::de::DeserializeOwned>(path: &PathBuf) -> Result<T> {
+fn input_text(p: &Project, path: &Path) -> Result<String> {
+    p.check_deadline()?;
+    let path = path
+        .to_str()
+        .ok_or_else(|| invalid("Operations input path must be UTF-8"))?;
     if std::fs::metadata(path)?.len() > 65536 {
         return Err(invalid("Operations input exceeds 64 KiB"));
     }
-    Ok(serde_json::from_slice(&std::fs::read(path)?)?)
+    let deadline = p
+        .deadline
+        .ok_or_else(|| invalid("Operations input requires request deadline"))?;
+    let text = crate::input::task_document(path, deadline)?;
+    if text.len() > 65536 {
+        return Err(invalid("Operations input exceeds 64 KiB"));
+    }
+    p.check_deadline()?;
+    Ok(text)
 }
-fn input<T: serde::de::DeserializeOwned>(path: &PathBuf) -> Result<T> {
-    if std::fs::metadata(path)?.len() > 65536 {
-        return Err(invalid("Operations input exceeds 64 KiB"));
-    }
-    let mut v: Value = serde_json::from_slice(&std::fs::read(path)?)?;
+fn raw_input<T: serde::de::DeserializeOwned>(p: &Project, path: &Path) -> Result<T> {
+    Ok(serde_json::from_str(&input_text(p, path)?)?)
+}
+fn input<T: serde::de::DeserializeOwned>(p: &Project, path: &Path) -> Result<T> {
+    let mut v: Value = serde_json::from_str(&input_text(p, path)?)?;
     sanitize(&mut v);
     Ok(serde_json::from_value(v)?)
 }
@@ -266,6 +304,9 @@ fn connect(p: &Project) -> Result<Connection> {
         |r| r.get(0),
     )?;
     if exists {
+        let tx = db.transaction_with_behavior(TransactionBehavior::Immediate)?;
+        crate::policy_controls::ensure_schema(p, &tx)?;
+        tx.commit()?;
         return Ok(db);
     }
     let tx = db.transaction_with_behavior(TransactionBehavior::Immediate)?;
@@ -279,6 +320,7 @@ CREATE TABLE IF NOT EXISTS ops_receipts(actor TEXT NOT NULL,key TEXT NOT NULL,re
 CREATE TABLE IF NOT EXISTS ops_events(seq INTEGER PRIMARY KEY AUTOINCREMENT,entity TEXT NOT NULL,kind TEXT NOT NULL,actor TEXT NOT NULL,payload TEXT NOT NULL,created INTEGER NOT NULL);
 CREATE TRIGGER IF NOT EXISTS ops_events_no_update BEFORE UPDATE ON ops_events BEGIN SELECT RAISE(ABORT,'append-only operations events'); END;
 CREATE TRIGGER IF NOT EXISTS ops_events_no_delete BEFORE DELETE ON ops_events BEGIN SELECT RAISE(ABORT,'append-only operations events'); END;")?;
+    crate::policy_controls::ensure_schema(p, &tx)?;
     tx.commit()?;
     Ok(db)
 }
@@ -842,7 +884,94 @@ fn decision_view(db: &Connection, decision: &str) -> Result<Value> {
         json!({"decision_id":decision,"action":serde_json::from_str::<Value>(&action)?,"state":if state=="approved"&&expires.is_none_or(|n|n<=now()){"expired"}else{&state},"reason":reason,"request":serde_json::from_str::<Value>(&request)?,"owner_evidence":evidence,"expires_at":expires,"provenance":provenance,"requesters":requesters,"host_permission":"separate_required"}),
     )
 }
+
+#[derive(Deserialize)]
+#[serde(deny_unknown_fields)]
+struct ReportingClaims {
+    category: String,
+    source_paths: Vec<String>,
+}
+
+/// Complete normalized, redacted sender-controlled message projection.
+/// Owner exceptions authorize this digest, including optional metadata.
+pub fn report_payload_hash(message: &Message) -> Result<String> {
+    let mut value = serde_json::to_value(message)?;
+    if serde_json::to_vec(&value)?.len() > 65536 {
+        return Err(invalid("Reporting projection exceeds limit"));
+    }
+    sanitize(&mut value);
+    let normalized: Message = serde_json::from_value(value)?;
+    Ok(hash(serde_json::to_vec(&normalized)?))
+}
+
+fn message_delivery(
+    p: &Project,
+    db: &Connection,
+    s: &RecipientSession,
+    sid: &str,
+    m: &Message,
+) -> Result<Option<String>> {
+    p.check_deadline()?;
+    if let Some(reporting) = &m.reporting {
+        let report: ReportingClaims = serde_json::from_value(reporting.clone())?;
+        if report.category != m.kind {
+            return Err(invalid("Reporting category must match message type"));
+        }
+        let mut roles =
+            std::collections::BTreeSet::from([s.role.as_deref().unwrap_or("*").to_owned()]);
+        let mut query = db.prepare("SELECT DISTINCT CASE WHEN length(CAST(role AS BLOB))<=256 THEN role ELSE NULL END FROM pctx_sessions WHERE agent=?1 AND role IS NOT NULL LIMIT 257")?;
+        for role in query.query_map([&s.agent], |r| r.get::<_, Option<String>>(0))? {
+            p.check_deadline()?;
+            let role = role?.ok_or_else(|| denied("Reporting consumer roles exceed bounds"))?;
+            label(&role)?;
+            roles.insert(role);
+            if roles.len() > 256 {
+                return Err(denied("Reporting consumer roles exceed bounds"));
+            }
+        }
+        roles.insert(s.agent.clone());
+        let name: Option<String> = db.query_row("SELECT CASE WHEN length(CAST(name AS BLOB))<=256 THEN name ELSE NULL END FROM agents WHERE id=?1", [&s.agent], |r| r.get(0))?;
+        let name = name.ok_or_else(|| denied("Reporting consumer identity exceeds bounds"))?;
+        label(&name)?;
+        roles.insert(name);
+        let mut bindings = Vec::new();
+        for role in &roles {
+            for recipient in [s.agent.as_str(), sid] {
+                let result = crate::policy_controls::evaluate_report(
+                    p,
+                    db,
+                    &json!({
+                        "schema_version":1,"role":role,
+                        "recipient":recipient,"topic":m.topic,"category":report.category,
+                        "source_paths":report.source_paths,"payload_hash":report_payload_hash(m)?
+                    }),
+                )?;
+                if result["state"] != "allowed" {
+                    return Ok(None);
+                }
+                bindings.push(result["fingerprint"].clone());
+            }
+        }
+        return Ok(Some(hash(serde_json::to_vec(&bindings)?)));
+    }
+    if paused(db, s.role.as_deref().unwrap_or(""))?
+        || silenced(db, s.role.as_deref().unwrap_or("*"), &s.agent, &m.topic)?
+        || silenced(db, s.role.as_deref().unwrap_or("*"), sid, &m.topic)?
+    {
+        return Ok(None);
+    }
+    Ok(Some(hash("ordinary_message_delivery")))
+}
 pub fn execute(p: &Project, command: &OperationCommand) -> Result<Value> {
+    let mut scoped;
+    let p = if p.deadline.is_none() {
+        scoped = p.clone();
+        scoped.deadline = Some(crate::deadline::Deadline::from_millis(10_000)?);
+        &scoped
+    } else {
+        p
+    };
+    p.check_deadline()?;
     let mut db = connect(p)?;
     let tx = db.transaction_with_behavior(TransactionBehavior::Immediate)?;
     let value = match command {
@@ -855,7 +984,8 @@ pub fn execute(p: &Project, command: &OperationCommand) -> Result<Value> {
                 let roles=s.query_map([],|r|Ok(json!({"role":r.get::<_,String>(0)?,"paused":r.get::<_,bool>(1)?,"reason":r.get::<_,String>(2)?,"actor":r.get::<_,String>(3)?,"updated_at":r.get::<_,i64>(4)?})))?.collect::<std::result::Result<Vec<_>,_>>()?;
                 let mut s=tx.prepare("SELECT role,recipient,topic,active FROM ops_silences ORDER BY role,recipient,topic")?;
                 let silences=s.query_map([],|r|Ok(json!({"role":r.get::<_,String>(0)?,"recipient":r.get::<_,String>(1)?,"topic":r.get::<_,String>(2)?,"active":r.get::<_,bool>(3)?})))?.collect::<std::result::Result<Vec<_>,_>>()?;
-                json!({"roles":roles,"silences":silences})
+                let restrictions = crate::policy_controls::list_restrictions(p, &tx)?;
+                json!({"roles":roles,"silences":silences,"restrictions":restrictions["restrictions"]})
             }
             RoleCommand::Pause {
                 role,
@@ -875,40 +1005,61 @@ pub fn execute(p: &Project, command: &OperationCommand) -> Result<Value> {
                     return Err(invalid("Pause/resume requires reason"));
                 }
                 let active = matches!(command, RoleCommand::Pause { .. });
-                if let Some(topic) = topic {
-                    label(topic)?;
-                    let recipient = recipient_key(&tx, recipient.as_deref().unwrap_or("*"))?;
-                    label(&recipient)?;
-                    tx.execute("INSERT INTO ops_silences VALUES(?1,?2,?3,?4,?5,'owner',?6) ON CONFLICT(role,recipient,topic) DO UPDATE SET active=excluded.active,reason=excluded.reason,actor=excluded.actor,updated=excluded.updated",params![role,recipient,topic,active,reader::redact(reason).0,now()])?;
-                } else {
-                    if recipient.is_some() {
-                        return Err(invalid("Recipient requires a topic silence"));
-                    }
-                    tx.execute("INSERT INTO ops_roles VALUES(?1,?2,?3,'owner',?4) ON CONFLICT(role) DO UPDATE SET paused=excluded.paused,reason=excluded.reason,actor=excluded.actor,updated=excluded.updated",params![role,active,reader::redact(reason).0,now()])?;
-                }
-                event(
+                let canonical_recipient = recipient
+                    .as_deref()
+                    .map(|r| recipient_key(&tx, r))
+                    .transpose()?;
+                let mut receipt = crate::policy_controls::change_restriction(
+                    p,
                     &tx,
                     role,
-                    "role_policy_changed",
-                    &json!({"paused_or_silenced":active,"topic_policy":topic.is_some()}),
+                    canonical_recipient.as_deref(),
+                    topic.as_deref(),
+                    active,
+                    reason,
                 )?;
-                json!({"role":role,"paused_or_silenced":active,"persistent":true,"model_woken":false})
+                receipt["role"] = json!(role);
+                receipt["paused_or_silenced"] = json!(active);
+                receipt["persistent"] = json!(true);
+                receipt["model_woken"] = json!(false);
+                receipt
             }
         },
-        OperationCommand::Policy {
-            command: PolicyCommand::Evaluate { action_file },
-        } => {
-            let mut action: Action = raw_input(action_file)?;
-            validate_action(&mut action)?;
-            evaluate(p, &tx, &action)?
-        }
+        OperationCommand::Policy { command } => match command {
+            PolicyCommand::Evaluate { action_file } => {
+                let mut action: Action = raw_input(p, action_file)?;
+                validate_action(&mut action)?;
+                evaluate(p, &tx, &action)?
+            }
+            PolicyCommand::AttestOwner { from_file } => {
+                crate::policy_controls::attest_owner(p, &tx, &raw_input(p, from_file)?)?
+            }
+            PolicyCommand::Release { from_file } => {
+                crate::policy_controls::release(p, &tx, &raw_input(p, from_file)?)?
+            }
+            PolicyCommand::ExceptionRecord { from_file } => {
+                crate::policy_controls::record_exception(p, &tx, &raw_input(p, from_file)?)?
+            }
+            PolicyCommand::ExceptionRevoke { from_file } => {
+                crate::policy_controls::revoke_exception(p, &tx, &raw_input(p, from_file)?)?
+            }
+            PolicyCommand::ReportEvaluate { from_file } => {
+                owner()?;
+                crate::policy_controls::evaluate_report(p, &tx, &raw_input(p, from_file)?)?
+            }
+            PolicyCommand::ReportFingerprint { from_file } => {
+                crate::policy_controls::trusted_principal()?;
+                let message: Message = input(p, from_file)?;
+                json!({"payload_hash":report_payload_hash(&message)?,"bound_projection":"message-v1"})
+            }
+        },
         OperationCommand::Decision { command } => match command {
             DecisionCommand::Request {
                 from_file,
                 task_id: task,
             } => {
                 let requester = authenticate(p, &tx)?;
-                let mut r: DecisionRequest = raw_input(from_file)?;
+                let mut r: DecisionRequest = raw_input(p, from_file)?;
                 if r.schema_version != 1 || r.reason.trim().is_empty() {
                     return Err(invalid("Decision request requires schema and reason"));
                 }
@@ -945,7 +1096,7 @@ pub fn execute(p: &Project, command: &OperationCommand) -> Result<Value> {
                 from_file,
             } => {
                 owner()?;
-                let r: DecisionRecord = input(from_file)?;
+                let r: DecisionRecord = input(p, from_file)?;
                 if r.schema_version != 1
                     || r.owner_evidence.trim().is_empty()
                     || r.expires_at <= now()
@@ -1048,7 +1199,7 @@ pub fn execute(p: &Project, command: &OperationCommand) -> Result<Value> {
                     task_id: task,
                 } => {
                     let sender = authenticate(p, &tx)?;
-                    let m: Message = input(from_file)?;
+                    let m: Message = input(p, from_file)?;
                     enqueue_message_db(
                         p,
                         &tx,
@@ -1095,10 +1246,7 @@ pub fn execute(p: &Project, command: &OperationCommand) -> Result<Value> {
                     if m.expires_at.is_some_and(|t| t <= now()) {
                         return Err(Error::new("MESSAGE_EXPIRED", "Message expired", 9));
                     }
-                    if paused(&tx, s.role.as_deref().unwrap_or(""))?
-                        || (silenced(&tx, s.role.as_deref().unwrap_or("*"), &s.agent, &m.topic)?
-                            || silenced(&tx, s.role.as_deref().unwrap_or("*"), sid, &m.topic)?)
-                    {
+                    if message_delivery(p, &tx, &s, sid, &m)?.is_none() {
                         return Err(Error::new(
                             "TOPIC_SILENCED",
                             "Delivery blocked by persistent role/topic policy",
@@ -1190,17 +1338,16 @@ pub fn execute(p: &Project, command: &OperationCommand) -> Result<Value> {
             for (seq, id, _kind, _recipient, payload, state) in rows {
                 let m: Message = serde_json::from_str(&payload)?;
                 cursor = seq;
+                let binding = message_delivery(p, &tx, &s, sid, &m)?;
                 if m.expires_at.is_some_and(|t| t <= now())
                     || s.status != "active"
-                    || paused(&tx, s.role.as_deref().unwrap_or(""))?
-                    || (silenced(&tx, s.role.as_deref().unwrap_or("*"), &s.agent, &m.topic)?
-                        || silenced(&tx, s.role.as_deref().unwrap_or("*"), sid, &m.topic)?)
+                    || binding.is_none()
                 {
                     suppressed += 1;
                     continue;
                 }
                 visible.push(
-                    json!({"message_seq":seq,"message_id":id,"message":m,"delivery_state":state}),
+                    json!({"message_seq":seq,"message_id":id,"message":m,"delivery_state":state,"delivery_policy_hash":binding}),
                 );
                 if visible.len() >= *limit {
                     break;
@@ -1215,6 +1362,7 @@ pub fn execute(p: &Project, command: &OperationCommand) -> Result<Value> {
             json!({"session_id":sid,"messages":visible,"next_cursor":cursor,"suppressed_count":suppressed,"delivery_inferred":false,"model_woken":false})
         }
     };
+    p.check_deadline()?;
     tx.commit()?;
     Ok(value)
 }
@@ -1273,11 +1421,30 @@ fn enqueue_message_db(
                 "decision",
                 "result",
                 "permission_incident",
+                "approval_prompt",
+                "deadline",
+                "security",
                 "notice",
             ]
             .contains(&m.kind.as_str())
         {
             return Err(invalid("Message schema/type/body/priority invalid"));
+        }
+        if let Some(reporting) = &m.reporting {
+            let report: ReportingClaims = serde_json::from_value(reporting.clone())?;
+            if report.category != m.kind
+                || ![
+                    "permission_incident",
+                    "approval_prompt",
+                    "deadline",
+                    "security",
+                ]
+                .contains(&report.category.as_str())
+                || report.source_paths.is_empty()
+                || report.source_paths.len() > 64
+            {
+                return Err(invalid("Invalid reporting claim"));
+            }
         }
         label(&m.topic)?;
         label(&m.idempotency_key)?;

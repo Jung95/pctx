@@ -1720,6 +1720,7 @@ fn tick(p: &Project, namespace: Option<&str>, at: i64, retry: bool) -> Result<Va
                 evidence_refs: vec![format!("schedule-result:{digest}")],
                 expires_at: None,
                 source_revision: Some(s.revision),
+                reporting: None,
                 idempotency_key: format!(
                     "schedule:{}",
                     hash(format!("{n}:{id}:{}:{key}:{digest}", s.revision))
