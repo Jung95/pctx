@@ -1,0 +1,105 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.66s
+     Running tests/atomic_publication.rs (target/debug/deps/atomic_publication-98bdbaf5c908cd10)
+
+running 2 tests
+test create_only_race_publishes_one_complete_record_and_preserves_it ... ok
+test replacement_keeps_old_open_reader_and_publishes_complete_new_record ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+
+     Running tests/filters.rs (target/debug/deps/filters-9e3df5656f93ef1c)
+
+running 7 tests
+test strict_keys_operations_and_regex_no_code_execution ... ok
+test protect_beats_drop_dedup_keeps_occurrences_ranges_and_no_pass_claim ... ok
+test structured_fields_grouping_and_excerpt_keep_protected_metadata ... ok
+test secrets_cr_and_unicode_are_safe_and_protected_survives_excerpt ... ok
+test changed_fixture_cannot_activate_old_report_and_bounds_are_explicit ... ok
+test saved_output_custom_render_preserves_observed_failure_without_rerun ... ok
+test full_fixture_activation_hash_invalidation_and_exact_match_ambiguity ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.45s
+
+     Running tests/output.rs (target/debug/deps/output-6e0a106d5d0b7325)
+
+running 10 tests
+test opaque_shell_heavy_and_bad_identifiers_rejected ... ok
+test masking_is_before_storage_and_cr_preserves_error ... ok
+test typed_full_report_preserves_failed_counts_without_becoming_gate_evidence ... ok
+test exact_trust_child_exit_and_reread_without_execution ... ok
+test none_expiry_tamper_and_policy_change_cannot_restore_records ... ok
+test diagnostic_extract_binds_original_source_and_rereads_without_execution ... ok
+test nonzero_and_timeout_are_not_filter_success ... ok
+test agent_cannot_mint_execution_trust_and_git_helpers_are_unavailable ... ok
+test verbose_output_preserves_late_diagnostics_and_full_masked_denominator ... ok
+test bounded_capture_retains_tail_and_original_record_positions ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.29s
+
+     Running tests/output_deadline.rs (target/debug/deps/output_deadline-9a5db5bcae11ac4f)
+
+running 5 tests
+test expired_saved_queries_and_accounting_preserve_exact_artifact ... ok
+test fifo_artifact_is_rejected_without_waiting_for_writer ... ok
+test failed_accounting_under_contention_never_increments_observed_bytes ... ok
+test retention_expiry_is_distinct_from_request_expiry_and_never_rewrites_artifact ... ok
+test saved_views_keep_unicode_and_original_budget_without_executing_or_mutating ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/query_deadline_cli.rs (target/debug/deps/query_deadline_cli-91fccc6ca25b7a4f)
+
+running 6 tests
+test invalid_or_inapplicable_timeout_has_no_project_effects ... ok
+test finite_saved_routes_accept_timeout_and_reject_zero_before_project_effects ... ok
+test strict_find_waits_only_remaining_budget_and_preserves_active_generation ... ok
+test finite_ndjson_contention_preserves_error_code_without_creating_events ... ok
+test doctor_contention_reports_timeout_with_original_budget_and_unchanged_database ... ok
+test saved_cli_reread_never_reruns_and_failed_metering_preserves_delivery_truth ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.57s
+
+     Running tests/search.rs (target/debug/deps/search-751f23ebc1208c2d)
+
+running 27 tests
+test expired_queries_fail_even_when_the_candidate_universe_is_empty ... ok
+test boolean_complements_validate_candidates_without_positive_hits ... ok
+test cached_policy_change_hides_metadata_and_boolean_remains_explicit ... ok
+test alias_and_aggregate_regex_candidates_use_current_validation ... ok
+test indexed_metadata_empty_generation_rejects_replaced_root_before_search ... ok
+test indexed_metadata_invalid_policy_and_foreign_workspace_fail_closed ... ok
+test indexed_body_search_does_not_follow_a_matching_or_complement_symlink ... ok
+test indexed_metadata_matches_including_complements_authorize_before_limit_even_off ... ok
+test markdown_sections_ignore_fenced_examples_and_link_parents ... ok
+test invalid_policy_fails_even_without_metadata_candidates ... ok
+test indexed_metadata_search_hides_unopened_historical_counts_and_propagates_generation ... ok
+test oversized_non_candidate_is_skipped_but_matching_candidate_fails ... ok
+test indexed_body_search_observes_new_text_and_boolean_complements_with_actual_hashes ... ok
+test matched_metadata_validates_stale_candidates_without_discovering_new_names ... ok
+test indexed_body_search_filters_current_policy_scope_language_and_deleted_rows_without_counts ... ok
+test structural_variants_use_real_grammar ... ok
+test unsupported_is_distinct_from_empty_supported ... ok
+test utf8_crlf_locations_and_version_ids ... ok
+test stale_symbol_and_ambiguous_names_never_select_code ... ok
+test indexed_body_search_validates_nonmatching_later_sources_before_limit_even_off ... ok
+test metadata_non_candidates_are_not_opened_as_source ... ok
+test text_and_all_still_read_sources_without_metadata_hits_and_policy_hides_candidates ... ok
+test indexed_metadata_staleness_and_body_only_discovery_keep_their_boundaries ... ok
+test parsing_cancellation_is_timeout_instead_of_empty_or_partial_ast_success ... ok
+test indexed_body_search_preserves_invalid_policy_workspace_and_shared_lock_deadlines ... ok
+test candidate_scan_cap_remains_distinct_from_request_timeout ... ok
+test deadline_partial_keeps_only_verified_matches_and_never_claims_complete_coverage ... ok
+
+test result: ok. 27 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.53s
+
+     Running tests/storage_deadline.rs (target/debug/deps/storage_deadline-8fad1ff023fe83b8)
+
+running 4 tests
+test parser_expiry_retains_previous_generation_instead_of_marking_source_skipped ... ok
+test expired_storage_requests_preserve_generation_and_checkpoint ... ok
+test sqlite_writer_contention_times_out_without_publishing_or_losing_checkpoint ... ok
+test writer_and_snapshot_waits_consume_supplied_budget_without_five_second_reset ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.15s
+

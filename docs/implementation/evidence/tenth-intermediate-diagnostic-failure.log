@@ -1,0 +1,33 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.04s
+     Running tests/project_deadline.rs (target/debug/deps/project_deadline-f7e8b9d913251d84)
+
+running 13 tests
+test deadline_project_loading_child_entry ... ok
+test query_supervisor_rejects_mutation_before_spawn ... ok
+test expired_loading_and_detection_do_not_touch_nonexistent_project ... ok
+test expired_connection_does_not_even_create_initialization_lock ... ok
+test actual_registered_project_loading_and_ancestor_discovery_keep_same_deadline ... ok
+test connection_initialization_wait_respects_remaining_request_not_five_seconds ... ok
+test busy_sqlite_read_is_bounded_by_remaining_request ... ok
+test successive_database_connections_share_the_original_request_budget ... ok
+test query_program_resolution_uses_captured_command_path ... ok
+test relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry ... FAILED
+test simultaneous_streams_are_collected_and_overflow_never_infers_success ... ok
+test query_deadline_includes_inherited_pipe_eof_after_root_exit ... ok
+test query_cannot_succeed_with_live_descendant_that_closed_both_streams ... ok
+
+failures:
+
+---- relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry stdout ----
+
+thread 'relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry' (7377595) panicked at tests/project_deadline.rs:546:9:
+Relative PATH query failed; evidence=/var/folders/dh/vzwzck1n4rx_bntdyff83ssc0000gp/T/.tmpJYVkSQ
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry
+
+test result: FAILED. 12 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.01s
+
+error: test failed, to rerun pass `--test project_deadline`

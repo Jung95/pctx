@@ -166,6 +166,22 @@ pub fn private_dir(path: &Path) -> Result<()> {
     Ok(())
 }
 #[cfg(windows)]
+fn windows_publication_error(phase: &str, error: &std::io::Error, overwrite: bool) -> Error {
+    // Native numeric diagnostics preserve the failing boundary without disclosing
+    // paths, receipt payloads, or localized OS messages containing private data.
+    Error::new(
+        "IO_ERROR",
+        format!(
+            "Windows atomic publication failed (phase={phase}, win32={}, overwrite={overwrite})",
+            error
+                .raw_os_error()
+                .map_or_else(|| "unavailable".into(), |code| code.to_string())
+        ),
+        7,
+    )
+}
+
+#[cfg(windows)]
 fn windows_publish_file(
     source: &fs::File,
     directory: &fs::File,
@@ -232,7 +248,7 @@ fn windows_publish_file(
             if !overwrite && error.kind() == std::io::ErrorKind::AlreadyExists {
                 return Err(Error::new("REVISION_CONFLICT", "Output already exists", 9));
             }
-            return Err(error.into());
+            return Err(windows_publication_error("rename", &error, overwrite));
         }
     }
     // Source data was WRITE_THROUGH + sync_all before publication. Do not claim
@@ -267,8 +283,11 @@ pub fn atomic_write(path: &Path, bytes: &[u8], overwrite: bool) -> Result<()> {
             .access_mode(FILE_READ_ATTRIBUTES | FILE_TRAVERSE)
             .share_mode(FILE_SHARE_READ | FILE_SHARE_WRITE)
             .custom_flags(FILE_FLAG_BACKUP_SEMANTICS | FILE_FLAG_OPEN_REPARSE_POINT)
-            .open(parent)?;
-        let metadata = file.metadata()?;
+            .open(parent)
+            .map_err(|e| windows_publication_error("open_parent", &e, overwrite))?;
+        let metadata = file
+            .metadata()
+            .map_err(|e| windows_publication_error("parent_metadata", &e, overwrite))?;
         if !metadata.is_dir() || metadata.file_attributes() & FILE_ATTRIBUTE_REPARSE_POINT != 0 {
             return Err(Error::new(
                 "POLICY_DENIED",
@@ -300,9 +319,24 @@ pub fn atomic_write(path: &Path, bytes: &[u8], overwrite: bool) -> Result<()> {
                 .share_mode(FILE_SHARE_READ)
                 .custom_flags(FILE_FLAG_WRITE_THROUGH);
         }
+        #[cfg(windows)]
+        let mut f = options
+            .open(&temp)
+            .map_err(|e| windows_publication_error("create_staging", &e, overwrite))?;
+        #[cfg(not(windows))]
         let mut f = options.open(&temp)?;
-        f.write_all(bytes)?;
-        f.sync_all()?;
+        #[cfg(windows)]
+        {
+            f.write_all(bytes)
+                .map_err(|e| windows_publication_error("write_staging", &e, overwrite))?;
+            f.sync_all()
+                .map_err(|e| windows_publication_error("sync_staging", &e, overwrite))?;
+        }
+        #[cfg(not(windows))]
+        {
+            f.write_all(bytes)?;
+            f.sync_all()?;
+        }
         #[cfg(windows)]
         windows_publish_file(&f, &directory, path, overwrite)?;
         drop(f);

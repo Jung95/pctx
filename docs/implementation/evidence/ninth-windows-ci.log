@@ -1,0 +1,593 @@
+validate (windows-latest)	Set up job	﻿2026-10-08T04:19:35.4183502Z Current runner version: '2.337.0'
+validate (windows-latest)	Set up job	2026-10-08T04:19:35.4241643Z ##[group]Runner Image Provisioner
+validate (windows-latest)	Set up job	2026-10-08T04:19:35.4242472Z Hosted Compute Agent
+validate (windows-latest)	Set up job	2026-10-08T04:19:35.4242980Z Version: 20260901.588
+validate (windows-latest)	Set up job	2026-10-08T04:19:35.4243572Z Commit: f88ec8081b781fac6c440065ac7ff9e710ce3d0b
+validate (windows-latest)	Set up job	2026-10-08T04:19:35.4244231Z Build Date: 2026-09-01T19:56:44Z
+validate (windows-latest)	Set up job	2026-10-08T04:19:35.4244833Z Worker ID: {62150fd7-ebf9-4572-9838-9195d2a79304}
+validate (windows-latest)	Set up job	2026-10-08T04:19:35.4245497Z Azure Region: westus3
+validate (windows-latest)	Set up job	2026-10-08T04:19:35.4246023Z ##[endgroup]
+validate (windows-latest)	Set up job	2026-10-08T04:19:35.4247315Z ##[group]Operating System
+validate (windows-latest)	Set up job	2026-10-08T04:19:35.4247907Z Microsoft Windows Server 2025
+validate (windows-latest)	Set up job	2026-10-08T04:19:35.4248458Z 10.0.26100
+validate (windows-latest)	Set up job	2026-10-08T04:19:35.4248933Z Datacenter
+validate (windows-latest)	Set up job	2026-10-08T04:19:35.4249393Z ##[endgroup]
+validate (windows-latest)	Set up job	2026-10-08T04:19:35.4249887Z ##[group]Runner Image
+validate (windows-latest)	Set up job	2026-10-08T04:19:35.4250420Z Image: windows-2025-vs2026
+validate (windows-latest)	Set up job	2026-10-08T04:19:35.4250937Z Version: 20260925.250.1
+validate (windows-latest)	Set up job	2026-10-08T04:19:35.4252044Z Included Software: https://github.com/actions/runner-images/blob/win25-vs2026/20260925.250/images/windows/Windows2025-VS2026-Readme.md
+validate (windows-latest)	Set up job	2026-10-08T04:19:35.4253884Z Image Release: https://github.com/actions/runner-images/releases/tag/win25-vs2026%2F20260925.250
+validate (windows-latest)	Set up job	2026-10-08T04:19:35.4254765Z ##[endgroup]
+validate (windows-latest)	Set up job	2026-10-08T04:19:35.4255797Z ##[group]GITHUB_TOKEN Permissions
+validate (windows-latest)	Set up job	2026-10-08T04:19:35.4258043Z Contents: read
+validate (windows-latest)	Set up job	2026-10-08T04:19:35.4258733Z Metadata: read
+validate (windows-latest)	Set up job	2026-10-08T04:19:35.4259246Z ##[endgroup]
+validate (windows-latest)	Set up job	2026-10-08T04:19:35.4261334Z Secret source: Actions
+validate (windows-latest)	Set up job	2026-10-08T04:19:35.4262181Z Cache mode: write
+validate (windows-latest)	Set up job	2026-10-08T04:19:35.4262865Z Prepare workflow directory
+validate (windows-latest)	Set up job	2026-10-08T04:19:35.4645349Z Prepare all required actions
+validate (windows-latest)	Set up job	2026-10-08T04:19:35.4711899Z Getting action download info
+validate (windows-latest)	Set up job	2026-10-08T04:19:35.7445944Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+validate (windows-latest)	Set up job	2026-10-08T04:19:35.8740069Z Download action repository 'dtolnay/rust-toolchain@stable' (SHA:89b12181fb390509a0842a86cc55eeb8eb928c1d)
+validate (windows-latest)	Set up job	2026-10-08T04:19:36.3021907Z Complete job name: validate (windows-latest)
+validate (windows-latest)	Run actions/checkout@v4	﻿2026-10-08T04:19:36.5143137Z ##[group]Run actions/checkout@v4
+validate (windows-latest)	Run actions/checkout@v4	2026-10-08T04:19:36.5144859Z with:
+validate (windows-latest)	Run actions/checkout@v4	2026-10-08T04:19:36.5145687Z   repository: Jung95/pctx
+validate (windows-latest)	Run actions/checkout@v4	2026-10-08T04:19:36.5151299Z   token: ***
+validate (windows-latest)	Run actions/checkout@v4	2026-10-08T04:19:36.5151872Z   ssh-strict: true
+validate (windows-latest)	Run actions/checkout@v4	2026-10-08T04:19:36.5152346Z   ssh-user: git
+validate (windows-latest)	Run actions/checkout@v4	2026-10-08T04:19:36.5152868Z   persist-credentials: true
+validate (windows-latest)	Run actions/checkout@v4	2026-10-08T04:19:36.5153448Z   clean: true
+validate (windows-latest)	Run actions/checkout@v4	2026-10-08T04:19:36.5154002Z   sparse-checkout-cone-mode: true
+validate (windows-latest)	Run actions/checkout@v4	2026-10-08T04:19:36.5267628Z   fetch-depth: 1
+validate (windows-latest)	Run actions/checkout@v4	2026-10-08T04:19:36.5268588Z   fetch-tags: false
+validate (windows-latest)	Run actions/checkout@v4	2026-10-08T04:19:36.5269191Z   show-progress: true
+validate (windows-latest)	Run actions/checkout@v4	2026-10-08T04:19:36.5269781Z   lfs: false
+validate (windows-latest)	Run actions/checkout@v4	2026-10-08T04:19:36.5270310Z   submodules: false
+validate (windows-latest)	Run actions/checkout@v4	2026-10-08T04:19:36.5270930Z   set-safe-directory: true
+validate (windows-latest)	Run actions/checkout@v4	2026-10-08T04:19:36.5271675Z   allow-unsafe-pr-checkout: false
+validate (windows-latest)	Run actions/checkout@v4	2026-10-08T04:19:36.5272902Z ##[endgroup]
+validate (windows-latest)	Run actions/checkout@v4	2026-10-08T04:19:36.6779113Z Syncing repository: Jung95/pctx
+validate (windows-latest)	Run actions/checkout@v4	2026-10-08T04:19:36.6780822Z ##[group]Getting Git version info
+validate (windows-latest)	Run actions/checkout@v4	2026-10-08T04:19:36.6781423Z Working directory is 'D:\a\pctx\pctx'
+validate (windows-latest)	Run actions/checkout@v4	2026-10-08T04:19:36.7708682Z [command]"C:\Program Files\Git\bin\git.exe" version
+validate (windows-latest)	Run actions/checkout@v4	2026-10-08T04:19:37.3152402Z git version 2.55.0.windows.5
+validate (windows-latest)	Run actions/checkout@v4	2026-10-08T04:19:37.3214700Z ##[endgroup]
+validate (windows-latest)	Run actions/checkout@v4	2026-10-08T04:19:37.3238869Z Temporarily overriding HOME='D:\a\_temp\96cf14f6-61b3-4130-8592-613f547e284a' before making global git config changes
+validate (windows-latest)	Run actions/checkout@v4	2026-10-08T04:19:37.3241582Z Adding repository directory to the temporary git global config as a safe directory
+validate (windows-latest)	Run actions/checkout@v4	2026-10-08T04:19:37.3252659Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\pctx\pctx
+validate (windows-latest)	Run actions/checkout@v4	2026-10-08T04:19:37.4035731Z Deleting the contents of 'D:\a\pctx\pctx'
+validate (windows-latest)	Run actions/checkout@v4	2026-10-08T04:19:37.4041778Z ##[group]Initializing the repository
+validate (windows-latest)	Run actions/checkout@v4	2026-10-08T04:19:37.4050642Z [command]"C:\Program Files\Git\bin\git.exe" init D:\a\pctx\pctx
+validate (windows-latest)	Run actions/checkout@v4	2026-10-08T04:19:37.5154642Z Initialized empty Git repository in D:/a/pctx/pctx/.git/
+validate (windows-latest)	Run actions/checkout@v4	2026-10-08T04:19:37.5240863Z [command]"C:\Program Files\Git\bin\git.exe" remote add origin https://github.com/Jung95/pctx
+validate (windows-latest)	Run actions/checkout@v4	2026-10-08T04:19:37.6058483Z ##[endgroup]
+validate (windows-latest)	Run actions/checkout@v4	2026-10-08T04:19:37.6060122Z ##[group]Disabling automatic garbage collection
+validate (windows-latest)	Run actions/checkout@v4	2026-10-08T04:19:37.6067968Z [command]"C:\Program Files\Git\bin\git.exe" config --local gc.auto 0
+validate (windows-latest)	Run actions/checkout@v4	2026-10-08T04:19:37.6387844Z ##[endgroup]
+validate (windows-latest)	Run actions/checkout@v4	2026-10-08T04:19:37.6389422Z ##[group]Setting up auth
+validate (windows-latest)	Run actions/checkout@v4	2026-10-08T04:19:37.6401002Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+validate (windows-latest)	Run actions/checkout@v4	2026-10-08T04:19:37.6734378Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+validate (windows-latest)	Run actions/checkout@v4	2026-10-08T04:19:39.3474756Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+validate (windows-latest)	Run actions/checkout@v4	2026-10-08T04:19:39.3789492Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+validate (windows-latest)	Run actions/checkout@v4	2026-10-08T04:19:39.9288566Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+validate (windows-latest)	Run actions/checkout@v4	2026-10-08T04:19:39.9592697Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+validate (windows-latest)	Run actions/checkout@v4	2026-10-08T04:19:40.5140460Z [command]"C:\Program Files\Git\bin\git.exe" config --local http.https://github.com/.extraheader "AUTHORIZATION: basic ***"
+validate (windows-latest)	Run actions/checkout@v4	2026-10-08T04:19:40.5474122Z ##[endgroup]
+validate (windows-latest)	Run actions/checkout@v4	2026-10-08T04:19:40.5474705Z ##[group]Fetching the repository
+validate (windows-latest)	Run actions/checkout@v4	2026-10-08T04:19:40.5493046Z [command]"C:\Program Files\Git\bin\git.exe" -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +d3d05b445ec4cfc96e494ac644315f97959202f7:refs/remotes/origin/main
+validate (windows-latest)	Run actions/checkout@v4	2026-10-08T04:19:42.0715936Z From https://github.com/Jung95/pctx
+validate (windows-latest)	Run actions/checkout@v4	2026-10-08T04:19:42.0716906Z  * [new ref]         d3d05b445ec4cfc96e494ac644315f97959202f7 -> origin/main
+validate (windows-latest)	Run actions/checkout@v4	2026-10-08T04:19:42.0774428Z ##[endgroup]
+validate (windows-latest)	Run actions/checkout@v4	2026-10-08T04:19:42.0775135Z ##[group]Determining the checkout info
+validate (windows-latest)	Run actions/checkout@v4	2026-10-08T04:19:42.0777393Z ##[endgroup]
+validate (windows-latest)	Run actions/checkout@v4	2026-10-08T04:19:42.0787565Z [command]"C:\Program Files\Git\bin\git.exe" sparse-checkout disable
+validate (windows-latest)	Run actions/checkout@v4	2026-10-08T04:19:42.1283222Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset-all extensions.worktreeConfig
+validate (windows-latest)	Run actions/checkout@v4	2026-10-08T04:19:42.1600652Z ##[group]Checking out the ref
+validate (windows-latest)	Run actions/checkout@v4	2026-10-08T04:19:42.1610119Z [command]"C:\Program Files\Git\bin\git.exe" checkout --progress --force -B main refs/remotes/origin/main
+validate (windows-latest)	Run actions/checkout@v4	2026-10-08T04:19:42.2937725Z Switched to a new branch 'main'
+validate (windows-latest)	Run actions/checkout@v4	2026-10-08T04:19:42.3008355Z branch 'main' set up to track 'origin/main'.
+validate (windows-latest)	Run actions/checkout@v4	2026-10-08T04:19:42.3077147Z ##[endgroup]
+validate (windows-latest)	Run actions/checkout@v4	2026-10-08T04:19:42.3518955Z [command]"C:\Program Files\Git\bin\git.exe" log -1 --format=%H
+validate (windows-latest)	Run actions/checkout@v4	2026-10-08T04:19:42.3787849Z d3d05b445ec4cfc96e494ac644315f97959202f7
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	﻿2026-10-08T04:19:42.4359845Z ##[group]Run dtolnay/rust-toolchain@stable
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:42.4360264Z with:
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:42.4360503Z   components: rustfmt, clippy
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:42.4360748Z   toolchain: stable
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:42.4360957Z ##[endgroup]
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:42.4431319Z ##[start-action display=Parse toolchain version;id=__dtolnay_rust-toolchain.parse]
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:42.4613018Z ##[group]Run if [[ -z $toolchain ]]; then
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:42.4613506Z ^[[36;1mif [[ -z $toolchain ]]; then^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:42.4614136Z ^[[36;1m  # GitHub does not enforce `required: true` inputs itself. https://github.com/actions/runner/issues/1070^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:42.4614793Z ^[[36;1m  echo "'toolchain' is a required input" >&2^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:42.4615122Z ^[[36;1m  exit 1^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:42.4615499Z ^[[36;1melif [[ $toolchain =~ ^stable' '[0-9]+' '(year|month|week|day)s?' 'ago$ ]]; then^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:42.4615984Z ^[[36;1m  if [[ Windows == macOS ]]; then^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:42.4616604Z ^[[36;1m    echo "toolchain=1.$((($(date -v-$(sed 's/stable \([0-9]*\) \(.\).*/\1\2/' <<< $toolchain) +%s)/60/60/24-16569)/7/6))" >> $GITHUB_OUTPUT^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:42.4618065Z ^[[36;1m  else^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:42.4618455Z ^[[36;1m    echo "toolchain=1.$((($(date --date "${toolchain#stable }" +%s)/60/60/24-16569)/7/6))" >> $GITHUB_OUTPUT^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:42.4619318Z ^[[36;1m  fi^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:42.4619667Z ^[[36;1melif [[ $toolchain =~ ^stable' 'minus' '[0-9]+' 'releases?$ ]]; then^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:42.4620184Z ^[[36;1m  echo "toolchain=1.$((($(date +%s)/60/60/24-16569)/7/6-${toolchain//[^0-9]/}))" >> $GITHUB_OUTPUT^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:42.4620622Z ^[[36;1melif [[ $toolchain =~ ^1\.[0-9]+$ ]]; then^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:42.4621121Z ^[[36;1m  echo "toolchain=1.$((i=${toolchain#1.}, c=($(date +%s)/60/60/24-16569)/7/6, i+9*i*(10*i<=c)+90*i*(100*i<=c)))" >> $GITHUB_OUTPUT^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:42.4621598Z ^[[36;1melse^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:42.4621861Z ^[[36;1m  echo "toolchain=$toolchain" >> $GITHUB_OUTPUT^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:42.4622173Z ^[[36;1mfi^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:42.4643516Z shell: C:\Program Files\Git\bin\bash.EXE --noprofile --norc -e -o pipefail {0}
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:42.4643943Z env:
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:42.4644154Z   toolchain: stable
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:42.4644364Z ##[endgroup]
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:42.8669878Z ##[end-action id=__dtolnay_rust-toolchain.parse;outcome=success;conclusion=success;duration_ms=423]
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:42.8687721Z ##[start-action display=Construct rustup command line;id=__dtolnay_rust-toolchain.flags]
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:42.8879358Z ##[group]Run echo "targets=$(for t in ${targets//,/ }; do echo -n ' --target' $t; done)" >> $GITHUB_OUTPUT
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:42.8880037Z ^[[36;1mecho "targets=$(for t in ${targets//,/ }; do echo -n ' --target' $t; done)" >> $GITHUB_OUTPUT^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:42.8880640Z ^[[36;1mecho "components=$(for c in ${components//,/ }; do echo -n ' --component' $c; done)" >> $GITHUB_OUTPUT^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:42.8881100Z ^[[36;1mecho "downgrade=" >> $GITHUB_OUTPUT^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:42.8900164Z shell: C:\Program Files\Git\bin\bash.EXE --noprofile --norc -e -o pipefail {0}
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:42.8900587Z env:
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:42.8900767Z   targets: 
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:42.8900969Z   components: rustfmt, clippy
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:42.8901203Z ##[endgroup]
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:43.0009810Z ##[end-action id=__dtolnay_rust-toolchain.flags;outcome=success;conclusion=success;duration_ms=132]
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:43.0012683Z ##[start-action display=Set $CARGO_HOME;id=__dtolnay_rust-toolchain.__run]
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:43.0150931Z ##[group]Run echo CARGO_HOME=${CARGO_HOME:-"$USERPROFILE\.cargo"} >> $GITHUB_ENV
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:43.0151480Z ^[[36;1mecho CARGO_HOME=${CARGO_HOME:-"$USERPROFILE\.cargo"} >> $GITHUB_ENV^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:43.0165163Z shell: C:\Program Files\Git\bin\bash.EXE --noprofile --norc -e -o pipefail {0}
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:43.0165571Z ##[endgroup]
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:43.1411799Z ##[end-action id=__dtolnay_rust-toolchain.__run;outcome=success;conclusion=success;duration_ms=139]
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:43.1416681Z ##[start-action display=Install rustup if needed;id=__dtolnay_rust-toolchain.__run_2]
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:43.1428094Z ##[end-action id=__dtolnay_rust-toolchain.__run_2;outcome=skipped;conclusion=skipped;duration_ms=0]
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:43.1430929Z ##[start-action display=Install rustup if needed on windows;id=__dtolnay_rust-toolchain.__run_3]
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:43.1594061Z ##[group]Run if ! command -v rustup &>/dev/null; then
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:43.1594441Z ^[[36;1mif ! command -v rustup &>/dev/null; then^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:43.1595172Z ^[[36;1m  curl --proto '=https' --tlsv1.2 --retry 10 --retry-connrefused --location --silent --show-error --fail https://win.rustup.rs/x86_64 --output 'D:\a\_temp\rustup-init.exe'^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:43.1595976Z ^[[36;1m  'D:\a\_temp\rustup-init.exe' --default-toolchain none --no-modify-path -y^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:43.1596390Z ^[[36;1m  echo "$CARGO_HOME\bin" >> $GITHUB_PATH^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:43.1596660Z ^[[36;1mfi^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:43.1610374Z shell: C:\Program Files\Git\bin\bash.EXE --noprofile --norc -e -o pipefail {0}
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:43.1610779Z env:
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:43.1610981Z   CARGO_HOME: C:\Users\runneradmin\.cargo
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:43.1611234Z ##[endgroup]
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:43.3084099Z ##[end-action id=__dtolnay_rust-toolchain.__run_3;outcome=success;conclusion=success;duration_ms=165]
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:43.3103174Z ##[start-action display=rustup toolchain install stable;id=__dtolnay_rust-toolchain.__run_4]
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:43.3258576Z ##[group]Run log=$(mktemp)
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:43.3258894Z ^[[36;1mlog=$(mktemp)^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:43.3259114Z ^[[36;1mtrap 'rm -f "$log"' EXIT^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:43.3259358Z ^[[36;1mfor attempt in 1 2 3 4 5; do^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:43.3260018Z ^[[36;1m  if rustup toolchain install stable --component rustfmt --component clippy --profile minimal --no-self-update --force-non-host 2>&1 | tee "$log"; then^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:43.3260785Z ^[[36;1m    break^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:43.3260974Z ^[[36;1m  else^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:43.3261188Z ^[[36;1m    status=$?^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:43.3261383Z ^[[36;1m  fi^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:43.3261652Z ^[[36;1m  if [[ $attempt == 5 ]] || ! grep -Fq 'checksum failed for ' "$log" \^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:43.3262168Z ^[[36;1m      || ! grep -Fq 'this is likely due to an ongoing update of the official release server' "$log"; then^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:43.3262730Z ^[[36;1m    exit "$status"^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:43.3262934Z ^[[36;1m  fi^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:43.3263258Z ^[[36;1m  echo "Retrying rustup toolchain install in 30 seconds (retry $attempt of 4)" >&2^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:43.3263650Z ^[[36;1m  sleep 30^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:43.3263830Z ^[[36;1mdone^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:43.3277641Z shell: C:\Program Files\Git\bin\bash.EXE --noprofile --norc -e -o pipefail {0}
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:43.3278026Z env:
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:43.3278226Z   CARGO_HOME: C:\Users\runneradmin\.cargo
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:43.3278494Z   RUSTUP_PERMIT_COPY_RENAME: 1
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:43.3278712Z ##[endgroup]
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:52.0434271Z info: syncing channel updates for stable-x86_64-pc-windows-msvc
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:52.6784538Z info: latest update on 2026-10-01 for version 1.99.0 (b940084d7 2026-09-28)
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:52.7120682Z info: removing previous version of component rustfmt
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:52.7417696Z info: removing previous version of component clippy
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:52.7735488Z info: removing previous version of component rust-std for target x86_64-pc-windows-gnu
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:52.8846138Z info: removing previous version of component rust-std for target i686-pc-windows-msvc
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:52.9952673Z info: removing previous version of component cargo
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:53.0763423Z info: removing previous version of component rust-std
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:53.1690822Z info: removing previous version of component rustc
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:19:53.3118500Z info: downloading 7 components
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:07.9191345Z 
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:07.9510402Z   stable-x86_64-pc-windows-msvc updated - rustc 1.99.0 (b940084d7 2026-09-28) (from rustc 1.98.1 (48a229cea 2026-09-01))
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:07.9511724Z 
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:07.9862695Z ##[end-action id=__dtolnay_rust-toolchain.__run_4;outcome=success;conclusion=success;duration_ms=24675]
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:07.9870619Z ##[start-action display=rustup default stable;id=__dtolnay_rust-toolchain.__run_5]
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:08.0009748Z ##[group]Run rustup default stable --force-non-host
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:08.0010124Z ^[[36;1mrustup default stable --force-non-host^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:08.0022777Z shell: C:\Program Files\Git\bin\bash.EXE --noprofile --norc -e -o pipefail {0}
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:08.0023565Z env:
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:08.0023771Z   CARGO_HOME: C:\Users\runneradmin\.cargo
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:08.0024017Z ##[endgroup]
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:08.0720544Z info: using existing install for stable-x86_64-pc-windows-msvc
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:08.0761111Z info: default toolchain set to stable-x86_64-pc-windows-msvc
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:08.0819212Z 
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:08.1046487Z   stable-x86_64-pc-windows-msvc unchanged - rustc 1.99.0 (b940084d7 2026-09-28)
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:08.1047527Z 
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:08.1151003Z ##[end-action id=__dtolnay_rust-toolchain.__run_5;outcome=success;conclusion=success;duration_ms=127]
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:08.1153524Z ##[start-action display=Create cachekey;id=__dtolnay_rust-toolchain.rustc-version]
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:08.1323400Z ##[group]Run DATE=$(rustc +stable --version --verbose | sed -ne 's/^commit-date: \(20[0-9][0-9]\)-\([01][0-9]\)-\([0-3][0-9]\)$/\1\2\3/p')
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:08.1324213Z ^[[36;1mDATE=$(rustc +stable --version --verbose | sed -ne 's/^commit-date: \(20[0-9][0-9]\)-\([01][0-9]\)-\([0-3][0-9]\)$/\1\2\3/p')^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:08.1324816Z ^[[36;1mHASH=$(rustc +stable --version --verbose | sed -ne 's/^commit-hash: //p')^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:08.1325377Z ^[[36;1mecho "cachekey=$(echo $DATE$HASH | head -c12)" >> $GITHUB_OUTPUT^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:08.1429183Z shell: C:\Program Files\Git\bin\bash.EXE --noprofile --norc -e -o pipefail {0}
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:08.1429610Z env:
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:08.1429839Z   CARGO_HOME: C:\Users\runneradmin\.cargo
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:08.1430089Z ##[endgroup]
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.2117131Z ##[end-action id=__dtolnay_rust-toolchain.rustc-version;outcome=success;conclusion=success;duration_ms=1096]
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.2122463Z ##[start-action display=Disable incremental compilation;id=__dtolnay_rust-toolchain.__run_6]
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.2307559Z ##[group]Run if [ -z "${CARGO_INCREMENTAL+set}" ]; then
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.2308216Z ^[[36;1mif [ -z "${CARGO_INCREMENTAL+set}" ]; then^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.2308766Z ^[[36;1m  echo CARGO_INCREMENTAL=0 >> $GITHUB_ENV^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.2309251Z ^[[36;1mfi^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.2327121Z shell: C:\Program Files\Git\bin\bash.EXE --noprofile --norc -e -o pipefail {0}
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.2327832Z env:
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.2328169Z   CARGO_HOME: C:\Users\runneradmin\.cargo
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.2328627Z ##[endgroup]
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.2783528Z ##[end-action id=__dtolnay_rust-toolchain.__run_6;outcome=success;conclusion=success;duration_ms=66]
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.2786058Z ##[start-action display=Enable colors in Cargo output;id=__dtolnay_rust-toolchain.__run_7]
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.2922277Z ##[group]Run if [ -z "${CARGO_TERM_COLOR+set}" ]; then
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.2922678Z ^[[36;1mif [ -z "${CARGO_TERM_COLOR+set}" ]; then^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.2923011Z ^[[36;1m  echo CARGO_TERM_COLOR=always >> $GITHUB_ENV^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.2923299Z ^[[36;1mfi^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.2936977Z shell: C:\Program Files\Git\bin\bash.EXE --noprofile --norc -e -o pipefail {0}
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.2937389Z env:
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.2937619Z   CARGO_HOME: C:\Users\runneradmin\.cargo
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.2937900Z   CARGO_INCREMENTAL: 0
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.2938132Z ##[endgroup]
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.3372500Z ##[end-action id=__dtolnay_rust-toolchain.__run_7;outcome=success;conclusion=success;duration_ms=58]
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.3375124Z ##[start-action display=Enable Cargo sparse registry;id=__dtolnay_rust-toolchain.__run_8]
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.3519757Z ##[group]Run # implemented in 1.66, stabilized in 1.68, made default in 1.70
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.3520678Z ^[[36;1m# implemented in 1.66, stabilized in 1.68, made default in 1.70^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.3521813Z ^[[36;1mif [ -z "${CARGO_REGISTRIES_CRATES_IO_PROTOCOL+set}" -o -f "D:\a\_temp"/.implicit_cargo_registries_crates_io_protocol ]; then^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.3523020Z ^[[36;1m  if rustc +stable --version --verbose | grep -q '^release: 1\.6[89]\.'; then^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.3523883Z ^[[36;1m    touch "D:\a\_temp"/.implicit_cargo_registries_crates_io_protocol || true^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.3524714Z ^[[36;1m    echo CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse >> $GITHUB_ENV^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.3525604Z ^[[36;1m  elif rustc +stable --version --verbose | grep -q '^release: 1\.6[67]\.'; then^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.3526510Z ^[[36;1m    touch "D:\a\_temp"/.implicit_cargo_registries_crates_io_protocol || true^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.3527330Z ^[[36;1m    echo CARGO_REGISTRIES_CRATES_IO_PROTOCOL=git >> $GITHUB_ENV^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.3529156Z ^[[36;1m  fi^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.3529644Z ^[[36;1mfi^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.3544523Z shell: C:\Program Files\Git\bin\bash.EXE --noprofile --norc -e -o pipefail {0}
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.3544920Z env:
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.3545130Z   CARGO_HOME: C:\Users\runneradmin\.cargo
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.3545390Z   CARGO_INCREMENTAL: 0
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.3545604Z   CARGO_TERM_COLOR: always
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.3545816Z ##[endgroup]
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.5597845Z ##[end-action id=__dtolnay_rust-toolchain.__run_8;outcome=success;conclusion=success;duration_ms=222]
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.5600230Z ##[start-action display=Work around spurious network errors in curl 8.0;id=__dtolnay_rust-toolchain.__run_9]
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.5738901Z ##[group]Run # https://rust-lang.zulipchat.com/#narrow/stream/246057-t-cargo/topic/timeout.20investigation
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.5739615Z ^[[36;1m# https://rust-lang.zulipchat.com/#narrow/stream/246057-t-cargo/topic/timeout.20investigation^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.5740221Z ^[[36;1mif rustc +stable --version --verbose | grep -q '^release: 1\.7[01]\.'; then^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.5740644Z ^[[36;1m  echo CARGO_HTTP_MULTIPLEXING=false >> $GITHUB_ENV^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.5740933Z ^[[36;1mfi^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.5753574Z shell: C:\Program Files\Git\bin\bash.EXE --noprofile --norc -e -o pipefail {0}
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.5754016Z env:
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.5754286Z   CARGO_HOME: C:\Users\runneradmin\.cargo
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.5754565Z   CARGO_INCREMENTAL: 0
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.5754785Z   CARGO_TERM_COLOR: always
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.5755009Z ##[endgroup]
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.6871368Z ##[end-action id=__dtolnay_rust-toolchain.__run_9;outcome=success;conclusion=success;duration_ms=127]
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.6875028Z ##[start-action display=rustc +stable --version --verbose;id=__dtolnay_rust-toolchain.__run_10]
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.7005978Z ##[group]Run rustc +stable --version --verbose
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.7006320Z ^[[36;1mrustc +stable --version --verbose^[[0m
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.7019430Z shell: C:\Program Files\Git\bin\bash.EXE --noprofile --norc -e -o pipefail {0}
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.7019804Z env:
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.7020001Z   CARGO_HOME: C:\Users\runneradmin\.cargo
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.7020257Z   CARGO_INCREMENTAL: 0
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.7020465Z   CARGO_TERM_COLOR: always
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.7020670Z ##[endgroup]
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.7867909Z rustc 1.99.0 (b940084d7 2026-09-28)
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.7868675Z binary: rustc
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.7869133Z commit-hash: b940084d7eb6a299eb4bfeb8e34901bc051e7ac4
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.7869683Z commit-date: 2026-09-28
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.7870062Z host: x86_64-pc-windows-msvc
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.7870451Z release: 1.99.0
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.7870869Z LLVM version: 23.1.1
+validate (windows-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:20:09.8018760Z ##[end-action id=__dtolnay_rust-toolchain.__run_10;outcome=success;conclusion=success;duration_ms=114]
+validate (windows-latest)	Formatting	﻿2026-10-08T04:20:09.8193094Z ##[group]Run cargo fmt --all -- --check
+validate (windows-latest)	Formatting	2026-10-08T04:20:09.8193514Z ^[[36;1mcargo fmt --all -- --check^[[0m
+validate (windows-latest)	Formatting	2026-10-08T04:20:09.8733611Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+validate (windows-latest)	Formatting	2026-10-08T04:20:09.8733974Z env:
+validate (windows-latest)	Formatting	2026-10-08T04:20:09.8734201Z   CARGO_HOME: C:\Users\runneradmin\.cargo
+validate (windows-latest)	Formatting	2026-10-08T04:20:09.8734465Z   CARGO_INCREMENTAL: 0
+validate (windows-latest)	Formatting	2026-10-08T04:20:09.8734671Z   CARGO_TERM_COLOR: always
+validate (windows-latest)	Formatting	2026-10-08T04:20:09.8734881Z ##[endgroup]
+validate (windows-latest)	Native Windows containment primitives	﻿2026-10-08T04:20:12.3810141Z ##[group]Run cargo test --locked --test windows_process
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:12.3810734Z ^[[36;1mcargo test --locked --test windows_process^[[0m
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:12.3877157Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:12.3877514Z env:
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:12.3877716Z   CARGO_HOME: C:\Users\runneradmin\.cargo
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:12.3877977Z   CARGO_INCREMENTAL: 0
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:12.3878179Z   CARGO_TERM_COLOR: always
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:12.3878387Z ##[endgroup]
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:12.7652442Z ^[[1m^[[92m    Updating^[[0m crates.io index
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:13.2098370Z ^[[1m^[[92m Downloading^[[0m crates ...
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:13.3380824Z ^[[1m^[[92m  Downloaded^[[0m anstyle-query v1.1.5
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:13.3481223Z ^[[1m^[[92m  Downloaded^[[0m anstyle v1.0.14
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:13.3587741Z ^[[1m^[[92m  Downloaded^[[0m aho-corasick v1.1.5
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:13.4104645Z ^[[1m^[[92m  Downloaded^[[0m anstyle-wincon v3.0.11
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:13.4217304Z ^[[1m^[[92m  Downloaded^[[0m anstream v1.0.0
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:13.4412305Z ^[[1m^[[92m  Downloaded^[[0m clap_derive v4.6.7
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:13.4581448Z ^[[1m^[[92m  Downloaded^[[0m equivalent v1.0.2
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:13.4662454Z ^[[1m^[[92m  Downloaded^[[0m clap_lex v1.1.1
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:13.4787312Z ^[[1m^[[92m  Downloaded^[[0m anstyle-parse v1.0.0
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:13.4896223Z ^[[1m^[[92m  Downloaded^[[0m chrono v0.4.45
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:13.5350831Z ^[[1m^[[92m  Downloaded^[[0m autocfg v1.5.1
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:13.5492975Z ^[[1m^[[92m  Downloaded^[[0m serde_core v1.0.229
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:13.6349731Z ^[[1m^[[92m  Downloaded^[[0m cpufeatures v0.2.17
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:13.6480424Z ^[[1m^[[92m  Downloaded^[[0m find-msvc-tools v0.1.14
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:13.6676699Z ^[[1m^[[92m  Downloaded^[[0m tree-sitter-language v0.1.8
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:13.6885828Z ^[[1m^[[92m  Downloaded^[[0m crypto-common v0.1.7
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:13.6983530Z ^[[1m^[[92m  Downloaded^[[0m fallible-iterator v0.3.0
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:13.7150918Z ^[[1m^[[92m  Downloaded^[[0m globset v0.4.20
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:13.7321571Z ^[[1m^[[92m  Downloaded^[[0m indexmap v2.14.2
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:13.7713359Z ^[[1m^[[92m  Downloaded^[[0m itoa v1.0.18
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:13.7822390Z ^[[1m^[[92m  Downloaded^[[0m log v0.4.34
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:13.8033916Z ^[[1m^[[92m  Downloaded^[[0m crossbeam-deque v0.8.8
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:13.8142674Z ^[[1m^[[92m  Downloaded^[[0m digest v0.10.7
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:14.1968072Z ^[[1m^[[92m  Downloaded^[[0m hashlink v0.12.2
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:14.2182029Z ^[[1m^[[92m  Downloaded^[[0m ignore v0.4.33
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:14.2367197Z ^[[1m^[[92m  Downloaded^[[0m shlex v2.0.1
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:14.2515564Z ^[[1m^[[92m  Downloaded^[[0m crossbeam-epoch v0.9.21
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:14.2702585Z ^[[1m^[[92m  Downloaded^[[0m streaming-iterator v0.1.9
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:14.2814622Z ^[[1m^[[92m  Downloaded^[[0m block-buffer v0.10.4
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:14.2962742Z ^[[1m^[[92m  Downloaded^[[0m serde_spanned v1.1.1
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:14.3046333Z ^[[1m^[[92m  Downloaded^[[0m crossbeam-utils v0.8.23
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:14.3394538Z ^[[1m^[[92m  Downloaded^[[0m heck v0.5.0
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:14.3536638Z ^[[1m^[[92m  Downloaded^[[0m fastrand v2.5.0
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:14.3644569Z ^[[1m^[[92m  Downloaded^[[0m foldhash v0.2.0
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:14.3743422Z ^[[1m^[[92m  Downloaded^[[0m fs2 v0.4.3
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:14.3878334Z ^[[1m^[[92m  Downloaded^[[0m fallible-streaming-iterator v0.1.9
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:14.3959295Z ^[[1m^[[92m  Downloaded^[[0m strsim v0.11.1
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:14.4073791Z ^[[1m^[[92m  Downloaded^[[0m bitflags v2.13.2
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:14.4538289Z ^[[1m^[[92m  Downloaded^[[0m clap_builder v4.6.7
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:14.5136178Z ^[[1m^[[92m  Downloaded^[[0m is_terminal_polyfill v1.70.2
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:14.5206759Z ^[[1m^[[92m  Downloaded^[[0m generic-array v0.14.7
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:14.5357789Z ^[[1m^[[92m  Downloaded^[[0m hashbrown v0.17.1
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:14.5744440Z ^[[1m^[[92m  Downloaded^[[0m once_cell_polyfill v1.70.2
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:14.5825849Z ^[[1m^[[92m  Downloaded^[[0m cfg-if v1.0.5
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:14.5971000Z ^[[1m^[[92m  Downloaded^[[0m toml_datetime v0.7.5+spec-1.1.0
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:14.6058785Z ^[[1m^[[92m  Downloaded^[[0m version_check v0.9.5
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:14.6164447Z ^[[1m^[[92m  Downloaded^[[0m colorchoice v1.0.5
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:14.6235524Z ^[[1m^[[92m  Downloaded^[[0m siphasher v1.0.4
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:14.6414567Z ^[[1m^[[92m  Downloaded^[[0m winapi-util v0.1.11
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:14.6535623Z ^[[1m^[[92m  Downloaded^[[0m phf_shared v0.12.1
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:14.6608490Z ^[[1m^[[92m  Downloaded^[[0m same-file v1.0.6
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:14.6718704Z ^[[1m^[[92m  Downloaded^[[0m utf8parse v0.2.2
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:14.6840441Z ^[[1m^[[92m  Downloaded^[[0m windows-link v0.2.1
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:14.6933910Z ^[[1m^[[92m  Downloaded^[[0m sha2 v0.10.9
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:14.7243779Z ^[[1m^[[92m  Downloaded^[[0m walkdir v2.5.0
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:14.7403362Z ^[[1m^[[92m  Downloaded^[[0m phf v0.12.1
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:14.7552263Z ^[[1m^[[92m  Downloaded^[[0m pkg-config v0.3.34
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:14.7677808Z ^[[1m^[[92m  Downloaded^[[0m zmij v1.0.23
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:14.7868369Z ^[[1m^[[92m  Downloaded^[[0m rusqlite v0.40.2
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:14.8449145Z ^[[1m^[[92m  Downloaded^[[0m tempfile v3.27.0
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:14.8688173Z ^[[1m^[[92m  Downloaded^[[0m toml_parser v1.1.3+spec-1.1.0
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:14.8900463Z ^[[1m^[[92m  Downloaded^[[0m toml_writer v1.1.2+spec-1.1.0
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:14.9006123Z ^[[1m^[[92m  Downloaded^[[0m unsafe-libyaml v0.2.11
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:14.9287529Z ^[[1m^[[92m  Downloaded^[[0m once_cell v1.21.4
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:14.9568372Z ^[[1m^[[92m  Downloaded^[[0m quote v1.0.47
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:14.9893633Z ^[[1m^[[92m  Downloaded^[[0m ryu v1.0.23
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:15.0220199Z ^[[1m^[[92m  Downloaded^[[0m smallvec v1.16.2
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:15.0310617Z ^[[1m^[[92m  Downloaded^[[0m toml v0.9.12+spec-1.1.0
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:15.0716445Z ^[[1m^[[92m  Downloaded^[[0m unicode-ident v1.0.26
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:15.0963280Z ^[[1m^[[92m  Downloaded^[[0m uuid v1.27.0
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:15.1181011Z ^[[1m^[[92m  Downloaded^[[0m clap v4.6.7
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:15.6927023Z ^[[1m^[[92m  Downloaded^[[0m getrandom v0.4.3
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:15.7298819Z ^[[1m^[[92m  Downloaded^[[0m num-traits v0.2.19
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:15.7576103Z ^[[1m^[[92m  Downloaded^[[0m serde_derive v1.0.229
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:15.7896439Z ^[[1m^[[92m  Downloaded^[[0m serde_yaml_ng v0.10.0
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:15.8184713Z ^[[1m^[[92m  Downloaded^[[0m cc v1.6.0
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:15.8534218Z ^[[1m^[[92m  Downloaded^[[0m proc-macro2 v1.0.107
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:15.8835719Z ^[[1m^[[92m  Downloaded^[[0m serde v1.0.229
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:15.9163696Z ^[[1m^[[92m  Downloaded^[[0m tree-sitter-javascript v0.25.0
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:15.9456607Z ^[[1m^[[92m  Downloaded^[[0m libc v0.2.190
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:17.7872240Z ^[[1m^[[92m  Downloaded^[[0m memchr v2.8.3
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:18.1311080Z ^[[1m^[[92m  Downloaded^[[0m typenum v1.20.1
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:18.3025264Z ^[[1m^[[92m  Downloaded^[[0m regex v1.13.1
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:18.5888120Z ^[[1m^[[92m  Downloaded^[[0m serde_json v1.0.151
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:18.8532718Z ^[[1m^[[92m  Downloaded^[[0m tree-sitter v0.25.10
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:18.9078393Z ^[[1m^[[92m  Downloaded^[[0m tree-sitter-python v0.25.0
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:18.9360198Z ^[[1m^[[92m  Downloaded^[[0m winnow v0.7.15
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:19.1089420Z ^[[1m^[[92m  Downloaded^[[0m winnow v1.0.4
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:19.2393862Z ^[[1m^[[92m  Downloaded^[[0m vcpkg v0.2.15
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:20.5636687Z ^[[1m^[[92m  Downloaded^[[0m bstr v1.13.1
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:20.6191746Z ^[[1m^[[92m  Downloaded^[[0m syn v3.0.6
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:20.7019128Z ^[[1m^[[92m  Downloaded^[[0m regex-syntax v0.8.11
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:21.0933674Z ^[[1m^[[92m  Downloaded^[[0m regex-automata v0.4.18
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:21.1931018Z ^[[1m^[[92m  Downloaded^[[0m chrono-tz v0.10.4
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:21.2351684Z ^[[1m^[[92m  Downloaded^[[0m tree-sitter-typescript v0.23.2
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:21.2940198Z ^[[1m^[[92m  Downloaded^[[0m winapi v0.3.9
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:21.5785856Z ^[[1m^[[92m  Downloaded^[[0m windows-sys v0.61.2
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:22.6257066Z ^[[1m^[[92m  Downloaded^[[0m libsqlite3-sys v0.38.2
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:22.8562093Z ^[[1m^[[92m   Compiling^[[0m find-msvc-tools v0.1.14
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:22.8562856Z ^[[1m^[[92m   Compiling^[[0m shlex v2.0.1
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:22.8564147Z ^[[1m^[[92m   Compiling^[[0m windows-link v0.2.1
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:22.8566035Z ^[[1m^[[92m   Compiling^[[0m serde_core v1.0.229
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:22.9194633Z ^[[1m^[[92m   Compiling^[[0m proc-macro2 v1.0.107
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:23.1119701Z ^[[1m^[[92m   Compiling^[[0m windows-sys v0.61.2
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:23.8782007Z ^[[1m^[[92m   Compiling^[[0m cc v1.6.0
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:25.4014976Z ^[[1m^[[92m   Compiling^[[0m unicode-ident v1.0.26
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:25.5261693Z ^[[1m^[[92m   Compiling^[[0m tree-sitter-language v0.1.8
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:25.6002334Z ^[[1m^[[92m   Compiling^[[0m quote v1.0.47
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:26.0071885Z ^[[1m^[[92m   Compiling^[[0m memchr v2.8.3
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:26.0965232Z ^[[1m^[[92m   Compiling^[[0m equivalent v1.0.2
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:26.2217428Z ^[[1m^[[92m   Compiling^[[0m version_check v0.9.5
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:26.7541955Z ^[[1m^[[92m   Compiling^[[0m zmij v1.0.23
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:27.0527531Z ^[[1m^[[92m   Compiling^[[0m syn v3.0.6
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:27.0961671Z ^[[1m^[[92m   Compiling^[[0m generic-array v0.14.7
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:27.3082634Z ^[[1m^[[92m   Compiling^[[0m itoa v1.0.18
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:27.8297772Z ^[[1m^[[92m   Compiling^[[0m aho-corasick v1.1.5
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:28.0765895Z ^[[1m^[[92m   Compiling^[[0m crossbeam-utils v0.8.23
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:28.4820258Z ^[[1m^[[92m   Compiling^[[0m hashbrown v0.17.1
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:29.3519917Z ^[[1m^[[92m   Compiling^[[0m regex-syntax v0.8.11
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:29.4378235Z ^[[1m^[[92m   Compiling^[[0m typenum v1.20.1
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:30.5693668Z ^[[1m^[[92m   Compiling^[[0m serde_json v1.0.151
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:30.8287827Z ^[[1m^[[92m   Compiling^[[0m autocfg v1.5.1
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:31.3674814Z ^[[1m^[[92m   Compiling^[[0m serde v1.0.229
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:31.7495944Z ^[[1m^[[92m   Compiling^[[0m foldhash v0.2.0
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:31.9572246Z ^[[1m^[[92m   Compiling^[[0m regex-automata v0.4.18
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:32.9692472Z ^[[1m^[[92m   Compiling^[[0m serde_derive v1.0.229
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:33.0917839Z ^[[1m^[[92m   Compiling^[[0m num-traits v0.2.19
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:34.1854239Z ^[[1m^[[92m   Compiling^[[0m indexmap v2.14.2
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:35.2506493Z ^[[1m^[[92m   Compiling^[[0m pkg-config v0.3.34
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:36.0302452Z ^[[1m^[[92m   Compiling^[[0m anstyle v1.0.14
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:36.3220942Z ^[[1m^[[92m   Compiling^[[0m once_cell_polyfill v1.70.2
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:36.4126266Z ^[[1m^[[92m   Compiling^[[0m cfg-if v1.0.5
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:36.4679753Z ^[[1m^[[92m   Compiling^[[0m crossbeam-epoch v0.9.21
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:36.7819662Z ^[[1m^[[92m   Compiling^[[0m vcpkg v0.2.15
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:37.7117879Z ^[[1m^[[92m   Compiling^[[0m utf8parse v0.2.2
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:37.8184764Z ^[[1m^[[92m   Compiling^[[0m getrandom v0.4.3
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:38.1252206Z ^[[1m^[[92m   Compiling^[[0m anstyle-parse v1.0.0
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:38.3616796Z ^[[1m^[[92m   Compiling^[[0m libsqlite3-sys v0.38.2
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:39.0138296Z ^[[1m^[[92m   Compiling^[[0m anstyle-wincon v3.0.11
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:39.8019308Z ^[[1m^[[92m   Compiling^[[0m anstyle-query v1.1.5
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:39.9251100Z ^[[1m^[[92m   Compiling^[[0m winapi-util v0.1.11
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:40.0268660Z ^[[1m^[[92m   Compiling^[[0m crossbeam-deque v0.8.8
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:40.2364958Z ^[[1m^[[92m   Compiling^[[0m winapi v0.3.9
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:40.2906221Z ^[[1m^[[92m   Compiling^[[0m colorchoice v1.0.5
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:40.3157393Z ^[[1m^[[92m   Compiling^[[0m siphasher v1.0.4
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:40.3381779Z ^[[1m^[[92m   Compiling^[[0m is_terminal_polyfill v1.70.2
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:40.3905824Z ^[[1m^[[92m   Compiling^[[0m tree-sitter v0.25.10
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:40.4145865Z ^[[1m^[[92m   Compiling^[[0m anstream v1.0.0
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:40.6178226Z ^[[1m^[[92m   Compiling^[[0m phf_shared v0.12.1
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:40.7277583Z ^[[1m^[[92m   Compiling^[[0m same-file v1.0.6
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:41.1358191Z ^[[1m^[[92m   Compiling^[[0m crypto-common v0.1.7
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:41.2219535Z ^[[1m^[[92m   Compiling^[[0m block-buffer v0.10.4
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:41.3209545Z ^[[1m^[[92m   Compiling^[[0m bstr v1.13.1
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:41.3533107Z ^[[1m^[[92m   Compiling^[[0m tree-sitter-typescript v0.23.2
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:41.5882938Z ^[[1m^[[92m   Compiling^[[0m tree-sitter-javascript v0.25.0
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:41.8230447Z ^[[1m^[[92m   Compiling^[[0m tree-sitter-python v0.25.0
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:41.8480296Z ^[[1m^[[92m   Compiling^[[0m heck v0.5.0
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:42.0894474Z ^[[1m^[[92m   Compiling^[[0m libc v0.2.190
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:42.1053901Z ^[[1m^[[92m   Compiling^[[0m chrono-tz v0.10.4
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:42.1359814Z ^[[1m^[[92m   Compiling^[[0m clap_lex v1.1.1
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:42.2885810Z ^[[1m^[[92m   Compiling^[[0m strsim v0.11.1
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:42.4855031Z ^[[1m^[[92m   Compiling^[[0m winnow v1.0.4
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:42.8048765Z ^[[1m^[[92m   Compiling^[[0m log v0.4.34
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:42.9333075Z ^[[1m^[[92m   Compiling^[[0m toml_parser v1.1.3+spec-1.1.0
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:42.9626045Z ^[[1m^[[92m   Compiling^[[0m globset v0.4.20
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:43.0882465Z ^[[1m^[[92m   Compiling^[[0m clap_builder v4.6.7
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:44.0698298Z ^[[1m^[[92m   Compiling^[[0m clap_derive v4.6.7
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:46.4248425Z ^[[1m^[[92m   Compiling^[[0m chrono v0.4.45
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:48.5971470Z ^[[1m^[[92m   Compiling^[[0m digest v0.10.7
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:48.9790332Z ^[[1m^[[92m   Compiling^[[0m walkdir v2.5.0
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:49.5793062Z ^[[1m^[[92m   Compiling^[[0m phf v0.12.1
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:49.9650587Z ^[[1m^[[92m   Compiling^[[0m regex v1.13.1
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:50.7479498Z ^[[1m^[[92m   Compiling^[[0m hashlink v0.12.2
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:50.8699760Z ^[[1m^[[92m   Compiling^[[0m serde_spanned v1.1.1
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:51.0059326Z ^[[1m^[[92m   Compiling^[[0m toml_datetime v0.7.5+spec-1.1.0
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:51.0215265Z ^[[1m^[[92m   Compiling^[[0m bitflags v2.13.2
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:51.1621292Z ^[[1m^[[92m   Compiling^[[0m streaming-iterator v0.1.9
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:51.3141899Z ^[[1m^[[92m   Compiling^[[0m fallible-streaming-iterator v0.1.9
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:51.4639024Z ^[[1m^[[92m   Compiling^[[0m unsafe-libyaml v0.2.11
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:51.4673407Z ^[[1m^[[92m   Compiling^[[0m fallible-iterator v0.3.0
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:51.5141516Z ^[[1m^[[92m   Compiling^[[0m winnow v0.7.15
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:51.6191785Z ^[[1m^[[92m   Compiling^[[0m ryu v1.0.23
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:51.8639144Z ^[[1m^[[92m   Compiling^[[0m toml_writer v1.1.2+spec-1.1.0
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:51.9617276Z ^[[1m^[[92m   Compiling^[[0m cpufeatures v0.2.17
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:52.0224350Z ^[[1m^[[92m   Compiling^[[0m smallvec v1.16.2
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:52.1442561Z ^[[1m^[[92m   Compiling^[[0m sha2 v0.10.9
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:52.3290621Z ^[[1m^[[92m   Compiling^[[0m rusqlite v0.40.2
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:52.7741430Z ^[[1m^[[92m   Compiling^[[0m serde_yaml_ng v0.10.0
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:54.0309013Z ^[[1m^[[92m   Compiling^[[0m toml v0.9.12+spec-1.1.0
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:54.3333463Z ^[[1m^[[92m   Compiling^[[0m fs2 v0.4.3
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:55.2045046Z ^[[1m^[[92m   Compiling^[[0m ignore v0.4.33
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:56.2515525Z ^[[1m^[[92m   Compiling^[[0m clap v4.6.7
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:57.2529147Z ^[[1m^[[92m   Compiling^[[0m uuid v1.27.0
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:58.0239262Z ^[[1m^[[92m   Compiling^[[0m fastrand v2.5.0
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:58.3513610Z ^[[1m^[[92m   Compiling^[[0m once_cell v1.21.4
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:20:58.6056237Z ^[[1m^[[92m   Compiling^[[0m tempfile v3.27.0
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:21:01.1490179Z ^[[1m^[[92m   Compiling^[[0m pctx v0.1.0-dev (D:\a\pctx\pctx)
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:21:20.5300649Z ^[[1m^[[92m    Finished^[[0m `test` profile [unoptimized + debuginfo] target(s) in 1m 07s
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:21:20.5575161Z ^[[1m^[[92m     Running^[[0m tests\windows_process.rs (target\debug\deps\windows_process-b1377388a018cdc4.exe)
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:21:20.5750614Z 
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:21:20.5751163Z running 13 tests
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:21:20.5756328Z test fixture_child_entry ... ok
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:21:20.5760944Z test missing_job_is_unknown_never_empty ... ok
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:21:20.5771528Z test native_access_denial_is_unknown ... ok
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:21:20.5772454Z test broad_native_dacl_cannot_impersonate_private_job ... ok
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:21:20.5773534Z test foreign_receipt_and_malformed_names_do_not_open ... ok
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:21:20.5776888Z test native_empty_job_reopens_with_private_security_and_zero_limits ... ok
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:21:20.5778085Z test owned_process_pins_unsigned_creation_identity_and_detects_mismatch ... ok
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:21:20.5788296Z test query_handle_retains_object_then_final_drop_destroys_empty_job ... ok
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:21:20.5813346Z test native_admission_rejects_ambiguous_environment_and_relative_executable ... ok
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:21:20.5898237Z test rejection_of_suspended_child_observes_empty_without_executing_marker ... ok
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:21:20.6075452Z test signaled_native_exit_259_is_an_exit_code_not_liveness ... ok
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:21:20.6146045Z test descendant_stays_contained_after_root_exit_until_explicit_cancellation ... ok
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:21:20.7113041Z test suspended_native_admission_roundtrips_crt_unicode_arguments_and_pipes ... ok
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:21:20.7114097Z 
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:21:20.7114493Z test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s
+validate (windows-latest)	Native Windows containment primitives	2026-10-08T04:21:20.7115064Z 
+validate (windows-latest)	Native Windows finite query supervision	﻿2026-10-08T04:21:20.8473881Z ##[group]Run cargo test --locked --lib query_process
+validate (windows-latest)	Native Windows finite query supervision	2026-10-08T04:21:20.8474441Z ^[[36;1mcargo test --locked --lib query_process^[[0m
+validate (windows-latest)	Native Windows finite query supervision	2026-10-08T04:21:20.8555165Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+validate (windows-latest)	Native Windows finite query supervision	2026-10-08T04:21:20.8555557Z env:
+validate (windows-latest)	Native Windows finite query supervision	2026-10-08T04:21:20.8555805Z   CARGO_HOME: C:\Users\runneradmin\.cargo
+validate (windows-latest)	Native Windows finite query supervision	2026-10-08T04:21:20.8556097Z   CARGO_INCREMENTAL: 0
+validate (windows-latest)	Native Windows finite query supervision	2026-10-08T04:21:20.8556350Z   CARGO_TERM_COLOR: always
+validate (windows-latest)	Native Windows finite query supervision	2026-10-08T04:21:20.8556582Z ##[endgroup]
+validate (windows-latest)	Native Windows finite query supervision	2026-10-08T04:21:21.2923309Z ^[[1m^[[92m   Compiling^[[0m pctx v0.1.0-dev (D:\a\pctx\pctx)
+validate (windows-latest)	Native Windows finite query supervision	2026-10-08T04:21:29.5404193Z ^[[1m^[[92m    Finished^[[0m `test` profile [unoptimized + debuginfo] target(s) in 8.39s
+validate (windows-latest)	Native Windows finite query supervision	2026-10-08T04:21:29.5477712Z ^[[1m^[[92m     Running^[[0m unittests src\lib.rs (target\debug\deps\pctx-7fc79ca6be5a37de.exe)
+validate (windows-latest)	Native Windows finite query supervision	2026-10-08T04:21:29.5600479Z 
+validate (windows-latest)	Native Windows finite query supervision	2026-10-08T04:21:29.5601067Z running 3 tests
+validate (windows-latest)	Native Windows finite query supervision	2026-10-08T04:21:29.5611832Z test query_process::native_tests::held_pipe_child ... ok
+validate (windows-latest)	Native Windows finite query supervision	2026-10-08T04:21:29.5612590Z test query_process::native_tests::root_exits_with_inherited_pipes ... ok
+validate (windows-latest)	Native Windows finite query supervision	2026-10-08T04:21:31.5703384Z test query_process::native_tests::finite_query_timeout_observes_owned_windows_cancellation_and_pipe_eof ... ok
+validate (windows-latest)	Native Windows finite query supervision	2026-10-08T04:21:31.5704069Z 
+validate (windows-latest)	Native Windows finite query supervision	2026-10-08T04:21:31.5704440Z test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 7 filtered out; finished in 2.01s
+validate (windows-latest)	Native Windows finite query supervision	2026-10-08T04:21:31.5704933Z 
+validate (windows-latest)	Native Windows keeper ownership	﻿2026-10-08T04:21:31.7232783Z ##[group]Run cargo test --locked --test windows_guardian
+validate (windows-latest)	Native Windows keeper ownership	2026-10-08T04:21:31.7233253Z ^[[36;1mcargo test --locked --test windows_guardian^[[0m
+validate (windows-latest)	Native Windows keeper ownership	2026-10-08T04:21:31.7299705Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+validate (windows-latest)	Native Windows keeper ownership	2026-10-08T04:21:31.7300045Z env:
+validate (windows-latest)	Native Windows keeper ownership	2026-10-08T04:21:31.7300240Z   CARGO_HOME: C:\Users\runneradmin\.cargo
+validate (windows-latest)	Native Windows keeper ownership	2026-10-08T04:21:31.7300517Z   CARGO_INCREMENTAL: 0
+validate (windows-latest)	Native Windows keeper ownership	2026-10-08T04:21:31.7300719Z   CARGO_TERM_COLOR: always
+validate (windows-latest)	Native Windows keeper ownership	2026-10-08T04:21:31.7300914Z ##[endgroup]
+validate (windows-latest)	Native Windows keeper ownership	2026-10-08T04:21:32.1516667Z ^[[1m^[[92m   Compiling^[[0m pctx v0.1.0-dev (D:\a\pctx\pctx)
+validate (windows-latest)	Native Windows keeper ownership	2026-10-08T04:21:33.5083745Z ^[[1m^[[92m    Finished^[[0m `test` profile [unoptimized + debuginfo] target(s) in 1.49s
+validate (windows-latest)	Native Windows keeper ownership	2026-10-08T04:21:33.5156324Z ^[[1m^[[92m     Running^[[0m tests\windows_guardian.rs (target\debug\deps\windows_guardian-eae5d1699def1f03.exe)
+validate (windows-latest)	Native Windows keeper ownership	2026-10-08T04:21:33.5276604Z 
+validate (windows-latest)	Native Windows keeper ownership	2026-10-08T04:21:33.5277160Z running 11 tests
+validate (windows-latest)	Native Windows keeper ownership	2026-10-08T04:21:33.5282323Z test fixture_inert_keeper_entry ... ok
+validate (windows-latest)	Native Windows keeper ownership	2026-10-08T04:21:33.5283326Z test fixture_guardian_entry ... ok
+validate (windows-latest)	Native Windows keeper ownership	2026-10-08T04:21:33.5283845Z test fixture_parent_entry ... ok
+validate (windows-latest)	Native Windows keeper ownership	2026-10-08T04:21:33.5284801Z test fixture_target_entry ... ok
+validate (windows-latest)	Native Windows keeper ownership	2026-10-08T04:21:34.3469241Z test native_keeper_durable_ack_single_use_and_descendant_bound_release ... ok
+validate (windows-latest)	Native Windows keeper ownership	2026-10-08T04:21:34.4144113Z test native_parent_death_keeps_live_target_slot_until_job_empty ... FAILED
+validate (windows-latest)	Native Windows keeper ownership	2026-10-08T04:21:34.8925579Z test registered_cli_entry_uses_owned_protocol_without_loading_project ... ok
+validate (windows-latest)	Native Windows keeper ownership	2026-10-08T04:21:34.9807590Z test sealed_empty_abort_consumes_admission_capability_before_unlock ... ok
+validate (windows-latest)	Native Windows keeper ownership	2026-10-08T04:21:35.0151337Z test stale_parent_creation_identity_cannot_admit_a_keeper ... ok
+validate (windows-latest)	Native Windows keeper ownership	2026-10-08T04:21:35.3913381Z test wrong_job_attach_retains_unsealed_slot_even_when_observed_job_is_empty ... ok
+validate (windows-latest)	Native Windows keeper ownership	2026-10-08T04:21:39.2571978Z test native_no_reader_has_one_bounded_send_receive_deadline ... ok
+validate (windows-latest)	Native Windows keeper ownership	2026-10-08T04:21:39.2572600Z 
+validate (windows-latest)	Native Windows keeper ownership	2026-10-08T04:21:39.2572735Z failures:
+validate (windows-latest)	Native Windows keeper ownership	2026-10-08T04:21:39.2572913Z 
+validate (windows-latest)	Native Windows keeper ownership	2026-10-08T04:21:39.2573170Z ---- native_parent_death_keeps_live_target_slot_until_job_empty stdout ----
+validate (windows-latest)	Native Windows keeper ownership	2026-10-08T04:21:39.2573544Z 
+validate (windows-latest)	Native Windows keeper ownership	2026-10-08T04:21:39.2573977Z thread 'native_parent_death_keeps_live_target_slot_until_job_empty' (6760) panicked at tests\windows_guardian.rs:501:13:
+validate (windows-latest)	Native Windows keeper ownership	2026-10-08T04:21:39.2579854Z parent-stage unavailable after 849ms; helper_status=Some(ExitStatus(ExitStatus(101))); latest_phase={"admission_sealed":true,"child":{"creation_filetime":134359068942993549,"pid":5484},"elapsed_ms":788,"guardian":{"creation_filetime":134359068942645343,"pid":2696},"job_name":"Local\\PCTX-5fa40063-106f-4d0c-93f4-21bd8b0bb0d5","job_owner_sid":"S-1-5-21-1643835476-1616584234-1346609752-500","phase":"target-started","protocol_dir":"\\\\?\\C:\\Users\\runneradmin\\AppData\\Local\\Temp\\.tmpRqcXlJ\\WG-65ca0e8d-9939-4209-8e85-1d62ae3a72a6"}; stdout_tail="\nrunning 1 test\ntest fixture_parent_entry ... FAILED\n\nfailures:\n\nfailures:\n    fixture_parent_entry\n\ntest result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 10 filtered out; finished in 0.84s\n\n"; stderr_tail="\nthread 'fixture_parent_entry' (5940) panicked at tests\\windows_guardian.rs:457:6:\ncalled `Result::unwrap()` on an `Err` value: Error { code: \"IO_ERROR\", message: \"Filesystem operation failed\", retryable: false, exit: 7 }\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"; cleanup_job_pinned=true; cleanup_keeper_identity_known=true; cleanup_completed=true; fixture diagnostics retained at C:\Users\RUNNER~1\AppData\Local\Temp\.tmpRqcXlJ
+validate (windows-latest)	Native Windows keeper ownership	2026-10-08T04:21:39.2585748Z note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+validate (windows-latest)	Native Windows keeper ownership	2026-10-08T04:21:39.2586095Z 
+validate (windows-latest)	Native Windows keeper ownership	2026-10-08T04:21:39.2586102Z 
+validate (windows-latest)	Native Windows keeper ownership	2026-10-08T04:21:39.2586195Z failures:
+validate (windows-latest)	Native Windows keeper ownership	2026-10-08T04:21:39.2586484Z     native_parent_death_keeps_live_target_slot_until_job_empty
+validate (windows-latest)	Native Windows keeper ownership	2026-10-08T04:21:39.2586759Z 
+validate (windows-latest)	Native Windows keeper ownership	2026-10-08T04:21:39.2587053Z test result: FAILED. 10 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 5.73s
+validate (windows-latest)	Native Windows keeper ownership	2026-10-08T04:21:39.2587448Z 
+validate (windows-latest)	Native Windows keeper ownership	2026-10-08T04:21:39.2598626Z ^[[1m^[[91merror^[[0m: test failed, to rerun pass `--test windows_guardian`
+validate (windows-latest)	Native Windows keeper ownership	2026-10-08T04:21:39.3692567Z ##[error]Process completed with exit code 1.
+validate (windows-latest)	Post Run actions/checkout@v4	﻿2026-10-08T04:21:39.3957690Z Post job cleanup.
+validate (windows-latest)	Post Run actions/checkout@v4	2026-10-08T04:21:39.5791793Z [command]"C:\Program Files\Git\bin\git.exe" version
+validate (windows-latest)	Post Run actions/checkout@v4	2026-10-08T04:21:39.6070261Z git version 2.55.0.windows.5
+validate (windows-latest)	Post Run actions/checkout@v4	2026-10-08T04:21:39.6139404Z Temporarily overriding HOME='D:\a\_temp\ccf99431-8ae9-4667-bc08-f495edab2876' before making global git config changes
+validate (windows-latest)	Post Run actions/checkout@v4	2026-10-08T04:21:39.6140608Z Adding repository directory to the temporary git global config as a safe directory
+validate (windows-latest)	Post Run actions/checkout@v4	2026-10-08T04:21:39.6151851Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\pctx\pctx
+validate (windows-latest)	Post Run actions/checkout@v4	2026-10-08T04:21:39.6470172Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+validate (windows-latest)	Post Run actions/checkout@v4	2026-10-08T04:21:39.6789366Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+validate (windows-latest)	Post Run actions/checkout@v4	2026-10-08T04:21:40.2302513Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+validate (windows-latest)	Post Run actions/checkout@v4	2026-10-08T04:21:40.2573541Z http.https://github.com/.extraheader
+validate (windows-latest)	Post Run actions/checkout@v4	2026-10-08T04:21:40.2631049Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset-all http.https://github.com/.extraheader
+validate (windows-latest)	Post Run actions/checkout@v4	2026-10-08T04:21:40.2971396Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+validate (windows-latest)	Post Run actions/checkout@v4	2026-10-08T04:21:40.8994254Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+validate (windows-latest)	Post Run actions/checkout@v4	2026-10-08T04:21:40.9316229Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+validate (windows-latest)	Complete job	﻿2026-10-08T04:21:41.5170418Z Cleaning up orphan processes
+validate (windows-latest)	Complete job	2026-10-08T04:21:41.5677424Z Terminate orphan process: pid (1248) (vctip)
+validate (windows-latest)	Complete job	2026-10-08T04:21:41.5773063Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

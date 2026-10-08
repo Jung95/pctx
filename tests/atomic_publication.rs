@@ -100,3 +100,26 @@ fn windows_replacement_failure_preserves_directory_target_and_cleans_staging() {
     );
     assert_eq!(std::fs::read_dir(dir.path()).unwrap().count(), 1);
 }
+
+#[cfg(windows)]
+#[test]
+fn windows_create_only_handle_relative_publication_in_nested_unicode_directory() {
+    let root = tempfile::tempdir().unwrap();
+    let directory = root.path().join("nested-한글-🚀");
+    std::fs::create_dir(&directory).unwrap();
+    let path = directory.join("parent-stage.json");
+    let bytes = br#"{"phase":"target-started","owned":true}"#;
+    if let Err(error) = atomic_write(&path, bytes, false) {
+        // The production error includes only phase/native numeric codes; no
+        // private absolute pathname or receipt content is emitted here.
+        panic!(
+            "Native create-only publication failed: code={}, diagnostic={}",
+            error.code, error.message
+        );
+    }
+    assert_eq!(std::fs::read(&path).unwrap(), bytes);
+    let conflict = atomic_write(&path, b"forbidden replacement", false).unwrap_err();
+    assert_eq!(conflict.code, "REVISION_CONFLICT");
+    assert_eq!(std::fs::read(&path).unwrap(), bytes);
+    assert_eq!(std::fs::read_dir(&directory).unwrap().count(), 1);
+}

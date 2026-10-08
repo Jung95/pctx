@@ -25,6 +25,116 @@ fn error(code: &str, message: &str) -> Error {
         },
     )
 }
+#[cfg(unix)]
+#[derive(Default)]
+struct QueryObservation {
+    phase: &'static str,
+    spawn_ms: u128,
+    root_pid: u32,
+    native_child: Option<String>,
+    iterations: u64,
+    stdout_eof: bool,
+    stderr_eof: bool,
+    stdout_bytes: usize,
+    stderr_bytes: usize,
+    root_exit_observed: bool,
+    waitid_signo: i32,
+    waitid_code: i32,
+    group_probes: u64,
+    group_has_others: Option<bool>,
+}
+#[cfg(unix)]
+impl QueryObservation {
+    fn timeout(&self, elapsed: Duration) -> Error {
+        // Counts and lifecycle flags only: never argv, paths, or captured bytes.
+        error(
+            "TIMEOUT",
+            &format!(
+                "Request deadline expired (phase={}, elapsed_ms={}, spawn_ms={}, iterations={}, stdout_eof={}, stderr_eof={}, stdout_bytes={}, stderr_bytes={}, root_exit_observed={}, waitid_signo={}, waitid_code={}, group_probes={}, group_has_others={:?}, root_pid={}, native_child={:?})",
+                self.phase,
+                elapsed.as_millis(),
+                self.spawn_ms,
+                self.iterations,
+                self.stdout_eof,
+                self.stderr_eof,
+                self.stdout_bytes,
+                self.stderr_bytes,
+                self.root_exit_observed,
+                self.waitid_signo,
+                self.waitid_code,
+                self.group_probes,
+                self.group_has_others,
+                self.root_pid,
+                self.native_child
+            ),
+        )
+    }
+}
+
+#[cfg(target_os = "macos")]
+fn mac_child_observation(pid: u32) -> String {
+    // Only our unreaped child is queried. Fixed-size native records; no command
+    // names, executable paths, environment, stack, or host-process inventory.
+    let mut bsd = std::mem::MaybeUninit::<libc::proc_bsdinfo>::zeroed();
+    let bsd_size = std::mem::size_of::<libc::proc_bsdinfo>();
+    let bsd_bytes = unsafe {
+        libc::proc_pidinfo(
+            pid as i32,
+            libc::PROC_PIDTBSDINFO,
+            0,
+            bsd.as_mut_ptr().cast(),
+            bsd_size as i32,
+        )
+    };
+    if bsd_bytes != bsd_size as i32 {
+        return format!(
+            "bsd_unknown(bytes={bsd_bytes},errno={:?})",
+            std::io::Error::last_os_error().raw_os_error()
+        );
+    }
+    let bsd = unsafe { bsd.assume_init() };
+    if bsd.pbi_pid != pid || bsd.pbi_uid != unsafe { libc::geteuid() } {
+        return "bsd_identity_unknown".into();
+    }
+    let mut task = std::mem::MaybeUninit::<libc::proc_taskinfo>::zeroed();
+    let task_size = std::mem::size_of::<libc::proc_taskinfo>();
+    let task_bytes = unsafe {
+        libc::proc_pidinfo(
+            pid as i32,
+            libc::PROC_PIDTASKINFO,
+            0,
+            task.as_mut_ptr().cast(),
+            task_size as i32,
+        )
+    };
+    let base = format!(
+        "status={},flags={},pgid_matches={},ppid_matches={},start_sec={},start_usec={}",
+        bsd.pbi_status,
+        bsd.pbi_flags,
+        bsd.pbi_pgid == pid,
+        bsd.pbi_ppid == std::process::id(),
+        bsd.pbi_start_tvsec,
+        bsd.pbi_start_tvusec
+    );
+    if task_bytes != task_size as i32 {
+        return format!(
+            "{base},task_unknown(bytes={task_bytes},errno={:?})",
+            std::io::Error::last_os_error().raw_os_error()
+        );
+    }
+    let task = unsafe { task.assume_init() };
+    format!(
+        "{base},threads={},running={},cpu_user={},cpu_system={},mach_calls={},unix_calls={},context_switches={}",
+        task.pti_threadnum,
+        task.pti_numrunning,
+        task.pti_total_user,
+        task.pti_total_system,
+        task.pti_syscalls_mach,
+        task.pti_syscalls_unix,
+        task.pti_csw
+    )
+}
+
 // Native group membership is observed while the exited root remains unreaped.
 // The pinned root prevents PGID reuse. This does not contain descendants that
 // deliberately escape the group; only admitted local Git/ps queries use it.
@@ -471,7 +581,14 @@ pub fn output(command: Command, deadline: Deadline, max_bytes: usize) -> Result<
             });
         }
         deadline.check()?;
+        let started = std::time::Instant::now();
         let mut child = command.spawn()?;
+        let mut observation = QueryObservation {
+            phase: "spawn_returned",
+            spawn_ms: started.elapsed().as_millis(),
+            root_pid: child.id(),
+            ..Default::default()
+        };
         let mut root_identity_retained = true;
         let result = (|| {
             let mut stdout = child
@@ -484,9 +601,20 @@ pub fn output(command: Command, deadline: Deadline, max_bytes: usize) -> Result<
                 .ok_or_else(|| error("SOURCE_UNAVAILABLE", "Missing query stderr"))?;
             let (mut out, mut err) = (Vec::new(), Vec::new());
             let (mut out_eof, mut err_eof) = (false, false);
+            #[cfg(target_os = "macos")]
+            let mut next_native_observation = started;
             loop {
+                observation.iterations = observation.iterations.saturating_add(1);
                 deadline.check()?;
+                #[cfg(target_os = "macos")]
+                if std::time::Instant::now() >= next_native_observation {
+                    observation.phase = "native_child_observation";
+                    observation.native_child = Some(mac_child_observation(child.id()));
+                    next_native_observation = std::time::Instant::now() + Duration::from_millis(50);
+                    deadline.check()?;
+                }
                 if !out_eof {
+                    observation.phase = "stdout_drain";
                     out_eof = drain(
                         &mut stdout,
                         &mut out,
@@ -494,7 +622,10 @@ pub fn output(command: Command, deadline: Deadline, max_bytes: usize) -> Result<
                         deadline,
                     )?;
                 }
+                observation.stdout_eof = out_eof;
+                observation.stdout_bytes = out.len();
                 if !err_eof {
+                    observation.phase = "stderr_drain";
                     err_eof = drain(
                         &mut stderr,
                         &mut err,
@@ -502,6 +633,9 @@ pub fn output(command: Command, deadline: Deadline, max_bytes: usize) -> Result<
                         deadline,
                     )?;
                 }
+                observation.stderr_eof = err_eof;
+                observation.stderr_bytes = err.len();
+                observation.phase = "root_exit_observation";
                 // Observe without reaping: root exit and pipe EOF alone do not
                 // prove descendants with closed streams have finished.
                 let mut info: libc::siginfo_t = unsafe { std::mem::zeroed() };
@@ -523,11 +657,19 @@ pub fn output(command: Command, deadline: Deadline, max_bytes: usize) -> Result<
                         "Query root exit could not be observed",
                     ));
                 }
-                if info.si_signo != 0
-                    && out_eof
-                    && err_eof
-                    && !group_has_other_members(child.id(), deadline)?
-                {
+                observation.waitid_signo = info.si_signo;
+                observation.waitid_code = info.si_code;
+                observation.root_exit_observed = info.si_signo != 0;
+                let group_empty = if observation.root_exit_observed && out_eof && err_eof {
+                    observation.phase = "group_observation";
+                    observation.group_probes = observation.group_probes.saturating_add(1);
+                    let others = group_has_other_members(child.id(), deadline)?;
+                    observation.group_has_others = Some(others);
+                    !others
+                } else {
+                    false
+                };
+                if group_empty {
                     // No further signals are allowed after this transition.
                     root_identity_retained = false;
                     let status = child.try_wait()?.ok_or_else(|| {
@@ -542,9 +684,17 @@ pub fn output(command: Command, deadline: Deadline, max_bytes: usize) -> Result<
                         stderr: err,
                     });
                 }
+                observation.phase = "wait_next_observation";
                 std::thread::sleep(deadline.remaining()?.min(Duration::from_millis(5)));
             }
         })();
+        let result = result.map_err(|e| {
+            if e.code == "TIMEOUT" {
+                observation.timeout(started.elapsed())
+            } else {
+                e
+            }
+        });
         if result.is_err() && root_identity_retained {
             unsafe {
                 libc::kill(-(child.id() as i32), libc::SIGKILL);

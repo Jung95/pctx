@@ -26,12 +26,15 @@ jobs:
       - name: Native Windows finite query supervision
         if: runner.os == 'Windows'
         run: cargo test --locked --lib query_process
+      - name: Native Windows atomic publication
+        if: runner.os == 'Windows'
+        run: cargo test --locked --test atomic_publication
       - name: Native Windows keeper ownership
         if: runner.os == 'Windows'
         run: cargo test --locked --test windows_guardian
       - name: Native Windows reader and CLI boundaries
         if: runner.os == 'Windows'
-        run: cargo test --locked --test atomic_publication --test reader_policy_cache --test cli_contract
+        run: cargo test --locked --test reader_policy_cache --test cli_contract
       - name: Static checks
         run: cargo clippy --all-targets --locked -- -D warnings
       - name: Unit and integration tests

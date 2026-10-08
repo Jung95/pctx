@@ -534,13 +534,17 @@ fn aliases(p: &Project, terms: &[String]) -> Result<AliasExpansion> {
 /// Search one pinned index generation. Strict refresh and its partial-coverage
 /// propagation remain the calling application's responsibility, as for `find`.
 /// Metadata-only kinds defer physical access checks until the exact expression
-/// selects a candidate; text/all preserve the fully authorized snapshot path.
+/// selects a candidate. Text/all defer physical admission until scope/language
+/// filtering, then retain authorization and verified reads of every candidate.
 pub fn find_indexed(p: &Project, req: &FindRequest) -> Result<Value> {
     let bounded = query_project(p)?;
     let p = &bounded;
     let metadata_only = matches!(req.kind.as_str(), "path" | "symbol" | "document");
+    let body_search = matches!(req.kind.as_str(), "text" | "all");
     let (generation, files) = if metadata_only {
         crate::storage::metadata_search_snapshot(p)?
+    } else if body_search {
+        crate::storage::body_search_snapshot(p)?
     } else {
         crate::storage::snapshot(p)?
     };
@@ -554,13 +558,17 @@ pub fn find_indexed(p: &Project, req: &FindRequest) -> Result<Value> {
         reader::validate_root(p)?;
     }
     value["generation_id"] = json!(generation);
-    if metadata_only {
+    if metadata_only || body_search {
         // Unopened noncandidates can be deleted, inaccessible or links. Their
         // historical indexed count is not a count of authorized current files.
         value["scanned_files"] = Value::Null;
         value["coverage"]["physical_non_candidates_checked"] = json!(false);
     } else {
         value["coverage"]["physical_non_candidates_checked"] = json!(true);
+    }
+    if body_search {
+        value["coverage"]["body_candidate_universe"] =
+            json!("policy_eligible_indexed_files_in_requested_scope_language");
     }
     Ok(value)
 }
@@ -630,6 +638,7 @@ pub fn find(p: &Project, files: &[FileEntry], req: &FindRequest) -> Result<Value
     let mut results = Vec::new();
     let mut reasons = Vec::new();
     let mut scanned = 0;
+    let mut verified_body_files = 0;
     'scan: for f in files {
         if let Err(e) = p.check_deadline() {
             if results.is_empty() {
@@ -703,6 +712,9 @@ pub fn find(p: &Project, files: &[FileEntry], req: &FindRequest) -> Result<Value
         } else {
             None
         };
+        if body.is_some() && matches!(req.kind.as_str(), "text" | "all") {
+            verified_body_files += 1;
+        }
         let freshness = if req.freshness == "off" {
             "unchecked"
         } else if body.as_ref().is_some_and(|v| v.hash == f.file_hash) {
@@ -915,7 +927,8 @@ pub fn find(p: &Project, files: &[FileEntry], req: &FindRequest) -> Result<Value
             "new_candidate_discovery": "not_performed_by_find"
         },
         "omitted_count": if reasons.is_empty() { json!(omitted) } else { Value::Null },
-        "scanned_files": scanned
+        "scanned_files": scanned,
+        "verified_body_files": if matches!(req.kind.as_str(), "text" | "all") { json!(verified_body_files) } else { Value::Null }
     }))
 }
 

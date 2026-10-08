@@ -1,0 +1,1100 @@
+validate (ubuntu-latest)	Set up job	﻿2026-10-08T04:13:26.6975001Z Current runner version: '2.337.0'
+validate (ubuntu-latest)	Set up job	2026-10-08T04:13:26.6996480Z ##[group]Runner Image Provisioner
+validate (ubuntu-latest)	Set up job	2026-10-08T04:13:26.6997208Z Hosted Compute Agent
+validate (ubuntu-latest)	Set up job	2026-10-08T04:13:26.6997908Z Version: 20261002.596
+validate (ubuntu-latest)	Set up job	2026-10-08T04:13:26.6998430Z Commit: c3d12f3313a95f25162a1503be624f3b0617f8c0
+validate (ubuntu-latest)	Set up job	2026-10-08T04:13:26.6999143Z Build Date: 2026-10-02T22:28:27Z
+validate (ubuntu-latest)	Set up job	2026-10-08T04:13:26.6999757Z Worker ID: {b3ee50d1-899c-41bf-8a2d-24f6d82b0f0b}
+validate (ubuntu-latest)	Set up job	2026-10-08T04:13:26.7000321Z Region: westus3
+validate (ubuntu-latest)	Set up job	2026-10-08T04:13:26.7000826Z Cloud: Azure
+validate (ubuntu-latest)	Set up job	2026-10-08T04:13:26.7001276Z ##[endgroup]
+validate (ubuntu-latest)	Set up job	2026-10-08T04:13:26.7002520Z ##[group]Operating System
+validate (ubuntu-latest)	Set up job	2026-10-08T04:13:26.7003048Z Ubuntu
+validate (ubuntu-latest)	Set up job	2026-10-08T04:13:26.7003477Z 24.04.5
+validate (ubuntu-latest)	Set up job	2026-10-08T04:13:26.7003936Z LTS
+validate (ubuntu-latest)	Set up job	2026-10-08T04:13:26.7004367Z ##[endgroup]
+validate (ubuntu-latest)	Set up job	2026-10-08T04:13:26.7004908Z ##[group]Runner Image
+validate (ubuntu-latest)	Set up job	2026-10-08T04:13:26.7005408Z Image: ubuntu-24.04
+validate (ubuntu-latest)	Set up job	2026-10-08T04:13:26.7005873Z Version: 20261004.327.1
+validate (ubuntu-latest)	Set up job	2026-10-08T04:13:26.7006804Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261004.327/images/ubuntu/Ubuntu2404-Readme.md
+validate (ubuntu-latest)	Set up job	2026-10-08T04:13:26.7008553Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261004.327
+validate (ubuntu-latest)	Set up job	2026-10-08T04:13:26.7009355Z ##[endgroup]
+validate (ubuntu-latest)	Set up job	2026-10-08T04:13:26.7010524Z ##[group]GITHUB_TOKEN Permissions
+validate (ubuntu-latest)	Set up job	2026-10-08T04:13:26.7012317Z Contents: read
+validate (ubuntu-latest)	Set up job	2026-10-08T04:13:26.7012855Z Metadata: read
+validate (ubuntu-latest)	Set up job	2026-10-08T04:13:26.7013450Z ##[endgroup]
+validate (ubuntu-latest)	Set up job	2026-10-08T04:13:26.7015076Z Secret source: Actions
+validate (ubuntu-latest)	Set up job	2026-10-08T04:13:26.7015930Z Cache mode: write
+validate (ubuntu-latest)	Set up job	2026-10-08T04:13:26.7016511Z Prepare workflow directory
+validate (ubuntu-latest)	Set up job	2026-10-08T04:13:26.7271522Z Prepare all required actions
+validate (ubuntu-latest)	Set up job	2026-10-08T04:13:26.7311339Z Getting action download info
+validate (ubuntu-latest)	Set up job	2026-10-08T04:13:27.0114214Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+validate (ubuntu-latest)	Set up job	2026-10-08T04:13:27.1426817Z Download action repository 'dtolnay/rust-toolchain@stable' (SHA:89b12181fb390509a0842a86cc55eeb8eb928c1d)
+validate (ubuntu-latest)	Set up job	2026-10-08T04:13:27.5066895Z Complete job name: validate (ubuntu-latest)
+validate (ubuntu-latest)	Run actions/checkout@v4	﻿2026-10-08T04:13:27.5665968Z ##[group]Run actions/checkout@v4
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:27.5666653Z with:
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:27.5667003Z   repository: Jung95/pctx
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:27.5670362Z   token: ***
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:27.5670710Z   ssh-strict: true
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:27.5671065Z   ssh-user: git
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:27.5671412Z   persist-credentials: true
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:27.5671803Z   clean: true
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:27.5672162Z   sparse-checkout-cone-mode: true
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:27.5672572Z   fetch-depth: 1
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:27.5672916Z   fetch-tags: false
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:27.5673268Z   show-progress: true
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:27.5673618Z   lfs: false
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:27.5673941Z   submodules: false
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:27.5674296Z   set-safe-directory: true
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:27.5674688Z   allow-unsafe-pr-checkout: false
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:27.5675293Z ##[endgroup]
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:27.6474770Z Syncing repository: Jung95/pctx
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:27.6476795Z ##[group]Getting Git version info
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:27.6477360Z Working directory is '/home/runner/work/pctx/pctx'
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:27.6478447Z [command]/usr/bin/git version
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:27.6554277Z git version 2.55.0
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:27.6577224Z ##[endgroup]
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:27.6585742Z Temporarily overriding HOME='/home/runner/work/_temp/9936aaeb-962d-4144-9467-3cc5914684d5' before making global git config changes
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:27.6591316Z Adding repository directory to the temporary git global config as a safe directory
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:27.6592478Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/pctx/pctx
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:27.6637184Z Deleting the contents of '/home/runner/work/pctx/pctx'
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:27.6644120Z ##[group]Initializing the repository
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:27.6650835Z [command]/usr/bin/git init /home/runner/work/pctx/pctx
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:27.6781792Z hint: Using 'master' as the name for the initial branch. This default branch name
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:27.6783373Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:27.6785538Z hint: to use in all of your new repositories, which will suppress this warning,
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:27.6787077Z hint: call:
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:27.6788790Z hint:
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:27.6789653Z hint: 	git config --global init.defaultBranch <name>
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:27.6791892Z hint:
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:27.6792822Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:27.6794080Z hint: 'development'. The just-created branch can be renamed via this command:
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:27.6795068Z hint:
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:27.6795716Z hint: 	git branch -m <name>
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:27.6796359Z hint:
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:27.6797017Z hint: Disable this message with "git config set advice.defaultBranchName false"
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:27.6798065Z Initialized empty Git repository in /home/runner/work/pctx/pctx/.git/
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:27.6800140Z [command]/usr/bin/git remote add origin https://github.com/Jung95/pctx
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:27.6844210Z ##[endgroup]
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:27.6845162Z ##[group]Disabling automatic garbage collection
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:27.6858621Z [command]/usr/bin/git config --local gc.auto 0
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:27.6874953Z ##[endgroup]
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:27.6875859Z ##[group]Setting up auth
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:27.6881319Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:27.6908544Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:27.7973640Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:27.8003721Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:27.8190204Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:27.8219585Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:27.8414520Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:27.8451048Z ##[endgroup]
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:27.8451701Z ##[group]Fetching the repository
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:27.8458406Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +d3d05b445ec4cfc96e494ac644315f97959202f7:refs/remotes/origin/main
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:28.7238155Z From https://github.com/Jung95/pctx
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:28.7239952Z  * [new ref]         d3d05b445ec4cfc96e494ac644315f97959202f7 -> origin/main
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:28.7243831Z ##[endgroup]
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:28.7245447Z ##[group]Determining the checkout info
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:28.7247080Z ##[endgroup]
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:28.7248261Z [command]/usr/bin/git sparse-checkout disable
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:28.7294028Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:28.7322002Z ##[group]Checking out the ref
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:28.7325213Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:28.7564967Z Switched to a new branch 'main'
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:28.7570455Z branch 'main' set up to track 'origin/main'.
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:28.7577620Z ##[endgroup]
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:28.7612614Z [command]/usr/bin/git log -1 --format=%H
+validate (ubuntu-latest)	Run actions/checkout@v4	2026-10-08T04:13:28.7635004Z d3d05b445ec4cfc96e494ac644315f97959202f7
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	﻿2026-10-08T04:13:28.8149486Z ##[group]Run dtolnay/rust-toolchain@stable
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.8150555Z with:
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.8151310Z   components: rustfmt, clippy
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.8152194Z   toolchain: stable
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.8152968Z ##[endgroup]
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.8291136Z ##[start-action display=Parse toolchain version;id=__dtolnay_rust-toolchain.parse]
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.8354892Z ##[group]Run if [[ -z $toolchain ]]; then
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.8355946Z ^[[36;1mif [[ -z $toolchain ]]; then^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.8357872Z ^[[36;1m  # GitHub does not enforce `required: true` inputs itself. https://github.com/actions/runner/issues/1070^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.8359517Z ^[[36;1m  echo "'toolchain' is a required input" >&2^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.8360494Z ^[[36;1m  exit 1^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.8361537Z ^[[36;1melif [[ $toolchain =~ ^stable' '[0-9]+' '(year|month|week|day)s?' 'ago$ ]]; then^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.8362804Z ^[[36;1m  if [[ Linux == macOS ]]; then^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.8364341Z ^[[36;1m    echo "toolchain=1.$((($(date -v-$(sed 's/stable \([0-9]*\) \(.\).*/\1\2/' <<< $toolchain) +%s)/60/60/24-16569)/7/6))" >> $GITHUB_OUTPUT^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.8365918Z ^[[36;1m  else^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.8367157Z ^[[36;1m    echo "toolchain=1.$((($(date --date "${toolchain#stable }" +%s)/60/60/24-16569)/7/6))" >> $GITHUB_OUTPUT^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.8368862Z ^[[36;1m  fi^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.8369830Z ^[[36;1melif [[ $toolchain =~ ^stable' 'minus' '[0-9]+' 'releases?$ ]]; then^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.8371441Z ^[[36;1m  echo "toolchain=1.$((($(date +%s)/60/60/24-16569)/7/6-${toolchain//[^0-9]/}))" >> $GITHUB_OUTPUT^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.8372863Z ^[[36;1melif [[ $toolchain =~ ^1\.[0-9]+$ ]]; then^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.8374439Z ^[[36;1m  echo "toolchain=1.$((i=${toolchain#1.}, c=($(date +%s)/60/60/24-16569)/7/6, i+9*i*(10*i<=c)+90*i*(100*i<=c)))" >> $GITHUB_OUTPUT^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.8375940Z ^[[36;1melse^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.8376757Z ^[[36;1m  echo "toolchain=$toolchain" >> $GITHUB_OUTPUT^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.8377853Z ^[[36;1mfi^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.8594172Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.8595268Z env:
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.8595943Z   toolchain: stable
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.8596666Z ##[endgroup]
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.8725693Z ##[end-action id=__dtolnay_rust-toolchain.parse;outcome=success;conclusion=success;duration_ms=43]
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.8739608Z ##[start-action display=Construct rustup command line;id=__dtolnay_rust-toolchain.flags]
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.8782520Z ##[group]Run echo "targets=$(for t in ${targets//,/ }; do echo -n ' --target' $t; done)" >> $GITHUB_OUTPUT
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.8784385Z ^[[36;1mecho "targets=$(for t in ${targets//,/ }; do echo -n ' --target' $t; done)" >> $GITHUB_OUTPUT^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.8786275Z ^[[36;1mecho "components=$(for c in ${components//,/ }; do echo -n ' --component' $c; done)" >> $GITHUB_OUTPUT^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.8787947Z ^[[36;1mecho "downgrade=" >> $GITHUB_OUTPUT^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.8839640Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.8840715Z env:
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.8841356Z   targets: 
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.8842050Z   components: rustfmt, clippy
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.8842851Z ##[endgroup]
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.8936891Z ##[end-action id=__dtolnay_rust-toolchain.flags;outcome=success;conclusion=success;duration_ms=19]
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.8942273Z ##[start-action display=Set $CARGO_HOME;id=__dtolnay_rust-toolchain.__run]
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.8975711Z ##[group]Run echo CARGO_HOME=${CARGO_HOME:-"$HOME/.cargo"} >> $GITHUB_ENV
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.8977153Z ^[[36;1mecho CARGO_HOME=${CARGO_HOME:-"$HOME/.cargo"} >> $GITHUB_ENV^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.9028941Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.9030014Z ##[endgroup]
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.9122278Z ##[end-action id=__dtolnay_rust-toolchain.__run;outcome=success;conclusion=success;duration_ms=17]
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.9127479Z ##[start-action display=Install rustup if needed;id=__dtolnay_rust-toolchain.__run_2]
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.9171167Z ##[group]Run if ! command -v rustup &>/dev/null; then
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.9172277Z ^[[36;1mif ! command -v rustup &>/dev/null; then^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.9174372Z ^[[36;1m  curl --proto '=https' --tlsv1.2 --retry 10 --retry-connrefused --location --silent --show-error --fail https://sh.rustup.rs | sh -s -- --default-toolchain none -y^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.9176457Z ^[[36;1m  echo "$CARGO_HOME/bin" >> $GITHUB_PATH^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.9177391Z ^[[36;1mfi^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.9228482Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.9229529Z env:
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.9230214Z   CARGO_HOME: /home/runner/.cargo
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.9231044Z ##[endgroup]
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.9317531Z ##[end-action id=__dtolnay_rust-toolchain.__run_2;outcome=success;conclusion=success;duration_ms=18]
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.9323008Z ##[start-action display=Install rustup if needed on windows;id=__dtolnay_rust-toolchain.__run_3]
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.9335002Z ##[end-action id=__dtolnay_rust-toolchain.__run_3;outcome=skipped;conclusion=skipped;duration_ms=0]
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.9347137Z ##[start-action display=rustup toolchain install stable;id=__dtolnay_rust-toolchain.__run_4]
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.9381333Z ##[group]Run log=$(mktemp)
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.9382138Z ^[[36;1mlog=$(mktemp)^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.9382895Z ^[[36;1mtrap 'rm -f "$log"' EXIT^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.9383734Z ^[[36;1mfor attempt in 1 2 3 4 5; do^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.9385614Z ^[[36;1m  if rustup toolchain install stable --component rustfmt --component clippy --profile minimal --no-self-update --force-non-host 2>&1 | tee "$log"; then^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.9387510Z ^[[36;1m    break^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.9388408Z ^[[36;1m  else^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.9389110Z ^[[36;1m    status=$?^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.9389832Z ^[[36;1m  fi^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.9390731Z ^[[36;1m  if [[ $attempt == 5 ]] || ! grep -Fq 'checksum failed for ' "$log" \^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.9392351Z ^[[36;1m      || ! grep -Fq 'this is likely due to an ongoing update of the official release server' "$log"; then^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.9393758Z ^[[36;1m    exit "$status"^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.9394514Z ^[[36;1m  fi^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.9395603Z ^[[36;1m  echo "Retrying rustup toolchain install in 30 seconds (retry $attempt of 4)" >&2^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.9396881Z ^[[36;1m  sleep 30^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.9397570Z ^[[36;1mdone^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.9449191Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.9450213Z env:
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.9450873Z   CARGO_HOME: /home/runner/.cargo
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.9451713Z   RUSTUP_PERMIT_COPY_RENAME: 1
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:28.9452492Z ##[endgroup]
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.1297914Z info: syncing channel updates for stable-x86_64-unknown-linux-gnu
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.2260956Z info: latest update on 2026-10-01 for version 1.99.0 (b940084d7 2026-09-28)
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.2365220Z info: component clippy is up to date
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.2365712Z info: component rustfmt is up to date
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.2375637Z 
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.2448891Z   stable-x86_64-unknown-linux-gnu unchanged - rustc 1.99.0 (b940084d7 2026-09-28)
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.2449248Z 
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.2493505Z ##[end-action id=__dtolnay_rust-toolchain.__run_4;outcome=success;conclusion=success;duration_ms=314]
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.2498656Z ##[start-action display=rustup default stable;id=__dtolnay_rust-toolchain.__run_5]
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.2516762Z ##[group]Run rustup default stable --force-non-host
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.2517149Z ^[[36;1mrustup default stable --force-non-host^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.2574284Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.2574605Z env:
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.2574824Z   CARGO_HOME: /home/runner/.cargo
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.2575059Z ##[endgroup]
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.2679059Z info: using existing install for stable-x86_64-unknown-linux-gnu
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.2688447Z info: default toolchain set to stable-x86_64-unknown-linux-gnu
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.2688858Z 
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.2754930Z   stable-x86_64-unknown-linux-gnu unchanged - rustc 1.99.0 (b940084d7 2026-09-28)
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.2755634Z 
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.2768874Z ##[end-action id=__dtolnay_rust-toolchain.__run_5;outcome=success;conclusion=success;duration_ms=26]
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.2771131Z ##[start-action display=Create cachekey;id=__dtolnay_rust-toolchain.rustc-version]
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.2790428Z ##[group]Run DATE=$(rustc +stable --version --verbose | sed -ne 's/^commit-date: \(20[0-9][0-9]\)-\([01][0-9]\)-\([0-3][0-9]\)$/\1\2\3/p')
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.2791295Z ^[[36;1mDATE=$(rustc +stable --version --verbose | sed -ne 's/^commit-date: \(20[0-9][0-9]\)-\([01][0-9]\)-\([0-3][0-9]\)$/\1\2\3/p')^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.2791869Z ^[[36;1mHASH=$(rustc +stable --version --verbose | sed -ne 's/^commit-hash: //p')^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.2792310Z ^[[36;1mecho "cachekey=$(echo $DATE$HASH | head -c12)" >> $GITHUB_OUTPUT^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.2845753Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.2846093Z env:
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.2846323Z   CARGO_HOME: /home/runner/.cargo
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.2846579Z ##[endgroup]
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.3162471Z ##[end-action id=__dtolnay_rust-toolchain.rustc-version;outcome=success;conclusion=success;duration_ms=39]
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.3165042Z ##[start-action display=Disable incremental compilation;id=__dtolnay_rust-toolchain.__run_6]
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.3183233Z ##[group]Run if [ -z "${CARGO_INCREMENTAL+set}" ]; then
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.3183605Z ^[[36;1mif [ -z "${CARGO_INCREMENTAL+set}" ]; then^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.3183933Z ^[[36;1m  echo CARGO_INCREMENTAL=0 >> $GITHUB_ENV^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.3184210Z ^[[36;1mfi^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.3240770Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.3241109Z env:
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.3241335Z   CARGO_HOME: /home/runner/.cargo
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.3241585Z ##[endgroup]
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.3313675Z ##[end-action id=__dtolnay_rust-toolchain.__run_6;outcome=success;conclusion=success;duration_ms=14]
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.3315686Z ##[start-action display=Enable colors in Cargo output;id=__dtolnay_rust-toolchain.__run_7]
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.3351050Z ##[group]Run if [ -z "${CARGO_TERM_COLOR+set}" ]; then
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.3351395Z ^[[36;1mif [ -z "${CARGO_TERM_COLOR+set}" ]; then^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.3351705Z ^[[36;1m  echo CARGO_TERM_COLOR=always >> $GITHUB_ENV^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.3351977Z ^[[36;1mfi^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.3400994Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.3401323Z env:
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.3401547Z   CARGO_HOME: /home/runner/.cargo
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.3401795Z   CARGO_INCREMENTAL: 0
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.3402012Z ##[endgroup]
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.3472728Z ##[end-action id=__dtolnay_rust-toolchain.__run_7;outcome=success;conclusion=success;duration_ms=15]
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.3474755Z ##[start-action display=Enable Cargo sparse registry;id=__dtolnay_rust-toolchain.__run_8]
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.3492743Z ##[group]Run # implemented in 1.66, stabilized in 1.68, made default in 1.70
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.3493224Z ^[[36;1m# implemented in 1.66, stabilized in 1.68, made default in 1.70^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.3493833Z ^[[36;1mif [ -z "${CARGO_REGISTRIES_CRATES_IO_PROTOCOL+set}" -o -f "/home/runner/work/_temp"/.implicit_cargo_registries_crates_io_protocol ]; then^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.3494448Z ^[[36;1m  if rustc +stable --version --verbose | grep -q '^release: 1\.6[89]\.'; then^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.3494935Z ^[[36;1m    touch "/home/runner/work/_temp"/.implicit_cargo_registries_crates_io_protocol || true^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.3495412Z ^[[36;1m    echo CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse >> $GITHUB_ENV^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.3495851Z ^[[36;1m  elif rustc +stable --version --verbose | grep -q '^release: 1\.6[67]\.'; then^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.3496372Z ^[[36;1m    touch "/home/runner/work/_temp"/.implicit_cargo_registries_crates_io_protocol || true^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.3496837Z ^[[36;1m    echo CARGO_REGISTRIES_CRATES_IO_PROTOCOL=git >> $GITHUB_ENV^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.3497285Z ^[[36;1m  fi^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.3497492Z ^[[36;1mfi^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.3546594Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.3546932Z env:
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.3547144Z   CARGO_HOME: /home/runner/.cargo
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.3547399Z   CARGO_INCREMENTAL: 0
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.3547628Z   CARGO_TERM_COLOR: always
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.3548052Z ##[endgroup]
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.3832640Z ##[end-action id=__dtolnay_rust-toolchain.__run_8;outcome=success;conclusion=success;duration_ms=35]
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.3835507Z ##[start-action display=Work around spurious network errors in curl 8.0;id=__dtolnay_rust-toolchain.__run_9]
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.3855106Z ##[group]Run # https://rust-lang.zulipchat.com/#narrow/stream/246057-t-cargo/topic/timeout.20investigation
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.3855763Z ^[[36;1m# https://rust-lang.zulipchat.com/#narrow/stream/246057-t-cargo/topic/timeout.20investigation^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.3856316Z ^[[36;1mif rustc +stable --version --verbose | grep -q '^release: 1\.7[01]\.'; then^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.3856761Z ^[[36;1m  echo CARGO_HTTP_MULTIPLEXING=false >> $GITHUB_ENV^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.3857080Z ^[[36;1mfi^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.3912774Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.3913103Z env:
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.3913317Z   CARGO_HOME: /home/runner/.cargo
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.3913571Z   CARGO_INCREMENTAL: 0
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.3913800Z   CARGO_TERM_COLOR: always
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.3914037Z ##[endgroup]
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.4089591Z ##[end-action id=__dtolnay_rust-toolchain.__run_9;outcome=success;conclusion=success;duration_ms=25]
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.4093150Z ##[start-action display=rustc +stable --version --verbose;id=__dtolnay_rust-toolchain.__run_10]
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.4111406Z ##[group]Run rustc +stable --version --verbose
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.4111740Z ^[[36;1mrustc +stable --version --verbose^[[0m
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.4163132Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.4163453Z env:
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.4163688Z   CARGO_HOME: /home/runner/.cargo
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.4163948Z   CARGO_INCREMENTAL: 0
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.4164176Z   CARGO_TERM_COLOR: always
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.4164401Z ##[endgroup]
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.4332668Z rustc 1.99.0 (b940084d7 2026-09-28)
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.4333102Z binary: rustc
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.4333436Z commit-hash: b940084d7eb6a299eb4bfeb8e34901bc051e7ac4
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.4333889Z commit-date: 2026-09-28
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.4334241Z host: x86_64-unknown-linux-gnu
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.4334483Z release: 1.99.0
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.4334801Z LLVM version: 23.1.1
+validate (ubuntu-latest)	Run dtolnay/rust-toolchain@stable	2026-10-08T04:13:29.4350453Z ##[end-action id=__dtolnay_rust-toolchain.__run_10;outcome=success;conclusion=success;duration_ms=25]
+validate (ubuntu-latest)	Formatting	﻿2026-10-08T04:13:29.4402150Z ##[group]Run cargo fmt --all -- --check
+validate (ubuntu-latest)	Formatting	2026-10-08T04:13:29.4402464Z ^[[36;1mcargo fmt --all -- --check^[[0m
+validate (ubuntu-latest)	Formatting	2026-10-08T04:13:29.4455767Z shell: /usr/bin/bash -e {0}
+validate (ubuntu-latest)	Formatting	2026-10-08T04:13:29.4456036Z env:
+validate (ubuntu-latest)	Formatting	2026-10-08T04:13:29.4456260Z   CARGO_HOME: /home/runner/.cargo
+validate (ubuntu-latest)	Formatting	2026-10-08T04:13:29.4456518Z   CARGO_INCREMENTAL: 0
+validate (ubuntu-latest)	Formatting	2026-10-08T04:13:29.4456755Z   CARGO_TERM_COLOR: always
+validate (ubuntu-latest)	Formatting	2026-10-08T04:13:29.4456984Z ##[endgroup]
+validate (ubuntu-latest)	Static checks	﻿2026-10-08T04:13:30.2884583Z ##[group]Run cargo clippy --all-targets --locked -- -D warnings
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.2885021Z ^[[36;1mcargo clippy --all-targets --locked -- -D warnings^[[0m
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.2944269Z shell: /usr/bin/bash -e {0}
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.2944487Z env:
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.2944664Z   CARGO_HOME: /home/runner/.cargo
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.2944907Z   CARGO_INCREMENTAL: 0
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.2945091Z   CARGO_TERM_COLOR: always
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.2945294Z ##[endgroup]
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.5091136Z ^[[1m^[[92m    Updating^[[0m crates.io index
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.7546227Z ^[[1m^[[92m Downloading^[[0m crates ...
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.8311702Z ^[[1m^[[92m  Downloaded^[[0m anstyle v1.0.14
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.8331377Z ^[[1m^[[92m  Downloaded^[[0m anstream v1.0.0
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.8347583Z ^[[1m^[[92m  Downloaded^[[0m anstyle-parse v1.0.0
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.8445100Z ^[[1m^[[92m  Downloaded^[[0m equivalent v1.0.2
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.8503214Z ^[[1m^[[92m  Downloaded^[[0m errno v0.3.14
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.8518271Z ^[[1m^[[92m  Downloaded^[[0m heck v0.5.0
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.8528959Z ^[[1m^[[92m  Downloaded^[[0m same-file v1.0.6
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.8539830Z ^[[1m^[[92m  Downloaded^[[0m anstyle-query v1.1.5
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.8549759Z ^[[1m^[[92m  Downloaded^[[0m fallible-streaming-iterator v0.1.9
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.8557086Z ^[[1m^[[92m  Downloaded^[[0m itoa v1.0.18
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.8601493Z ^[[1m^[[92m  Downloaded^[[0m autocfg v1.5.1
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.8618279Z ^[[1m^[[92m  Downloaded^[[0m digest v0.10.7
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.8635329Z ^[[1m^[[92m  Downloaded^[[0m fallible-iterator v0.3.0
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.8646016Z ^[[1m^[[92m  Downloaded^[[0m fastrand v2.5.0
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.8657091Z ^[[1m^[[92m  Downloaded^[[0m find-msvc-tools v0.1.14
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.8671611Z ^[[1m^[[92m  Downloaded^[[0m zmij v1.0.23
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.8686942Z ^[[1m^[[92m  Downloaded^[[0m strsim v0.11.1
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.8700487Z ^[[1m^[[92m  Downloaded^[[0m version_check v0.9.5
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.8710310Z ^[[1m^[[92m  Downloaded^[[0m clap_derive v4.6.7
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.8727928Z ^[[1m^[[92m  Downloaded^[[0m siphasher v1.0.4
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.8739736Z ^[[1m^[[92m  Downloaded^[[0m generic-array v0.14.7
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.8751011Z ^[[1m^[[92m  Downloaded^[[0m fs2 v0.4.3
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.8760217Z ^[[1m^[[92m  Downloaded^[[0m is_terminal_polyfill v1.70.2
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.8767349Z ^[[1m^[[92m  Downloaded^[[0m tree-sitter-language v0.1.8
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.8781952Z ^[[1m^[[92m  Downloaded^[[0m utf8parse v0.2.2
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.8789651Z ^[[1m^[[92m  Downloaded^[[0m block-buffer v0.10.4
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.8797896Z ^[[1m^[[92m  Downloaded^[[0m phf_shared v0.12.1
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.8805164Z ^[[1m^[[92m  Downloaded^[[0m cpufeatures v0.2.17
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.8816659Z ^[[1m^[[92m  Downloaded^[[0m cfg-if v1.0.5
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.8827140Z ^[[1m^[[92m  Downloaded^[[0m crypto-common v0.1.7
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.8835409Z ^[[1m^[[92m  Downloaded^[[0m clap_lex v1.1.1
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.8845917Z ^[[1m^[[92m  Downloaded^[[0m colorchoice v1.0.5
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.8854766Z ^[[1m^[[92m  Downloaded^[[0m foldhash v0.2.0
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.8864910Z ^[[1m^[[92m  Downloaded^[[0m serde_spanned v1.1.1
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.8874160Z ^[[1m^[[92m  Downloaded^[[0m toml_parser v1.1.3+spec-1.1.0
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.8892808Z ^[[1m^[[92m  Downloaded^[[0m crossbeam-epoch v0.9.21
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.8914458Z ^[[1m^[[92m  Downloaded^[[0m toml_datetime v0.7.5+spec-1.1.0
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.8924596Z ^[[1m^[[92m  Downloaded^[[0m toml_writer v1.1.2+spec-1.1.0
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.8936200Z ^[[1m^[[92m  Downloaded^[[0m pkg-config v0.3.34
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.8949562Z ^[[1m^[[92m  Downloaded^[[0m shlex v2.0.1
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.8960368Z ^[[1m^[[92m  Downloaded^[[0m walkdir v2.5.0
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.8975028Z ^[[1m^[[92m  Downloaded^[[0m phf v0.12.1
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.8985078Z ^[[1m^[[92m  Downloaded^[[0m streaming-iterator v0.1.9
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.8994896Z ^[[1m^[[92m  Downloaded^[[0m num-traits v0.2.19
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.9015992Z ^[[1m^[[92m  Downloaded^[[0m serde_derive v1.0.229
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.9043795Z ^[[1m^[[92m  Downloaded^[[0m globset v0.4.20
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.9055997Z ^[[1m^[[92m  Downloaded^[[0m crossbeam-deque v0.8.8
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.9070201Z ^[[1m^[[92m  Downloaded^[[0m quote v1.0.47
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.9093783Z ^[[1m^[[92m  Downloaded^[[0m sha2 v0.10.9
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.9118406Z ^[[1m^[[92m  Downloaded^[[0m smallvec v1.16.2
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.9130842Z ^[[1m^[[92m  Downloaded^[[0m tempfile v3.27.0
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.9153646Z ^[[1m^[[92m  Downloaded^[[0m iana-time-zone v0.1.65
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.9177432Z ^[[1m^[[92m  Downloaded^[[0m crossbeam-utils v0.8.23
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.9207248Z ^[[1m^[[92m  Downloaded^[[0m hashlink v0.12.2
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.9225578Z ^[[1m^[[92m  Downloaded^[[0m log v0.4.34
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.9245727Z ^[[1m^[[92m  Downloaded^[[0m once_cell v1.21.4
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.9266607Z ^[[1m^[[92m  Downloaded^[[0m ryu v1.0.23
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.9293763Z ^[[1m^[[92m  Downloaded^[[0m proc-macro2 v1.0.107
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.9319393Z ^[[1m^[[92m  Downloaded^[[0m toml v0.9.12+spec-1.1.0
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.9353794Z ^[[1m^[[92m  Downloaded^[[0m bitflags v2.13.2
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.9391419Z ^[[1m^[[92m  Downloaded^[[0m getrandom v0.4.3
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.9424345Z ^[[1m^[[92m  Downloaded^[[0m ignore v0.4.33
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.9443979Z ^[[1m^[[92m  Downloaded^[[0m serde_core v1.0.229
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.9466146Z ^[[1m^[[92m  Downloaded^[[0m unicode-ident v1.0.26
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.9489263Z ^[[1m^[[92m  Downloaded^[[0m clap v4.6.7
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.9571724Z ^[[1m^[[92m  Downloaded^[[0m serde_yaml_ng v0.10.0
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.9598428Z ^[[1m^[[92m  Downloaded^[[0m unsafe-libyaml v0.2.11
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.9624111Z ^[[1m^[[92m  Downloaded^[[0m uuid v1.27.0
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.9647872Z ^[[1m^[[92m  Downloaded^[[0m serde v1.0.229
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.9675840Z ^[[1m^[[92m  Downloaded^[[0m memchr v2.8.3
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.9720838Z ^[[1m^[[92m  Downloaded^[[0m typenum v1.20.1
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.9748905Z ^[[1m^[[92m  Downloaded^[[0m cc v1.6.0
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.9776791Z ^[[1m^[[92m  Downloaded^[[0m indexmap v2.14.2
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.9812115Z ^[[1m^[[92m  Downloaded^[[0m serde_json v1.0.151
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.9872040Z ^[[1m^[[92m  Downloaded^[[0m tree-sitter-javascript v0.25.0
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.9918945Z ^[[1m^[[92m  Downloaded^[[0m clap_builder v4.6.7
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:30.9973528Z ^[[1m^[[92m  Downloaded^[[0m aho-corasick v1.1.5
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:31.0016895Z ^[[1m^[[92m  Downloaded^[[0m regex v1.13.1
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:31.0060736Z ^[[1m^[[92m  Downloaded^[[0m winnow v0.7.15
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:31.0139352Z ^[[1m^[[92m  Downloaded^[[0m hashbrown v0.17.1
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:31.0182251Z ^[[1m^[[92m  Downloaded^[[0m rusqlite v0.40.2
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:31.0238305Z ^[[1m^[[92m  Downloaded^[[0m tree-sitter-python v0.25.0
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:31.0290248Z ^[[1m^[[92m  Downloaded^[[0m tree-sitter v0.25.10
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:31.0339957Z ^[[1m^[[92m  Downloaded^[[0m winnow v1.0.4
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:31.0419776Z ^[[1m^[[92m  Downloaded^[[0m vcpkg v0.2.15
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:31.0874551Z ^[[1m^[[92m  Downloaded^[[0m chrono v0.4.45
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:31.0928741Z ^[[1m^[[92m  Downloaded^[[0m syn v3.0.6
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:31.1017031Z ^[[1m^[[92m  Downloaded^[[0m regex-syntax v0.8.11
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:31.1074587Z ^[[1m^[[92m  Downloaded^[[0m bstr v1.13.1
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:31.1140106Z ^[[1m^[[92m  Downloaded^[[0m rustix v1.1.5
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:31.1365294Z ^[[1m^[[92m  Downloaded^[[0m regex-automata v0.4.18
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:31.1482752Z ^[[1m^[[92m  Downloaded^[[0m tree-sitter-typescript v0.23.2
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:31.1691849Z ^[[1m^[[92m  Downloaded^[[0m chrono-tz v0.10.4
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:31.1822531Z ^[[1m^[[92m  Downloaded^[[0m libc v0.2.190
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:31.2225056Z ^[[1m^[[92m  Downloaded^[[0m linux-raw-sys v0.12.1
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:31.2747856Z ^[[1m^[[92m  Downloaded^[[0m libsqlite3-sys v0.38.2
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:31.3762771Z ^[[1m^[[92m   Compiling^[[0m shlex v2.0.1
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:31.3763443Z ^[[1m^[[92m   Compiling^[[0m find-msvc-tools v0.1.14
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:31.3764174Z ^[[1m^[[92m   Compiling^[[0m proc-macro2 v1.0.107
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:31.3764860Z ^[[1m^[[92m   Compiling^[[0m serde_core v1.0.229
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:31.6353961Z ^[[1m^[[92m   Compiling^[[0m cc v1.6.0
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:31.6570770Z ^[[1m^[[92m   Compiling^[[0m tree-sitter-language v0.1.8
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:31.9151646Z ^[[1m^[[92m   Compiling^[[0m quote v1.0.47
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:31.9286153Z ^[[1m^[[92m   Compiling^[[0m unicode-ident v1.0.26
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:32.0259536Z ^[[1m^[[92m   Compiling^[[0m zmij v1.0.23
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:32.1306536Z ^[[1m^[[92m    Checking^[[0m memchr v2.8.3
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:32.5028985Z ^[[1m^[[92m   Compiling^[[0m version_check v0.9.5
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:32.6148927Z ^[[1m^[[92m   Compiling^[[0m syn v3.0.6
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:32.6541290Z ^[[1m^[[92m   Compiling^[[0m generic-array v0.14.7
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:32.7379933Z ^[[1m^[[92m   Compiling^[[0m libc v0.2.190
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:32.9359548Z ^[[1m^[[92m    Checking^[[0m aho-corasick v1.1.5
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:32.9844957Z ^[[1m^[[92m   Compiling^[[0m serde_json v1.0.151
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:33.0619786Z ^[[1m^[[92m   Compiling^[[0m serde v1.0.229
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:33.1919320Z ^[[1m^[[92m    Checking^[[0m typenum v1.20.1
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:33.4558924Z ^[[1m^[[92m   Compiling^[[0m equivalent v1.0.2
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:33.4811467Z ^[[1m^[[92m   Compiling^[[0m autocfg v1.5.1
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:33.5013199Z ^[[1m^[[92m    Checking^[[0m regex-syntax v0.8.11
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:33.7108965Z ^[[1m^[[92m    Checking^[[0m foldhash v0.2.0
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:33.7655562Z ^[[1m^[[92m   Compiling^[[0m hashbrown v0.17.1
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:33.7722813Z ^[[1m^[[92m   Compiling^[[0m crossbeam-utils v0.8.23
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:34.1759056Z ^[[1m^[[92m   Compiling^[[0m indexmap v2.14.2
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:34.5260893Z ^[[1m^[[92m    Checking^[[0m regex-automata v0.4.18
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:34.6059102Z ^[[1m^[[92m   Compiling^[[0m num-traits v0.2.19
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:35.3664149Z ^[[1m^[[92m   Compiling^[[0m serde_derive v1.0.229
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:35.6878941Z ^[[1m^[[92m   Compiling^[[0m pkg-config v0.3.34
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:35.7189544Z ^[[1m^[[92m    Checking^[[0m utf8parse v0.2.2
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:35.7578955Z ^[[1m^[[92m   Compiling^[[0m itoa v1.0.18
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:35.8419413Z ^[[1m^[[92m   Compiling^[[0m getrandom v0.4.3
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:35.9345052Z ^[[1m^[[92m   Compiling^[[0m vcpkg v0.2.15
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:36.0079114Z ^[[1m^[[92m   Compiling^[[0m crossbeam-epoch v0.9.21
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:36.2879872Z ^[[1m^[[92m    Checking^[[0m cfg-if v1.0.5
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:36.3218937Z ^[[1m^[[92m    Checking^[[0m anstyle-parse v1.0.0
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:36.3819064Z ^[[1m^[[92m   Compiling^[[0m libsqlite3-sys v0.38.2
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:36.5670110Z ^[[1m^[[92m    Checking^[[0m anstyle-query v1.1.5
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:36.5973501Z ^[[1m^[[92m    Checking^[[0m colorchoice v1.0.5
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:36.6359269Z ^[[1m^[[92m    Checking^[[0m bitflags v2.13.2
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:36.7132611Z ^[[1m^[[92m    Checking^[[0m siphasher v1.0.4
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:36.7638665Z ^[[1m^[[92m    Checking^[[0m anstyle v1.0.14
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:36.8029198Z ^[[1m^[[92m   Compiling^[[0m crossbeam-deque v0.8.8
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:36.8490917Z ^[[1m^[[92m    Checking^[[0m is_terminal_polyfill v1.70.2
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:36.8787066Z ^[[1m^[[92m    Checking^[[0m anstream v1.0.0
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:36.9219520Z ^[[1m^[[92m    Checking^[[0m phf_shared v0.12.1
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:37.2307376Z ^[[1m^[[92m   Compiling^[[0m tree-sitter v0.25.10
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:37.3939513Z ^[[1m^[[92m    Checking^[[0m block-buffer v0.10.4
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:37.4448885Z ^[[1m^[[92m    Checking^[[0m crypto-common v0.1.7
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:37.4827441Z ^[[1m^[[92m   Compiling^[[0m tree-sitter-javascript v0.25.0
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:37.5069128Z ^[[1m^[[92m   Compiling^[[0m tree-sitter-typescript v0.23.2
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:37.5979030Z ^[[1m^[[92m   Compiling^[[0m tree-sitter-python v0.25.0
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:37.6270415Z ^[[1m^[[92m    Checking^[[0m bstr v1.13.1
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:37.7159059Z ^[[1m^[[92m    Checking^[[0m same-file v1.0.6
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:37.8269084Z ^[[1m^[[92m    Checking^[[0m log v0.4.34
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:37.8989255Z ^[[1m^[[92m    Checking^[[0m strsim v0.11.1
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:37.9078881Z ^[[1m^[[92m   Compiling^[[0m chrono-tz v0.10.4
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:37.9181634Z ^[[1m^[[92m   Compiling^[[0m heck v0.5.0
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:37.9909736Z ^[[1m^[[92m    Checking^[[0m clap_lex v1.1.1
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:37.9930934Z ^[[1m^[[92m    Checking^[[0m iana-time-zone v0.1.65
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:38.0359034Z ^[[1m^[[92m    Checking^[[0m winnow v1.0.4
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:38.0649750Z ^[[1m^[[92m    Checking^[[0m clap_builder v4.6.7
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:38.1373560Z ^[[1m^[[92m    Checking^[[0m chrono v0.4.45
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:38.2207843Z ^[[1m^[[92m    Checking^[[0m toml_parser v1.1.3+spec-1.1.0
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:38.4539049Z ^[[1m^[[92m   Compiling^[[0m clap_derive v4.6.7
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:38.8988383Z ^[[1m^[[92m    Checking^[[0m globset v0.4.20
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:39.0588818Z ^[[1m^[[92m    Checking^[[0m walkdir v2.5.0
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:41.1948970Z ^[[1m^[[92m    Checking^[[0m digest v0.10.7
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:41.3622612Z ^[[1m^[[92m    Checking^[[0m phf v0.12.1
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:41.4072773Z ^[[1m^[[92m    Checking^[[0m regex v1.13.1
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:41.5418695Z ^[[1m^[[92m    Checking^[[0m hashlink v0.12.2
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:41.7009009Z ^[[1m^[[92m    Checking^[[0m serde_spanned v1.1.1
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:41.7463042Z ^[[1m^[[92m    Checking^[[0m toml_datetime v0.7.5+spec-1.1.0
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:42.0338908Z ^[[1m^[[92m    Checking^[[0m ryu v1.0.23
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:42.0949547Z ^[[1m^[[92m    Checking^[[0m streaming-iterator v0.1.9
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:42.2586377Z ^[[1m^[[92m    Checking^[[0m winnow v0.7.15
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:42.5629426Z ^[[1m^[[92m    Checking^[[0m smallvec v1.16.2
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:42.5679544Z ^[[1m^[[92m    Checking^[[0m toml_writer v1.1.2+spec-1.1.0
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:42.6659452Z ^[[1m^[[92m    Checking^[[0m unsafe-libyaml v0.2.11
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:42.6740208Z ^[[1m^[[92m   Compiling^[[0m rustix v1.1.5
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:42.8479760Z ^[[1m^[[92m    Checking^[[0m fallible-streaming-iterator v0.1.9
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:42.9079002Z ^[[1m^[[92m    Checking^[[0m fallible-iterator v0.3.0
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:43.0642587Z ^[[1m^[[92m    Checking^[[0m cpufeatures v0.2.17
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:43.0812357Z ^[[1m^[[92m    Checking^[[0m sha2 v0.10.9
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:43.0885905Z ^[[1m^[[92m    Checking^[[0m serde_yaml_ng v0.10.0
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:43.1006527Z ^[[1m^[[92m    Checking^[[0m toml v0.9.12+spec-1.1.0
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:43.6629018Z ^[[1m^[[92m    Checking^[[0m ignore v0.4.33
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:43.9860884Z ^[[1m^[[92m    Checking^[[0m clap v4.6.7
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:43.9994543Z ^[[1m^[[92m    Checking^[[0m uuid v1.27.0
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:44.0101961Z ^[[1m^[[92m    Checking^[[0m fs2 v0.4.3
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:44.0558978Z ^[[1m^[[92m    Checking^[[0m linux-raw-sys v0.12.1
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:44.1755981Z ^[[1m^[[92m    Checking^[[0m fastrand v2.5.0
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:44.2594510Z ^[[1m^[[92m    Checking^[[0m once_cell v1.21.4
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:44.5278357Z ^[[1m^[[92m    Checking^[[0m rusqlite v0.40.2
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:45.1605595Z ^[[1m^[[92m    Checking^[[0m tempfile v3.27.0
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:46.2613481Z ^[[1m^[[92m    Checking^[[0m pctx v0.1.0-dev (/home/runner/work/pctx/pctx)
+validate (ubuntu-latest)	Static checks	2026-10-08T04:13:51.6991326Z ^[[1m^[[92m    Finished^[[0m `dev` profile [unoptimized + debuginfo] target(s) in 21.35s
+validate (ubuntu-latest)	Unit and integration tests	﻿2026-10-08T04:13:51.7368294Z ##[group]Run cargo test --locked
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:51.7368589Z ^[[36;1mcargo test --locked^[[0m
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:51.7425511Z shell: /usr/bin/bash -e {0}
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:51.7425731Z env:
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:51.7425903Z   CARGO_HOME: /home/runner/.cargo
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:51.7426129Z   CARGO_INCREMENTAL: 0
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:51.7426309Z   CARGO_TERM_COLOR: always
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:51.7426493Z ##[endgroup]
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:51.8344059Z ^[[1m^[[92m   Compiling^[[0m serde_core v1.0.229
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:51.8344848Z ^[[1m^[[92m   Compiling^[[0m memchr v2.8.3
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:51.8345250Z ^[[1m^[[92m   Compiling^[[0m equivalent v1.0.2
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:51.8372151Z ^[[1m^[[92m   Compiling^[[0m itoa v1.0.18
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:51.8612857Z ^[[1m^[[92m   Compiling^[[0m zmij v1.0.23
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:51.9343197Z ^[[1m^[[92m   Compiling^[[0m typenum v1.20.1
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:52.0948799Z ^[[1m^[[92m   Compiling^[[0m foldhash v0.2.0
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:52.1699153Z ^[[1m^[[92m   Compiling^[[0m aho-corasick v1.1.5
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:52.3509262Z ^[[1m^[[92m   Compiling^[[0m regex-syntax v0.8.11
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:52.5432616Z ^[[1m^[[92m   Compiling^[[0m indexmap v2.14.2
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:52.9993845Z ^[[1m^[[92m   Compiling^[[0m generic-array v0.14.7
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:53.3901418Z ^[[1m^[[92m   Compiling^[[0m hashbrown v0.17.1
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:53.5145282Z ^[[1m^[[92m   Compiling^[[0m libc v0.2.190
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:53.7959434Z ^[[1m^[[92m   Compiling^[[0m regex-automata v0.4.18
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:53.9109104Z ^[[1m^[[92m   Compiling^[[0m tree-sitter-language v0.1.8
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:53.9429029Z ^[[1m^[[92m   Compiling^[[0m utf8parse v0.2.2
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:53.9779058Z ^[[1m^[[92m   Compiling^[[0m cfg-if v1.0.5
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:53.9966052Z ^[[1m^[[92m   Compiling^[[0m anstyle-parse v1.0.0
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:54.0819689Z ^[[1m^[[92m   Compiling^[[0m serde_json v1.0.151
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:54.3039120Z ^[[1m^[[92m   Compiling^[[0m serde v1.0.229
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:54.6712594Z ^[[1m^[[92m   Compiling^[[0m crossbeam-utils v0.8.23
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:54.6822928Z ^[[1m^[[92m   Compiling^[[0m anstyle v1.0.14
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:54.8019275Z ^[[1m^[[92m   Compiling^[[0m siphasher v1.0.4
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:54.9029103Z ^[[1m^[[92m   Compiling^[[0m bitflags v2.13.2
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:54.9319981Z ^[[1m^[[92m   Compiling^[[0m is_terminal_polyfill v1.70.2
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:54.9649113Z ^[[1m^[[92m   Compiling^[[0m anstyle-query v1.1.5
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:54.9987352Z ^[[1m^[[92m   Compiling^[[0m colorchoice v1.0.5
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:55.0179640Z ^[[1m^[[92m   Compiling^[[0m crossbeam-epoch v0.9.21
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:55.0335954Z ^[[1m^[[92m   Compiling^[[0m anstream v1.0.0
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:55.0346378Z ^[[1m^[[92m   Compiling^[[0m tree-sitter v0.25.10
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:55.1489099Z ^[[1m^[[92m   Compiling^[[0m phf_shared v0.12.1
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:55.2169573Z ^[[1m^[[92m   Compiling^[[0m num-traits v0.2.19
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:55.2195394Z ^[[1m^[[92m   Compiling^[[0m getrandom v0.4.3
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:55.2341592Z ^[[1m^[[92m   Compiling^[[0m crypto-common v0.1.7
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:55.2830754Z ^[[1m^[[92m   Compiling^[[0m block-buffer v0.10.4
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:55.3059951Z ^[[1m^[[92m   Compiling^[[0m bstr v1.13.1
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:55.3396539Z ^[[1m^[[92m   Compiling^[[0m clap_lex v1.1.1
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:55.4648911Z ^[[1m^[[92m   Compiling^[[0m iana-time-zone v0.1.65
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:55.6229048Z ^[[1m^[[92m   Compiling^[[0m log v0.4.34
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:55.6462884Z ^[[1m^[[92m   Compiling^[[0m same-file v1.0.6
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:55.6799350Z ^[[1m^[[92m   Compiling^[[0m strsim v0.11.1
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:55.7146086Z ^[[1m^[[92m   Compiling^[[0m winnow v1.0.4
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:55.7184342Z ^[[1m^[[92m   Compiling^[[0m globset v0.4.20
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:55.9229032Z ^[[1m^[[92m   Compiling^[[0m clap_builder v4.6.7
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:55.9649162Z ^[[1m^[[92m   Compiling^[[0m toml_parser v1.1.3+spec-1.1.0
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:56.3455923Z ^[[1m^[[92m   Compiling^[[0m walkdir v2.5.0
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:56.4978976Z ^[[1m^[[92m   Compiling^[[0m chrono v0.4.45
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:56.5679029Z ^[[1m^[[92m   Compiling^[[0m regex v1.13.1
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:56.8668853Z ^[[1m^[[92m   Compiling^[[0m digest v0.10.7
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:56.9339094Z ^[[1m^[[92m   Compiling^[[0m libsqlite3-sys v0.38.2
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:56.9605193Z ^[[1m^[[92m   Compiling^[[0m phf v0.12.1
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:57.0459530Z ^[[1m^[[92m   Compiling^[[0m crossbeam-deque v0.8.8
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:57.6080984Z ^[[1m^[[92m   Compiling^[[0m hashlink v0.12.2
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:57.7469373Z ^[[1m^[[92m   Compiling^[[0m serde_spanned v1.1.1
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:57.7958388Z ^[[1m^[[92m   Compiling^[[0m toml_datetime v0.7.5+spec-1.1.0
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:57.7959193Z ^[[1m^[[92m   Compiling^[[0m winnow v0.7.15
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:57.9764955Z ^[[1m^[[92m   Compiling^[[0m toml_writer v1.1.2+spec-1.1.0
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:58.0939592Z ^[[1m^[[92m   Compiling^[[0m unsafe-libyaml v0.2.11
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:58.1179343Z ^[[1m^[[92m   Compiling^[[0m fallible-streaming-iterator v0.1.9
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:58.1833840Z ^[[1m^[[92m   Compiling^[[0m fallible-iterator v0.3.0
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:58.4074549Z ^[[1m^[[92m   Compiling^[[0m cpufeatures v0.2.17
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:58.4379283Z ^[[1m^[[92m   Compiling^[[0m ryu v1.0.23
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:58.5479763Z ^[[1m^[[92m   Compiling^[[0m streaming-iterator v0.1.9
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:58.7314101Z ^[[1m^[[92m   Compiling^[[0m smallvec v1.16.2
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:58.8579080Z ^[[1m^[[92m   Compiling^[[0m rusqlite v0.40.2
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:58.9429112Z ^[[1m^[[92m   Compiling^[[0m toml v0.9.12+spec-1.1.0
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:59.0711753Z ^[[1m^[[92m   Compiling^[[0m serde_yaml_ng v0.10.0
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:59.2629121Z ^[[1m^[[92m   Compiling^[[0m sha2 v0.10.9
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:59.5149104Z ^[[1m^[[92m   Compiling^[[0m clap v4.6.7
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:59.5408644Z ^[[1m^[[92m   Compiling^[[0m chrono-tz v0.10.4
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:13:59.9778959Z ^[[1m^[[92m   Compiling^[[0m ignore v0.4.33
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:00.2139158Z ^[[1m^[[92m   Compiling^[[0m tree-sitter-javascript v0.25.0
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:00.2408982Z ^[[1m^[[92m   Compiling^[[0m tree-sitter-typescript v0.23.2
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:00.2768952Z ^[[1m^[[92m   Compiling^[[0m tree-sitter-python v0.25.0
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:00.4569510Z ^[[1m^[[92m   Compiling^[[0m uuid v1.27.0
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:00.7669069Z ^[[1m^[[92m   Compiling^[[0m fs2 v0.4.3
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:00.8277129Z ^[[1m^[[92m   Compiling^[[0m linux-raw-sys v0.12.1
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:01.0579016Z ^[[1m^[[92m   Compiling^[[0m rustix v1.1.5
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:01.2328903Z ^[[1m^[[92m   Compiling^[[0m once_cell v1.21.4
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:01.3498755Z ^[[1m^[[92m   Compiling^[[0m fastrand v2.5.0
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:01.9888534Z ^[[1m^[[92m   Compiling^[[0m tempfile v3.27.0
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:02.5564930Z ^[[1m^[[92m   Compiling^[[0m pctx v0.1.0-dev (/home/runner/work/pctx/pctx)
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:16.2675640Z ^[[1m^[[92m    Finished^[[0m `test` profile [unoptimized + debuginfo] target(s) in 24.51s
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:16.4108574Z ^[[1m^[[92m     Running^[[0m unittests src/lib.rs (target/debug/deps/pctx-f38f9b8e31892293)
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:16.4122519Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:16.4124461Z running 10 tests
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:16.4136659Z test output::capture_tests::incomplete_private_key_never_reaches_records ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:16.4214562Z test broker::tests::nul_names_rename_and_unborn_metadata_are_machine_parsed ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:16.4218196Z test query_process::linux_group_tests::non_utf8_named_fixture_child ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:16.4218939Z test query_process::linux_group_tests::stat_group_ignores_non_utf8_comm_and_rejects_invalid_group ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:16.4219599Z test output::capture_tests::split_secret_and_ansi_never_survive_normalization ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:16.4220398Z test output::capture_tests::registered_git_nul_capture_preserves_filename_controls_and_record_boundaries ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:16.4221071Z test search::tests::literal_smart_case ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:16.4221487Z test search::tests::boolean_precedence_and_bounds ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:16.4366878Z test query_process::linux_group_tests::unrelated_native_non_utf8_process_name_does_not_block_query ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:16.4868332Z test output::capture_tests::oversize_binary_invalid_utf8_and_record_counts_are_bounded ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:16.4868862Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:16.4869164Z test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:16.4869547Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:16.4874383Z ^[[1m^[[92m     Running^[[0m unittests src/main.rs (target/debug/deps/pctx-eb99a026e186af3d)
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:16.4885182Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:16.4885422Z running 0 tests
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:16.4885567Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:16.4885786Z test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:16.4886225Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:16.4887435Z ^[[1m^[[92m     Running^[[0m tests/adapter.rs (target/debug/deps/adapter-53646cef1775f865)
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:16.4900969Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:16.4901103Z running 10 tests
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:17.0817184Z test malformed_and_version_variation_are_rejected_without_mutation ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:17.4078500Z test permission_events_are_observation_only ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:18.0469791Z test edited_owned_hook_conflicts_without_partial_removal ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:18.5221089Z test pretool_decisions_never_rewrite_or_execute_declared_commands ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:18.7502851Z test stale_plans_do_not_change_config ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:18.7507646Z test plans_are_hash_bound_and_preserve_existing_settings ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:19.5579759Z test symlink_configuration_is_rejected ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:19.5582921Z test events_delegate_epoch_and_never_ack_or_store_dialogue ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:19.9712133Z test uninstall_preserves_user_changes_and_only_removes_new_entries ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:19.9792837Z test statusline_cost_is_estimate_context_is_snapshot_and_epoch_is_checked ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:19.9793142Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:19.9793343Z test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.49s
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:19.9793615Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:19.9799220Z ^[[1m^[[92m     Running^[[0m tests/atomic_publication.rs (target/debug/deps/atomic_publication-ae7dc99bb82a64c8)
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:19.9809621Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:19.9809738Z running 2 tests
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:19.9913068Z test replacement_keeps_old_open_reader_and_publishes_complete_new_record ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:19.9936007Z test create_only_race_publishes_one_complete_record_and_preserves_it ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:19.9936303Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:19.9936496Z test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:19.9936783Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:19.9939523Z ^[[1m^[[92m     Running^[[0m tests/broker.rs (target/debug/deps/broker-71baaab1bb96ea3a)
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:19.9951775Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:19.9951908Z running 9 tests
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:20.0763804Z test field_selection_and_nul_filenames_do_not_emit_paths_or_source ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:20.1838488Z test concurrent_refresh_is_shared_but_workspace_and_policy_keys_are_isolated ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:20.2174056Z test five_actual_cli_processes_share_one_refresh ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:20.2287894Z test bounded_wait_without_snapshot_is_unavailable_and_never_reclaims_live_owner ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:20.2896921Z test non_git_is_unsupported_and_corrupt_git_is_never_empty_or_clean ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:20.3265299Z test proven_dead_refresh_owner_can_be_reclaimed_without_ttl_guessing ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:20.3411966Z test repo_fsmonitor_script_is_never_executed ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:20.4171835Z test live_refresh_owner_is_not_stolen_by_age_and_returns_pending ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:20.8498757Z test default_waiter_receives_shared_publication_after_old_half_second_cutoff ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:20.8499159Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:20.8499359Z test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.85s
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:20.8499650Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:20.8506765Z ^[[1m^[[92m     Running^[[0m tests/cli_contract.rs (target/debug/deps/cli_contract-f200f66845cdd94d)
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:20.8519001Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:20.8519233Z running 14 tests
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:20.8591436Z test invalid_json_cli_inputs_still_return_one_json_document ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:20.8652621Z test invalid_capacity_is_json_even_for_markdown_and_never_writes_output ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:20.9013510Z test every_stdout_budget_route_rejects_tiny_capacity_without_child_or_local_files ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:20.9168956Z test inventory_cli_reports_static_candidates_without_execution_or_authority ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:20.9303997Z test minimum_error_budget_boundary_is_argument_validation_before_project_access ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:20.9458515Z test invalid_project_and_merged_user_policy_never_become_successful_empty_results ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:20.9538389Z test context_budget_is_exact_json_and_required_rules_are_not_cut ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:20.9997168Z test markdown_is_a_safe_document_and_unsupported_formats_precede_writes ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:21.0385126Z test security_applies_to_direct_reads_and_cached_metadata ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:21.0698969Z test non_git_exploration_changes_and_idempotent_init ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:21.1014600Z test strict_lookup_retains_available_evidence_and_reports_incomplete_refresh ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:21.1176355Z test valid_minimum_capacity_with_oversize_mandatory_rule_keeps_budget_exit_eight ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:21.2879799Z test tiny_budgets_preserve_index_lease_checks_and_context_receipt_ledgers ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:22.9848519Z test ndjson_snapshot_follow_and_resume_have_no_event_gap ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:22.9848831Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:22.9849054Z test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.13s
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:22.9849349Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:22.9851604Z ^[[1m^[[92m     Running^[[0m tests/concurrency.rs (target/debug/deps/concurrency-b9f1c19a997718ed)
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:22.9861713Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:22.9861835Z running 9 tests
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:23.0229142Z test agent_cannot_authorize_execution_trust ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:23.0589097Z test git_status_does_not_run_unbound_repository_fsmonitor ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:23.1080371Z test agent_capability_cannot_grant_owner_authority ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:23.1680560Z test check_changed_during_external_execution_stays_stale ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:23.2016255Z test report_replay_and_revision_conflict_are_visible_at_cli ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:23.2076704Z test changed_source_and_definition_do_not_reuse_check_evidence ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:23.3399187Z test two_process_claims_have_one_winner ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:23.3426052Z test ten_readers_and_two_writers_see_published_generations ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:23.4298431Z test session_ack_and_epoch_cannot_be_changed_by_other_agent ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:23.4298855Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:23.4299148Z test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.44s
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:23.4299582Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:23.4303460Z ^[[1m^[[92m     Running^[[0m tests/context_input_deadline.rs (target/debug/deps/context_input_deadline-564a7ea62d906f46)
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:23.4313378Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:23.4313497Z running 5 tests
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:23.4362320Z test task_file_reader_preserves_utf8_and_rejects_oversize_invalid_and_expired_inputs ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:23.4363278Z test unix_stdin_flags_probe ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:23.4773338Z test fifo_task_path_is_rejected_without_waiting_for_a_writer_or_publishing ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:23.5339844Z test stdin_flag_restoration_is_observed_in_a_separate_process ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:23.8772360Z test held_open_task_stdin_times_out_without_index_publication ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:23.8772681Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:23.8772876Z test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.45s
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:23.8773147Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:23.8777042Z ^[[1m^[[92m     Running^[[0m tests/core_security.rs (target/debug/deps/core_security-aa42c5b00fdd8a2f)
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:23.8789523Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:23.8789652Z running 12 tests
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:24.0504208Z test cr04_require_complete_does_not_hide_skipped_input ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:24.0548742Z test cr01_handoff_symlink_cannot_write_outside_project ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:24.0763767Z test cr06_equals_format_errors_are_single_json_documents ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:24.0857563Z test checkpoint_scope_unique_rename_and_checksum_failure_are_explicit ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:24.1258880Z test cr02_embedded_private_key_fragments_are_masked ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:24.1367605Z test cr05_public_envelope_reports_truncation_and_parser_partial ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:24.1704497Z test cr08_checkpoint_metadata_obeys_new_security_exclusions ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:24.1715179Z test cr09_freshness_is_validated_and_off_is_visible ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:24.2969013Z test rebuild_refuses_foreign_workspace_without_replacing_index ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:24.4038881Z test rebuild_refuses_newer_schema_without_replacing_original ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:24.4455785Z test rebuild_preserves_checkpoints_and_quarantines_corrupt_index ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:25.0481618Z test cr10_explicit_seed_limit_is_reported ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:25.0481993Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:25.0482209Z test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.17s
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:25.0482500Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:25.0485965Z ^[[1m^[[92m     Running^[[0m tests/derived_query_deadline.rs (target/debug/deps/derived_query_deadline-d420f6b976a794fd)
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:25.0500387Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:25.0500596Z running 4 tests
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:25.0509422Z test expired_derived_entries_reject_before_index_or_source_changes ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:25.1770632Z test nested_extract_refresh_cannot_restart_budget_while_writer_is_busy ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:25.1789232Z test graph_default_and_supplied_budget_preserve_edges_and_inferred_impact ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:25.1793896Z test extract_default_and_supplied_budget_preserve_source_span ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:25.1794281Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:25.1794580Z test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:25.1794974Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:25.1799684Z ^[[1m^[[92m     Running^[[0m tests/filters.rs (target/debug/deps/filters-d730e0f7501e0a23)
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:25.1812794Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:25.1812906Z running 7 tests
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:25.3969075Z test protect_beats_drop_dedup_keeps_occurrences_ranges_and_no_pass_claim ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:25.5597980Z test secrets_cr_and_unicode_are_safe_and_protected_survives_excerpt ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:25.6838307Z test strict_keys_operations_and_regex_no_code_execution ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:25.8248900Z test structured_fields_grouping_and_excerpt_keep_protected_metadata ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:25.9305067Z test changed_fixture_cannot_activate_old_report_and_bounds_are_explicit ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:26.6242621Z test full_fixture_activation_hash_invalidation_and_exact_match_ambiguity ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:27.0079101Z test saved_output_custom_render_preserves_observed_failure_without_rerun ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:27.0079558Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:27.0079841Z test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.83s
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:27.0080230Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:27.0086145Z ^[[1m^[[92m     Running^[[0m tests/graph.rs (target/debug/deps/graph-012db322bea3571c)
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:27.0100761Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:27.0100975Z running 4 tests
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:27.6616801Z test import_cycles_have_bounded_traversal_and_reverse_impact_is_inferred ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:27.6617324Z test workspace_exports_and_dynamic_import_are_explicit ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:28.0233159Z test alias_configuration_changes_invalidate_without_index_refresh ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:28.5514436Z test workspaces_and_policy_are_never_cross_used ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:28.5514790Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:28.5515089Z test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.54s
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:28.5515459Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:28.5520582Z ^[[1m^[[92m     Running^[[0m tests/inventory.rs (target/debug/deps/inventory-9d9e7f8d8f561c09)
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:28.5534187Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:28.5534309Z running 8 tests
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:28.5629739Z test dynamic_invalid_and_unsupported_configs_are_explicit ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:28.6451304Z test exclusions_and_redaction_apply_to_scan_and_current_audit ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:28.6512708Z test static_workspace_packages_and_checks_have_current_proof_without_execution ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:28.6527858Z test symlinks_and_budgets_are_not_traversed ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:28.6934299Z test audit_proposals_are_deterministic_hash_bound_and_do_not_write ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:28.6937491Z test stale_documents_and_changed_source_only_need_review ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:28.7756561Z test unknown_selectors_and_code_structure_do_not_invent_facts ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:28.7758568Z test profile_confirms_observation_not_owner_authority_and_detects_conflict_and_stale ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:28.7759020Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:28.7759286Z test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.22s
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:28.7759676Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:28.7763932Z ^[[1m^[[92m     Running^[[0m tests/operations.rs (target/debug/deps/operations-f51c580693cc9cd9)
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:28.7782449Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:28.7782577Z running 11 tests
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:30.2869321Z test forged_agent_owner_decision_does_not_generate_grant ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:31.0397299Z test exact_decisions_deduplicate_but_changed_environment_amount_artifact_do_not ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:31.0472363Z test mailbox_retry_is_queued_once_and_ack_is_recipient_bound ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:31.0581580Z test omitted_action_role_cannot_bypass_registered_actor_pause ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:31.0872631Z test owner_queue_filters_oldest_hidden_actions_before_limit_without_disclosing_details ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:31.0920227Z test owner_queue_honors_specific_recipients_and_owner_destination_without_globalizing_silence ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:31.1157478Z test role_pause_blocks_claim_without_mutating_task_or_run ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:31.1178655Z test silence_hides_topic_and_body_before_inbox_ranking ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:31.1612477Z test unknown_cost_pause_and_silence_override_valid_grant ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:31.1654200Z test owner_queue_delivery_barriers_survive_control_restore ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:31.1739745Z test backup_restore_preserves_pause_silence_and_messages_but_revokes_grants ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:31.1740208Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:31.1740454Z test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.40s
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:31.1740737Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:31.1746303Z ^[[1m^[[92m     Running^[[0m tests/output.rs (target/debug/deps/output-7bda06d6aed76c04)
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:31.1760940Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:31.1761070Z running 10 tests
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:31.2099279Z test exact_trust_child_exit_and_reread_without_execution ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:31.2243817Z test agent_cannot_mint_execution_trust_and_git_helpers_are_unavailable ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:31.2258771Z test diagnostic_extract_binds_original_source_and_rereads_without_execution ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:31.2314731Z test masking_is_before_storage_and_cr_preserves_error ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:31.2320565Z test opaque_shell_heavy_and_bad_identifiers_rejected ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:31.2557078Z test typed_full_report_preserves_failed_counts_without_becoming_gate_evidence ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:31.2634370Z test none_expiry_tamper_and_policy_change_cannot_restore_records ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:31.3789588Z test nonzero_and_timeout_are_not_filter_success ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:32.1979053Z test verbose_output_preserves_late_diagnostics_and_full_masked_denominator ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:32.4529805Z test bounded_capture_retains_tail_and_original_record_positions ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:32.4530116Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:32.4530328Z test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.28s
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:32.4530609Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:32.4541973Z ^[[1m^[[92m     Running^[[0m tests/pack.rs (target/debug/deps/pack-729a4aa85a864393)
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:32.4557968Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:32.4558089Z running 10 tests
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:32.5057966Z test inspection_reapplies_source_artifact_policy_and_masks_untrusted_manifest ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:32.5071278Z test forged_budgets_parts_and_json_complexity_are_rejected_before_load ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:32.5338645Z test giant_item_and_total_budget_fail_without_plans_or_publication ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:32.5386621Z test immutable_plan_has_no_source_metadata_default_and_full_masks_preserves_license ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:32.5605992Z test racing_artifact_parent_symlink_never_reads_outside_marker ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:32.5651989Z test integrity_tamper_missing_parts_and_missing_original_are_distinct ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:32.5714783Z test signatures_keep_notices_and_single_json_verifies ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:32.5760393Z test stale_source_policy_task_and_wrong_expected_hash_do_not_publish ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:32.5938797Z test symlink_output_input_overlap_and_overwrite_are_denied ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:32.6381835Z test task_or_parser_revision_changes_make_current_source_pack_stale ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:32.6382281Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:32.6382587Z test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.18s
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:32.6383049Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:32.6388995Z ^[[1m^[[92m     Running^[[0m tests/parsers.rs (target/debug/deps/parsers-ca50229a08e69cb9)
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:32.6401157Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:32.6401436Z running 15 tests
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:32.6472447Z test duplicate_json_keys_never_override_failure_into_pass ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:32.6473272Z test eslint_count_drift_or_metadata_wrapper_is_partial ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:32.6474019Z test eslint_keeps_error_warning_fatal_ranges_and_distinct_files ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:32.6485130Z test git_log_selected_fields_and_diff_ranges_remain_review_only ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:32.6485880Z test git_nul_status_preserves_rename_whitespace_and_conflicts ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:32.6491265Z test malformed_complex_oversize_and_unknown_inputs_fail_safely ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:32.6505906Z test missing_final_and_unknown_assertions_are_partial ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:32.6507361Z test native_capture_timeout_or_missing_final_never_pass ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:32.6508245Z test native_complete_claim_is_never_gate_evidence ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:32.6508980Z test test_report_counts_survive_but_retry_history_is_not_invented ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:32.6509726Z test retries_prior_failures_and_suite_crash_are_preserved ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:32.6510472Z test native_zero_all_skipped_nonzero_and_exit_mismatch_cannot_pass ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:32.6513295Z test test_zero_all_skipped_and_observed_nonzero_never_pass ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:32.6519360Z test typescript_diagnostics_keep_codes_locations_and_record_provenance ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:32.6544294Z test diagnostic_limit_keeps_total_counts_and_masks_messages ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:32.6544653Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:32.6544956Z test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:32.6545367Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:32.6549239Z ^[[1m^[[92m     Running^[[0m tests/project_deadline.rs (target/debug/deps/project_deadline-a252c4de178976a8)
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:32.6562270Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:32.6562402Z running 13 tests
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:32.6568032Z test deadline_project_loading_child_entry ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:32.6820555Z test expired_connection_does_not_even_create_initialization_lock ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:32.6873065Z test expired_loading_and_detection_do_not_touch_nonexistent_project ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:32.6940857Z test actual_registered_project_loading_and_ancestor_discovery_keep_same_deadline ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:32.7571458Z test connection_initialization_wait_respects_remaining_request_not_five_seconds ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:32.7659877Z test query_program_resolution_uses_captured_command_path ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:32.7660893Z test query_supervisor_rejects_mutation_before_spawn ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:32.7829681Z test busy_sqlite_read_is_bounded_by_remaining_request ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:32.7835520Z test relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:32.7976352Z test simultaneous_streams_are_collected_and_overflow_never_infers_success ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:33.0346378Z test successive_database_connections_share_the_original_request_budget ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:35.6911858Z test query_cannot_succeed_with_live_descendant_that_closed_both_streams ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:35.6973046Z test query_deadline_includes_inherited_pipe_eof_after_root_exit ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:35.6973440Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:35.6973749Z test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.04s
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:35.6974163Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:35.6978245Z ^[[1m^[[92m     Running^[[0m tests/project_documents.rs (target/debug/deps/project_documents-e1b6815148234377)
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:35.6990911Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:35.6991025Z running 5 tests
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:35.7168434Z test decisions_keep_superseded_records_and_report_unresolved_references ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:35.7178387Z test legacy_instructions_are_opaque_and_all_returned_metadata_is_masked ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:35.7179714Z test rules_are_scoped_required_and_keep_source_provenance ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:35.7262807Z test structured_conflicts_fail_but_natural_contradictions_remain_data ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:35.7278063Z test tags_aliases_duplicate_ids_and_excess_nesting_are_rejected ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:35.7278460Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:35.7278806Z test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:35.7279228Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:35.7282477Z ^[[1m^[[92m     Running^[[0m tests/query_deadline_cli.rs (target/debug/deps/query_deadline_cli-4413fed3589a19d5)
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:35.7292953Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:35.7293065Z running 2 tests
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:35.7473423Z test invalid_or_inapplicable_timeout_has_no_project_effects ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:35.8888263Z test strict_find_waits_only_remaining_budget_and_preserves_active_generation ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:35.8888827Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:35.8889126Z test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.16s
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:35.8889414Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:35.8891275Z ^[[1m^[[92m     Running^[[0m tests/query_filter_guard.rs (target/debug/deps/query_filter_guard-be261ae5882af541)
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:35.8902272Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:35.8902498Z running 3 tests
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:35.9039322Z test filter_configuration_query_is_narrow_and_not_general_configuration_access ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:35.9244068Z test no_filter_match_is_normal_and_invalid_configuration_is_not_an_empty_observation ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:35.9373239Z test effective_clean_or_process_filter_declines_status_without_running_driver ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:35.9373739Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:35.9374058Z test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:35.9374454Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:35.9375901Z ^[[1m^[[92m     Running^[[0m tests/quota.rs (target/debug/deps/quota-705c9bff294f7535)
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:35.9389308Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:35.9389427Z running 7 tests
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:35.9822503Z test first_unknown_baseline_and_missing_provider_do_not_become_zero_or_normal ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:35.9848211Z test cumulative_counters_are_deltas_and_collector_sources_do_not_double_count ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:35.9859000Z test pools_are_isolated_and_manual_estimates_do_not_change_actual_usage ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:35.9888561Z test epochs_resets_and_stale_counters_are_not_inherited ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:36.0683058Z test quota_thresholds_reset_reobservation_and_persistent_pause_silence ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:36.0727605Z test reservations_share_pool_same_unit_and_are_soft_idempotent ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:36.1099332Z test restored_quota_requires_fresh_observation_and_event_ledgers_stay_immutable ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:36.1099806Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:36.1100068Z test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.17s
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:36.1100327Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:36.1105054Z ^[[1m^[[92m     Running^[[0m tests/reader_deadline.rs (target/debug/deps/reader_deadline-40df079f32842487)
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:36.1117287Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:36.1117403Z running 4 tests
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:36.1172836Z test cloned_project_keeps_same_expired_budget_instead_of_starting_a_new_phase ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:36.1174393Z test expired_budget_is_timeout_for_read_inventory_manifest_and_path_authorization ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:36.1213902Z test expired_inventory_never_returns_empty_or_converts_timeout_to_skipped_metadata ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:36.1260263Z test bounded_chunks_keep_hash_utf8_and_source_policy_contracts ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:36.1260663Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:36.1260959Z test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:36.1261402Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:36.1263322Z ^[[1m^[[92m     Running^[[0m tests/reader_policy_cache.rs (target/debug/deps/reader_policy_cache-5f632893cc5f5644)
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:36.1276173Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:36.1276309Z running 8 tests
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:36.1401589Z test cloned_anchor_never_rebinds_after_root_is_deleted_and_recreated ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:36.1420704Z test fifo_source_and_configuration_are_rejected_without_blocking ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:36.1447103Z test compiled_patterns_never_cache_path_access_or_source_across_projects ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:36.1458935Z test immutable_root_anchor_accepts_in_place_and_atomic_source_edits ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:36.1459818Z test warmed_patterns_do_not_authorize_a_path_replaced_by_a_symlink ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:36.1501028Z test warmed_root_and_ancestor_replacement_cannot_redirect_current_source ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:36.1506093Z test concurrent_eviction_keeps_each_exact_policy_and_current_source ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:36.1886931Z test initialized_project_rejects_normal_root_and_ancestor_replacement ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:36.1887374Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:36.1887804Z test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:36.1888215Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:36.1892861Z ^[[1m^[[92m     Running^[[0m tests/render.rs (target/debug/deps/render-15a54a73264c6759)
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:36.1903095Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:36.1903276Z running 8 tests
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:36.1918441Z test json_formats_are_one_minified_document_including_exact_final_newline ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:36.1919444Z test malicious_fences_and_controls_cannot_escape_literal_source_and_roundtrip_exactly ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:36.1920410Z test errors_partial_scope_and_negative_report_are_explicit_without_success_claim ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:36.1921300Z test preexisting_masking_and_unicode_are_not_changed_or_inferred ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:36.1922012Z test outline_and_handoff_display_source_provenance_and_keep_unknown_fields ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:36.1922683Z test terminal_hidden_unicode_is_json_escaped_without_changing_values ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:36.1923470Z test support_is_exact_and_unsupported_markdown_returns_argument_error ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:36.1926785Z test renderer_never_enforces_or_silently_cuts_a_reported_budget ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:36.1927165Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:36.1927485Z test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:36.1928353Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:36.1929023Z ^[[1m^[[92m     Running^[[0m tests/runner.rs (target/debug/deps/runner-d5c78750b77dafbf)
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:36.1939993Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:36.1940161Z running 23 tests
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:36.3529575Z test cloud_helper_is_only_durable_intent ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:36.4718318Z test changed_script_and_agent_forged_trust_are_denied ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:36.6919074Z test explicit_script_input_change_requires_new_trust ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:36.9935682Z test inherited_canonical_descriptor_retains_lock_after_invalid_proof_and_parent_close ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:39.0347823Z test cross_project_heavy_capacity_is_one ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:39.2208673Z test legacy_bridge_absence_prevents_execution ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:39.2209198Z test legacy_lock_fixture ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:39.4148320Z test linked_slot_child_directory_cannot_redirect_state ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:41.6776936Z test local_auxiliary_provider_needs_registered_linked_workspace_and_capacity ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:42.5428776Z test native_environment_change_or_missing_profile_invalidates_existing_pass ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:42.8658724Z test native_pass_is_invalidated_by_external_executable_change_with_sources_unchanged ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:43.3260579Z test parent_exit_does_not_release_living_child ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:43.6269206Z test profile_change_during_execution_is_stale_at_report_recording ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:45.1508769Z test source_mutation_during_check_is_stale ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:45.5618638Z test synthetic_low_memory_defers_heavy_admission ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:46.2431492Z test timeout_is_observed_without_success_evidence ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:46.7928668Z test trusted_typed_check_is_real_evidence ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:47.3977852Z test unknown_and_zero_tests_do_not_pass ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:47.8128968Z test unknown_memory_requires_disclosed_exact_owner_override ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:14:48.0014762Z test user_created_host_state_symlink_is_denied ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:15:05.8527558Z test canonical_mutex_survives_main_parent_death ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:15:12.4756531Z test killed_guardian_causes_negative_child_observation ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:15:28.6487924Z test canonical_legacy_and_pctx_exclude_each_other ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:15:28.6489296Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:15:28.6489760Z test result: ok. 23 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 52.45s
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:15:28.6490211Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:15:28.6491825Z ^[[1m^[[92m     Running^[[0m tests/runner_spawn_binding.rs (target/debug/deps/runner_spawn_binding-c4fc0e2ab82120d0)
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:15:28.6504168Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:15:28.6504285Z running 1 test
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:15:32.9059636Z test external_native_tool_changed_during_final_manifest_never_spawns ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:15:32.9060127Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:15:32.9062339Z test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.26s
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:15:32.9063340Z ^[[1m^[[92m     Running^[[0m tests/schedule.rs (target/debug/deps/schedule-496da06c2f26f469)
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:15:32.9063856Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:15:32.9083693Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:15:32.9083920Z running 17 tests
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:15:33.0719886Z test berlin_spring_gap_moves_to_next_valid_wall_time ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:15:33.0767626Z test berlin_fall_back_occurs_once_per_local_date_and_restart_reuses_record ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:15:33.0801631Z test elapsed_intervals_do_not_change_with_dst_and_missed_ticks_coalesce ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:15:33.1010665Z test empty_readonly_tick_is_successful_without_notification_or_model_wake ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:15:33.1265336Z test failed_attempt_is_recorded_and_retry_is_explicit_instead_of_synthetic_success ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:15:33.1288133Z test namespaces_and_cas_pause_updates_are_independent ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:15:33.1389459Z test non_read_job_requires_matching_operation_decision ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:15:33.1499494Z test project_private_bridge_staging_rejects_user_symlinks_without_changing_target ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:15:33.1555757Z test paused_role_blocks_actual_tick_and_loop_does_not_acquire_keep_awake ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:15:33.1731467Z test reconcile_singleflight_and_managed_bridge_never_claim_install_or_success ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:15:33.1886304Z test role_pause_topic_silence_do_not_reactivate ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:15:33.3183591Z test session_boundary_invalidates_binding_without_reinstall_or_epoch_inheritance ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:15:43.6245217Z test running_owner_is_never_released_by_ttl_and_restored_binding_is_not_inherited ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:15:43.7489609Z test tick_executes_once_and_only_changed_results_queue_a_local_notice ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:15:47.6740380Z test staged_bridge_uninstall_removes_only_owned_files_and_missing_manifest_can_be_repaired ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:15:54.3067225Z test managed_bridge_requires_current_reviewed_plan_and_preserves_user_changes ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:00.4723864Z test actual_cli_concurrent_ticks_claim_one_occurrence_and_fixture_bridge_invokes_tick ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:00.4724445Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:00.4724755Z test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 27.56s
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:00.4725196Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:00.4731285Z ^[[1m^[[92m     Running^[[0m tests/search.rs (target/debug/deps/search-fe216b7ba27c845c)
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:00.4745731Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:00.4745892Z running 22 tests
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:00.4772861Z test boolean_complements_validate_candidates_without_positive_hits ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:00.4787293Z test cached_policy_change_hides_metadata_and_boolean_remains_explicit ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:00.4788583Z test alias_and_aggregate_regex_candidates_use_current_validation ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:00.4795190Z test expired_queries_fail_even_when_the_candidate_universe_is_empty ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:00.4861707Z test indexed_metadata_empty_generation_rejects_replaced_root_before_search ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:00.4965525Z test indexed_metadata_invalid_policy_and_foreign_workspace_fail_closed ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:00.5044878Z test indexed_metadata_matches_including_complements_authorize_before_limit_even_off ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:00.5140138Z test indexed_metadata_search_hides_unopened_historical_counts_and_propagates_generation ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:00.5155051Z test invalid_policy_fails_even_without_metadata_candidates ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:00.5157212Z test indexed_metadata_staleness_and_body_only_discovery_keep_their_boundaries ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:00.5158748Z test markdown_sections_ignore_fenced_examples_and_link_parents ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:00.5178659Z test matched_metadata_validates_stale_candidates_without_discovering_new_names ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:00.5180453Z test metadata_non_candidates_are_not_opened_as_source ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:00.5197599Z test oversized_non_candidate_is_skipped_but_matching_candidate_fails ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:00.5210583Z test stale_symbol_and_ambiguous_names_never_select_code ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:00.5220352Z test structural_variants_use_real_grammar ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:00.5242010Z test text_and_all_still_read_sources_without_metadata_hits_and_policy_hides_candidates ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:00.5243097Z test unsupported_is_distinct_from_empty_supported ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:00.5243932Z test utf8_crlf_locations_and_version_ids ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:00.5443481Z test parsing_cancellation_is_timeout_instead_of_empty_or_partial_ast_success ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:00.7895027Z test candidate_scan_cap_remains_distinct_from_request_timeout ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:01.0386971Z test deadline_partial_keeps_only_verified_matches_and_never_claims_complete_coverage ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:01.0387466Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:01.0388825Z test result: ok. 22 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.56s
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:01.0389375Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:01.0425309Z ^[[1m^[[92m     Running^[[0m tests/session.rs (target/debug/deps/session-59170f50b36b0867)
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:01.0441041Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:01.0441180Z running 6 tests
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:01.0728914Z test identity_secrets_are_rejected_before_persistence ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:01.0824496Z test minimum_budget_failure_creates_no_emission ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:01.1134647Z test explicit_ack_unchanged_delta_and_no_source_ledger ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:01.1251273Z test rule_changes_and_deleted_paths_are_explicit ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:01.1268080Z test independent_sessions_boundaries_and_policy_reject_old_baselines ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:01.1397492Z test suspend_reconcile_preserves_task_pause_and_never_revives_run ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:01.1398085Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:01.1398334Z test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:01.1398605Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:01.1403768Z ^[[1m^[[92m     Running^[[0m tests/storage_deadline.rs (target/debug/deps/storage_deadline-0a5fe3472a21095b)
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:01.1418810Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:01.1418966Z running 4 tests
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:01.1628440Z test parser_expiry_retains_previous_generation_instead_of_marking_source_skipped ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:01.1638709Z test expired_storage_requests_preserve_generation_and_checkpoint ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:01.2237365Z test sqlite_writer_contention_times_out_without_publishing_or_losing_checkpoint ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:01.2792709Z test writer_and_snapshot_waits_consume_supplied_budget_without_five_second_reset ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:01.2793540Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:01.2793810Z test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:01.2794217Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:01.2798397Z ^[[1m^[[92m     Running^[[0m tests/watch.rs (target/debug/deps/watch-0af1ba847bc6d91e)
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:01.2812843Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:01.2812984Z running 4 tests
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:01.3826593Z test closed_stdout_returns_controlled_error_without_panic ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:03.4590804Z test compact_watch_renders_essential_columns_and_refreshes ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:03.7592958Z test finite_ndjson_drains_all_pages_and_resumes_after_cursor ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:07.8430700Z test heartbeat_and_expiry_appear_as_ephemeral_observations ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:07.8431148Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:07.8431452Z test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 6.56s
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:07.8431883Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:07.8435321Z ^[[1m^[[92m     Running^[[0m tests/windows_guardian.rs (target/debug/deps/windows_guardian-d0cbef76409f92e8)
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:07.8444073Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:07.8444180Z running 0 tests
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:07.8444424Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:07.8444665Z test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:07.8444929Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:07.8446469Z ^[[1m^[[92m     Running^[[0m tests/windows_process.rs (target/debug/deps/windows_process-73366bc3b8b06bec)
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:07.8455054Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:07.8455177Z running 0 tests
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:07.8455339Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:07.8455703Z test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:07.8456115Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:07.8457250Z ^[[1m^[[92m     Running^[[0m tests/work_control.rs (target/debug/deps/work_control-4826a6ae91907273)
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:07.8475922Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:07.8476066Z running 11 tests
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:07.8691164Z test database_rejects_event_modification_and_receipt_conflict ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:07.8926275Z test claims_reports_reassignment_and_cursor ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:07.9796931Z test current_source_change_blocks_completion ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:07.9915054Z test external_report_is_an_allowed_claim_without_native_environment_authority ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:07.9941487Z test backup_restore_revokes_live_leases_and_preserves_pause ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:08.0033689Z test evidence_gate_and_historical_completion ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:08.0147795Z test legacy_native_pass_without_authoritative_binding_is_not_current_evidence ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:08.0347034Z test zero_minimum_cannot_make_zero_tests_pass ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:08.0567953Z test zero_tests_and_revision_conflict ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:08.1531541Z test schedule_v2_backup_strips_local_binding_and_restore_revokes_running_authority ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:08.1549235Z test restore_preserves_session_history_without_ack_or_epoch_reuse ... ok
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:08.1549516Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:08.1549719Z test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.31s
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:08.1550019Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:08.1559505Z ^[[1m^[[92m   Doc-tests^[[0m pctx
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:09.0526504Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:09.0527192Z running 0 tests
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:09.0527405Z 
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:09.0527900Z test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+validate (ubuntu-latest)	Unit and integration tests	2026-10-08T04:16:09.0528201Z 
+validate (ubuntu-latest)	Post Run actions/checkout@v4	﻿2026-10-08T04:16:09.0890777Z Post job cleanup.
+validate (ubuntu-latest)	Post Run actions/checkout@v4	2026-10-08T04:16:09.1578162Z [command]/usr/bin/git version
+validate (ubuntu-latest)	Post Run actions/checkout@v4	2026-10-08T04:16:09.1603731Z git version 2.55.0
+validate (ubuntu-latest)	Post Run actions/checkout@v4	2026-10-08T04:16:09.1631281Z Temporarily overriding HOME='/home/runner/work/_temp/d1a77482-f8ce-4c86-9b45-73053cfb446b' before making global git config changes
+validate (ubuntu-latest)	Post Run actions/checkout@v4	2026-10-08T04:16:09.1632278Z Adding repository directory to the temporary git global config as a safe directory
+validate (ubuntu-latest)	Post Run actions/checkout@v4	2026-10-08T04:16:09.1635353Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/pctx/pctx
+validate (ubuntu-latest)	Post Run actions/checkout@v4	2026-10-08T04:16:09.1665525Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+validate (ubuntu-latest)	Post Run actions/checkout@v4	2026-10-08T04:16:09.1695978Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+validate (ubuntu-latest)	Post Run actions/checkout@v4	2026-10-08T04:16:09.1905925Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+validate (ubuntu-latest)	Post Run actions/checkout@v4	2026-10-08T04:16:09.1928229Z http.https://github.com/.extraheader
+validate (ubuntu-latest)	Post Run actions/checkout@v4	2026-10-08T04:16:09.1937530Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+validate (ubuntu-latest)	Post Run actions/checkout@v4	2026-10-08T04:16:09.1967056Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+validate (ubuntu-latest)	Post Run actions/checkout@v4	2026-10-08T04:16:09.2187794Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+validate (ubuntu-latest)	Post Run actions/checkout@v4	2026-10-08T04:16:09.2219358Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+validate (ubuntu-latest)	Complete job	﻿2026-10-08T04:16:09.2555259Z Cleaning up orphan processes
+validate (ubuntu-latest)	Complete job	2026-10-08T04:16:09.2776967Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

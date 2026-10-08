@@ -1,6 +1,6 @@
 # Query deadlines
 
-The current development source starts one monotonic budget after argument validation and before project discovery. Supported finite queries default to 10 seconds: `find`, `query`, `extract`, `graph`, `outline`, `read`, `changes`, `status`, `doctor`, `repo`, `cache`, finite `board` and finite `activity`. `index`, `build` and `checkpoint` default to 120 seconds.
+The current development source starts one monotonic budget after argument validation and before project discovery. Supported finite queries default to 10 seconds: `find`, `query`, `extract`, `graph`, `outline`, `read`, `changes`, `status`, `doctor`, `repo`, `cache`, finite `board`, finite `activity`, `handoff show`, `output show/find/render`, and existing `savings report/opportunities`. `index`, `build` and `checkpoint` default to 120 seconds.
 
 ```sh
 pctx --root /path/to/project --timeout-ms 3000 --format json find auth
@@ -16,3 +16,7 @@ Task documents are limited to 1 MiB and valid UTF-8. Unix stdin polling shares t
 Local Git/ps observations use bounded stream collection and cancellation, including inherited pipe EOF after root exit. Git status declines repositories with configured clean/process filter drivers rather than executing them or changing conversion semantics. The preflight is not atomic against concurrent configuration edits; complete side-effect isolation remains unfinished.
 
 Filesystem calls, console output and some native operations are cooperative: checks bound phases but do not guarantee interruption of an individual stalled system call. Full finite-command coverage and platform qualification remain tracked in [requirements](../implementation/requirements.md), PCTX68/AX20 and PCTX69/AX21. This is not a full release deadline guarantee.
+
+After a successful output write, delivery accounting reuses the original project and budget. If measurement cannot be confirmed, the delivered outcome is preserved and stderr emits `OUTPUT_MEASUREMENT_UNRECORDED` with `measurement_recorded: "unknown"`. Failed writes never record delivery. This is not proof of provider receipt, token usage or cost.
+
+Native macOS CLI regressions verify exact newline-inclusive byte accounting and a complete output write followed by accounting timeout when the reader stalls past the original budget. The latter demonstrates cooperative pipe behavior; it does not guarantee hard cancellation of a blocked stdout write.

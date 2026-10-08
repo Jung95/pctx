@@ -169,6 +169,7 @@ fn preserve_eof_failure(root: &std::path::Path, payload: &serde_json::Value) -> 
         "descendant.pid",
         "descendant.ready",
         "root.exiting",
+        "root.started",
         "git",
     ] {
         if let Ok(bytes) = fs::read(root.join(name)) {
@@ -426,8 +427,21 @@ fn query_cannot_succeed_with_live_descendant_that_closed_both_streams() {
 #[cfg(unix)]
 #[test]
 fn simultaneous_streams_are_collected_and_overflow_never_infers_success() {
-    let (_t, c) = fake_git("printf stdout\nprintf stderr >&2\n");
-    let o = query_process::output(c, Deadline::from_millis(1000).unwrap(), 64).unwrap();
+    let (t, mut c) = fake_git(
+        "printf '%s' $$ > root.pid\nprintf root-started > root.started\nprintf stdout\nprintf stderr >&2\nprintf root-exiting > root.exiting\n",
+    );
+    c.current_dir(t.path());
+    let o =
+        query_process::output(c, Deadline::from_millis(1000).unwrap(), 64).unwrap_or_else(|e| {
+            let payload = serde_json::json!({"error_code":e.code,"diagnostic":e.message,
+                "root_started":t.path().join("root.started").exists(),
+                "root_exiting":t.path().join("root.exiting").exists()});
+            let evidence = preserve_eof_failure(t.path(), &payload);
+            panic!(
+                "Simple builtin query failed; evidence at {}: {payload}",
+                evidence.display()
+            );
+        });
     assert!(o.status.success());
     assert_eq!(o.stdout, b"stdout");
     assert_eq!(o.stderr, b"stderr");

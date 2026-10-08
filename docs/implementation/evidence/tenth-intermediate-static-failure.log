@@ -1,0 +1,25 @@
+    Checking pctx v0.1.0-dev (/Users/dev/PCTX)
+error[E0308]: mismatched types
+   --> src/main.rs:867:66
+    |
+867 |         bytes = encoded(&mut response, &Format::Json, &mut exit, deadline);
+    |                 ------- arguments to this function are incorrect ^^^^^^^^ expected `Option<Deadline>`, found `Deadline`
+    |
+    = note: expected enum `std::option::Option<Deadline>`
+             found struct `Deadline`
+note: function defined here
+   --> src/main.rs:331:4
+    |
+331 | fn encoded(
+    |    ^^^^^^^
+...
+335 |     deadline: Option<pctx::deadline::Deadline>,
+    |     ------------------------------------------
+help: try wrapping the expression in `Some`
+    |
+867 |         bytes = encoded(&mut response, &Format::Json, &mut exit, Some(deadline));
+    |                                                                  +++++        +
+
+For more information about this error, try `rustc --explain E0308`.
+error: could not compile `pctx` (bin "pctx") due to 1 previous error
+warning: build failed, waiting for other jobs to finish...

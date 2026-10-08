@@ -108,7 +108,7 @@ A run produces:
 
 “Met” means the observed value meets a numerical target on that host; it does not certify the reference environment or full product. “Miss” means an observed target or contract failed. “Unknown” means there is no sufficient observation. Smoke results, fewer than 30 repetitions, non-M corpora, failed CLI samples, and unconfirmed hardware cannot establish normative performance acceptance. Script exit zero means the measurement run finished, not that all product requirements passed; inspect report status/metrics. Harness infrastructure failure exits nonzero and retains its partial evidence.
 
-No benchmark results are prefilled in this documentation. Generation and harness code require parent integration and actual runs before claiming measured performance. Python syntax and JSON fixture validation alone do not validate CLI behavior.
+The [ninth immutable M30 report](implementation/evidence/evaluation-m30-ninth.md), [raw observations](implementation/evidence/evaluation-m30-ninth-samples.json) and [source/binary binding](implementation/evidence/evaluation-m30-ninth-source.json) measure the pushed d3d05b4 source on the same10000-file/200MiB corpus over30repetitions. Body search completes30/30 but p952916.91025ms misses2000ms; metadata28.608583ms and matched symbol29.011625ms meet their observed targets. Historical seventh body measurements were partial and are not a complete-search latency baseline. Hardware/cold-cache equivalence and real model/task outcomes remain unknown. Updated source requires fresh measurement; Python syntax or fixtures alone do not validate its performance.
 
 ## Future Model Evaluation Protocol
 

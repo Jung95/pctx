@@ -328,7 +328,12 @@ fn with_refresh_coverage(mut value: Value, refresh: Option<Value>) -> Value {
     }
     value
 }
-fn encoded(value: &mut Value, format: &Format, exit: &mut i32) -> Vec<u8> {
+fn encoded(
+    value: &mut Value,
+    format: &Format,
+    exit: &mut i32,
+    deadline: Option<pctx::deadline::Deadline>,
+) -> Vec<u8> {
     let format = match format {
         Format::Compact => pctx::render::Format::Compact,
         Format::Json | Format::Ndjson => pctx::render::Format::Json,
@@ -337,6 +342,7 @@ fn encoded(value: &mut Value, format: &Format, exit: &mut i32) -> Vec<u8> {
     match pctx::render::render(value, format) {
         Ok(bytes) => bytes,
         Err(error) => {
+            let error = request_error(deadline, error);
             *exit = error.exit;
             *value = domain::envelope("render", None, Value::Null);
             value["status"] = json!("error");
@@ -361,6 +367,11 @@ fn query_deadline(cli: &Cli) -> Result<Option<pctx::deadline::Deadline>> {
         | Command::Doctor
         | Command::Repo { .. }
         | Command::Cache { .. }
+        | Command::Output { .. }
+        | Command::Savings { .. }
+        | Command::Handoff {
+            command: HandoffCommand::Show { .. },
+        }
         | Command::Board { watch: false }
         | Command::Activity { follow: false, .. } => Some(10_000),
         _ => None,
@@ -376,6 +387,11 @@ fn query_deadline(cli: &Cli) -> Result<Option<pctx::deadline::Deadline>> {
         }
         (None, None) => Ok(None),
     }
+}
+fn request_error(deadline: Option<pctx::deadline::Deadline>, error: Error) -> Error {
+    deadline
+        .and_then(|deadline| deadline.check().err())
+        .unwrap_or(error)
 }
 fn execute(
     cli: &Cli,
@@ -453,6 +469,10 @@ fn execute(
                     if let Some(deadline) = p.deadline {
                         d.progress_handler(1000, Some(move || deadline.check().is_err()))?;
                     }
+                    d.busy_timeout(
+                        p.remaining(std::time::Duration::from_secs(5))?
+                            .saturating_add(std::time::Duration::from_nanos(999_999)),
+                    )?;
                     let check: String = d.query_row("PRAGMA integrity_check", [], |r| r.get(0))?;
                     let version: i64 = d.pragma_query_value(None, "user_version", |r| r.get(0))?;
                     databases.push(json!({"kind":kind,"integrity":check,"schema":version}));
@@ -583,7 +603,7 @@ fn stream(cli: &Cli, deadline: Option<pctx::deadline::Deadline>) -> Result<()> {
     let root = project::detect_root_with_deadline(cli.root.as_deref(), deadline)?;
     let p = Project::open_with_deadline(&root, deadline)?;
     let ndjson = matches!(cli.format, Format::Ndjson);
-    match &cli.command {
+    let result = match &cli.command {
         Command::Board { watch } => pctx::watch::run(&p, true, 0, *watch, ndjson),
         Command::Activity { since_seq, follow } => {
             pctx::watch::run(&p, false, *since_seq, *follow, ndjson)
@@ -593,7 +613,9 @@ fn stream(cli: &Cli, deadline: Option<pctx::deadline::Deadline>) -> Result<()> {
             "NDJSON supports board and activity",
             2,
         )),
-    }
+    };
+    p.check_deadline()?;
+    result
 }
 
 // A capacity guard is argument validation, not a context selection failure.
@@ -732,6 +754,7 @@ fn main() {
     };
     if follows || matches!(cli.format, Format::Ndjson) {
         if let Err(e) = stream(&cli, deadline) {
+            let e = request_error(deadline, e);
             let response = json!({"schema_version":"1.0","event_namespace":"work","event_seq":null,"type":"error","data":e});
             use std::io::Write;
             let _ = writeln!(std::io::stderr(), "{}", response);
@@ -739,6 +762,7 @@ fn main() {
         }
         return;
     }
+    let mut opened_project = None;
     let (mut response, mut exit) = match execute(&cli, deadline) {
         Ok((name, p, data)) => {
             let mut out = domain::envelope(&name, Some(&p), data);
@@ -770,9 +794,11 @@ fn main() {
             } else {
                 0
             };
+            opened_project = Some(p);
             (out, exit)
         }
         Err(e) => {
+            let e = request_error(deadline, e);
             let exit = e.exit;
             let mut out = domain::envelope(cli.command.name(), None, Value::Null);
             out["status"] = json!("error");
@@ -820,16 +846,25 @@ fn main() {
     } else {
         cli.format.clone()
     };
-    let mut bytes = encoded(&mut response, &render_format, &mut exit);
-    if exit == 0
+    let mut bytes = encoded(&mut response, &render_format, &mut exit, deadline);
+    let usable_timeout_partial = matches!(&cli.command, Command::Find(_))
+        && response["data"]["coverage"]["reasons"]
+            .as_array()
+            .is_some_and(|reasons| reasons.iter().any(|reason| reason == "timeout"))
+        && response["data"]["items"]
+            .as_array()
+            .is_some_and(|items| !items.is_empty());
+    if response["status"] != "error"
+        && !usable_timeout_partial
         && let Some(deadline) = deadline
         && let Err(e) = deadline.check()
     {
         response = domain::envelope(cli.command.name(), None, Value::Null);
         response["status"] = json!("error");
+        response["coverage"] = json!({"status":"partial","reasons":["TIMEOUT"]});
         response["errors"] = json!([e]);
         exit = 7;
-        bytes = encoded(&mut response, &Format::Json, &mut exit);
+        bytes = encoded(&mut response, &Format::Json, &mut exit, Some(deadline));
     }
     // Budget always applies to the format actually emitted, including the newline.
     let limit = output_budget(&cli.command);
@@ -856,7 +891,7 @@ fn main() {
             let count = execution["records_omitted"].as_u64().unwrap_or(0) + 1;
             execution["records_omitted"] = json!(count);
             execution["records_included"] = json!(execution["records"].as_array().unwrap().len());
-            bytes = encoded(&mut response, &render_format, &mut exit);
+            bytes = encoded(&mut response, &render_format, &mut exit, deadline);
         }
     }
     if let Some(limit) = limit
@@ -889,7 +924,7 @@ fn main() {
         response["errors"] = json!([e]);
         // The complete JSON error is the smallest reversible fallback. Budgets
         // smaller than that envelope cannot hold a valid error document.
-        bytes = encoded(&mut response, &Format::Json, &mut exit);
+        bytes = encoded(&mut response, &Format::Json, &mut exit, deadline);
         exit = 8;
     }
     if let Command::Run(r) = &cli.command
@@ -907,6 +942,7 @@ fn main() {
         match project::atomic_write(output, &bytes, false) {
             Ok(()) => true,
             Err(e) => {
+                let e = request_error(deadline, e);
                 eprintln!("{e}");
                 exit = e.exit;
                 false
@@ -926,15 +962,22 @@ fn main() {
         && let Some(output_id) = response
             .pointer(execution_pointer)
             .and_then(|v| v["output_id"].as_str())
-        && let Ok(root) = project::detect_root(cli.root.as_deref())
-        && let Ok(p) = Project::open(&root)
+        && let Some(p) = opened_project.as_ref()
     {
         let kind = if response["data"]["delivery_kind"] == "retrieval" {
             "retrieval"
         } else {
             "compact"
         };
-        let _ = output::record_delivery(&p, output_id, bytes.len() as u64, kind);
+        if let Err(error) = output::record_delivery(p, output_id, bytes.len() as u64, kind) {
+            // The completed write and its exit outcome stand. Accounting has no
+            // renewed budget or inferred provider/receipt observation.
+            let error = request_error(deadline, error);
+            let diagnostic = json!({"code":"OUTPUT_MEASUREMENT_UNRECORDED",
+                "message":"Output was written; byte accounting could not be confirmed",
+                "reason":error.code,"delivery_written":true,"measurement_recorded":"unknown"});
+            eprintln!("{diagnostic}");
+        }
     }
     std::process::exit(exit)
 }

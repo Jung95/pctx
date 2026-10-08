@@ -1,0 +1,10 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.33s
+     Running tests/output_delivery_observation.rs (target/debug/deps/output_delivery_observation-513791f406dd7de4)
+
+running 2 tests
+test successful_full_delivery_counts_exact_stdout_including_final_newline ... ok
+test observed_live_pipe_write_keeps_delivery_success_after_original_budget_expires ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.16s
+

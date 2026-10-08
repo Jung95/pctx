@@ -1,6 +1,7 @@
 //! Explicit noninteractive execution and masked, expiring output artifacts.
 //! Presentation is never completion evidence; registered runner owns host admission.
 use crate::{
+    deadline::Deadline,
     domain::{Error, Result, hash, now},
     project::{Project, atomic_write, private_dir},
     reader,
@@ -170,6 +171,22 @@ struct Artifact {
 }
 fn err(code: &str, msg: &str, exit: i32) -> Error {
     Error::new(code, msg, exit)
+}
+// All saved-query phases use the caller's immutable deadline. Execution does
+// not acquire a query budget; its timeout and child truth remain independent.
+fn query_project(p: &Project) -> Result<Project> {
+    let mut scoped = p.clone();
+    if scoped.deadline.is_none() {
+        scoped.deadline = Some(Deadline::from_millis(10_000)?);
+    }
+    scoped.check_deadline()?;
+    Ok(scoped)
+}
+fn phase<T>(p: &Project, operation: impl FnOnce() -> Result<T>) -> Result<T> {
+    p.check_deadline()?;
+    let result = operation();
+    p.check_deadline()?;
+    result
 }
 fn output_dir(p: &Project) -> PathBuf {
     p.data_dir.join("outputs").join(&p.workspace_id)
@@ -608,24 +625,24 @@ fn nonblocking<T: std::os::fd::AsRawFd>(pipe: &T) -> Result<()> {
     }
     Ok(())
 }
-fn total_size(path: &Path) -> u64 {
-    fs::read_dir(path)
-        .map(|entries| {
-            entries
-                .flatten()
-                .map(|e| {
-                    let m = e.file_type().ok();
-                    if m.is_some_and(|t| t.is_dir()) {
-                        total_size(&e.path())
-                    } else if m.is_some_and(|t| t.is_file()) {
-                        e.metadata().map(|m| m.len()).unwrap_or(0)
-                    } else {
-                        0
-                    }
-                })
-                .sum()
-        })
-        .unwrap_or(0)
+fn total_size(p: &Project, path: &Path) -> Result<u64> {
+    let entries = phase(p, || Ok(fs::read_dir(path)?))?;
+    let mut size = 0u64;
+    for entry in entries {
+        p.check_deadline()?;
+        let entry = phase(p, || Ok(entry?))?;
+        let kind = phase(p, || Ok(entry.file_type()?))?;
+        let bytes = if kind.is_dir() {
+            total_size(p, &entry.path())?
+        } else if kind.is_file() {
+            phase(p, || Ok(entry.metadata()?.len()))?
+        } else {
+            0
+        };
+        size = size.saturating_add(bytes);
+    }
+    p.check_deadline()?;
+    Ok(size)
 }
 // Explicit unlock prevents a concurrent fork in another thread from briefly
 // retaining an inherited open-file-description lock after this scope returns.
@@ -636,6 +653,10 @@ impl Drop for UnlockGuard {
     }
 }
 fn save(p: &Project, a: &Artifact) -> Result<()> {
+    phase(p, || save_inner(p, a))
+}
+fn save_inner(p: &Project, a: &Artifact) -> Result<()> {
+    p.check_deadline()?;
     let top = p.data_dir.join("outputs");
     checked_private(&top)?;
     private_dir(&top)?;
@@ -654,10 +675,10 @@ fn save(p: &Project, a: &Artifact) -> Result<()> {
         .try_lock_exclusive()
         .map_err(|_| err("RESOURCE_BUSY", "Output publication is busy", 7))?;
     let path = artifact_path(p, &a.output_id)?;
-    let bytes = serde_json::to_vec(a)?;
+    let bytes = phase(p, || Ok(serde_json::to_vec(a)?))?;
     let previous = fs::metadata(&path).map(|m| m.len()).unwrap_or(0);
-    if total_size(&output_dir(p)).saturating_sub(previous) + bytes.len() as u64 > PROJECT_LIMIT
-        || total_size(&top).saturating_sub(previous) + bytes.len() as u64 > HOST_LIMIT
+    if total_size(p, &output_dir(p))?.saturating_sub(previous) + bytes.len() as u64 > PROJECT_LIMIT
+        || total_size(p, &top)?.saturating_sub(previous) + bytes.len() as u64 > HOST_LIMIT
     {
         return Err(err(
             "OUTPUT_PARTIAL",
@@ -665,21 +686,82 @@ fn save(p: &Project, a: &Artifact) -> Result<()> {
             3,
         ));
     }
-    atomic_write(&path, &bytes, true)?;
+    phase(p, || atomic_write(&path, &bytes, true))?;
     Ok(())
 }
 fn load(p: &Project, value: &str) -> Result<Artifact> {
-    let path = artifact_path(p, value)?;
-    let m =
-        fs::metadata(&path).map_err(|_| err("OUTPUT_EXPIRED", "Output artifact unavailable", 6))?;
-    if m.len() > 64 * 1024 * 1024 {
+    phase(p, || load_inner(p, value))
+}
+fn load_inner(p: &Project, value: &str) -> Result<Artifact> {
+    use std::io::Read;
+    const MAX_BYTES: usize = 64 * 1024 * 1024;
+    let path = phase(p, || artifact_path(p, value))?;
+    let mut options = fs::OpenOptions::new();
+    options.read(true);
+    #[cfg(unix)]
+    {
+        use std::os::unix::fs::OpenOptionsExt;
+        options.custom_flags(libc::O_NOFOLLOW | libc::O_NONBLOCK);
+    }
+    #[cfg(windows)]
+    {
+        use std::os::windows::fs::OpenOptionsExt;
+        options.custom_flags(windows_sys::Win32::Storage::FileSystem::FILE_FLAG_OPEN_REPARSE_POINT);
+    }
+    let mut file = phase(p, || {
+        options
+            .open(&path)
+            .map_err(|_| err("OUTPUT_EXPIRED", "Output artifact unavailable", 6))
+    })?;
+    let metadata = phase(p, || Ok(file.metadata()?))?;
+    if !metadata.is_file() {
+        return Err(err(
+            "POLICY_DENIED",
+            "Output artifact must be a regular file",
+            5,
+        ));
+    }
+    #[cfg(windows)]
+    {
+        use std::os::windows::{fs::MetadataExt, io::AsRawHandle};
+        use windows_sys::Win32::Storage::FileSystem::{
+            FILE_ATTRIBUTE_REPARSE_POINT, FILE_TYPE_DISK, GetFileType,
+        };
+        if metadata.file_attributes() & FILE_ATTRIBUTE_REPARSE_POINT != 0
+            || unsafe { GetFileType(file.as_raw_handle().cast()) } != FILE_TYPE_DISK
+        {
+            return Err(err(
+                "POLICY_DENIED",
+                "Output artifact is not a regular disk file",
+                5,
+            ));
+        }
+    }
+    if metadata.len() > MAX_BYTES as u64 {
         return Err(err(
             "OUTPUT_PARTIAL",
             "Output artifact exceeds safe read limit",
             3,
         ));
     }
-    let a: Artifact = serde_json::from_slice(&fs::read(path)?)?;
+    let mut bytes = Vec::new();
+    let mut chunk = [0u8; 65536];
+    loop {
+        let capacity = chunk.len().min(MAX_BYTES + 1 - bytes.len());
+        let count = phase(p, || Ok(file.read(&mut chunk[..capacity])?))?;
+        if count == 0 {
+            break;
+        }
+        bytes.extend_from_slice(&chunk[..count]);
+        if bytes.len() > MAX_BYTES {
+            return Err(err(
+                "OUTPUT_PARTIAL",
+                "Output artifact exceeds safe read limit",
+                3,
+            ));
+        }
+    }
+    let a: Artifact = phase(p, || Ok(serde_json::from_slice(&bytes)?))?;
     if a.schema_version != 1 || a.output_id != value || a.workspace_id != p.workspace_id {
         return Err(err(
             "POLICY_DENIED",
@@ -697,7 +779,7 @@ fn load(p: &Project, value: &str) -> Result<Artifact> {
     if a.expires_at <= now() {
         return Err(err("OUTPUT_EXPIRED", "Output retention has expired", 6));
     }
-    if a.records_hash != hash(serde_json::to_vec(&a.records)?) {
+    if a.records_hash != phase(p, || Ok(hash(serde_json::to_vec(&a.records)?)))? {
         return Err(err("OUTPUT_PARTIAL", "Output integrity check failed", 3));
     }
     Ok(a)
@@ -735,12 +817,14 @@ fn typed_report(a: &Artifact) -> Option<Value> {
         json!({"parser":"pctx-check-report-v1","summary":{"tests":r.tests,"passed":r.passed,"failed":r.failed,"errors":r.errors,"skipped":r.skipped},"reported_result":r.result,"report_origin":"child_stdout_claim","report_digest":hash(text.as_bytes()),"gate_evidence":false}),
     )
 }
-fn compact(a: &Artifact, budget: usize) -> Value {
+fn compact(p: &Project, a: &Artifact, budget: usize) -> Result<Value> {
+    p.check_deadline()?;
     let mut protected = Vec::new();
     let mut normal = Vec::new();
     let protect =
         regex::Regex::new(r"(?i)error|failed|failure|warning|denied|timeout|panic").unwrap();
     for r in &a.records {
+        p.check_deadline()?;
         if protect.is_match(&r.text) {
             protected.push(r)
         } else {
@@ -753,6 +837,7 @@ fn compact(a: &Artifact, budget: usize) -> Value {
     // Reserve metadata/envelope first; UTF-8 is never byte-truncated.
     let room = budget.saturating_sub(2500);
     for r in protected.iter().chain(normal.iter().take(12)) {
+        p.check_deadline()?;
         let value =
             json!({"stream":r.stream,"sequence":r.sequence,"text":r.text,"redacted":r.redacted});
         let cost = serde_json::to_vec(&value)
@@ -764,7 +849,8 @@ fn compact(a: &Artifact, budget: usize) -> Value {
         }
     }
     let mut value = json!({"execution_id":a.execution_id,"output_id":a.output_id,"spawned":a.spawned,"termination":a.termination,"child_exit_code":a.child_exit_code,"signal":a.signal,"pctx_error":a.pctx_error,"parse_status":"unsupported","capture_complete":a.capture_complete,"redaction_applied":true,"redaction_changed_content":a.records.iter().any(|r|r.redacted),"input_stage":a.input_stage,"raw_available":a.retained && a.expires_at>now(),"raw_semantics":"redacted_uncompressed","records":included,"records_included":included.len(),"records_omitted":total.saturating_sub(included.len()),"protected_records":protected.len(),"captured_bytes":a.captured_bytes,"normalized_bytes":a.normalized_bytes,"redacted_bytes":a.redacted_bytes,"baseline_completeness":if a.capture_complete{"complete"}else{"partial"},"omitted_bytes":a.omitted_bytes,"query_ref":format!("pctx output show {} --view full",a.output_id),"evidence_origin":"runner_observed","task_completion":"not_evaluated","test_result":"not_evaluated","budget_bytes":budget});
-    if let Some(report) = typed_report(a) {
+    let report = phase(p, || Ok(typed_report(a)))?;
+    if let Some(report) = report {
         value["parse_status"] = json!("complete");
         value["typed_report"] = report;
     }
@@ -778,6 +864,7 @@ fn compact(a: &Artifact, budget: usize) -> Value {
             .take(8193)
             .map(|r| json!({"stream":r.stream,"sequence":r.sequence,"text":r.text}))
             .collect::<Vec<_>>();
+        p.check_deadline()?;
         let parsed = crate::parsers::parse(
             &a.parser_identity,
             &records,
@@ -785,12 +872,14 @@ fn compact(a: &Artifact, budget: usize) -> Value {
             &a.termination,
             a.capture_complete && a.pctx_error.is_none(),
         );
+        p.check_deadline()?;
         value["parse_status"] = parsed["parse_status"].clone();
         value["parser"] = parsed;
         let mut omitted = serde_json::Map::new();
         // Rendering omissions are distinct from incomplete parsing and capture.
         let parser_room = budget.saturating_sub(2500) / 2;
         while serde_json::to_vec(&value["parser"]).is_ok_and(|v| v.len() > parser_room) {
+            p.check_deadline()?;
             let key = ["diagnostics", "items", "reasons"]
                 .into_iter()
                 .filter(|key| {
@@ -814,7 +903,8 @@ fn compact(a: &Artifact, budget: usize) -> Value {
         value["parser"]["query_ref"] =
             json!(format!("pctx output show {} --view full", a.output_id));
     }
-    value
+    p.check_deadline()?;
+    Ok(value)
 }
 pub fn run(p: &Project, r: &RunRequest) -> Result<Value> {
     run_inner(p, r, ".", &BTreeMap::new(), None, None, None, None, None)
@@ -1246,7 +1336,11 @@ fn run_inner(
             retrieval_bytes: 0,
             delivery_attempts: 0,
         };
-        let mut data = compact(&a, r.budget_bytes);
+        // Execution presentation retains its existing bounded-record contract;
+        // a query budget never replaces the completed child's exit truth.
+        let mut execution_presentation = p.clone();
+        execution_presentation.deadline = None;
+        let mut data = compact(&execution_presentation, &a, r.budget_bytes)?;
         data["exit_policy"] = json!(r.exit_policy);
         if !retained {
             a.records.clear();
@@ -1270,6 +1364,10 @@ fn run_inner(
 /// Called by the frontend with the exact bytes actually emitted (including its envelope).
 /// Emitted is an observation, not proof of receipt or provider token/cost usage.
 pub fn record_delivery(p: &Project, value: &str, bytes: u64, kind: &str) -> Result<()> {
+    phase(p, || record_delivery_inner(p, value, bytes, kind))
+}
+fn record_delivery_inner(p: &Project, value: &str, bytes: u64, kind: &str) -> Result<()> {
+    p.check_deadline()?;
     let metrics = p.data_dir.join("output-metrics.lock");
     checked_private(&metrics)?;
     let mut opts = fs::OpenOptions::new();
@@ -1295,6 +1393,10 @@ pub fn record_delivery(p: &Project, value: &str, bytes: u64, kind: &str) -> Resu
     save(p, &a)
 }
 pub fn output(p: &Project, command: &OutputCommand) -> Result<Value> {
+    let scoped = query_project(p)?;
+    phase(&scoped, || output_inner(&scoped, command))
+}
+fn output_inner(p: &Project, command: &OutputCommand) -> Result<Value> {
     let value = match command {
         OutputCommand::Show { id, .. }
         | OutputCommand::Find { id, .. }
@@ -1316,7 +1418,7 @@ pub fn output(p: &Project, command: &OutputCommand) -> Result<Value> {
             ..
         } => {
             if view == "compact" {
-                return Ok(compact(&a, 8192));
+                return compact(p, &a, 8192);
             }
             if view != "full" {
                 return Err(err("INVALID_ARGUMENT", "Unknown output view", 2));
@@ -1342,14 +1444,21 @@ pub fn output(p: &Project, command: &OutputCommand) -> Result<Value> {
             } else {
                 (1, 80)
             };
-            let all = a
-                .records
-                .iter()
-                .filter(|r| stream.as_ref().is_none_or(|s| s == &r.stream))
-                .collect::<Vec<_>>();
-            let records=all.iter().filter(|r|{let line=r.sequence as usize+1;line>=first&&line<=last}).map(|r|json!({"stream":r.stream,"sequence":r.sequence,"text":r.text,"redacted":r.redacted})).collect::<Vec<_>>();
+            let mut records = Vec::new();
+            let mut total = 0usize;
+            for record in &a.records {
+                p.check_deadline()?;
+                if stream.as_ref().is_some_and(|s| s != &record.stream) {
+                    continue;
+                }
+                total += 1;
+                let line = record.sequence as usize + 1;
+                if line >= first && line <= last {
+                    records.push(json!({"stream":record.stream,"sequence":record.sequence,"text":record.text,"redacted":record.redacted}));
+                }
+            }
             Ok(
-                json!({"output_id":a.output_id,"execution_id":a.execution_id,"view":"full","raw_semantics":"redacted_uncompressed","records":records,"total_records":all.len(),"omitted_records":all.len().saturating_sub(records.len()),"capture_complete":a.capture_complete,"omitted_bytes":a.omitted_bytes,"child_exit_code":a.child_exit_code,"termination":a.termination,"command_rerun":false,"delivery_kind":"retrieval"}),
+                json!({"output_id":a.output_id,"execution_id":a.execution_id,"view":"full","raw_semantics":"redacted_uncompressed","records":records,"total_records":total,"omitted_records":total.saturating_sub(records.len()),"capture_complete":a.capture_complete,"omitted_bytes":a.omitted_bytes,"child_exit_code":a.child_exit_code,"termination":a.termination,"command_rerun":false,"delivery_kind":"retrieval"}),
             )
         }
         OutputCommand::Find { literal, limit, .. } => {
@@ -1360,37 +1469,39 @@ pub fn output(p: &Project, command: &OutputCommand) -> Result<Value> {
                     2,
                 ));
             }
-            let records = a
-                .records
-                .iter()
-                .filter(|r| r.text.contains(literal))
-                .take(*limit)
-                .cloned()
-                .collect::<Vec<_>>();
+            let mut records = Vec::new();
+            for record in &a.records {
+                p.check_deadline()?;
+                if record.text.contains(literal) {
+                    records.push(record.clone());
+                }
+                if records.len() >= *limit {
+                    break;
+                }
+            }
             Ok(
                 json!({"output_id":a.output_id,"records":records,"command_rerun":false,"capture_complete":a.capture_complete,"delivery_kind":"retrieval"}),
             )
         }
         OutputCommand::Render { filter, .. } => {
             let mut v = if filter == "builtin" {
-                compact(&a, 8192)
+                compact(p, &a, 8192)?
             } else {
                 let mut offset = 0;
-                let records = a
-                    .records
-                    .iter()
-                    .map(|r| {
-                        let start = offset;
-                        offset += r.text.len() + 1;
-                        crate::filters::FilterRecord {
-                            stream: r.stream.clone(),
-                            sequence: r.sequence,
-                            text: r.text.clone(),
-                            start_byte: start,
-                            end_byte: offset,
-                        }
-                    })
-                    .collect::<Vec<_>>();
+                let mut records = Vec::new();
+                for record in &a.records {
+                    p.check_deadline()?;
+                    let start = offset;
+                    offset += record.text.len() + 1;
+                    records.push(crate::filters::FilterRecord {
+                        stream: record.stream.clone(),
+                        sequence: record.sequence,
+                        text: record.text.clone(),
+                        start_byte: start,
+                        end_byte: offset,
+                    });
+                }
+                p.check_deadline()?;
                 crate::filters::apply_observed(
                     p,
                     filter,
@@ -1414,12 +1525,23 @@ pub fn output(p: &Project, command: &OutputCommand) -> Result<Value> {
     }
 }
 pub fn savings(p: &Project) -> Result<Value> {
+    let scoped = query_project(p)?;
+    phase(&scoped, || savings_inner(&scoped))
+}
+fn savings_inner(p: &Project) -> Result<Value> {
     let mut samples = Vec::new();
     let mut baseline = 0u64;
     let mut emitted = 0u64;
     let mut retrieval = 0u64;
-    if let Ok(entries) = fs::read_dir(output_dir(p)) {
-        for entry in entries.flatten() {
+    let entries = phase(p, || match fs::read_dir(output_dir(p)) {
+        Ok(entries) => Ok(Some(entries)),
+        Err(e) if e.kind() == std::io::ErrorKind::NotFound => Ok(None),
+        Err(e) => Err(e.into()),
+    })?;
+    if let Some(entries) = entries {
+        for entry in entries {
+            p.check_deadline()?;
+            let entry = phase(p, || Ok(entry?))?;
             let Some(value) = entry
                 .path()
                 .file_stem()
@@ -1431,7 +1553,12 @@ pub fn savings(p: &Project) -> Result<Value> {
             if !value.starts_with("OUT-") {
                 continue;
             }
-            if let Ok(a) = load(p, &value) {
+            let artifact = match load(p, &value) {
+                Ok(artifact) => Some(artifact),
+                Err(error) if error.code == "TIMEOUT" => return Err(error),
+                Err(_) => None,
+            };
+            if let Some(a) = artifact {
                 if a.input_stage == "already_compacted" {
                     samples.push(
                         json!({"output_id":value,"baseline":"unknown","input_stage":a.input_stage}),
@@ -1449,6 +1576,7 @@ pub fn savings(p: &Project) -> Result<Value> {
             }
         }
     }
+    p.check_deadline()?;
     let net = baseline as i128 - emitted as i128 - retrieval as i128;
     Ok(
         json!({"scope":"workspace","metric":"observed_emitted_bytes","samples":samples,"redacted_uncompressed_bytes":baseline,"emitted_compact_bytes":emitted,"emitted_retrieval_bytes":retrieval,"net_bytes_saved":net as i64,"net_percent":if baseline==0 {Value::Null}else{json!(net as f64*100.0/baseline as f64)},"tokenizer_tokens":"unknown","provider_usage":"unknown","subscription_quota":"unknown","api_cost":"unknown","delivery_receipt":"not_observed","metrics_available":emitted+retrieval>0}),

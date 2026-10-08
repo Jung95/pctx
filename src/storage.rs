@@ -218,6 +218,14 @@ pub(crate) fn metadata_search_snapshot(p: &Project) -> Result<(Option<String>, V
     snapshot_rows(p, false)
 }
 
+/// Internal body-search input only. Metadata cannot eliminate a body candidate:
+/// search must physically authorize and verified-read every policy-eligible row
+/// in the requested scope/language before evaluating text/all expressions.
+/// The generic snapshot remains physically authorized for other consumers.
+pub(crate) fn body_search_snapshot(p: &Project) -> Result<(Option<String>, Vec<FileEntry>)> {
+    snapshot_rows(p, false)
+}
+
 fn snapshot_rows(p: &Project, physical: bool) -> Result<(Option<String>, Vec<FileEntry>)> {
     let bounded = bounded_project(p, 10000)?;
     let p = &bounded;

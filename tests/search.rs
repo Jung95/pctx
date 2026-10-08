@@ -598,7 +598,9 @@ fn indexed_metadata_search_hides_unopened_historical_counts_and_propagates_gener
     for kind in ["text", "all"] {
         let result = find_indexed(&p, &metadata_request(kind, "auth")).unwrap();
         assert_eq!(result["items"].as_array().unwrap().len(), 1);
-        assert_eq!(result["coverage"]["physical_non_candidates_checked"], true);
+        assert_eq!(result["coverage"]["physical_non_candidates_checked"], false);
+        assert!(result["scanned_files"].is_null());
+        assert_eq!(result["verified_body_files"], 1);
     }
 }
 
@@ -702,10 +704,214 @@ fn indexed_metadata_empty_generation_rejects_replaced_root_before_search() {
     storage::update(&p).unwrap();
     std::fs::rename(&p.root, temp.path().join("original")).unwrap();
     std::fs::create_dir(&p.root).unwrap();
-    assert_eq!(
-        find_indexed(&p, &metadata_request("symbol", "missing"))
-            .unwrap_err()
-            .code,
-        "POLICY_DENIED"
+    for kind in ["symbol", "text", "all"] {
+        assert_eq!(
+            find_indexed(&p, &metadata_request(kind, "missing"))
+                .unwrap_err()
+                .code,
+            "POLICY_DENIED"
+        );
+    }
+}
+
+#[test]
+fn indexed_body_search_filters_current_policy_scope_language_and_deleted_rows_without_counts() {
+    use pctx::{search::find_indexed, storage};
+    let (_temp, mut p) = indexed_project();
+    std::fs::create_dir(p.root.join("src")).unwrap();
+    std::fs::create_dir(p.root.join("elsewhere")).unwrap();
+    let current = "def unrelated():\n    return 'needle'\n";
+    for (path, text) in [
+        ("src/current.py", current),
+        ("src/deleted.py", current),
+        ("src/private.py", current),
+        (
+            "src/other.js",
+            "function unrelated() { return 'needle'; }\n",
+        ),
+        ("elsewhere/other.py", current),
+    ] {
+        std::fs::write(p.root.join(path), text).unwrap();
+    }
+    let indexed = storage::update(&p).unwrap();
+    std::fs::remove_file(p.root.join("src/deleted.py")).unwrap();
+    p.config.policy.exclude.push("src/private.py".into());
+    // Real verified reads would fail. Scope/language and current policy must
+    // exclude these before reading, regardless of their old matching bodies.
+    for path in ["src/private.py", "src/other.js", "elsewhere/other.py"] {
+        std::fs::write(p.root.join(path), [0xff]).unwrap();
+    }
+    for kind in ["text", "all"] {
+        let mut req = metadata_request(kind, "needle");
+        req.scopes = vec!["src".into()];
+        req.language = Some("python".into());
+        let value = find_indexed(&p, &req).unwrap();
+        assert_eq!(value["generation_id"], indexed["generation_id"]);
+        assert_eq!(value["items"].as_array().unwrap().len(), 1);
+        assert_eq!(value["items"][0]["path"], "src/current.py");
+        assert_eq!(value["items"][0]["file_hash"], hash(current));
+        assert_eq!(value["items"][0]["line_numbers"], serde_json::json!([2]));
+        assert_eq!(value["verified_body_files"], 1);
+        assert!(value["scanned_files"].is_null());
+        assert_eq!(value["coverage"]["physical_non_candidates_checked"], false);
+        assert_eq!(
+            value["coverage"]["body_candidate_universe"],
+            "policy_eligible_indexed_files_in_requested_scope_language"
+        );
+        for hidden in ["deleted.py", "private.py", "other.js", "elsewhere"] {
+            assert!(!value.to_string().contains(hidden), "{value}");
+        }
+    }
+    // The generic snapshot still removes physically missing entries for its
+    // other consumers, while retaining the authorized out-of-scope rows.
+    let (_, generic) = storage::snapshot(&p).unwrap();
+    assert_eq!(generic.len(), 3);
+    assert!(
+        !generic
+            .iter()
+            .any(|f| f.path == "src/deleted.py" || f.path == "src/private.py")
     );
+}
+
+#[test]
+fn indexed_body_search_observes_new_text_and_boolean_complements_with_actual_hashes() {
+    use pctx::{search::find_indexed, storage};
+    let (_temp, p) = indexed_project();
+    for path in ["changed.py", "clean.py", "banned.py"] {
+        std::fs::write(p.root.join(path), "def unrelated():\n    pass\n").unwrap();
+    }
+    let indexed = storage::update(&p).unwrap();
+    let changed = "def renamed():\n    return 'needle'\n";
+    let clean = "def unrelated():\n    return 2\n";
+    let banned = "def unrelated():\n    return 'banned'\n";
+    for (path, text) in [
+        ("changed.py", changed),
+        ("clean.py", clean),
+        ("banned.py", banned),
+    ] {
+        std::fs::write(p.root.join(path), text).unwrap();
+    }
+    for kind in ["text", "all"] {
+        let mut req = metadata_request(kind, "needle");
+        req.query = None;
+        req.boolean_query = Some("needle OR NOT banned".into());
+        let value = find_indexed(&p, &req).unwrap();
+        assert_eq!(value["generation_id"], indexed["generation_id"]);
+        assert_eq!(value["verified_body_files"], 3);
+        assert_eq!(value["items"].as_array().unwrap().len(), 2);
+        assert_eq!(value["items"][0]["path"], "changed.py");
+        assert_eq!(value["items"][0]["file_hash"], hash(changed));
+        assert_eq!(value["items"][0]["line_numbers"], serde_json::json!([2]));
+        assert_eq!(value["items"][0]["freshness"], "stale");
+        assert_eq!(value["items"][1]["path"], "clean.py");
+        assert_eq!(value["items"][1]["file_hash"], hash(clean));
+        assert_eq!(value["items"][1]["score"], 0);
+        assert_eq!(value["items"][1]["match_count"], 0);
+        assert!(!value.to_string().contains("banned.py"));
+    }
+}
+
+#[test]
+fn indexed_body_search_validates_nonmatching_later_sources_before_limit_even_off() {
+    use pctx::{search::find_indexed, storage};
+    let (_temp, p) = indexed_project();
+    std::fs::write(
+        p.root.join("a.py"),
+        "def unrelated():\n    return 'needle'\n",
+    )
+    .unwrap();
+    std::fs::write(p.root.join("z.py"), "def later():\n    pass\n").unwrap();
+    storage::update(&p).unwrap();
+    std::fs::write(p.root.join("z.py"), [0xff]).unwrap();
+    for kind in ["text", "all"] {
+        for freshness in ["matched", "off"] {
+            let mut req = metadata_request(kind, "needle");
+            req.limit = 1;
+            req.freshness = freshness.into();
+            let error = find_indexed(&p, &req).unwrap_err();
+            assert_eq!(error.code, "UNSUPPORTED_ENCODING");
+            assert_eq!(error.exit, 3);
+        }
+    }
+}
+
+#[cfg(unix)]
+#[test]
+fn indexed_body_search_does_not_follow_a_matching_or_complement_symlink() {
+    use pctx::{search::find_indexed, storage};
+    let (temp, p) = indexed_project();
+    let current = "def unrelated():\n    return 'needle'\n";
+    for path in ["a.py", "z.py"] {
+        std::fs::write(p.root.join(path), current).unwrap();
+    }
+    storage::update(&p).unwrap();
+    let outside = temp.path().join("outside.py");
+    std::fs::write(&outside, [0xff]).unwrap();
+    std::fs::remove_file(p.root.join("a.py")).unwrap();
+    std::os::unix::fs::symlink(&outside, p.root.join("a.py")).unwrap();
+    for kind in ["text", "all"] {
+        let mut req = metadata_request(kind, "needle");
+        req.query = None;
+        req.boolean_query = Some("needle OR NOT banned".into());
+        let value = find_indexed(&p, &req).unwrap();
+        assert_eq!(value["items"].as_array().unwrap().len(), 1);
+        assert_eq!(value["items"][0]["path"], "z.py");
+        assert_eq!(value["verified_body_files"], 1);
+        assert!(!value.to_string().contains("a.py"));
+    }
+    let (_, generic) = storage::snapshot(&p).unwrap();
+    assert_eq!(generic.len(), 1);
+    assert_eq!(generic[0].path, "z.py");
+}
+
+#[test]
+fn indexed_body_search_preserves_invalid_policy_workspace_and_shared_lock_deadlines() {
+    use fs2::FileExt;
+    use pctx::{deadline::Deadline, search::find_indexed, storage};
+    let (_temp, mut p) = indexed_project();
+    std::fs::write(
+        p.root.join("current.py"),
+        "def unrelated():\n    return 'needle'\n",
+    )
+    .unwrap();
+    let indexed = storage::update(&p).unwrap();
+    let mut invalid = p.clone();
+    invalid.config.policy.exclude.push("[".into());
+    let mut foreign = p.clone();
+    foreign.workspace_id = "foreign".into();
+    for kind in ["text", "all"] {
+        assert_eq!(
+            find_indexed(&invalid, &metadata_request(kind, "absent"))
+                .unwrap_err()
+                .code,
+            "INVALID_CONFIG"
+        );
+        assert_eq!(
+            find_indexed(&foreign, &metadata_request(kind, "needle"))
+                .unwrap_err()
+                .code,
+            "NOT_INITIALIZED"
+        );
+    }
+    let lock = std::fs::OpenOptions::new()
+        .read(true)
+        .write(true)
+        .open(p.workspace_dir.join("writer.lock"))
+        .unwrap();
+    lock.lock_exclusive().unwrap();
+    for kind in ["text", "all"] {
+        let deadline = Deadline::from_millis(60).unwrap();
+        p.deadline = Some(deadline);
+        let error = find_indexed(&p, &metadata_request(kind, "needle")).unwrap_err();
+        assert_eq!(error.code, "TIMEOUT");
+        assert_eq!(error.exit, 7);
+        assert!(
+            deadline.check().is_err(),
+            "The snapshot renewed its deadline"
+        );
+    }
+    FileExt::unlock(&lock).unwrap();
+    p.deadline = None;
+    let (generation, _) = storage::snapshot(&p).unwrap();
+    assert_eq!(generation.as_deref(), indexed["generation_id"].as_str());
 }
