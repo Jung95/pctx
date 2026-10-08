@@ -8,7 +8,7 @@ use clap::Subcommand;
 use rusqlite::{Connection, OptionalExtension, TransactionBehavior, params};
 use serde_json::{Value, json};
 use std::collections::BTreeMap;
-const SERIALIZER: &str = "adaptive-context-v3";
+const SERIALIZER: &str = "adaptive-context-v4";
 #[derive(Debug, Clone, Subcommand)]
 pub enum SessionCommand {
     Attach {
@@ -382,7 +382,19 @@ fn representation_metadata(mut metadata: Value, body: &Value) -> Result<Value> {
         metadata["delivered_text_hash"] = json!(hash(text.as_bytes()));
         metadata["delivered_text_byte_range"] = json!([0, text.len()]);
     }
-    for key in ["byte_range", "line_range", "source_range", "range"] {
+    for key in [
+        "byte_range",
+        "line_range",
+        "source_range",
+        "range",
+        "source_id",
+        "status",
+        "historical",
+        "current_guidance",
+        "superseded_by",
+        "effective_superseded_by",
+        "validity_basis",
+    ] {
         if let Some(range) = body.get(key) {
             metadata[key] = range.clone();
         }
@@ -468,7 +480,7 @@ impl ReceiptSpec<'_> {
                 .ok_or_else(|| invalid("Selected item has no path"))?;
             let kind = match item["reason"].as_str() {
                 Some("required_rule") => "required_rule",
-                Some("required_decision") => "decision",
+                Some("required_decision" | "decision_reference") => "decision",
                 Some("related_document") => "project_document",
                 _ => "code",
             };
@@ -492,7 +504,8 @@ impl ReceiptSpec<'_> {
         let plan = json!({"omissions":data["omitted_items"],"omitted_count":data["omitted_count"],
             "omission_reasons":data["omission_reasons"],"omission_details_omitted":data["omission_details_omitted"],
             "selection_complete":data["selection_complete"],"selector_version":data["selection_inputs"]["selector_version"],
-            "parser_set":data["selection_inputs"]["parser_set"]});
+            "parser_set":data["selection_inputs"]["parser_set"],
+            "project_documents_hash":data["source_versions"]["project_documents_hash"]});
         // Persist selection metadata, never the source bodies or task text.
         metadata.insert("__plan".into(), plan.clone());
         let content_hash = hash(serde_json::to_vec(
@@ -512,7 +525,19 @@ impl ReceiptSpec<'_> {
             p.check_deadline()?;
             match old.and_then(|old| old.get(key)) {
                 None => added.push(body.clone()),
-                Some(previous) if *previous != metadata[key] => changed.push(body.clone()),
+                Some(previous) if *previous != metadata[key] => {
+                    if previous["kind"] == "decision"
+                        && previous["current_guidance"] == true
+                        && metadata[key]["current_guidance"] == false
+                    {
+                        invalidated.push(
+                            json!({"item_id":key,"previous":previous,"tombstone":true,
+                            "reason":"decision_no_longer_current","status":metadata[key]["status"],
+                            "superseded_by":metadata[key]["superseded_by"]}),
+                        );
+                    }
+                    changed.push(body.clone());
+                }
                 _ => unchanged += 1,
             }
         }

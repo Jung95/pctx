@@ -177,3 +177,67 @@ fn source_changed_during_delivery_preparation_cannot_publish_stale_spans() {
     assert!(changed);
     assert_eq!(error.code, "CONCURRENT_MODIFICATION");
 }
+
+#[test]
+fn omitted_replacement_changed_during_delivery_invalidates_unchanged_selected_decision() {
+    let (_temp, p, mut r) = fixture();
+    fs::create_dir_all(p.root.join(".pctx/decisions")).unwrap();
+    let old_path = ".pctx/decisions/old.md";
+    let new_path = ".pctx/decisions/new.md";
+    fs::write(p.root.join(old_path), "---\nid: old\nstatus: accepted\ndate: '2026-10-08'\n---\nRetain this claim unless replaced.\n").unwrap();
+    let replace = |status: &str| {
+        fs::write(p.root.join(new_path), format!(
+        "---\nid: proposed-replacement\nstatus: {status}\ndate: '2026-10-08'\nsupersedes: old\n---\nReplacement claim.\n")).unwrap()
+    };
+    replace("proposed");
+    let old_source = fs::read(p.root.join(old_path)).unwrap();
+    let large = select_with_measurement(&p, &r, Format::Json, |data| {
+        Ok(render(&packet(&p, data), Format::Json)?.len())
+    })
+    .unwrap();
+    let reference = large["items"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .find(|v| v["path"] == new_path)
+        .unwrap();
+    assert_eq!(reference["representation"], "reference");
+    r.budget_bytes = large["budget"]["used"].as_u64().unwrap() as usize
+        - serde_json::to_vec(reference).unwrap().len()
+        + 200;
+    let mut replaced = false;
+    let error = select_with_measurement(&p, &r, Format::Json, |data| {
+        if !replaced
+            && !data["items"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .any(|v| v["path"] == new_path)
+        {
+            let old = data["items"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .find(|v| v["path"] == old_path)
+                .unwrap();
+            assert_eq!(old["current_guidance"], true);
+            assert!(
+                data["omitted_items"]
+                    .as_array()
+                    .unwrap()
+                    .iter()
+                    .any(|v| v["path"] == new_path)
+            );
+            replace("accepted");
+            replaced = true;
+        }
+        Ok(render(&packet(&p, data), Format::Json)?.len())
+    })
+    .unwrap_err();
+    assert!(
+        replaced,
+        "fixture must mutate the omitted dependency during preparation"
+    );
+    assert_eq!(fs::read(p.root.join(old_path)).unwrap(), old_source);
+    assert_eq!(error.code, "CONCURRENT_MODIFICATION");
+}

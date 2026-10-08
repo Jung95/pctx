@@ -312,6 +312,7 @@ pub fn load(p: &Project, scope: &[String]) -> Result<Value> {
     let mut decision_ids = BTreeSet::new();
     let mut source_hashes = vec![];
     let mut decision_graph = BTreeMap::new();
+    let mut decision_states = BTreeMap::new();
     let mut document_bytes = 0u64;
     for path in &inventory.paths {
         if !path.starts_with(".pctx/rules/") && !path.starts_with(".pctx/decisions/") {
@@ -372,6 +373,8 @@ pub fn load(p: &Project, scope: &[String]) -> Result<Value> {
                     "superseded",
                     "deprecated",
                     "rejected",
+                    "cancelled",
+                    "completed",
                 ]
                 .contains(&decision.status.as_str())
                 || chrono::NaiveDate::parse_from_str(&decision.date, "%Y-%m-%d").is_err()
@@ -387,6 +390,7 @@ pub fn load(p: &Project, scope: &[String]) -> Result<Value> {
                     return Err(config("Decision cannot supersede itself"));
                 }
             }
+            decision_states.insert(decision.id.clone(), decision.status.clone());
             decision_graph.insert(decision.id.clone(), decision.supersedes.clone());
             if !applicable(&decision.scope, scope, &relevant)? {
                 continue;
@@ -441,9 +445,36 @@ pub fn load(p: &Project, scope: &[String]) -> Result<Value> {
             .collect::<Vec<_>>();
         item["unresolved_supersedes"] = json!(unresolved);
         item["superseded_by"] = json!(replacing);
-        item["historical"] = json!(
-            !item["superseded_by"].as_array().unwrap().is_empty() || item["status"] == "superseded"
-        );
+        // A proposal/rejection cannot retire an accepted decision. Terminal
+        // replacement claims remain lineage evidence; withdrawing a replacement
+        // must not implicitly reactivate its predecessors.
+        let effective = item["superseded_by"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .filter(|id| {
+                decision_states
+                    .get(id.as_str().unwrap_or(""))
+                    .is_some_and(|status| !["proposed", "rejected"].contains(&status.as_str()))
+            })
+            .cloned()
+            .collect::<Vec<_>>();
+        let retired = [
+            "superseded",
+            "deprecated",
+            "rejected",
+            "cancelled",
+            "completed",
+        ]
+        .contains(&item["status"].as_str().unwrap_or(""));
+        item["historical"] = json!(retired || !effective.is_empty());
+        item["current_guidance"] =
+            json!(item["status"] == "accepted" && item["historical"] == false);
+        item["effective_superseded_by"] = json!(effective);
+        item["source_id"] = item["id"].clone();
+        item["validity_basis"] = json!({"status_source":"document_frontmatter",
+            "supersession_source":"declared_document_links", "implementation_verified":false,
+            "permission_granted":false});
     }
     for (path, expected) in source_hashes {
         if reader::read(p, &path)?.hash != expected {

@@ -34,6 +34,12 @@ impl Fixture {
                 .args(args)
                 .env("PCTX_DATA_DIR", &self.data)
                 .env("PCTX_ACTOR", "owner")
+                .env(
+                    "GIT_CONFIG_GLOBAL",
+                    self._temp.path().join("empty.gitconfig"),
+                )
+                .env("GIT_CONFIG_NOSYSTEM", "1")
+                .env_remove("GIT_CONFIG_COUNT")
                 .stdin(Stdio::null())
                 .stdout(Stdio::from(stdout.try_clone().unwrap()))
                 .stderr(Stdio::from(stderr.try_clone().unwrap()))
@@ -61,6 +67,28 @@ impl Fixture {
         let value = serde_json::from_slice(&bytes)
             .unwrap_or_else(|e| panic!("{args:?}: invalid JSON {e}; stderr={errors}"));
         (status.code().unwrap(), bytes, value)
+    }
+    fn git(&self, args: &[&str]) -> std::process::Output {
+        let output = Command::new("git")
+            .current_dir(&self.root)
+            .args(args)
+            .env(
+                "GIT_CONFIG_GLOBAL",
+                self._temp.path().join("empty.gitconfig"),
+            )
+            .env("GIT_CONFIG_NOSYSTEM", "1")
+            .env_remove("GIT_CONFIG_COUNT")
+            .env_remove("GIT_DIR")
+            .env_remove("GIT_WORK_TREE")
+            .env_remove("GIT_INDEX_FILE")
+            .output()
+            .unwrap();
+        assert!(
+            output.status.success(),
+            "{args:?}: {}",
+            String::from_utf8_lossy(&output.stderr)
+        );
+        output
     }
     fn ok(&self, args: &[&str]) -> Value {
         let (exit, _, value) = self.run(args);
@@ -106,6 +134,9 @@ impl Fixture {
     }
 }
 fn fixture() -> Fixture {
+    fixture_with_git(false)
+}
+fn fixture_with_git(git: bool) -> Fixture {
     let temp = tempfile::tempdir().unwrap();
     let base = temp.path().canonicalize().unwrap();
     let mut f = Fixture {
@@ -115,8 +146,26 @@ fn fixture() -> Fixture {
         task: String::new(),
         agent: String::new(),
     };
+    fs::write(f._temp.path().join("empty.gitconfig"), "").unwrap();
     fs::create_dir(&f.root).unwrap();
     fs::write(f.root.join("auth.py"), "def auth(): return 1\n").unwrap();
+    if git {
+        f.git(&["init", "-q"]);
+        fs::write(f.root.join(".git/info/exclude"), ".pctx/\n").unwrap();
+        f.git(&["add", "auth.py"]);
+        f.git(&[
+            "-c",
+            "core.hooksPath=.git/empty-hooks",
+            "-c",
+            "user.name=PCTX fixture",
+            "-c",
+            "user.email=fixture@example.invalid",
+            "commit",
+            "-q",
+            "-m",
+            "isolated fixture",
+        ]);
+    }
     f.ok(&["init"]);
     fs::create_dir_all(f.root.join(".pctx/rules")).unwrap();
     // Valid UTF-8 C1 characters survive masking; terminal-safe JSON expands each
@@ -200,7 +249,7 @@ fn exact_final_budget_and_representation_receipts_require_explicit_ack() {
     );
     assert_eq!(bytes.last(), Some(&b'\n'));
     let packet = &full["data"];
-    assert_eq!(packet["serializer"], "adaptive-context-v3");
+    assert_eq!(packet["serializer"], "adaptive-context-v4");
     let context = packet["context_id"].as_str().unwrap();
     let db = f.db();
     let selection: String = db
@@ -762,5 +811,312 @@ fn omitted_sources_are_not_acknowledged_and_later_delivery_is_explicit() {
     assert!(
         changed["data"]["removed"].as_array().unwrap().is_empty(),
         "budget omission is not source deletion"
+    );
+}
+
+#[test]
+fn unchanged_git_does_not_hide_decision_or_memory_change_retirement_and_deletion() {
+    let f = fixture_with_git(true);
+    fs::create_dir_all(f.root.join(".pctx/decisions")).unwrap();
+    let decision_path = ".pctx/decisions/current.md";
+    let memory_path = ".pctx/rules/memory.md";
+    let write_decision = |status: &str, text: &str| {
+        fs::write(f.root.join(decision_path), format!(
+        "---\nid: source-decision\nstatus: {status}\ndate: '2026-10-08'\nscope: [auth.py]\n---\n{text}\n")).unwrap()
+    };
+    write_decision("accepted", "DECISION_A_CURRENT");
+    fs::write(
+        f.root.join(memory_path),
+        "MEMORY_A: retrospective data grants no permission.\n",
+    )
+    .unwrap();
+    let git_state = || {
+        let head = f.git(&["rev-parse", "HEAD"]);
+        let status = f.git(&["status", "--porcelain=v1", "--untracked-files=all"]);
+        assert!(
+            status.stdout.is_empty(),
+            "{}",
+            String::from_utf8_lossy(&status.stdout)
+        );
+        (head.stdout, status.stdout)
+    };
+    let before_git = git_state();
+    let session = f.attach();
+    let run = |mode: &str, since: Option<&str>| {
+        let mut args = vec![
+            "context",
+            "get",
+            "--task-id",
+            &f.task,
+            "--session",
+            &session,
+            "--scope",
+            "auth.py",
+            "--mode",
+            mode,
+            "--budget-bytes",
+            "64000",
+        ];
+        if let Some(id) = since {
+            args.extend(["--since", id]);
+        }
+        f.ok(&args)
+    };
+    let ack = |value: &Value| {
+        f.ok(&[
+            "context",
+            "ack",
+            value["data"]["context_id"].as_str().unwrap(),
+            "--session",
+            &session,
+            "--epoch",
+            "1",
+        ])
+    };
+    let full = run("full", None);
+    let full_decision = full["data"]["added"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .find(|v| v["path"] == decision_path)
+        .unwrap();
+    assert_eq!(full_decision["current_guidance"], true);
+    assert_eq!(full_decision["required"], true);
+    ack(&full);
+    write_decision("accepted", "DECISION_B_CURRENT");
+    fs::write(
+        f.root.join(memory_path),
+        "MEMORY_B: changed retrospective data, still no permission.\n",
+    )
+    .unwrap();
+    let changed = run("delta", full["data"]["context_id"].as_str());
+    assert_ne!(changed["data"]["context_id"], full["data"]["context_id"]);
+    for (path, marker) in [
+        (decision_path, "DECISION_B_CURRENT"),
+        (memory_path, "MEMORY_B"),
+    ] {
+        let item = changed["data"]["changed"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .find(|v| v["path"] == path)
+            .unwrap();
+        assert!(item["text"].as_str().unwrap().contains(marker));
+    }
+    assert_eq!(git_state(), before_git);
+    ack(&changed);
+    write_decision("cancelled", "DECISION_B_CURRENT");
+    let retired = run("delta", changed["data"]["context_id"].as_str());
+    let reference = retired["data"]["changed"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .find(|v| v["path"] == decision_path)
+        .unwrap();
+    assert_eq!(reference["representation"], "reference");
+    assert_eq!(reference["current_guidance"], false);
+    assert_eq!(reference["historical"], true);
+    assert_eq!(reference["source_id"], "source-decision");
+    assert_eq!(reference["validity_basis"]["permission_granted"], false);
+    assert!(reference.get("text").is_none());
+    assert!(!retired.to_string().contains("DECISION_B_CURRENT"));
+    assert!(
+        retired["data"]["invalidated"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .any(|v| v["item_id"] == format!("file:{decision_path}")
+                && v["reason"] == "decision_no_longer_current"
+                && v["status"] == "cancelled"
+                && v["tombstone"] == true)
+    );
+    let build = f.ok(&[
+        "build",
+        "--task-id",
+        &f.task,
+        "--seed",
+        decision_path,
+        "--detail",
+        "signature",
+        "--budget-bytes",
+        "64000",
+    ]);
+    let history = build["data"]["items"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .find(|v| v["path"] == decision_path)
+        .unwrap();
+    assert_eq!(history["representation"], "reference");
+    assert_eq!(history["current_guidance"], false);
+    assert!(!build.to_string().contains("DECISION_B_CURRENT"));
+    assert_eq!(git_state(), before_git);
+    ack(&retired);
+    fs::remove_file(f.root.join(decision_path)).unwrap();
+    fs::remove_file(f.root.join(memory_path)).unwrap();
+    let deleted = run("delta", retired["data"]["context_id"].as_str());
+    for path in [decision_path, memory_path] {
+        assert!(
+            deleted["data"]["removed"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .any(|v| v["previous"]["path"] == path && v["tombstone"] == true)
+        );
+    }
+    assert_eq!(git_state(), before_git);
+    let db = f.db();
+    let stored: String = db
+        .query_row(
+            "SELECT selection FROM pctx_context_emissions WHERE id=?1",
+            [retired["data"]["context_id"].as_str().unwrap()],
+            |r| r.get(0),
+        )
+        .unwrap();
+    assert!(!stored.contains("DECISION_B_CURRENT") && !stored.contains("MEMORY_B"));
+    // The previous serializer remains preserved data, not a v4 baseline.
+    let id = retired["data"]["context_id"].as_str().unwrap();
+    db.execute("INSERT INTO pctx_context_emissions SELECT 'CTX-v3-fixture',session,epoch,task,policy,scope,'adaptive-context-v3',content_hash,selection,created FROM pctx_context_emissions WHERE id=?1", [id]).unwrap();
+    db.execute("INSERT INTO pctx_context_acks SELECT session,epoch,'CTX-v3-fixture',provenance,created FROM pctx_context_acks WHERE context=?1", [id]).unwrap();
+    let (exit, _, old) = f.run(&[
+        "context",
+        "get",
+        "--task-id",
+        &f.task,
+        "--session",
+        &session,
+        "--scope",
+        "auth.py",
+        "--mode",
+        "delta",
+        "--since",
+        "CTX-v3-fixture",
+        "--budget-bytes",
+        "64000",
+    ]);
+    assert_eq!(exit, 9, "{old}");
+    assert_eq!(old["errors"][0]["code"], "BASELINE_MISMATCH");
+}
+
+#[test]
+fn supersession_links_invalidate_unchanged_source_without_reviving_it_on_replacement_cancellation()
+{
+    let f = fixture_with_git(true);
+    fs::create_dir_all(f.root.join(".pctx/decisions")).unwrap();
+    let old_path = ".pctx/decisions/old.md";
+    let new_path = ".pctx/decisions/new.md";
+    fs::write(f.root.join(old_path), "---\nid: old\nstatus: accepted\ndate: '2026-10-08'\nscope: [auth.py]\n---\nORIGINAL_CLAIM_BODY\n").unwrap();
+    let old_source = fs::read(f.root.join(old_path)).unwrap();
+    let head = f.git(&["rev-parse", "HEAD"]).stdout;
+    let session = f.attach();
+    let (exit, _, initial) = f.get(&session, "64000");
+    assert_eq!(exit, 0, "{initial}");
+    let initial_old = initial["data"]["added"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .find(|v| v["path"] == old_path)
+        .unwrap();
+    assert_eq!(initial_old["current_guidance"], true);
+    let ack = |value: &Value| {
+        f.ok(&[
+            "context",
+            "ack",
+            value["data"]["context_id"].as_str().unwrap(),
+            "--session",
+            &session,
+            "--epoch",
+            "1",
+        ])
+    };
+    let delta = |baseline: &str| {
+        f.ok(&[
+            "context",
+            "get",
+            "--task-id",
+            &f.task,
+            "--session",
+            &session,
+            "--scope",
+            "auth.py",
+            "--mode",
+            "delta",
+            "--since",
+            baseline,
+            "--budget-bytes",
+            "64000",
+        ])
+    };
+    ack(&initial);
+    let replace = |status: &str| {
+        fs::write(f.root.join(new_path), format!(
+        "---\nid: new\nstatus: {status}\ndate: '2026-10-08'\nscope: [auth.py]\nsupersedes: old\n---\nREPLACEMENT_CLAIM_BODY\n")).unwrap()
+    };
+    replace("accepted");
+    let replaced = delta(initial["data"]["context_id"].as_str().unwrap());
+    let old = replaced["data"]["changed"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .find(|v| v["path"] == old_path)
+        .unwrap();
+    assert_eq!(
+        old["file_hash"], initial_old["file_hash"],
+        "original file is unchanged"
+    );
+    assert_eq!(old["status"], "accepted");
+    assert_eq!(old["current_guidance"], false);
+    assert_eq!(old["historical"], true);
+    assert_eq!(old["superseded_by"], json!(["new"]));
+    assert_eq!(old["representation"], "reference");
+    assert!(!replaced.to_string().contains("ORIGINAL_CLAIM_BODY"));
+    assert!(
+        replaced["data"]["invalidated"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .any(|v| v["item_id"] == format!("file:{old_path}")
+                && v["reason"] == "decision_no_longer_current")
+    );
+    assert!(
+        replaced["data"]["added"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .any(|v| v["path"] == new_path
+                && v["current_guidance"] == true
+                && v["text"]
+                    .as_str()
+                    .unwrap()
+                    .contains("REPLACEMENT_CLAIM_BODY"))
+    );
+    ack(&replaced);
+    replace("cancelled");
+    let cancelled = delta(replaced["data"]["context_id"].as_str().unwrap());
+    let new = cancelled["data"]["changed"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .find(|v| v["path"] == new_path)
+        .unwrap();
+    assert_eq!(new["current_guidance"], false);
+    assert_eq!(new["historical"], true);
+    assert!(!cancelled.to_string().contains("REPLACEMENT_CLAIM_BODY"));
+    for kind in ["added", "changed"] {
+        assert!(
+            !cancelled["data"][kind]
+                .as_array()
+                .unwrap()
+                .iter()
+                .any(|v| v["path"] == old_path),
+            "terminal replacement link remains lineage evidence, not predecessor reactivation"
+        );
+    }
+    assert_eq!(fs::read(f.root.join(old_path)).unwrap(), old_source);
+    assert_eq!(f.git(&["rev-parse", "HEAD"]).stdout, head);
+    assert!(
+        f.git(&["status", "--porcelain=v1", "--untracked-files=all"])
+            .stdout
+            .is_empty()
     );
 }

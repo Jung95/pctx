@@ -209,3 +209,70 @@ fn legacy_instructions_are_opaque_and_all_returned_metadata_is_masked() {
     let second = documents::load(&p, &[]).unwrap();
     assert_eq!(first, second);
 }
+
+#[test]
+fn decision_lifecycle_never_promotes_retired_or_proposed_claims() {
+    let (_t, p) = fixture();
+    for status in [
+        "accepted",
+        "proposed",
+        "superseded",
+        "deprecated",
+        "rejected",
+        "cancelled",
+        "completed",
+    ] {
+        std::fs::write(p.root.join(format!(".pctx/decisions/{status}.md")), format!(
+            "---\nid: {status}\nstatus: {status}\ndate: '2026-10-08'\n---\nClaim data for {status}.\n")).unwrap();
+    }
+    let v = documents::load(&p, &[]).unwrap();
+    for item in v["decisions"].as_array().unwrap() {
+        let status = item["status"].as_str().unwrap();
+        assert_eq!(item["current_guidance"], status == "accepted");
+        assert_eq!(
+            item["historical"],
+            !["accepted", "proposed"].contains(&status)
+        );
+        assert_eq!(item["source_id"], status);
+        assert_eq!(item["validity_basis"]["permission_granted"], false);
+        assert_eq!(item["validity_basis"]["implementation_verified"], false);
+    }
+}
+#[test]
+fn proposed_replacement_cannot_retire_current_claim_and_cancellation_cannot_revive_predecessor() {
+    let (_t, p) = fixture();
+    decision(&p, "old.md", "old", "[]");
+    let write = |status: &str| {
+        std::fs::write(p.root.join(".pctx/decisions/new.md"),format!(
+        "---\nid: new\nstatus: {status}\ndate: '2026-10-08'\nsupersedes: old\n---\nReplacement claim.\n")).unwrap()
+    };
+    write("proposed");
+    let v = documents::load(&p, &[]).unwrap();
+    let old = v["decisions"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .find(|d| d["id"] == "old")
+        .unwrap();
+    assert_eq!(old["current_guidance"], true);
+    assert_eq!(old["superseded_by"], serde_json::json!(["new"]));
+    assert!(
+        old["effective_superseded_by"]
+            .as_array()
+            .unwrap()
+            .is_empty()
+    );
+    for status in ["accepted", "cancelled"] {
+        write(status);
+        let v = documents::load(&p, &[]).unwrap();
+        let old = v["decisions"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .find(|d| d["id"] == "old")
+            .unwrap();
+        assert_eq!(old["current_guidance"], false);
+        assert_eq!(old["historical"], true);
+        assert_eq!(old["effective_superseded_by"], serde_json::json!(["new"]));
+    }
+}

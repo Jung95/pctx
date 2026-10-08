@@ -167,6 +167,7 @@ pub(crate) fn select_scoped_with_measurement(
     let mut omitted = Vec::new();
     let mut seen = BTreeSet::new();
     let docs = crate::documents::load(p, &task_scope)?;
+    let document_fingerprint = hash(serde_json::to_vec(&docs)?);
     for rule in docs["rules"]
         .as_array()
         .into_iter()
@@ -184,7 +185,12 @@ pub(crate) fn select_scoped_with_measurement(
     }
     // Decision records may carry blocking constraints; retain their claims in full rather than
     // inferring which natural-language statements are blocking.
-    for decision in docs["decisions"].as_array().into_iter().flatten() {
+    for decision in docs["decisions"]
+        .as_array()
+        .into_iter()
+        .flatten()
+        .filter(|d| d["current_guidance"] == true)
+    {
         let path = decision["path"].as_str().unwrap().to_string();
         if seen.insert(path.clone()) {
             let mut item = decision.clone();
@@ -200,7 +206,7 @@ pub(crate) fn select_scoped_with_measurement(
     explicit.sort();
     explicit.dedup();
     let mut documents = Vec::new();
-    for section in ["rules", "instructions"] {
+    for section in ["rules", "instructions", "decisions"] {
         for doc in docs[section].as_array().into_iter().flatten() {
             if let Some(path) = doc["path"].as_str()
                 && !seen.contains(path)
@@ -267,12 +273,25 @@ pub(crate) fn select_scoped_with_measurement(
             candidates.push((f.path.clone(), "lexical_match"));
         }
     }
-    let mut data = json!({"task":task,"role":r.role,"items":items,"omitted_items":[],"selection_complete":true,"search_coverage":{"status":"partial","reasons":["lexical_candidates_only"]},"rule_scope_uncertain":docs["scope_uncertain"],"source_versions":{"policy_hash":p.policy_hash()},"import_expansions":graph_sources,"budget":{"limit":r.budget_bytes,"used":0,"unit":"bytes"}});
+    let mut data = json!({"task":task,"role":r.role,"items":items,"omitted_items":[],"selection_complete":true,"search_coverage":{"status":"partial","reasons":["lexical_candidates_only"]},"rule_scope_uncertain":docs["scope_uncertain"],"source_versions":{"policy_hash":p.policy_hash(),"project_documents_hash":document_fingerprint},"import_expansions":graph_sources,"budget":{"limit":r.budget_bytes,"used":0,"unit":"bytes"}});
     let mut candidate_seen = BTreeSet::new();
     candidates.retain(|(path, reason)| {
         let allowed =
             scope.is_none_or(|scope| *reason == "related_document" || in_scope(path, scope));
-        allowed && !seen.contains(path) && candidate_seen.insert(path.clone())
+        if !allowed {
+            return false;
+        }
+        if path.starts_with(".pctx/decisions/")
+            && !docs["decisions"]
+                .as_array()
+                .into_iter()
+                .flatten()
+                .any(|d| d["path"] == *path)
+        {
+            omitted.push(json!({"path":path,"reason":"document_scope"}));
+            return false;
+        }
+        !seen.contains(path) && candidate_seen.insert(path.clone())
     });
     for (path, _) in candidates.iter().skip(200) {
         omitted.push(json!({"path":path,"reason":"candidate_limit"}));
@@ -292,29 +311,59 @@ pub(crate) fn select_scoped_with_measurement(
                 4,
             ));
         }
-        let tiers = representations(p, &path, &f.hash, &f.text, e, reason)?;
-        let start = match r.detail.as_str() {
-            "reference" => tiers.len() - 1,
-            "outline" => tiers
-                .iter()
-                .position(|v| v["representation"] == "outline")
-                .unwrap(),
-            "signature" => tiers
-                .iter()
-                .position(|v| v["representation"] == "signature")
-                .unwrap_or(1),
-            "adaptive" if reason == "import_dependency" => tiers
-                .iter()
-                .position(|v| v["representation"] == "signature")
-                .unwrap_or(1),
-            "adaptive" if reason == "lexical_match" => tiers
-                .iter()
-                .position(|v| v["representation"] == "outline")
-                .unwrap(),
-            _ => 0,
+        let mut tiers = representations(p, &path, &f.hash, &f.text, e, reason)?;
+        if let Some(decision) = docs["decisions"]
+            .as_array()
+            .into_iter()
+            .flatten()
+            .find(|d| d["path"] == path && d["current_guidance"] != true)
+        {
+            // Retired and proposed records are provenance references, never
+            // current instruction bodies (including explicit/lexical seeds).
+            tiers = vec![tiers.pop().unwrap()];
+            for key in [
+                "source_id",
+                "status",
+                "scope",
+                "historical",
+                "current_guidance",
+                "superseded_by",
+                "effective_superseded_by",
+                "validity_basis",
+            ] {
+                tiers[0][key] = decision[key].clone();
+            }
+            tiers[0]["reason"] = json!("decision_reference");
+        }
+        let start = if tiers.len() == 1 {
+            0
+        } else {
+            match r.detail.as_str() {
+                "reference" => tiers.len() - 1,
+                "outline" => tiers
+                    .iter()
+                    .position(|v| v["representation"] == "outline")
+                    .unwrap(),
+                "signature" => tiers
+                    .iter()
+                    .position(|v| v["representation"] == "signature")
+                    .unwrap_or(1),
+                "adaptive" if reason == "import_dependency" => tiers
+                    .iter()
+                    .position(|v| v["representation"] == "signature")
+                    .unwrap_or(1),
+                "adaptive" if reason == "lexical_match" => tiers
+                    .iter()
+                    .position(|v| v["representation"] == "outline")
+                    .unwrap(),
+                _ => 0,
+            }
         };
         let mut chosen = tiers[start..].to_vec();
-        if r.detail == "signature" && chosen[0]["representation"] != "signature" {
+        if r.detail == "signature"
+            && chosen[0]["representation"] != "signature"
+            && chosen[0]["reason"] != "decision_reference"
+        {
             chosen[0]["fallback"] = json!("signature_unsupported_outline");
         }
         data["items"]
@@ -326,7 +375,7 @@ pub(crate) fn select_scoped_with_measurement(
     }
     data["selection_inputs"] = json!({"detail":r.detail,"seed":r.seed,"task_scope":task_scope,
         "changed_since":r.changed_since,"dependency_depth":r.dependency_depth,
-        "parser_set":storage::PARSER_SET,"selector_version":"adaptive-v2",
+        "parser_set":storage::PARSER_SET,"selector_version":"adaptive-v3",
         "format": match format { crate::render::Format::Markdown => "markdown", _ => "json" }});
     finalize(
         p,
@@ -362,6 +411,16 @@ pub(crate) fn select_scoped_with_measurement(
                 4,
             ));
         }
+    }
+    // Supersession/applicability can depend on a document that was omitted
+    // from the packet. Revalidating only selected paths would miss that race.
+    let current_documents = crate::documents::load(p, &task_scope)?;
+    if hash(serde_json::to_vec(&current_documents)?) != document_fingerprint {
+        return Err(Error::new(
+            "CONCURRENT_MODIFICATION",
+            "Project document dependencies changed before output",
+            4,
+        ));
     }
     p.check_deadline()?;
     Ok(data)

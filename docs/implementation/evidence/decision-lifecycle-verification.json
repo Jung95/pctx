@@ -1,0 +1,41 @@
+{
+  "base_revision": "f62f3a49e65b86b99e3ee978a1fc319d138a0649",
+  "platform": "native macOS arm64",
+  "source_sha256": {
+    "src/context.rs": "7744f3f466844d2c7407e2af5a4a663f63b70cff1bb365886fa40c08b4a2561c",
+    "src/documents.rs": "60e93f147d46f097d5423bc015b037f8a00e24a40438e1fe263414837f96bb05",
+    "src/session.rs": "e4ec9b3c979b463d392974acde5a46e57f841355822e55040a650a19e1925c52",
+    "tests/context_delivery_selection.rs": "66226369362a8c4720cf40d832b3bfaac7a7c470835612a0434c50c8430f5b9c",
+    "tests/project_documents.rs": "73c45bef4199545814462596121bf0ce8f580777e0984a0f492d05a68ce2ddd3",
+    "tests/session_render_budget.rs": "b0ecbcd204aa0c7c35d4671e817cbd0184365f4ea5345185e3a869a39b591acb"
+  },
+  "gates": {
+    "22524": {
+      "exit": 0,
+      "targeted_passed": 33,
+      "clippy": "all-targets locked warnings denied"
+    },
+    "77786": {
+      "exit": 0,
+      "full_passed": 313
+    }
+  },
+  "intermediate": {
+    "18874": {
+      "exit": 0,
+      "passed": 312,
+      "phase": "before omitted-document dependency fence",
+      "source_hashes": "not_recorded"
+    }
+  },
+  "serializer": "adaptive-context-v4",
+  "selector": "adaptive-v3",
+  "db_schema_version": 1,
+  "ci_dispatched": false,
+  "scope_limits": [
+    "silence/paused-role delivery filters and handoff/task/approval-memory variants unfinished",
+    "persistent lineage after link-file deletion/restoration unqualified",
+    "cooperative native I/O and final validation-to-output window",
+    "Linux and Windows execution unverified"
+  ]
+}
