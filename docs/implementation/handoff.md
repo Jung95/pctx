@@ -7,7 +7,9 @@
 ## Latest integration boundary
 
 PCTX01 G05/G08/G09 Linux proc-stat disappearance repair, runtime
-5ff3f46ad757f8f19483763fa3048b6baafc065e (publication checked below after push).
+5ff3f46ad757f8f19483763fa3048b6baafc065e. Normal push74592 terminal0
+published runtime and evidence704503b93beeda74cc74af33b5d5a345b08bfb98
+to origin/main (ede9285..704503b), [skip ci]. Publication record follows.
 Linux aarch64 VM, Ubuntu24.04.4/LinuxKit7.0.12, Rust1.99, Docker29.8,
 6CPU/5.047GiB; immutable image7759288062d2. Actual native execution, not
 cross-compilation/Actions/x86_64/Windows qualification. Source/toolchain RO,
@@ -98,8 +100,7 @@ preserve every valid JSON value/cursor/order/original clock. No new Activity/Wat
 feature or skip-corrupt-row/empty-success behavior. Additional frontend/phase
 matrix and Windows execution remain mandatory. No next official task selected.
 
-All heavy jobs must be terminal before publication; confirm actual handles/Git
-and manifest on resume. Windows needs real current-source full/CLI matrix with
+All heavy jobs are terminal. Confirm actual handles/Git and manifest on resume. Windows needs real current-source full/CLI matrix with
 OS/compiler/source/log IDs; no Windows environment available. Monthly3000-minute
 constraint remains: no Actions dispatched. Original objective attachment exists.
 
