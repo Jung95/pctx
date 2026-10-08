@@ -141,15 +141,44 @@ fn stamp(s: &str) -> Result<i64> {
         .map(|d| d.timestamp())
         .map_err(|_| invalid("Usage times must be absolute RFC3339 with an offset"))
 }
+fn request_phase<T>(p: &Project, call: impl FnOnce() -> Result<T>) -> Result<T> {
+    p.check_deadline()?;
+    let result = call();
+    p.check_deadline()?;
+    result
+}
+fn collect_rows<T>(
+    p: &Project,
+    db: &Connection,
+    mut rows: impl Iterator<Item = rusqlite::Result<T>>,
+) -> Result<Vec<T>> {
+    let mut values = Vec::new();
+    loop {
+        p.configure_sqlite(db)?;
+        let row = rows.next();
+        p.check_deadline()?;
+        match row {
+            Some(row) => values.push(row.map_err(|e| p.map_sqlite_error(e))?),
+            None => return Ok(values),
+        }
+    }
+}
 fn connect(p: &Project) -> Result<Connection> {
+    request_phase(p, || connect_inner(p))
+}
+fn connect_inner(p: &Project) -> Result<Connection> {
     let mut db = work::connect(p)?;
-    let initialized: bool = db.query_row(
-        "SELECT EXISTS(SELECT 1 FROM sqlite_master WHERE type='table' AND name='quota_schema')",
-        [],
-        |r| r.get(0),
-    )?;
+    let initialized: bool = p.sqlite_call(&db, || {
+        db.query_row(
+            "SELECT EXISTS(SELECT 1 FROM sqlite_master WHERE type='table' AND name='quota_schema')",
+            [],
+            |r| r.get(0),
+        )
+    })?;
     if initialized {
-        let version: i64 = db.query_row("SELECT version FROM quota_schema", [], |r| r.get(0))?;
+        let version: i64 = p.sqlite_call(&db, || {
+            db.query_row("SELECT version FROM quota_schema", [], |r| r.get(0))
+        })?;
         if version != VERSION {
             return Err(Error::new(
                 "DB_SCHEMA_TOO_NEW",
@@ -157,18 +186,24 @@ fn connect(p: &Project) -> Result<Connection> {
                 7,
             ));
         }
-        db.execute_batch("CREATE TRIGGER IF NOT EXISTS quota_events_no_update BEFORE UPDATE ON quota_events BEGIN SELECT RAISE(ABORT,'append-only events'); END; CREATE TRIGGER IF NOT EXISTS quota_events_no_delete BEFORE DELETE ON quota_events BEGIN SELECT RAISE(ABORT,'append-only events'); END;")?;
+        p.sqlite_call(&db, || db.execute_batch("CREATE TRIGGER IF NOT EXISTS quota_events_no_update BEFORE UPDATE ON quota_events BEGIN SELECT RAISE(ABORT,'append-only events'); END; CREATE TRIGGER IF NOT EXISTS quota_events_no_delete BEFORE DELETE ON quota_events BEGIN SELECT RAISE(ABORT,'append-only events'); END;"))?;
         return Ok(db);
     }
-    let tx = db.transaction_with_behavior(TransactionBehavior::Immediate)?;
-    tx.execute_batch("CREATE TABLE quota_schema(version INTEGER NOT NULL);INSERT INTO quota_schema VALUES(1);
+    p.configure_sqlite(&db)?;
+    let tx = db
+        .transaction_with_behavior(TransactionBehavior::Immediate)
+        .map_err(|e| p.map_sqlite_error(e))?;
+    p.check_deadline()?;
+    p.sqlite_call(&tx, || tx.execute_batch("CREATE TABLE quota_schema(version INTEGER NOT NULL);INSERT INTO quota_schema VALUES(1);
 CREATE TABLE quota_observations(observation_id TEXT PRIMARY KEY,pool TEXT NOT NULL,provider TEXT NOT NULL,model TEXT NOT NULL,metric TEXT NOT NULL,unit TEXT NOT NULL,source TEXT NOT NULL,session TEXT,context_epoch INTEGER,counter_epoch TEXT,observed INTEGER NOT NULL,window_start INTEGER NOT NULL,window_end INTEGER NOT NULL,payload TEXT NOT NULL,payload_hash TEXT NOT NULL);
 CREATE INDEX quota_lookup ON quota_observations(pool,metric,observed);
 CREATE TABLE quota_receipts(key TEXT PRIMARY KEY,request_hash TEXT NOT NULL,response TEXT NOT NULL);
 CREATE TABLE quota_reservations(id TEXT PRIMARY KEY,task TEXT NOT NULL,pool TEXT NOT NULL,unit TEXT NOT NULL,amount REAL NOT NULL,policy TEXT NOT NULL,policy_hash TEXT NOT NULL,status TEXT NOT NULL,created INTEGER NOT NULL);
-CREATE TABLE quota_events(seq INTEGER PRIMARY KEY AUTOINCREMENT,entity TEXT NOT NULL,kind TEXT NOT NULL,metadata TEXT NOT NULL,created INTEGER NOT NULL);")?;
-    tx.commit()?;
-    db.execute_batch("CREATE TRIGGER IF NOT EXISTS quota_events_no_update BEFORE UPDATE ON quota_events BEGIN SELECT RAISE(ABORT,'append-only events'); END; CREATE TRIGGER IF NOT EXISTS quota_events_no_delete BEFORE DELETE ON quota_events BEGIN SELECT RAISE(ABORT,'append-only events'); END;")?;
+CREATE TABLE quota_events(seq INTEGER PRIMARY KEY AUTOINCREMENT,entity TEXT NOT NULL,kind TEXT NOT NULL,metadata TEXT NOT NULL,created INTEGER NOT NULL);"))?;
+    p.check_deadline()?;
+    tx.commit().map_err(|e| p.map_sqlite_error(e))?;
+    p.check_deadline()?;
+    p.sqlite_call(&db, || db.execute_batch("CREATE TRIGGER IF NOT EXISTS quota_events_no_update BEFORE UPDATE ON quota_events BEGIN SELECT RAISE(ABORT,'append-only events'); END; CREATE TRIGGER IF NOT EXISTS quota_events_no_delete BEFORE DELETE ON quota_events BEGIN SELECT RAISE(ABORT,'append-only events'); END;"))?;
     Ok(db)
 }
 fn canonical_task(db: &Connection, name: &str) -> Result<String> {
@@ -472,24 +507,35 @@ fn ingest(p: &Project, path: &PathBuf, key: &str) -> Result<Value> {
     tx.commit()?;
     Ok(value)
 }
-fn observations(db: &Connection, pool: Option<&str>) -> Result<Vec<Observation>> {
+fn observations(p: &Project, db: &Connection, pool: Option<&str>) -> Result<Vec<Observation>> {
     // Restore preserves history, but old capacity observations cannot authorize work.
-    let cutoff:i64=db.query_row("SELECT coalesce(max(json_extract(metadata,'$.historical_observation_rowid')),0) FROM quota_events WHERE kind='control_restored'",[],|r|r.get(0))?;
-    let mut statement=db.prepare("SELECT rowid,payload FROM quota_observations WHERE ?1 IS NULL OR pool=?1 ORDER BY observed,rowid")?;
+    p.check_deadline()?;
+    let cutoff: i64 = p.sqlite_call(db, || db.query_row("SELECT coalesce(max(json_extract(metadata,'$.historical_observation_rowid')),0) FROM quota_events WHERE kind='control_restored'",[],|r|r.get(0)))?;
+    let mut statement = p.sqlite_call(db, || db.prepare("SELECT rowid,payload FROM quota_observations WHERE ?1 IS NULL OR pool=?1 ORDER BY observed,rowid"))?;
     let rows = statement
         .query_map([pool], |r| {
             Ok((r.get::<_, i64>(0)?, r.get::<_, String>(1)?))
-        })?
-        .collect::<std::result::Result<Vec<_>, _>>()?;
-    rows.into_iter()
-        .map(|(rowid, s)| {
-            let mut o: Observation = serde_json::from_str(&s)?;
-            if rowid <= cutoff && o.kind == "quota" {
-                o.status = "unknown".into();
-            }
-            Ok(o)
         })
-        .collect()
+        .map_err(|e| p.map_sqlite_error(e))?;
+    let mut observations = Vec::new();
+    let mut rows = rows;
+    loop {
+        p.configure_sqlite(db)?;
+        let row = rows.next();
+        p.check_deadline()?;
+        let Some(row) = row else {
+            break;
+        };
+        let (rowid, payload) = row.map_err(|e| p.map_sqlite_error(e))?;
+        let mut o: Observation = serde_json::from_str(&payload)?;
+        p.check_deadline()?;
+        if rowid <= cutoff && o.kind == "quota" {
+            o.status = "unknown".into();
+        }
+        observations.push(o);
+    }
+    p.check_deadline()?;
+    Ok(observations)
 }
 
 fn priority(source: &str) -> usize {
@@ -500,15 +546,22 @@ fn priority(source: &str) -> usize {
         _ => 3,
     }
 }
-fn quota_status(observations: &[Observation], pool: &str, max_age: i64) -> Result<Value> {
+fn quota_status(
+    p: &Project,
+    observations: &[Observation],
+    pool: &str,
+    max_age: i64,
+) -> Result<Value> {
+    p.check_deadline()?;
     if max_age <= 0 || max_age > 86400 {
         return Err(invalid("Quota max age must be 1..86400 seconds"));
     }
     let mut windows: BTreeMap<String, &Observation> = BTreeMap::new();
-    for o in observations
-        .iter()
-        .filter(|o| o.pool_id == pool && o.kind == "quota" && o.metric == "subscription_quota")
-    {
+    for o in observations {
+        p.check_deadline()?;
+        if o.pool_id != pool || o.kind != "quota" || o.metric != "subscription_quota" {
+            continue;
+        }
         let key = format!("{}:{}", o.provider, o.window_id);
         if windows.get(&key).is_none_or(|old| {
             priority(&o.source) < priority(&old.source)
@@ -523,6 +576,7 @@ fn quota_status(observations: &[Observation], pool: &str, max_age: i64) -> Resul
     let mut known = false;
     let mut unknown = false;
     for o in windows.values() {
+        p.check_deadline()?;
         let stale = now() - stamp(&o.observed_at)? > max_age
             || now() >= stamp(&o.window_end)?
             || o.reset_at
@@ -618,6 +672,7 @@ fn report(
     include_coordination: bool,
     max_age: i64,
 ) -> Result<Value> {
+    p.check_deadline()?;
     if let Some(pool) = pool {
         label(pool)?;
     }
@@ -627,15 +682,19 @@ fn report(
     let cutoff = now() - duration(window)?;
     let db = connect(p)?;
     let task_filter = task_filter
-        .map(|task| canonical_task(&db, task))
+        .map(|task| {
+            p.configure_sqlite(&db)?;
+            request_phase(p, || canonical_task(&db, task))
+        })
         .transpose()?;
-    let all = observations(&db, pool)?;
+    let all = observations(p, &db, pool)?;
     // One actual source per model/session/metric/window prevents statusline/OTel/request overlap.
     let mut preferred: BTreeMap<String, (usize, String)> = BTreeMap::new();
-    for o in all
-        .iter()
-        .filter(|o| o.kind != "quota" && o.status == "actual" && o.source != "manual")
-    {
+    for o in &all {
+        p.check_deadline()?;
+        if o.kind == "quota" || o.status != "actual" || o.source == "manual" {
+            continue;
+        }
         let key = lane(o);
         let value = (priority(&o.source), o.source.clone());
         if preferred.get(&key).is_none_or(|old| value < *old) {
@@ -646,7 +705,11 @@ fn report(
     let mut previous: BTreeMap<String, (f64, i64)> = BTreeMap::new();
     let mut requests = BTreeSet::new();
     let mut ignored = 0;
-    for o in all.iter().filter(|o| o.kind != "quota") {
+    for o in &all {
+        p.check_deadline()?;
+        if o.kind == "quota" {
+            continue;
+        }
         let actual = o.status == "actual" && o.source != "manual";
         if actual
             && preferred
@@ -727,27 +790,36 @@ fn report(
             }
         }
     }
-    let groups:Vec<_>=totals.into_iter().map(|(key,t)|{let keys:Vec<_>=key.split('\0').collect();json!({"group":keys[0],"metric":keys[1],"unit":keys[2],"actual_amount":t.actual,"estimated_amount":t.estimated,"manual_reported_amount":t.manual,"status":if t.unknown||t.actual.is_none(){"unknown_or_partial"}else{"observed"},"coverage":if t.unknown{"partial"}else{"observed_intervals_only"},"sources":t.sources,"observation_refs":t.references,"observations":t.observations})}).collect();
-    let mut pools: BTreeSet<String> = all.iter().map(|o| o.pool_id.clone()).collect();
+    let groups:Vec<_>=totals.into_iter().map(|(key,t)|{p.check_deadline()?;let keys:Vec<_>=key.split('\0').collect();Ok(json!({"group":keys[0],"metric":keys[1],"unit":keys[2],"actual_amount":t.actual,"estimated_amount":t.estimated,"manual_reported_amount":t.manual,"status":if t.unknown||t.actual.is_none(){"unknown_or_partial"}else{"observed"},"coverage":if t.unknown{"partial"}else{"observed_intervals_only"},"sources":t.sources,"observation_refs":t.references,"observations":t.observations}))}).collect::<Result<Vec<_>>>()?;
+    let mut pools: BTreeSet<String> = all
+        .iter()
+        .map(|o| {
+            p.check_deadline()?;
+            Ok(o.pool_id.clone())
+        })
+        .collect::<Result<_>>()?;
     if let Some(pool) = pool {
         pools.insert(pool.into());
     }
     let statuses = pools
         .iter()
-        .map(|pool| quota_status(&all, pool, max_age))
+        .map(|pool| quota_status(p, &all, pool, max_age))
         .collect::<Result<Vec<_>>>()?;
     Ok(
         json!({"group_by":group_by,"window":window,"include_coordination":include_coordination,"groups":groups,"quota":statuses,"other_windows":all.iter().filter(|o|o.kind=="quota"&&o.metric!="subscription_quota").collect::<Vec<_>>(),"collector_status":if all.is_empty(){"unknown"}else{"explicit_imported_observations"},"actual_usage_available":groups.iter().any(|g|!g["actual_amount"].is_null()),"ignored_duplicate_source_observations":ignored,"source_precedence":["provider_request","statusline","otel","manual_separate"],"local_cache_tokens_included":false,"subscription_token_conversion":false,"billing_amount_asserted":false}),
     )
 }
-fn barriers(db: &Connection, task: Option<&str>) -> Result<Vec<String>> {
+fn barriers(p: &Project, db: &Connection, task: Option<&str>) -> Result<Vec<String>> {
+    p.check_deadline()?;
     let mut reasons = Vec::new();
     if let Some(task) = task {
-        let (state, agent): (String, Option<String>) = db
-            .query_row("SELECT state,agent FROM tasks WHERE id=?1", [task], |r| {
-                Ok((r.get(0)?, r.get(1)?))
-            })
-            .optional()?
+        let (state, agent): (String, Option<String>) = p
+            .sqlite_call(db, || {
+                db.query_row("SELECT state,agent FROM tasks WHERE id=?1", [task], |r| {
+                    Ok((r.get(0)?, r.get(1)?))
+                })
+                .optional()
+            })?
             .ok_or_else(|| Error::new("TASK_NOT_FOUND", "Task not found", 6))?;
         if state == "paused" {
             reasons.push("task_paused".into());
@@ -755,36 +827,39 @@ fn barriers(db: &Connection, task: Option<&str>) -> Result<Vec<String>> {
         if ["done", "cancelled", "blocked", "in_review"].contains(&state.as_str()) {
             reasons.push(format!("task_{state}"));
         }
-        let ops: bool = db.query_row(
-            "SELECT EXISTS(SELECT 1 FROM sqlite_master WHERE name='ops_roles' AND type='table')",
-            [],
-            |r| r.get(0),
-        )?;
-        let sessions:bool=db.query_row("SELECT EXISTS(SELECT 1 FROM sqlite_master WHERE name='pctx_sessions' AND type='table')",[],|r|r.get(0))?;
+        let ops:bool=p.sqlite_call(db,||db.query_row("SELECT EXISTS(SELECT 1 FROM sqlite_master WHERE name='ops_roles' AND type='table')",[],|r|r.get(0)))?;
+        let sessions:bool=p.sqlite_call(db,||db.query_row("SELECT EXISTS(SELECT 1 FROM sqlite_master WHERE name='pctx_sessions' AND type='table')",[],|r|r.get(0)))?;
         if ops && sessions {
-            let paused:bool=db.query_row("SELECT EXISTS(SELECT 1 FROM ops_roles WHERE paused=1 AND (role='*' OR role IN (SELECT role FROM pctx_sessions WHERE agent=?1)))",[&agent],|r|r.get(0))?;
+            let paused:bool=p.sqlite_call(db,||db.query_row("SELECT EXISTS(SELECT 1 FROM ops_roles WHERE paused=1 AND (role='*' OR role IN (SELECT role FROM pctx_sessions WHERE agent=?1)))",[&agent],|r|r.get(0)))?;
             if paused {
                 reasons.push("role_paused".into());
             }
-            let silenced:bool=db.query_row("SELECT EXISTS(SELECT 1 FROM ops_silences WHERE active=1 AND (role='*' OR role IN (SELECT role FROM pctx_sessions WHERE agent=?1)) AND (recipient='*' OR recipient=?1 OR recipient IN (SELECT id FROM pctx_sessions WHERE agent=?1)))",[&agent],|r|r.get(0))?;
+            let silenced:bool=p.sqlite_call(db,||db.query_row("SELECT EXISTS(SELECT 1 FROM ops_silences WHERE active=1 AND (role='*' OR role IN (SELECT role FROM pctx_sessions WHERE agent=?1)) AND (recipient='*' OR recipient=?1 OR recipient IN (SELECT id FROM pctx_sessions WHERE agent=?1)))",[&agent],|r|r.get(0)))?;
             if silenced {
                 reasons.push("topic_silenced_requires_explicit_policy_evaluation".into());
             }
         }
     }
+    p.check_deadline()?;
     Ok(reasons)
 }
 fn plan(p: &Project, pool: &str, task: Option<&str>, max_age: i64) -> Result<Value> {
+    p.check_deadline()?;
     label(pool)?;
     let db = connect(p)?;
-    let observations = observations(&db, Some(pool))?;
-    let status = quota_status(&observations, pool, max_age)?;
-    let task = task.map(|task| canonical_task(&db, task)).transpose()?;
-    let reasons = barriers(&db, task.as_deref())?;
+    let observations = observations(p, &db, Some(pool))?;
+    let status = quota_status(p, &observations, pool, max_age)?;
+    let task = task
+        .map(|task| {
+            p.configure_sqlite(&db)?;
+            request_phase(p, || canonical_task(&db, task))
+        })
+        .transpose()?;
+    let reasons = barriers(p, &db, task.as_deref())?;
     let active: Vec<Value> = {
-        let mut s=db.prepare("SELECT id,task,unit,amount,policy,status FROM quota_reservations WHERE pool=?1 AND status='active' ORDER BY id")?;
+        let mut s=p.sqlite_call(&db,|| db.prepare("SELECT id,task,unit,amount,policy,status FROM quota_reservations WHERE pool=?1 AND status='active' ORDER BY id"))?;
 
-        s.query_map([pool],|r|Ok(json!({"reservation_id":r.get::<_,String>(0)?,"task_id":r.get::<_,String>(1)?,"unit":r.get::<_,String>(2)?,"amount":r.get::<_,f64>(3)?,"policy":r.get::<_,String>(4)?,"status":r.get::<_,String>(5)?})))?.collect::<std::result::Result<Vec<_>,_>>()?
+        collect_rows(p, &db, s.query_map([pool],|r|Ok(json!({"reservation_id":r.get::<_,String>(0)?,"task_id":r.get::<_,String>(1)?,"unit":r.get::<_,String>(2)?,"amount":r.get::<_,f64>(3)?,"policy":r.get::<_,String>(4)?,"status":r.get::<_,String>(5)?})))?)?
     };
     let state = status["state"].as_str().unwrap_or("unknown");
     let next = if !reasons.is_empty() {
@@ -857,7 +932,7 @@ fn reserve(
         old["replayed"] = json!(true);
         return Ok(old);
     }
-    let reasons = barriers(&tx, Some(&task))?;
+    let reasons = barriers(p, &tx, Some(&task))?;
     if !reasons.is_empty() {
         return Err(Error::new(
             if reasons.iter().any(|r| r.contains("silenced")) {
@@ -869,7 +944,7 @@ fn reserve(
             5,
         ));
     }
-    let status = quota_status(&observations(&tx, Some(pool))?, pool, 900)?;
+    let status = quota_status(p, &observations(p, &tx, Some(pool))?, pool, 900)?;
     if !matches!(status["state"].as_str(), Some("normal" | "conserve")) {
         return Err(Error::new(
             "BUDGET_EXHAUSTED",
@@ -909,12 +984,21 @@ fn reserve(
     Ok(value)
 }
 pub fn recovery_state(p: &Project) -> Result<Value> {
+    request_phase(p, || recovery_state_inner(p))
+}
+fn recovery_state_inner(p: &Project) -> Result<Value> {
     let db = connect(p)?;
-    let all = observations(&db, None)?;
-    let pools: BTreeSet<_> = all.iter().map(|o| o.pool_id.clone()).collect();
+    let all = observations(p, &db, None)?;
+    let pools: BTreeSet<_> = all
+        .iter()
+        .map(|o| {
+            p.check_deadline()?;
+            Ok(o.pool_id.clone())
+        })
+        .collect::<Result<_>>()?;
     let quota = pools
         .iter()
-        .map(|pool| quota_status(&all, pool, 900))
+        .map(|pool| quota_status(p, &all, pool, 900))
         .collect::<Result<Vec<_>>>()?;
     let refs:Vec<_>=all.iter().map(|o|json!({"observation_id":o.observation_id,"pool_id":o.pool_id,"source":o.source,"source_revision":o.source_revision,"metric":o.metric,"unit":o.unit,"model":o.model,"task_id":o.task_id,"role":o.role,"window_id":o.window_id,"window_start":o.window_start,"window_end":o.window_end,"reset_at":o.reset_at,"observed_at":o.observed_at,"status":o.status,"session_id":o.session_id,"context_epoch":o.context_epoch,"counter_epoch":o.counter_epoch})).collect();
     Ok(
@@ -922,6 +1006,20 @@ pub fn recovery_state(p: &Project) -> Result<Value> {
     )
 }
 pub fn execute(p: &Project, c: &QuotaCommand) -> Result<Value> {
+    if matches!(
+        c,
+        QuotaCommand::Report { .. } | QuotaCommand::Plan { .. } | QuotaCommand::Reconcile { .. }
+    ) {
+        let mut scope = p.clone();
+        if scope.deadline.is_none() {
+            scope.deadline = Some(crate::deadline::Deadline::from_millis(10_000)?);
+        }
+        request_phase(&scope, || execute_inner(&scope, c))
+    } else {
+        execute_inner(p, c)
+    }
+}
+fn execute_inner(p: &Project, c: &QuotaCommand) -> Result<Value> {
     match c {
         QuotaCommand::Ingest {
             from_file,

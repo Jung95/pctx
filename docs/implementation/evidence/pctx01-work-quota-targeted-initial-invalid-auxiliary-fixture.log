@@ -1,0 +1,68 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 6.11s
+     Running unittests src/main.rs (target/debug/deps/pctx-5861ab217462b7f0)
+
+running 2 tests
+test cli_help::tests::every_declared_leaf_has_an_explicit_effect_contract ... ok
+test finite_route_tests::work_and_quota_reads_share_query_deadline_without_timing_execution ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/query_deadline_cli.rs (target/debug/deps/query_deadline_cli-91fccc6ca25b7a4f)
+
+running 7 tests
+test invalid_or_inapplicable_timeout_has_no_project_effects ... ok
+test finite_saved_routes_accept_timeout_and_reject_zero_before_project_effects ... ok
+test strict_find_waits_only_remaining_budget_and_preserves_active_generation ... ok
+test finite_ndjson_contention_preserves_error_code_without_creating_events ... ok
+test doctor_contention_reports_timeout_with_original_budget_and_unchanged_database ... ok
+test saved_cli_reread_never_reruns_and_failed_metering_preserves_delivery_truth ... ok
+test work_and_quota_reads_accept_request_budget_and_preserve_state_under_contention ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.81s
+
+     Running tests/runner.rs (target/debug/deps/runner-262d46ab6960599b)
+
+running 24 tests
+test inherited_canonical_descriptor_retains_lock_after_invalid_proof_and_parent_close ... ok
+test legacy_lock_fixture ... ok
+test cloud_helper_is_only_durable_intent ... ok
+test legacy_bridge_absence_prevents_execution ... ok
+test explicit_script_input_change_requires_new_trust ... ok
+test changed_script_and_agent_forged_trust_are_denied ... ok
+test check_plan_auxiliary_discovery_keeps_original_deadline_and_never_launches_job ... FAILED
+test linked_slot_child_directory_cannot_redirect_state ... ok
+test profile_change_during_execution_is_stale_at_report_recording ... ok
+test native_pass_is_invalidated_by_external_executable_change_with_sources_unchanged ... ok
+test synthetic_low_memory_defers_heavy_admission ... ok
+test parent_exit_does_not_release_living_child ... ok
+test trusted_typed_check_is_real_evidence ... ok
+test timeout_is_observed_without_success_evidence ... ok
+test native_environment_change_or_missing_profile_invalidates_existing_pass ... ok
+test user_created_host_state_symlink_is_denied ... ok
+test unknown_and_zero_tests_do_not_pass ... ok
+test source_mutation_during_check_is_stale ... ok
+test unknown_memory_requires_disclosed_exact_owner_override ... ok
+test local_auxiliary_provider_needs_registered_linked_workspace_and_capacity ... ok
+test cross_project_heavy_capacity_is_one ... ok
+test canonical_mutex_survives_main_parent_death ... ok
+test killed_guardian_causes_negative_child_observation ... ok
+test canonical_legacy_and_pctx_exclude_each_other ... ok
+
+failures:
+
+---- check_plan_auxiliary_discovery_keeps_original_deadline_and_never_launches_job stdout ----
+
+thread 'check_plan_auxiliary_discovery_keeps_original_deadline_and_never_launches_job' (7888200) panicked at tests/runner.rs:971:5:
+assertion `left == right` failed: Output { status: ExitStatus(unix_wait_status(0)), stdout: "{\"command\":\"work\",\"coverage\":{\"reasons\":[],\"status\":\"complete\"},\"data\":{\"active_run_verified\":false,\"allowed_sources\":[\"runner_observed\"],\"blocked_reasons\":[\"owner_binding_required\"],\"cwd\":\".\",\"environment_keys\":[],\"executable_hash\":\"68c831f7c8468a09979fa812f3cab7b2043a42101160a526a20a09719db342fa\",\"execution_started\":false,\"execution_timeout_ms\":null,\"fingerprint\":\"2d294883a8e7379e11f7d99d8dd4d80090972ea9bdf6ca6c7330e4523dfbf609\",\"guardian_executable_hash\":null,\"guardian_protocol\":null,\"heavy\":false,\"host_permission\":\"separate_required\",\"key\":\"unit\",\"memory_policy\":{\"fixture_path\":null,\"minimum_available_bytes\":268435456,\"source\":\"native\",\"unknown\":\"deny\"},\"output_paths\":[\"reports/**\"],\"reporter\":\"pctx-json-v1\",\"resource_provider\":\"pctx\",\"resources\":[\"aux-agent\"],\"run_required_before_execution\":true,\"script_hashes\":{\"fixture.sh\":\"e09311897a2dc2ffd43ec8a579866c728b08ffe66d001f67aeb0b10f24c147e2\"}},\"errors\":[],\"generation_id\":null,\"project_id\":\"e2bddd3f-99f3-469a-8f4e-9e3fbee79797\",\"schema_version\":\"1.0\",\"status\":\"ok\",\"truncation\":{\"reasons\":[],\"truncated\":false},\"validation\":{\"checked_at\":\"2026-10-08T10:59:29.741Z\",\"mode\":\"matched\",\"scope\":[],\"workspace_atomic\":false},\"warnings\":[],\"workspace_id\":\"WS-f6138e47-bb5c-489a-be2c-e9ff5f6ab90b\"}\n", stderr: "" }
+  left: Some(0)
+ right: Some(7)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    check_plan_auxiliary_discovery_keeps_original_deadline_and_never_launches_job
+
+test result: FAILED. 23 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 25.20s
+
+error: test failed, to rerun pass `--test runner`

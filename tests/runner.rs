@@ -940,3 +940,29 @@ fn profile_change_during_execution_is_stale_at_report_recording() {
     assert_eq!(result["data"]["execution"]["child_exit_code"], 0);
     assert_eq!(result["data"]["evidence"]["result"], "stale");
 }
+
+#[test]
+fn check_plan_with_finite_budget_inspects_registered_auxiliary_workspace_without_launch() {
+    let f = Fixture::new(&report(1), false, None);
+    let _target = linked_provider(&f);
+    let output = f.output(&[
+        "check",
+        "plan",
+        "--task-id",
+        &f.task,
+        "--key",
+        "unit",
+        "--timeout-ms",
+        "10000",
+    ]);
+    assert!(output.status.success(), "{output:?}");
+    let response: Value = serde_json::from_slice(&output.stdout).unwrap();
+    assert_eq!(response["status"], "ok");
+    assert_eq!(response["data"]["execution_started"], false);
+    assert_eq!(response["data"]["resources"], json!(["aux-agent"]));
+    assert!(response["data"]["script_hashes"]["fixture.sh"].is_string());
+    assert!(
+        !f.host.exists(),
+        "A plan launched execution or acquired host resources"
+    );
+}

@@ -887,10 +887,34 @@ impl Project {
         db: &Connection,
         call: impl FnOnce() -> rusqlite::Result<T>,
     ) -> Result<T> {
-        db.busy_timeout(self.remaining(Duration::from_secs(5))?)?;
+        self.sqlite_call(db, call)
+    }
+    /// Recompute the busy wait from the original request budget before each SQL phase.
+    pub fn configure_sqlite(&self, db: &Connection) -> Result<()> {
+        self.check_deadline()?;
+        // SQLite truncates its millisecond timeout. Round upwards so a sub-ms
+        // remainder cannot become a spurious immediate database-busy error.
+        db.busy_timeout(
+            self.remaining(Duration::from_secs(5))?
+                .saturating_add(Duration::from_nanos(999_999)),
+        )?;
+        if let Some(deadline) = self.deadline {
+            db.progress_handler(1000, Some(move || deadline.check().is_err()))?;
+        }
+        self.check_deadline()
+    }
+    pub fn map_sqlite_error(&self, error: rusqlite::Error) -> Error {
+        self.check_deadline().err().unwrap_or_else(|| error.into())
+    }
+    pub fn sqlite_call<T>(
+        &self,
+        db: &Connection,
+        call: impl FnOnce() -> rusqlite::Result<T>,
+    ) -> Result<T> {
+        self.configure_sqlite(db)?;
         let result = call();
         self.check_deadline()?;
-        result.map_err(Into::into)
+        result.map_err(|error| self.map_sqlite_error(error))
     }
     pub fn connect(&self, control: bool) -> Result<Connection> {
         self.check_deadline()?;

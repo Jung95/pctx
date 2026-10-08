@@ -358,6 +358,27 @@ fn encoded(
 fn query_deadline(cli: &Cli) -> Result<Option<pctx::deadline::Deadline>> {
     let default = match &cli.command {
         Command::Index { .. } | Command::Build(_) | Command::Checkpoint { .. } => Some(120_000),
+        Command::Work(work::WorkCommand::Task {
+            command:
+                work::TaskCommand::List
+                | work::TaskCommand::Show { .. }
+                | work::TaskCommand::Complete { dry_run: true, .. },
+        })
+        | Command::Work(work::WorkCommand::Agent {
+            command: work::AgentCommand::List | work::AgentCommand::Show { .. },
+        })
+        | Command::Work(work::WorkCommand::Check {
+            command:
+                work::CheckCommand::List { .. }
+                | work::CheckCommand::Show { .. }
+                | work::CheckCommand::Plan { .. },
+        })
+        | Command::Quota {
+            command:
+                quota::QuotaCommand::Report { .. }
+                | quota::QuotaCommand::Plan { .. }
+                | quota::QuotaCommand::Reconcile { .. },
+        } => Some(10_000),
         Command::Find(_)
         | Command::Query(_)
         | Command::Extract(_)
@@ -1058,4 +1079,59 @@ fn main() {
         }
     }
     std::process::exit(exit)
+}
+
+#[cfg(test)]
+mod finite_route_tests {
+    use super::*;
+    #[test]
+    fn work_and_quota_reads_share_query_deadline_without_timing_execution() {
+        for values in [
+            vec!["task", "list"],
+            vec!["task", "show", "T001"],
+            vec!["task", "complete", "T001", "--dry-run"],
+            vec!["agent", "list"],
+            vec!["agent", "show", "A001"],
+            vec!["check", "list"],
+            vec!["check", "show", "C001"],
+            vec!["check", "plan", "--task-id", "T001", "--key", "test"],
+            vec!["quota", "report"],
+            vec!["quota", "plan", "--pool", "local"],
+            vec!["quota", "reconcile", "--pool", "local"],
+        ] {
+            let mut argv = vec!["pctx", "--timeout-ms", "100"];
+            argv.extend(values.clone());
+            let cli = Cli::try_parse_from(argv).unwrap();
+            let deadline = query_deadline(&cli).unwrap().unwrap();
+            assert!(
+                deadline.remaining().unwrap() <= std::time::Duration::from_millis(100),
+                "{values:?}"
+            );
+        }
+        for values in [
+            vec!["task", "complete", "T001"],
+            vec!["task", "cancel", "T001", "--reason", "fixture"],
+            vec!["quota", "release", "Q001"],
+            vec!["check", "run", "test", "--task-id", "T001", "--run", "R001"],
+            vec!["board", "--watch"],
+            vec!["activity", "--follow"],
+        ] {
+            let mut argv = vec!["pctx"];
+            argv.extend(values.clone());
+            assert!(
+                query_deadline(&Cli::try_parse_from(&argv).unwrap())
+                    .unwrap()
+                    .is_none(),
+                "{values:?}"
+            );
+            argv.extend(["--timeout-ms", "100"]);
+            assert_eq!(
+                query_deadline(&Cli::try_parse_from(argv).unwrap())
+                    .unwrap_err()
+                    .code,
+                "INVALID_ARGUMENT",
+                "{values:?}"
+            );
+        }
+    }
 }

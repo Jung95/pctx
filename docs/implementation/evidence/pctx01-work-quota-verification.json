@@ -1,0 +1,95 @@
+{
+  "official_task": "PCTX01",
+  "status": "implementing_not_complete",
+  "base_commit": "79eb579b2dbc20cadafe7b84d41954873d765d42",
+  "platform": "native macOS arm64",
+  "source_sha256": {
+    "src/main.rs": "156aee95aee26749885b791b061eff1bac1ed6e5c939a587b35c3e9fbbfe6ca0",
+    "src/project.rs": "8aeeebb93f17812b650e1f1187a0a7436d4852df69ec8f46ca80639df3a2565a",
+    "src/work.rs": "9776271eef1a8f9a6c8e68e71395b62d8a63600d30fd5934a7a6324a2f9cce5d",
+    "src/quota.rs": "94577dbe2d2d295ac15cc52da647bdc014f2f9a6cbe9e2818400dc6e83ef1781",
+    "src/runner.rs": "8d0fcb29b8502e631a0c9251ed27919d0477b3c8462ff10b3aed2ae823de3c0b",
+    "tests/work_quota_deadline.rs": "6365805a4efea1d12da732cfbe549b577bf97ebc7317ebb6a79ed6694807e0ab",
+    "tests/query_deadline_cli.rs": "ee35df6d03dc283ccbd27e48dff03e746deca4b1ff91506ac5fffe679b350707",
+    "tests/runner.rs": "b324b82155e4a0f5b02d0f8f61c8727c8f6c9c5dd464c5ec75dda64d2076c6ce"
+  },
+  "verification": {
+    "full": {
+      "handle": 24156,
+      "exit": 101,
+      "passed": 382,
+      "failed": 4,
+      "suites": 46,
+      "command": "cargo test --locked --all-targets --no-fail-fast",
+      "failures": [
+        "query_program_resolution_uses_captured_command_path",
+        "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+        "simultaneous_streams_are_collected_and_overflow_never_infers_success",
+        "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget"
+      ]
+    },
+    "actual_cli_query_deadline": {
+      "passed": 7,
+      "failed": 0,
+      "new_proof": "Positive empty Work/quota reads; rollback-journal EXCLUSIVE contention at project opening produces TIMEOUT/exit7 under one100ms budget and preserves revisions/events."
+    },
+    "direct_work_quota_deadline": {
+      "passed": 3,
+      "failed": 0,
+      "proofs": [
+        "Expired all finite read groups refuse before database initialization or missing-target validation",
+        "Work BEGIN IMMEDIATE live writer contention shares50ms budget and preserves events",
+        "Quota rollback-journal EXCLUSIVE opening contention shares50ms budget and preserves observations/events"
+      ]
+    },
+    "runner": {
+      "passed": 24,
+      "failed": 0,
+      "new_proof": "Finite CheckPlan inspects registered linked workspace, reports script hashes and does not create host resources; NOT auxiliary phase-expiry proof."
+    },
+    "main_unit": {
+      "passed": 2,
+      "failed": 0
+    },
+    "format_exit": 0,
+    "locked_all_target_clippy_exit": 0
+  },
+  "initial_fixture_failure": {
+    "handle": 17983,
+    "exit": 101,
+    "reason": "The attempted Git-delay fixture expected a native Git query during registered auxiliary opening, but that path is inert. Correct success was returned; the shim did not exercise the intended phase. Initial failure retained, not promoted to expiry proof. Replacement verifies positive plan behavior only."
+  },
+  "review": {
+    "agent": "requirements",
+    "remaining_code_blockers": 0,
+    "resolved": "Auxiliary Project::open dropped deadline; now open_with_deadline receives original p.deadline. Review corrected its earlier unexecuted-observation claim.",
+    "whole_task_complete": false
+  },
+  "remaining_required_gates": [
+    "Auxiliary discovery/hash phase-expiry and large-row/CPU-SQL expiry qualification",
+    "Remaining resource/runner/trust/filter/adapter/schedule/inventory finite routes and bounded native probes/adapter lock/stdin preview",
+    "Full semantic pre-effect argument/envelope/representation/exit/budget matrix",
+    "Unresolved original native query startup root cause",
+    "Required native Linux/Windows execution"
+  ],
+  "logs": {
+    "targeted-initial-invalid-auxiliary-fixture": {
+      "path": "docs/implementation/evidence/pctx01-work-quota-targeted-initial-invalid-auxiliary-fixture.log",
+      "sha256": "42fc1e21344231b65a36a9afd4315c8e1d8e3f62388a0cb2bbd0f3bd9fd6427a"
+    },
+    "full": {
+      "path": "docs/implementation/evidence/pctx01-work-quota-full.log",
+      "sha256": "eecba084a90ffd97f6749bdac8d5ed648073d0f5197a3b31e468184638ee3612"
+    },
+    "clippy": {
+      "path": "docs/implementation/evidence/pctx01-work-quota-clippy.log",
+      "sha256": "c75c56b839be07c51c0caaf69a0d1f85b589155f4718b7ec8daa5656a0fb8d4e"
+    },
+    "format": {
+      "path": "docs/implementation/evidence/pctx01-work-quota-format.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "actions_dispatched": 0,
+  "other_active_official_tasks": []
+}

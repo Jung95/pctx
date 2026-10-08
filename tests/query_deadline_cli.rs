@@ -327,3 +327,80 @@ fn saved_cli_reread_never_reruns_and_failed_metering_preserves_delivery_truth() 
     assert_eq!(fs::read(&destination).unwrap(), b"unchanged destination");
     assert_eq!(fs::read(&artifact).unwrap(), before);
 }
+
+#[test]
+fn work_and_quota_reads_accept_request_budget_and_preserve_state_under_contention() {
+    let temp = tempfile::tempdir().unwrap();
+    let root = temp.path().join("project");
+    let data = temp.path().join("data");
+    fs::create_dir(&root).unwrap();
+    assert!(
+        command(&root, &data)
+            .arg("init")
+            .output()
+            .unwrap()
+            .status
+            .success()
+    );
+    for values in [
+        vec!["task", "list"],
+        vec!["agent", "list"],
+        vec!["check", "list"],
+        vec!["quota", "report"],
+    ] {
+        let output = command(&root, &data)
+            .args(&values)
+            .args(["--timeout-ms", "10000"])
+            .output()
+            .unwrap();
+        assert!(output.status.success(), "{values:?}: {output:?}");
+        let response: Value = serde_json::from_slice(&output.stdout).unwrap();
+        assert_eq!(response["status"], "ok");
+    }
+    let output = command(&root, &data).arg("status").output().unwrap();
+    assert!(output.status.success());
+    let status: Value = serde_json::from_slice(&output.stdout).unwrap();
+    let path = status["data"]["local_storage"]["control"].as_str().unwrap();
+    let db = rusqlite::Connection::open(path).unwrap();
+    let snapshot = || {
+        let revision: i64 = db
+            .query_row("SELECT revision FROM work_meta WHERE id=1", [], |row| {
+                row.get(0)
+            })
+            .unwrap();
+        let count: i64 = db
+            .query_row("SELECT count(*) FROM events", [], |row| row.get(0))
+            .unwrap();
+        (revision, count)
+    };
+    let before = snapshot();
+    // Rollback-journal EXCLUSIVE prevents read phases too. WAL writer contention
+    // is separately exercised at the Work transaction boundary by library tests.
+    db.pragma_update(None, "journal_mode", "DELETE").unwrap();
+    db.execute_batch("BEGIN EXCLUSIVE").unwrap();
+    for values in [
+        vec!["task", "list"],
+        vec!["agent", "list"],
+        vec!["check", "list"],
+        vec!["quota", "report"],
+        vec!["quota", "plan", "--pool", "local"],
+        vec!["quota", "reconcile", "--pool", "local"],
+    ] {
+        let started = Instant::now();
+        let output = command(&root, &data)
+            .args(&values)
+            .args(["--timeout-ms", "100"])
+            .output()
+            .unwrap();
+        assert_eq!(output.status.code(), Some(7), "{values:?}: {output:?}");
+        assert!(
+            started.elapsed() < Duration::from_secs(2),
+            "Wait exceeded original query budget tolerance: {values:?}"
+        );
+        let response: Value = serde_json::from_slice(&output.stdout).unwrap();
+        assert_eq!(response["errors"][0]["code"], "TIMEOUT", "{values:?}");
+        assert_eq!(response["status"], "error");
+    }
+    db.execute_batch("ROLLBACK").unwrap();
+    assert_eq!(snapshot(), before);
+}

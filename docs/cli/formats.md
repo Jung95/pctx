@@ -4,6 +4,8 @@ The renderer in `src/render.rs` provides `Compact`, `Json`, and `Markdown`. The 
 
 `compact` and `json` produce one minified standard JSON envelope followed by exactly one newline. They preserve the same fields and values. Success, partial results, errors and empty results all remain single documents; no progress text or diagnostics are mixed into the document. JSON control escapes are reversible, and Unicode text remains valid UTF-8. Terminal-sensitive C1 and bidirectional formatting characters are escaped without changing their parsed values.
 
+Transport exceptions are explicit: `adapter claude event --hook` emits native hook output on success, while board/activity NDJSON emits event records. `pack create --output` writes the source artifact and leaves its response on stdout; streaming routes reject output-file options. Root and nested help state standard envelope schema 1.0 and each command's read/write/execute effects, including conditional flags. `--no-color` applies before help parsing, and parser diagnostics redact secrets and escape unsafe control characters.
+
 `markdown` is supported for `build`, `outline`, `read`, and `handoff` (including create, update and show). Unsupported commands must reject this format before execution, so a formatting error cannot occur after a write or child launch. NDJSON streaming is a separate CLI contract and is not implemented by this renderer.
 
 These examples use the supported format names:

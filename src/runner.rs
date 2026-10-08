@@ -300,6 +300,7 @@ fn checked(path: &Path) -> Result<()> {
     Ok(())
 }
 fn profile(p: &Project, key: &str) -> Result<Binding> {
+    p.check_deadline()?;
     let f = reader::read(p, ".pctx/runner.toml")?;
     if f.size_bytes > 65536 {
         return Err(error(
@@ -339,6 +340,7 @@ fn profile(p: &Project, key: &str) -> Result<Binding> {
         }
         let target = auxiliary_workspace(p, &provider.workspace)?;
         for path in &provider.scope {
+            p.check_deadline()?;
             reader::authorize(&target, path)?;
         }
         Some(target)
@@ -392,6 +394,7 @@ fn profile(p: &Project, key: &str) -> Result<Binding> {
         ));
     }
     for (name, value) in &spec.env {
+        p.check_deadline()?;
         if !spec.env_allowlist.contains(name)
             || !["LANG", "LC_ALL", "LC_CTYPE", "TZ", "CI"].contains(&name.as_str())
             || reader::redact(value).1
@@ -448,7 +451,9 @@ fn profile(p: &Project, key: &str) -> Result<Binding> {
     } else {
         None
     };
+    p.check_deadline()?;
     let native = output::registered_binding_at(execution_project, &spec.argv, &spec.cwd)?;
+    p.check_deadline()?;
     let executable = native["executable"]
         .as_str()
         .ok_or_else(|| error("INVALID_CONFIG", "Execution binding missing executable", 2))?
@@ -492,10 +497,12 @@ fn profile(p: &Project, key: &str) -> Result<Binding> {
         ));
     }
     for input in &spec.script_inputs {
+        p.check_deadline()?;
         let file = reader::read(execution_project, input)?;
         scripts.insert(input.clone(), file.hash);
     }
     for arg in spec.argv.iter().skip(1) {
+        p.check_deadline()?;
         if !arg.starts_with('-') && execution_project.root.join(&spec.cwd).join(arg).is_file() {
             let relative = if spec.cwd == "." {
                 arg.clone()
@@ -527,6 +534,7 @@ fn profile(p: &Project, key: &str) -> Result<Binding> {
             );
         }
     }
+    p.check_deadline()?;
     let native = output::registered_binding_at(execution_project, &spec.argv, &spec.cwd)?;
     let execution_fingerprint = native["fingerprint"]
         .as_str()
@@ -904,12 +912,19 @@ fn task_check(
     Ok((task, check))
 }
 fn planned(p: &Project, task: &str, key: &str, run: Option<&str>) -> Result<(Binding, Value)> {
+    p.check_deadline()?;
     let (_, check) = task_check(p, task, key, run)?;
+    p.check_deadline()?;
     let b = profile(p, key)?;
+    p.check_deadline()?;
     let mut reasons = vec![];
-    if trusted(p, &b).is_err() {
+    if let Err(error) = trusted(p, &b) {
+        if error.code == "TIMEOUT" {
+            return Err(error);
+        }
         reasons.push("owner_binding_required");
     }
+    p.check_deadline()?;
     if b.profile.resource_backend == "legacy"
         && b.profile.bridge.is_none()
         && !b.profile.resources.is_empty()
@@ -917,6 +932,7 @@ fn planned(p: &Project, task: &str, key: &str, run: Option<&str>) -> Result<(Bin
         reasons.push("legacy_bridge_unverified");
     }
     let plan = json!({"key":key,"fingerprint":b.fingerprint,"executable_hash":b.executable_hash,"script_hashes":b.script_hashes,"cwd":b.profile.cwd,"environment_keys":b.profile.env.keys().collect::<Vec<_>>(),"resources":b.profile.resources,"heavy":b.profile.heavy,"resource_provider":b.profile.resource_backend,"execution_timeout_ms":b.profile.execution_timeout_ms,"reporter":b.profile.reporter,"allowed_sources":check.allowed_sources,"output_paths":check.output_paths,"blocked_reasons":reasons,"execution_started":false,"active_run_verified":run.is_some(),"run_required_before_execution":true,"host_permission":"separate_required","memory_policy":b.profile.memory,"guardian_protocol":b.profile.bridge.as_ref().map(|b|&b.protocol),"guardian_executable_hash":b.guardian_hash});
+    p.check_deadline()?;
     Ok((b, plan))
 }
 fn release_not_spawned(dir: &Path, job: &mut Job) -> Result<()> {
@@ -1799,6 +1815,7 @@ fn inert_git_common(root: &Path, require_linked: bool) -> Result<PathBuf> {
     )?)
 }
 fn auxiliary_workspace(p: &Project, path: &Path) -> Result<Project> {
+    p.check_deadline()?;
     if !path.is_absolute() {
         return Err(error(
             "INVALID_CONFIG",
@@ -1806,7 +1823,7 @@ fn auxiliary_workspace(p: &Project, path: &Path) -> Result<Project> {
             2,
         ));
     }
-    let target = Project::open(path)?;
+    let target = Project::open_with_deadline(path, p.deadline)?;
     if target.root == p.root
         || target.workspace_id == p.workspace_id
         || target.project_id != p.project_id
@@ -1819,6 +1836,7 @@ fn auxiliary_workspace(p: &Project, path: &Path) -> Result<Project> {
             9,
         ));
     }
+    p.check_deadline()?;
     Ok(target)
 }
 fn helper_path(p: &Project, helper: &str) -> Result<PathBuf> {

@@ -346,17 +346,44 @@ pub struct CheckReport {
     pub environment: Value,
 }
 
+fn request_phase<T>(project: &Project, call: impl FnOnce() -> Result<T>) -> Result<T> {
+    project.check_deadline()?;
+    let result = call();
+    project.check_deadline()?;
+    result
+}
+fn collect_rows<T>(
+    project: &Project,
+    db: &Connection,
+    mut rows: impl Iterator<Item = rusqlite::Result<T>>,
+) -> Result<Vec<T>> {
+    let mut values = Vec::new();
+    loop {
+        project.configure_sqlite(db)?;
+        let row = rows.next();
+        project.check_deadline()?;
+        match row {
+            Some(row) => values.push(row.map_err(|e| project.map_sqlite_error(e))?),
+            None => return Ok(values),
+        }
+    }
+}
 pub fn connect(project: &Project) -> Result<Connection> {
+    request_phase(project, || connect_inner(project))
+}
+fn connect_inner(project: &Project) -> Result<Connection> {
     let db = project.connect(true)?;
-    let initialized: i64 = db.query_row(
-        "SELECT count(*) FROM sqlite_master WHERE type='table' AND name='work_meta'",
-        [],
-        |r| r.get(0),
-    )?;
+    let initialized: i64 = project.sqlite_call(&db, || {
+        db.query_row(
+            "SELECT count(*) FROM sqlite_master WHERE type='table' AND name='work_meta'",
+            [],
+            |r| r.get(0),
+        )
+    })?;
     if initialized > 0 {
         return Ok(db);
     }
-    db.execute_batch("BEGIN IMMEDIATE;
+    project.sqlite_call(&db, || db.execute_batch("BEGIN IMMEDIATE;
 CREATE TABLE IF NOT EXISTS work_meta(id INTEGER PRIMARY KEY CHECK(id=1),revision INTEGER NOT NULL);
 INSERT OR IGNORE INTO work_meta VALUES(1,0);
 CREATE TABLE IF NOT EXISTS tasks(id TEXT PRIMARY KEY,number INTEGER UNIQUE NOT NULL,state TEXT NOT NULL,revision INTEGER NOT NULL,definition_revision INTEGER NOT NULL,definition TEXT NOT NULL,agent TEXT,workspace TEXT,reason TEXT,resume_state TEXT,submission TEXT,completion TEXT);
@@ -370,7 +397,7 @@ CREATE TABLE IF NOT EXISTS events(seq INTEGER PRIMARY KEY AUTOINCREMENT,entity T
 CREATE TRIGGER IF NOT EXISTS events_no_update BEFORE UPDATE ON events BEGIN SELECT RAISE(ABORT,'append-only events'); END;
 CREATE TRIGGER IF NOT EXISTS events_no_delete BEFORE DELETE ON events BEGIN SELECT RAISE(ABORT,'append-only events'); END;
 CREATE TABLE IF NOT EXISTS receipts(key TEXT PRIMARY KEY,request_hash TEXT NOT NULL,response TEXT NOT NULL);
-PRAGMA user_version=1; COMMIT;")?;
+PRAGMA user_version=1; COMMIT;"))?;
     Ok(db)
 }
 fn conflict(code: &str, msg: &str) -> Error {
@@ -680,6 +707,7 @@ fn fingerprint(
     let required = glob(&d.scope)?;
     let mut files = std::collections::BTreeMap::new();
     for path in inventory.paths {
+        project.check_deadline()?;
         let is_config = path == ".pctx/config.toml"
             || path.ends_with("lock")
             || path.ends_with("lock.json")
@@ -701,12 +729,13 @@ fn fingerprint(
         &json!({"files":files,"definition":d,"policy":project.policy_hash(),"workspace":project.workspace_id}),
     )?))
 }
-fn evidence_set(db: &Connection, t: &Task) -> Result<Value> {
+fn evidence_set(project: &Project, db: &Connection, t: &Task) -> Result<Value> {
+    project.configure_sqlite(db)?;
     let mut s =
         db.prepare("SELECT id,key,status,target,report FROM checks WHERE task=?1 ORDER BY rowid")?;
-    let checks=s.query_map([&t.id],|r|Ok(json!({"id":r.get::<_,String>(0)?,"key":r.get::<_,String>(1)?,"status":r.get::<_,String>(2)?,"target":r.get::<_,String>(3)?,"report":r.get::<_,Option<String>>(4)?})))?.collect::<std::result::Result<Vec<_>,_>>()?;
+    let checks=collect_rows(project, db, s.query_map([&t.id],|r|Ok(json!({"id":r.get::<_,String>(0)?,"key":r.get::<_,String>(1)?,"status":r.get::<_,String>(2)?,"target":r.get::<_,String>(3)?,"report":r.get::<_,Option<String>>(4)?})))?)?;
     let mut s=db.prepare("SELECT criterion,evidence,definition_revision FROM acceptances WHERE task=?1 ORDER BY criterion")?;
-    let accept=s.query_map([&t.id],|r|Ok(json!({"criterion":r.get::<_,String>(0)?,"evidence":r.get::<_,String>(1)?,"definition_revision":r.get::<_,i64>(2)?})))?.collect::<std::result::Result<Vec<_>,_>>()?;
+    let accept=collect_rows(project, db, s.query_map([&t.id],|r|Ok(json!({"criterion":r.get::<_,String>(0)?,"evidence":r.get::<_,String>(1)?,"definition_revision":r.get::<_,i64>(2)?})))?)?;
     Ok(json!({"checks":checks,"acceptances":accept}))
 }
 fn check_environment_current(project: &Project, key: &str, stored: Option<&str>) -> bool {
@@ -728,6 +757,7 @@ fn required_environments_current(db: &Connection, project: &Project, t: &Task) -
         .iter()
         .filter(|c| c.required && c.kind != "not_applicable")
     {
+        project.configure_sqlite(db)?;
         let report: Option<Option<String>> = db
             .query_row(
                 "SELECT report FROM checks WHERE task=?1 AND key=?2 ORDER BY rowid DESC LIMIT 1",
@@ -736,12 +766,15 @@ fn required_environments_current(db: &Connection, project: &Project, t: &Task) -
             )
             .optional()?;
         if !check_environment_current(project, &c.key, report.flatten().as_deref()) {
+            project.check_deadline()?;
             return Ok(false);
         }
     }
+    project.check_deadline()?;
     Ok(true)
 }
 fn gates(db: &Connection, project: &Project, t: &Task) -> Result<Value> {
+    project.configure_sqlite(db)?;
     let mut failures = vec![];
     if t.state != "in_review" {
         failures.push("task_not_in_review".to_string());
@@ -750,7 +783,7 @@ fn gates(db: &Connection, project: &Project, t: &Task) -> Result<Value> {
         failures.push("dependencies_incomplete".into());
     }
     let target = fingerprint(project, &t.def, None)?;
-    let evidence = evidence_set(db, t)?;
+    let evidence = evidence_set(project, db, t)?;
     let evidence_hash = hash(evidence.to_string());
     if let Some(sub) = &t.submission {
         if sub["target"] != target
@@ -767,6 +800,7 @@ fn gates(db: &Connection, project: &Project, t: &Task) -> Result<Value> {
         failures.push("submission_missing".into());
     }
     for c in &t.def.acceptance {
+        project.configure_sqlite(db)?;
         if c.required {
             let accepted:i64=db.query_row("SELECT count(*) FROM acceptances WHERE task=?1 AND criterion=?2 AND definition_revision=?3",params![t.id,c.id,t.def_rev],|r|r.get(0))?;
             if accepted == 0 {
@@ -775,6 +809,7 @@ fn gates(db: &Connection, project: &Project, t: &Task) -> Result<Value> {
         }
     }
     for c in &t.def.checks {
+        project.configure_sqlite(db)?;
         if !c.required || c.kind == "not_applicable" {
             continue;
         }
@@ -803,6 +838,31 @@ fn gates(db: &Connection, project: &Project, t: &Task) -> Result<Value> {
     )
 }
 pub fn execute(project: &Project, command: &WorkCommand) -> Result<Value> {
+    let finite_read = matches!(
+        command,
+        WorkCommand::Task {
+            command: TaskCommand::List
+                | TaskCommand::Show { .. }
+                | TaskCommand::Complete { dry_run: true, .. }
+        } | WorkCommand::Agent {
+            command: AgentCommand::List | AgentCommand::Show { .. }
+        } | WorkCommand::Check {
+            command: CheckCommand::List { .. }
+                | CheckCommand::Show { .. }
+                | CheckCommand::Plan { .. }
+        }
+    );
+    if finite_read {
+        let mut scope = project.clone();
+        if scope.deadline.is_none() {
+            scope.deadline = Some(crate::deadline::Deadline::from_millis(10_000)?);
+        }
+        request_phase(&scope, || execute_inner(&scope, command))
+    } else {
+        execute_inner(project, command)
+    }
+}
+fn execute_inner(project: &Project, command: &WorkCommand) -> Result<Value> {
     if let WorkCommand::Check {
         command: CheckCommand::Plan { task_id, key, run },
     } = command
@@ -845,14 +905,20 @@ pub fn execute(project: &Project, command: &WorkCommand) -> Result<Value> {
         return control_command(project, command);
     }
     let mut db = connect(project)?;
-    let tx = db.transaction_with_behavior(TransactionBehavior::Immediate)?;
+    project.configure_sqlite(&db)?;
+    let tx = db
+        .transaction_with_behavior(TransactionBehavior::Immediate)
+        .map_err(|e| project.map_sqlite_error(e))?;
+    project.check_deadline()?;
     let data = match command {
         WorkCommand::Task { command } => task_command(project, &tx, command)?,
         WorkCommand::Agent { command } => agent_command(project, &tx, command)?,
         WorkCommand::Check { command } => check_command(project, &tx, command)?,
         WorkCommand::Control { .. } => unreachable!("control commands handled before transaction"),
     };
-    tx.commit()?;
+    project.check_deadline()?;
+    tx.commit().map_err(|e| project.map_sqlite_error(e))?;
+    project.check_deadline()?;
     Ok(data)
 }
 fn task_command(project: &Project, db: &Connection, command: &TaskCommand) -> Result<Value> {
@@ -1140,7 +1206,7 @@ fn task_command(project: &Project, db: &Connection, command: &TaskCommand) -> Re
                 return Err(conflict("REVISION_CONFLICT", "Run cannot submit this task"));
             }
             let target = fingerprint(project, &t.def, None)?;
-            let evidence = evidence_set(db, &t)?;
+            let evidence = evidence_set(project, db, &t)?;
             let sub = json!({"id":id("SUB"),"target":target,"definition_revision":t.def_rev,"evidence_hash":hash(evidence.to_string()),"evidence":evidence,"agent":agent,"workspace":project.workspace_id,"submitted_at":now()});
             db.execute(
                 "UPDATE tasks SET submission=?1 WHERE id=?2",
@@ -1172,7 +1238,7 @@ fn task_command(project: &Project, db: &Connection, command: &TaskCommand) -> Re
                 ));
             }
             if sub["target"] != fingerprint(project, &t.def, None)?
-                || sub["evidence_hash"] != hash(evidence_set(db, &t)?.to_string())
+                || sub["evidence_hash"] != hash(evidence_set(project, db, &t)?.to_string())
                 || sub["definition_revision"] != t.def_rev
             {
                 return Err(Error::new(
@@ -1341,7 +1407,7 @@ fn agent_command(project: &Project, db: &Connection, command: &AgentCommand) -> 
         AgentCommand::List => {
             let mut s =
                 db.prepare("SELECT id,name,kind,concurrency_limit FROM agents ORDER BY name")?;
-            let agents=s.query_map([],|r|Ok(json!({"agent_id":r.get::<_,String>(0)?,"name":r.get::<_,String>(1)?,"kind":r.get::<_,String>(2)?,"concurrency_limit":r.get::<_,i64>(3)?})))?.collect::<std::result::Result<Vec<_>,_>>()?;
+            let agents=collect_rows(project, db, s.query_map([],|r|Ok(json!({"agent_id":r.get::<_,String>(0)?,"name":r.get::<_,String>(1)?,"kind":r.get::<_,String>(2)?,"concurrency_limit":r.get::<_,i64>(3)?})))?)?;
             Ok(json!({"agents":agents}))
         }
         AgentCommand::Show { agent } => {
@@ -1430,11 +1496,12 @@ fn check_command(project: &Project, db: &Connection, command: &CheckCommand) -> 
  CheckCommand::Plan{..}|CheckCommand::Run{..}=>unreachable!("Runner dispatch precedes control transaction"),
  CheckCommand::Begin{task:name,key,run}=>{let t=task(db,name)?;let (run_task,_,_)=lease(db,run,None,project)?;if run_task!=t.id{return Err(conflict("LEASE_REVOKED","Run belongs to another task"));}let c=t.def.checks.iter().find(|c|&c.key==key).ok_or_else(||invalid("Check key not defined"))?;let target=fingerprint(project,&t.def,Some(c))?;let check=id("CHECK");db.execute("INSERT INTO checks VALUES(?1,?2,?3,?4,?5,?6,?7,'running',NULL,?8)",params![check,t.id,key,run,t.def_rev,target,project.policy_hash(),now()])?;let e=event(db,&t.id,"check_begun",&json!({"check_id":check,"key":key,"target":target}))?;Ok(json!({"check_id":check,"artifact_fingerprint":target,"event":e}))},
  CheckCommand::Record{check,from_file}=>{let report:CheckReport=parse_file(from_file)?;if report.source=="runner_observed"{return Err(invalid("External report cannot claim runner-observed provenance"));}record_check_report(project,db,check,report,false,None)},
- CheckCommand::List{task:name}=>{let task_id=name.as_ref().map(|name|task(db,name).map(|t|t.id)).transpose()?;let mut s=db.prepare("SELECT id,task,key,status,target,report FROM checks WHERE ?1 IS NULL OR task=?1 ORDER BY rowid")?;let checks=s.query_map([task_id],|r|Ok(json!({"check_id":r.get::<_,String>(0)?,"task_id":r.get::<_,String>(1)?,"key":r.get::<_,String>(2)?,"result":r.get::<_,String>(3)?,"target":r.get::<_,String>(4)?,"report":r.get::<_,Option<String>>(5)?})))?.collect::<std::result::Result<Vec<_>,_>>()?;Ok(json!({"checks":checks}))},
+ CheckCommand::List{task:name}=>{let task_id=name.as_ref().map(|name|task(db,name).map(|t|t.id)).transpose()?;let mut s=db.prepare("SELECT id,task,key,status,target,report FROM checks WHERE ?1 IS NULL OR task=?1 ORDER BY rowid")?;let checks=collect_rows(project, db, s.query_map([task_id],|r|Ok(json!({"check_id":r.get::<_,String>(0)?,"task_id":r.get::<_,String>(1)?,"key":r.get::<_,String>(2)?,"result":r.get::<_,String>(3)?,"target":r.get::<_,String>(4)?,"report":r.get::<_,Option<String>>(5)?})))?)?;Ok(json!({"checks":checks}))},
  CheckCommand::Show{check}=>db.query_row("SELECT id,task,key,status,target,report FROM checks WHERE id=?1",[check],|r|Ok(json!({"check_id":r.get::<_,String>(0)?,"task_id":r.get::<_,String>(1)?,"key":r.get::<_,String>(2)?,"result":r.get::<_,String>(3)?,"target":r.get::<_,String>(4)?,"report":r.get::<_,Option<String>>(5)?}))).optional()?.ok_or_else(||invalid("Check not found")),
 }
 }
 fn task_view(project: &Project, db: &Connection, t: &Task) -> Result<Value> {
+    project.configure_sqlite(db)?;
     let run:Option<Value>=db.query_row("SELECT id,epoch,status,lease_until,last_seen,last_progress,stage,summary,estimate FROM runs WHERE task=?1 ORDER BY rowid DESC LIMIT 1",[&t.id],|r|{let status:String=r.get(2)?;let until:i64=r.get(3)?;let seen:i64=r.get(4)?;Ok(json!({"run_id":r.get::<_,String>(0)?,"lease_epoch":r.get::<_,i64>(1)?,"status":status,"activity_status":if status=="active"&&until<=now(){"lease_expired"}else if status=="active"&&now()-seen>90{"stale"}else{&status},"lease_until":until,"last_seen_at":r.get::<_,i64>(4)?,"last_progress_at":r.get::<_,i64>(5)?,"stage":r.get::<_,String>(6)?,"summary":r.get::<_,String>(7)?,"estimate_percent":r.get::<_,Option<i64>>(8)?}))}).optional()?;
     let total: u64 = t
         .def
@@ -1444,7 +1511,11 @@ fn task_view(project: &Project, db: &Connection, t: &Task) -> Result<Value> {
         .map(|c| u64::from(c.weight))
         .sum();
     let mut accepted = 0u64;
-    for c in t.def.acceptance.iter().filter(|c| c.required) {
+    for c in &t.def.acceptance {
+        project.configure_sqlite(db)?;
+        if !c.required {
+            continue;
+        }
         let n:i64=db.query_row("SELECT count(*) FROM acceptances WHERE task=?1 AND criterion=?2 AND definition_revision=?3",params![t.id,c.id,t.def_rev],|r|r.get(0))?;
         if n > 0 {
             accepted += u64::from(c.weight);
@@ -1466,6 +1537,7 @@ fn task_view(project: &Project, db: &Connection, t: &Task) -> Result<Value> {
     };
     let mut checks = Vec::new();
     for required in &t.def.checks {
+        project.configure_sqlite(db)?;
         let latest:Option<(String,String,i64,String,Option<String>)>=db.query_row("SELECT status,target,definition_revision,policy,report FROM checks WHERE task=?1 AND key=?2 ORDER BY rowid DESC LIMIT 1",params![t.id,required.key],|r|Ok((r.get(0)?,r.get(1)?,r.get(2)?,r.get(3)?,r.get(4)?))).optional()?;
         let result = match latest {
             Some((status, target, revision, policy, report))
@@ -1488,13 +1560,15 @@ fn task_view(project: &Project, db: &Connection, t: &Task) -> Result<Value> {
     )
 }
 fn board_db(project: &Project, db: &Connection) -> Result<Value> {
+    project.check_deadline()?;
     let mut s = db.prepare("SELECT id FROM tasks ORDER BY number")?;
-    let ids = s
-        .query_map([], |r| r.get::<_, String>(0))?
-        .collect::<std::result::Result<Vec<_>, _>>()?;
+    let ids = collect_rows(project, db, s.query_map([], |r| r.get::<_, String>(0))?)?;
     let tasks = ids
         .into_iter()
-        .map(|id| task_view(project, db, &task(db, &id)?))
+        .map(|id| {
+            project.configure_sqlite(db)?;
+            task_view(project, db, &task(db, &id)?)
+        })
         .collect::<Result<Vec<_>>>()?;
     let seq: i64 = db.query_row("SELECT coalesce(max(seq),0) FROM events", [], |r| r.get(0))?;
     Ok(
@@ -1502,13 +1576,22 @@ fn board_db(project: &Project, db: &Connection) -> Result<Value> {
     )
 }
 pub fn board(project: &Project) -> Result<Value> {
+    request_phase(project, || board_inner(project))
+}
+fn board_inner(project: &Project) -> Result<Value> {
     let mut db = connect(project)?;
-    let tx = db.transaction()?;
+    project.configure_sqlite(&db)?;
+    let tx = db.transaction().map_err(|e| project.map_sqlite_error(e))?;
+    project.check_deadline()?;
     let data = board_db(project, &tx)?;
-    tx.commit()?;
+    project.check_deadline()?;
+    tx.commit().map_err(|e| project.map_sqlite_error(e))?;
     Ok(data)
 }
 pub fn activity(project: &Project, since: i64) -> Result<Value> {
+    request_phase(project, || activity_inner(project, since))
+}
+fn activity_inner(project: &Project, since: i64) -> Result<Value> {
     if since < 0 {
         return Err(Error::new(
             "INVALID_ARGUMENT",
@@ -1520,8 +1603,10 @@ pub fn activity(project: &Project, since: i64) -> Result<Value> {
     let mut s = db.prepare(
         "SELECT seq,entity,type,payload,created FROM events WHERE seq>?1 ORDER BY seq LIMIT 1000",
     )?;
-    let rows = s
-        .query_map([since], |r| {
+    let rows = collect_rows(
+        project,
+        &db,
+        s.query_map([since], |r| {
             Ok((
                 r.get::<_, i64>(0)?,
                 r.get::<_, String>(1)?,
@@ -1529,9 +1614,9 @@ pub fn activity(project: &Project, since: i64) -> Result<Value> {
                 r.get::<_, String>(3)?,
                 r.get::<_, i64>(4)?,
             ))
-        })?
-        .collect::<std::result::Result<Vec<_>, _>>()?;
-    let events=rows.into_iter().map(|(seq,entity,kind,payload,time)|Ok(json!({"schema_version":"1.0","event_seq":seq,"entity_id":entity,"type":kind,"data":serde_json::from_str::<Value>(&payload)?,"received_at":time}))).collect::<Result<Vec<_>>>()?;
+        })?,
+    )?;
+    let events=rows.into_iter().map(|(seq,entity,kind,payload,time)|{project.check_deadline()?;Ok(json!({"schema_version":"1.0","event_seq":seq,"entity_id":entity,"type":kind,"data":serde_json::from_str::<Value>(&payload)?,"received_at":time}))}).collect::<Result<Vec<_>>>()?;
     Ok(
         json!({"events":events,"next_cursor":events.last().map(|e|e["event_seq"].clone()).unwrap_or(json!(since)),"has_more":events.len()==1000}),
     )
