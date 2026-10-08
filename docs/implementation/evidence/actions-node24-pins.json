@@ -1,0 +1,32 @@
+{
+  "status": "exact_commit_metadata_verified",
+  "runtime_major": 24,
+  "actions": [
+    {
+      "action": "actions/checkout",
+      "version": "v6.1.0",
+      "commit": "d23441a48e516b6c34aea4fa41551a30e30af803",
+      "runtime": "node24",
+      "metadata_sha256": "d59219cb79590abdb877deaa14e3b65a00c05318bf5a6f3b989b9162b5d08c35",
+      "metadata_url": "https://github.com/actions/checkout/blob/d23441a48e516b6c34aea4fa41551a30e30af803/action.yml"
+    },
+    {
+      "action": "actions/cache/restore",
+      "version": "v5.1.0",
+      "commit": "caa296126883cff596d87d8935842f9db880ef25",
+      "runtime": "node24",
+      "metadata_sha256": "bb552a94cec165255080b7e13fe3d2051c6c79e321e99435b5859dc7de5e9057",
+      "metadata_url": "https://github.com/actions/cache/blob/caa296126883cff596d87d8935842f9db880ef25/restore/action.yml"
+    },
+    {
+      "action": "actions/cache/save",
+      "version": "v5.1.0",
+      "commit": "caa296126883cff596d87d8935842f9db880ef25",
+      "runtime": "node24",
+      "metadata_sha256": "5da400e1a7551cee617339fd1a5281483d71e6c56d86dd117fbd354f047308ec",
+      "metadata_url": "https://github.com/actions/cache/blob/caa296126883cff596d87d8935842f9db880ef25/save/action.yml"
+    }
+  ],
+  "hosted_runtime_execution": "not_run_for_this_workflow_change",
+  "additional_actions_runs": 0
+}
