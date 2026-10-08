@@ -978,3 +978,8 @@ without startup repair; all four historical startup conditions remain unresolved
 and original budgets unchanged. All jobs terminal, no heavy job live. PCTX01
 incomplete0/10. Offline read-only Linux arm64 container executes, but cargo/rustc
 absent; capability log is environment proof only, not native PCTX verification.
+
+Runtime4ec817760eebc639c15ef074880fad9585106631 normally published by22892 terminal0
+(c63c007..4ec8177), [skip ci]. All jobs terminal; no Actions. PCTX01 only.
+Next local priority G09 isolated Linux Rust setup/native execution; current
+engine exists but Rust missing. Windows/startup/whole gates remain open.

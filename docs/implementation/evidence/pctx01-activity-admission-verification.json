@@ -161,5 +161,14 @@
     "observed": "uname Linux/aarch64, git/cc available, cargo/rustc absent",
     "status": "Linux execution environment exists; Rust setup and all native product tests remain unverified. This supersedes unavailable-environment assumption, not platform qualification."
   },
-  "next_local_boundary": "PCTX01-G09: prepare isolated Rust1.99 Linux arm64 toolchain/cache on available local engine, then real native required tests; no Actions. Secondary existing G05/G06 Work events.payload malformed persisted JSON currently uses input2 and needs contextual DB_CORRUPT7; no accepted-value shape narrowing."
+  "next_local_boundary": "PCTX01-G09: prepare isolated Rust1.99 Linux arm64 toolchain/cache on available local engine, then real native required tests; no Actions. Secondary existing G05/G06 Work events.payload malformed persisted JSON currently uses input2 and needs contextual DB_CORRUPT7; no accepted-value shape narrowing.",
+  "runtime_revision": "4ec817760eebc639c15ef074880fad9585106631",
+  "publication": {
+    "session": 22892,
+    "exit": 0,
+    "remote": "https://github.com/Jung95/pctx.git",
+    "branch": "main",
+    "range": "c63c007..4ec8177",
+    "actions_dispatched": false
+  }
 }

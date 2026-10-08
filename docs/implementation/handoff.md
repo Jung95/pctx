@@ -7,8 +7,9 @@
 ## Latest integration boundary
 
 PCTX01-G03/G08-C001 existing Activity cursor admission, base
-c63c00741e123a74b5767b04dc6d1f9db2603d87. Runtime revision follows development
-commit. Exact nonnegative i64/message/error2 shared in Work/Watch/frontend.
+c63c00741e123a74b5767b04dc6d1f9db2603d87. Runtime revision
+4ec817760eebc639c15ef074880fad9585106631, normally published by22892 terminal0
+(c63c007..4ec8177) to origin/main, [skip ci]. Exact nonnegative i64/message/error2 shared in Work/Watch/frontend.
 Normal preflight before discovery; stream admission after output/route guards,
 before discovery. JSON-follow/stream stderr priority preserved. Work original
 expiry first unchanged; Watch supplied expiry before cursor/stdout, no new clock.
