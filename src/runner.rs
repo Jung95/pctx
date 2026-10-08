@@ -566,7 +566,10 @@ fn trust_path(p: &Project, b: &Binding) -> PathBuf {
 fn trusted(p: &Project, b: &Binding) -> Result<()> {
     let path = trust_path(p, b);
     checked(&path)?;
-    let raw = fs::read(path).map_err(|_| {
+    let raw = finite_metadata(p, &path, 1024 * 1024).map_err(|e| {
+        if e.code == "TIMEOUT" {
+            return e;
+        }
         error(
             "OWNER_DECISION_REQUIRED",
             "Exact registered check fingerprint requires runner trust",
@@ -597,7 +600,8 @@ pub(crate) fn current_check_binding(p: &Project, key: &str) -> Result<Value> {
         "environment_fingerprint":output::registered_environment_fingerprint(&b.profile.env)?,
         "cwd":b.profile.cwd,"workspace":p.workspace_id,"policy":p.policy_hash()}))
 }
-fn host_dir(p: &Project) -> Result<PathBuf> {
+fn host_path(p: &Project) -> Result<PathBuf> {
+    p.check_deadline()?;
     let path = std::env::var_os("PCTX_HOST_RESOURCE_DIR")
         .map(PathBuf::from)
         .unwrap_or_else(|| p.data_dir.join("host-resources"));
@@ -609,9 +613,28 @@ fn host_dir(p: &Project) -> Result<PathBuf> {
         ));
     }
     let path = system_path(&path)?;
-    checked(&path)?;
-    checked(&path.join("jobs"))?;
-    checked(&path.join("slots"))?;
+    for directory in [path.clone(), path.join("jobs"), path.join("slots")] {
+        p.check_deadline()?;
+        checked(&directory)?;
+        let metadata = fs::symlink_metadata(&directory);
+        p.check_deadline()?;
+        match metadata {
+            Ok(m) if !m.is_dir() => {
+                return Err(std::io::Error::new(
+                    std::io::ErrorKind::NotADirectory,
+                    "Resource state ancestor is not a directory",
+                )
+                .into());
+            }
+            Err(e) if e.kind() != std::io::ErrorKind::NotFound => return Err(e.into()),
+            _ => {}
+        }
+    }
+    p.check_deadline()?;
+    Ok(path)
+}
+fn host_dir(p: &Project) -> Result<PathBuf> {
+    let path = host_path(p)?;
     private_dir(&path)?;
     private_dir(&path.join("jobs"))?;
     private_dir(&path.join("slots"))?;
@@ -874,22 +897,26 @@ fn task_check(
         .strip_prefix("T-")
         .and_then(|s| s.parse::<i64>().ok())
         .unwrap_or(-1);
-    let (task, definition): (String, String) = db
-        .query_row(
-            "SELECT id,definition FROM tasks WHERE id=?1 OR number=?2",
-            rusqlite::params![task_name, number],
-            |r| Ok((r.get(0)?, r.get(1)?)),
-        )
-        .optional()?
+    let (task, definition): (String, String) = p
+        .sqlite_call(&db, || {
+            db.query_row(
+                "SELECT id,definition FROM tasks WHERE id=?1 OR number=?2",
+                rusqlite::params![task_name, number],
+                |r| Ok((r.get(0)?, r.get(1)?)),
+            )
+            .optional()
+        })?
         .ok_or_else(|| error("TASK_NOT_FOUND", "Task not found", 6))?;
+    p.check_deadline()?;
     let d: work::TaskDefinition = serde_json::from_str(&definition)?;
+    p.check_deadline()?;
     let check = d
         .checks
         .into_iter()
         .find(|c| c.key == key)
         .ok_or_else(|| error("INVALID_ARGUMENT", "Check is not defined on task", 2))?;
     if let Some(run) = run {
-        let valid:bool=db.query_row("SELECT EXISTS(SELECT 1 FROM runs WHERE id=?1 AND task=?2 AND workspace=?3 AND status='active' AND lease_until>?4)",rusqlite::params![run,task,p.workspace_id,now()],|r|r.get(0))?;
+        let valid:bool=p.sqlite_call(&db, || db.query_row("SELECT EXISTS(SELECT 1 FROM runs WHERE id=?1 AND task=?2 AND workspace=?3 AND status='active' AND lease_until>?4)",rusqlite::params![run,task,p.workspace_id,now()],|r|r.get(0)))?;
         if !valid {
             return Err(error(
                 "LEASE_REVOKED",
@@ -897,10 +924,13 @@ fn task_check(
                 9,
             ));
         }
-        let agent: String = db.query_row("SELECT agent FROM runs WHERE id=?1", [run], |row| {
-            row.get(0)
+        let agent: String = p.sqlite_call(&db, || {
+            db.query_row("SELECT agent FROM runs WHERE id=?1", [run], |row| {
+                row.get(0)
+            })
         })?;
         crate::operations::ensure_claim_allowed_db(&db, &agent)?;
+        p.check_deadline()?;
     }
     if !check.allowed_sources.iter().any(|s| s == "runner_observed") {
         return Err(error(
@@ -953,7 +983,153 @@ fn release_not_spawned(dir: &Path, job: &mut Job) -> Result<()> {
     job.state = "not_started".into();
     publish(dir, job)
 }
+fn finite_metadata(p: &Project, path: &Path, limit: usize) -> Result<Vec<u8>> {
+    if p.deadline.is_none() {
+        return Ok(fs::read(path)?);
+    }
+    use std::io::Read;
+    p.check_deadline()?;
+    checked(path)?;
+    let parent = path
+        .parent()
+        .ok_or_else(|| error("INVALID_ARGUMENT", "Invalid metadata authority", 2))?;
+    let leaf = path
+        .file_name()
+        .and_then(|s| s.to_str())
+        .ok_or_else(|| error("INVALID_ARGUMENT", "Invalid metadata authority", 2))?;
+    let anchor = crate::project::RootAnchor::capture(parent)?;
+    let mut file = reader::anchored_open_deadline(parent, &anchor, leaf, p.deadline)?;
+    let initial = file.metadata()?;
+    if !initial.is_file() || initial.len() > limit as u64 {
+        return Err(error(
+            "INVALID_ARGUMENT",
+            "Metadata must be a bounded regular file",
+            2,
+        ));
+    }
+    let identity = same_file::Handle::from_file(file.try_clone()?)?;
+    let mut bytes = Vec::new();
+    let mut chunk = [0; 8192];
+    loop {
+        p.check_deadline()?;
+        let count = file.read(&mut chunk);
+        p.check_deadline()?;
+        let count = count?;
+        if count == 0 {
+            break;
+        }
+        if bytes.len() + count > limit {
+            return Err(error("INVALID_ARGUMENT", "Metadata exceeds size bound", 2));
+        }
+        bytes.extend_from_slice(&chunk[..count]);
+    }
+    let after = file.metadata()?;
+    let reopened = reader::anchored_open_deadline(parent, &anchor, leaf, p.deadline)?;
+    let current = reopened.metadata()?;
+    if identity != same_file::Handle::from_file(reopened)?
+        || initial.len() != after.len()
+        || initial.len() != current.len()
+        || initial.modified().ok() != after.modified().ok()
+        || initial.modified().ok() != current.modified().ok()
+    {
+        return Err(error(
+            "CONCURRENT_MODIFICATION",
+            "Metadata changed during read",
+            4,
+        ));
+    }
+    #[cfg(unix)]
+    {
+        use std::os::unix::fs::MetadataExt;
+        if (initial.ctime(), initial.ctime_nsec()) != (after.ctime(), after.ctime_nsec())
+            || (initial.ctime(), initial.ctime_nsec()) != (current.ctime(), current.ctime_nsec())
+        {
+            return Err(error(
+                "CONCURRENT_MODIFICATION",
+                "Metadata changed during read",
+                4,
+            ));
+        }
+    }
+    p.check_deadline()?;
+    Ok(bytes)
+}
+#[cfg(test)]
+type IdentityObserver = Box<dyn FnMut(u32, Option<crate::deadline::Deadline>, bool, bool)>;
+#[cfg(test)]
+thread_local! { static IDENTITY_OBSERVER: std::cell::RefCell<Option<IdentityObserver>> = const { std::cell::RefCell::new(None) }; }
+#[cfg(test)]
+struct IdentityObserverGuard;
+#[cfg(test)]
+impl Drop for IdentityObserverGuard {
+    fn drop(&mut self) {
+        IDENTITY_OBSERVER.with(|s| *s.borrow_mut() = None);
+    }
+}
+#[cfg(test)]
+fn observe_identity(
+    callback: impl FnMut(u32, Option<crate::deadline::Deadline>, bool, bool) + 'static,
+) -> IdentityObserverGuard {
+    IDENTITY_OBSERVER.with(|s| {
+        assert!(s.borrow().is_none());
+        *s.borrow_mut() = Some(Box::new(callback));
+    });
+    IdentityObserverGuard
+}
+fn observed_start(p: &Project, pid: u32) -> Result<Option<String>> {
+    p.check_deadline()?;
+    #[cfg(target_os = "linux")]
+    let observed = {
+        let path = PathBuf::from(format!("/proc/{pid}/stat"));
+        match finite_metadata(p, &path, 16384) {
+            Ok(bytes) => bytes.windows(2).rposition(|w| w == b") ").and_then(|i| {
+                std::str::from_utf8(&bytes[i + 2..])
+                    .ok()?
+                    .split_whitespace()
+                    .nth(19)
+                    .map(str::to_owned)
+            }),
+            Err(e) if e.code == "TIMEOUT" => return Err(e),
+            Err(_) => None,
+        }
+    };
+    #[cfg(not(target_os = "linux"))]
+    let observed = process_start(pid);
+    #[cfg(test)]
+    IDENTITY_OBSERVER.with(|s| {
+        if let Some(callback) = s.borrow_mut().as_mut() {
+            callback(pid, p.deadline, observed.is_some(), false);
+        }
+    });
+    p.check_deadline()?;
+    #[cfg(test)]
+    IDENTITY_OBSERVER.with(|s| {
+        if let Some(callback) = s.borrow_mut().as_mut() {
+            callback(pid, p.deadline, observed.is_some(), true);
+        }
+    });
+    Ok(observed)
+}
 pub fn execute(p: &Project, command: &RunnerCommand) -> Result<Value> {
+    let finite = matches!(
+        command,
+        RunnerCommand::CheckPlan { .. }
+            | RunnerCommand::ResourceStatus
+            | RunnerCommand::HelperStatus { .. }
+    );
+    if !finite {
+        return execute_inner(p, command);
+    }
+    let mut scope = p.clone();
+    if scope.deadline.is_none() {
+        scope.deadline = Some(crate::deadline::Deadline::from_millis(10000)?);
+    }
+    scope.check_deadline()?;
+    let result = execute_inner(&scope, command);
+    scope.check_deadline()?;
+    result
+}
+fn execute_inner(p: &Project, command: &RunnerCommand) -> Result<Value> {
     match command {
         RunnerCommand::BridgeGuardian { fd, lock_path } => guardian_main(*fd, lock_path),
         RunnerCommand::HelperRequest {
@@ -1193,23 +1369,41 @@ pub fn execute(p: &Project, command: &RunnerCommand) -> Result<Value> {
             6,
         )),
         RunnerCommand::ResourceStatus => {
-            let dir = host_dir(p)?;
+            p.check_deadline()?;
+            let dir = host_path(p)?;
+            p.check_deadline()?;
+            let boot = boot_id();
+            p.check_deadline()?;
             let mut jobs = vec![];
             for resource in ["exclusive-compute", "aux-agent"] {
+                p.check_deadline()?;
                 let path = dir.join("slots").join(format!("{resource}.json"));
-                if !path.exists() {
-                    continue;
+                let metadata = fs::symlink_metadata(&path);
+                p.check_deadline()?;
+                match metadata {
+                    Err(e) if e.kind() == std::io::ErrorKind::NotFound => continue,
+                    Err(e) => return Err(e.into()),
+                    Ok(_) => {}
                 }
-                let mut job: Job = serde_json::from_slice(&fs::read(path)?)?;
-                if job.boot_id != boot_id()
+                let mut job: Job =
+                    serde_json::from_slice(&finite_metadata(p, &path, 1024 * 1024)?)?;
+                if job.boot_id != boot
                     || job.pid.is_none()
-                    || job
-                        .pid
-                        .is_some_and(|pid| process_start(pid) != job.start_identity)
+                    || match job.pid {
+                        Some(pid) => observed_start(p, pid)? != job.start_identity,
+                        None => false,
+                    }
                 {
                     job.state = "resource_owner_unknown".into();
                 }
-                jobs.push(json!({"resource":resource,"job":job,"ttl_takeover_allowed":false,"automatic_release":false,"guardian_alive_verified":job.guardian_pid.is_some_and(|pid|job.guardian_start.is_some()&&process_start(pid)==job.guardian_start)}));
+                let guardian_alive = match job.guardian_pid {
+                    Some(pid) if job.guardian_start.is_some() => {
+                        observed_start(p, pid)? == job.guardian_start
+                    }
+                    _ => false,
+                };
+                p.check_deadline()?;
+                jobs.push(json!({"resource":resource,"job":job,"ttl_takeover_allowed":false,"automatic_release":false,"guardian_alive_verified":guardian_alive}));
             }
             Ok(
                 json!({"resources":jobs,"scope":"host","capacity_per_slot":1,"legacy_bridge":"per_job_registered_guardian_or_unconfigured"}),
@@ -1917,7 +2111,8 @@ fn auxiliary_workspace(p: &Project, path: &Path) -> Result<Project> {
     p.check_deadline()?;
     Ok(target)
 }
-fn helper_path(p: &Project, helper: &str) -> Result<PathBuf> {
+fn helper_read_path(p: &Project, helper: &str) -> Result<PathBuf> {
+    p.check_deadline()?;
     if !helper.starts_with("HELP-")
         || helper.len() > 64
         || !helper
@@ -1928,8 +2123,13 @@ fn helper_path(p: &Project, helper: &str) -> Result<PathBuf> {
     }
     let dir = p.workspace_dir.join("helpers");
     checked(&dir)?;
-    private_dir(&dir)?;
+    p.check_deadline()?;
     Ok(dir.join(format!("{helper}.json")))
+}
+fn helper_path(p: &Project, helper: &str) -> Result<PathBuf> {
+    let path = helper_read_path(p, helper)?;
+    private_dir(path.parent().unwrap())?;
+    Ok(path)
 }
 fn save_helper(p: &Project, h: &Helper) -> Result<()> {
     atomic_write(
@@ -1939,7 +2139,8 @@ fn save_helper(p: &Project, h: &Helper) -> Result<()> {
     )
 }
 fn load_helper(p: &Project, id: &str) -> Result<Helper> {
-    let h: Helper = serde_json::from_slice(&fs::read(helper_path(p, id)?)?)?;
+    let h: Helper =
+        serde_json::from_slice(&finite_metadata(p, &helper_path(p, id)?, 1024 * 1024)?)?;
     if h.schema_version != 1 || h.helper_id != id || h.workspace != p.workspace_id {
         return Err(error(
             "WORKSPACE_MISMATCH",
@@ -2129,12 +2330,24 @@ fn helper_request(
     )
 }
 fn helper_status(p: &Project, id: &str) -> Result<Value> {
-    let h = load_helper(p, id)?;
+    p.check_deadline()?;
+    let path = helper_read_path(p, id)?;
+    let h: Helper = serde_json::from_slice(&finite_metadata(p, &path, 1024 * 1024)?)?;
+    if h.schema_version != 1 || h.helper_id != id || h.workspace != p.workspace_id {
+        return Err(error(
+            "WORKSPACE_MISMATCH",
+            "Helper receipt belongs to another workspace",
+            9,
+        ));
+    }
+    p.check_deadline()?;
     let job = if let Some(id) = &h.job_id {
-        let dir = host_dir(p)?;
-        Some(serde_json::from_slice::<Job>(&fs::read(job_path(
-            &dir, id,
-        )?)?)?)
+        let dir = host_path(p)?;
+        Some(serde_json::from_slice::<Job>(&finite_metadata(
+            p,
+            &job_path(&dir, id)?,
+            1024 * 1024,
+        )?)?)
     } else {
         None
     };
@@ -2211,6 +2424,7 @@ mod auxiliary_deadline_tests {
             .env(PROBE, temp.path())
             .env("PCTX_DATA_DIR", temp.path().join("data"))
             .env("PCTX_USER_CONFIG", temp.path().join("absent-user-config"))
+            .env("PCTX_HOST_RESOURCE_DIR", temp.path().join("host"))
             .stdout(Stdio::piped())
             .stderr(Stdio::piped())
             .spawn()
@@ -2461,5 +2675,138 @@ mod auxiliary_deadline_tests {
         ] {
             assert!(!path.exists());
         }
+    }
+    #[test]
+    fn resource_status_retains_original_budget_after_native_identity_observation() {
+        let Some(base) =
+            isolated("resource_status_retains_original_budget_after_native_identity_observation")
+        else {
+            return;
+        };
+        let fixture = fixture(base);
+        let mut project = fixture.project;
+        let dir = host_dir(&project).unwrap();
+        let pid = std::process::id();
+        let identity = process_start(pid).expect("Native fixture process identity");
+        let job = Job {
+            schema_version: 1,
+            job_id: "JOB-fixture".into(),
+            workspace: project.workspace_id.clone(),
+            profile_fingerprint: "fixture".into(),
+            resources: vec!["exclusive-compute".into()],
+            state: "running".into(),
+            pid: Some(pid),
+            process_group: None,
+            start_identity: Some(identity),
+            boot_id: boot_id(),
+            guardian_pid: None,
+            guardian_start: None,
+            guardian_attached: false,
+            bridge_path_hash: None,
+            created_at: now(),
+            updated_at: now(),
+        };
+        assert_ne!(job.boot_id, "unknown");
+        let path = dir.join("slots/exclusive-compute.json");
+        let raw = serde_json::to_vec(&job).unwrap();
+        fs::write(&path, &raw).unwrap();
+        use std::{cell::RefCell, rc::Rc};
+        let scopes = Rc::new(RefCell::new(Vec::new()));
+        let observed = scopes.clone();
+        {
+            let _guard = observe_identity(move |actual, deadline, known, admitted| {
+                assert_eq!(actual, pid);
+                assert!(known);
+                if !admitted {
+                    observed.borrow_mut().push(deadline.unwrap().instant());
+                }
+            });
+            let positive = execute(&project, &RunnerCommand::ResourceStatus).unwrap();
+            assert_eq!(positive["resources"][0]["job"]["state"], "running");
+        }
+        assert_eq!(scopes.borrow().len(), 1);
+        assert!(project.deadline.is_none());
+        let original = crate::deadline::Deadline::from_millis(1000).unwrap();
+        project.deadline = Some(original);
+        let reached = Rc::new(RefCell::new(0usize));
+        let observed = reached.clone();
+        {
+            let _guard = observe_identity(move |actual, deadline, known, admitted| {
+                assert_eq!(actual, pid);
+                assert!(known);
+                assert_eq!(deadline.unwrap().instant(), original.instant());
+                assert!(
+                    !admitted,
+                    "Expired native identity must not pass its local admission guard"
+                );
+                *observed.borrow_mut() += 1;
+                while let Ok(remaining) = original.remaining() {
+                    std::thread::sleep(remaining.min(Duration::from_millis(10)));
+                }
+            });
+            let error = execute(&project, &RunnerCommand::ResourceStatus).unwrap_err();
+            assert_eq!(error.code, "TIMEOUT");
+            assert_eq!(error.exit, 7);
+        }
+        assert_eq!(*reached.borrow(), 1);
+        assert_eq!(project.deadline.unwrap().instant(), original.instant());
+        assert_eq!(fs::read(path).unwrap(), raw);
+        assert!(!project.control_db().exists());
+        assert!(!project.index_db().exists());
+    }
+
+    #[test]
+    fn trust_plan_establishes_one_default_scope_and_preserves_supplied_scope() {
+        let Some(base) =
+            isolated("trust_plan_establishes_one_default_scope_and_preserves_supplied_scope")
+        else {
+            return;
+        };
+        let fixture = fixture(base);
+        let mut project = fixture.project;
+        let binary = project.root.join("fingerprint-fixture");
+        let bytes = vec![42u8; 2 * 65536 + 7];
+        fs::write(&binary, &bytes).unwrap();
+        let command = output::TrustCommand::Plan {
+            argv: vec![binary.to_str().unwrap().into()],
+        };
+        use std::{cell::RefCell, rc::Rc};
+        for supplied in [
+            None,
+            Some(crate::deadline::Deadline::from_millis(2000).unwrap()),
+        ] {
+            project.deadline = supplied;
+            let scopes = Rc::new(RefCell::new(Vec::new()));
+            let observed = scopes.clone();
+            let before = Instant::now();
+            {
+                let _guard = output::observe_hash(move |phase, _, deadline| {
+                    if matches!(phase, output::HashPhase::ChunkRead) {
+                        observed.borrow_mut().push(deadline.unwrap().instant());
+                    }
+                });
+                let value = output::trust(&project, &command).unwrap();
+                assert_eq!(value["executable_hash"], hash(&bytes));
+                assert_eq!(value["execution_started"], false);
+                assert_eq!(value["trusted"], false);
+            }
+            let scopes = scopes.borrow();
+            assert_eq!(scopes.len(), 3);
+            assert!(scopes.iter().all(|end| *end == scopes[0]));
+            if let Some(original) = supplied {
+                assert_eq!(scopes[0], original.instant());
+            } else {
+                assert!(scopes[0] >= before + Duration::from_secs(9));
+                assert!(scopes[0] <= Instant::now() + Duration::from_secs(10));
+            }
+            assert_eq!(
+                project.deadline.map(|d| d.instant()),
+                supplied.map(|d| d.instant())
+            );
+        }
+        assert!(!project.data_dir.join("trust").exists());
+        assert!(!project.data_dir.join("outputs").exists());
+        assert!(!project.control_db().exists());
+        assert!(!project.index_db().exists());
     }
 }

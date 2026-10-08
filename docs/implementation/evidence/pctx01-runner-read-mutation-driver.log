@@ -1,0 +1,4 @@
+identity-postguard-loss 101
+trust-scope-loss 101
+metadata-fifo-admission-loss 101
+{"restored_sha256": {"src/runner.rs": "cafa8c2ea237e7399598f518271d82524be66087404635d5de5c321fb543f362", "src/output.rs": "2b66d772129c96ee51030b121b8eebd2a047f5e71e23d9dc29a405921c204166"}, "probes": [{"probe": "identity-postguard-loss", "expected_exit": 101, "actual_exit": 101}, {"probe": "trust-scope-loss", "expected_exit": 101, "actual_exit": 101}, {"probe": "metadata-fifo-admission-loss", "expected_exit": 101, "actual_exit": 101}]}

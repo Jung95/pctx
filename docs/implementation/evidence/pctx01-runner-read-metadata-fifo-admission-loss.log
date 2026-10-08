@@ -1,0 +1,19 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.75s
+     Running tests/runner_read_deadline.rs (target/debug/deps/runner_read_deadline-552541b77005096c)
+
+running 1 test
+
+thread 'finite_helper_fifo_is_refused_before_reading_or_creating_other_state' (8027614) panicked at tests/runner_read_deadline.rs:121:17:
+FIFO metadata probe exceeded owned three-second bound
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test finite_helper_fifo_is_refused_before_reading_or_creating_other_state ... FAILED
+
+failures:
+
+failures:
+    finite_helper_fifo_is_refused_before_reading_or_creating_other_state
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 2 filtered out; finished in 3.00s
+
+error: test failed, to rerun pass `--test runner_read_deadline`

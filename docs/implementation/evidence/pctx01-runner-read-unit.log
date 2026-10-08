@@ -1,0 +1,13 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.92s
+     Running unittests src/lib.rs (target/debug/deps/pctx-ae897bec01e143c7)
+
+running 5 tests
+test runner::auxiliary_deadline_tests::trust_plan_establishes_one_default_scope_and_preserves_supplied_scope ... ok
+test runner::auxiliary_deadline_tests::resource_status_retains_original_budget_after_native_identity_observation ... ok
+test runner::auxiliary_deadline_tests::opened_auxiliary_keeps_budget_for_subsequent_source_reads ... ok
+test runner::auxiliary_deadline_tests::auxiliary_loading_expires_after_actual_config_admission ... ok
+test runner::auxiliary_deadline_tests::registered_fingerprint_expires_after_actual_executable_chunk_read ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 20 filtered out; finished in 2.06s
+

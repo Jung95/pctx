@@ -44,6 +44,109 @@ fn invalid_or_inapplicable_timeout_has_no_project_effects() {
 }
 
 #[test]
+fn runner_and_trust_read_budgets_validate_before_discovery() {
+    let temp = tempfile::tempdir().unwrap();
+    let root = temp.path().join("missing");
+    let data = temp.path().join("data");
+    let host = temp.path().join("host");
+    for args in [
+        vec!["resource", "status"],
+        vec!["runner", "resource-status"],
+        vec!["runner", "check-plan", "--task-id", "T001", "--key", "test"],
+        vec!["runner", "helper-status", "H001"],
+        vec!["trust", "plan", "--", "/bin/sh"],
+    ] {
+        for budget in ["0", "5000"] {
+            let output = command(&root, &data)
+                .args(["--timeout-ms", budget])
+                .args(&args)
+                .env("PCTX_HOST_RESOURCE_DIR", &host)
+                .output()
+                .unwrap();
+            let response: Value = serde_json::from_slice(&output.stdout).unwrap();
+            if budget == "0" {
+                assert_eq!(output.status.code(), Some(2), "{args:?}: {output:?}");
+                assert_eq!(response["errors"][0]["code"], "INVALID_ARGUMENT");
+            } else {
+                assert_ne!(
+                    response["errors"][0]["code"], "INVALID_ARGUMENT",
+                    "{args:?}: {output:?}"
+                );
+                assert!(
+                    !output.status.success(),
+                    "Missing project unexpectedly succeeded"
+                );
+            }
+            assert!(!root.exists());
+            assert!(!data.exists());
+            assert!(!host.exists());
+        }
+    }
+}
+
+#[test]
+fn resource_and_trust_plans_return_complete_envelopes_without_launching() {
+    let (_temp, root, data) = initialized();
+    let host = data.join("absent-host");
+    for args in [
+        vec!["resource", "status"],
+        vec!["runner", "resource-status"],
+    ] {
+        let output = command(&root, &data)
+            .args(["--timeout-ms", "5000"])
+            .args(&args)
+            .env("PCTX_HOST_RESOURCE_DIR", &host)
+            .output()
+            .unwrap();
+        assert!(output.status.success(), "{args:?}: {output:?}");
+        let response: Value = serde_json::from_slice(&output.stdout).unwrap();
+        assert_eq!(response["status"], "ok");
+        assert_eq!(response["data"]["resources"], serde_json::json!([]));
+        assert!(
+            !host.exists(),
+            "Status must not create an absent resource directory"
+        );
+    }
+    fs::create_dir(&host).unwrap();
+    fs::write(host.join("slots"), b"invalid directory ancestor").unwrap();
+    let output = command(&root, &data)
+        .args(["--timeout-ms", "5000", "resource", "status"])
+        .env("PCTX_HOST_RESOURCE_DIR", &host)
+        .output()
+        .unwrap();
+    let response: Value = serde_json::from_slice(&output.stdout).unwrap();
+    assert_eq!(output.status.code(), Some(7), "{output:?}");
+    assert_eq!(response["errors"][0]["code"], "IO_ERROR");
+    assert!(response["data"].is_null());
+    assert_eq!(
+        fs::read(host.join("slots")).unwrap(),
+        b"invalid directory ancestor"
+    );
+    assert!(!host.join("jobs").exists());
+    #[cfg(unix)]
+    {
+        use std::os::unix::fs::PermissionsExt;
+        let script = root.join("never-run-fixture");
+        let marker = root.join("unexpected-execution");
+        fs::write(&script, "#!/bin/sh\ntouch unexpected-execution\n").unwrap();
+        fs::set_permissions(&script, fs::Permissions::from_mode(0o700)).unwrap();
+        let output = command(&root, &data)
+            .args(["--timeout-ms", "5000", "trust", "plan", "--"])
+            .arg(&script)
+            .output()
+            .unwrap();
+        assert!(output.status.success(), "{output:?}");
+        let response: Value = serde_json::from_slice(&output.stdout).unwrap();
+        assert_eq!(response["status"], "ok");
+        assert_eq!(response["data"]["execution_started"], false);
+        assert_eq!(response["data"]["trusted"], false);
+        assert!(!marker.exists());
+        assert!(!data.join("trust").exists());
+        assert!(!data.join("outputs").exists());
+    }
+}
+
+#[test]
 fn strict_find_waits_only_remaining_budget_and_preserves_active_generation() {
     let temp = tempfile::tempdir().unwrap();
     let root = temp.path().join("project");

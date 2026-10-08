@@ -379,7 +379,19 @@ fn query_deadline(cli: &Cli) -> Result<Option<pctx::deadline::Deadline>> {
                 | quota::QuotaCommand::Plan { .. }
                 | quota::QuotaCommand::Reconcile { .. },
         } => Some(10_000),
-        Command::Adapter {
+        Command::Resource {
+            command: ResourceCommand::Status { .. },
+        }
+        | Command::Runner {
+            command:
+                runner::RunnerCommand::CheckPlan { .. }
+                | runner::RunnerCommand::ResourceStatus
+                | runner::RunnerCommand::HelperStatus { .. },
+        }
+        | Command::Trust {
+            command: output::TrustCommand::Plan { .. },
+        }
+        | Command::Adapter {
             command:
                 adapter::AdapterCommand::Claude {
                     command:
@@ -1116,6 +1128,11 @@ mod finite_route_tests {
             vec!["quota", "report"],
             vec!["quota", "plan", "--pool", "local"],
             vec!["quota", "reconcile", "--pool", "local"],
+            vec!["resource", "status"],
+            vec!["runner", "resource-status"],
+            vec!["runner", "check-plan", "--task-id", "T001", "--key", "test"],
+            vec!["runner", "helper-status", "H001"],
+            vec!["trust", "plan", "--", "/bin/sh"],
         ] {
             let mut argv = vec!["pctx", "--timeout-ms", "100"];
             argv.extend(values.clone());
@@ -1143,6 +1160,39 @@ mod finite_route_tests {
             vec!["check", "run", "test", "--task-id", "T001", "--run", "R001"],
             vec!["board", "--watch"],
             vec!["activity", "--follow"],
+            vec!["runner", "trust", "--key", "test", "--expect-hash", "hash"],
+            vec![
+                "runner",
+                "check-run",
+                "--task-id",
+                "T001",
+                "--key",
+                "test",
+                "--run",
+                "R001",
+            ],
+            vec![
+                "runner",
+                "helper-request",
+                "--task-id",
+                "T001",
+                "--key",
+                "test",
+                "--run",
+                "R001",
+            ],
+            vec!["runner", "helper-cancel", "H001"],
+            vec!["runner", "helper-release", "H001", "--evidence", "O001"],
+            vec!["runner", "job-cancel", "J001"],
+            vec![
+                "runner",
+                "bridge-guardian",
+                "--fd",
+                "3",
+                "--lock-path",
+                "lock",
+            ],
+            vec!["trust", "add", "--expect-hash", "hash", "--", "/bin/sh"],
         ] {
             let mut argv = vec!["pctx"];
             argv.extend(values.clone());
@@ -1152,7 +1202,7 @@ mod finite_route_tests {
                     .is_none(),
                 "{values:?}"
             );
-            argv.extend(["--timeout-ms", "100"]);
+            argv.splice(1..1, ["--timeout-ms", "100"]);
             assert_eq!(
                 query_deadline(&Cli::try_parse_from(argv).unwrap())
                     .unwrap_err()

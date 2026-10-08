@@ -1,0 +1,36 @@
+from pathlib import Path
+import hashlib, json, subprocess
+root=Path('/Users/dev/PCTX')
+evidence=root/'docs/implementation/evidence'
+runner=root/'src/runner.rs'
+output=root/'src/output.rs'
+original={p:p.read_bytes() for p in [runner,output]}
+def digest(b): return hashlib.sha256(b).hexdigest()
+marker=b'''            callback(pid, p.deadline, observed.is_some(), false);
+        }
+    });
+    p.check_deadline()?;
+    #[cfg(test)]'''
+changed=b'''            callback(pid, p.deadline, observed.is_some(), false);
+        }
+    });
+    #[cfg(test)]'''
+cases=[('identity-postguard-loss',runner,marker,changed,['--lib','runner::auxiliary_deadline_tests::resource_status_retains_original_budget_after_native_identity_observation']),('trust-scope-loss',output,b'trust_inner(&scope, command)',b'trust_inner(p, command)',['--lib','runner::auxiliary_deadline_tests::trust_plan_establishes_one_default_scope_and_preserves_supplied_scope']),('metadata-fifo-admission-loss',runner,b'''fn finite_metadata(p: &Project, path: &Path, limit: usize) -> Result<Vec<u8>> {
+    if p.deadline.is_none() {''',b'''fn finite_metadata(p: &Project, path: &Path, limit: usize) -> Result<Vec<u8>> {
+    if true {''',['--test','runner_read_deadline','finite_helper_fifo_is_refused_before_reading_or_creating_other_state'])]
+records=[]
+try:
+    for name,path,old,new,args in cases:
+        for p,b in original.items(): p.write_bytes(b)
+        assert original[path].count(old)==1, (name,'selector must be unique')
+        path.write_bytes(original[path].replace(old,new,1))
+        with (evidence/f'pctx01-runner-read-{name}.log').open('wb') as log:
+            result=subprocess.run(['cargo','test','--locked',*args,'--','--exact','--nocapture'],cwd=root,stdout=log,stderr=subprocess.STDOUT,timeout=90)
+        records.append({'probe':name,'expected_exit':101,'actual_exit':result.returncode})
+        assert result.returncode==101, (name,result.returncode)
+        print(name,result.returncode,flush=True)
+finally:
+    for p,b in original.items():
+        p.write_bytes(b)
+        assert digest(p.read_bytes())==digest(b)
+    print(json.dumps({'restored_sha256':{str(p.relative_to(root)):digest(b) for p,b in original.items()},'probes':records}),flush=True)

@@ -1,0 +1,121 @@
+{
+  "official_task": "PCTX01",
+  "status": "implementing_not_complete",
+  "base_commit": "b586fbd7823fed824a7bd47c13324dcfd9e2611e",
+  "platform": "native macOS arm64",
+  "source_sha256": {
+    "src/main.rs": "ac6692ab0d4a5ed6173bd9b47f8de5e7ad6e95ae3a274baf0dc014300d3d12fc",
+    "src/runner.rs": "573691e7894f2af8651e93f66ddb1aa2a20d20e8b57bb051e262a86e3b84a47a",
+    "src/output.rs": "2b66d772129c96ee51030b121b8eebd2a047f5e71e23d9dc29a405921c204166",
+    "src/project.rs": "b26681e04129cc2d533d83249dc27764f5678fce326b5461a3d854b564db70b3",
+    "src/reader.rs": "8e298b824a461dc160c8c023b2df7b1bb362c8508e89ecaac5bf037dbb5ecb4f",
+    "tests/query_deadline_cli.rs": "0d85ce873dfc4ef87807ae2f675d4c103ced4bfcaa4efed2c0a88941fc3c83b8",
+    "tests/runner_read_deadline.rs": "d6f95dc24f0c1fe80c69e147fe2997ef7f10e579ac8e36978ccff96bebdc1b6d"
+  },
+  "verification": {
+    "unit": {
+      "handle": 39677,
+      "exit": 0,
+      "passed": 5,
+      "failed": 0
+    },
+    "targeted_initial": {
+      "handle": 37730,
+      "exit": 101,
+      "passed": 18,
+      "failed": 1,
+      "reason": "New positive CLI fixture incorrectly used directly prohibited shell; existing classification preserved. Changed only private test executable."
+    },
+    "targeted_after_fixture_fix": {
+      "handle": 63758,
+      "exit": 0,
+      "passed": 47,
+      "failed": 0,
+      "qualification": "Before independent review host/slot metadata error repair; final full gate covers final code."
+    },
+    "controlled_mutations": {
+      "handle": 2050,
+      "exit": 0,
+      "restored_sha256": {
+        "src/runner.rs": "cafa8c2ea237e7399598f518271d82524be66087404635d5de5c321fb543f362",
+        "src/output.rs": "2b66d772129c96ee51030b121b8eebd2a047f5e71e23d9dc29a405921c204166"
+      },
+      "probes": [
+        {
+          "probe": "identity-postguard-loss",
+          "expected_exit": 101,
+          "actual_exit": 101
+        },
+        {
+          "probe": "trust-scope-loss",
+          "expected_exit": 101,
+          "actual_exit": 101
+        },
+        {
+          "probe": "metadata-fifo-admission-loss",
+          "expected_exit": 101,
+          "actual_exit": 101
+        }
+      ],
+      "qualification": "Guard/scope/FIFO sensitivity before final host-directory validation; exact bytes restored before final repair/full gate."
+    },
+    "full_native": {
+      "handle": 29877,
+      "exit": 101,
+      "passed": 406,
+      "failed": 3,
+      "result_lines_including_zero_and_doc_tests": 50
+    },
+    "format": {
+      "exit": 0
+    },
+    "clippy": {
+      "handle": 54903,
+      "exit": 0
+    }
+  },
+  "retained_failures": [
+    "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+    "simultaneous_streams_are_collected_and_overflow_never_infers_success",
+    "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget"
+  ],
+  "qualified_boundaries": [
+    "CLI finite Resource Status, Runner CheckPlan/ResourceStatus/HelperStatus and Trust Plan classifier; zero budget rejected before discovery",
+    "Direct finite reads create one default10s scope only for absent deadline, preserve exact supplied deadline; child/trust writes/cancellation remain separate",
+    "Resource and helper status do not create absent state directories; real invalid directory ancestor yields IO_ERROR7/null data/unchanged state",
+    "Actual native process identity observed before original1s expiry; TIMEOUT7 before local admission or final result, same original instant/unchanged slot bytes; local guard loss fails despite outer check",
+    "Actual trust executable chunk reads under one default or supplied scope, byte-exact SHA/no trust or execution artifacts; scope loss fails",
+    "Finite helper FIFO refuses INVALID_ARGUMENT2 under original1s; owned3s parent kill/reap boundary; unbounded-reader loss fails",
+    "Scoped metadata pinned regular1MiB cap/chunks/growth/final identity+mtime+Unixctime; process identity observation preserves timeout instead of inferring dead owner"
+  ],
+  "independent_review": {
+    "reviewer": "requirements",
+    "resolved": [
+      "Unix-specific shell fixture scope",
+      "Resource status exists() erased metadata errors; explicit directory/slot stat errors now propagate"
+    ],
+    "final_scoped_blocker": false,
+    "verification_owner": "root"
+  },
+  "limitations": [
+    "Cooperative checks do not preempt filesystem/native syscalls",
+    "No exhaustive metadata/config/input race qualification",
+    "Linux procfs implementation reviewed but no native current-source Linux run; Windows native identity and frontend matrix unverified",
+    "Original native startup root cause unresolved; unchanged original1s budgets, no retry promotion",
+    "Filter/schedule/inventory finite routes, full option/error/envelope/exit/budget matrix and whole PCTX01 remain incomplete"
+  ],
+  "actions_dispatched": 0,
+  "artifacts_sha256": {
+    "pctx01-runner-read-clippy.log": "de4f7fd73f6c364c913d563dcd91c057b9c5531b0182fe548c736a6f4a5d2411",
+    "pctx01-runner-read-format.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "pctx01-runner-read-full-native.log": "0ad9736f6957b620a1e1602632102a4d59216ab02be47cf80ecc7726ca52377f",
+    "pctx01-runner-read-identity-postguard-loss.log": "713409472ba84032862973970779e9872eddcea32e24a5dd661040f1e474dc86",
+    "pctx01-runner-read-metadata-fifo-admission-loss.log": "9a455a7005b1b91cf085749fbfd9da577a789c69911171ea0d332b880849b98c",
+    "pctx01-runner-read-mutation-driver.log": "11a900c1f7353622b0096cdc47c1751302a122e36b345a9f52da6d1814816b8b",
+    "pctx01-runner-read-mutation-driver.py.txt": "ce4b0b2a81ae9dc310481fa83bd003a6aa2ef5899a3280d979eca47fcfbbc318",
+    "pctx01-runner-read-targeted-initial.log": "723a530b0e080aae09d701cece97037664bb698a6840f9b34f3b688bcc6ee62b",
+    "pctx01-runner-read-targeted.log": "d160b81ba978a02fa7669972822b235e00d305fae5ea1f9aa331f4f50174caf0",
+    "pctx01-runner-read-trust-scope-loss.log": "47b61eac77a2adb7c06144dacb2ffaddcc94bd4ccac293a0dc6615caf8778c90",
+    "pctx01-runner-read-unit.log": "f53839641dad49ff435c92b03371370407f21c3b40d9a9c58313db7e682158c4"
+  }
+}

@@ -1,0 +1,46 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.51s
+     Running tests/output.rs (target/debug/deps/output-6e0a106d5d0b7325)
+
+running 10 tests
+test opaque_shell_heavy_and_bad_identifiers_rejected ... ok
+test typed_full_report_preserves_failed_counts_without_becoming_gate_evidence ... ok
+test masking_is_before_storage_and_cr_preserves_error ... ok
+test exact_trust_child_exit_and_reread_without_execution ... ok
+test none_expiry_tamper_and_policy_change_cannot_restore_records ... ok
+test diagnostic_extract_binds_original_source_and_rereads_without_execution ... ok
+test nonzero_and_timeout_are_not_filter_success ... ok
+test agent_cannot_mint_execution_trust_and_git_helpers_are_unavailable ... ok
+test verbose_output_preserves_late_diagnostics_and_full_masked_denominator ... ok
+test bounded_capture_retains_tail_and_original_record_positions ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.25s
+
+     Running tests/query_deadline_cli.rs (target/debug/deps/query_deadline_cli-91fccc6ca25b7a4f)
+
+running 9 tests
+test invalid_or_inapplicable_timeout_has_no_project_effects ... ok
+test runner_and_trust_read_budgets_validate_before_discovery ... ok
+test resource_and_trust_plans_return_complete_envelopes_without_launching ... FAILED
+test finite_saved_routes_accept_timeout_and_reject_zero_before_project_effects ... ok
+test strict_find_waits_only_remaining_budget_and_preserves_active_generation ... ok
+test finite_ndjson_contention_preserves_error_code_without_creating_events ... ok
+test doctor_contention_reports_timeout_with_original_budget_and_unchanged_database ... ok
+test saved_cli_reread_never_reruns_and_failed_metering_preserves_delivery_truth ... ok
+test work_and_quota_reads_accept_request_budget_and_preserve_state_under_contention ... ok
+
+failures:
+
+---- resource_and_trust_plans_return_complete_envelopes_without_launching stdout ----
+
+thread 'resource_and_trust_plans_return_complete_envelopes_without_launching' (8023234) panicked at tests/query_deadline_cli.rs:120:9:
+Output { status: ExitStatus(unix_wait_status(1536)), stdout: "{\"command\":\"trust\",\"coverage\":{\"reasons\":[\"CAPABILITY_UNAVAILABLE\"],\"status\":\"partial\"},\"data\":null,\"errors\":[{\"code\":\"CAPABILITY_UNAVAILABLE\",\"message\":\"Shells, opaque interpreters, compressors and heavy/operational runners need a registered execution profile\",\"retryable\":false}],\"generation_id\":null,\"project_id\":null,\"schema_version\":\"1.0\",\"status\":\"error\",\"truncation\":{\"reasons\":[],\"truncated\":false},\"validation\":{\"checked_at\":\"2026-10-08T12:38:32.711Z\",\"mode\":\"matched\",\"scope\":[],\"workspace_atomic\":false},\"warnings\":[],\"workspace_id\":null}\n", stderr: "" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    resource_and_trust_plans_return_complete_envelopes_without_launching
+
+test result: FAILED. 8 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.10s
+
+error: test failed, to rerun pass `--test query_deadline_cli`

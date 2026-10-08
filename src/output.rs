@@ -480,6 +480,19 @@ fn binding_inner(p: &Project, argv: &[String], registered: bool, cwd: &str) -> R
     })
 }
 pub fn trust(p: &Project, command: &TrustCommand) -> Result<Value> {
+    if !matches!(command, TrustCommand::Plan { .. }) {
+        return trust_inner(p, command);
+    }
+    let mut scope = p.clone();
+    if scope.deadline.is_none() {
+        scope.deadline = Some(crate::deadline::Deadline::from_millis(10000)?);
+    }
+    scope.check_deadline()?;
+    let result = trust_inner(&scope, command);
+    scope.check_deadline()?;
+    result
+}
+fn trust_inner(p: &Project, command: &TrustCommand) -> Result<Value> {
     if matches!(command, TrustCommand::Add { .. })
         && std::env::var("PCTX_ACTOR").unwrap_or_else(|_| "owner".into()) != "owner"
     {
