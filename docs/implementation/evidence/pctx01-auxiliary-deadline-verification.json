@@ -1,0 +1,81 @@
+{
+  "official_task": "PCTX01",
+  "status": "implementing_not_complete",
+  "base_commit": "0c5b6a0f47b680ee5a5843003b702246dabedb2e",
+  "platform": "native macOS arm64",
+  "source_sha256": {
+    "src/runner.rs": "12cffc3f6dde47ff5613176eec1dc0a7dc054287402daebbef43c410b9299d35"
+  },
+  "verification": {
+    "targeted": {
+      "handle": 84851,
+      "exit": 0,
+      "passed": 1,
+      "failed": 0
+    },
+    "original_loss_mutation": {
+      "handle": 88616,
+      "driver_exit": 0,
+      "expected_test_exit": 101,
+      "expected_passed": 0,
+      "expected_failed": 1,
+      "proof": "Replacing inherited open_with_deadline with original Project::open causes the changed post-expiry source to be returned. Regression fails; driver finally restores exact source bytes.",
+      "restored_source_sha256": "12cffc3f6dde47ff5613176eec1dc0a7dc054287402daebbef43c410b9299d35"
+    },
+    "full": {
+      "handle": 35833,
+      "exit": 101,
+      "passed": 386,
+      "failed": 3,
+      "suites": 46,
+      "failures": [
+        "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+        "simultaneous_streams_are_collected_and_overflow_never_infers_success",
+        "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget"
+      ],
+      "historical_unresolved_variant": "query_program_resolution_uses_captured_command_path previously failed; this pass is not root-cause qualification"
+    },
+    "format_exit": 0,
+    "locked_all_target_clippy_exit": 0
+  },
+  "proof_scope": "Isolated subprocess/data/config and bounded inert linked-worktree metadata. Reader succeeds before original1s deadline, refuses changed source TIMEOUT/exit7 after expiry, retains identical deadline and creates no control/index DB. Real CLI linked-Git-worktree positive plan fixture remains separate.",
+  "review": {
+    "agent": "requirements",
+    "scoped_blockers": 0
+  },
+  "remaining_required_gates": [
+    "Expiry during auxiliary discovery/hash, beyond subsequent source-read propagation",
+    "Command-level large-row aggregation phase expiry",
+    "Remaining finite resource/runner/trust/filter/adapter/schedule/inventory routes",
+    "Full semantic pre-effect argument/envelope/representation/error/exit/budget matrix",
+    "Original native startup root cause and native Linux/Windows matrix"
+  ],
+  "logs": {
+    "targeted": {
+      "path": "docs/implementation/evidence/pctx01-auxiliary-deadline-targeted.log",
+      "sha256": "98bdb1bc52c58b8e08f39c8cc9126fcd2799efb79493db8dbd07f154a0e52c0d"
+    },
+    "original-loss-probe": {
+      "path": "docs/implementation/evidence/pctx01-auxiliary-deadline-original-loss-probe.log",
+      "sha256": "37ca7d2ffce5a85e73dc34d65bfd1cb0fdc1df08970a9ecc6f5736e09b7f0044"
+    },
+    "full-native": {
+      "path": "docs/implementation/evidence/pctx01-auxiliary-deadline-full-native.log",
+      "sha256": "d332db795588402761b5e78a38ee2bf19b1e0de4d07a1d3143f12f0d4da249df"
+    },
+    "clippy": {
+      "path": "docs/implementation/evidence/pctx01-auxiliary-deadline-clippy.log",
+      "sha256": "39e121c70eabc5b839f2da0b96448f4505847f2759b427a73369edff2ce99097"
+    },
+    "format": {
+      "path": "docs/implementation/evidence/pctx01-auxiliary-deadline-format.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "mutation-driver": {
+      "path": "docs/implementation/evidence/pctx01-auxiliary-deadline-mutation-probe.py.txt",
+      "sha256": "635f2cebbc081e6ab1b1db28709b0496a1683694446859e5e83bbc6901a8c5cc"
+    }
+  },
+  "actions_dispatched": 0,
+  "other_active_official_tasks": []
+}

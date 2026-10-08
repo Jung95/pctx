@@ -2106,3 +2106,122 @@ fn helper_release(p: &Project, id: &str, evidence: &str) -> Result<Value> {
     save_helper(p, &h)?;
     Ok(json!({"helper":h,"resources_released":true}))
 }
+
+#[cfg(all(test, unix))]
+mod auxiliary_deadline_tests {
+    use super::*;
+    use crate::project::{Config, ProjectConfig};
+    use std::{
+        process::Stdio,
+        time::{Duration, Instant},
+    };
+
+    #[test]
+    fn opened_auxiliary_keeps_budget_for_subsequent_source_reads() {
+        const PROBE: &str = "PCTX_AUXILIARY_DEADLINE_TEST_ROOT";
+        let Some(base) = std::env::var_os(PROBE).map(PathBuf::from) else {
+            // Isolate data/config environment from concurrent library tests.
+            let temp = tempfile::tempdir().unwrap();
+            let mut child = std::process::Command::new(std::env::current_exe().unwrap())
+                .args(["--exact", "runner::auxiliary_deadline_tests::opened_auxiliary_keeps_budget_for_subsequent_source_reads", "--nocapture"])
+                .env(PROBE, temp.path())
+                .env("PCTX_DATA_DIR", temp.path().join("data"))
+                .env("PCTX_USER_CONFIG", temp.path().join("absent-user-config"))
+                .stdout(Stdio::piped()).stderr(Stdio::piped())
+                .spawn().unwrap();
+            let limit = Instant::now() + Duration::from_secs(10);
+            loop {
+                if child.try_wait().unwrap().is_some() {
+                    break;
+                }
+                if Instant::now() >= limit {
+                    let _ = child.kill();
+                    let _ = child.wait();
+                    panic!("Isolated auxiliary deadline probe did not finish within ten seconds");
+                }
+                std::thread::sleep(Duration::from_millis(5));
+            }
+            let output = child.wait_with_output().unwrap();
+            assert!(
+                output.status.success(),
+                "{} {}",
+                String::from_utf8_lossy(&output.stdout),
+                String::from_utf8_lossy(&output.stderr)
+            );
+            return;
+        };
+        let base = fs::canonicalize(base).unwrap();
+        let primary = base.join("primary");
+        let auxiliary = base.join("auxiliary");
+        let data = base.join("data");
+        fs::create_dir_all(primary.join(".pctx")).unwrap();
+        fs::create_dir_all(auxiliary.join(".pctx")).unwrap();
+        fs::create_dir_all(&data).unwrap();
+        let config = Config {
+            schema_version: 1,
+            project: ProjectConfig {
+                id: uuid::Uuid::new_v4().to_string(),
+                name: "auxiliary deadline fixture".into(),
+            },
+            index: Default::default(),
+            policy: Default::default(),
+            search: Default::default(),
+            context: Default::default(),
+            roles: Default::default(),
+        };
+        for root in [&primary, &auxiliary] {
+            fs::write(
+                root.join(".pctx/config.toml"),
+                toml::to_string(&config).unwrap(),
+            )
+            .unwrap();
+        }
+        // Model the bounded inert linked-worktree metadata consumed by the helper.
+        // The actual CLI linked-Git-worktree fixture is retained in tests/runner.rs.
+        let gitdir = primary.join(".git/worktrees/auxiliary");
+        fs::create_dir_all(&gitdir).unwrap();
+        fs::write(
+            auxiliary.join(".git"),
+            format!("gitdir: {}\n", gitdir.display()),
+        )
+        .unwrap();
+        fs::write(gitdir.join("commondir"), "../..\n").unwrap();
+        fs::write(
+            gitdir.join("gitdir"),
+            format!("{}\n", auxiliary.join(".git").display()),
+        )
+        .unwrap();
+        let roots: serde_json::Map<String, Value> = [
+            (primary.to_str().unwrap().to_owned(), json!({"project_id":config.project.id,"workspace_id":"primary","coordination_id":"shared"})),
+            (auxiliary.to_str().unwrap().to_owned(), json!({"project_id":config.project.id,"workspace_id":"auxiliary","coordination_id":"shared"})),
+        ].into_iter().collect();
+        fs::write(
+            data.join("registry.json"),
+            json!({"roots":roots,"common_dirs":{}}).to_string(),
+        )
+        .unwrap();
+        fs::write(auxiliary.join("source.rs"), "fn original() {}\n").unwrap();
+        let mut project = Project::open(&primary).unwrap();
+        let original = crate::deadline::Deadline::from_millis(1000).unwrap();
+        project.deadline = Some(original);
+        let target = auxiliary_workspace(&project, &auxiliary).unwrap();
+        assert_eq!(
+            reader::read(&target, "source.rs").unwrap().text,
+            "fn original() {}\n"
+        );
+        let delay =
+            original.instant().saturating_duration_since(Instant::now()) + Duration::from_millis(2);
+        std::thread::sleep(delay);
+        fs::write(
+            auxiliary.join("source.rs"),
+            "fn changed_after_expiry() {}\n",
+        )
+        .unwrap();
+        let error = reader::read(&target, "source.rs").unwrap_err();
+        assert_eq!(error.code, "TIMEOUT");
+        assert_eq!(error.exit, 7);
+        assert_eq!(target.deadline.unwrap().instant(), original.instant());
+        assert!(!target.control_db().exists());
+        assert!(!target.index_db().exists());
+    }
+}

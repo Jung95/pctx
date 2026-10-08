@@ -1,0 +1,13 @@
+from pathlib import Path
+import subprocess,hashlib
+p=Path('src/runner.rs');original=p.read_bytes();source=original.decode();needle='let target = Project::open_with_deadline(path, p.deadline)?;';assert source.count(needle)==1
+try:
+ p.write_text(source.replace(needle,'let target = Project::open(path)?;'))
+ with open('/tmp/pctx-pctx01-auxiliary-deadline-original-loss-probe.log','w') as log:
+  result=subprocess.run(['cargo','test','--locked','--lib','runner::auxiliary_deadline_tests'],stdout=log,stderr=subprocess.STDOUT,timeout=45)
+finally:
+ p.write_bytes(original)
+assert p.read_bytes()==original
+log=Path('/tmp/pctx-pctx01-auxiliary-deadline-original-loss-probe.log').read_text()
+assert result.returncode==101 and 'test result: FAILED. 0 passed; 1 failed' in log,log[-3000:]
+print('Original deadline-loss mutation detected; exact source restored',hashlib.sha256(original).hexdigest())
