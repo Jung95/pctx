@@ -103,5 +103,6 @@
     "macOS nonUTF8 filename success impossible in this fixture; native Linux success still required.",
     "Broader \u00a713 Markdown validation, checkpoint rollback/recovery and Handoff feature completeness remain separate PCTX11 gates; this does not complete that task.",
     "Original startup failure root cause/full frontend matrix/native Linux-Windows qualification remain open."
-  ]
+  ],
+  "runtime_commit": "081dcf4415dc485222eac4682d09e4d379b4e39c"
 }
