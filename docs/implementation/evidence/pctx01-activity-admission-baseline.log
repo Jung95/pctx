@@ -1,0 +1,34 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.69s
+     Running tests/activity_preflight.rs (target/debug/deps/activity_preflight-75d999e79acf25ab)
+
+running 3 tests
+test accepted_activity_boundaries_return_empty_without_cursor_narrowing_or_new_clock ... ok
+test direct_activity_and_watch_refusal_keep_original_expiry_and_state ... FAILED
+test native_negative_activity_cursor_precedes_discovery_without_changing_transport ... FAILED
+
+failures:
+
+---- direct_activity_and_watch_refusal_keep_original_expiry_and_state stdout ----
+
+thread 'direct_activity_and_watch_refusal_keep_original_expiry_and_state' (8960291) panicked at tests/activity_preflight.rs:185:17:
+assertion `left == right` failed
+  left: ("INVALID_ARGUMENT", 2)
+ right: ("TIMEOUT", 7)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- native_negative_activity_cursor_precedes_discovery_without_changing_transport stdout ----
+
+thread 'native_negative_activity_cursor_precedes_discovery_without_changing_transport' (8960292) panicked at tests/activity_preflight.rs:131:25:
+assertion `left == right` failed: Output { status: ExitStatus(unix_wait_status(1792)), stdout: "{\"command\":\"activity\",\"coverage\":{\"reasons\":[\"IO_ERROR\"],\"status\":\"partial\"},\"data\":null,\"errors\":[{\"code\":\"IO_ERROR\",\"message\":\"Filesystem operation failed\",\"retryable\":false}],\"generation_id\":null,\"project_id\":null,\"schema_version\":\"1.0\",\"status\":\"error\",\"truncation\":{\"reasons\":[],\"truncated\":false},\"validation\":{\"checked_at\":\"2026-10-08T22:05:41.548Z\",\"mode\":\"matched\",\"scope\":[],\"workspace_atomic\":false},\"warnings\":[],\"workspace_id\":null}\n", stderr: "" }
+  left: Some(7)
+ right: Some(2)
+
+
+failures:
+    direct_activity_and_watch_refusal_keep_original_expiry_and_state
+    native_negative_activity_cursor_precedes_discovery_without_changing_transport
+
+test result: FAILED. 1 passed; 2 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.90s
+
+error: test failed, to rerun pass `--test activity_preflight`

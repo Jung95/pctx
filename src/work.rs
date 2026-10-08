@@ -1639,10 +1639,8 @@ fn board_inner(project: &Project) -> Result<Value> {
     tx.commit().map_err(|e| project.map_sqlite_error(e))?;
     Ok(data)
 }
-pub fn activity(project: &Project, since: i64) -> Result<Value> {
-    request_phase(project, || activity_inner(project, since))
-}
-fn activity_inner(project: &Project, since: i64) -> Result<Value> {
+/// Existing cursor grammar, without project or database access.
+pub fn validate_activity_cursor(since: i64) -> Result<()> {
     if since < 0 {
         return Err(Error::new(
             "INVALID_ARGUMENT",
@@ -1650,6 +1648,13 @@ fn activity_inner(project: &Project, since: i64) -> Result<Value> {
             2,
         ));
     }
+    Ok(())
+}
+pub fn activity(project: &Project, since: i64) -> Result<Value> {
+    request_phase(project, || activity_inner(project, since))
+}
+fn activity_inner(project: &Project, since: i64) -> Result<Value> {
+    validate_activity_cursor(since)?;
     let db = connect(project)?;
     let mut s = db.prepare(
         "SELECT seq,entity,type,payload,created FROM events WHERE seq>?1 ORDER BY seq LIMIT 1000",

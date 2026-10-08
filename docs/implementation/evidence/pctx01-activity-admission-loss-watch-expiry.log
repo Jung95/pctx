@@ -1,0 +1,24 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.37s
+     Running tests/activity_preflight.rs (target/debug/deps/activity_preflight-75d999e79acf25ab)
+
+running 1 test
+test direct_activity_and_watch_refusal_keep_original_expiry_and_state ... FAILED
+
+failures:
+
+---- direct_activity_and_watch_refusal_keep_original_expiry_and_state stdout ----
+
+thread 'direct_activity_and_watch_refusal_keep_original_expiry_and_state' (8964697) panicked at tests/activity_preflight.rs:202:17:
+assertion `left == right` failed
+  left: ("INVALID_ARGUMENT", 2)
+ right: ("TIMEOUT", 7)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    direct_activity_and_watch_refusal_keep_original_expiry_and_state
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--test activity_preflight`

@@ -1,0 +1,24 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.58s
+     Running tests/activity_preflight.rs (target/debug/deps/activity_preflight-75d999e79acf25ab)
+
+running 1 test
+test native_negative_activity_cursor_precedes_discovery_without_changing_transport ... FAILED
+
+failures:
+
+---- native_negative_activity_cursor_precedes_discovery_without_changing_transport stdout ----
+
+thread 'native_negative_activity_cursor_precedes_discovery_without_changing_transport' (8963828) panicked at tests/activity_preflight.rs:139:25:
+assertion `left == right` failed: Output { status: ExitStatus(unix_wait_status(1792)), stdout: "{\"command\":\"activity\",\"coverage\":{\"reasons\":[\"IO_ERROR\"],\"status\":\"partial\"},\"data\":null,\"errors\":[{\"code\":\"IO_ERROR\",\"message\":\"Filesystem operation failed\",\"retryable\":false}],\"generation_id\":null,\"project_id\":null,\"schema_version\":\"1.0\",\"status\":\"error\",\"truncation\":{\"reasons\":[],\"truncated\":false},\"validation\":{\"checked_at\":\"2026-10-08T22:06:56.198Z\",\"mode\":\"matched\",\"scope\":[],\"workspace_atomic\":false},\"warnings\":[],\"workspace_id\":null}\n", stderr: "" }
+  left: Some(7)
+ right: Some(2)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    native_negative_activity_cursor_precedes_discovery_without_changing_transport
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.70s
+
+error: test failed, to rerun pass `--test activity_preflight`

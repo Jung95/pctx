@@ -1,0 +1,86 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 5.11s
+     Running tests/activity_preflight.rs (target/debug/deps/activity_preflight-75d999e79acf25ab)
+
+running 3 tests
+test direct_activity_and_watch_refusal_keep_original_expiry_and_state ... ok
+test accepted_activity_boundaries_return_empty_without_cursor_narrowing_or_new_clock ... ok
+test native_negative_activity_cursor_precedes_discovery_without_changing_transport ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.08s
+
+     Running tests/cli_frontend.rs (target/debug/deps/cli_frontend-4948844b4d514170)
+
+running 23 tests
+test non_utf8_argument_returns_structured_error_without_panic_or_effect ... ok
+test parser_diagnostics_mask_secrets_and_escape_control_characters ... ok
+test help_and_version_are_successful_without_project_access ... ok
+test no_color_suppresses_help_on_a_real_terminal_including_nested_help ... ok
+test parser_errors_respect_actual_json_option_and_do_not_load_project ... ok
+test native_hook_invalid_transports_refuse_before_project_or_output_access ... ok
+test root_version_is_exact_and_ignores_project_output_and_query_options ... ok
+test parsed_run_preflight_refusals_attest_no_child_before_any_access ... ok
+test plain_parser_diagnostics_escape_bidi_c1_and_line_controls ... ok
+test partial_refresh_does_not_claim_the_requested_outline_is_wholly_unsupported ... ok
+test nested_global_positions_select_the_same_root_format_and_timeout ... ok
+test semantic_refusals_are_one_safe_json_document_for_every_requested_format ... ok
+test invalid_strict_queries_preserve_generation_database_sources_and_output_path ... ok
+test undeliverable_parser_capacity_semantic_and_timeout_refusals_return_io_exit ... ok
+test unsupported_ndjson_is_rejected_before_project_discovery_or_init ... ok
+test undeliverable_plain_parser_diagnostic_returns_io_exit_without_panic ... ok
+test singular_global_duplicates_are_rejected_before_project_and_output_effects ... ok
+test valid_minimum_capacity_bounds_semantic_and_timeout_refusals_without_writes ... ok
+test saved_output_invalid_arguments_refuse_before_project_and_response_access ... ok
+test unsupported_markdown_refuses_before_response_files_and_stream_dispatch ... ok
+test pack_artifact_output_is_required_once_and_works_at_every_command_depth ... ok
+test outline_empty_unsupported_and_partial_are_distinct_in_every_representation ... ok
+test every_visible_help_path_describes_schema_and_effects_without_project_access ... ok
+
+test result: ok. 23 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.05s
+
+     Running tests/cli_refusal_envelope.rs (target/debug/deps/cli_refusal_envelope-e0fa1efd013109e3)
+
+running 4 tests
+test semantic_and_representation_refusals_do_not_claim_completed_execution ... ok
+test install_required_and_duplicate_options_keep_parser_envelope_and_no_effects ... ok
+test admitted_install_failures_keep_state_classification_and_response_destination ... ok
+test all_visible_leaf_unknown_options_refuse_before_project_and_output ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.77s
+
+     Running tests/query_deadline_cli.rs (target/debug/deps/query_deadline_cli-91fccc6ca25b7a4f)
+
+running 9 tests
+test invalid_or_inapplicable_timeout_has_no_project_effects ... ok
+test runner_and_trust_read_budgets_validate_before_discovery ... ok
+test resource_and_trust_plans_return_complete_envelopes_without_launching ... ok
+test finite_saved_routes_accept_timeout_and_reject_zero_before_project_effects ... ok
+test strict_find_waits_only_remaining_budget_and_preserves_active_generation ... ok
+test finite_ndjson_contention_preserves_error_code_without_creating_events ... ok
+test doctor_contention_reports_timeout_with_original_budget_and_unchanged_database ... ok
+test saved_cli_reread_never_reruns_and_failed_metering_preserves_delivery_truth ... ok
+test work_and_quota_reads_accept_request_budget_and_preserve_state_under_contention ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.11s
+
+     Running tests/watch.rs (target/debug/deps/watch-0aa3808534cf4f9e)
+
+running 4 tests
+test heartbeat_and_expiry_appear_as_ephemeral_observations ... ok
+test compact_watch_renders_essential_columns_and_refreshes ... ok
+test finite_ndjson_drains_all_pages_and_resumes_after_cursor ... ok
+test closed_stdout_returns_controlled_error_without_panic ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 6.64s
+
+     Running tests/work_quota_deadline.rs (target/debug/deps/work_quota_deadline-b12539874124d6ff)
+
+running 5 tests
+test already_expired_reads_do_not_initialize_control_storage_or_validate_missing_targets ... ok
+test cpu_bound_sql_expires_inside_the_engine_under_the_original_budget ... ok
+test reused_sql_connection_does_not_inherit_an_expired_prior_request_handler ... ok
+test quota_read_exclusive_contention_returns_timeout_instead_of_empty_unknown_success ... ok
+test work_read_transaction_contention_uses_remaining_budget_without_control_events ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.23s
+

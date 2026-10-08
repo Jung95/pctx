@@ -1122,3 +1122,36 @@ Final native full51862 terminal101:566PASS3FAIL. Captured-command-path passed
 without startup repair; all four historical startup conditions remain unresolved
 and original budgets unchanged. Full failures/source hashes in manifest. All
 jobs terminal, no heavy job live. PCTX01 remains incomplete0/10.
+
+
+## PCTX01 C001 Activity cursor admission — 2026-10-09
+
+Only PCTX01 active; this integration covers G03/G08. Reuse exact existing nonnegative i64 cursor/error2/
+message across CLI, Work and Watch. Normal admission precedes discovery; stream
+admission follows output/route guards before discovery, preserving JSON-follow
+refusal and stderr error records. Work original expiry-first unchanged; Watch
+now checks supplied expiry before cursor/stdout with no new/default clock.
+
+Manifest evidence/pctx01-activity-admission-verification.json: baseline1PASS2FAIL
+retains missing-root IO7 masking cursor2 and expired-negative Watch input2.
+Related48PASS, final target4PASS. Native48 negative combinations plus32 typed
+parser refusals preserve root/data/existing response bytes and exact error
+transport/priority. Direct negative/expired Work and Board/follow Watch variants
+retain same original instant/state. Finite0/i64-max across three formats preserve
+empty events/next cursor; snapshots follow initial storage setup, not first-use
+rollback. Exact default cursor field and new live follow/active-deadline positive
+behavior are not separately asserted. Existing bounded watch suite is included.
+
+Four actual guard-loss failures/exact restoration cover frontend/stream/Watch
+expiry/cursor grammar; final parser fixture follows losses. Format/locked
+all-target Clippy PASS; independent read-only review no blocker and restored
+source confirmed. Final full/publication status in manifest/current handoff.
+Whole0/10,140 leaves and historical local12/12/platform0/12 unchanged. This is
+existing C001 admission, not a new task/group/stream feature. Native platforms
+and all four historical startup conditions remain open. No Actions/next task.
+
+Final native full13204 terminal101:570PASS3FAIL. Captured-command-path passed
+without startup repair; all four historical startup conditions remain unresolved
+and original budgets unchanged. All jobs terminal, no heavy job live. PCTX01
+incomplete0/10. Offline read-only Linux arm64 container executes, but cargo/rustc
+absent; capability log is environment proof only, not native PCTX verification.

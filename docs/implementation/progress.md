@@ -961,3 +961,20 @@ jobs terminal, no heavy job live. PCTX01 remains incomplete0/10.
 Runtime3a08146e2ea1eac23bc1f82d25ee5b54345f06f9 normally published by11290 terminal0
 (3ca728e..3a08146) to origin/main, [skip ci]. All jobs terminal, no Actions.
 Only PCTX01 active; next local G03-C001 existing Activity cursor admission.
+
+
+## PCTX01 C001 Activity cursor admission — 2026-10-09
+
+Existing cursor guard shared before discovery; original expiry and stream
+transport/output/format priority retained. Manifest:
+evidence/pctx01-activity-admission-verification.json. Baseline1PASS2FAIL,
+related48PASS, final target4PASS, four sensitivity failures/restoration, static
+PASS and independent review no blocker. Native80 negative/typed refusals and
+finite0/i64-max/direct expiry proof are local only. Whole0/10/platform/startup
+remain open; no new group/official task/Actions. Full status in current handoff.
+
+Final native full13204 terminal101:570PASS3FAIL. Captured-command-path passed
+without startup repair; all four historical startup conditions remain unresolved
+and original budgets unchanged. All jobs terminal, no heavy job live. PCTX01
+incomplete0/10. Offline read-only Linux arm64 container executes, but cargo/rustc
+absent; capability log is environment proof only, not native PCTX verification.

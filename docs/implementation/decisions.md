@@ -1002,3 +1002,28 @@ has no Activity arm before discovery. This is a missing G03 admission for the
 existing leaf, not a new feature or label group. Record G03-C001 with source
 evidence; preserve finite Work original-expiry handling and separate streaming
 behavior. Frozen140/12/10 denominators remain unchanged.
+
+
+## PCTX01: Activity stream admission placement — 2026-10-09
+
+The same pure cursor grammar needs two frontend placements. Normal finite
+JSON/compact uses common preflight. NDJSON/follow uses stream admission after
+existing output/route refusal and before discovery, preserving stderr error
+records. JSON-follow refusal remains ahead of cursor; Markdown unsupported
+refusal remains ahead of all semantics. Direct Work original expiry first stays;
+Watch checks a supplied expiry before cursor/stdout but gains no clock. Do not
+collapse these branches into a universal JSON preflight or new watch timeout.
+Existing C001/fixed140/12/10 denominators unchanged.
+
+
+## PCTX01: revalidate native environment availability — 2026-10-09
+
+A read-only Docker inventory and ephemeral offline capability probe show an
+available Linux arm64 engine/image with git/cc but no Rust. Replace the blanket
+Linux-unavailable assumption with Rust setup pending. Environment execution is
+not native PCTX qualification, nor Linux x86_64/Windows proof. Override the cached
+runner's registration entrypoint and mount no host credentials/socket. Continue
+G09 under PCTX01 using isolated toolchain/build storage and one heavy job.
+Independent source/spec audit also identifies existing G05/G06 persisted Work
+event JSON syntax classified as input2; contextual corruption7 is required with
+accepted JSON types/cursor/clock unchanged. No new feature/denominator.

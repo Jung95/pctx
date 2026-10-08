@@ -1,0 +1,12 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.65s
+     Running tests/activity_preflight.rs (target/debug/deps/activity_preflight-75d999e79acf25ab)
+
+running 4 tests
+test direct_activity_and_watch_refusal_keep_original_expiry_and_state ... ok
+test accepted_activity_boundaries_return_empty_without_cursor_narrowing_or_new_clock ... ok
+test malformed_activity_cursor_types_refuse_before_discovery_and_output ... ok
+test native_negative_activity_cursor_precedes_discovery_without_changing_transport ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.08s
+

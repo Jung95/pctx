@@ -1,0 +1,165 @@
+{
+  "official_task": "PCTX01",
+  "gates": [
+    "PCTX01-G03",
+    "PCTX01-G08"
+  ],
+  "existing_leaf": "C001",
+  "base_revision": "c63c00741e123a74b5767b04dc6d1f9db2603d87",
+  "integration_date": "2026-10-09",
+  "platform": "native macOS arm64",
+  "source_sha256": {
+    "src/main.rs": "4bc497bf9baf426719b511ca3b9450dcb9524a7df4ed184e600b0e7c9bd8b592",
+    "src/work.rs": "89b25fda7e25424d28e95316a54bdfc7e65026d0d394a8644a027201cc004527",
+    "src/watch.rs": "dc6c6f1d4bbe27fe2dccd4505a8ddfed54fbf8224f793fbe72d3751ba654c2fb",
+    "tests/activity_preflight.rs": "330447ca867908e09342baa7e514e4b06620549a01e8c9e535b885720bc89a86"
+  },
+  "contract": "Exact existing nonnegative i64 cursor/error2/message shared. Normal Activity preflight before discovery; stream admission after output/route guards before discovery. Work original expiry-first retained; Watch supplied-expiry check before admission/stdout without a new clock. JSON-follow and stream error transport/priority retained.",
+  "baseline": {
+    "session": 57040,
+    "exit": 101,
+    "passed": 1,
+    "failed": 2,
+    "log": "pctx01-activity-admission-baseline.log",
+    "observations": [
+      "negative CLI missing root IO7 instead of input2",
+      "direct expired-negative Watch input2 instead of original TIMEOUT7"
+    ]
+  },
+  "related": {
+    "session": 99935,
+    "exit": 0,
+    "passed": 48,
+    "failed": 0,
+    "log": "pctx01-activity-admission-related.log",
+    "targets": [
+      "activity_preflight",
+      "watch",
+      "cli_frontend",
+      "cli_refusal_envelope",
+      "work_quota_deadline",
+      "query_deadline_cli"
+    ]
+  },
+  "final_target": {
+    "session": 31137,
+    "exit": 0,
+    "passed": 4,
+    "failed": 0,
+    "log": "pctx01-activity-admission-target-final.log"
+  },
+  "coverage": {
+    "negative_native_combinations": 48,
+    "dimensions": "missing/initialized \u00d7 four forms \u00d7 JSON/compact \u00d7 stdout/existing response",
+    "typed_parser_combinations": 32,
+    "typed_forms": [
+      "above i64 max",
+      "below i64 min",
+      "nonnumeric",
+      "empty"
+    ],
+    "direct": "two negative cursors Work and all Board/follow combinations; four original-expired cursors Work and all Board/follow combinations; same original Instant, error class and state",
+    "positive": "0/i64-max finite query across JSON/compact/NDJSON; empty events/next cursor/has_more preserved, snapshot after initial control initialization. Follow explicit query timeout refuses2 before effects; existing actual bounded watch tests included.",
+    "not_claimed": [
+      "No first-use no-write claim",
+      "No new valid long-lived follow or active-deadline boundary proof in these fixtures",
+      "Default-cursor initialization succeeds; exact default cursor field is source-confirmed, not separately asserted here"
+    ]
+  },
+  "controlled_loss": {
+    "session": 67461,
+    "exit": 0,
+    "results": [
+      {
+        "guard": "frontend",
+        "exit": 101,
+        "passed": 0,
+        "failed": 1,
+        "log": "pctx01-activity-admission-loss-frontend.log"
+      },
+      {
+        "guard": "stream",
+        "exit": 101,
+        "passed": 0,
+        "failed": 1,
+        "log": "pctx01-activity-admission-loss-stream.log"
+      },
+      {
+        "guard": "watch-expiry",
+        "exit": 101,
+        "passed": 0,
+        "failed": 1,
+        "log": "pctx01-activity-admission-loss-watch-expiry.log"
+      },
+      {
+        "guard": "cursor",
+        "exit": 101,
+        "passed": 0,
+        "failed": 1,
+        "log": "pctx01-activity-admission-loss-cursor.log"
+      }
+    ],
+    "exact_restoration": true,
+    "source_sha256": {
+      "src/main.rs": "4bc497bf9baf426719b511ca3b9450dcb9524a7df4ed184e600b0e7c9bd8b592",
+      "src/work.rs": "89b25fda7e25424d28e95316a54bdfc7e65026d0d394a8644a027201cc004527",
+      "src/watch.rs": "dc6c6f1d4bbe27fe2dccd4505a8ddfed54fbf8224f793fbe72d3751ba654c2fb",
+      "tests/activity_preflight.rs": "29328573763213fec1ea3ea118407107df97dd268c0c6618950ab5951f746858"
+    },
+    "note": "Final parser/default initialization fixture additions follow loss execution; source production hashes unchanged."
+  },
+  "static": {
+    "session": 55134,
+    "exit": 0,
+    "log": "pctx01-activity-admission-static.log",
+    "final_exit": 0,
+    "final_log": "pctx01-activity-admission-static-final.log",
+    "format_log": "pctx01-activity-admission-format-final.log"
+  },
+  "full": {
+    "session": 13204,
+    "status": "terminal",
+    "log": "pctx01-activity-admission-full-macos.log",
+    "command": "cargo test --locked --all-targets --no-fail-fast",
+    "exit": 101,
+    "passed": 570,
+    "failed": 3,
+    "failed_tests": [
+      "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+      "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget",
+      "simultaneous_streams_are_collected_and_overflow_never_infers_success"
+    ],
+    "incidental_pass": "captured command path passes without startup repair; all four historical conditions remain unresolved"
+  },
+  "independent_review": {
+    "agent": "/root/work_control",
+    "mode": "read-only",
+    "result": "no scoped blocker; exact predicate, transport priority and original clocks preserved; final restored source re-read"
+  },
+  "status": {
+    "whole_gates_closed": 0,
+    "whole_gates_total": 10,
+    "visible_leaves": 140,
+    "historical_bounded_local_groups": "12/12",
+    "historical_required_platform_groups": "0/12",
+    "next_official_task": null
+  },
+  "limits": [
+    "Native Linux/Windows unverified; no Actions",
+    "All four historical startup conditions unresolved; no retry/budget weakening",
+    "Full remaining frontend/representation/phase matrix remains mandatory"
+  ],
+  "linux_capability": {
+    "engine": "Linux aarch64, Docker29.8.0",
+    "cached_image": "besir-actions-runner:2.337.0",
+    "image_id_prefix": "7759288062d2",
+    "image_architecture": "arm64/linux",
+    "entrypoint_overridden": "/bin/sh (registration script never invoked)",
+    "probe_exit": 0,
+    "log": "pctx01-linux-container-capability.log",
+    "isolation": "ephemeral --rm, --network none, --read-only, private32MiB /tmp; no host/credentials mounts",
+    "observed": "uname Linux/aarch64, git/cc available, cargo/rustc absent",
+    "status": "Linux execution environment exists; Rust setup and all native product tests remain unverified. This supersedes unavailable-environment assumption, not platform qualification."
+  },
+  "next_local_boundary": "PCTX01-G09: prepare isolated Rust1.99 Linux arm64 toolchain/cache on available local engine, then real native required tests; no Actions. Secondary existing G05/G06 Work events.payload malformed persisted JSON currently uses input2 and needs contextual DB_CORRUPT7; no accepted-value shape narrowing."
+}

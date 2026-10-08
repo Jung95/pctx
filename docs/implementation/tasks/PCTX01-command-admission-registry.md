@@ -46,7 +46,7 @@ for currently unrestricted lookup keys.
 
 | Stable leaf ID | Visible route | Producer | Admission audit |
 | --- | --- | --- | --- |
-| C001 | `activity` | src/work.rs | G03-C001 residual: existing since>=0 check in Work/Watch follows CLI discovery; share exact guard before effects. Frozen-leaf unknown-option transport locally qualified by pctx01-refusal-envelope-verification.json; full matrix/platforms open |
+| C001 | `activity` | src/work.rs | G03-C001 local exact nonnegative cursor admission proof, pctx01-activity-admission-verification.json; stream priority/original expiry preserved. Typed/unknown-option subsets qualified; full matrix/platforms open |
 | C002 | `adapter claude doctor` | src/adapter.rs | Existing parser/shared admission or state/input-dependent checks; whole matrix open |
 | C003 | `adapter claude event` | src/adapter.rs | R10 |
 | C004 | `adapter claude install` | src/adapter.rs | G03-C004 local admission proof: exact existing provided hash length/hex/equality before discovery/lock, pctx01-install-admission-verification.json; stored bytes/identity stateful; required platforms/full matrix open |

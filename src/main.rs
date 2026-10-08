@@ -676,6 +676,9 @@ fn stream(cli: &Cli, deadline: Option<pctx::deadline::Deadline>) -> Result<()> {
             2,
         ));
     }
+    if let Command::Activity { since_seq, .. } = &cli.command {
+        work::validate_activity_cursor(*since_seq)?;
+    }
     let root = project::detect_root_with_deadline(cli.root.as_deref(), deadline)?;
     let p = Project::open_with_deadline(&root, deadline)?;
     let ndjson = matches!(cli.format, Format::Ndjson);
@@ -906,6 +909,10 @@ fn main() {
         }
         Command::Quota { command } => quota::validate_quota_request(command),
         Command::Work(command) => work::validate_work_request(command),
+        Command::Activity {
+            since_seq,
+            follow: false,
+        } if !matches!(cli.format, Format::Ndjson) => work::validate_activity_cursor(*since_seq),
         Command::Schedule { command } => schedule::validate_schedule_request(command),
         Command::Session { command } => session::validate_session_request(command),
         Command::Operations(command) => operations::validate_operation_request(command),

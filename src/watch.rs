@@ -85,13 +85,8 @@ fn emit(writer: &mut impl Write, value: &Value, ndjson: bool, board: bool) -> Re
 /// Stream durable work events, with separate ephemeral board observations every two seconds.
 /// The caller handles argument/format/output-file admission and writes diagnostics to stderr.
 pub fn run(project: &Project, board: bool, since: i64, follow: bool, ndjson: bool) -> Result<()> {
-    if since < 0 {
-        return Err(Error::new(
-            "INVALID_ARGUMENT",
-            "Sequence cannot be negative",
-            2,
-        ));
-    }
+    project.check_deadline()?;
+    work::validate_activity_cursor(since)?;
     let stdout = io::stdout();
     let mut writer = stdout.lock();
     let mut cursor = since;

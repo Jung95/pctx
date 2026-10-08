@@ -1,0 +1,39 @@
+{
+  "results": [
+    {
+      "guard": "frontend",
+      "exit": 101,
+      "passed": 0,
+      "failed": 1,
+      "log": "pctx01-activity-admission-loss-frontend.log"
+    },
+    {
+      "guard": "stream",
+      "exit": 101,
+      "passed": 0,
+      "failed": 1,
+      "log": "pctx01-activity-admission-loss-stream.log"
+    },
+    {
+      "guard": "watch-expiry",
+      "exit": 101,
+      "passed": 0,
+      "failed": 1,
+      "log": "pctx01-activity-admission-loss-watch-expiry.log"
+    },
+    {
+      "guard": "cursor",
+      "exit": 101,
+      "passed": 0,
+      "failed": 1,
+      "log": "pctx01-activity-admission-loss-cursor.log"
+    }
+  ],
+  "exact_restoration": true,
+  "source_sha256": {
+    "src/main.rs": "4bc497bf9baf426719b511ca3b9450dcb9524a7df4ed184e600b0e7c9bd8b592",
+    "src/work.rs": "89b25fda7e25424d28e95316a54bdfc7e65026d0d394a8644a027201cc004527",
+    "src/watch.rs": "dc6c6f1d4bbe27fe2dccd4505a8ddfed54fbf8224f793fbe72d3751ba654c2fb",
+    "tests/activity_preflight.rs": "29328573763213fec1ea3ea118407107df97dd268c0c6618950ab5951f746858"
+  }
+}
