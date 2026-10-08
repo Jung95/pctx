@@ -1,0 +1,21 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.85s
+     Running tests/adapter_errors.rs (target/debug/deps/adapter_errors-c6d5fa4673ac7e39)
+
+running 1 test
+
+thread 'direct_adapter_plan_input_source_and_binding_are_distinct' (8860925) panicked at tests/adapter_errors.rs:261:5:
+assertion `left == right` failed
+  left: ("PLAN_MISMATCH", 9)
+ right: ("PLAN_MISMATCH", 4)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test direct_adapter_plan_input_source_and_binding_are_distinct ... FAILED
+
+failures:
+
+failures:
+    direct_adapter_plan_input_source_and_binding_are_distinct
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 7 filtered out; finished in 0.07s
+
+error: test failed, to rerun pass `--test adapter_errors`

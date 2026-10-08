@@ -1,0 +1,208 @@
+{
+  "official_task": "PCTX01",
+  "gates": [
+    "PCTX01-G05",
+    "PCTX01-G06"
+  ],
+  "baseline_sections": [
+    "\u00a714",
+    "\u00a727",
+    "\u00a738"
+  ],
+  "base_revision": "352186bce081af6907f685bb929ead524996d683",
+  "source_sha256": {
+    "src/adapter.rs": "68f419d4143ece7bd55f6f5a6edc9e104b25743724a2d9f32ce0f6a3166b3cd7",
+    "tests/adapter_errors.rs": "2ea75e27bb244a023b1aaf98692ec4cae725af5a19424fc53b501a88ab1d737c",
+    "tests/adapter_preflight.rs": "6225be253ffb1f46959119357e9c52221b0ba1f0bf7d8de4e07a04ed22dadd33"
+  },
+  "platform": "native macOS arm64",
+  "classification": "Input/config safety2; changed original4; policy/path5; unavailable6; storage/schema7; state/binding/ownership9. CONFIG_CONFLICT and PLAN_MISMATCH classified at contextual call sites. Persisted syntax/shape DB_CORRUPT7.",
+  "related": {
+    "session": 36322,
+    "log": "pctx01-adapter-errors-related-storage-final.log",
+    "exit": 0,
+    "passed": 37,
+    "failed": 0
+  },
+  "final_target": {
+    "session": 41532,
+    "log": "pctx01-adapter-errors-target-storage-final.log",
+    "exit": 0,
+    "passed": 9,
+    "failed": 0,
+    "qualification": "Expanded event/hook_output/incomplete corruption fixtures after storage-loss execution"
+  },
+  "controlled_losses": [
+    {
+      "session": 95578,
+      "driver": "pctx01-adapter-errors-loss.py.txt",
+      "results": "pctx01-adapter-errors-loss-results.json",
+      "count": 5,
+      "qualification": "Before persisted JSON repair, hash bound in results"
+    },
+    {
+      "session": 95323,
+      "driver": "pctx01-adapter-errors-storage-loss.py.txt",
+      "results": "pctx01-adapter-errors-storage-loss-results.json",
+      "count": 2,
+      "qualification": "Final product source, before three additional shape subcases"
+    }
+  ],
+  "static": {
+    "initial_session": 8792,
+    "initial_exit": 0,
+    "final_session": 85773,
+    "final_exit": 0,
+    "format_exit": 0,
+    "logs": [
+      "pctx01-adapter-errors-clippy.log",
+      "pctx01-adapter-errors-clippy-final.log",
+      "pctx01-adapter-errors-format-final.log"
+    ]
+  },
+  "full_before_storage": {
+    "session": 61665,
+    "log": "pctx01-adapter-errors-full-before-storage-json.log",
+    "exit": 101,
+    "passed": 554,
+    "failed": 4,
+    "qualification": "Original four startup conditions fail; this source precedes persisted JSON repair",
+    "source_sha256": {
+      "src/adapter.rs": "9602e5529d9b273b95bf7c4669cedd83d51568ab263c20b2b780c555d1ec78c2",
+      "tests/adapter_errors.rs": "b039101949dcf6f5e9f4305d1d35727282a24634efd5fcb7fd3af9c80f6e5eac",
+      "tests/adapter_preflight.rs": "6225be253ffb1f46959119357e9c52221b0ba1f0bf7d8de4e07a04ed22dadd33"
+    }
+  },
+  "full": {
+    "session": 4105,
+    "log": "pctx01-adapter-errors-full-macos.log",
+    "command": "cargo test --locked --all-targets --no-fail-fast",
+    "status": "terminal",
+    "exit": 101,
+    "passed": 555,
+    "failed": 4,
+    "failed_tests": [
+      "query_program_resolution_uses_captured_command_path",
+      "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+      "simultaneous_streams_are_collected_and_overflow_never_infers_success",
+      "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget"
+    ],
+    "qualification": "Final source; all four original startup conditions fail, budgets unchanged, no retry/repair promotion"
+  },
+  "review": "pctx01-adapter-errors-review.md",
+  "status": {
+    "official": "implementing",
+    "whole_gates_closed": 0,
+    "fixed_whole_gates_total": 10,
+    "historical_local_residuals_closed": 12,
+    "historical_residuals_total": 12,
+    "required_platform_residuals_closed": 0,
+    "next_local_boundary": "PCTX01-G03-C004 Install hash admission",
+    "next_official_task": null
+  },
+  "limitations": [
+    "Native Linux/Windows unverified",
+    "Four historical startup conditions unresolved; no retry promotion",
+    "Install invalid supplied hash retains lock creation; next G03-C004 repair",
+    "Unbound PreCompact persists incomplete intent before binding failure; no rollback",
+    "Not every message/retryable/representation/phase race separately qualified",
+    "No live account/OS registration/model call/Actions or new business feature"
+  ],
+  "logs": {
+    "pctx01-adapter-errors-baseline.log": {
+      "passed": 0,
+      "failed": 4,
+      "sha256": "aef6afddc53ca9c8f2fed6a6a22c292683f899583eab6a94afcc3bedf75506a6"
+    },
+    "pctx01-adapter-errors-clippy-final.log": {
+      "passed": 0,
+      "failed": 0,
+      "sha256": "4eeef885ee5b4630fce2652c037aff8ca906d48489b7324b70c2257a99884da1"
+    },
+    "pctx01-adapter-errors-clippy.log": {
+      "passed": 0,
+      "failed": 0,
+      "sha256": "64cac7674596a4c6806b99b974ba913541fa6d2ef8931e70aed299061e49314d"
+    },
+    "pctx01-adapter-errors-format-final.log": {
+      "passed": 0,
+      "failed": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "pctx01-adapter-errors-format.log": {
+      "passed": 0,
+      "failed": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "pctx01-adapter-errors-full-before-storage-json.log": {
+      "passed": 554,
+      "failed": 4,
+      "sha256": "7992e277300d164a8227e47247c2ac0f7dafc34ca6982eedd911ab7f97542da7"
+    },
+    "pctx01-adapter-errors-full-macos.log": {
+      "passed": 555,
+      "failed": 4,
+      "sha256": "3d627c9809c0339c7e88b0fa5b64bdc9b9db8c1878c7baae517c8a6412807b20"
+    },
+    "pctx01-adapter-errors-loss-blanket.log": {
+      "passed": 0,
+      "failed": 1,
+      "sha256": "27191134867ac49a3cded912782110581d6db08069583973c83fbcd4c592fa04"
+    },
+    "pctx01-adapter-errors-loss-config.log": {
+      "passed": 0,
+      "failed": 1,
+      "sha256": "626e00948969bbcb1051ebaf94b395803b71553929676631ff95ffefd28d81fa"
+    },
+    "pctx01-adapter-errors-loss-plan-source.log": {
+      "passed": 0,
+      "failed": 1,
+      "sha256": "ef1b0954add1c6895400950c1f6b5bb802eed094eec2155c474f0f8e06211823"
+    },
+    "pctx01-adapter-errors-loss-schema.log": {
+      "passed": 0,
+      "failed": 1,
+      "sha256": "be4eaa77b504d7bbadc7d1a5a2b3bb9f5b8217bb3e83d73abc4aeeb3644f1071"
+    },
+    "pctx01-adapter-errors-loss-state.log": {
+      "passed": 0,
+      "failed": 1,
+      "sha256": "47f9b1446047dc04cca152eecb327077c24bb801bcf86359e815f4bc6239af4e"
+    },
+    "pctx01-adapter-errors-related-final.log": {
+      "passed": 36,
+      "failed": 0,
+      "sha256": "3a668e0e02f8b062308443f28d18230dd07add234b9308073944470f4b68bc71"
+    },
+    "pctx01-adapter-errors-related-storage-final.log": {
+      "passed": 37,
+      "failed": 0,
+      "sha256": "1f9ac2e912183d66af019b527ba8eaf4bd06a9eecd17ffbbbb0bcfce9b8268c2"
+    },
+    "pctx01-adapter-errors-related.log": {
+      "passed": 35,
+      "failed": 0,
+      "sha256": "ac0d9a7827527ef23b48fc5cc67d1e9e974dfa2a1507b97b6b3f1c4ef4c25caf"
+    },
+    "pctx01-adapter-errors-storage-json-baseline.log": {
+      "passed": 0,
+      "failed": 1,
+      "sha256": "b8e2fc06e9793fd1380441a1a50121445c87bcc7e0b5a4f6606101b8955c6b0c"
+    },
+    "pctx01-adapter-errors-storage-loss-owned-shape.log": {
+      "passed": 0,
+      "failed": 1,
+      "sha256": "1699b99c3b6ba9eb77fdc6c60f9d16f0c9866e1efcb0ebe7475a639e70d50941"
+    },
+    "pctx01-adapter-errors-storage-loss-receipt-json.log": {
+      "passed": 0,
+      "failed": 1,
+      "sha256": "29033ec876fe1f13260ab1e4ea330fec1a49aa494aa5453077893a12b5619a93"
+    },
+    "pctx01-adapter-errors-target-storage-final.log": {
+      "passed": 9,
+      "failed": 0,
+      "sha256": "4d94239523494cde95ca30baa0a444161cd8d0bde7952794c98a98cd3e3f7397"
+    }
+  }
+}

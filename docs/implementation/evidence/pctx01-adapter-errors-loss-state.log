@@ -1,0 +1,21 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.96s
+     Running tests/adapter_errors.rs (target/debug/deps/adapter_errors-c6d5fa4673ac7e39)
+
+running 1 test
+
+thread 'direct_adapter_receipt_conflicts_and_reconciliation_retain_nine' (8861492) panicked at tests/adapter_errors.rs:261:5:
+assertion `left == right` failed
+  left: ("IDEMPOTENCY_CONFLICT", 4)
+ right: ("IDEMPOTENCY_CONFLICT", 9)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test direct_adapter_receipt_conflicts_and_reconciliation_retain_nine ... FAILED
+
+failures:
+
+failures:
+    direct_adapter_receipt_conflicts_and_reconciliation_retain_nine
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 7 filtered out; finished in 0.03s
+
+error: test failed, to rerun pass `--test adapter_errors`

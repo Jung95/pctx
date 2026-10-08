@@ -948,3 +948,24 @@ The frozen residual denominator12 is unchanged; local12/12 does not close whole
 platform or official PCTX01 gates. Latest serial rule prohibits switching official
 tasks for external blockers. No schedule feature, native registration or clock
 was added.
+
+
+## PCTX01: contextual adapter exit classes — 2026-10-08
+
+Read §14 with §27/§38, which explicitly extend conflict9 and gate10. Adapter's
+blanket non-input9 incorrectly classified policy/path/capability/input cap/schema
+and changed original bytes. Restore semantic classes, retaining actual state9.
+Same CONFIG_CONFLICT/PLAN_MISMATCH names have different causes, so classify at
+call site where necessary rather than globally normalizing every code. Input
+128KiB/settings cap is2, not minimum-context budget8. Persisted DB JSON syntax
+errors cannot inherit user serde input2; generic DB_CORRUPT7 and checked shapes
+prevent malformed success/panic without exposing stored content. Incomplete
+intent still requires reconciliation9; no rollback claim.
+
+Source audit also resolves frozen C004 classification: provided plan/expect hash
+length/hex/equality is pure; comparison with stored bytes/identity is stateful.
+Existing Install acquires a lock before the pure predicate. Record this required
+G03 residual under the already existing leaf C004; fixed public denominator140,
+historical residual label groups12 and official gate denominator10 unchanged.
+Local12/12 is not all-leaf completion. Next implementation reuses existing
+predicate without new business functionality or actor/state bypass.

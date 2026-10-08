@@ -1,0 +1,81 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+warning: unused imports: `AdapterCommand`, `ClaudeCommand`, `deadline::Deadline`, and `self`
+ --> tests/adapter_errors.rs:3:15
+  |
+3 |     adapter::{self, AdapterCommand, ClaudeCommand},
+  |               ^^^^  ^^^^^^^^^^^^^^  ^^^^^^^^^^^^^
+4 |     deadline::Deadline,
+  |     ^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused imports: `Duration` and `Instant`
+  --> tests/adapter_errors.rs:13:12
+   |
+13 |     time::{Duration, Instant},
+   |            ^^^^^^^^  ^^^^^^^
+
+warning: method `project` is never used
+  --> tests/adapter_errors.rs:79:8
+   |
+47 | impl Fixture {
+   | ------------ method in this implementation
+...
+79 |     fn project(&self) -> Project {
+   |        ^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `pctx` (test "adapter_errors") generated 3 warnings (run `cargo fix --test "adapter_errors" -p pctx` to apply 2 suggestions)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.59s
+     Running tests/adapter_errors.rs (target/debug/deps/adapter_errors-c6d5fa4673ac7e39)
+
+running 4 tests
+test native_adapter_unsupported_protocol_is_capability_six ... FAILED
+test native_adapter_input_cap_and_configuration_shape_are_input_two ... FAILED
+test native_adapter_symlink_refusal_is_access_five ... FAILED
+test native_adapter_owner_refusal_is_policy_five_in_both_formats ... FAILED
+
+failures:
+
+---- native_adapter_unsupported_protocol_is_capability_six stdout ----
+
+thread 'native_adapter_unsupported_protocol_is_capability_six' (8854071) panicked at tests/adapter_errors.rs:107:5:
+assertion `left == right` failed: Output { status: ExitStatus(unix_wait_status(2304)), stdout: "{\"command\":\"adapter\",\"coverage\":{\"reasons\":[\"CAPABILITY_UNAVAILABLE\"],\"status\":\"partial\"},\"data\":null,\"errors\":[{\"code\":\"CAPABILITY_UNAVAILABLE\",\"message\":\"Unknown hook event; incompatible feature disabled\",\"retryable\":false}],\"generation_id\":null,\"project_id\":null,\"schema_version\":\"1.0\",\"status\":\"error\",\"truncation\":{\"reasons\":[],\"truncated\":false},\"validation\":{\"checked_at\":\"2026-10-08T21:13:07.978Z\",\"mode\":\"matched\",\"scope\":[],\"workspace_atomic\":false},\"warnings\":[],\"workspace_id\":null}\n", stderr: "" }
+  left: Some(9)
+ right: Some(6)
+
+---- native_adapter_input_cap_and_configuration_shape_are_input_two stdout ----
+
+thread 'native_adapter_input_cap_and_configuration_shape_are_input_two' (8854068) panicked at tests/adapter_errors.rs:107:5:
+assertion `left == right` failed: Output { status: ExitStatus(unix_wait_status(2304)), stdout: "{\"command\":\"adapter\",\"coverage\":{\"reasons\":[\"BUDGET_EXCEEDED\"],\"status\":\"partial\"},\"data\":null,\"errors\":[{\"code\":\"BUDGET_EXCEEDED\",\"message\":\"Adapter input exceeds 128 KiB\",\"retryable\":false}],\"generation_id\":null,\"project_id\":null,\"schema_version\":\"1.0\",\"status\":\"error\",\"truncation\":{\"reasons\":[],\"truncated\":false},\"validation\":{\"checked_at\":\"2026-10-08T21:13:07.977Z\",\"mode\":\"matched\",\"scope\":[],\"workspace_atomic\":false},\"warnings\":[],\"workspace_id\":null}\n", stderr: "" }
+  left: Some(9)
+ right: Some(2)
+
+---- native_adapter_symlink_refusal_is_access_five stdout ----
+
+thread 'native_adapter_symlink_refusal_is_access_five' (8854070) panicked at tests/adapter_errors.rs:107:5:
+assertion `left == right` failed: Output { status: ExitStatus(unix_wait_status(2304)), stdout: "{\"command\":\"adapter\",\"coverage\":{\"reasons\":[\"PATH_DENIED\"],\"status\":\"partial\"},\"data\":null,\"errors\":[{\"code\":\"PATH_DENIED\",\"message\":\"Symlink adapter input\",\"retryable\":false}],\"generation_id\":null,\"project_id\":null,\"schema_version\":\"1.0\",\"status\":\"error\",\"truncation\":{\"reasons\":[],\"truncated\":false},\"validation\":{\"checked_at\":\"2026-10-08T21:13:07.977Z\",\"mode\":\"matched\",\"scope\":[],\"workspace_atomic\":false},\"warnings\":[],\"workspace_id\":null}\n", stderr: "" }
+  left: Some(9)
+ right: Some(5)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- native_adapter_owner_refusal_is_policy_five_in_both_formats stdout ----
+
+thread 'native_adapter_owner_refusal_is_policy_five_in_both_formats' (8854069) panicked at tests/adapter_errors.rs:107:5:
+assertion `left == right` failed: Output { status: ExitStatus(unix_wait_status(2304)), stdout: "{\"command\":\"adapter\",\"coverage\":{\"reasons\":[\"POLICY_DENIED\"],\"status\":\"partial\"},\"data\":null,\"errors\":[{\"code\":\"POLICY_DENIED\",\"message\":\"Adapter bindings and configuration require owner authority\",\"retryable\":false}],\"generation_id\":null,\"project_id\":null,\"schema_version\":\"1.0\",\"status\":\"error\",\"truncation\":{\"reasons\":[],\"truncated\":false},\"validation\":{\"checked_at\":\"2026-10-08T21:13:07.982Z\",\"mode\":\"matched\",\"scope\":[],\"workspace_atomic\":false},\"warnings\":[],\"workspace_id\":null}\n", stderr: "" }
+  left: Some(9)
+ right: Some(5)
+
+
+failures:
+    native_adapter_input_cap_and_configuration_shape_are_input_two
+    native_adapter_owner_refusal_is_policy_five_in_both_formats
+    native_adapter_symlink_refusal_is_access_five
+    native_adapter_unsupported_protocol_is_capability_six
+
+test result: FAILED. 0 passed; 4 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.88s
+
+error: test failed, to rerun pass `--test adapter_errors`
+error: 1 target failed:
+    `--test adapter_errors`

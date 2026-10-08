@@ -1,0 +1,16 @@
+{
+  "results": [
+    {
+      "case": "receipt-json",
+      "exit": 101,
+      "actual_test_failed": true
+    },
+    {
+      "case": "owned-shape",
+      "exit": 101,
+      "actual_test_failed": true
+    }
+  ],
+  "exact_source_restored": true,
+  "source_sha256": "68f419d4143ece7bd55f6f5a6edc9e104b25743724a2d9f32ce0f6a3166b3cd7"
+}

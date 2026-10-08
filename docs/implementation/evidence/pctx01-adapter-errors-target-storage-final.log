@@ -1,0 +1,17 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.18s
+     Running tests/adapter_errors.rs (target/debug/deps/adapter_errors-c6d5fa4673ac7e39)
+
+running 9 tests
+test direct_adapter_plan_input_source_and_binding_are_distinct ... ok
+test direct_adapter_receipt_conflicts_and_reconciliation_retain_nine ... ok
+test direct_adapter_schema_and_ownership_integrity_are_storage_seven ... ok
+test direct_adapter_corrupt_persisted_json_and_shapes_are_storage_errors ... ok
+test native_adapter_symlink_refusal_is_access_five ... ok
+test native_adapter_hook_error_and_io_keep_envelope_and_state ... ok
+test native_adapter_owner_refusal_is_policy_five_in_both_formats ... ok
+test native_adapter_unsupported_protocol_is_capability_six ... ok
+test native_adapter_input_cap_and_configuration_shape_are_input_two ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.84s
+

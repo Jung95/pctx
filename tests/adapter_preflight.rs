@@ -385,7 +385,7 @@ fn native_accepted_plan_labels_preserve_owner_authority() {
             .args(["adapter", "claude", "plan", "--agent", &agent])
             .output()
             .unwrap();
-        assert_eq!(output.status.code(), Some(9), "{output:?}");
+        assert_eq!(output.status.code(), Some(5), "{output:?}");
         let value: Value = serde_json::from_slice(&output.stdout).unwrap();
         assert_eq!(value["errors"][0]["code"], "POLICY_DENIED");
         assert_eq!(f.state(), before);

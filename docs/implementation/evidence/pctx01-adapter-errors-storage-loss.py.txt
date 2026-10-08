@@ -1,0 +1,23 @@
+import hashlib,json,os,pathlib,subprocess,re
+root=pathlib.Path("/Users/dev/PCTX");path=root/"src/adapter.rs";original=path.read_bytes();source=original.decode()
+env=dict(os.environ,RUSTUP_HOME=str(root/".toolchain/rustup"),CARGO_HOME=str(root/".toolchain/cargo"),SDKROOT="/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",PATH=str(root/".toolchain/cargo/bin")+":/Library/Developer/CommandLineTools/usr/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin")
+prefix=root/"docs/implementation/evidence/pctx01-adapter-errors-storage"
+receipt=re.search(r'Error::new\(\s*"DB_CORRUPT",\s*"Invalid stored adapter receipt JSON",\s*7,?\s*\)',source).group()
+groups=re.search(r'let groups = groups\s*\.as_array\(\)\s*\.ok_or_else\(.*?"Invalid stored adapter ownership shape".*?\)\?;\s*for group in groups \{',source,re.S).group()
+cases=[("receipt-json",receipt,'Error::new("INVALID_ARGUMENT", "Invalid JSON data", 2)'),("owned-shape",groups,'for group in groups.as_array().unwrap() {')]
+results=[]
+try:
+ for name,old,new in cases:
+  assert source.count(old)==1
+  path.write_text(source.replace(old,new,1))
+  log=pathlib.Path(str(prefix)+"-loss-"+name+".log")
+  with log.open("wb") as output:
+   run=subprocess.run(["cargo","test","--locked","--test","adapter_errors","direct_adapter_corrupt_persisted_json_and_shapes_are_storage_errors","--","--exact","--nocapture"],cwd=root,env=env,stdout=output,stderr=subprocess.STDOUT)
+  data=log.read_text();results.append(dict(case=name,exit=run.returncode,actual_test_failed="test result: FAILED. 0 passed; 1 failed;" in data))
+  assert run.returncode==101 and results[-1]["actual_test_failed"],results[-1]
+finally:
+ path.write_bytes(original);restored=path.read_bytes()==original
+ pathlib.Path(str(prefix)+"-loss-results.json").write_text(json.dumps(dict(results=results,exact_source_restored=restored,source_sha256=hashlib.sha256(original).hexdigest()),indent=2)+"\n")
+ assert restored
+print(json.dumps(results))
+

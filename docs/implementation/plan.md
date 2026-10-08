@@ -707,3 +707,19 @@ same-task boundary G05 adapter error classification against §14.
 
 
 Final native full98360 terminal101: 547 PASS / 3 FAIL. Failed tests: relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry, simultaneous_streams_are_collected_and_overflow_never_infers_success, concurrent_query_startup_preserves_group_streams_and_original_one_second_budget. Captured-command-path passed incidentally without a startup/resolution repair; all four historical conditions remain unresolved and original budgets unchanged. All jobs terminal; no heavy job live. PCTX01 remains incomplete0/10.
+
+
+## PCTX01 adapter error integration — 2026-10-08
+
+Only PCTX01 active. Adapter uses §14 classes2/4/5/6/7 while preserving §27/§38
+state conflicts9; contextual plan/config errors and persisted DB JSON/shape
+corruption7 are distinguished. See requirements “PCTX01 adapter error
+classification” and evidence/pctx01-adapter-errors-verification.json. Final
+related37PASS plus final target9PASS; seven loss failures/exact restoration;
+static PASS and independent review no blocker. Final full terminal (555 PASS / 4 FAIL), earlier
+554PASS4FAIL retained. Whole gates0/10; historical bounded local groups12/12,
+required-platform0/12. Next same-task G03-C004 existing Install pure hash check
+before lock; no new task/feature/Actions. Native platforms/startup gates remain.
+
+
+Final native full4105 terminal101: 555 PASS / 4 FAIL. Failed tests: query_program_resolution_uses_captured_command_path, relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry, simultaneous_streams_are_collected_and_overflow_never_infers_success, concurrent_query_startup_preserves_group_streams_and_original_one_second_budget. All four historical startup conditions remain unresolved, original budgets unchanged. All jobs terminal; no heavy job live. PCTX01 remains incomplete0/10.

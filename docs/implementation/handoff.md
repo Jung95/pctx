@@ -6,25 +6,26 @@
 
 ## Latest integration boundary
 
-PCTX01-G03-R11/G08 schedule admission, runtime
-b4861db8ada0742b31b177533c8f6256c4308b75, base
-9315627c104a5df6bf9f3718b32627d9ebd3be3a. Normal push35313 terminal0 published
-9315627..b4861db to origin/main. Runtime edits: src/schedule.rs,
-tests/schedule_preflight.rs and schedule-admission evidence/docs. Existing pure
-checks before discovery/owner/input/storage; original expiry first, private loop
-helper shared. Conditional namespace/purpose, unrestricted lookups and future
-state checks preserved. No business feature, OS registration, model or wake call.
-Baseline47943 terminal101:1PASS1FAIL; related53185 terminal0:25PASS; final
-related10944 terminal0:28PASS; loss driver73664 terminal0 (five actual
-0PASS1FAIL/exact restore). Initial Clippy75098 terminal101, equivalent List
-Some-pattern fix; final format0/Clippy96799 terminal0. Independent read-only
-/root/work_control no blocker. Related/loss source precedes style-only fix.
-Full native macOS98360 terminal101: 547PASS3FAIL at final source, unchanged
-budgets/no-fail-fast. Three historical startup conditions fail; captured-path
-passes without a repair, all four conditions remain unresolved. All jobs terminal;
-no heavy job live. Manifest pctx01-schedule-admission-verification.json. Local residual
-12/12, required-platform0/12, whole PCTX01 gates0/10. Linux/Windows and four
-historical startup conditions remain open. No next official task or Actions.
+PCTX01-G05/G06 adapter error classification, base
+352186bce081af6907f685bb929ead524996d683. Uncommitted src/adapter.rs,
+tests/adapter_errors.rs, tests/adapter_preflight.rs policy5 assertion, docs/evidence.
+§14 classes2/4/5/6/7 with §27/§38 state9 preserved; contextual plan/config errors;
+persisted DB JSON/shape corruption7, no ownership-array panic. No clock/owner/
+replay/publication/business change. Baseline37694 terminal101:0PASS4FAIL; related
+87098 terminal0:35PASS and54548 terminal0:36PASS. First full61665 terminal101:
+554PASS4FAIL before storage repair, retained log full-before-storage-json.
+Storage baseline66073 terminal101:0PASS1FAIL. Final related36322 terminal0:
+37PASS; target41532 terminal0:9PASS after expanded shape fixture. Classification
+loss95578 terminal0 (five actual failed tests/exact restoration), storage loss
+95323 terminal0 (two actual failures/exact restoration). Static8792 and final
+85773 terminal0; final format0. Independent /root/work_control read-only review
+no blocker. Final full4105 terminal101: 555PASS4FAIL, all four original startup
+conditions fail at unchanged budgets/no-fail-fast. All jobs terminal; no heavy
+job live.
+Manifest pctx01-adapter-errors-verification.json. Whole gates0/10; historical
+local residual groups12/12, platform0/12. Install invalid hash still creates lock
+(G03-C004), unbound PreCompact persists incomplete intent, no rollback claim.
+Linux/Windows and four original startup conditions remain open. No Actions.
 
 ## Source, evidence and environment
 
@@ -72,18 +73,16 @@ Original ignored specification SHA256 8914faad57432f524aec0a06aa90c43c18c23f8c19
 
 ## Exact next action
 
-Native full98360 and normal push35313 are terminal, exact counts/failures/hashes
-recorded. Resume from published runtime b4861db and remain on PCTX01. The fixed
-R01–R12 local residual register has evidence12/12; whole gates remain0/10. Next
-same-task boundary is G05: reconcile adapter POLICY_DENIED9 and other error
-classifications with specification §14 policy5/stable statuses, using actual
-CLI+library error/representation/no-effects matrix. Preserve initial behavior
-evidence rather than qualifying it as conformance. No next official task.
-External blockers require exact needed action while retaining current task. G09
-requires actual Linux/Windows hosts at current source: cargo test --locked
---all-targets --no-fail-fast plus required native CLI input/transport matrix and
-full logs/source/environment IDs. Cross-builds are not native proof. No Actions
-dispatch authorized by this record; monthly limit respected. Local work remains.
+Final full4105 is terminal, counts/failures/source hashes recorded. Publish
+verified development integration with [skip ci], then remain on PCTX01. Next is
+G03-C004: extract existing Install provided hash length/hex/equality before
+CLI discovery/producer lock, keep stored-byte/identity comparisons stateful and
+original expiry first. Fixed leaf140 and historical label groups12 unchanged;
+no next official task. Broader G05/other whole gates and native platforms remain.
+External blockers require exact needed action while retaining current task.
+Native G09 requires actual Linux/Windows current-source all-target tests plus
+required CLI input/transport matrix, complete logs/source/environment IDs. No
+Actions authorization from this record; monthly limit respected. Local work remains.
 
 ## Retained historical results and inactive backlog
 

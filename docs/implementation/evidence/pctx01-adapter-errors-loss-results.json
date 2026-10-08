@@ -1,0 +1,36 @@
+{
+  "results": [
+    {
+      "case": "blanket",
+      "test": "native_adapter_owner_refusal_is_policy_five_in_both_formats",
+      "exit": 101,
+      "actual_test_failed": true
+    },
+    {
+      "case": "config",
+      "test": "native_adapter_input_cap_and_configuration_shape_are_input_two",
+      "exit": 101,
+      "actual_test_failed": true
+    },
+    {
+      "case": "plan-source",
+      "test": "direct_adapter_plan_input_source_and_binding_are_distinct",
+      "exit": 101,
+      "actual_test_failed": true
+    },
+    {
+      "case": "state",
+      "test": "direct_adapter_receipt_conflicts_and_reconciliation_retain_nine",
+      "exit": 101,
+      "actual_test_failed": true
+    },
+    {
+      "case": "schema",
+      "test": "direct_adapter_schema_and_ownership_integrity_are_storage_seven",
+      "exit": 101,
+      "actual_test_failed": true
+    }
+  ],
+  "exact_source_restored": true,
+  "source_sha256": "9602e5529d9b273b95bf7c4669cedd83d51568ab263c20b2b780c555d1ec78c2"
+}

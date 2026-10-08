@@ -1,0 +1,19 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.14s
+     Running tests/adapter_errors.rs (target/debug/deps/adapter_errors-c6d5fa4673ac7e39)
+
+running 1 test
+
+thread 'direct_adapter_corrupt_persisted_json_and_shapes_are_storage_errors' (8883606) panicked at src/adapter.rs:1098:40:
+called `Option::unwrap()` on a `None` value
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test direct_adapter_corrupt_persisted_json_and_shapes_are_storage_errors ... FAILED
+
+failures:
+
+failures:
+    direct_adapter_corrupt_persisted_json_and_shapes_are_storage_errors
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 8 filtered out; finished in 0.04s
+
+error: test failed, to rerun pass `--test adapter_errors`

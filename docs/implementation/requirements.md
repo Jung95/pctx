@@ -996,3 +996,60 @@ official task or Actions. Full native integration is terminal (547 PASS / 3 FAIL
 
 
 Final native full98360 terminal101: 547 PASS / 3 FAIL. Failed tests: relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry, simultaneous_streams_are_collected_and_overflow_never_infers_success, concurrent_query_startup_preserves_group_streams_and_original_one_second_budget. Captured-command-path passed incidentally without a startup/resolution repair; all four historical conditions remain unresolved and original budgets unchanged. All jobs terminal; no heavy job live. PCTX01 remains incomplete0/10.
+
+
+## PCTX01 adapter error classification — 2026-10-08
+
+Only PCTX01-G05/G06 is active, specification §14 plus extension §27/§38.
+The general exit table does not remove extension state/revision/lease conflict9.
+Adapter now distinguishes input/settings safety cap2, original plan/config bytes
+changed4, policy/path5, unavailable protocol6, storage/schema7, and actual
+receipt/binding/ownership conflict9. No global conflict or budget remapping.
+CONFIG_CONFLICT retains context: hooks object/event-array input2, malformed
+stored ownership object7, missing ownership/modified owned hooks9. PLAN_MISMATCH
+likewise distinguishes supplied hash syntax/equality2, changed stored bytes4,
+unsupported plan schema2, and project/workspace/additions binding9. Existing
+codes remain; unsupported plan schema has a more precise message. Clocks, owner,
+replay, publication and business predicates remain unchanged. Historical policy9
+evidence is retained at its exact prior source; current policy5 supersedes it.
+
+Persisted receipts.result and installs.owned JSON parse failures are now generic
+DB_CORRUPT7, distinct from user JSON2. Receipt object/event/hook_output/incomplete
+shape and ownership group arrays are checked before returning a result or
+publishing config; a malformed group cannot panic. Incomplete intent retains
+reconciliation9 before normal-result shape checks. This is common error/success
+truthfulness, not a new adapter feature.
+
+Evidence: baseline0PASS4FAIL retained; first related35PASS, added hook/IO36PASS.
+First full61665 terminal101:554PASS4FAIL before stored JSON repair, all original
+startup failures retained. Stored JSON baseline66073 terminal101:0PASS1FAIL
+proves INVALID_ARGUMENT2 instead of DB_CORRUPT7. Final related36322 terminal0:
+37PASS; final target41532 terminal0:9PASS includes expanded event/output/flag
+shape fixtures. Native owner policy5 is qualified for JSON/compact; unsupported
+protocol6 includes real stdin hook with complete JSON then EOF and standard error
+envelope. Native input cap/config shape2, symlink5, absent input IO7 preserve
+project/data; symlink target/link bytes/identity remain unchanged. Direct cases
+qualify input/source/schema/binding distinctions, original TIMEOUT7, future/empty
+DB schema7, stored ownership/JSON7 and same-key replay/conflict/reconciliation9.
+Snapshot is taken after initialization/corruption, not treated as rollback.
+
+Install's existing invalid-hash path creates the adapter lock before refusal;
+this remains G03-C004, not a no-effects qualification. Unbound PreCompact stores
+an incomplete intent before binding9; retry9 requires reconciliation, not rollback.
+Five initial classification losses and two stored-JSON/shape losses each actual
+0PASS1FAIL/exact restoration. Both stages are hash-bound; new shape subcases were
+added after loss execution and pass final target. Final format/locked all-target
+Clippy PASS; independent read-only review no scoped blocker. Every message and
+retryable field is not separately asserted by this fixture. Full final source
+integration is terminal (555 PASS / 4 FAIL). Evidence: `evidence/pctx01-adapter-errors-verification.json`.
+
+Whole PCTX01 gates remain0/10, native Linux/Windows unverified. Historical fixed
+label/admission residual groups remain locally12/12 and required-platform0/12;
+that bounded list does not close all G03 leaf contracts. C004 is an existing
+visible leaf in the fixed140-leaf register, not a new official task or group.
+Next same-task boundary: move its existing Install hash admission before
+discovery/lock, preserving original expiry and valid owner/state behavior.
+Four historical startup conditions remain unresolved; no Actions/next task.
+
+
+Final native full4105 terminal101: 555 PASS / 4 FAIL. Failed tests: query_program_resolution_uses_captured_command_path, relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry, simultaneous_streams_are_collected_and_overflow_never_infers_success, concurrent_query_startup_preserves_group_streams_and_original_one_second_budget. All four historical startup conditions remain unresolved, original budgets unchanged. All jobs terminal; no heavy job live. PCTX01 remains incomplete0/10.

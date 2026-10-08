@@ -96,7 +96,16 @@ struct Plan {
     additions: Value,
 }
 fn err(code: &str, s: &str) -> Error {
-    Error::new(code, s, if code == "INVALID_ARGUMENT" { 2 } else { 9 })
+    let exit = match code {
+        "INVALID_ARGUMENT" | "BUDGET_EXCEEDED" => 2,
+        "PLAN_STALE" => 4,
+        "POLICY_DENIED" | "PATH_DENIED" => 5,
+        "CAPABILITY_UNAVAILABLE" => 6,
+        "DB_SCHEMA_TOO_NEW" => 7,
+        // State/binding/receipt conflicts retain the extension contract (§27/38).
+        _ => 9,
+    };
+    Error::new(code, s, exit)
 }
 fn label(s: &str) -> Result<()> {
     if s.is_empty() || s.len() > 256 || s.chars().any(|c| c.is_control()) || reader::redact(s).1 {
@@ -369,13 +378,15 @@ fn merge(mut config: Value, add: &Value) -> Result<Value> {
     }
     let hooks = config["hooks"]
         .as_object_mut()
-        .ok_or_else(|| err("CONFIG_CONFLICT", "Existing hooks must be an object"))?;
+        .ok_or_else(|| Error::new("CONFIG_CONFLICT", "Existing hooks must be an object", 2))?;
     for (event, groups) in add.as_object().unwrap() {
         let values = hooks
             .entry(event.clone())
             .or_insert(json!([]))
             .as_array_mut()
-            .ok_or_else(|| err("CONFIG_CONFLICT", "Existing hook event must be an array"))?;
+            .ok_or_else(|| {
+                Error::new("CONFIG_CONFLICT", "Existing hook event must be an array", 2)
+            })?;
         for group in groups.as_array().unwrap() {
             if !values.contains(group) {
                 values.push(group.clone());
@@ -505,11 +516,29 @@ fn import(p: &Project, agent: &str, path: Option<&Path>, key: Option<&str>) -> R
                 "Hook key reused with different input",
             ));
         }
-        let previous: Value = serde_json::from_str(&r)?;
+        let previous: Value = serde_json::from_str(&r)
+            .map_err(|_| Error::new("DB_CORRUPT", "Invalid stored adapter receipt JSON", 7))?;
+        if !previous.is_object() {
+            return Err(Error::new(
+                "DB_CORRUPT",
+                "Invalid stored adapter receipt shape",
+                7,
+            ));
+        }
         if previous["incomplete"] == true {
             return Err(err(
                 "RECONCILIATION_REQUIRED",
                 "Previous event interrupted; inspect session before retrying",
+            ));
+        }
+        if !previous["hook_output"].is_object()
+            || previous["event"] != safe["hook_event_name"]
+            || previous.get("incomplete").is_some_and(|v| !v.is_boolean())
+        {
+            return Err(Error::new(
+                "DB_CORRUPT",
+                "Invalid stored adapter receipt shape",
+                7,
             ));
         }
         if let (Some(sid), Some(recorded)) = (
@@ -888,7 +917,7 @@ fn execute_inner(p: &Project, c: &AdapterCommand) -> Result<Value> {
                 || !plan.bytes().all(|b| b.is_ascii_hexdigit())
                 || plan != expect_hash
             {
-                return Err(err("PLAN_MISMATCH", "Exact plan hash required"));
+                return Err(Error::new("PLAN_MISMATCH", "Exact plan hash required", 2));
             }
             let bytes = bounded(Some(
                 &p.control_dir
@@ -896,11 +925,17 @@ fn execute_inner(p: &Project, c: &AdapterCommand) -> Result<Value> {
                     .join(format!("{plan}.json")),
             ))?;
             if hash(&bytes) != *expect_hash {
-                return Err(err("PLAN_MISMATCH", "Plan bytes changed"));
+                return Err(Error::new("PLAN_MISMATCH", "Plan bytes changed", 4));
             }
             let plan: Plan = serde_json::from_slice(&bytes)?;
-            if plan.schema != 1
-                || plan.project != p.project_id
+            if plan.schema != 1 {
+                return Err(Error::new(
+                    "PLAN_MISMATCH",
+                    "Unsupported adapter plan schema",
+                    2,
+                ));
+            }
+            if plan.project != p.project_id
                 || plan.workspace != p.workspace_id
                 || plan.additions != additions(&plan.agent)
             {
@@ -1044,10 +1079,11 @@ fn uninstall(p: &Project, plan: &str, expected: &str) -> Result<Value> {
             "Interrupted installation does not match published settings",
         ));
     }
-    let owned: Value = serde_json::from_str(&owned)?;
+    let owned: Value = serde_json::from_str(&owned)
+        .map_err(|_| Error::new("DB_CORRUPT", "Invalid stored adapter ownership JSON", 7))?;
     for (event, groups) in owned
         .as_object()
-        .ok_or_else(|| err("CONFIG_CONFLICT", "Malformed ownership receipt"))?
+        .ok_or_else(|| Error::new("CONFIG_CONFLICT", "Malformed ownership receipt", 7))?
     {
         let existing = cfg
             .get_mut("hooks")
@@ -1059,7 +1095,10 @@ fn uninstall(p: &Project, plan: &str, expected: &str) -> Result<Value> {
                     "Owned hook event was modified; no settings changed",
                 )
             })?;
-        for group in groups.as_array().unwrap() {
+        let groups = groups
+            .as_array()
+            .ok_or_else(|| Error::new("DB_CORRUPT", "Invalid stored adapter ownership shape", 7))?;
+        for group in groups {
             let at = existing.iter().position(|v| v == group).ok_or_else(|| {
                 err(
                     "CONFIG_CONFLICT",
