@@ -1,0 +1,114 @@
+{
+  "task": "PCTX01",
+  "gates": [
+    "G05",
+    "G06"
+  ],
+  "status": "implementing",
+  "base_revision": "2387a7617e2f97f8912a567fc19f0ff5afbd9168",
+  "runtime_revision": "e2fff281a915f55835d689747980a1c3bbfd7b9d",
+  "scope": [
+    "INDEX_BUSY retryable state from specification9, unchanged exits/waits/manual retry behavior",
+    "Persisted Activity event JSON syntax is DB_CORRUPT7, caller syntax remains INVALID_ARGUMENT2, all valid values/page/cursor/original clocks retained"
+  ],
+  "whole_gates_closed": 0,
+  "whole_gate_denominator": 10,
+  "visible_leaf_denominator": 140,
+  "historical_group_denominator": 12,
+  "initial": {
+    "session": 38045,
+    "exit": 101,
+    "passed": 1,
+    "failed": 3,
+    "log": "pctx01-persisted-errors-initial.log",
+    "source": "pctx01-persisted-errors-initial-source.json"
+  },
+  "initial_related": {
+    "session": 68549,
+    "exit": 101,
+    "fixture_assumptions_corrected": [
+      "Compact admitted producer errors use stdout JSON, not parser-refusal stderr",
+      "NDJSON error frame stores error object inside data",
+      "Markdown Activity is unsupported and retains pre-effect INVALID_ARGUMENT2 priority"
+    ],
+    "log": "pctx01-persisted-errors-related.log"
+  },
+  "related": {
+    "session": 8079,
+    "exit": 0,
+    "passed": 21,
+    "log": "pctx01-persisted-errors-related-final.log"
+  },
+  "controlled_loss": {
+    "session": 40437,
+    "exit": 0,
+    "losses": 2,
+    "each_test_passed": 0,
+    "each_test_failed": 1,
+    "source_restored_exactly": true,
+    "record": "pctx01-persisted-errors-loss.json"
+  },
+  "static_macos": {
+    "session": 77453,
+    "exit": 0,
+    "format_check_exit": 0,
+    "log": "pctx01-persisted-errors-static.log"
+  },
+  "full_macos": {
+    "session": 47802,
+    "exit": 101,
+    "passed": 573,
+    "failed": 4,
+    "failed_tests": [
+      "query_program_resolution_uses_captured_command_path",
+      "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget",
+      "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+      "simultaneous_streams_are_collected_and_overflow_never_infers_success"
+    ],
+    "log": "pctx01-persisted-errors-full-macos.log",
+    "counts_exclude_nested_child_summary": true
+  },
+  "full_linux": {
+    "session": 33955,
+    "status": "terminal",
+    "log": "pctx01-persisted-errors-full-linux.log",
+    "record": "pctx01-persisted-errors-linux-test-run.json",
+    "exit": 101,
+    "passed": 582,
+    "failed": 1,
+    "failed_tests": [
+      "actual_cli_concurrent_ticks_claim_one_occurrence_and_fixture_bridge_invokes_tick"
+    ],
+    "counts_exclude_nested_child_summary": true,
+    "source_unchanged": true,
+    "platform": "Linux aarch64 native container VM"
+  },
+  "independent_review": {
+    "agent": "/root/work_control",
+    "scoped_blocker": false,
+    "no_tests_or_edits": true
+  },
+  "proof_limits": [
+    "Prepared control store snapshot; not cold first-use rollback",
+    "Delivered valid earlier stream page is preserved, not rolled back after later failure",
+    "CLI busy proof holds connection-init lock; actual SQLite BUSY/LOCKED conversion tested directly",
+    "Four historical macOS startup conditions remain unresolved",
+    "Linux PCTX36 concurrent schedule INDEX_BUSY remains unresolved, no source/test change",
+    "Windows unverified, no Actions dispatched",
+    "Other stored Task/session/quota JSON paths need same existing G05 audit"
+  ],
+  "files_sha256": {
+    "src/domain.rs": "28586433d27e7d969345c4a07dec8ae7434e771a34ddddd9e2b0612c9a77d9b9",
+    "src/work.rs": "fbc16ef7e7627be08bb57cb1d446568a932c7ca8f10f59358592d8ed26d5a3b0",
+    "tests/persisted_error_contract.rs": "7c78343183d20b15164b186cc4d5c249bcb346ab0a24ca11af787028b1796582"
+  },
+  "next_same_task": "PCTX01 G05 audit remaining DB-origin typed Task/receipt JSON, preserve input/state conflict/clock/replay boundaries; no independent feature.",
+  "static_linux": {
+    "session": 74383,
+    "status": "terminal",
+    "exit": 0,
+    "source_unchanged": true,
+    "record": "pctx01-persisted-errors-linux-clippy-run.json",
+    "log": "pctx01-persisted-errors-linux-static.log"
+  }
+}

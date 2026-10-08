@@ -10,6 +10,33 @@ Logical module names below describe Application/Domain boundaries; current flat 
 
 Only **PCTX01** is active. It is the lowest-numbered incomplete official development item and has no prerequisites. All other incomplete rows are backlog status, not concurrent active work. D-series records describe historical implementation slices; they are not substitutes for whole official-task completion. Finish all PCTX01-owned required CLI/help/version/argument/envelope/error/budget/exit/common-timeout contracts and required platform qualification before selecting PCTX02. Shared acceptance IDs retain their full conditions; record which common contract PCTX01 owns and which independent feature belongs to a later task. Do not mark a whole shared AC verified from PCTX01-only proof.
 
+## Current PCTX01 error-contract boundary — 2026-10-09
+
+Only PCTX01 is active (`implementing`), whole gates 0/10. Runtime
+`e2fff281a915f55835d689747980a1c3bbfd7b9d` classifies malformed persisted
+Activity event JSON as DB_CORRUPT7 and exposes INDEX_BUSY as retryable, as
+required by specification §9/14. Caller syntax remains INVALID_ARGUMENT2;
+valid JSON values, pagination, delivered earlier stream pages, state-conflict
+precedence and original clocks remain unchanged. No retry or wait was added.
+
+Related tests:21PASS; two controlled losses each0PASS1FAIL with exact source
+restoration. Independent read-only review found no scoped blocker. Native macOS
+full47802 terminal101:573PASS4FAIL (all four retained startup conditions).
+Native Linux aarch64 full33955 terminal101:582PASS1FAIL (persistent concurrent
+schedule tick INDEX_BUSY); all four new error-contract tests pass there.
+Evidence: `evidence/pctx01-persisted-errors-verification.json`, with source/archive
+identity, original failures, transport fixture corrections and loss logs.
+Linux source is fixed runtime revision, read-only, hash-isolated target; source
+unchanged. macOS static checks pass; Linux static result is recorded in manifest.
+Windows remains unverified; no Actions dispatched. Neither platform subset nor
+retryable metadata repairs the independent schedule concurrency failure.
+
+Next action remains PCTX01 G05: audit five existing DB-origin Work Task/receipt
+JSON conversions, preserving nullable/valid values, caller syntax2, lease/state
+conflicts9, request-hash conflict before saved-receipt decode and original expiry.
+No new official task selected. Schedule writer-critical-section concern is
+recorded for inactive PCTX36; hash-phase causation has not been proven.
+
 ## Development items
 
 | Work ID | Required behavior | Spec sections | Module owner | Dependencies (PCTX suffixes) | Acceptance IDs (AC suffixes) | Status | Evidence |

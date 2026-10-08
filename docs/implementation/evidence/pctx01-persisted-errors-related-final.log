@@ -1,0 +1,53 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.67s
+     Running tests/activity_preflight.rs (target/debug/deps/activity_preflight-75d999e79acf25ab)
+
+running 4 tests
+test direct_activity_and_watch_refusal_keep_original_expiry_and_state ... ok
+test accepted_activity_boundaries_return_empty_without_cursor_narrowing_or_new_clock ... ok
+test malformed_activity_cursor_types_refuse_before_discovery_and_output ... ok
+test native_negative_activity_cursor_precedes_discovery_without_changing_transport ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.96s
+
+     Running tests/cli_refusal_envelope.rs (target/debug/deps/cli_refusal_envelope-e0fa1efd013109e3)
+
+running 4 tests
+test semantic_and_representation_refusals_do_not_claim_completed_execution ... ok
+test install_required_and_duplicate_options_keep_parser_envelope_and_no_effects ... ok
+test admitted_install_failures_keep_state_classification_and_response_destination ... ok
+test all_visible_leaf_unknown_options_refuse_before_project_and_output ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.71s
+
+     Running tests/persisted_error_contract.rs (target/debug/deps/persisted_error_contract-257962e0e1215410)
+
+running 4 tests
+test caller_json_syntax_remains_input_error_without_storage_effects ... ok
+test corrupted_activity_syntax_is_storage_failure_on_every_existing_transport ... ok
+test valid_stored_json_values_and_later_page_failure_preserve_events_and_cursors ... ok
+test busy_admission_is_retryable_but_original_request_expiry_is_not ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 10.25s
+
+     Running tests/watch.rs (target/debug/deps/watch-0aa3808534cf4f9e)
+
+running 4 tests
+test heartbeat_and_expiry_appear_as_ephemeral_observations ... ok
+test compact_watch_renders_essential_columns_and_refreshes ... ok
+test closed_stdout_returns_controlled_error_without_panic ... ok
+test finite_ndjson_drains_all_pages_and_resumes_after_cursor ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 6.64s
+
+     Running tests/work_quota_deadline.rs (target/debug/deps/work_quota_deadline-b12539874124d6ff)
+
+running 5 tests
+test already_expired_reads_do_not_initialize_control_storage_or_validate_missing_targets ... ok
+test cpu_bound_sql_expires_inside_the_engine_under_the_original_budget ... ok
+test reused_sql_connection_does_not_inherit_an_expired_prior_request_handler ... ok
+test quota_read_exclusive_contention_returns_timeout_instead_of_empty_unknown_success ... ok
+test work_read_transaction_contention_uses_remaining_budget_without_control_events ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.20s
+

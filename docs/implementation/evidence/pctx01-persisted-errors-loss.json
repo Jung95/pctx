@@ -1,0 +1,19 @@
+{
+  "results": [
+    {
+      "loss": "busy",
+      "test": "busy_admission_is_retryable_but_original_request_expiry_is_not",
+      "exit": 101
+    },
+    {
+      "loss": "stored",
+      "test": "corrupted_activity_syntax_is_storage_failure_on_every_existing_transport",
+      "exit": 101
+    }
+  ],
+  "restored_exactly": true,
+  "restored_sha256": {
+    "src/domain.rs": "28586433d27e7d969345c4a07dec8ae7434e771a34ddddd9e2b0612c9a77d9b9",
+    "src/work.rs": "fbc16ef7e7627be08bb57cb1d446568a932c7ca8f10f59358592d8ed26d5a3b0"
+  }
+}

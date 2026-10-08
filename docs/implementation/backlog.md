@@ -30,3 +30,14 @@ even if later whole runs pass incidentally. Evidence:
 `evidence/pctx01-linux-environment-full.log`. Investigate the owning schedule/
 coordination contract when active; any necessary common admission/deadline
 correction must remain in the current PCTX01 scope.
+
+
+PCTX36 follow-up source audit (PCTX01 review only): schedule.rs claim2112 and
+final2152 IMMEDIATE transactions call execution_binding -> exact_plan -> plan
+-> runtime_identity (up to256MiB executable hashing). This is a plausible long
+writer critical section. Tick has no ordinary-query default clock; common DB
+5s cap matches §9. Actual lock-duration/hash-phase evidence is still required
+before attribution or repair. Keep occurrence uniqueness, current binding/policy
+and final admission when shortening this scope later. No schedule source/test
+change was made. Common INDEX_BUSY retryable metadata is corrected independently
+under PCTX01; it does not repair this retained failure.

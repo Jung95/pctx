@@ -1027,3 +1027,24 @@ G09 under PCTX01 using isolated toolchain/build storage and one heavy job.
 Independent source/spec audit also identifies existing G05/G06 persisted Work
 event JSON syntax classified as input2; contextual corruption7 is required with
 accepted JSON types/cursor/clock unchanged. No new feature/denominator.
+
+
+## PCTX01: storage-origin errors and busy retryability — 2026-10-09
+
+Specification §9 explicitly requires INDEX_BUSY with retryable state after the
+existing5s DB wait cap; §14 classifies DB_CORRUPT as storage exit7 and invalid
+caller JSON as input2. Error::new now marks only INDEX_BUSY retryable; this is
+metadata, not automatic retry, renewed budget or longer lock wait. Activity
+maps only persisted event JSON decoding failure to contextual DB_CORRUPT7 while
+accepting every valid JSON Value. Existing Markdown admission and NDJSON stderr
+error frame (code inside data) retain priority/shape. A streamed valid earlier
+page remains delivered when a later page fails; no stdout rollback or skipped
+corrupt event is claimed. Whole/frozen denominators remain10/140/12.
+
+Persistent Linux schedule INDEX_BUSY is not an omitted general query clock:
+Tick is mutation/occurrence execution and keeps deadline None by default, with
+existing5s SQLite wait cap. Source review finds execution_binding/exact_plan/
+runtime_identity hashes inside IMMEDIATE claim/final transactions (§35/38,
+PCTX36); causal lock-duration proof remains missing. Do not widen the wait or
+add a query clock to force this test green. Independent scheduling repair stays
+backlog while PCTX01 owns its error envelope/classification.

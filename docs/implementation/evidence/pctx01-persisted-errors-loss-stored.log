@@ -1,0 +1,24 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.52s
+     Running tests/persisted_error_contract.rs (target/debug/deps/persisted_error_contract-257962e0e1215410)
+
+running 1 test
+test corrupted_activity_syntax_is_storage_failure_on_every_existing_transport ... FAILED
+
+failures:
+
+---- corrupted_activity_syntax_is_storage_failure_on_every_existing_transport stdout ----
+
+thread 'corrupted_activity_syntax_is_storage_failure_on_every_existing_transport' (9028215) panicked at tests/persisted_error_contract.rs:122:9:
+assertion `left == right` failed: json: Output { status: ExitStatus(unix_wait_status(512)), stdout: "{\"command\":\"activity\",\"coverage\":{\"reasons\":[\"INVALID_ARGUMENT\"],\"status\":\"partial\"},\"data\":null,\"errors\":[{\"code\":\"INVALID_ARGUMENT\",\"message\":\"Invalid JSON data\",\"retryable\":false}],\"generation_id\":null,\"project_id\":null,\"schema_version\":\"1.0\",\"status\":\"error\",\"truncation\":{\"reasons\":[],\"truncated\":false},\"validation\":{\"checked_at\":\"2026-10-08T23:02:04.323Z\",\"mode\":\"matched\",\"scope\":[],\"workspace_atomic\":false},\"warnings\":[],\"workspace_id\":null}\n", stderr: "" }
+  left: Some(2)
+ right: Some(7)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    corrupted_activity_syntax_is_storage_failure_on_every_existing_transport
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 3 filtered out; finished in 0.82s
+
+error: test failed, to rerun pass `--test persisted_error_contract`

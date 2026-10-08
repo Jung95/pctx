@@ -1,0 +1,12 @@
+{
+  "base_revision": "2387a7617e2f97f8912a567fc19f0ff5afbd9168",
+  "files_sha256": {
+    "src/domain.rs": "26506941f9bfe294e782c3a45ba632d7c9198e649a133d5214df992c3063e3ba",
+    "src/work.rs": "89b25fda7e25424d28e95316a54bdfc7e65026d0d394a8644a027201cc004527",
+    "tests/persisted_error_contract.rs": "88b0181132164b9932e16daa0eacb40f13fd2c85959dd5de01e4881f9bcbba05"
+  },
+  "session": 38045,
+  "exit": 101,
+  "passed": 1,
+  "failed": 3
+}

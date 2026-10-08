@@ -12,7 +12,7 @@ Status: **implementing; only active official task**. Selection: lowest incomplet
 | PCTX01-G06 | Unsupported versus successful empty | Outline actual JSON/compact/Markdown complete unsupported6, supported empty0, mixed/parse partial3 and strict-refresh partial priority in pctx01-outline-coverage-verification.json | Complete remaining producer coverage matrix; no new analyzer implementation in PCTX01 |
 | PCTX01-G07 | No-color and control-character suppression | Renderers escape unsafe content; parser diagnostics redact secrets/escape controls; no-color applied before root/nested help on actual Unix PTY | Native Windows console and complete error/representation matrix remain; local help/color/secret fixtures pass |
 | PCTX01-G08 | Original finite-request deadline | Inventory read scope/actual128-package and256-claim original1s processing/default/CLI state proofs (`pctx01-inventory-deadline-verification.json`); Schedule original finite scope/read-only state/row/native observation proofs (`pctx01-schedule-deadline-verification.json`); Filter scope/shared stdin and actual original250ms input/record/pipe plus policy-classification proof (`pctx01-filter-deadline-verification.json`); Resource/runner/trust read scope and actual native identity/hash/FIFO/error proof (`pctx01-runner-read-verification.json`); common classifier; adapter Doctor/Verify/ProtocolFixture original read scope and native CLI/error/lock distinction proof; Work/quota read scope/SQL/row checks; query_deadline_cli9 and work_quota_deadline5 pass (CPU SQL VM interruption and reused-connection isolation included) | Work/quota opening/transaction contention qualified locally. SQL engine expiry qualified locally; opened auxiliary source-read propagation/expiry qualified with original-loss mutation detection; authored public quota10000-row aggregation expiry qualified with guard-loss mutation; actual auxiliary config-admission expiry and fingerprint chunk-read expiry qualified with independent tests and controlled loss; additional metadata/input races and other command CPU phases remain unverified; finite-leaf audit found no clear omission; downstream phase proof, adapter phase-race coverage, full budget matrix and required platforms remain. Child/watch separation preserved |
-| PCTX01-G09 | Supported platforms | Native macOS evidence plus actual Linux aarch64 fixed-source fresh full578PASS1FAIL (pctx01-linux-verification.json); proc-stat ESRCH regression repair qualified locally | Linux concurrent schedule INDEX_BUSY unresolved; complete required native frontend matrix and Windows execution. ARM64/container results do not qualify x86_64/Windows or whole G09 |
+| PCTX01-G09 | Supported platforms | Native macOS full573PASS4FAIL and Linux aarch64 fixed-source full582PASS1FAIL (pctx01-persisted-errors-verification.json); proc-stat ESRCH regression repair qualified locally | Linux concurrent schedule INDEX_BUSY unresolved; complete required native frontend matrix and Windows execution. ARM64/container results do not qualify x86_64/Windows or whole G09 |
 | PCTX01-G10 | Documentation, evidence and independent review | requirements/progress/handoff, this audit and actual CLI tests | Close every gate with exact-source execution evidence before `verified` or advancing to PCTX02 |
 
 Checklist count: **0/10 whole gates closed**. This assigns stable IDs to the
@@ -36,6 +36,33 @@ AC01 non-Git discovery/registry feature ownership remains PCTX02; PCTX01 reuses 
 
 Next local action after the current integration gate: help/color locally integrated; finish the finite-route/option-before-effect matrix and required native frontend exit tests. No next official task is selected. If an external platform is unavailable, complete local contracts first and record the exact needed native run; do not silently lower the gate or start unrelated work.
 
+
+## Current PCTX01 error-contract boundary — 2026-10-09
+
+Only PCTX01 is active (`implementing`), whole gates 0/10. Runtime
+`e2fff281a915f55835d689747980a1c3bbfd7b9d` classifies malformed persisted
+Activity event JSON as DB_CORRUPT7 and exposes INDEX_BUSY as retryable, as
+required by specification §9/14. Caller syntax remains INVALID_ARGUMENT2;
+valid JSON values, pagination, delivered earlier stream pages, state-conflict
+precedence and original clocks remain unchanged. No retry or wait was added.
+
+Related tests:21PASS; two controlled losses each0PASS1FAIL with exact source
+restoration. Independent read-only review found no scoped blocker. Native macOS
+full47802 terminal101:573PASS4FAIL (all four retained startup conditions).
+Native Linux aarch64 full33955 terminal101:582PASS1FAIL (persistent concurrent
+schedule tick INDEX_BUSY); all four new error-contract tests pass there.
+Evidence: `evidence/pctx01-persisted-errors-verification.json`, with source/archive
+identity, original failures, transport fixture corrections and loss logs.
+Linux source is fixed runtime revision, read-only, hash-isolated target; source
+unchanged. macOS static checks pass; Linux static result is recorded in manifest.
+Windows remains unverified; no Actions dispatched. Neither platform subset nor
+retryable metadata repairs the independent schedule concurrency failure.
+
+Next action remains PCTX01 G05: audit five existing DB-origin Work Task/receipt
+JSON conversions, preserving nullable/valid values, caller syntax2, lease/state
+conflicts9, request-hash conflict before saved-receipt decode and original expiry.
+No new official task selected. Schedule writer-critical-section concern is
+recorded for inactive PCTX36; hash-phase causation has not been proven.
 
 ## Native startup isolation evidence
 
