@@ -6,21 +6,21 @@
 
 ## Latest verified integration boundary
 
-PCTX01 only active (`implementing`), base f1e6134. Common main classifier now
-propagates nested CheckRun/Check Run/local HelperRequest processing errors and
-incomplete capture. Typed error7 and partial3 preserve child observation; valid
-failed checks retain processing0/failed evidence. Manual child policy unchanged.
-Original50ms registered timeout and killed-guardian assertions now reject wrapper
-success; no runner feature/deadline changed. Related49 PASS, added actual linked
-helper1 PASS. Initial3PASS3FAIL and compile error preserved; excluded metadata
-counter fixes source-mutation fixture only. Two controlled losses0PASS1FAIL each,
-exact source restore. Independent static review no scoped blocker; timeout
-attests spawn only, partial capture attests one invocation. Static gates PASS.
-Final native full17428 terminal101: 485 PASS/5 FAIL. Four original1s project_deadline failures and adapter version failure6-versusTIMEOUT7 are retained, without asserting one cause. All jobs terminal; PCTX01 incomplete.
-Manifest evidence/pctx01-nested-execution-verification.json. Existing startup
-and adapter failure causes remain unproven. Native callback faults, remaining
-frontend/phase/startup/native Linux/Windows gates stay open. No next official
-task or Actions. Prior main push rejected/pending explicit approval; no retry.
+PCTX01 only active (`implementing`); current baseb4e294c. Read-only counterbalanced
+startup diagnostic terminal16652/exit0 (driver completion, not test pass):512
+attempts8workers×16reps×4cells,509 within-budget/3expiry under unchanged1s. Perworker/
+group reuse paths and balanced Williams order, all rows present. Two cold reused/
+no-group expiries have no bytes and cleanupSIGKILL9; one fresh/group expiry has
+both11-byte streams/EOF and post-expiry root0, killEPERM1. Do not promote it.
+Exact paths/dev/inodes/PIDs/timing, cancel versus observation and source hashes
+are in evidence/pctx01-startup-counterbalanced-verification.json. No product or
+original tests changed; latest full17428 remains485PASS5FAIL. Initial metadata
+compile error retained; repaired build0. Independent review requires explicit
+unbounded cleanup/panic, inherited cwd/stdin, root mode not explicitly0700 and read-warmed
+filesystem limits. No proof of policy cause/startup-only failure or universal
+latency. All jobs terminal; no live heavy job. PCTX01/goal incomplete; native
+callback/remaining frontend/phase/LinuxWindows open. No next official task or
+Actions. Prior rejected main push still pending explicit approval, no retry.
 
 ## Source, evidence and environment
 
@@ -69,9 +69,11 @@ Original ignored specification SHA256 8914faad57432f524aec0a06aa90c43c18c23f8c19
 ## Exact next action
 
 Stay on PCTX01. Read its completion audit and exact-source failure evidence.
-Investigate native startup causally with counterbalanced fresh/reused byte-identical
-executables and group/no-group factors, preserving actual identity/signals and
-original budgets. Include newly retained adapter failure: expected native nonzero
+The counterbalanced diagnostic is complete but does not identify the cause.
+Record independent first-byte/EOF timestamps and exit-probe intervals alongside
+parent observation gaps and exact native identities to distinguish child progress
+from delayed parent observation under the original budgets. Do not rerun an
+unchanged full gate to seek passing status. Include newly retained adapter failure: expected native nonzero
 SOURCE_UNAVAILABLE6, actual TIMEOUT7; no cause established. Do not use warm-up
 retries, interpreter substitution, relaxed deadlines or OS-policy changes.
 Continue the remaining common frontend/producer/phase matrix, including registered

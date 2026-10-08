@@ -1,0 +1,5 @@
+{
+  "sha256": "37746764ef926092702d18aa52c31d680e21c3028bce62e92176283dddadca83",
+  "compile_exit": 1,
+  "repair": "Replace unsupported Metadata birthtime method calls with SystemTime created() duration fields."
+}

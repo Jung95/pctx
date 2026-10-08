@@ -493,3 +493,19 @@ Native callback-fault injection, remaining frontend/phase/startup gates and
 native Linux/Windows remain open. PCTX01 stays implementing; no next task.
 
 Related49 PASS, added helper1 PASS; two controlled losses each0PASS1FAIL/exact restoration. Final format/locked all-target Clippy PASS. Final native full17428 terminal101: 485 PASS/5 FAIL. Four original1s project_deadline failures and adapter version failure6-versusTIMEOUT7 are retained, without asserting one cause. All jobs terminal; PCTX01 incomplete.
+
+## PCTX01 counterbalanced native startup observation
+
+Read-only direct native diagnostic:8 workers,16 repetitions/cell, balanced
+fresh/reused executable paths x group/no-group, original1s budget;512 attempts,
+509 within-budget observations and3 expiries. Reused paths are separate per worker/
+group with first use explicitly cold; no prewarm or retry qualification. Two
+expiry rows have no bytes; one has both streams/EOF and later reaps0 despite
+owned-group kill EPERM1. All remain failures; no common cause established.
+[Evidence](evidence/pctx01-startup-counterbalanced-verification.json) records exact
+path/dev/inode/PID, timestamps, observed versus cancellation signal, all cells,
+build failure/repair and independent review. No product/original-test changes or
+full-suite rerun; latest full485PASS5FAIL remains. Cleanup/panic/launch equivalence,
+cold-cache and policy causation are unqualified. Next causal observation must
+separate first-read/EOF timing from exit-probe/parent observation gaps. PCTX01
+stays implementing, no next official task, Actions or rejected-push retry.
