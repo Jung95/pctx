@@ -16,7 +16,7 @@ impl Error {
         Self {
             code: code.into(),
             message: message.into(),
-            retryable: false,
+            retryable: code == "INDEX_BUSY",
             exit,
         }
     }

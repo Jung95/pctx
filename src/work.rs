@@ -1672,7 +1672,16 @@ fn activity_inner(project: &Project, since: i64) -> Result<Value> {
             ))
         })?,
     )?;
-    let events=rows.into_iter().map(|(seq,entity,kind,payload,time)|{project.check_deadline()?;Ok(json!({"schema_version":"1.0","event_seq":seq,"entity_id":entity,"type":kind,"data":serde_json::from_str::<Value>(&payload)?,"received_at":time}))}).collect::<Result<Vec<_>>>()?;
+    let events = rows
+        .into_iter()
+        .map(|(seq, entity, kind, payload, time)| {
+            project.check_deadline()?;
+            let data = serde_json::from_str::<Value>(&payload).map_err(|_| {
+                Error::new("DB_CORRUPT", "Stored activity event JSON is invalid", 7)
+            })?;
+            Ok(json!({"schema_version":"1.0","event_seq":seq,"entity_id":entity,"type":kind,"data":data,"received_at":time}))
+        })
+        .collect::<Result<Vec<_>>>()?;
     Ok(
         json!({"events":events,"next_cursor":events.last().map(|e|e["event_seq"].clone()).unwrap_or(json!(since)),"has_more":events.len()==1000}),
     )
