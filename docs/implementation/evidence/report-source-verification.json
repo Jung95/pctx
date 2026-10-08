@@ -91,5 +91,6 @@
     "Three original native query startup failures remain unresolved; no retry or timeout extension promotes them."
   ],
   "actions_dispatched": 0,
-  "original_spec_sha256": "8914faad57432f524aec0a06aa90c43c18c23f8c19e9f54fe69d9ad185db6523"
+  "original_spec_sha256": "8914faad57432f524aec0a06aa90c43c18c23f8c19e9f54fe69d9ad185db6523",
+  "runtime_commit": "616866a8942395f0355e379fa327ff59059ee7c7"
 }
