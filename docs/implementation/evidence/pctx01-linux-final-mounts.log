@@ -1,0 +1,4 @@
+Linux 7.0.12-linuxkit aarch64
+tmpfs /tmp tmpfs rw,nosuid,nodev,relatime,size=1048576k 0 0
+    PID    PPID STAT COMMAND
+      1       0 Ss   docker-init

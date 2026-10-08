@@ -50,6 +50,11 @@ def main():
     if any(not path.is_dir() or "," in str(path) for path in paths):
         parser.error("Mount paths must be directories without commas")
     source, toolchain, cargo_home, target = paths
+    source_hash = tree_hash(source)
+    # Cargo freshness can reuse a mutation artifact when an archived restored
+    # source has older mtimes. Never share build artifacts between source trees.
+    target = target / source_hash
+    target.mkdir(exist_ok=True)
     if any((cargo_home / name).exists() for name in ["credentials", "credentials.toml", "config", "config.toml"]):
         parser.error("Use a dedicated Cargo cache without credentials or global config")
     phase = {
@@ -79,7 +84,9 @@ def main():
         command += ["--env", value]
     command += [args.image, "-c", "mkdir -p /tmp/pctx-home && exec " + phase]
     record = {
-        "source_revision": args.revision, "source_tree_sha256": tree_hash(source),
+        "source_revision": args.revision, "source_tree_sha256": source_hash,
+        "target_source_tree_sha256": source_hash,
+        "launcher_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
         "image": args.image, "phase": args.phase, "container": name,
         "command": command, "status": "running", "build_jobs": 2,
         "test_threads": "default; no test concurrency override",

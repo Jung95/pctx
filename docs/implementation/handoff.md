@@ -6,35 +6,37 @@
 
 ## Latest integration boundary
 
-PCTX01-G03/G08-C001 existing Activity cursor admission, base
-c63c00741e123a74b5767b04dc6d1f9db2603d87. Runtime revision
-4ec817760eebc639c15ef074880fad9585106631, normally published by22892 terminal0
-(c63c007..4ec8177) to origin/main, [skip ci]. Exact nonnegative i64/message/error2 shared in Work/Watch/frontend.
-Normal preflight before discovery; stream admission after output/route guards,
-before discovery. JSON-follow/stream stderr priority preserved. Work original
-expiry first unchanged; Watch supplied expiry before cursor/stdout, no new clock.
-Files src/main.rs, src/work.rs, src/watch.rs, tests/activity_preflight.rs.
-Baseline57040 terminal101:1PASS2FAIL (missing root7/expired-negative Watch2).
-Related99935 terminal0:48PASS. Loss67461 terminal0:four actual0PASS1FAIL/exact
-restore, hashes bound before final parser fixture. Final target31137 terminal0:
-4PASS includes32 malformed i64 parser combinations;48 negative combinations,
-direct original expiry/all Board/follow combinations, finite0/max empty proof.
-Snapshot after initialization, not first-use rollback/live follow qualification.
-Static55134 terminal0; final static/format terminal0 after fixture expansion.
-Independent /root/work_control no scoped blocker; restored source re-read.
-Final full13204 terminal101:570PASS3FAIL (relative resolution, concurrent startup,
-simultaneous streams); original budgets unchanged. Captured-command-path passes
-incidentally, no repair. All four historical conditions unresolved.
-All jobs terminal, no heavy job live. Manifest evidence/
-pctx01-activity-admission-verification.json. Whole0/10,140 leaves, historical
-local12/12/platform0/12 unchanged. Only PCTX01; no Actions/next official task.
+PCTX01 G05/G08/G09 Linux proc-stat disappearance repair, runtime
+5ff3f46ad757f8f19483763fa3048b6baafc065e (publication checked below after push).
+Linux aarch64 VM, Ubuntu24.04.4/LinuxKit7.0.12, Rust1.99, Docker29.8,
+6CPU/5.047GiB; immutable image7759288062d2. Actual native execution, not
+cross-compilation/Actions/x86_64/Windows qualification. Source/toolchain RO,
+network none, UID502:20, private HOME, dedicated registry/target, init reaper,
+executable tmpfs. No host credentials/socket/registration/global settings.
 
-New G09 environment evidence: local Docker29.8.0 Linux/aarch64 and cached arm64
-runner image7759288062d2 exist. Ephemeral network-none/read-only32MiB-tmp probe
-overrode registration entrypoint, mounted no host files/credentials and executed
-Linux/aarch64 with git/cc, but no cargo/rustc. Log pctx01-linux-container-capability.
-This supersedes the earlier blanket Linux-unavailable assumption; no native PCTX
-test or platform gate closed. Windows remains unavailable/unverified.
+src/query_process.rs accepts an opened stat descriptor's ESRCH as disappeared;
+other errors remain SOURCE_UNAVAILABLE6, pinned root required, zombies remain
+members, original budgets/concurrency unchanged. Actual FD-after-reap probe
+and two new unit regressions; independent read-only review no product blocker.
+Original-source full18470:555PASS22FAIL with implicit noexec/no init. Environment
+fixed full85854:575PASS2FAIL (proc scan and concurrent schedule INDEX_BUSY).
+Focused3971:5PASS; separate guard loss62467:4PASS1FAIL, checkout unchanged.
+Shared-target full68758 invalidated: restored archive may reuse mutation unit
+artifact; failed runtime qualification is retained, never promoted. Launcher now
+selects source-tree-hash target directories and records its own hash.
+
+Fresh exact-source full16560 terminal101:578PASS1FAIL. Library44PASS and
+project_deadline14PASS at original clocks/workers. Only concurrent schedule tick
+fails INDEX_BUSY; PCTX36 remains inactive, failure is not repaired/hidden.
+Fresh library/CLI hashes and archived Git provenance recorded. Manifest:
+evidence/pctx01-linux-verification.json. Final isolated Clippy status in manifest.
+PCTX01 remains implementing, whole0/10;140 leaves/historical12 groups unchanged.
+Four historical macOS conditions unresolved; Linux-only repair does not fix them.
+Windows unavailable/unverified. No other official task or Actions started.
+
+Preceding C001 Activity cursor runtime4ec8177/publicationede92857 and its macOS
+full13204:570PASS3FAIL remain in pctx01-activity-admission-verification.json.
+The older Linux-no-Rust capability is superseded by actual native runs above.
 
 ## Source, evidence and environment
 
@@ -82,27 +84,24 @@ Original ignored specification SHA256 8914faad57432f524aec0a06aa90c43c18c23f8c19
 
 ## Exact next action
 
-Remain on PCTX01. Prioritize G09 native Linux: prepare an isolated Rust1.99 Linux
-arm64 toolchain/cargo cache under ignored .toolchain storage for the available
-local engine. Inspect local rustup help/cached tooling first. Override image
-registration entrypoint; no runner/account registration, host credentials/socket
-mount, global packages or Actions. Mount source read-only and a separate owned
-target/cache writable. Execute actual Linux required tests, record compiler/
-kernel/image/source/log IDs and exact pass/failure scopes. Do not claim Linux
-x86_64/Windows from arm64/container evidence or cross-compilation. One heavy job.
+Remain on PCTX01. Inspect the actual Linux failure
+actual_cli_concurrent_ticks_claim_one_occurrence_and_fixture_bridge_invokes_tick
+in pctx01-linux-clean-full.log (INDEX_BUSY). Compare project startup/control schema
+opening/lock waits against original common finite-request deadlines and source
+contracts before deciding ownership. Necessary common fixes remain PCTX01;
+independent PCTX36 scheduling features stay inactive. Do not weaken original
+concurrency/deadlines, retry-green, ignore this failure, or switch tasks.
 
-Secondary same-task G05/G06 source audit: work::activity_inner parses DB-origin
-events.payload via generic serde input2; malformed persisted syntax should be
-contextual generic DB_CORRUPT7. Independent source/spec review confirmed this.
-Preserve every valid JSON value type, events/cursor/order/original clocks; no new
-Activity/Watch feature, skip-corrupt-row or empty-success behavior. Implement only
-after the selected same-task boundary. Fixed140/12/10 denominators unchanged.
+Then same-task G05/G06 audit: work::activity_inner parses persisted events.payload
+with generic serde input2. Malformed stored syntax should contextual DB_CORRUPT7;
+preserve every valid JSON value/cursor/order/original clock. No new Activity/Watch
+feature or skip-corrupt-row/empty-success behavior. Additional frontend/phase
+matrix and Windows execution remain mandatory. No next official task selected.
 
-Four original startup conditions unresolved; no retry-green or original1000ms/
-stream/group weakening. G09 Windows still requires real current-source tests/
-CLI matrix with source/environment IDs/logs; no Windows environment available.
-Actions remain undispatched under monthly3000-minute constraint. External
-blockers do not authorize switching official tasks; local PCTX01 work remains.
+All heavy jobs must be terminal before publication; confirm actual handles/Git
+and manifest on resume. Windows needs real current-source full/CLI matrix with
+OS/compiler/source/log IDs; no Windows environment available. Monthly3000-minute
+constraint remains: no Actions dispatched. Original objective attachment exists.
 
 ## Retained historical results and inactive backlog
 

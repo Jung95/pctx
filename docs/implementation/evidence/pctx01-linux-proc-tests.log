@@ -1,0 +1,14 @@
+{"container": "pctx-linux-99205", "phase": "proc-test", "source_tree_sha256": "b99439192c77dfbd35b9bed651be287e2e0eee6b13ae83c573d221fd22823b7b"}
+   Compiling pctx v0.1.0-dev (/workspace)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 5.61s
+     Running unittests src/lib.rs (/target/debug/deps/pctx-90826fa8f66155e0)
+
+running 5 tests
+test query_process::linux_group_tests::non_utf8_named_fixture_child ... ok
+test query_process::linux_group_tests::stat_group_ignores_non_utf8_comm_and_rejects_invalid_group ... ok
+test query_process::linux_group_tests::inaccessible_stat_remains_unknown_and_live_stat_bytes_are_preserved ... ok
+test query_process::linux_group_tests::opened_stat_of_reaped_process_is_absent_but_pinned_root_is_required ... ok
+test query_process::linux_group_tests::unrelated_native_non_utf8_process_name_does_not_block_query ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 39 filtered out; finished in 0.02s
+

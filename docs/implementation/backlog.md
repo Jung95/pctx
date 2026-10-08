@@ -18,3 +18,15 @@ partial3 for its own SQLite database/WAL/SHM (UNSUPPORTED_ENCODING). See
 contract for user-overridden local data paths when the owning task is active.
 Current fixture keeps project and data directories as siblings; no automatic
 exclusion behavior is implemented or claimed here.
+
+
+PCTX36 inactive Linux investigation: unchanged source ede92857, actual
+Linux aarch64 Ubuntu24.04 container with executable tmpfs and init reaper,
+`actual_cli_concurrent_ticks_claim_one_occurrence_and_fixture_bridge_invokes_tick`
+returned INDEX_BUSY7 at tests/schedule.rs:774. Original concurrency/budgets were
+unchanged. The prior noexec environment run passed this test, so that pass is not
+a repair; no schedule product/test change is made here. Preserve this failure
+even if later whole runs pass incidentally. Evidence:
+`evidence/pctx01-linux-environment-full.log`. Investigate the owning schedule/
+coordination contract when active; any necessary common admission/deadline
+correction must remain in the current PCTX01 scope.

@@ -12,14 +12,14 @@ Status: **implementing; only active official task**. Selection: lowest incomplet
 | PCTX01-G06 | Unsupported versus successful empty | Outline actual JSON/compact/Markdown complete unsupported6, supported empty0, mixed/parse partial3 and strict-refresh partial priority in pctx01-outline-coverage-verification.json | Complete remaining producer coverage matrix; no new analyzer implementation in PCTX01 |
 | PCTX01-G07 | No-color and control-character suppression | Renderers escape unsafe content; parser diagnostics redact secrets/escape controls; no-color applied before root/nested help on actual Unix PTY | Native Windows console and complete error/representation matrix remain; local help/color/secret fixtures pass |
 | PCTX01-G08 | Original finite-request deadline | Inventory read scope/actual128-package and256-claim original1s processing/default/CLI state proofs (`pctx01-inventory-deadline-verification.json`); Schedule original finite scope/read-only state/row/native observation proofs (`pctx01-schedule-deadline-verification.json`); Filter scope/shared stdin and actual original250ms input/record/pipe plus policy-classification proof (`pctx01-filter-deadline-verification.json`); Resource/runner/trust read scope and actual native identity/hash/FIFO/error proof (`pctx01-runner-read-verification.json`); common classifier; adapter Doctor/Verify/ProtocolFixture original read scope and native CLI/error/lock distinction proof; Work/quota read scope/SQL/row checks; query_deadline_cli9 and work_quota_deadline5 pass (CPU SQL VM interruption and reused-connection isolation included) | Work/quota opening/transaction contention qualified locally. SQL engine expiry qualified locally; opened auxiliary source-read propagation/expiry qualified with original-loss mutation detection; authored public quota10000-row aggregation expiry qualified with guard-loss mutation; actual auxiliary config-admission expiry and fingerprint chunk-read expiry qualified with independent tests and controlled loss; additional metadata/input races and other command CPU phases remain unverified; finite-leaf audit found no clear omission; downstream phase proof, adapter phase-race coverage, full budget matrix and required platforms remain. Child/watch separation preserved |
-| PCTX01-G09 | Supported platforms | Native macOS execution only for current changes | Native Linux and Windows full required CLI matrix; cross-compilation/static fixtures are not native proof |
+| PCTX01-G09 | Supported platforms | Native macOS evidence plus actual Linux aarch64 fixed-source fresh full578PASS1FAIL (pctx01-linux-verification.json); proc-stat ESRCH regression repair qualified locally | Linux concurrent schedule INDEX_BUSY unresolved; complete required native frontend matrix and Windows execution. ARM64/container results do not qualify x86_64/Windows or whole G09 |
 | PCTX01-G10 | Documentation, evidence and independent review | requirements/progress/handoff, this audit and actual CLI tests | Close every gate with exact-source execution evidence before `verified` or advancing to PCTX02 |
 
 Checklist count: **0/10 whole gates closed**. This assigns stable IDs to the
 existing ten rows; previous denominator10, current denominator10, no scope added.
 All rows remain implementing because their mandatory residual conditions above
 are open. Local subset qualifications do not close a whole gate. Native macOS
-observations are recorded separately; required Linux/Windows remain unverified.
+observations are recorded separately; Linux aarch64 execution is recorded with one unresolved failure; whole platform gate and required Windows remain unverified.
 Each row uses the baseline sections above, existing evidence and exact remaining
 condition; changes to the denominator require a specification-grounded record.
 
@@ -547,3 +547,16 @@ without startup repair; all four historical startup conditions remain unresolved
 and original budgets unchanged. All jobs terminal, no heavy job live. PCTX01
 incomplete0/10. Offline read-only Linux arm64 container executes, but cargo/rustc
 absent; capability log is environment proof only, not native PCTX verification.
+
+
+## PCTX01 native Linux boundary — 2026-10-09
+
+See evidence/pctx01-linux-verification.json for source/archive/binary identity,
+initial555PASS22FAIL, environment-fixed575PASS2FAIL, actual ESRCH repair and
+sensitivity failure, invalidated shared-target result, and fresh578PASS1FAIL.
+No scope denominator or official-task status changes. Fresh source-hash target
+prevents cross-tree mutation artifacts. Linux proc scan repair preserves pinned
+root, unknown-error failure, zombie membership and original deadlines. Concurrent
+schedule INDEX_BUSY remains unresolved; inspect common startup/open contract
+ownership next. Four macOS conditions and required Windows remain open. Only
+PCTX01 active, whole0/10; no next official task/Actions.

@@ -1,0 +1,185 @@
+{
+  "task": "PCTX01",
+  "gates": [
+    "G05",
+    "G08",
+    "G09"
+  ],
+  "status": "implementing",
+  "whole_gates_closed": 0,
+  "whole_gate_denominator": 10,
+  "base_revision": "ede92857b42b45e5acef772d71cfdb7123691558",
+  "runtime_revision": "5ff3f46ad757f8f19483763fa3048b6baafc065e",
+  "platform": {
+    "os": "Linux",
+    "architecture": "aarch64",
+    "kernel": "7.0.12-linuxkit",
+    "distribution": "Ubuntu 24.04.4 LTS",
+    "rust": "1.99.0",
+    "engine": "Docker 29.8.0",
+    "cpus": 6,
+    "memory_bytes": 5419159552,
+    "native_vm_execution": true,
+    "image": "sha256:7759288062d2eae43e6df4611c464a1262d3e39d0d774d3fb64f6eed7e12e552",
+    "build_jobs": 2,
+    "test_threads": "default; no override",
+    "network": "none",
+    "host_credentials_mounted": false,
+    "actions_dispatched": false
+  },
+  "source_provenance": [
+    "pctx01-linux-source.json",
+    "pctx01-linux-fixed-source.json"
+  ],
+  "initial_full": {
+    "session": 18470,
+    "exit": 101,
+    "passed": 555,
+    "failed": 22,
+    "log": "pctx01-linux-initial-full.log",
+    "record": "pctx01-linux-initial-test-run.json",
+    "environment_defects": [
+      "Docker implicit noexec tmpfs prevents executable fixtures",
+      "Cargo as PID1 does not supply an orphan init reaper"
+    ],
+    "all_failures_retained": true
+  },
+  "environment_fixed_full": {
+    "session": 85854,
+    "exit": 101,
+    "passed": 575,
+    "failed": 2,
+    "log": "pctx01-linux-environment-full.log",
+    "record": "pctx01-linux-environment-test-run.json",
+    "failed_tests": [
+      "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget",
+      "actual_cli_concurrent_ticks_claim_one_occurrence_and_fixture_bridge_invokes_tick"
+    ],
+    "product_source_unchanged": true
+  },
+  "repair": {
+    "file": "src/query_process.rs",
+    "behavior": "An opened proc stat descriptor returning ESRCH is absent; permission/other errors remain SOURCE_UNAVAILABLE6, required pinned root and zombie-member checks unchanged.",
+    "reference": "https://www.kernel.org/doc/html/latest/filesystems/proc.html",
+    "native_probe": "pctx01-linux-proc-race-probe.log",
+    "original_deadlines_and_concurrency_unchanged": true
+  },
+  "focused": {
+    "session": 3971,
+    "exit": 0,
+    "passed": 5,
+    "failed": 0,
+    "log": "pctx01-linux-proc-tests.log"
+  },
+  "controlled_loss": {
+    "session": 62467,
+    "exit": 101,
+    "passed": 4,
+    "failed": 1,
+    "log": "pctx01-linux-proc-loss.log",
+    "source": "pctx01-linux-proc-loss-source.json",
+    "variant_revision_is_base_only": true,
+    "exact_repair_guard_removed_in_separate_copy": true,
+    "product_checkout_never_mutated": true
+  },
+  "static": {
+    "session": 90633,
+    "exit": 0,
+    "log": "pctx01-linux-clean-clippy.log",
+    "record": "pctx01-linux-clean-clippy-run.json",
+    "source_unchanged": true,
+    "locked_offline_all_targets_warnings_denied": true
+  },
+  "independent_review": {
+    "agent": "/root/work_control",
+    "production_blocker_found": false,
+    "limitations": [
+      "No bare-metal/x86_64/Windows or whole G09 claim",
+      "Fixture cleanup before early assertion failure could be strengthened; normal path kills/reaps child before new assertion",
+      "Schedule INDEX_BUSY retained separately"
+    ],
+    "launcher_source_hash_target_review": "No scoped blocker; shared-target runtime invalidated and actual fresh build/archive/binary identity required."
+  },
+  "setup_failures_retained": {
+    "path_typo": "pctx01-linux-snapshot-path-error.log",
+    "tests_executed": 0
+  },
+  "limitations": [
+    "Native Linux aarch64 only; Windows and Linux x86_64 unverified",
+    "Four historical macOS startup conditions remain unresolved; this Linux-only code does not repair them",
+    "PCTX36 concurrent schedule INDEX_BUSY remains unresolved even if a later run passes without repair",
+    "Existing suite execution is not the entire remaining PCTX01 frontend/representation/deadline acceptance matrix"
+  ],
+  "next_same_task": "PCTX01 G09: classify reproducible Linux schedule INDEX_BUSY against common project-startup/schema/open original-deadline contracts; independent PCTX36 scheduling remains inactive. Then G05/G06 persisted Work event JSON classification.",
+  "invalidated_shared_target_full": {
+    "session": 68758,
+    "status": "terminal",
+    "log": "pctx01-linux-fixed-full.log",
+    "record": "pctx01-linux-fixed-test-run.json",
+    "qualification": "invalidated: mutated source and restored source shared target; archive mtimes may retain mutation unit artifact; source hash alone does not bind executable",
+    "build_cache_contamination_suspected": true,
+    "exit": 101,
+    "lib_test_binary_sha256": "8737560cae46a79d7725fac5ce96eb2b973b56d40637505752fed544f519a82c"
+  },
+  "full": {
+    "session": 16560,
+    "status": "terminal",
+    "log": "pctx01-linux-clean-full.log",
+    "record": "pctx01-linux-clean-test-run.json",
+    "fresh_source_hash_isolated_target": true,
+    "lib_test_binary_sha256": "5fd3b8cc786d8eb909bbea8348668e244b6d5b5ac9863ba370e56f161bca6acd",
+    "library_binary_differs_from_invalidated_shared_target": true,
+    "exit": 101,
+    "passed": 578,
+    "failed": 1,
+    "targets": 75,
+    "failed_tests": [
+      "actual_cli_concurrent_ticks_claim_one_occurrence_and_fixture_bridge_invokes_tick"
+    ],
+    "source_unchanged": true,
+    "counts_exclude_nested_child_summary": true,
+    "query_process_group_regression": "5/5 within 44/44 library tests; project_deadline14/14 at original budgets/concurrency",
+    "cli_binary_sha256": "815968cd61c807f06d2b1cc6a949d53fead63e233f59163a8e4c4078af6a8811"
+  },
+  "preceding_shared_target_static": {
+    "session": 38858,
+    "exit": 0,
+    "log": "pctx01-linux-fixed-clippy.log",
+    "locked_offline_all_targets_warnings_denied": true
+  },
+  "format_check": "cargo fmt --all -- --check terminal0",
+  "all_heavy_jobs_terminal": true,
+  "evidence_sha256": {
+    "pctx01-linux-clean-clippy-run.json": "d33241f213558665803cc720d207c9443fab2c3f5d9a67ec1d89cad613be2489",
+    "pctx01-linux-clean-clippy.log": "e7c99f6335cbeeca0a231e3b60323df066474ed7ba26d6c96da150a08df53357",
+    "pctx01-linux-clean-full.log": "ac18106f02be9942cd39f8de3666fa489f591ddce42245edd229d373734c788c",
+    "pctx01-linux-clean-test-run.json": "afbd4628df6a596c0ac985b143888ca9b8061cdec9c5a22f1af9eb4570113ee5",
+    "pctx01-linux-clippy-install.log": "08cc3e5ddf8fdac43e355fa0e3215ff51d62897f38c2b9748679f1984a32d562",
+    "pctx01-linux-clippy-run.json": "ba7a0ff4906d28a349686cd611a8bb753e9bed51a142194c82df99cce2418213",
+    "pctx01-linux-clippy.log": "380ba05a0f61609e9783b8a1c92c4f3fc0e69b662912378eb42008855a03e413",
+    "pctx01-linux-container-capability.log": "82d513d9cea8d98fea9fc0bd77750d2fff5aa922556b258fe99281f40bad3591",
+    "pctx01-linux-engine.log": "4192e8f06c465d30b8c0af67ca5dc7a921b311b6f3942822539f0d8da84a0a6c",
+    "pctx01-linux-environment-full.log": "9f63b98892aac887c07828f7d9c3d0897b808a26920956835dccf414a4e1c706",
+    "pctx01-linux-environment-test-run.json": "0d8d429f1dd33fdd22df6e2e1f53cc967d5e3f2a3bc52e436c939b967d22d6f0",
+    "pctx01-linux-final-mounts.log": "d3ba96e0e675d470f1ccb6faf386acc3095c4a5c7211d778e696689f7b7fb810",
+    "pctx01-linux-fixed-clippy-run.json": "e8a0e1aba73976c401978a5ab30955dc931e061846c80ebbb6660ba9ec63ab1d",
+    "pctx01-linux-fixed-clippy.log": "82d7d57e3f5ddfa931355618b49f0c1b9708dfcca8a4de85e7eef8c4fae020ed",
+    "pctx01-linux-fixed-full.log": "afde7b151835f25563250fadbc449a84a928e6a8cb9279e09635d31744f0c721",
+    "pctx01-linux-fixed-source.json": "8575aaa2dd5eb6ef95b2786e6478cc4f2fdfcdf82d5e9db55478d54395fb0ea0",
+    "pctx01-linux-fixed-test-run.json": "902dd47a4b4a6497d7552ab503824aec8a84e54d42019c96c4e08ea65d20f3a3",
+    "pctx01-linux-init-probe.log": "d6557a5928f8661b984147994eed4a28cbe1bef369912ac9a9c946e36e55bb43",
+    "pctx01-linux-initial-full.log": "14663c61bd09ee5aa09fcb0ee39dfec2eac501229949d9f90526c5abbd10b72a",
+    "pctx01-linux-initial-mounts.log": "cfecc074ae7d461fa6b8d193d1505cd7515b4dc572512925de221e0a15befbd8",
+    "pctx01-linux-initial-test-run.json": "d4b7f44f9a8ee856d0c7c2c7e07083d7ee470c6efb672fcd4622cc633a8605c7",
+    "pctx01-linux-native-environment.log": "61ab15a3651618a1ccb7d30d64eba499e3d895002d02dc1ab3611397a53b93de",
+    "pctx01-linux-proc-loss-run.json": "8b14653a91df5574b5e5c7e2f55f2fd507458a904c0cca3a08c1f492cb79fe94",
+    "pctx01-linux-proc-loss-source.json": "8a8839852060b2a02a63ca6470bf17e99b42096292e580c03eca6003eeee507a",
+    "pctx01-linux-proc-loss.log": "72f8c79cfeb4fed2ff8e401a33d5abd477c5afd435d81f5f42063c584bf90aeb",
+    "pctx01-linux-proc-race-probe.log": "ec88a1fcb934eba382e457698da293246e32e641ec0f22ece2a64fddb147b7e0",
+    "pctx01-linux-proc-test-run.json": "07848a2506bc91985fc690ecee516c948c473b2fdc001bee3c0db9d6286c382f",
+    "pctx01-linux-proc-tests.log": "d4c87bd8cd85ebe88d2d97c3c014a4d764dd880394f6b354a83b802bc4fbc83c",
+    "pctx01-linux-rust-install.log": "113c83ccd2d46074a3d2c6aa0d1373d1fba7401ca94bc5f8b699352f1b6015b0",
+    "pctx01-linux-snapshot-path-error.log": "b63a532127ab0ef81d66895fd078e1f7135f64b1856d99da3ee46e05a8bb05d0",
+    "pctx01-linux-source.json": "525c71092d2b6312492d49f17219b347a4515b67d2019a44b7ec6fcc613f815c"
+  }
+}

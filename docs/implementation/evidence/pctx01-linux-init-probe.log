@@ -1,0 +1,14 @@
+init=False exit=0
+    PID    PPID    PGID STAT COMMAND
+
+init=True exit=0
+    PID    PPID    PGID STAT COMMAND
+
+
+Non-reaping Python PID1 comparison:
+init=False exit=0
+    PID    PPID    PGID STAT COMMAND
+      8       1       1 Z    sleep
+
+init=True exit=0
+    PID    PPID    PGID STAT COMMAND

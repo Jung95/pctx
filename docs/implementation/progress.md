@@ -8,6 +8,19 @@ Baseline: specification 0.6, all 45 sections read; 2026-10-08. The repository be
 
 The pre-existing eleventh M30 has finished and remains historical evidence. Packaging target-directory repair and approval-memory integration are backlog. No unrelated implementation or verification is active.
 
+## Current Linux verification boundary — 2026-10-09
+
+Only PCTX01 active. Runtime5ff3f46 repairs ESRCH after an opened Linux proc
+process is reaped; pinned-root/unknown-error/zombie/original-budget contracts
+remain intact. Native Linux aarch64 fresh full16560 is terminal101:578PASS1FAIL,
+only concurrent schedule tick INDEX_BUSY. Original failures and invalidated shared
+mutation-cache run retained; launcher now isolates targets by source hash.
+See evidence/pctx01-linux-verification.json for archive/environment/binary IDs,
+regression/sensitivity/static results and independent review. No Actions used.
+Whole0/10; Windows and four macOS conditions remain open. Next: classify Linux
+DB contention against PCTX01 common startup/open contracts before any fix;
+independent scheduling stays backlog. No next official task selected.
+
 ## Integrated behavior
 
 - Project/workspace bindings, safe descriptor-based source reads, metadata-only SQLite generations, five Tree-sitter grammar variants, Boolean/literal search, extraction, bounded byte context, checkpoints and explicit handoffs.
@@ -30,7 +43,7 @@ These are partial specification implementations. Code or a passing subset does n
 
 macOS arm64, 10 CPUs, 16 GiB; local ignored Rust 1.99.0. SQLite bundled with runtime minimum version check. Git branch main, origin https://github.com/Jung95/pctx.git. GitHub network authentication confirms active Jung95. This gate prepares the first verified development commit; inspect `git log` and `origin/main` for publication status. Public documentation is English; the original Korean input is preserved and excluded; the faithful English edition and translation coverage record are present (PCTX67).
 
-## Next actions
+## Historical next actions — superseded by current official task
 
 Pack corrections, scoped documents, quota ledger, local schedule registry and offline Claude adapter are integrated. Registered runner has 19/19 isolated tests passing using native macOS OS identity, including canonical bridge exclusion, child survival after parent death and negative observation after guardian death. Watch/NDJSON regressions pass (4 watch + 5 CLI tests); quota restore regression passes (7 quota + 8 work tests). The final macOS gate passed formatting, all-target static checks with warnings denied, and all 148 tests; see `evidence/full-macos-validation.log`. The local macOS arm64 archive is generated with notices/SBOM for 131 locked dependencies. Hash/extraction/version, isolated exploration, atomic same-build reinstallation and removal preserving user data passed; see `evidence/archive-install-validation.log`. Future-version migration is not established by reinstalling the same build. Commit and push the verified development milestone, keeping incomplete requirements explicit. Continue registered checks/resource supervision, scheduling, adapters, remaining coordination/search/contracts and reproducible measurement toward the full goal.
 

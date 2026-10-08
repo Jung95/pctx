@@ -1,0 +1,3 @@
+tmpfs /tmp tmpfs rw,nosuid,nodev,noexec,relatime,size=1048576k 0 0
+lrwxrwxrwx 1 root root      4 Mar 31  2024 /bin/sh -> dash
+-rwxr-xr-x 1 root root 199440 Sep 26  2024 /usr/bin/ps

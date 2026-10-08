@@ -1155,3 +1155,25 @@ without startup repair; all four historical startup conditions remain unresolved
 and original budgets unchanged. All jobs terminal, no heavy job live. PCTX01
 incomplete0/10. Offline read-only Linux arm64 container executes, but cargo/rustc
 absent; capability log is environment proof only, not native PCTX verification.
+
+
+## PCTX01 native Linux verification — 2026-10-09
+
+G05/G08/G09, §14/§38: opened Linux proc-stat descriptors can return ESRCH when
+the observed process is reaped. src/query_process.rs now classifies only that
+vanished-process condition as absent; required pinned-root observation, other
+read errors/size/parser refusal and conservative zombie members remain. Actual
+FD-after-reap regression, missing-root refusal, EACCES failure and unchanged live
+bytes are verified in the fresh native Linux44-test library suite; original
+project_deadline14-test group/stream/budget suite also passes.
+
+Evidence: evidence/pctx01-linux-verification.json. Linux aarch64 Ubuntu24.04.4
+Rust1.99 VM fresh full578PASS1FAIL; concurrent schedule INDEX_BUSY remains open.
+Earlier555PASS22FAIL (noexec/no init),575PASS2FAIL and mutation/contaminated-cache
+failures retained. Source hash alone did not bind shared-target artifacts; the
+launcher now isolates build targets by source hash, with Git archive and binary
+identity independently recorded. Independent read-only reviews found no scoped
+production blocker. This is actual platform execution, not whole-G09 closure,
+Windows/x86_64 support or macOS startup repair. Fixed whole0/10,140 leaves and12
+historical groups unchanged. Next same-task audit classifies the persistent Linux
+DB admission contention; independent PCTX36 functionality remains inactive.

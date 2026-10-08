@@ -1,0 +1,3 @@
+{"container": "pctx-linux-99135", "phase": "clippy", "source_tree_sha256": "b99439192c77dfbd35b9bed651be287e2e0eee6b13ae83c573d221fd22823b7b"}
+    Checking pctx v0.1.0-dev (/workspace)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 9.30s

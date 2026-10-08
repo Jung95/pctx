@@ -1,0 +1,19 @@
+{
+  "source_revision": "ede92857b42b45e5acef772d71cfdb7123691558",
+  "source_snapshot": "/Users/dev/PCTX/.toolchain/linux/source-ede92857",
+  "archive_sha256": "4a246809ad934e0cc75f91585a236bfa1462e63bc64e7503c8ae7fe3c6eecda6",
+  "files_sha256": {
+    "Cargo.toml": "f05c2b74835e00ce3c8692882e0815280cb75f0dad4cd563f464bcc7e9d2042e",
+    "Cargo.lock": "f96362897990caba560793601bc9fca08cef5c977907bb06889d5595d2acd7b0",
+    "src/main.rs": "4bc497bf9baf426719b511ca3b9450dcb9524a7df4ed184e600b0e7c9bd8b592",
+    "src/work.rs": "89b25fda7e25424d28e95316a54bdfc7e65026d0d394a8644a027201cc004527",
+    "src/watch.rs": "dc6c6f1d4bbe27fe2dccd4505a8ddfed54fbf8224f793fbe72d3751ba654c2fb",
+    "tests/activity_preflight.rs": "330447ca867908e09342baa7e514e4b06620549a01e8c9e535b885720bc89a86"
+  },
+  "source_read_only": true,
+  "registry_copied_only": true,
+  "host_credentials_or_global_config_copied": false,
+  "archive_recreated_from_revision": true,
+  "snapshot_files_compared_to_git_archive": 1042,
+  "snapshot_executable_modes_match": true
+}

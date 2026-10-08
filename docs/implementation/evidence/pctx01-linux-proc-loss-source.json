@@ -1,0 +1,7 @@
+{
+  "base_revision": "5ff3f46ad757f8f19483763fa3048b6baafc065e",
+  "mutation": "remove only ESRCH disappearance classification",
+  "mutated_file_sha256": "f1a1cd180d247c197337b870b986db7768e91ccd59862b4a4495dc715cf46eee",
+  "immutable_original_file_sha256": "74c4c46c6b224563c63e9e2d7a9beac7996ef69735b072a39ee22c9aa989d6cb",
+  "product_checkout_unchanged": true
+}
