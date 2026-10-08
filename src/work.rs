@@ -511,6 +511,9 @@ struct Task {
     submission: Option<Value>,
     completion: Option<Value>,
 }
+fn stored_json<T: serde::de::DeserializeOwned>(text: &str, message: &str) -> Result<T> {
+    serde_json::from_str(text).map_err(|_| Error::new("DB_CORRUPT", message, 7))
+}
 fn task(db: &Connection, name: &str) -> Result<Task> {
     let number = name
         .strip_prefix("T-")
@@ -523,11 +526,17 @@ fn task(db: &Connection, name: &str) -> Result<Task> {
         state: row.2,
         revision: row.3,
         def_rev: row.4,
-        def: serde_json::from_str(&row.5)?,
+        def: stored_json(&row.5, "Stored task definition JSON is invalid")?,
         agent: row.6,
         workspace: row.7,
-        submission: row.8.map(|s| serde_json::from_str(&s)).transpose()?,
-        completion: row.9.map(|s| serde_json::from_str(&s)).transpose()?,
+        submission: row
+            .8
+            .map(|s| stored_json(&s, "Stored task submission JSON is invalid"))
+            .transpose()?,
+        completion: row
+            .9
+            .map(|s| stored_json(&s, "Stored task completion JSON is invalid"))
+            .transpose()?,
     })
 }
 fn expect(t: &Task, r: Option<i64>) -> Result<()> {
@@ -1030,7 +1039,7 @@ fn task_command(project: &Project, db: &Connection, command: &TaskCommand) -> Re
                         "Key used with different task definition",
                     ));
                 }
-                return Ok(serde_json::from_str(&response)?);
+                return stored_json(&response, "Stored command receipt JSON is invalid");
             }
             let number: i64 =
                 db.query_row("SELECT coalesce(max(number),0)+1 FROM tasks", [], |r| {
@@ -1516,7 +1525,7 @@ fn agent_command(project: &Project, db: &Connection, command: &AgentCommand) -> 
                         "Report key used with different payload",
                     ));
                 }
-                return Ok(serde_json::from_str(&response)?);
+                return stored_json(&response, "Stored command receipt JSON is invalid");
             }
             let (task_id, _, _) = lease(db, run, Some(*lease_epoch), project)?;
             let seq: i64 = db.query_row("SELECT seq FROM runs WHERE id=?1", [run], |r| r.get(0))?;
