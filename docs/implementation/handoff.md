@@ -6,7 +6,7 @@
 
 ## Source, evidence and environment
 
-Baseefe10fbd8f21153cec258e3009f452bc00ccc018; current SQL runtime commit is bound in evidence/pctx01-cpu-sql-verification.json after integration. Native full14793 terminal101:384 PASS/4 original startup FAIL across46 suites. DirectSQL/readdeadline5 PASS; format/locked all-target Clippy PASS; independent scoped review no blocker. No live heavy job or CI. Confirm Git/process state on resume.
+Baseefe10fbd8f21153cec258e3009f452bc00ccc018; SQL runtime1a20c03fc311b1dd9a8660e0e75beb3baebc3e45. Native full14793 terminal101:384 PASS/4 original startup FAIL across46 suites. DirectSQL/readdeadline5 PASS; format/locked all-target Clippy PASS; independent scoped review no blocker. No live heavy job or CI. Confirm Git/process state on resume.
 
 Long recursive SQL proves actual VM work and TIMEOUT/exit7 under immutable original50ms. New distinct deadline-free caller clears the connection's expired prior progress handler; expired Some(deadline) still refuses before reconfiguration. Initial DB_ERROR failure retained. Engine qualification does not cover command-level aggregation or auxiliary phase expiry.
 
