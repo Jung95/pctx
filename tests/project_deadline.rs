@@ -561,3 +561,36 @@ fn relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry() {
         b"child-cwd"
     );
 }
+
+#[cfg(unix)]
+#[test]
+fn concurrent_query_startup_preserves_group_streams_and_original_one_second_budget() {
+    // Bounded concurrency exercises fork/spawn startup in a multithreaded host.
+    // Every query keeps the same one-second contract as the path/stream fixtures.
+    std::thread::scope(|scope| {
+        let workers: Vec<_> = (0..8)
+            .map(|_| {
+                scope.spawn(|| {
+                    let (_t, c) =
+                        fake_git("kill -0 -$$ || exit 47\nprintf stdout\nprintf stderr >&2\n");
+                    for _ in 0..16 {
+                        let mut command = Command::new(c.get_program());
+                        command.args(c.get_args());
+                        let result = query_process::output(
+                            command,
+                            Deadline::from_millis(1000).unwrap(),
+                            64,
+                        )
+                        .unwrap();
+                        assert!(result.status.success(), "isolated child group must exist");
+                        assert_eq!(result.stdout, b"stdout");
+                        assert_eq!(result.stderr, b"stderr");
+                    }
+                })
+            })
+            .collect();
+        for worker in workers {
+            worker.join().unwrap();
+        }
+    });
+}

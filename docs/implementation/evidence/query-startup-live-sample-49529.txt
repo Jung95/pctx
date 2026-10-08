@@ -1,0 +1,28 @@
+Analysis of sampling sh (pid 49529) every 10 milliseconds
+Process:         sh [49529]
+Path:            /bin/sh
+Load Address:    0x104e6c000
+Identifier:      sh
+Version:         ???
+Code Type:       ARM64
+Parent Process:  project_deadline-f7e8b9d913251d84 [49524]
+Target Type:     live task
+
+Date/Time:       2026-10-08 09:26:11.360 +0200
+Launch Time:     2026-10-08 09:26:11.046 +0200
+OS Version:      macOS 26.7.1 (25G241)
+Report Version:  7
+Analysis Tool:   /usr/bin/sample
+----
+
+Call graph:
+    59 Thread_7598021: Main Thread   DispatchQueue_<multiple>
+      59 _dyld_start  (in dyld) + 0  [0x10519c9c0]
+
+Total number in stack (recursive counted multiple, when >=5):
+
+Sort by top of stack, same collapsed (when >= 5):
+        _dyld_start  (in dyld)        59
+
+Binary images description not available
+

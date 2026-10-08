@@ -1,0 +1,23 @@
+{
+  "test_exit": 101,
+  "samples": [
+    {
+      "pid": 49527,
+      "observed_ms": 220,
+      "command": "/bin/sh",
+      "sample": "/tmp/pctx-query-live-samples/sample-49527.txt"
+    },
+    {
+      "pid": 49528,
+      "observed_ms": 221,
+      "command": "/bin/sh",
+      "sample": "/tmp/pctx-query-live-samples/sample-49528.txt"
+    },
+    {
+      "pid": 49529,
+      "observed_ms": 222,
+      "command": "/bin/sh",
+      "sample": "/tmp/pctx-query-live-samples/sample-49529.txt"
+    }
+  ]
+}

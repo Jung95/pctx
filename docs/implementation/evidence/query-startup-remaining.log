@@ -1,0 +1,22 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.06s
+     Running tests/query_deadline_cli.rs (target/debug/deps/query_deadline_cli-91fccc6ca25b7a4f)
+
+running 6 tests
+test invalid_or_inapplicable_timeout_has_no_project_effects ... ok
+test finite_saved_routes_accept_timeout_and_reject_zero_before_project_effects ... ok
+test strict_find_waits_only_remaining_budget_and_preserves_active_generation ... ok
+test finite_ndjson_contention_preserves_error_code_without_creating_events ... ok
+test doctor_contention_reports_timeout_with_original_budget_and_unchanged_database ... ok
+test saved_cli_reread_never_reruns_and_failed_metering_preserves_delivery_truth ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.35s
+
+     Running tests/query_filter_guard.rs (target/debug/deps/query_filter_guard-227c495d0a8a5b95)
+
+running 3 tests
+test filter_configuration_query_is_narrow_and_not_general_configuration_access ... ok
+test no_filter_match_is_normal_and_invalid_configuration_is_not_an_empty_observation ... ok
+test effective_clean_or_process_filter_declines_status_without_running_driver ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.33s
+

@@ -571,15 +571,10 @@ pub fn output(command: Command, deadline: Deadline, max_bytes: usize) -> Result<
             .envs(environment)
             .stdin(Stdio::null())
             .stdout(Stdio::piped())
-            .stderr(Stdio::piped());
-        unsafe {
-            command.pre_exec(|| {
-                if libc::setpgid(0, 0) == -1 {
-                    return Err(std::io::Error::last_os_error());
-                }
-                Ok(())
-            });
-        }
+            .stderr(Stdio::piped())
+            // Standard group setup preserves PGID=PID while allowing native
+            // spawn instead of forcing fork/exec for a pre_exec callback.
+            .process_group(0);
         deadline.check()?;
         let started = std::time::Instant::now();
         let mut child = command.spawn()?;

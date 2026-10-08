@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "base_commit": "749de79eaa2f6d2bec3a97e238e3e907fc435ba7",
+  "production_sha256": "a038678716f4bd1a34b9725285573e63ef8248a88612f358f455ad72bb4e4ad4",
+  "fixture_sha256": "8b9fbc97fbd5acaf612b2d75b94cf810faa2b61614b654495082462b1941a8dc",
+  "before_production_sha256": "4c288e102729ed35e2237ccc4974a3808db208ff86a63e640a990ab1ee3f6f43",
+  "platform": "native macOS arm64",
+  "checks": {
+    "format": "PASS",
+    "all_target_clippy": "PASS",
+    "before_identical_concurrency_fixture": "FAIL",
+    "after_isolated_concurrency_fixture": "PASS (128 queries, 8 workers, original1000ms)",
+    "related_native_suite": {
+      "passed": 11,
+      "failed": 3,
+      "exit_code": 101,
+      "handle": 38670
+    },
+    "live_sample_test": {
+      "passed": 10,
+      "failed": 4,
+      "exit_code": 101,
+      "handle": 82615
+    },
+    "remaining_cli_filter": {
+      "passed": 9,
+      "failed": 0,
+      "handle": 82476,
+      "exit_code": 0
+    }
+  },
+  "conclusion": "Equivalent standard process group setup is not a startup fix. Related suite and live sampling reproduce pre-body stalls despite removing sole pre_exec. All three sampled failed children remain at _dyld_start+0 with no script output; native cause remains unknown. This narrows observed phase, not underlying OS diagnosis.",
+  "limits": [
+    "No deadline relaxation or retry promotion",
+    "Full native gate not qualified; related suite failure retained",
+    "Other supported platforms unverified for this change",
+    "No Actions dispatched",
+    "D041 operations helper assigned to work_control, not yet integrated/verified"
+  ],
+  "primary_sources": [
+    "https://doc.rust-lang.org/std/os/unix/process/trait.CommandExt.html#tymethod.process_group",
+    "https://doc.rust-lang.org/src/std/sys/process/unix/unix.rs.html"
+  ],
+  "evidence_sha256": {
+    "docs/implementation/evidence/query-startup-live-status.json": "6ecffe52629b62b6d1eb5ebd338b0694631e863012230d04c8db911b2f7e88e2",
+    "docs/implementation/evidence/query-startup-static.log": "4e3b72c511822cd988b20860a7ce11fc3772997488b13c2ac593c7734e2af92a",
+    "docs/implementation/evidence/query-startup-after.log": "7c593e831f300b0272075fe14539e7d7a93b8f7597be50deb1c0a0570bb7eb45",
+    "docs/implementation/evidence/query-startup-before.log": "e911dc36c0c6bc408d7ff006d0b4f41097aa798c982b083789851ad28a439438",
+    "docs/implementation/evidence/query-startup-live-sample-49527.txt": "d52bd2bf6989270284dddc618d988fcfce783cd5565da576a00e7ca8ef6912d3",
+    "docs/implementation/evidence/query-startup-live-tests.log": "e564fe58834eb7b706302dbbee13e285cb772c404c3070637ac54b14ffe864cc",
+    "docs/implementation/evidence/query-startup-live-sample-49529.txt": "d745c8668e7fe767a5d315d95db348808c605dccde9e263cadc0e4dee3399110",
+    "docs/implementation/evidence/query-startup-targeted.log": "571079779d8351a079d7e0f7c9c84428fd6e467b0f35b4410d8cc293736e4643",
+    "docs/implementation/evidence/query-startup-live-sample-49528.txt": "daeb8fa48d141e0b200aed38b2f6e08e2f01901262d66c6db5dce60904fb96d1",
+    "docs/implementation/evidence/query-startup-format.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/implementation/evidence/query-startup-remaining.log": "07e23756f55bcf070d97af424cd68f552fc5029677dd9a408295d43468079be8"
+  }
+}
