@@ -1,0 +1,27 @@
+{
+  "base_revision": "1a3db97ca39e96be1be9a8d1f08783334894492a",
+  "platform": "native macOS arm64",
+  "source_sha256": {
+    "src/main.rs": "289f590349bf6339053c311ca4fbc1963a3a1a6445d2a496e61ea499c88f147a",
+    "src/session.rs": "17ef72cbe4dc55ad3ed77f4a65be2fb62ebbf0e1197be1759457a5a61f62e5c4",
+    "tests/session.rs": "934d43592cafa4a1f74cf8756bc8c82f03aa82349bcb7dae6b1bfb7fb2d85511",
+    "tests/session_render_budget.rs": "45eb326acac8d2ed2ac5d89294c65c871fdeaa8dd3fb65fccda3d9a17dadf264"
+  },
+  "gates": {
+    "35252": {
+      "exit": 0,
+      "targeted_passed": 28,
+      "clippy": "all-targets locked warnings denied"
+    },
+    "65022": {
+      "exit": 0,
+      "full_passed": 302
+    }
+  },
+  "ci_dispatched": false,
+  "scope_limits": [
+    "cooperative blocking native calls",
+    "full finite command coverage unfinished",
+    "Linux and Windows integration unverified"
+  ]
+}

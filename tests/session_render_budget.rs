@@ -319,3 +319,95 @@ fn exact_final_budget_and_representation_receipts_require_explicit_ack() {
         "semantic serializer bump does not invent a DB migration"
     );
 }
+
+#[test]
+fn original_cli_budget_bounds_writer_admission_without_context_or_epoch_writes() {
+    let f = fixture();
+    let session = f.attach();
+    let (exit, _, packet) = f.get(&session, "20000");
+    assert_eq!(exit, 0, "{packet}");
+    let context = packet["data"]["context_id"].as_str().unwrap();
+    let db = f.db();
+    let counts = || {
+        [
+            "pctx_sessions",
+            "pctx_context_emissions",
+            "pctx_context_acks",
+            "pctx_session_events",
+            "pctx_session_capsules",
+        ]
+        .map(|table| {
+            db.query_row(&format!("SELECT count(*) FROM {table}"), [], |r| {
+                r.get::<_, i64>(0)
+            })
+            .unwrap()
+        })
+    };
+    let before = counts();
+    db.execute_batch("BEGIN IMMEDIATE").unwrap();
+    for args in [
+        vec![
+            "--timeout-ms",
+            "100",
+            "context",
+            "get",
+            "--task-id",
+            &f.task,
+            "--session",
+            &session,
+            "--scope",
+            "auth.py",
+            "--budget-bytes",
+            "20000",
+        ],
+        vec![
+            "--timeout-ms",
+            "100",
+            "context",
+            "ack",
+            context,
+            "--session",
+            &session,
+            "--epoch",
+            "1",
+        ],
+        vec![
+            "--timeout-ms",
+            "100",
+            "session",
+            "boundary",
+            "--session",
+            &session,
+        ],
+    ] {
+        let begin = Instant::now();
+        let (exit, _, failure) = f.run(&args);
+        assert_eq!(exit, 7, "{args:?}: {failure}");
+        // Busy admission can finish just before the deadline's final fraction;
+        // neither case may renew the wait to the default five seconds.
+        assert!(
+            matches!(
+                failure["errors"][0]["code"].as_str(),
+                Some("TIMEOUT" | "INDEX_BUSY")
+            ),
+            "{failure}"
+        );
+        assert!(
+            begin.elapsed() < Duration::from_secs(1),
+            "request renewed its budget"
+        );
+        assert_eq!(counts(), before);
+    }
+    db.execute_batch("ROLLBACK").unwrap();
+    assert_eq!(counts(), before);
+    let epoch: i64 = db
+        .query_row(
+            "SELECT epoch FROM pctx_sessions WHERE id=?1",
+            [&session],
+            |r| r.get(0),
+        )
+        .unwrap();
+    assert_eq!(epoch, 1);
+    let (_, _, current) = f.get(&session, "20000");
+    assert_eq!(current["status"], "ok", "{current}");
+}

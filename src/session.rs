@@ -81,7 +81,9 @@ fn mismatch(s: &str) -> Error {
     )
 }
 fn connect(p: &Project) -> Result<Connection> {
+    p.check_deadline()?;
     let mut db = work::connect(p)?;
+    p.check_deadline()?;
     let initialized:bool=db.query_row("SELECT EXISTS(SELECT 1 FROM sqlite_master WHERE type='table' AND name='pctx_session_schema')",[],|r|r.get(0))?;
     if initialized {
         let version: i64 =
@@ -112,6 +114,7 @@ CREATE TABLE IF NOT EXISTS pctx_session_capsules(id TEXT PRIMARY KEY,session TEX
             7,
         ));
     }
+    p.check_deadline()?;
     tx.commit()?;
     db.execute_batch("CREATE TRIGGER IF NOT EXISTS pctx_session_events_no_update BEFORE UPDATE ON pctx_session_events BEGIN SELECT RAISE(ABORT,'append-only events'); END; CREATE TRIGGER IF NOT EXISTS pctx_session_events_no_delete BEFORE DELETE ON pctx_session_events BEGIN SELECT RAISE(ABORT,'append-only events'); END;")?;
     Ok(db)
@@ -172,7 +175,27 @@ fn snapshot(p: &Project, agent: &str) -> Result<Value> {
         json!({"schema_version":1,"project_id":p.project_id,"workspace_id":p.workspace_id,"agent_id":agent,"policy_hash":p.policy_hash(),"manifest":manifest,"event_watermark":board["as_of_seq"],"tasks":tasks,"usage":crate::quota::recovery_state(p)?,"approval_restore":false,"lease_restore":false,"dialogue_included":false}),
     )
 }
+// Library callers get the same finite budget; an existing outer deadline is
+// retained rather than renewed by nested session/context calls.
+fn request(p: &Project, operation: impl FnOnce(&Project) -> Result<Value>) -> Result<Value> {
+    let mut scoped;
+    let p = if p.deadline.is_none() {
+        scoped = p.clone();
+        scoped.deadline = Some(crate::deadline::Deadline::from_millis(10_000)?);
+        &scoped
+    } else {
+        p
+    };
+    p.check_deadline()?;
+    let result = operation(p);
+    // Normalize late storage/serialization failures to the original expiry.
+    p.check_deadline()?;
+    result
+}
 pub fn session(p: &Project, c: &SessionCommand) -> Result<Value> {
+    request(p, |p| session_inner(p, c))
+}
+fn session_inner(p: &Project, c: &SessionCommand) -> Result<Value> {
     // Operational snapshot is read before opening our writer transaction.
     let mut db = connect(p)?;
     let capsule = match c {
@@ -308,6 +331,7 @@ pub fn session(p: &Project, c: &SessionCommand) -> Result<Value> {
             json!({"session_id":session,"context_epoch":s.epoch,"status":s.status,"capsule_id":latest.map(|(id,_)|id),"current":current,"changed_since_capsule":changed,"resume_allowed":s.status=="active"&&!paused,"next_action":if paused{"owner must explicitly resume paused work"}else{"attach a new session, obtain and acknowledge full context, then explicitly claim available work"},"lease_restored":false,"approvals_restored":false})
         }
     };
+    p.check_deadline()?;
     tx.commit()?;
     Ok(value)
 }
@@ -404,7 +428,9 @@ fn selection(
     };
     let docs = crate::documents::load(p, &effective_scope)?;
     for section in ["rules", "decisions", "instructions"] {
+        p.check_deadline()?;
         for doc in docs[section].as_array().into_iter().flatten() {
+            p.check_deadline()?;
             let path = doc["path"].as_str().unwrap();
             let key = format!("file:{path}");
             let kind = if section == "rules" && doc["required"] == true {
@@ -423,6 +449,7 @@ fn selection(
         }
     }
     for path in inventory.paths {
+        p.check_deadline()?;
         if path.starts_with(".pctx/rules/")
             || path.starts_with(".pctx/decisions/")
             || effective_scope.is_empty()
@@ -442,6 +469,9 @@ fn selection(
     Ok((metadata, bodies))
 }
 pub fn context(p: &Project, c: &ContextCommand) -> Result<Value> {
+    request(p, |p| context_inner(p, c))
+}
+fn context_inner(p: &Project, c: &ContextCommand) -> Result<Value> {
     match c {
         ContextCommand::Ack {
             context,
@@ -482,6 +512,7 @@ pub fn context(p: &Project, c: &ContextCommand) -> Result<Value> {
                 "context_ack",
                 &json!({"context_id":context,"epoch":epoch,"provenance":provenance}),
             )?;
+            p.check_deadline()?;
             tx.commit()?;
             Ok(
                 json!({"context_id":context,"session_id":session,"context_epoch":epoch,"acknowledged":true,"provenance":provenance,"understanding_proven":false}),
@@ -564,6 +595,7 @@ pub fn context(p: &Project, c: &ContextCommand) -> Result<Value> {
                 }
                 let old: BTreeMap<String, Value> = serde_json::from_str(&row.6)?;
                 for (key, value) in &metadata {
+                    p.check_deadline()?;
                     match old.get(key) {
                         None => added.push(bodies[key].clone()),
                         Some(v) if v != value => changed.push(bodies[key].clone()),
@@ -571,6 +603,7 @@ pub fn context(p: &Project, c: &ContextCommand) -> Result<Value> {
                     }
                 }
                 for (key, value) in &old {
+                    p.check_deadline()?;
                     if !metadata.contains_key(key) {
                         removed.push(json!({"item_id":key,"previous":value,"tombstone":true,"reason":"removed_or_no_longer_visible"}));
                     }
@@ -593,6 +626,7 @@ pub fn context(p: &Project, c: &ContextCommand) -> Result<Value> {
                 ));
             }
             for item in metadata.values().filter(|m| m.get("path").is_some()) {
+                p.check_deadline()?;
                 let path = item["path"].as_str().unwrap();
                 if reader::read(p, path)?.hash != item["hash"].as_str().unwrap() {
                     return Err(Error::new(
@@ -625,6 +659,7 @@ pub fn context(p: &Project, c: &ContextCommand) -> Result<Value> {
                 "context_emitted",
                 &json!({"context_id":context_id,"mode":mode,"epoch":s.epoch}),
             )?;
+            p.check_deadline()?;
             tx.commit()?;
             Ok(value)
         }

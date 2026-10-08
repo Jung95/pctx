@@ -331,3 +331,91 @@ fn identity_secrets_are_rejected_before_persistence() {
         .unwrap();
     assert_eq!(n, 0);
 }
+
+#[test]
+fn expired_outer_budget_cannot_emit_ack_attach_or_change_epoch() {
+    let (_t, p, agent, task) = fixture();
+    let sid = attach(&p, &agent);
+    let packet = context(
+        &p,
+        &ContextCommand::Get {
+            task_id: task.clone(),
+            session: sid.clone(),
+            mode: "full".into(),
+            since: None,
+            scope: vec!["auth.py".into()],
+            budget_bytes: 20000,
+        },
+    )
+    .unwrap();
+    let db = p.connect(true).unwrap();
+    let counts = || {
+        [
+            "pctx_sessions",
+            "pctx_context_emissions",
+            "pctx_context_acks",
+            "pctx_session_events",
+            "pctx_session_capsules",
+        ]
+        .map(|table| {
+            db.query_row(&format!("SELECT count(*) FROM {table}"), [], |r| {
+                r.get::<_, i64>(0)
+            })
+            .unwrap()
+        })
+    };
+    let before = counts();
+    let mut expired = p.clone();
+    expired.deadline = Some(pctx::deadline::Deadline::from_instant(
+        std::time::Instant::now() - std::time::Duration::from_millis(1),
+    ));
+    for command in [
+        ContextCommand::Get {
+            task_id: task,
+            session: sid.clone(),
+            mode: "full".into(),
+            since: None,
+            scope: vec!["auth.py".into()],
+            budget_bytes: 20000,
+        },
+        ContextCommand::Ack {
+            context: packet["context_id"].as_str().unwrap().into(),
+            session: sid.clone(),
+            epoch: 1,
+            provenance: "explicit-agent".into(),
+        },
+    ] {
+        assert_eq!(context(&expired, &command).unwrap_err().code, "TIMEOUT");
+    }
+    for command in [
+        SessionCommand::Boundary {
+            session: sid.clone(),
+            reason: "new epoch".into(),
+        },
+        SessionCommand::Suspend {
+            session: sid.clone(),
+            reason: "pause".into(),
+        },
+        SessionCommand::Reconcile {
+            session: sid.clone(),
+        },
+        SessionCommand::Attach {
+            agent,
+            runtime: "manual".into(),
+            workspace: "current".into(),
+            native_session: None,
+            role: None,
+            account_pool: None,
+            adapter_version: "v1".into(),
+        },
+    ] {
+        assert_eq!(session(&expired, &command).unwrap_err().code, "TIMEOUT");
+    }
+    assert_eq!(counts(), before);
+    let epoch: i64 = db
+        .query_row("SELECT epoch FROM pctx_sessions WHERE id=?1", [&sid], |r| {
+            r.get(0)
+        })
+        .unwrap();
+    assert_eq!(epoch, 1);
+}
