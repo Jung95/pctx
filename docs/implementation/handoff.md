@@ -6,7 +6,7 @@
 
 ## Source, evidence and environment
 
-Base d8254dc481947420574a8bd6acc8d8a08ba9ea2c; adapter runtime commit to be bound after commit. Native full83611 terminal101:395 PASS/3 original startup FAIL across48 suites; targeted19 PASS plus overflow1 PASS, format/locked all-target Clippy PASS. Independent scoped review no blocker. No live heavy job or new CI. Confirm Git/process state on resume.
+Base d8254dc481947420574a8bd6acc8d8a08ba9ea2c; adapter runtime a6d86d03d7ad9446e1b71e96dcd7e3c836c1381e. Native full83611 terminal101:395 PASS/3 original startup FAIL across48 suites; targeted19 PASS plus overflow1 PASS, format/locked all-target Clippy PASS. Independent scoped review no blocker. No live heavy job or new CI. Confirm Git/process state on resume.
 
 Adapter Doctor/Verify/ProtocolFixture preserve one original finite deadline; default10s only when none exists. Actual private-HOME synthetic version probe entry then original1.5s TIMEOUT, absence/positive/nonzero/empty/invalidUTF8 and128KiB overflow distinctions qualified on macOS. Exact shared version-only whitelist rejects inference/extra argv. Verify stays lock-free/no new config; supplied50ms existing Install lock contention expires without installation while Verify succeeds with that lock held. CLI zero-budget refuses before discovery/input; positive envelope/input checks pass. Initial /var alias fixture failure retained; canonicalize test base only, no policy relaxation. Cooperative input/root/final phase checks do not qualify preemptive syscalls or all phase races. No live Claude or native Linux/Windows inference. See pctx01-adapter-deadline-verification.json.
 
