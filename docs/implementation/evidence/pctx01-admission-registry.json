@@ -1,0 +1,1246 @@
+{
+  "revision": "d0dbaef",
+  "binary_sha256": "a4d050b5a341c889fa87ce61d2ae7cb3c2fbd52cf1a292ca11d2dae1a1740963",
+  "source_sha256": "b069d8ad7ceb5df7e14879221e78fa4d57f21f395ac8b4d73e641575d1faa7c9",
+  "scope": "Actual visible help registry; not semantic or native Windows qualification",
+  "paths": [
+    {
+      "path": "",
+      "leaf": false,
+      "children": [
+        "task",
+        "agent",
+        "check",
+        "control",
+        "role",
+        "policy",
+        "decision",
+        "owner",
+        "message",
+        "inbox",
+        "quota",
+        "pack",
+        "filter",
+        "session",
+        "context",
+        "adapter",
+        "schedule",
+        "inventory",
+        "resource",
+        "job",
+        "runner",
+        "run",
+        "output",
+        "trust",
+        "savings",
+        "repo",
+        "cache",
+        "board",
+        "activity",
+        "init",
+        "status",
+        "doctor",
+        "index",
+        "find",
+        "trace",
+        "impact",
+        "refs",
+        "query",
+        "extract",
+        "outline",
+        "read",
+        "build",
+        "checkpoint",
+        "changes",
+        "handoff"
+      ],
+      "help_sha256": "c44d17750af1690f1307404d082b93c44fe0ddec58e7e9db004023c45a96ccb2"
+    },
+    {
+      "path": "activity",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "faf5aa7f823ba669f7e45fe087babf98a2f934f007ed443d83958454bb7a1ff6"
+    },
+    {
+      "path": "adapter",
+      "leaf": false,
+      "children": [
+        "claude"
+      ],
+      "help_sha256": "73e2555c1bc42d1e71cc4d160ec0be9d014e78ab0c270402ae17f1472b07dc30"
+    },
+    {
+      "path": "adapter claude",
+      "leaf": false,
+      "children": [
+        "doctor",
+        "plan",
+        "install",
+        "uninstall",
+        "verify",
+        "statusline",
+        "event",
+        "protocol-fixture"
+      ],
+      "help_sha256": "2371bdbeb57ac79e8ea9c2c7ae9db37790922ed4b496816270ba43e7bae0038f"
+    },
+    {
+      "path": "adapter claude doctor",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "b658b23f77e5620322bc688b0d779e8ddc591ff17779261685518bec95ec1fbc"
+    },
+    {
+      "path": "adapter claude event",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "5042afd0ef88c59db36e90fa7e27df14dfe22998dd8b692da30cd5b9da0468f4"
+    },
+    {
+      "path": "adapter claude install",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "cf0b783d1e00aa6e7209e81c7ca36a5c2fbbdb6ca893ea8d2b38b123501ad4d6"
+    },
+    {
+      "path": "adapter claude plan",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "2271278ef3cc2ac0842bba53f6024065d5981a52090d25d975fcb11f3021d9a1"
+    },
+    {
+      "path": "adapter claude protocol-fixture",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "a56062b8d63f861c9e4aac2ad1138124ef837bd51ebd042e9d8e89d77620738d"
+    },
+    {
+      "path": "adapter claude statusline",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "a02020009c52f45a47cfa0ba7634d50b23f085cbb15c01e0065aaf0a84493fa9"
+    },
+    {
+      "path": "adapter claude uninstall",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "03d15784b880cc278468117dfc4fe1c84e94231d67f3c19f59be490931b88cca"
+    },
+    {
+      "path": "adapter claude verify",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "df8d8cc8405a2095da05bf5bc5ad59720dbe117f7c02df0e30ca8e2f95e76200"
+    },
+    {
+      "path": "agent",
+      "leaf": false,
+      "children": [
+        "register",
+        "list",
+        "show",
+        "report",
+        "heartbeat"
+      ],
+      "help_sha256": "78d2fd8e6c473e0de1592baa73c456e95ddd9c54cf19adb9da989a024fb2ab32"
+    },
+    {
+      "path": "agent heartbeat",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "222643c2bac8f4d3e495d17110fe67da324ca95101f1c0f63ff2b738846e8baf"
+    },
+    {
+      "path": "agent list",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "426db311d771fa4c48739eb2cd4f17f67a37cf2c3f30609015165b7596d539a2"
+    },
+    {
+      "path": "agent register",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "fad9b4b6c5ee2e363fbe5fedaa8805ac76f1d2aa9218dddc84503eb1d36d71be"
+    },
+    {
+      "path": "agent report",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "ee154fc7e229bc5d811fd1c00923af1edbb0325dc745dbdfcf0dac5dd747e10a"
+    },
+    {
+      "path": "agent show",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "16d6fc0d9275a377f2d41c97d00e1e4747ff41e016a5567cdaf38733c2664bbe"
+    },
+    {
+      "path": "board",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "a34a947f66a20039981e6d1a87adf4c870b88922380ed03439f817d861701390"
+    },
+    {
+      "path": "build",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "09ee9e6d06195c2d9af4ff0bf7be9ee4a7f00323184877ff7c5cec4b65ee9759"
+    },
+    {
+      "path": "cache",
+      "leaf": false,
+      "children": [
+        "stats"
+      ],
+      "help_sha256": "ffa93df25b586f6a59fa83adaa6934559723d0f074e195ecaa4bcc4728c3737b"
+    },
+    {
+      "path": "cache stats",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "4c9867f5aaa72b3186d57f7f76feedddf56ddb9158acb2bde8c8e14540c26a68"
+    },
+    {
+      "path": "changes",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "90e36d40d7f31d53a56ca9dd36eb47c186118bb069f4510f0612bc8ff5a67f33"
+    },
+    {
+      "path": "check",
+      "leaf": false,
+      "children": [
+        "plan",
+        "run",
+        "begin",
+        "record",
+        "list",
+        "show"
+      ],
+      "help_sha256": "5398d41f554d21d38c1525a61ec7e95621416405574bab173f399ae594e36bae"
+    },
+    {
+      "path": "check begin",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "7155148b3270141a7a61da89ee1547b0be96f6f003bb2e5e0eaec0ac4e9c0c39"
+    },
+    {
+      "path": "check list",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "8b9c8e327483a91ae97c245406c1dbeea26b86f8fe175f88bc8cf54205a5a672"
+    },
+    {
+      "path": "check plan",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "a97ce21788697cf3926967d20d8f87732a0c537fb7514e64a4b64a45dea2dde5"
+    },
+    {
+      "path": "check record",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "eb44efa0ec8ba824001e7c7a8bba4013096e70fc1d2f468f0401ba056e008044"
+    },
+    {
+      "path": "check run",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "64256635815933bb1b3984ed79c75788b45fe975df23a9b1b9ec79ef28a1ff3e"
+    },
+    {
+      "path": "check show",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "3a85ad0f5830ae7e0e53248862b53f2fa3c77683dfbda7163d0e97b70bd82df4"
+    },
+    {
+      "path": "checkpoint",
+      "leaf": false,
+      "children": [
+        "create",
+        "list",
+        "delete"
+      ],
+      "help_sha256": "dff92e13e3d4e0838f562e5f60130626daa686b4a2825dc404b654d3d8e922ed"
+    },
+    {
+      "path": "checkpoint create",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "629c1d6358e35a740109b5ec8df548591f4e1102737c6bf2893efef80b5f0961"
+    },
+    {
+      "path": "checkpoint delete",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "571577e21c8e9d48d1f3e113d1cba0896f47978a700a4714d46895a14926c4b2"
+    },
+    {
+      "path": "checkpoint list",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "6168badf65012a4553561148f12af1a023b5b9848131cbc1df275e58bae88458"
+    },
+    {
+      "path": "context",
+      "leaf": false,
+      "children": [
+        "get",
+        "ack"
+      ],
+      "help_sha256": "136e2ba2298b9ef7305c13622b731b3d27bfd4bf7f6ae1d5b1eaf7f1e24e28ab"
+    },
+    {
+      "path": "context ack",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "a0eecdf87ef794c3cdd0cc7cbc3ae8dce47aa3c04563ed5ee3a8406f7936f44a"
+    },
+    {
+      "path": "context get",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "2feb5057a21126e8ecc6c77bca9255e4cc8d1ea3d0a3a7e0ea6fb76f998698ed"
+    },
+    {
+      "path": "control",
+      "leaf": false,
+      "children": [
+        "backup",
+        "restore"
+      ],
+      "help_sha256": "5f905b0c6af227eb25582c7294a329439768f3aad22c5ce5475a2f30bc6b26c2"
+    },
+    {
+      "path": "control backup",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "5932191367c442091377a3c93bc77ecbe34743fd1b45b845d28edae9ebf045aa"
+    },
+    {
+      "path": "control restore",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "cfda66b7ddc924da1ec44ac0cbfd86bb31ec08b6aab23be8bf174651e60854d4"
+    },
+    {
+      "path": "decision",
+      "leaf": false,
+      "children": [
+        "request",
+        "record",
+        "show"
+      ],
+      "help_sha256": "6a146138832ba8a3edbdcf1cf295923cb99ceb35f0d7cee844708e63452a6985"
+    },
+    {
+      "path": "decision record",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "b35bec68981770ca993546f4351450c3901fdd78104e0af7297f25a04ecc2663"
+    },
+    {
+      "path": "decision request",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "64d88bf4a89785f0e44ed8c12c012ee8c68d4489b567a299075dc00f5d54420e"
+    },
+    {
+      "path": "decision show",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "163e29a6fe753b2efcecf287931c92bd21f04bad71ab95ecb34c565908e10b84"
+    },
+    {
+      "path": "doctor",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "7503f0baed936ea55606979878273954b9ca3bdd7d84a9b343619fb24c8d0ae2"
+    },
+    {
+      "path": "extract",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "9bd1cd33e0a6b0416bc075eb90b83449bb4dc95c76298ad4a551e5cfc386ebb8"
+    },
+    {
+      "path": "filter",
+      "leaf": false,
+      "children": [
+        "validate",
+        "apply",
+        "test",
+        "activate",
+        "explain"
+      ],
+      "help_sha256": "a70bba98e9863b80a85c6c195cc3a618c8384536061a788bfe1aca8051d9d923"
+    },
+    {
+      "path": "filter activate",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "1d2a04c9e11e2fd5355ef6aba13b2dff166d0759fafbce117fc15b9734bf4c86"
+    },
+    {
+      "path": "filter apply",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "6775c9435f969a694e348e4af6bbfac97b47c6cdce0a1784c96d2e77471abc7b"
+    },
+    {
+      "path": "filter explain",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "7df999317d1e9f958732f59a501df29f4c608b1245a58c163448afcc537fe3aa"
+    },
+    {
+      "path": "filter test",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "de4de9703433a598e45f2e7228b8656d6d5ad0e69869e2fb182c201aa503be5d"
+    },
+    {
+      "path": "filter validate",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "8fbf4d24493510ada1e7c81385b91486259ce345b4c72a70109892d4da6907bc"
+    },
+    {
+      "path": "find",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "2dc8ff2c8c14b6af44bfc5f010774d4522f688ad784c5dd44f0bb75a67befacc"
+    },
+    {
+      "path": "handoff",
+      "leaf": false,
+      "children": [
+        "create",
+        "update",
+        "show"
+      ],
+      "help_sha256": "8c20ba453e534f9a7e2654efd6e28b75b7c7f97f46539187bc96f1378876e5fb"
+    },
+    {
+      "path": "handoff create",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "424162a2bf5df79e44d45e72f70465885d5d0219915ff027fc684dd1e562d2ac"
+    },
+    {
+      "path": "handoff show",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "08fd8ab00dff0926eeba1ddf94a3a7bb353e26e30fdef9734124c311a72923e1"
+    },
+    {
+      "path": "handoff update",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "5e01086ac6d406abb25cba8a7e766adcac8a80fa0ac12462d52fb4b8561250ce"
+    },
+    {
+      "path": "impact",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "f1ea27e66efadfef5db9db07d2eabb0aa8f94723f1d0212a83cce6a734129b9f"
+    },
+    {
+      "path": "inbox",
+      "leaf": false,
+      "children": [
+        "read"
+      ],
+      "help_sha256": "88c1ae3e6098d1b04f1c13643fb49bd8f1011b41f02cea5a7af48bfb326887b3"
+    },
+    {
+      "path": "inbox read",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "f8b6e8cf8829a5082e61360b7f3724c63c91b743cd71171f0d24ec16d7f70775"
+    },
+    {
+      "path": "index",
+      "leaf": false,
+      "children": [
+        "update",
+        "rebuild",
+        "gc"
+      ],
+      "help_sha256": "a695c93d64bdf34ed0b225334f8c00c8eb884957cbedf4080e88699690eac24a"
+    },
+    {
+      "path": "index gc",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "4f2e5c370c7cb8c51a8e266af087c1342e3943a5be7ecf095c0df88578a951b5"
+    },
+    {
+      "path": "index rebuild",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "0e36a8868ca7c4003013bfa5fd72234e3259e15fd8520dbf8c3de6098ac7f037"
+    },
+    {
+      "path": "index update",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "b05cba8a7f1a0400e63bda3370723562d2b260f67ce11f5d49732d1b7f6b00b4"
+    },
+    {
+      "path": "init",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "33463f2928d4528e805114cef1f90ab5bcc6ca1a95982f92ad734f7fa9625e72"
+    },
+    {
+      "path": "inventory",
+      "leaf": false,
+      "children": [
+        "scan",
+        "profile",
+        "audit"
+      ],
+      "help_sha256": "b45804d336bd4200c8dacf1469f12127f08d3089984c405c3b3fbe02b01eda89"
+    },
+    {
+      "path": "inventory audit",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "14fee6a123cf2efcca0fd8dfeeb564c2a8225f0f713897930c14a658ee24aaef"
+    },
+    {
+      "path": "inventory profile",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "50f06ab56eb555e8a79040b476c15d752b62924fa49dd8d7cb38b189143a78aa"
+    },
+    {
+      "path": "inventory scan",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "3e409297b6a2d154ee1a2f78bcc9839171db682b8ffb301d43f883838b1e515e"
+    },
+    {
+      "path": "job",
+      "leaf": false,
+      "children": [
+        "cancel"
+      ],
+      "help_sha256": "d6b1ae96ea958e4ad007663290fd6b7a191946e38b7adaad5c301b7a9fd7c76b"
+    },
+    {
+      "path": "job cancel",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "135cd34b596b0cb67be463f5016a98bfbfa4747041ac09acc8312533da1fb50b"
+    },
+    {
+      "path": "message",
+      "leaf": false,
+      "children": [
+        "send",
+        "ack",
+        "resolve"
+      ],
+      "help_sha256": "3937cdb39113f40bad537a1c3dd6a8b6e641b8e9e43240256f07ef6f5ab371a8"
+    },
+    {
+      "path": "message ack",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "3460b62eba5d6d26eb13de857795e49fc73261f96beaf445943abc0ffc0aaddc"
+    },
+    {
+      "path": "message resolve",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "34e129c3abdd3a943b4ba54ef1a70bfad6eb2410d68b8262dacdc5cf6d9f1cfa"
+    },
+    {
+      "path": "message send",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "a8ff6ee7425852e135f9950aae32a4bc94cd1be2d0a6796b3c2e8345775ecd43"
+    },
+    {
+      "path": "outline",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "90654dc650d3ccab1c66955996aac2547ca19c3354625f08a3adfcd4ddb858ef"
+    },
+    {
+      "path": "output",
+      "leaf": false,
+      "children": [
+        "show",
+        "find",
+        "render"
+      ],
+      "help_sha256": "3530aa9d19701bd30bf0286447fd37eb3f0caf0e91fcdbbcb7eb12ccad2cca37"
+    },
+    {
+      "path": "output find",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "ba3ea19f2e1f4fc08acb96b3585e9561287c75a8e34ec201d0043c5681a1d960"
+    },
+    {
+      "path": "output render",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "fe7c06b99f6fe491cee6c42e47449b5e41be242eb41c0d5a7362b00ba337b5a3"
+    },
+    {
+      "path": "output show",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "6eae278839c643d1113982447bb44721487459eabe20f82ed5fc82ff78fa0f3a"
+    },
+    {
+      "path": "owner",
+      "leaf": false,
+      "children": [
+        "queue"
+      ],
+      "help_sha256": "318056dcaccd82393993e745c6fc51cd9e6b712db8c04f75c1cdcca2eb42afea"
+    },
+    {
+      "path": "owner queue",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "aa7c4916b1cac92ddbd93b4b4a9fd59cce0226ef279d5f2c567b98c17bdbc5c6"
+    },
+    {
+      "path": "pack",
+      "leaf": false,
+      "children": [
+        "plan",
+        "create",
+        "inspect",
+        "verify"
+      ],
+      "help_sha256": "24fd7b2f3e397d93950e91a65105c6f275f0299390be9fa82df9f1d2d877ed3b"
+    },
+    {
+      "path": "pack create",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "a91f9eb8933b7663650d7e54919d87cd68ace92026546a767e7f697ff735e35d"
+    },
+    {
+      "path": "pack inspect",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "d24ce87f43e8d68b9111d7ad265d7505d6f5f5364b0fe599e006493aab9510c3"
+    },
+    {
+      "path": "pack plan",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "aaf6ff4a8bdda759262a01c08e80e156c9282a741f632b4633179c274466f9ef"
+    },
+    {
+      "path": "pack verify",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "9f744957ba2e038f830a4af038cc5ead8c63251afc395b8160e99d65851f41f0"
+    },
+    {
+      "path": "policy",
+      "leaf": false,
+      "children": [
+        "evaluate",
+        "attest-owner",
+        "release",
+        "exception-record",
+        "exception-revoke",
+        "report-evaluate",
+        "report-fingerprint"
+      ],
+      "help_sha256": "85498c303da624c99ee2c460395e3941e31a6b76084c72fb37405a9ac33a8f44"
+    },
+    {
+      "path": "policy attest-owner",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "587bedab9bc36a3630763335ff7bc60d0e7845f00fb1b0f09e99b05c249fb07c"
+    },
+    {
+      "path": "policy evaluate",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "45762079c9775141329849b357e934a44d7d2e4a1987f13d89d87da40120ec05"
+    },
+    {
+      "path": "policy exception-record",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "220085ae1c588acfd54d082e0a2749c3af28951d4d7df0dc0c83c32f64534b3d"
+    },
+    {
+      "path": "policy exception-revoke",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "decc6d4ba523ac6fc39bdeb4645855f95d0d6b2f7fcd1b8ac5f3bfce4e53993d"
+    },
+    {
+      "path": "policy release",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "0f69847675ac079ebb2f054dd3e2acc4d9a7095a0851144642103d1033c39702"
+    },
+    {
+      "path": "policy report-evaluate",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "9497077b4b1d1e941f7ad2175c13fceeaf23910ae69e70bc20e819d6cd5adc24"
+    },
+    {
+      "path": "policy report-fingerprint",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "06811f36b097af95eb5f5f67c92076573f00f20ed1a817d201e1f9e7530e5e4d"
+    },
+    {
+      "path": "query",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "50b056c0866cb45c242a348fff9f4374ff68f32a47f4e5d3b08b944ed0f8b0a2"
+    },
+    {
+      "path": "quota",
+      "leaf": false,
+      "children": [
+        "ingest",
+        "report",
+        "reconcile",
+        "plan",
+        "reserve",
+        "release"
+      ],
+      "help_sha256": "7786f43f6f32afcae3507fd52de5fc7ad454caa33e1517479c4398ef95c69157"
+    },
+    {
+      "path": "quota ingest",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "4070dd074240a3070261056dca12b18a31932eeff957af5526c5aeec9496c5d1"
+    },
+    {
+      "path": "quota plan",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "5f74502d2d33366b9b179f24141ec766153ed5287c6daebae9ee308db7562767"
+    },
+    {
+      "path": "quota reconcile",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "847e50fbca9d79d50b5c054e696a5350ffc64c25d2470e2591f4a67358912b9e"
+    },
+    {
+      "path": "quota release",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "6b2935eebb84ba8fa998ed685611ed1f8cb4a1e7bc1ab8e0ce83b8fc8f502eba"
+    },
+    {
+      "path": "quota report",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "a689f3dd0836e17a3521bd5e48ae9837e0c458bb076e2003865a32d6bfffdf02"
+    },
+    {
+      "path": "quota reserve",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "218d911058df59ce336404188b26aa3ae65864b9d97ddae16b0616cc8a0b3d36"
+    },
+    {
+      "path": "read",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "5a5b0f16bda3a3f8607c0f378010c0aad8214745a312e26a15ef2a3620cbbca4"
+    },
+    {
+      "path": "refs",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "fba6e2e119bce5424f069d414cc0e7e214c26aa1a3f14b8613d20ae67a3a50fa"
+    },
+    {
+      "path": "repo",
+      "leaf": false,
+      "children": [
+        "status"
+      ],
+      "help_sha256": "ed551bea90f9f5c74995cabbda921f0e258688ec1631ac9c68b31426f701993e"
+    },
+    {
+      "path": "repo status",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "aa3434eca7cd2938a8f2d0ff122a9f2478c447d65f2b6125b55b375b6ac1737c"
+    },
+    {
+      "path": "resource",
+      "leaf": false,
+      "children": [
+        "status"
+      ],
+      "help_sha256": "84f075fa7df026498bbcf5c64c3bc65ea56415163dc2ed71bfe43e364dd74592"
+    },
+    {
+      "path": "resource status",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "bbbbe3c6cf57e426ed6f0ef38d961696f9c21ea4a468122f14d5bfb3c385b621"
+    },
+    {
+      "path": "role",
+      "leaf": false,
+      "children": [
+        "pause",
+        "resume",
+        "list"
+      ],
+      "help_sha256": "73944d4d7218ed1f35a15488916825a9b8f41c5075cf733bb01907fb5e45e6a6"
+    },
+    {
+      "path": "role list",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "e4f1e8f22cd44ffd93c63dbec9813562276b64a9a718abea812e9c7efa6bee7a"
+    },
+    {
+      "path": "role pause",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "24d148715a8d5de8aaf8b8cdeb3184d3894af6d31660b98bcf0f6c9dbcbb86c3"
+    },
+    {
+      "path": "role resume",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "8fa449c41c935a902f36e40667a72d7ffdaed7cc70875b4780de0f005a889dc7"
+    },
+    {
+      "path": "run",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "9ce61488c0309c7d96aa0d9eb83a8b9b2b252ff4159c4bf20fff787689accfcb"
+    },
+    {
+      "path": "runner",
+      "leaf": false,
+      "children": [
+        "check-plan",
+        "check-run",
+        "trust",
+        "resource-status",
+        "job-cancel",
+        "helper-request",
+        "helper-status",
+        "helper-cancel",
+        "helper-release"
+      ],
+      "help_sha256": "131d990a697a8c4ef491c00004af58aa0a95ee20fd888d57e06bc8db72ff6e24"
+    },
+    {
+      "path": "runner check-plan",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "8fb77c721e0a46141924e37327c7c15e6994ab0b5e7e62d6abdbacfec3740b24"
+    },
+    {
+      "path": "runner check-run",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "126057d07e5dc74d295d55bd933e62c64b42fc7cea961c2c777252ed6e8f9095"
+    },
+    {
+      "path": "runner helper-cancel",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "0b6e610a4aac290fce1dab53174c06580f8610c46f846b53b2b3456906b59244"
+    },
+    {
+      "path": "runner helper-release",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "ecc0cdc145483d04fc8cdabb50685143e98eaf9c7e8a84093ae447081f486a1b"
+    },
+    {
+      "path": "runner helper-request",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "8d14dc5f3fc511a034fc11da8ac92857ed66f2d8f153ba2d4e290a19c3ff52c8"
+    },
+    {
+      "path": "runner helper-status",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "9332f78a9e94b3564fb8ea9ac783c130b4e86b07d2adce0897d905e302353c97"
+    },
+    {
+      "path": "runner job-cancel",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "d4a72180c79bd8562b0e066dde5b8f01aab51e943432b4a53a31bdd512bfcba7"
+    },
+    {
+      "path": "runner resource-status",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "7377aa092357c4b9be37b0d5f35803dc8d6f7d5966a0af8287b07a9e43e3432b"
+    },
+    {
+      "path": "runner trust",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "8b1600c07f26b420215950e83dd7a74e3c7dc3e6f87cdaafbeb471f7041cbef5"
+    },
+    {
+      "path": "savings",
+      "leaf": false,
+      "children": [
+        "report",
+        "opportunities"
+      ],
+      "help_sha256": "e436c7fe3063395656406bf4a09f3aff1f900e2ba9bf1d16c1e9cc4c516c9b1b"
+    },
+    {
+      "path": "savings opportunities",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "9c28649daaab18a09ae4dfe3eb78917d2044015f6edbaac04aafe35beed147a3"
+    },
+    {
+      "path": "savings report",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "686643e07acd123d06e941420b5a0ceacc69d0d3cf02fa950388685092da3cfa"
+    },
+    {
+      "path": "schedule",
+      "leaf": false,
+      "children": [
+        "plan",
+        "install",
+        "inspect",
+        "recover",
+        "uninstall",
+        "tick",
+        "run-loop",
+        "add",
+        "update",
+        "list",
+        "pause",
+        "resume",
+        "remove",
+        "reconcile"
+      ],
+      "help_sha256": "1ee5098e4dcb25d4a16819c80fbf4c0a958e0718e6d74181f3f68d06ee62c1a7"
+    },
+    {
+      "path": "schedule add",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "7fce393824753ff34d6922427ae0beeeb1ef02b0ebde744493b14644c4bd0f7b"
+    },
+    {
+      "path": "schedule inspect",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "324a449bc0270c8ec95848349b1e4e141a945bce2efdecff85e0d47884a83c1b"
+    },
+    {
+      "path": "schedule install",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "5514285417d69454db921c659c49f049e5dead15ade095c0a92bad1262d484d7"
+    },
+    {
+      "path": "schedule list",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "5b4346df82b6c01a1cdb03693e2d8ba8f68391893b202ea2b230a424636e8f3f"
+    },
+    {
+      "path": "schedule pause",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "3820f000abf3b518f1b1244eb55351e404bdd4ca0b8dac3dfd3a991c76b4f536"
+    },
+    {
+      "path": "schedule plan",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "96b8f8b0718e9390850bdaabcc1aa7a1fa4141754df66c1500b0217b7f1c2b14"
+    },
+    {
+      "path": "schedule reconcile",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "5f987014dc56914221eaf93c96e5bb84704771a2774d466825fcbd4c8eee2c19"
+    },
+    {
+      "path": "schedule recover",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "2772568edcaa5d8fb7e48fcf605d1da2666251a70dc9af611a93dfdbbac0c8a3"
+    },
+    {
+      "path": "schedule remove",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "70ec13e34a1cbd4dcb5d2860d94982dc1292bccc69c0adffc71d8d716cb80b50"
+    },
+    {
+      "path": "schedule resume",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "c7185aa0b45234412dcbb4d4ad76e3cdc959581c12665c8e371acc10d27fd29a"
+    },
+    {
+      "path": "schedule run-loop",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "719d2bb049a93ae655046ba3b9cdcc99adf94c2f9373f6a5e2d2ce10b416902a"
+    },
+    {
+      "path": "schedule tick",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "41021dbf8ee02c5240b68133bf164f13d8d6ae786964b0fb96d187f1e099b2da"
+    },
+    {
+      "path": "schedule uninstall",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "8253198556ee2c7198b0de2cb846213c8a6a3f279bda1e619d63d53bb4a569fd"
+    },
+    {
+      "path": "schedule update",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "ef19c92d7071fbf1d5153feb8324aa5fcbac008fb2a9b6b21c59b5cc6b2fffe0"
+    },
+    {
+      "path": "session",
+      "leaf": false,
+      "children": [
+        "attach",
+        "suspend",
+        "reconcile",
+        "boundary"
+      ],
+      "help_sha256": "a51ce573161b26633023b108f300eef34146b2227dc78d3cdaec23237aae6ed9"
+    },
+    {
+      "path": "session attach",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "8c9ba7d17df4e19b8b4baa01c11513a85a0c3a10e5348307f84c962cb543ad07"
+    },
+    {
+      "path": "session boundary",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "e56781fce03acc77beba5b2e3c1a22f214b479e1139f02549a64d9c08a535846"
+    },
+    {
+      "path": "session reconcile",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "2da29601d7b22386fe39eb5a16929661df94398596422d3b9e60a2622578e9a7"
+    },
+    {
+      "path": "session suspend",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "d0288f278c3d75ec39497ae07b6e66f22243dfb27f0191f65155f9b1ee6fa82f"
+    },
+    {
+      "path": "status",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "6643c766be953ddec0ec3808316dce7b8cf1f19f7fd3c425e2d7c7278b7866cc"
+    },
+    {
+      "path": "task",
+      "leaf": false,
+      "children": [
+        "create",
+        "list",
+        "show",
+        "edit",
+        "ready",
+        "assign",
+        "reassign",
+        "start",
+        "claim",
+        "block",
+        "pause",
+        "resume",
+        "cancel",
+        "reopen",
+        "criterion",
+        "submit",
+        "review",
+        "complete"
+      ],
+      "help_sha256": "6480750280f430d8b14781ccd6633a13d23a95a281a7bfdb144b72e88589545d"
+    },
+    {
+      "path": "task assign",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "641153fca997430adf849bbb2becae5fbd976749e4bd614cbd2fc564aec161da"
+    },
+    {
+      "path": "task block",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "9c43199ac5b82f254f04426b941866f3bf4aa2527d5792935ed451812aa27e6e"
+    },
+    {
+      "path": "task cancel",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "cd9842c404a22209c36d84e65d4107074d79eff564c9b2f29ad5f09dd54a5a77"
+    },
+    {
+      "path": "task claim",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "ddf296d1d530a12f11a3374c2415722010eb723556a10b4587f7dd48cee59a98"
+    },
+    {
+      "path": "task complete",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "826b3ddd32867e1f6f79dce1684da4f662b22a70fceb4ba627659f78a9e4e750"
+    },
+    {
+      "path": "task create",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "aaf74cf092c4248a21365d16faa4dedfe19b46c7f2cf8c489320fd9e70ddf8ce"
+    },
+    {
+      "path": "task criterion",
+      "leaf": false,
+      "children": [
+        "accept"
+      ],
+      "help_sha256": "fe95bbc8509e1bc69a4b5ea6eef2d0e61e389b56bafe2eff6cc2d3d82019ef60"
+    },
+    {
+      "path": "task criterion accept",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "1840ad0dea4f4edd627b4be50ded6a5ededa28d530ce1fc6f55d0141af3de650"
+    },
+    {
+      "path": "task edit",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "14d088e132ce8a611bc7a2695c944d579a0a2674ff597ab073246b2fe975d6f0"
+    },
+    {
+      "path": "task list",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "7d98e9c3555d557944881e9f818c3e986863076e5814d015982e5af9d907e1f9"
+    },
+    {
+      "path": "task pause",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "1a72493b61e3e28999d25878636797531cc9b1df1c4fee89f75a436b7b92a0af"
+    },
+    {
+      "path": "task ready",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "755fe22ad30c1b1bef1a9b35e9f4b1fc4c7b024facb883665c2a6a81f723bec7"
+    },
+    {
+      "path": "task reassign",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "b6aba61e69daac5863dab642726d7973790d793948e86373b3de67468a2af4a3"
+    },
+    {
+      "path": "task reopen",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "bce964991fcb067702c922403ebf9f34fd59d948a26b1f0ea51dcfba1433a4ca"
+    },
+    {
+      "path": "task resume",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "d8a39dd8359388be626edf196ba1b4b33e99329d907df4b6a33866681fb0ea7c"
+    },
+    {
+      "path": "task review",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "d9967dc3f48b972599486d3e42e64d16b9262c5603939b5256cc3b63c70b62bb"
+    },
+    {
+      "path": "task show",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "f8d60491a75019c1eabae16ca297c0b528ade456ee813a14d6acbfaffee1827b"
+    },
+    {
+      "path": "task start",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "3fdd326c5ff83235839801a1cd51b76f20299e335cde38f85b68ccfc01ec1810"
+    },
+    {
+      "path": "task submit",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "eb841568dc06da3f77d61aca2031e1b95aa880608d6d22776e0dec9f57f5f309"
+    },
+    {
+      "path": "trace",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "f1cffc51e538ccf0a76e57c2139297b43c098eff4a55024619f8a0f68d11221f"
+    },
+    {
+      "path": "trust",
+      "leaf": false,
+      "children": [
+        "plan",
+        "add"
+      ],
+      "help_sha256": "ed0f7711d9a2a339d4e8d313009596183aeba5771648eb2aa1f425da77b8a7bb"
+    },
+    {
+      "path": "trust add",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "701e6036c18e354c81bd99670cf1fbc083811f5608d7979bd9372cb0956c49b8"
+    },
+    {
+      "path": "trust plan",
+      "leaf": true,
+      "children": [],
+      "help_sha256": "a2ba08feb63efdb0346b093d8f8f67877ff25b5328c602954239558b8e868954"
+    }
+  ],
+  "path_count": 172,
+  "leaf_count": 140,
+  "project_data_effects": "none"
+}

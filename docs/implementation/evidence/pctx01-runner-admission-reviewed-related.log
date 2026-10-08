@@ -1,0 +1,64 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.97s
+     Running tests/control_preflight.rs (target/debug/deps/control_preflight-1104ac0ed832cb66)
+
+running 12 tests
+test direct_producers_refuse_before_database_and_preserve_original_expiry ... ok
+test runner_direct_pure_refusal_preserves_storage_and_original_expiry ... ok
+test runner_valid_boundaries_preserve_existing_non_owner_policy ... ok
+test role_pure_arguments_precede_project_and_response_effects ... ok
+test valid_grammar_does_not_bypass_non_owner_authority ... ok
+test valid_control_arguments_reach_existing_authorization_and_state_flows ... ok
+test schedule_pure_arguments_precede_project_and_response_effects ... ok
+test session_pure_arguments_precede_project_and_response_effects ... ok
+test quota_pure_arguments_precede_project_and_response_effects ... ok
+test work_pure_arguments_precede_project_and_response_effects ... ok
+test runner_pure_arguments_precede_project_and_response_effects ... ok
+test malformed_reviewed_schedule_provider_refuses_without_panic_or_installation ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.21s
+
+     Running tests/runner.rs (target/debug/deps/runner-262d46ab6960599b)
+
+running 29 tests
+test cloud_helper_is_only_durable_intent ... ok
+test explicit_script_input_change_requires_new_trust ... ok
+test changed_script_and_agent_forged_trust_are_denied ... ok
+test check_plan_with_finite_budget_inspects_registered_auxiliary_workspace_without_launch ... ok
+test legacy_lock_fixture ... ok
+test finite_auxiliary_plan_refuses_fifo_metadata_without_waiting_or_launching ... ok
+test inherited_canonical_descriptor_retains_lock_after_invalid_proof_and_parent_close ... ok
+test check_alias_preserves_nested_timeout_processing_error ... ok
+test check_capture_partial_is_not_wrapper_success_in_either_route ... ok
+test legacy_bridge_absence_prevents_execution ... ok
+test linked_slot_child_directory_cannot_redirect_state ... ok
+test native_pass_is_invalidated_by_external_executable_change_with_sources_unchanged ... ok
+test observed_failed_check_is_distinct_from_processing_failure ... ok
+test parent_exit_does_not_release_living_child ... ok
+test synthetic_low_memory_defers_heavy_admission ... ok
+test local_helper_preserves_nested_timeout_and_partial_capture ... ok
+test profile_change_during_execution_is_stale_at_report_recording ... ok
+test native_environment_change_or_missing_profile_invalidates_existing_pass ... ok
+test cross_project_heavy_capacity_is_one ... ok
+test trusted_typed_check_is_real_evidence ... ok
+test timeout_is_observed_without_success_evidence ... ok
+test local_auxiliary_provider_needs_registered_linked_workspace_and_capacity ... ok
+test unknown_memory_requires_disclosed_exact_owner_override ... ok
+test user_created_host_state_symlink_is_denied ... ok
+test source_mutation_during_check_is_stale ... ok
+test unknown_and_zero_tests_do_not_pass ... ok
+test canonical_mutex_survives_main_parent_death ... ok
+test killed_guardian_causes_negative_child_observation ... ok
+test canonical_legacy_and_pctx_exclude_each_other ... ok
+
+test result: ok. 29 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 25.16s
+
+     Running tests/runner_read_deadline.rs (target/debug/deps/runner_read_deadline-552541b77005096c)
+
+running 3 tests
+test expired_reads_fail_before_directory_database_or_trust_effects ... ok
+test default_helper_read_returns_real_receipt_without_writes ... ok
+test finite_helper_fifo_is_refused_before_reading_or_creating_other_state ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+

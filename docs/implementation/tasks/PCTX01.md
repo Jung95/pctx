@@ -290,3 +290,16 @@ static review no scoped blocker. Next common defect is ContextGet pure admission
 PCTX01 stays implementing, no other official task, Actions or rejected-push retry.
 
 Final format/locked all-target Clippy PASS. Final native full97981 terminal101: 493 PASS/3 FAIL; original relative resolution/concurrent startup/simultaneous-stream failures retained without budget relaxation. All jobs terminal; PCTX01 incomplete.
+
+## Current visible command admission register
+
+G03 now has an actual visible enumeration:172 paths/140 leaves, stable C001–C140
+in [complete register](PCTX01-command-admission-registry.md), not merely the
+historical bounded A01–A11 groups. Residual inventory R01–R12 records existing
+pure contracts after source review; the earlier outer Role evidence does not
+qualify stronger downstream policy controls. R12 runner correction has local
+native/static/mutation/independent review evidence in
+[evidence](../evidence/pctx01-runner-admission-verification.json). Whole gates
+remain closed0/10; native Linux/Windows and original startup failures are open.
+No other official task is active. Next same-task correction is R01–R03 existing
+Operations/Role admission; state/authority/input schema stays in producers.

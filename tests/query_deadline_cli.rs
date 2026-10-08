@@ -56,7 +56,7 @@ fn runner_and_trust_read_budgets_validate_before_discovery() {
         vec!["resource", "status"],
         vec!["runner", "resource-status"],
         vec!["runner", "check-plan", "--task-id", "T001", "--key", "test"],
-        vec!["runner", "helper-status", "H001"],
+        vec!["runner", "helper-status", "HELP-001"],
         vec!["trust", "plan", "--", "/bin/sh"],
     ] {
         for budget in ["0", "5000"] {

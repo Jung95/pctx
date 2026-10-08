@@ -740,13 +740,17 @@ fn process_start(pid: u32) -> Option<String> {
         None
     }
 }
-fn job_path(dir: &Path, job: &str) -> Result<PathBuf> {
+fn validate_job_id(job: &str) -> Result<()> {
     if !job.starts_with("JOB-")
         || job.len() > 64
         || !job.bytes().all(|c| c.is_ascii_alphanumeric() || c == b'-')
     {
         return Err(error("INVALID_ARGUMENT", "Invalid resource job ID", 2));
     }
+    Ok(())
+}
+fn job_path(dir: &Path, job: &str) -> Result<PathBuf> {
+    validate_job_id(job)?;
     Ok(dir.join("jobs").join(format!("{job}.json")))
 }
 fn publish(dir: &Path, job: &Job) -> Result<()> {
@@ -1110,6 +1114,42 @@ fn observed_start(p: &Project, pid: u32) -> Result<Option<String>> {
     });
     Ok(observed)
 }
+fn helper_arguments(mode: &str, scope: &[String]) -> Result<()> {
+    if !["local", "cloud", "native"].contains(&mode) {
+        return Err(error(
+            "INVALID_ARGUMENT",
+            "Unknown auxiliary provider mode",
+            2,
+        ));
+    }
+    if scope.len() > 64 || scope.iter().any(|s| reader::redact(s).1) {
+        return Err(error(
+            "INVALID_ARGUMENT",
+            "Bounded nonsecret helper scope required",
+            2,
+        ));
+    }
+    if mode != "local" && scope.is_empty() {
+        return Err(error(
+            "INVALID_ARGUMENT",
+            "Queued auxiliary intent requires explicit scope",
+            2,
+        ));
+    }
+    Ok(())
+}
+/// Existing pure runner grammar; authority, receipt lookup and scope policy stay in producers.
+pub fn validate_runner_request(command: &RunnerCommand) -> Result<()> {
+    match command {
+        RunnerCommand::JobCancel { job } => validate_job_id(job)?,
+        RunnerCommand::HelperStatus { helper }
+        | RunnerCommand::HelperCancel { helper }
+        | RunnerCommand::HelperRelease { helper, .. } => validate_helper_id(helper)?,
+        RunnerCommand::HelperRequest { mode, scope, .. } => helper_arguments(mode, scope)?,
+        _ => {}
+    }
+    Ok(())
+}
 pub fn execute(p: &Project, command: &RunnerCommand) -> Result<Value> {
     let finite = matches!(
         command,
@@ -1130,6 +1170,8 @@ pub fn execute(p: &Project, command: &RunnerCommand) -> Result<Value> {
     result
 }
 fn execute_inner(p: &Project, command: &RunnerCommand) -> Result<Value> {
+    p.check_deadline()?;
+    validate_runner_request(command)?;
     match command {
         RunnerCommand::BridgeGuardian { fd, lock_path } => guardian_main(*fd, lock_path),
         RunnerCommand::HelperRequest {
@@ -2111,8 +2153,7 @@ fn auxiliary_workspace(p: &Project, path: &Path) -> Result<Project> {
     p.check_deadline()?;
     Ok(target)
 }
-fn helper_read_path(p: &Project, helper: &str) -> Result<PathBuf> {
-    p.check_deadline()?;
+fn validate_helper_id(helper: &str) -> Result<()> {
     if !helper.starts_with("HELP-")
         || helper.len() > 64
         || !helper
@@ -2121,6 +2162,11 @@ fn helper_read_path(p: &Project, helper: &str) -> Result<PathBuf> {
     {
         return Err(error("INVALID_ARGUMENT", "Invalid helper ID", 2));
     }
+    Ok(())
+}
+fn helper_read_path(p: &Project, helper: &str) -> Result<PathBuf> {
+    p.check_deadline()?;
+    validate_helper_id(helper)?;
     let dir = p.workspace_dir.join("helpers");
     checked(&dir)?;
     p.check_deadline()?;
@@ -2159,22 +2205,10 @@ fn helper_request(
     scope: &[String],
     budget: usize,
 ) -> Result<Value> {
+    p.check_deadline()?;
+    helper_arguments(mode, scope)?;
     owner()?;
     let (task_id, _) = task_check(p, task, key, Some(run))?;
-    if !["local", "cloud", "native"].contains(&mode) {
-        return Err(error(
-            "INVALID_ARGUMENT",
-            "Unknown auxiliary provider mode",
-            2,
-        ));
-    }
-    if scope.len() > 64 || scope.iter().any(|s| reader::redact(s).1) {
-        return Err(error(
-            "INVALID_ARGUMENT",
-            "Bounded nonsecret helper scope required",
-            2,
-        ));
-    }
     let mut helper = Helper {
         schema_version: 1,
         helper_id: id("HELP"),
@@ -2191,13 +2225,6 @@ fn helper_request(
         created_at: now(),
     };
     if mode != "local" {
-        if scope.is_empty() {
-            return Err(error(
-                "INVALID_ARGUMENT",
-                "Queued auxiliary intent requires explicit scope",
-                2,
-            ));
-        }
         for path in scope {
             reader::authorize(p, path)?;
         }

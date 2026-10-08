@@ -1,5 +1,8 @@
 # PCTX01 common argument admission audit
 
+Historical bounded A01–A11 register; the complete visible register and residual
+next actions now live in PCTX01-command-admission-registry.md. The weaker Role
+outer grammar does not qualify downstream policy_controls constraints (R03).
 Only PCTX01 is active. Baseline: specification §14 (unsupported options are
 errors; stable envelope/exit), §38 processing failure distinction. Source audit
 base04c674c plus current Output correction. Static review identifies local

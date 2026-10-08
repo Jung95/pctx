@@ -627,3 +627,225 @@ fn valid_grammar_does_not_bypass_non_owner_authority() {
         assert_eq!(f.state(), before);
     }
 }
+
+#[test]
+fn runner_pure_arguments_precede_project_and_response_effects() {
+    let long = "HELP-".to_owned() + &"x".repeat(60);
+    let scopes = vec!["a"; 65];
+    let mut many = vec![
+        "runner",
+        "helper-request",
+        "--task-id",
+        "missing",
+        "--key",
+        "fixture",
+        "--run",
+        "missing",
+    ];
+    for scope in &scopes {
+        many.extend(["--scope", scope]);
+    }
+    no_effects(&[
+        vec!["job", "cancel", "../escape"],
+        vec!["runner", "job-cancel", "JOB-../escape"],
+        vec!["runner", "helper-status", ""],
+        vec!["runner", "helper-status", &long],
+        vec!["runner", "helper-cancel", "HELP-../escape"],
+        vec![
+            "runner",
+            "helper-release",
+            "wrong",
+            "--evidence",
+            "OUT-fixture",
+        ],
+        vec![
+            "runner",
+            "helper-request",
+            "--task-id",
+            "missing",
+            "--key",
+            "fixture",
+            "--run",
+            "missing",
+            "--mode",
+            "bogus",
+        ],
+        vec![
+            "runner",
+            "helper-request",
+            "--task-id",
+            "missing",
+            "--key",
+            "fixture",
+            "--run",
+            "missing",
+            "--mode",
+            "cloud",
+        ],
+        vec![
+            "runner",
+            "helper-request",
+            "--task-id",
+            "missing",
+            "--key",
+            "fixture",
+            "--run",
+            "missing",
+            "--mode",
+            "native",
+        ],
+        vec![
+            "runner",
+            "helper-request",
+            "--task-id",
+            "missing",
+            "--key",
+            "fixture",
+            "--run",
+            "missing",
+            "--scope",
+            "sk-proj-FAKE012345678901234567890123456789012345678901234567890",
+        ],
+        many,
+    ]);
+}
+
+#[test]
+fn runner_direct_pure_refusal_preserves_storage_and_original_expiry() {
+    use pctx::runner::{self, RunnerCommand};
+    let f = Fixture::new();
+    f.init();
+    let mut p = Project {
+        deadline: None,
+        root_anchor: RootAnchor::capture(&f.root).unwrap(),
+        root: f.root.clone(),
+        data_dir: f.data.clone(),
+        workspace_dir: f.data.join("workspace"),
+        control_dir: f.data.join("control"),
+        project_id: "fixture".into(),
+        workspace_id: "workspace".into(),
+        coordination_id: "coordination".into(),
+        config: Config {
+            schema_version: 1,
+            project: ProjectConfig {
+                id: "fixture".into(),
+                name: "fixture".into(),
+            },
+            index: Default::default(),
+            policy: Default::default(),
+            search: Default::default(),
+            context: Default::default(),
+            roles: Default::default(),
+        },
+    };
+    let before = f.state();
+    let cases = [
+        RunnerCommand::JobCancel {
+            job: "../escape".into(),
+        },
+        RunnerCommand::HelperStatus {
+            helper: "wrong".into(),
+        },
+        RunnerCommand::HelperCancel {
+            helper: "wrong".into(),
+        },
+        RunnerCommand::HelperRelease {
+            helper: "wrong".into(),
+            evidence: "OUT-fixture".into(),
+        },
+        RunnerCommand::HelperRequest {
+            task_id: "missing".into(),
+            key: "fixture".into(),
+            run: "missing".into(),
+            mode: "bogus".into(),
+            scope: vec![],
+            budget_bytes: 8192,
+        },
+        RunnerCommand::HelperRequest {
+            task_id: "missing".into(),
+            key: "fixture".into(),
+            run: "missing".into(),
+            mode: "cloud".into(),
+            scope: vec![],
+            budget_bytes: 8192,
+        },
+    ];
+    for c in &cases {
+        let e = runner::execute(&p, c).unwrap_err();
+        assert_eq!((e.code.as_str(), e.exit), ("INVALID_ARGUMENT", 2));
+        assert_eq!(f.state(), before);
+    }
+    let original = Instant::now() - Duration::from_secs(1);
+    p.deadline = Some(Deadline::from_instant(original));
+    for c in &cases {
+        assert_eq!(runner::execute(&p, c).unwrap_err().code, "TIMEOUT");
+        assert_eq!(p.deadline.unwrap().instant(), original);
+        assert_eq!(f.state(), before);
+    }
+}
+
+#[test]
+fn runner_valid_boundaries_preserve_existing_non_owner_policy() {
+    use pctx::runner::{RunnerCommand, validate_runner_request};
+    for (prefix, helper) in [("JOB-", false), ("HELP-", true)] {
+        for len in [64, 65] {
+            let id = format!("{prefix}{}", "x".repeat(len - prefix.len()));
+            let c = if helper {
+                RunnerCommand::HelperStatus { helper: id }
+            } else {
+                RunnerCommand::JobCancel { job: id }
+            };
+            assert_eq!(validate_runner_request(&c).is_ok(), len == 64);
+        }
+    }
+    for mode in ["local", "cloud", "native"] {
+        let c = RunnerCommand::HelperRequest {
+            task_id: "missing".into(),
+            key: "unit".into(),
+            run: "missing".into(),
+            mode: mode.into(),
+            scope: vec!["code.py".into(); 64],
+            budget_bytes: 8192,
+        };
+        validate_runner_request(&c).unwrap();
+    }
+    let f = Fixture::new();
+    f.init();
+    let before = f.state();
+    for args in [
+        vec!["job", "cancel", "JOB-fixture"],
+        vec!["runner", "helper-cancel", "HELP-fixture"],
+        vec![
+            "runner",
+            "helper-release",
+            "HELP-fixture",
+            "--evidence",
+            "OUT-fixture",
+        ],
+        vec![
+            "runner",
+            "helper-request",
+            "--task-id",
+            "missing",
+            "--key",
+            "unit",
+            "--run",
+            "missing",
+            "--mode",
+            "cloud",
+            "--scope",
+            "code.py",
+        ],
+    ] {
+        let o = f
+            .command()
+            .env("PCTX_ACTOR", "agent:unregistered-fixture")
+            .args(args)
+            .output()
+            .unwrap();
+        assert_eq!(o.status.code(), Some(5), "{o:?}");
+        let v: Value = serde_json::from_slice(&o.stdout).unwrap();
+        assert_eq!(v["errors"][0]["code"], "POLICY_DENIED");
+        assert_eq!(f.state(), before);
+    }
+}

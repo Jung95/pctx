@@ -1,0 +1,165 @@
+{
+  "official_task": "PCTX01",
+  "gate": "PCTX01-G03",
+  "residual": "R12",
+  "base_revision": "d0dbaef",
+  "platform": "native macOS arm64",
+  "source_sha256": {
+    "src/main.rs": "bec520a8ea3f3d634ebc82413070e65779813448b9b681e70e68d329984a4ce4",
+    "src/runner.rs": "a3254f651ec32b2db18bf6943ec5d104eaa6b750fca606b29fdf3415733a9fd7",
+    "tests/control_preflight.rs": "99afa7bad5e5d168e547b2a9f0b76d2afa5393bf840336e415c6d009dc6551ba",
+    "tests/runner.rs": "333b89d817a5f6d7a9a2b65b99660f37b54bc577755607a399f4f1f30287656b",
+    "tests/query_deadline_cli.rs": "7b15c8b36ef5749c353e8b3139df55efd6c5c0d961a828b33ac2e8987fd872ae"
+  },
+  "registry": {
+    "log": "pctx01-admission-registry.json",
+    "visible_paths": 172,
+    "visible_leaves": 140,
+    "stable_ids": "C001-C140",
+    "qualification": "Help enumeration with no project/data effects; source audit residuals R01-R12 are not semantic completion."
+  },
+  "native_refusal_matrix": {
+    "forms": 11,
+    "combinations": 44,
+    "dimensions": [
+      "missing/initialized",
+      "json/compact",
+      "absent/existing absolute response"
+    ],
+    "proof": "INVALID_ARGUMENT2 before discovery; exact root/data paths+bytes and response preservation"
+  },
+  "direct": {
+    "invalid_requests": 6,
+    "proof": "Before host/helper/DB effects; exact original expired instant retained and TIMEOUT first"
+  },
+  "positive": {
+    "proofs": [
+      "ID64 accepted/65 refused",
+      "scope64 accepted/65 refused",
+      "sensitive synthetic scope refused",
+      "four valid non-owner routes deny5/no effects",
+      "actual cloud/native queued-only receipts and no model/slot start",
+      "source escape deny5, full data snapshot unchanged and no host dir"
+    ]
+  },
+  "controlled_losses": {
+    "driver": "pctx01-runner-admission-loss-driver.json",
+    "count": 3,
+    "all_exit": 101,
+    "exact_source_restored": true
+  },
+  "review": "pctx01-runner-admission-review.md",
+  "static": {
+    "log": "pctx01-runner-admission-final-static.log",
+    "exit": 0,
+    "commands": [
+      "cargo fmt --all -- --check",
+      "cargo clippy --locked --all-targets -- -D warnings"
+    ]
+  },
+  "full": {
+    "session": 38671,
+    "log": "pctx01-runner-admission-final-full.log",
+    "status": "terminal",
+    "exit": 101,
+    "passed": 517,
+    "failed": 2,
+    "failed_tests": [
+      "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget",
+      "simultaneous_streams_are_collected_and_overflow_never_infers_success"
+    ],
+    "command": "cargo test --locked --all-targets --no-fail-fast",
+    "qualification": "Final source; all original budgets retained; earlier H001 fixture failure remains in initial full, no retry promotion of startup failures. Two previously failed resolution tests happen to pass in this run without source/budget change; all four historical startup conditions remain unresolved."
+  },
+  "limits": [
+    "Whole PCTX01 closed0/10",
+    "Native Linux/Windows unverified",
+    "Existing native startup failures remain open; no retry promotion or deadline relaxation",
+    "No provider/registered-check/containment feature or native scheduling/Actions added",
+    "R01-R11 and other fixed gates remain; historical bounded A01-A11 qualification is not exhaustive G03"
+  ],
+  "log_test_counts": {
+    "pctx01-runner-admission-fixture.log": {
+      "passed": 0,
+      "failed": 2
+    },
+    "pctx01-runner-admission-initial.log": {
+      "passed": 0,
+      "failed": 2
+    },
+    "pctx01-runner-admission-intent.log": {
+      "passed": 1,
+      "failed": 0
+    },
+    "pctx01-runner-admission-loss-frontend.log": {
+      "passed": 0,
+      "failed": 1
+    },
+    "pctx01-runner-admission-loss-helper-grammar.log": {
+      "passed": 0,
+      "failed": 1
+    },
+    "pctx01-runner-admission-loss-producer.log": {
+      "passed": 0,
+      "failed": 1
+    },
+    "pctx01-runner-admission-related.log": {
+      "passed": 0,
+      "failed": 0
+    },
+    "pctx01-runner-admission-reviewed-related.log": {
+      "passed": 44,
+      "failed": 0
+    },
+    "pctx01-runner-admission-static.log": {
+      "passed": 0,
+      "failed": 0
+    },
+    "pctx01-runner-admission-verified-related.log": {
+      "passed": 43,
+      "failed": 0
+    },
+    "pctx01-runner-admission-final-static.log": {
+      "passed": 0,
+      "failed": 0
+    },
+    "pctx01-runner-admission-timeout-fixture.log": {
+      "passed": 21,
+      "failed": 0
+    }
+  },
+  "retained_initials": {
+    "initial": "0PASS2FAIL: native exit7 masks2; direct default data resolution fixture NOT_INITIALIZED6",
+    "fixture": "0PASS2FAIL: native refusal and actual direct host dir side effect",
+    "target": "runner_deadline target nonexistent, no tests run",
+    "related": "verified43PASS before added final proof; reviewed44PASS before stronger entire-data snapshot; tightened intent1PASS final source"
+  },
+  "initial_full": {
+    "session": 46531,
+    "log": "pctx01-runner-admission-full.log",
+    "exit": 101,
+    "passed": 514,
+    "failed": 5,
+    "failed_tests": [
+      "query_program_resolution_uses_captured_command_path",
+      "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+      "simultaneous_streams_are_collected_and_overflow_never_infers_success",
+      "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget",
+      "runner_and_trust_read_budgets_validate_before_discovery"
+    ],
+    "qualification": "Four retained startup failures plus timeout-test malformed H001 fixture. Not final repaired test source.",
+    "query_fixture_sha256": "db5ea27ae33584db160eafb56e2f4b97e677c9ca3f8dadc630ce2d5d91bef03f"
+  },
+  "timeout_fixture": {
+    "log": "pctx01-runner-admission-timeout-fixture.log",
+    "exit": 0,
+    "passed": 21,
+    "change": "Only invalid H001 replaced with valid HELP-001 in positive/zero timeout fixture; all existing budget and no-effects assertions retained. Invalid IDs remain tested separately."
+  },
+  "historically_unresolved_startup_tests": [
+    "query_program_resolution_uses_captured_command_path",
+    "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+    "simultaneous_streams_are_collected_and_overflow_never_infers_success",
+    "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget"
+  ]
+}

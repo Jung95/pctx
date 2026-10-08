@@ -687,3 +687,46 @@ admission before choosing further necessary PCTX01 work. No other official task,
 Actions, OS registration or independent business expansion.
 
 Final native full31923 terminal101: 512 PASS/4 FAIL. Failed tests: relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry, query_program_resolution_uses_captured_command_path, simultaneous_streams_are_collected_and_overflow_never_infers_success, concurrent_query_startup_preserves_group_streams_and_original_one_second_budget. All jobs terminal; no heavy job live. Whole PCTX01 remains incomplete0/10; no other official task selected.
+
+## PCTX01 complete visible admission register and runner correction — 2026-10-08
+
+Only PCTX01 is active, specification §14/§38 and fixed G03. The previous turn
+changed code/evidence/publication and is classified as progress. Actual help
+enumeration at d0dbaef observes172 visible paths/140 leaves without data/project
+effects. tasks/PCTX01-command-admission-registry.md assigns C001–C140 and freezes
+R01–R12 currently identified residual groups after source inspection. This
+replaces serial rediscovery; the earlier11/11 bounded local groups are not whole
+G03 coverage. Official gate denominator10 remains unchanged, closed0/10.
+
+Independent read-only audit covers all Operations, Work, Session, Context, Quota,
+Schedule and Inventory routes. Remaining existing pure predicates include owner/
+inbox bounds, recipient/evidence grammar, stronger downstream Role controls,
+Agent Report, Session reasons, Ingest key, inventory paths, execution argv,
+filter/adapter grammar and schedule variants. Library-only Clap-protected checks
+are distinguished. Raw input/state/authority policy stays with producers.
+
+Current repair is R12 only: exact existing runner JOB/HELP identifiers and
+HelperRequest mode/count/nonsecret/nonlocal explicit-scope predicates shared
+before CLI discovery and producer host/helper/DB effects. Private callers retain
+shared defenses; original supplied expiry checked first, no new default write
+clock. Job cancel alias uses the same validator. No provider, containment,
+registered-check feature or other official task is added. Initial CLI exit7
+masking and direct host directory creation are retained; first direct fixture
+incorrectly relied on default global data resolution and is explicitly corrected
+to local Project. Target-selection failure ran no tests. Completion requires
+actual missing/initialized JSON/compact+response no-effects, direct unchanged
+storage/expiry, accepted/rejected bounds, valid non-owner and queued intent/source
+policy, independent review, controlled loss, static and final full evidence.
+No Actions or native OS registration.
+
+Initial native full46531 terminal101:514PASS5FAIL, retained. Four original startup
+failures plus query_deadline_cli positive timeout fixture used malformed H001.
+Corrected only ID to valid HELP-001; zero/positive timeout and no-effects assertions
+retained, invalid IDs stay in new matrix. Targeted query/control21PASS and final
+staticPASS. Final exact-source full38671 is running; do not promote initial full.
+
+Final native full38671 terminal101: 517 PASS/2 FAIL. Failed tests: concurrent_query_startup_preserves_group_streams_and_original_one_second_budget, simultaneous_streams_are_collected_and_overflow_never_infers_success. All jobs terminal; no heavy job live. Whole PCTX01 remains0/10. R12 has local evidence; remaining R01–R11 and required platforms/full gates open. No other official task.
+
+Two previously failing resolution tests pass in the latest full without any
+query-process/test or budget correction. This is not repair evidence; all four
+historical startup conditions remain unresolved. No retry-green promotion.

@@ -1,0 +1,26 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.57s
+     Running tests/control_preflight.rs (target/debug/deps/control_preflight-1104ac0ed832cb66)
+
+running 2 tests
+
+thread 'runner_pure_arguments_precede_project_and_response_effects' (8640109) panicked at tests/control_preflight.rs:84:5:
+assertion `left == right` failed: Output { status: ExitStatus(unix_wait_status(1792)), stdout: "", stderr: "" }
+  left: Some(7)
+ right: Some(2)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test runner_pure_arguments_precede_project_and_response_effects ... FAILED
+
+thread 'runner_direct_pure_refusal_preserves_storage_and_original_expiry' (8640108) panicked at tests/control_preflight.rs:656:40:
+called `Result::unwrap()` on an `Err` value: Error { code: "NOT_INITIALIZED", message: "Local data directory missing; run pctx init", retryable: false, exit: 6 }
+test runner_direct_pure_refusal_preserves_storage_and_original_expiry ... FAILED
+
+failures:
+
+failures:
+    runner_direct_pure_refusal_preserves_storage_and_original_expiry
+    runner_pure_arguments_precede_project_and_response_effects
+
+test result: FAILED. 0 passed; 2 failed; 0 ignored; 0 measured; 9 filtered out; finished in 0.83s
+
+error: test failed, to rerun pass `--test control_preflight`

@@ -6,16 +6,24 @@
 
 ## Latest integration boundary
 
-PCTX01-G03-A07–A11, runtime74a326c4024ea2a8dda51e5ba91e10cd543e228c,
-base234349c. Normal push15474 terminal0 published234349c..74a326c to origin/main.
-Read evidence/pctx01-control-admission-verification.json and independent review.
-Native132 no-effects combinations, reviewed9 PASS, seven loss probes fail/exact
-restore. Original deadline and valid/non-owner paths preserved. Private schedule
-plan also validates reviewed-install provider after an actual panic regression.
-Static PASS; final full31923 terminal101: 512 PASS/4 FAIL. Original startup failures remain. All jobs terminal; no heavy job live. Whole PCTX01
-closed0/10; bounded local groups11/11, platform groups0/11. Linux/Windows remain
-unverified. No other official task selected, no Actions or OS registration.
-Development commits and normal pushes to Jung95/pctx remain authorized.
+PCTX01-G03-R12 runner admission, base d0dbaef; uncommitted parent-owned source,
+tests and documents. Exact runner IDs/mode/scope shared before discovery and
+host/helper/DB effects. Native44 refusal combinations, direct expiry/storage,
+accepted boundaries, sensitive scope and non-owner4 routes; reviewed44PASS,
+tightened actual cloud/native intent1PASS. Three loss probes fail/exact restore;
+staticPASS; independent read-only review no scoped blocker. Evidence manifest:
+pctx01-runner-admission-verification.json. Initial full46531 terminal101:514PASS5FAIL (four original startup failures
+and malformed H001 timeout fixture). One ID corrected to valid HELP-001;
+timeout+control21PASS/final staticPASS. Final native full38671 terminal101: 517PASS2FAIL.
+Original startup failures retained; all jobs terminal, no heavy job live. Whole PCTX01 remains0/10; native Linux/
+Windows and original startup failures remain. No other official task/Actions.
+
+Actual help register172 paths/140 leaves is recorded with binary/source hashes.
+Read tasks/PCTX01-command-admission-registry.md; stable C001–C140 and remaining
+pure groups R01–R12 replace incremental discovery. Historical A01–A11 bounded
+local evidence is not complete G03. After this integration continue R01–R03
+existing Operations/Role pure grammar; no independent messaging/policy feature.
+Development commits/normal pushes to Jung95/pctx remain approved.
 
 ## Source, evidence and environment
 
@@ -63,13 +71,14 @@ Original ignored specification SHA256 8914faad57432f524aec0a06aa90c43c18c23f8c19
 
 ## Exact next action
 
-Final full31923 is terminal; all failures are retained without retry-green
-promotion. Current control-admission changes and evidence are committed and normally
-pushed as74a326c [skip ci]. Stay on PCTX01 and audit the complete
-command registry against pure/state-dependent admission; do not activate another
-formal task. Required local gates remain, so external-only switching does not
-apply. Keep original budgets/interpreters/OS policy and preserve historical
-startup failures. No unrelated business feature or new platform qualification.
+Final full38671 is terminal; original startup failures retained. Current parent
+runner correction/registry/evidence/documents are ready to commit [skip ci] and
+normally push. Then stay on PCTX01 and implement R01–R03 existing
+Operations/Role grammar as one common admission boundary. Use downstream
+policy_controls validator for exact stronger Role rules; keep authority/state/
+raw input in producers. Registry R04–R11 and fixed full gates remain open.
+One official task only. No unchanged high-cost rerun, timeout/interpreter/OS
+policy changes, Actions or external-only task switch while local work remains.
 
 ## Retained historical results and inactive backlog
 
@@ -94,3 +103,7 @@ Origin is https://github.com/Jung95/pctx.git; locally observed origin/main remai
 02979e1634a205fd2a54605da41d563dde08aeae. Explicit approval is needed to push the
 local delivery-fixture/evidence commit and this handoff-only record to that main.
 PCTX01 remains incomplete and no other task is started. All test jobs terminal.
+
+Two previously failing resolution tests pass in the latest full without any
+query-process/test or budget correction. This is not repair evidence; all four
+historical startup conditions remain unresolved. No retry-green promotion.

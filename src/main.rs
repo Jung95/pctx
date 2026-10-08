@@ -915,6 +915,12 @@ fn main() {
         Command::Checkpoint {
             command: CheckpointCommand::Create { name, scopes, .. },
         } => storage::validate_checkpoint_request(name.as_deref(), scopes),
+        Command::Runner { command } => runner::validate_runner_request(command),
+        Command::Job {
+            command: JobCommand::Cancel { job },
+        } => {
+            runner::validate_runner_request(&runner::RunnerCommand::JobCancel { job: job.clone() })
+        }
         Command::Quota { command } => quota::validate_quota_request(command),
         Command::Work(command) => work::validate_work_request(command),
         Command::Schedule { command } => schedule::validate_schedule_request(command),

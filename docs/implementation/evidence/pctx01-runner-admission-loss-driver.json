@@ -1,0 +1,20 @@
+{
+  "results": [
+    {
+      "loss": "frontend",
+      "exit": 101
+    },
+    {
+      "loss": "producer",
+      "exit": 101
+    },
+    {
+      "loss": "helper-grammar",
+      "exit": 101
+    }
+  ],
+  "restored_sha256": {
+    "src/main.rs": "bec520a8ea3f3d634ebc82413070e65779813448b9b681e70e68d329984a4ce4",
+    "src/runner.rs": "a3254f651ec32b2db18bf6943ec5d104eaa6b750fca606b29fdf3415733a9fd7"
+  }
+}

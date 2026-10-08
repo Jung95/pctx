@@ -556,27 +556,74 @@ fn linked_provider(f: &Fixture) -> PathBuf {
 }
 #[test]
 fn cloud_helper_is_only_durable_intent() {
+    fn snapshot(root: &std::path::Path) -> std::collections::BTreeMap<PathBuf, Option<Vec<u8>>> {
+        fn walk(
+            base: &std::path::Path,
+            dir: &std::path::Path,
+            values: &mut std::collections::BTreeMap<PathBuf, Option<Vec<u8>>>,
+        ) {
+            values.insert(dir.strip_prefix(base).unwrap().into(), None);
+            for entry in fs::read_dir(dir).unwrap() {
+                let entry = entry.unwrap();
+                let path = entry.path();
+                assert!(!entry.file_type().unwrap().is_symlink());
+                if path.is_dir() {
+                    walk(base, &path, values);
+                } else {
+                    values.insert(
+                        path.strip_prefix(base).unwrap().into(),
+                        Some(fs::read(path).unwrap()),
+                    );
+                }
+            }
+        }
+        let mut values = std::collections::BTreeMap::new();
+        walk(root, root, &mut values);
+        values
+    }
     let f = Fixture::new(&report(1), false, None);
-    let v = f.ok(&[
-        "runner",
-        "helper-request",
-        "--task-id",
-        &f.task,
-        "--key",
-        "unit",
-        "--run",
-        &f.run,
-        "--mode",
-        "cloud",
-        "--scope",
-        "code.rs",
-    ]);
-    assert_eq!(v["data"]["helper"]["state"], "queued_intent");
-    assert_eq!(v["data"]["model_started"], false);
-    assert_eq!(v["data"]["slot_allocated"], false);
-    let id = v["data"]["helper"]["helper_id"].as_str().unwrap();
-    let status = f.ok(&["runner", "helper-status", id]);
-    assert_eq!(status["data"]["helper"]["started"], false);
+    for mode in ["cloud", "native"] {
+        let v = f.ok(&[
+            "runner",
+            "helper-request",
+            "--task-id",
+            &f.task,
+            "--key",
+            "unit",
+            "--run",
+            &f.run,
+            "--mode",
+            mode,
+            "--scope",
+            "code.rs",
+        ]);
+        assert_eq!(v["data"]["helper"]["state"], "queued_intent");
+        assert_eq!(v["data"]["model_started"], false);
+        assert_eq!(v["data"]["slot_allocated"], false);
+        let id = v["data"]["helper"]["helper_id"].as_str().unwrap();
+        let status = f.ok(&["runner", "helper-status", id]);
+        assert_eq!(status["data"]["helper"]["started"], false);
+        let before = snapshot(&f.data);
+        let denied = f.output(&[
+            "runner",
+            "helper-request",
+            "--task-id",
+            &f.task,
+            "--key",
+            "unit",
+            "--run",
+            &f.run,
+            "--mode",
+            mode,
+            "--scope",
+            "../escape",
+        ]);
+        assert_eq!(denied.status.code(), Some(5));
+        let v: Value = serde_json::from_slice(&denied.stdout).unwrap();
+        assert_eq!(v["errors"][0]["code"], "PATH_OUTSIDE_ROOT");
+        assert_eq!(snapshot(&f.data), before);
+        assert!(!f.host.exists());
+    }
 }
 #[test]
 fn local_auxiliary_provider_needs_registered_linked_workspace_and_capacity() {
