@@ -14,6 +14,10 @@ pub struct BuildRequest {
     #[arg(long,conflicts_with_all=["task","task_file"])]
     pub task_id: Option<String>,
     #[arg(long)]
+    pub session: Option<String>,
+    #[arg(long)]
+    pub topic: Option<String>,
+    #[arg(long)]
     pub seed: Vec<String>,
     #[arg(long, default_value_t = 12000)]
     pub budget_bytes: usize,
@@ -112,6 +116,8 @@ pub(crate) fn select_scoped_with_measurement(
             2,
         ));
     }
+    let (delivery_role, delivery_barrier) =
+        crate::session::delivery_binding(p, r.session.as_deref(), r.topic.as_deref(), &r.role)?;
     let mut task_scope = r.seed.clone();
     let task = if let Some(task) = &r.task {
         reader::redact(task).0
@@ -273,7 +279,7 @@ pub(crate) fn select_scoped_with_measurement(
             candidates.push((f.path.clone(), "lexical_match"));
         }
     }
-    let mut data = json!({"task":task,"role":r.role,"items":items,"omitted_items":[],"selection_complete":true,"search_coverage":{"status":"partial","reasons":["lexical_candidates_only"]},"rule_scope_uncertain":docs["scope_uncertain"],"source_versions":{"policy_hash":p.policy_hash(),"project_documents_hash":document_fingerprint},"import_expansions":graph_sources,"budget":{"limit":r.budget_bytes,"used":0,"unit":"bytes"}});
+    let mut data = json!({"task":task,"role":delivery_role,"delivery_barrier":delivery_barrier,"items":items,"omitted_items":[],"selection_complete":true,"search_coverage":{"status":"partial","reasons":["lexical_candidates_only"]},"rule_scope_uncertain":docs["scope_uncertain"],"source_versions":{"policy_hash":p.policy_hash(),"project_documents_hash":document_fingerprint},"import_expansions":graph_sources,"budget":{"limit":r.budget_bytes,"used":0,"unit":"bytes"}});
     let mut candidate_seen = BTreeSet::new();
     candidates.retain(|(path, reason)| {
         let allowed =
@@ -377,7 +383,7 @@ pub(crate) fn select_scoped_with_measurement(
     }
     data["selection_inputs"] = json!({"detail":r.detail,"seed":r.seed,"task_scope":task_scope,
         "changed_since":r.changed_since,"dependency_depth":r.dependency_depth,
-        "parser_set":storage::PARSER_SET,"selector_version":"adaptive-v4",
+        "parser_set":storage::PARSER_SET,"selector_version":"adaptive-v5",
         "format": match format { crate::render::Format::Markdown => "markdown", _ => "json" }});
     finalize(
         p,
@@ -425,6 +431,15 @@ pub(crate) fn select_scoped_with_measurement(
         ));
     }
     p.check_deadline()?;
+    if crate::session::delivery_binding(p, r.session.as_deref(), r.topic.as_deref(), &r.role)?.1
+        != delivery_barrier
+    {
+        return Err(Error::new(
+            "CONCURRENT_MODIFICATION",
+            "Delivery controls or audience changed before output",
+            4,
+        ));
+    }
     Ok(data)
 }
 

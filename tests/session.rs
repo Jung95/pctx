@@ -100,6 +100,7 @@ fn get(
     context(
         p,
         &ContextCommand::Get {
+            topic: None,
             task_id: task.into(),
             session: s.into(),
             mode: mode.into(),
@@ -294,6 +295,7 @@ fn minimum_budget_failure_creates_no_emission() {
     let (_t, p, a, task) = fixture();
     let s = attach(&p, &a);
     let c = ContextCommand::Get {
+        topic: None,
         task_id: task,
         session: s,
         mode: "full".into(),
@@ -339,6 +341,7 @@ fn expired_outer_budget_cannot_emit_ack_attach_or_change_epoch() {
     let packet = context(
         &p,
         &ContextCommand::Get {
+            topic: None,
             task_id: task.clone(),
             session: sid.clone(),
             mode: "full".into(),
@@ -371,6 +374,7 @@ fn expired_outer_budget_cannot_emit_ack_attach_or_change_epoch() {
     ));
     for command in [
         ContextCommand::Get {
+            topic: None,
             task_id: task,
             session: sid.clone(),
             mode: "full".into(),

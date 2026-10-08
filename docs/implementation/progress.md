@@ -169,3 +169,11 @@ The equivalent standard process_group API removes the unnecessary Unix pre_exec 
 D041 operations helper and isolated direct tests are delegated to work_control, with writes limited to operations.rs and context_delivery_barriers.rs and no heavy job authorized concurrently. Parent owns CLI/session/context integration. This is authored work pending handback/verification, not completed delivery filtering.
 
 D042 remaining CLI/filter gate82476 terminal0:9 PASS. It completes the remaining narrow checks after the failed target, without repairing or relabeling the retained11/3 native startup failure. D041 helper edits are separate uncommitted agent work and are not qualified by these module-scoped results.
+
+## D041 consumer-bound context delivery
+
+Build accepts session/topic binding and uses the authenticated registered role instead of a caller ranking hint. Unbound agent delivery requires a session; local owner inspection remains subject to wildcard/selected-role controls. ContextGet checks recipient/registered roles and declared topic before task/source loading and again inside the emission transaction. Common read-only operations controls fail closed on pause, silence, missing-topic ambiguity, partial schema or bounded-row overflow. Opaque receipt fingerprints include durable relevant-role event sequence; alternate registered-role pause/resume cannot resurrect an old acknowledged baseline. Serializer6/selector5 preserve older stored data and require fresh compatible full acknowledgement.
+
+Final source gate61111:325 macOS PASS/3 native startup FAIL. Related adaptive/barrier/delivery/Pack/session/receipt/work suites56 PASS within that gate; format and locked all-target Clippy PASS. Evidence delivery-barriers-verification.json binds sources, final logs and retained initial CLI grammar/Pack constructor failures. Independent review found and confirmed repair of the alternate-role fingerprint gap. No agent report is substituted for runtime evidence.
+
+Still required: per-item topic attribution, explicit owner exception conflicts, handoff/task/approval memory variants, authenticated agent-bound selected Pack plumbing, race/platform/recovery matrix and original dyld startup repair. Declared packet topics are not a content classifier. Whole AC77/PCTX44 and full mandatory goal remain implementing; no Actions dispatched.

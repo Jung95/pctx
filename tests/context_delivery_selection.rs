@@ -54,6 +54,8 @@ fn fixture() -> (tempfile::TempDir, Project, BuildRequest) {
     fs::create_dir_all(&p.workspace_dir).unwrap();
     fs::create_dir_all(&p.control_dir).unwrap();
     let r = BuildRequest {
+        session: None,
+        topic: None,
         task: Some("inspect calculate".into()),
         task_file: None,
         task_id: None,
@@ -240,4 +242,43 @@ fn omitted_replacement_changed_during_delivery_invalidates_unchanged_selected_de
     );
     assert_eq!(fs::read(p.root.join(old_path)).unwrap(), old_source);
     assert_eq!(error.code, "CONCURRENT_MODIFICATION");
+}
+
+#[test]
+fn owner_pause_during_delivery_preparation_cannot_publish_selected_bodies() {
+    use pctx::operations::{OperationCommand, RoleCommand};
+    let (_temp, p, r) = fixture();
+    let mut changed = false;
+    let error = select_with_measurement(&p, &r, Format::Json, |data| {
+        if !changed {
+            pctx::operations::execute(
+                &p,
+                &OperationCommand::Role {
+                    command: RoleCommand::Pause {
+                        role: "*".into(),
+                        reason: "controlled owner pause".into(),
+                        topic: None,
+                        recipient: None,
+                    },
+                },
+            )?;
+            changed = true;
+        }
+        Ok(render(&packet(&p, data), Format::Json)?.len())
+    })
+    .unwrap_err();
+    assert!(changed, "fixture must reach actual consumer preparation");
+    assert_eq!(error.code, "ROLE_PAUSED");
+    let db = pctx::work::connect(&p).unwrap();
+    let receipts: i64 = db
+        .query_row(
+            "SELECT count(*) FROM sqlite_master WHERE name='pctx_context_emissions'",
+            [],
+            |r| r.get(0),
+        )
+        .unwrap();
+    assert_eq!(
+        receipts, 0,
+        "Build measurement creates no delivery receipt tables"
+    );
 }

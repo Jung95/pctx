@@ -8,7 +8,7 @@ use clap::Subcommand;
 use rusqlite::{Connection, OptionalExtension, TransactionBehavior, params};
 use serde_json::{Value, json};
 use std::collections::BTreeMap;
-const SERIALIZER: &str = "adaptive-context-v5";
+const SERIALIZER: &str = "adaptive-context-v6";
 #[derive(Debug, Clone, Subcommand)]
 pub enum SessionCommand {
     Attach {
@@ -51,6 +51,8 @@ pub enum ContextCommand {
         task_id: String,
         #[arg(long)]
         session: String,
+        #[arg(long)]
+        topic: Option<String>,
         #[arg(long,default_value="full",value_parser=["full","delta"])]
         mode: String,
         #[arg(long)]
@@ -122,6 +124,7 @@ CREATE TABLE IF NOT EXISTS pctx_session_capsules(id TEXT PRIMARY KEY,session TEX
 #[derive(Debug)]
 struct Session {
     agent: String,
+    role: Option<String>,
     workspace: String,
     epoch: i64,
     status: String,
@@ -129,7 +132,7 @@ struct Session {
 fn get(db: &Connection, p: &Project, id: &str) -> Result<Session> {
     let s = db
         .query_row(
-            "SELECT agent,workspace,epoch,status FROM pctx_sessions WHERE id=?1",
+            "SELECT agent,workspace,epoch,status,role FROM pctx_sessions WHERE id=?1",
             [id],
             |r| {
                 Ok(Session {
@@ -137,6 +140,7 @@ fn get(db: &Connection, p: &Project, id: &str) -> Result<Session> {
                     workspace: r.get(1)?,
                     epoch: r.get(2)?,
                     status: r.get(3)?,
+                    role: r.get(4)?,
                 })
             },
         )
@@ -153,6 +157,46 @@ fn get(db: &Connection, p: &Project, id: &str) -> Result<Session> {
         ));
     }
     Ok(s)
+}
+/// Authenticate a Build consumer before source loading, without granting rights.
+/// Agent callers must bind a registered session; local owner inspection remains
+/// subject to wildcard and explicitly selected role/topic delivery controls.
+pub(crate) fn delivery_binding(
+    p: &Project,
+    session: Option<&str>,
+    topic: Option<&str>,
+    owner_role: &str,
+) -> Result<(String, String)> {
+    p.check_deadline()?;
+    if let Some(session) = session {
+        let db = connect(p)?;
+        let s = get(&db, p, session)?;
+        crate::operations::ensure_claim_allowed_db(&db, &s.agent)?;
+        let barrier = crate::operations::delivery_barrier_fingerprint(
+            p,
+            &db,
+            &s.agent,
+            s.role.as_deref(),
+            topic,
+        )?;
+        return Ok((
+            s.role.unwrap_or_else(|| "implementer".into()),
+            hash(serde_json::to_vec(
+                &json!({"barrier":barrier,"session":session,"epoch":s.epoch,"status":s.status,"workspace":s.workspace}),
+            )?),
+        ));
+    }
+    let db = work::connect(p)?;
+    if work::authenticated_actor(p, &db)?.is_some() {
+        return Err(Error::new(
+            "POLICY_DENIED",
+            "Agent delivery requires a registered consumer session",
+            5,
+        ));
+    }
+    let barrier =
+        crate::operations::delivery_barrier_fingerprint(p, &db, "owner", Some(owner_role), topic)?;
+    Ok((owner_role.into(), barrier))
 }
 fn event(db: &Connection, session: &str, kind: &str, metadata: &Value) -> Result<()> {
     db.execute(
@@ -421,6 +465,7 @@ struct ReceiptSpec<'a> {
     scope: &'a [String],
     policy: String,
     scope_json: String,
+    delivery_barrier: String,
 }
 impl ReceiptSpec<'_> {
     fn baseline(&self, db: &Connection) -> Result<Option<BTreeMap<String, Value>>> {
@@ -451,7 +496,16 @@ impl ReceiptSpec<'_> {
                 "Baseline session, epoch, task, permission scope, serializer or acknowledgement differs",
             ));
         }
-        Ok(Some(serde_json::from_str(&row.6)?))
+        let selection: BTreeMap<String, Value> = serde_json::from_str(&row.6)?;
+        if selection
+            .get("__plan")
+            .and_then(|p| p.get("delivery_barrier"))
+            .and_then(Value::as_str)
+            != Some(self.delivery_barrier.as_str())
+        {
+            return Err(mismatch("Delivery controls or audience changed"));
+        }
+        Ok(Some(selection))
     }
     fn packet(
         &self,
@@ -507,7 +561,8 @@ impl ReceiptSpec<'_> {
             "omission_reasons":data["omission_reasons"],"omission_details_omitted":data["omission_details_omitted"],
             "selection_complete":data["selection_complete"],"selector_version":data["selection_inputs"]["selector_version"],
             "parser_set":data["selection_inputs"]["parser_set"],
-            "project_documents_hash":data["source_versions"]["project_documents_hash"]});
+            "project_documents_hash":data["source_versions"]["project_documents_hash"],
+            "delivery_barrier":self.delivery_barrier});
         // Persist selection metadata, never the source bodies or task text.
         metadata.insert("__plan".into(), plan.clone());
         let content_hash = hash(serde_json::to_vec(
@@ -632,6 +687,7 @@ fn context_inner(p: &Project, c: &ContextCommand) -> Result<Value> {
         ContextCommand::Get {
             task_id,
             session,
+            topic,
             mode,
             since,
             scope,
@@ -667,6 +723,17 @@ fn context_inner(p: &Project, c: &ContextCommand) -> Result<Value> {
             scope.dedup();
             let authorization_db = connect(p)?;
             let authorized_session = get(&authorization_db, p, session)?;
+            crate::operations::ensure_claim_allowed_db(
+                &authorization_db,
+                &authorized_session.agent,
+            )?;
+            let delivery_barrier = crate::operations::delivery_barrier_fingerprint(
+                p,
+                &authorization_db,
+                &authorized_session.agent,
+                authorized_session.role.as_deref(),
+                topic.as_deref(),
+            )?;
             let policy = p.policy_hash();
             let scope_json = serde_json::to_string(&scope)?;
             let spec = ReceiptSpec {
@@ -679,6 +746,7 @@ fn context_inner(p: &Project, c: &ContextCommand) -> Result<Value> {
                 scope: &scope,
                 policy: policy.clone(),
                 scope_json: scope_json.clone(),
+                delivery_barrier: delivery_barrier.clone(),
             };
             let old = spec.baseline(&authorization_db)?;
             drop(authorization_db);
@@ -722,12 +790,17 @@ fn context_inner(p: &Project, c: &ContextCommand) -> Result<Value> {
                 task: Some(serde_json::to_string(&task_value)?),
                 task_file: None,
                 task_id: None,
+                session: Some(session.clone()),
+                topic: topic.clone(),
                 seed,
                 budget_bytes: *budget_bytes,
                 budget_tokens: None,
                 tokenizer: None,
                 handoff: None,
-                role: "implementer".into(),
+                role: authorized_session
+                    .role
+                    .clone()
+                    .unwrap_or_else(|| "implementer".into()),
                 detail: "adaptive".into(),
                 changed_since: None,
                 dependency_depth: 0,
@@ -753,8 +826,22 @@ fn context_inner(p: &Project, c: &ContextCommand) -> Result<Value> {
             let mut db = connect(p)?;
             let tx = db.transaction_with_behavior(TransactionBehavior::Immediate)?;
             let s = get(&tx, p, session)?;
-            if s.epoch != authorized_session.epoch || s.status != authorized_session.status {
+            if s.epoch != authorized_session.epoch
+                || s.status != authorized_session.status
+                || s.role != authorized_session.role
+            {
                 return Err(mismatch("Session changed during selection"));
+            }
+            crate::operations::ensure_claim_allowed_db(&tx, &s.agent)?;
+            if crate::operations::delivery_barrier_fingerprint(
+                p,
+                &tx,
+                &s.agent,
+                s.role.as_deref(),
+                topic.as_deref(),
+            )? != delivery_barrier
+            {
+                return Err(mismatch("Delivery controls changed during selection"));
             }
             if spec.baseline(&tx)? != old {
                 return Err(mismatch("Baseline changed during selection"));

@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "base_commit": "d486b1a4c0e7da25d1837cdf6d8c34c90aa44e85",
+  "platform": "native macOS arm64",
+  "serializer": "adaptive-context-v6",
+  "selector": "adaptive-v5",
+  "source_sha256": {
+    "src/operations.rs": "99d2e091981adc1a3c3680ef2b4da9f038c94a15f21358e640df4d201c71053d",
+    "src/session.rs": "dc172aed5b7cded8d68930be0f56a48ef668ea114c42f5ad7e8986aea0c3a90a",
+    "src/context.rs": "7b54d8347091ad572a3c03040b868bdf2b8d27822d18ab586ced87f3210f38af",
+    "src/pack.rs": "1bbca3edde8cd00e3d10c3e4210ba54d48bd82450b0894513a2b632cff1e1cac",
+    "tests/context_delivery_barriers.rs": "44bf645d7b7a400898844421489010182d56236cb21804adf5407301fb90e292",
+    "tests/session_render_budget.rs": "08cfe9a51be413f065803557f445c203253a9c923340cafbb2b78403c69acd27",
+    "tests/context_delivery_selection.rs": "f5315c3aab19ef1cb86d1276254d2241c4b125b688509f444d7401bda6df577f",
+    "tests/session.rs": "9fe687f16f2e5a09e93feea02a3b08ab1d7f40bf5ca166044f3b73c368e1601e",
+    "tests/work_control.rs": "9f83a709d1d88db1949560243e0a1ad397652fbc3a309bafcddaac95b6825f42"
+  },
+  "checks": {
+    "format": "PASS",
+    "locked_all_target_clippy": "PASS",
+    "full_native": {
+      "passed": 325,
+      "failed": 3,
+      "exit_code": 101,
+      "handle": 61111,
+      "status": "FAILED"
+    },
+    "final_source_related_suites_in_full_gate": {
+      "passed": 56,
+      "failed": 0,
+      "targets": [
+        "context_adaptive",
+        "context_delivery_barriers",
+        "context_delivery_selection",
+        "pack",
+        "session",
+        "session_render_budget",
+        "work_control"
+      ]
+    },
+    "initial_helper": {
+      "passed": 7,
+      "failed": 0,
+      "scope": "before parent registered-role-set alignment"
+    }
+  },
+  "retained_failures": [
+    "project_deadline concurrent startup",
+    "project_deadline relative PATH",
+    "project_deadline simultaneous streams"
+  ],
+  "independent_review": "Requirements agent found alternate registered-role fingerprint gap; parent bounded role-set query and actual CLI regression fix confirmed by read-only follow-up, no remaining blocker in reviewed delta. Review performed no runtime tests.",
+  "limits": [
+    "Native dyld startup cause unresolved; no retry promotion/deadline relaxation",
+    "Declared packet topic binding is not source classification; per-item attribution remains",
+    "Owner exception priority and handoff/task/approval variants remain",
+    "Agent-bound selected Pack consumer plumbing remains",
+    "Other-platform qualification and whole AC77/PCTX44/full goal incomplete",
+    "No Actions dispatched"
+  ],
+  "evidence_sha256": {
+    "docs/implementation/evidence/delivery-barriers-static.log": "7be1ba056980a8176263f9a6e74c2ae9718509178793a8391a819353caf0117b",
+    "docs/implementation/evidence/delivery-barriers-intermediate-targeted.log": "598c3b7efc9a4c7e49f6a3cae9c9bba26b7d28a25584eb1bedd6954ce782a0af",
+    "docs/implementation/evidence/delivery-barriers-full-macos.log": "c7de9b35e63328662fe018dee362e25ff93b7c0aa10639ac4646922d9b4922cc",
+    "docs/implementation/evidence/delivery-barriers-initial-cli-failure.log": "ea9a677d006622d0cadbe450d6c4f4579e0569df233867e8634fe3f7b59afdc9",
+    "docs/implementation/evidence/delivery-barriers-intermediate-compile-failure.log": "316d171a04127aba29f8020e881964e970c685e32922ffe8443f693cf480b152",
+    "docs/implementation/evidence/delivery-barriers-direct.log": "87409ccb7208f79143752143a23283e47cdace7d23ab067290bb4d9458a616b6",
+    "docs/implementation/evidence/delivery-barriers-format.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

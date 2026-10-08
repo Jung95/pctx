@@ -249,7 +249,7 @@ fn exact_final_budget_and_representation_receipts_require_explicit_ack() {
     );
     assert_eq!(bytes.last(), Some(&b'\n'));
     let packet = &full["data"];
-    assert_eq!(packet["serializer"], "adaptive-context-v5");
+    assert_eq!(packet["serializer"], "adaptive-context-v6");
     let context = packet["context_id"].as_str().unwrap();
     let db = f.db();
     let selection: String = db
@@ -974,10 +974,10 @@ fn unchanged_git_does_not_hide_decision_or_memory_change_retirement_and_deletion
         )
         .unwrap();
     assert!(!stored.contains("DECISION_B_CURRENT") && !stored.contains("MEMORY_B"));
-    // The previous serializer remains preserved data, not a v5 baseline.
+    // The previous serializer remains preserved data, not a v6 baseline.
     let id = retired["data"]["context_id"].as_str().unwrap();
-    db.execute("INSERT INTO pctx_context_emissions SELECT 'CTX-v4-fixture',session,epoch,task,policy,scope,'adaptive-context-v4',content_hash,selection,created FROM pctx_context_emissions WHERE id=?1", [id]).unwrap();
-    db.execute("INSERT INTO pctx_context_acks SELECT session,epoch,'CTX-v4-fixture',provenance,created FROM pctx_context_acks WHERE context=?1", [id]).unwrap();
+    db.execute("INSERT INTO pctx_context_emissions SELECT 'CTX-v5-fixture',session,epoch,task,policy,scope,'adaptive-context-v5',content_hash,selection,created FROM pctx_context_emissions WHERE id=?1", [id]).unwrap();
+    db.execute("INSERT INTO pctx_context_acks SELECT session,epoch,'CTX-v5-fixture',provenance,created FROM pctx_context_acks WHERE context=?1", [id]).unwrap();
     let (exit, _, old) = f.run(&[
         "context",
         "get",
@@ -990,7 +990,7 @@ fn unchanged_git_does_not_hide_decision_or_memory_change_retirement_and_deletion
         "--mode",
         "delta",
         "--since",
-        "CTX-v4-fixture",
+        "CTX-v5-fixture",
         "--budget-bytes",
         "64000",
     ]);
@@ -1186,5 +1186,227 @@ fn supersession_links_invalidate_unchanged_source_without_reviving_it_on_replace
         f.git(&["status", "--porcelain=v1", "--untracked-files=all"])
             .stdout
             .is_empty()
+    );
+}
+
+#[test]
+fn registered_role_and_topic_controls_precede_context_and_resume_requires_fresh_baseline() {
+    let f = fixture();
+    let session = f.ok(&[
+        "session",
+        "attach",
+        "--agent",
+        &f.agent,
+        "--runtime",
+        "manual",
+        "--role",
+        "developer",
+    ])["data"]["session_id"]
+        .as_str()
+        .unwrap()
+        .to_owned();
+    let full = |topic: Option<&str>| {
+        let mut args = vec![
+            "context",
+            "get",
+            "--task-id",
+            &f.task,
+            "--session",
+            &session,
+            "--scope",
+            "auth.py",
+            "--budget-bytes",
+            "64000",
+        ];
+        if let Some(topic) = topic {
+            args.extend(["--topic", topic]);
+        }
+        f.run(&args)
+    };
+    let (exit, _, initial) = full(Some("public"));
+    assert_eq!(exit, 0, "{initial}");
+    let initial_id = initial["data"]["context_id"].as_str().unwrap();
+    f.ok(&[
+        "context",
+        "ack",
+        initial_id,
+        "--session",
+        &session,
+        "--epoch",
+        "1",
+    ]);
+    let counts = || {
+        let db = f.db();
+        [
+            "pctx_context_emissions",
+            "pctx_context_acks",
+            "pctx_session_events",
+        ]
+        .map(|table| {
+            db.query_row(&format!("SELECT count(*) FROM {table}"), [], |r| {
+                r.get::<_, i64>(0)
+            })
+            .unwrap()
+        })
+    };
+    f.ok(&["role", "pause", "developer", "--reason", "test owner pause"]);
+    let before = counts();
+    let (exit, bytes, denied) = full(Some("public"));
+    assert_eq!(exit, 5, "{denied}");
+    assert_eq!(denied["errors"][0]["code"], "ROLE_PAUSED");
+    assert!(!String::from_utf8(bytes).unwrap().contains("auth.py"));
+    assert_eq!(counts(), before);
+    let (exit, bytes, denied) = f.run(&[
+        "build",
+        "--session",
+        &session,
+        "--topic",
+        "public",
+        "--role",
+        "implementer",
+        "--task-id",
+        &f.task,
+        "--budget-bytes",
+        "64000",
+    ]);
+    assert_eq!(exit, 5, "{denied}");
+    assert_eq!(denied["errors"][0]["code"], "ROLE_PAUSED");
+    assert!(!String::from_utf8(bytes).unwrap().contains("auth.py"));
+    assert_eq!(counts(), before);
+    f.ok(&[
+        "role",
+        "resume",
+        "developer",
+        "--reason",
+        "test explicit resume",
+    ]);
+    let (exit, _, delta) = f.run(&[
+        "context",
+        "get",
+        "--task-id",
+        &f.task,
+        "--session",
+        &session,
+        "--scope",
+        "auth.py",
+        "--topic",
+        "public",
+        "--mode",
+        "delta",
+        "--since",
+        initial_id,
+        "--budget-bytes",
+        "64000",
+    ]);
+    assert_eq!(exit, 9, "{delta}");
+    assert_eq!(delta["errors"][0]["code"], "BASELINE_MISMATCH");
+    let (exit, _, refreshed) = full(Some("public"));
+    assert_eq!(exit, 0, "{refreshed}");
+    assert_ne!(
+        refreshed["data"]["context_id"],
+        initial["data"]["context_id"]
+    );
+    let built = f.ok(&[
+        "build",
+        "--session",
+        &session,
+        "--topic",
+        "public",
+        "--role",
+        "implementer",
+        "--task-id",
+        &f.task,
+        "--budget-bytes",
+        "64000",
+    ]);
+    assert_eq!(
+        built["data"]["role"], "developer",
+        "registered role overrides a ranking hint"
+    );
+
+    f.ok(&[
+        "session",
+        "attach",
+        "--agent",
+        &f.agent,
+        "--runtime",
+        "manual",
+        "--role",
+        "reviewer",
+    ]);
+    let (exit, _, other_role_baseline) = full(Some("public"));
+    assert_eq!(exit, 0);
+    let other_id = other_role_baseline["data"]["context_id"].as_str().unwrap();
+    f.ok(&[
+        "context",
+        "ack",
+        other_id,
+        "--session",
+        &session,
+        "--epoch",
+        "1",
+    ]);
+    f.ok(&[
+        "role",
+        "pause",
+        "reviewer",
+        "--reason",
+        "other registered role",
+    ]);
+    assert_eq!(full(Some("public")).2["errors"][0]["code"], "ROLE_PAUSED");
+    f.ok(&[
+        "role",
+        "resume",
+        "reviewer",
+        "--reason",
+        "explicit other-role resume",
+    ]);
+    let (exit, _, refused) = f.run(&[
+        "context",
+        "get",
+        "--task-id",
+        &f.task,
+        "--session",
+        &session,
+        "--scope",
+        "auth.py",
+        "--topic",
+        "public",
+        "--mode",
+        "delta",
+        "--since",
+        other_id,
+        "--budget-bytes",
+        "64000",
+    ]);
+    assert_eq!(exit, 9, "{refused}");
+    assert_eq!(refused["errors"][0]["code"], "BASELINE_MISMATCH");
+    f.ok(&[
+        "role",
+        "pause",
+        "developer",
+        "--topic",
+        "sensitive-topic",
+        "--recipient",
+        &f.agent,
+        "--reason",
+        "test silence",
+    ]);
+    let before = counts();
+    for (topic, expected) in [
+        (Some("sensitive-topic"), "TOPIC_SILENCED"),
+        (None, "DELIVERY_TOPIC_REQUIRED"),
+    ] {
+        let (exit, bytes, denied) = full(topic);
+        assert_eq!(exit, 5, "{denied}");
+        assert_eq!(denied["errors"][0]["code"], expected);
+        let text = String::from_utf8(bytes).unwrap();
+        assert!(!text.contains("sensitive-topic") && !text.contains("auth.py"));
+        assert_eq!(counts(), before);
+    }
+    assert_eq!(
+        full(Some("public")).0,
+        0,
+        "unrelated explicit topic remains deliverable"
     );
 }

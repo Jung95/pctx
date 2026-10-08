@@ -1,0 +1,15 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.48s
+     Running tests/context_delivery_barriers.rs (target/debug/deps/context_delivery_barriers-557a7f251a35cc4a)
+
+running 7 tests
+test canonical_id_wins_over_colliding_alias_and_expired_budget_never_writes ... ok
+test uninitialized_controls_are_read_only_and_partial_schema_fails_closed ... ok
+test canonical_alias_registered_role_and_wildcard_pauses_block_without_grant ... ok
+test relevant_control_mutation_rebinds_fingerprint_but_unrelated_controls_do_not ... ok
+test durable_role_event_revision_prevents_same_second_pause_resume_reuse ... ok
+test topic_silence_normalizes_aliases_and_is_exact_to_role_recipient_topic ... ok
+test relevant_topic_controls_are_bounded_and_corrupt_labels_fail_closed ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+

@@ -388,6 +388,265 @@ fn recipient_key(db: &Connection, value: &str) -> Result<String> {
 fn silenced(db: &Connection, role: &str, recipient: &str, topic: &str) -> Result<bool> {
     Ok(db.query_row("SELECT EXISTS(SELECT 1 FROM ops_silences WHERE active=1 AND (role=?1 OR role='*') AND (recipient=?2 OR recipient='*') AND topic=?3)",params![role,recipient_key(db,recipient)?,topic],|r|r.get(0))?)
 }
+/// Read-only delivery barrier for an already authenticated canonical recipient.
+/// This function neither authenticates a caller nor grants permission. The caller
+/// owns its connection/transaction and registered role/session/workspace binding.
+pub fn delivery_barrier_fingerprint(
+    p: &Project,
+    db: &Connection,
+    recipient: &str,
+    registered_role: Option<&str>,
+    topic: Option<&str>,
+) -> Result<String> {
+    p.check_deadline()?;
+    label(recipient)?;
+    if recipient == "*" {
+        return Err(invalid("A canonical recipient is required"));
+    }
+    if let Some(role) = registered_role {
+        label(role)?;
+    }
+    if let Some(topic) = topic {
+        label(topic)?;
+    }
+    let table_exists = |name: &str| -> Result<bool> {
+        p.check_deadline()?;
+        let present = db.query_row(
+            "SELECT EXISTS(SELECT 1 FROM sqlite_master WHERE type='table' AND name=?1)",
+            [name],
+            |r| r.get(0),
+        )?;
+        p.check_deadline()?;
+        Ok(present)
+    };
+    let roles = table_exists("ops_roles")?;
+    let silences = table_exists("ops_silences")?;
+    let events = table_exists("ops_events")?;
+    if roles != silences || roles != events {
+        return Err(Error::new(
+            "POLICY_UNAVAILABLE",
+            "Delivery controls are incomplete",
+            7,
+        ));
+    }
+    let mut identities = std::collections::BTreeSet::from([recipient.to_owned()]);
+    let has_agents = table_exists("agents")?;
+    if has_agents {
+        // Canonical ID is authoritative. An alias that happens to equal another
+        // agent ID cannot change which authenticated recipient is inspected.
+        let alias: Option<Option<String>> = db
+            .query_row("SELECT CASE WHEN length(CAST(name AS BLOB))<=256 THEN name ELSE NULL END FROM agents WHERE id=?1", [recipient], |r| {
+                r.get(0)
+            })
+            .optional()?;
+        p.check_deadline()?;
+        if let Some(alias) = alias {
+            let alias = alias.ok_or_else(|| {
+                Error::new(
+                    "POLICY_UNAVAILABLE",
+                    "Delivery identity exceeds safe bounds",
+                    7,
+                )
+            })?;
+            label(&alias)
+                .map_err(|_| Error::new("POLICY_UNAVAILABLE", "Delivery identity is invalid", 7))?;
+            identities.insert(alias);
+        }
+    }
+    let mut role_keys = identities.clone();
+    role_keys.insert("*".into());
+    if let Some(role) = registered_role {
+        role_keys.insert(role.into());
+    }
+    // Match the registered-role set enforced by task/session pause checks.
+    // Otherwise another role's pause/resume could restore an old baseline.
+    if table_exists("pctx_sessions")? {
+        let mut statement = db.prepare("SELECT DISTINCT CASE WHEN length(CAST(role AS BLOB))<=256 THEN role ELSE NULL END FROM pctx_sessions WHERE agent=?1 AND role IS NOT NULL ORDER BY role LIMIT 257")?;
+        for (index, row) in statement
+            .query_map([recipient], |r| r.get::<_, Option<String>>(0))?
+            .enumerate()
+        {
+            p.check_deadline()?;
+            let role = row?.ok_or_else(|| {
+                Error::new(
+                    "POLICY_UNAVAILABLE",
+                    "Delivery controls exceed safe bounds",
+                    7,
+                )
+            })?;
+            if index >= 256 || label(&role).is_err() {
+                return Err(Error::new(
+                    "POLICY_UNAVAILABLE",
+                    "Delivery controls exceed safe bounds",
+                    7,
+                ));
+            }
+            role_keys.insert(role);
+        }
+    }
+    let placeholders = |count: usize| vec!["?"; count].join(",");
+    let role_values = role_keys.iter().cloned().collect::<Vec<_>>();
+    let mut states = Vec::new();
+    let mut revision = 0i64;
+    if roles {
+        // Durable event sequence prevents a pause/resume roundtrip in one second
+        // from restoring an earlier acknowledged fingerprint. Existing policy
+        // events bind only role, so this conservatively invalidates other topics
+        // or recipients sharing that role; no finer provenance is invented.
+        let sql = format!(
+            "SELECT COALESCE(MAX(seq),0) FROM ops_events WHERE kind='role_policy_changed' AND entity IN ({})",
+            placeholders(role_values.len())
+        );
+        p.check_deadline()?;
+        revision = db.query_row(&sql, rusqlite::params_from_iter(role_values.iter()), |r| {
+            r.get(0)
+        })?;
+        p.check_deadline()?;
+        let sql = format!(
+            "SELECT role,paused,updated FROM ops_roles WHERE role IN ({}) ORDER BY role LIMIT 257",
+            placeholders(role_values.len())
+        );
+        let mut statement = db.prepare(&sql)?;
+        p.check_deadline()?;
+        let mut rows_seen = 0usize;
+        for row in statement.query_map(rusqlite::params_from_iter(role_values.iter()), |r| {
+            Ok((
+                r.get::<_, String>(0)?,
+                r.get::<_, bool>(1)?,
+                r.get::<_, i64>(2)?,
+            ))
+        })? {
+            p.check_deadline()?;
+            let (role, paused, updated) = row?;
+            rows_seen += 1;
+            if rows_seen > 256 || label(&role).is_err() {
+                return Err(Error::new(
+                    "POLICY_UNAVAILABLE",
+                    "Delivery controls exceed safe bounds",
+                    7,
+                ));
+            }
+            if !role_keys.contains(&role) {
+                continue;
+            }
+            if paused {
+                return Err(Error::new("ROLE_PAUSED", "Delivery is paused", 5));
+            }
+            states.push(json!(["role", role, paused, updated]));
+        }
+        let mut recipient_values = identities.iter().cloned().collect::<Vec<_>>();
+        recipient_values.push("*".into());
+        let mut values = role_values.clone();
+        values.extend(recipient_values.iter().cloned());
+        let mut sql = format!(
+            "SELECT role,recipient,CASE WHEN length(CAST(topic AS BLOB))<=256 THEN topic ELSE NULL END,active,updated FROM ops_silences WHERE role IN ({}) AND recipient IN ({})",
+            placeholders(role_values.len()),
+            placeholders(recipient_values.len())
+        );
+        if let Some(topic) = topic {
+            sql.push_str(" AND topic=?");
+            values.push(topic.into());
+        }
+        sql.push_str(" ORDER BY role,recipient,topic LIMIT 257");
+        let mut statement = db.prepare(&sql)?;
+        p.check_deadline()?;
+        let mut rows_seen = 0usize;
+        for row in statement.query_map(rusqlite::params_from_iter(values.iter()), |r| {
+            Ok((
+                r.get::<_, String>(0)?,
+                r.get::<_, String>(1)?,
+                r.get::<_, Option<String>>(2)?,
+                r.get::<_, bool>(3)?,
+                r.get::<_, i64>(4)?,
+            ))
+        })? {
+            p.check_deadline()?;
+            let (role, target, controlled_topic, active, updated) = row?;
+            let controlled_topic = controlled_topic.ok_or_else(|| {
+                Error::new(
+                    "POLICY_UNAVAILABLE",
+                    "Delivery controls exceed safe bounds",
+                    7,
+                )
+            })?;
+            rows_seen += 1;
+            if rows_seen > 256
+                || [&role, &target, &controlled_topic]
+                    .into_iter()
+                    .any(|value| label(value).is_err())
+            {
+                return Err(Error::new(
+                    "POLICY_UNAVAILABLE",
+                    "Delivery controls exceed safe bounds",
+                    7,
+                ));
+            }
+            if !role_keys.contains(&role) {
+                continue;
+            }
+            let canonical_target = if target == "*" || !has_agents {
+                target
+            } else {
+                let by_id: Option<String> = db
+                    .query_row("SELECT id FROM agents WHERE id=?1", [&target], |r| r.get(0))
+                    .optional()?;
+                p.check_deadline()?;
+                let resolved = if let Some(id) = by_id {
+                    id
+                } else {
+                    db.query_row("SELECT id FROM agents WHERE name=?1", [&target], |r| {
+                        r.get::<_, String>(0)
+                    })
+                    .optional()?
+                    .unwrap_or(target)
+                };
+                p.check_deadline()?;
+                resolved
+            };
+            if canonical_target != "*" && canonical_target != recipient {
+                continue;
+            }
+            if topic.is_none() {
+                if active {
+                    return Err(Error::new(
+                        "DELIVERY_TOPIC_REQUIRED",
+                        "Explicit delivery topic is required by active controls",
+                        5,
+                    ));
+                }
+                continue;
+            }
+            if topic != Some(controlled_topic.as_str()) {
+                continue;
+            }
+            if active {
+                return Err(Error::new(
+                    "TOPIC_SILENCED",
+                    "Delivery topic is silenced",
+                    5,
+                ));
+            }
+            // Only this explicit topic and authenticated recipient's relevant
+            // controls bind a receipt. Unrelated topics/reasons never enter it.
+            states.push(json!([
+                "topic",
+                role,
+                canonical_target,
+                controlled_topic,
+                active,
+                updated
+            ]));
+        }
+    }
+    p.check_deadline()?;
+    let fingerprint = hash(serde_json::to_vec(&json!({
+        "barrier_version":1,"recipient":recipient,"registered_role":registered_role,
+        "topic":topic,"controls":states,"policy_event_revision":revision,
+        "coordination":p.coordination_id}))?);
+    p.check_deadline()?;
+    Ok(fingerprint)
+}
+
 /// Hook for task claim: pause is durable policy, independent of task and lease state.
 pub fn ensure_claim_allowed(p: &Project, agent: &str) -> Result<()> {
     let db = connect(p)?;

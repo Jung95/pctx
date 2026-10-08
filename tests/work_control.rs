@@ -546,6 +546,7 @@ fn restore_preserves_session_history_without_ack_or_epoch_reuse() {
     let context = session::context(
         &p,
         &ContextCommand::Get {
+            topic: None,
             task_id: name.clone(),
             session: sid.clone(),
             mode: "full".into(),

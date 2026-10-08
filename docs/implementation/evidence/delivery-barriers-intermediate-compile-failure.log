@@ -1,0 +1,9 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+error[E0063]: missing fields `session` and `topic` in initializer of `BuildRequest`
+   --> src/pack.rs:478:23
+    |
+478 |         let request = context::BuildRequest {
+    |                       ^^^^^^^^^^^^^^^^^^^^^ missing `session` and `topic`
+
+For more information about this error, try `rustc --explain E0063`.
+error: could not compile `pctx` (lib) due to 1 previous error

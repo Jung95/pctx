@@ -476,6 +476,8 @@ fn create_plan(
     }
     let chosen = if content == "selected" {
         let request = context::BuildRequest {
+            session: None,
+            topic: None,
             task: Some(format!(
                 "{}\n{}",
                 task["title"].as_str().unwrap_or(""),
