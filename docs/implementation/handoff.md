@@ -7,20 +7,21 @@
 ## Latest verified integration boundary
 
 PCTX01 remains the only active official task (`implementing`). Base
-02979e1634a205fd2a54605da41d563dde08aeae; current test-only delta isolates all
-seven discovered raw-pipe fixtures with exact-case workers and verified CLOEXEC.
-Related34 PASS; final format/locked all-target Clippy PASS. Final full25288
-terminal101: 478 PASS/3 original startup FAIL. Initial stages and normal-ended
-EPERM signal failures are retained in the manifest; no absence inference.
-Real native-hook CLI O_RDWR FIFO timeout cancellation verifies same-group CLI
-absence before WNOWAIT leader reap, then ECHILD. Root-only guard loss fails
-0PASS1FAIL and exact source restoration is recorded. Independent review finds
-no scoped blocker; panic cleanup is best effort, kernel kill/wait latency not
-hard-bounded, separate runner groups/general descendants/early-failed-root paths
-unqualified. All jobs terminal; no live heavy job. Manifest:
-evidence/pctx01-delivery-ownership-verification.json.
-Native Linux/Windows and full frontend/phase/startup gates remain required.
-No next official task, Actions or external calls; whole task/goal incomplete.
+e57c5ed; current test-only delta qualifies actual native final Run record trimming.
+Normalized bidi text expands in safe JSON; baseline8192 response exceeds5000 with
+one admitted record. Explicit5000 JSON/compact responses omit that record and
+preserve child0/2/signal15 for both exit policies. Full reread retains normalized
+text/child/signal and never reruns; five invocations per case. Related32 PASS;
+format/locked all-target Clippy PASS. Guard loss actual0PASS1FAIL/exit8 instead
+of expected0; exact source restoration. Initial C1 normalization guard failure
+and invalid test-target selection/no tests retained. Final full30370 terminal101:
+479 PASS/3 original startup FAIL. Independent review found no scoped blocker.
+All jobs terminal; no live heavy job. Manifest:
+evidence/pctx01-run-final-bytes-verification.json. Production unchanged.
+Metadata-only budget fallback, spawn-observer error injection, remaining frontend/
+phase/startup and native Linux/Windows gates remain open. No next official task.
+Prior auto-review main push rejection remains; no retry or alternate mechanism.
+Local commits remain unpushed pending explicit approval. Whole goal incomplete.
 
 ## Source, evidence and environment
 
@@ -68,7 +69,7 @@ Original ignored specification SHA256 8914faad57432f524aec0a06aa90c43c18c23f8c19
 
 ## Exact next action
 
-Within PCTX01, audit actual post-spawn presentation fallback and spawn-observer
+Within PCTX01, audit metadata-only post-spawn presentation fallback and spawn-observer
 error truth, remaining oversized error and supported-empty/unavailable/partial
 envelope propagation, and the remaining producer argument/phase matrix. Preserve
 producer semantics and original native startup budgets. Normal delivery fixtures

@@ -1,0 +1,8 @@
+Independent read-only review by /root/requirements; no edits or tests performed.
+No blocker found. Actual native child fixtures establish an admitted record
+exceeding the final escaped-document budget. Record trimming preserves child
+0/2/signal15 truth across JSON/compact and both exit policies. Saved reread and
+invocation count support no rerun.
+This proves final record trimming, not metadata-only BUDGET_TOO_SMALL fallback.
+Exact reread means retained normalized record text, not original stdout bytes.
+Unix-specific evidence does not complete PCTX01 or qualify other native platforms.

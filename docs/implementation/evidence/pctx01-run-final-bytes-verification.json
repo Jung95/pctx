@@ -1,0 +1,126 @@
+{
+  "task": "PCTX01",
+  "status": "implementing; incomplete; sole active official task",
+  "base_revision": "e57c5edd610a5b17b3044d2b489110cefed3163a",
+  "previous_goal_turn": "progress: fixture isolation, native ownership evidence, local commits; push approval rejected and pending",
+  "platform": "native macOS arm64",
+  "production_changed": false,
+  "source_sha256": {
+    "tests/cli_run_exit.rs": "3125aeecb4853b0fd3d005f1eb006a7d29851a4354cde4d5541f2d423ba423c2",
+    "src/main.rs": "a3c4abe399254125041800ec6d1df4086a470a3f77eba5d8bccadca4e139533c",
+    "src/output.rs": "69e1b365abba2986ec1e04b1648c8dbff1fe1eddfa762816e85379f4c3be7940",
+    "src/render.rs": "00604836931e43f1ba7a79fa55ab76171a3360e122cf2f20a0ab568b868cce06"
+  },
+  "runs": [
+    {
+      "path": "pctx01-run-final-bytes-selected.log",
+      "sha256": "98dfa73bd8091adf4576f298a5ca0ed9c9f3fd9c13110d5bec3baf881b872ce0",
+      "exit": 101,
+      "session": 5045,
+      "counts": {
+        "passed": 0,
+        "failed": 1
+      },
+      "qualification": "Initial C1 fixture failed its >budget guard after normalization; no final-byte qualification."
+    },
+    {
+      "path": "pctx01-run-final-bytes-repaired.log",
+      "sha256": "dc5e31f9dc200cc58cb2d262bd74f0a4b9b77cdcabd91bbd6d52c9a3d929d583",
+      "exit": 0,
+      "session": 18645,
+      "counts": {
+        "passed": 1,
+        "failed": 0
+      },
+      "qualification": "Final normalized bidi fixture actual CLI exact test."
+    },
+    {
+      "path": "pctx01-run-final-bytes-guard-loss.log",
+      "sha256": "12141c2277db1eeb97259f02bd4a9909a1a1db971ebbd2dde14821433aed6d2d",
+      "exit": 101,
+      "session": 35371,
+      "counts": {
+        "passed": 0,
+        "failed": 1
+      },
+      "qualification": "Only final-record loop disabled; actual CLI fell back8 instead of expected0; exact restore."
+    },
+    {
+      "path": "pctx01-run-final-bytes-related.log",
+      "sha256": "9b09518c2dc29fcf100dbce5fc4c059fca3318a40cfe26f5bb4bf809643a9c1f",
+      "exit": 101,
+      "session": null,
+      "counts": {
+        "passed": 0,
+        "failed": 0
+      },
+      "qualification": "Invalid nonexistent output_capture target selection; no tests executed."
+    },
+    {
+      "path": "pctx01-run-final-bytes-related-repaired.log",
+      "sha256": "0374c5747366805f68ea5b7d84491024dc8e1ece3bb5a6938262326d44855828",
+      "exit": 0,
+      "session": 20813,
+      "counts": {
+        "passed": 32,
+        "failed": 0
+      },
+      "qualification": "Final related four suites."
+    },
+    {
+      "path": "pctx01-run-final-bytes-static.log",
+      "sha256": "6934b2786c6fc47ed726fc6809727da143d55a85054d3cbb6eb23c39762be711",
+      "exit": 0,
+      "session": 13229,
+      "counts": {
+        "passed": 0,
+        "failed": 0
+      },
+      "qualification": "Final format/locked all-target Clippy."
+    },
+    {
+      "path": "pctx01-run-final-bytes-full.log",
+      "sha256": "8e2d382e1451e0d0a81a0c89a3720a37fe667a496823cbc906c85dceded96590",
+      "exit": 101,
+      "session": 30370,
+      "counts": {
+        "passed": 479,
+        "failed": 3
+      },
+      "qualification": "Final restored-source full; all original startup failures retained."
+    }
+  ],
+  "guard_loss": {
+    "test_exit": 101,
+    "original_sha256": "a3c4abe399254125041800ec6d1df4086a470a3f77eba5d8bccadca4e139533c",
+    "restored_sha256": "a3c4abe399254125041800ec6d1df4086a470a3f77eba5d8bccadca4e139533c",
+    "mutation": "disable only final serialized record-trimming loop"
+  },
+  "proof_scope": [
+    "Actual native children0/2/signal15 with original5000ms execution budget.",
+    "JSON/compact and child/PCTX policies: final bytes<=5000, spawnedtrue, child/signal exact, complete capture, pctxerrornull, not_evaluated tests.",
+    "Baseline8192 response exceeds5000 with one admitted record; final5000 response omits one record.",
+    "Saved full reread retains normalized bidi record and exact child/signal; no rerun and five invocations perfixture."
+  ],
+  "limits": [
+    "Record trimming only; metadata-only budget fallback and spawn-observer error injection remain open.",
+    "Retained normalized record text is not original raw stdout byte equivalence.",
+    "Native Linux/Windows and original startup failures remain open; full PCTX01 incomplete."
+  ],
+  "commands": {
+    "selected": "cargo test --locked --test cli_run_exit final_serialized_budget_preserves_actual_child_truth_and_full_reread -- --exact",
+    "related": "cargo test --locked --no-fail-fast --test cli_run_exit --test output --test render --test output_delivery_observation",
+    "full": "cargo test --locked --no-fail-fast"
+  },
+  "review_path": "pctx01-run-final-bytes-review.txt",
+  "review_sha256": "294783c366cb1c778cdf2ecf15909a55c9a303a88322dea4aad3ba10a35718e2",
+  "guard_loss_driver_sha256": "a7bfdadecf35c1981af23ff17a8d7cb87545e4087b8c727471465edd919e8423",
+  "push_state": "prior auto-review rejection unchanged; no retry; explicit approval pending",
+  "actions_dispatched": false,
+  "next_official_task": null,
+  "full_failed_tests": [
+    "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget",
+    "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+    "simultaneous_streams_are_collected_and_overflow_never_infers_success"
+  ]
+}

@@ -24,13 +24,16 @@ impl Fixture {
         f
     }
     fn invoke(&self, args: &[&str]) -> Output {
+        self.invoke_format(args, "json")
+    }
+    fn invoke_format(&self, args: &[&str], format: &str) -> Output {
         Command::new(env!("CARGO_BIN_EXE_pctx"))
             .current_dir(self.temp.path())
             .args([
                 "--root",
                 self.temp.path().to_str().unwrap(),
                 "--format",
-                "json",
+                format,
             ])
             .args(args)
             .env("PCTX_DATA_DIR", self.temp.path().join("data"))
@@ -425,4 +428,76 @@ fn project_refusal_near_minimum_keeps_original_exit_and_fits() {
         }
     }
     assert_eq!(fs::read_dir(temp.path()).unwrap().count(), 0);
+}
+
+#[test]
+fn final_serialized_budget_preserves_actual_child_truth_and_full_reread() {
+    // Bidi formatting is retained as text and expands from three bytes to six in safe JSON.
+    // Producer record admission alone cannot establish the delivered byte budget.
+    let text = "\u{202e}".repeat(750);
+    let body = format!(
+        "#!/bin/sh\nprintf x >> invocations\nprintf '{text}\\n'\ncase \"$1\" in signal) kill -TERM $$;; *) exit \"$1\";; esac\n"
+    );
+    for (mode, code, signal) in [
+        ("0", Some(0), None),
+        ("2", Some(2), None),
+        ("signal", None, Some(15)),
+    ] {
+        let f = Fixture::new(&body);
+        f.trust(mode);
+        let baseline = f.run(mode, "pctx", "5000");
+        assert!(baseline.status.success(), "{baseline:?}");
+        let initial = document(&baseline);
+        assert!(
+            baseline.stdout.len() > 5000,
+            "Fixture must exercise final-byte trimming: {}",
+            baseline.stdout.len()
+        );
+        assert_eq!(initial["data"]["records_included"], 1);
+        for format in ["json", "compact"] {
+            for policy in ["child", "pctx"] {
+                let out = f.invoke_format(
+                    &[
+                        "run",
+                        "--exit-policy",
+                        policy,
+                        "--execution-timeout-ms",
+                        "5000",
+                        "--budget-bytes",
+                        "5000",
+                        "--",
+                        f.program.to_str().unwrap(),
+                        mode,
+                    ],
+                    format,
+                );
+                let v = document(&out);
+                let expected = if policy == "pctx" {
+                    0
+                } else {
+                    code.unwrap_or_else(|| 128 + signal.unwrap())
+                };
+                assert_eq!(out.status.code(), Some(expected), "{v}");
+                assert!(out.stdout.len() <= 5000, "{}: {v}", out.stdout.len());
+                assert_eq!(v["status"], "ok", "{v}");
+                assert_eq!(v["data"]["spawned"], true);
+                assert_eq!(v["data"]["child_exit_code"], serde_json::json!(code));
+                assert_eq!(v["data"]["signal"], serde_json::json!(signal));
+                assert_eq!(v["data"]["capture_complete"], true);
+                assert!(v["data"]["pctx_error"].is_null());
+                assert_eq!(v["data"]["records_included"], 0, "{v}");
+                assert_eq!(v["data"]["records_omitted"], 1);
+                assert_eq!(v["data"]["test_result"], "not_evaluated");
+                let id = v["data"]["output_id"].as_str().unwrap();
+                let saved = f.invoke(&["output", "show", id, "--view", "full"]);
+                assert!(saved.status.success(), "{saved:?}");
+                let saved = document(&saved);
+                assert_eq!(saved["data"]["command_rerun"], false);
+                assert_eq!(saved["data"]["child_exit_code"], serde_json::json!(code));
+                assert_eq!(saved["data"]["signal"], serde_json::json!(signal));
+                assert_eq!(saved["data"]["records"][0]["text"], text);
+            }
+        }
+        assert_eq!(fs::read(f.count()).unwrap(), b"xxxxx");
+    }
 }

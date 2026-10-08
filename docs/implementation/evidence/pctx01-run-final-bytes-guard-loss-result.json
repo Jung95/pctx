@@ -1,0 +1,6 @@
+{
+  "test_exit": 101,
+  "original_sha256": "a3c4abe399254125041800ec6d1df4086a470a3f77eba5d8bccadca4e139533c",
+  "restored_sha256": "a3c4abe399254125041800ec6d1df4086a470a3f77eba5d8bccadca4e139533c",
+  "mutation": "disable only final serialized record-trimming loop"
+}

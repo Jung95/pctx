@@ -1,0 +1,18 @@
+import hashlib,json,pathlib,shlex,subprocess
+p=pathlib.Path("src/main.rs")
+original=p.read_bytes()
+old=b"while bytes.len() > limit\n            && response"
+new=b"while false\n            && response"
+assert original.count(old)==1
+e=pathlib.Path("docs/implementation/evidence")
+try:
+ p.write_bytes(original.replace(old,new))
+ with (e/"pctx01-run-final-bytes-guard-loss.log").open("w") as f:
+  result=subprocess.run(shlex.split("env RUSTUP_HOME=/Users/dev/PCTX/.toolchain/rustup CARGO_HOME=/Users/dev/PCTX/.toolchain/cargo SDKROOT=/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk PATH=/Users/dev/PCTX/.toolchain/cargo/bin:/Library/Developer/CommandLineTools/usr/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin ")+["cargo","test","--locked","--test","cli_run_exit","final_serialized_budget_preserves_actual_child_truth_and_full_reread","--","--exact"],stdout=f,stderr=subprocess.STDOUT,timeout=40)
+ code=result.returncode
+finally:
+ p.write_bytes(original)
+(e/"pctx01-run-final-bytes-guard-loss-result.json").write_text(json.dumps({"test_exit":code,"original_sha256":hashlib.sha256(original).hexdigest(),"restored_sha256":hashlib.sha256(p.read_bytes()).hexdigest(),"mutation":"disable only final serialized record-trimming loop"},indent=2)+"\n")
+print("mutation exit",code,"exact restore",original==p.read_bytes())
+assert code==101
+

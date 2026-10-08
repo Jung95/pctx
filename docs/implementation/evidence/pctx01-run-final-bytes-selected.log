@@ -1,0 +1,22 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.30s
+     Running tests/cli_run_exit.rs (target/debug/deps/cli_run_exit-6950b2b7b4cecebc)
+
+running 1 test
+test final_serialized_budget_preserves_actual_child_truth_and_full_reread ... FAILED
+
+failures:
+
+---- final_serialized_budget_preserves_actual_child_truth_and_full_reread stdout ----
+
+thread 'final_serialized_budget_preserves_actual_child_truth_and_full_reread' (8392952) panicked at tests/cli_run_exit.rs:451:9:
+Fixture must exercise final-byte trimming: 1296
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    final_serialized_budget_preserves_actual_child_truth_and_full_reread
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 10 filtered out; finished in 1.21s
+
+error: test failed, to rerun pass `--test cli_run_exit`

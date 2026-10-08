@@ -108,3 +108,26 @@ arbitrary descendants. Native Linux/Windows, original startup failures and other
 PCTX01 gates remain open. No next official task or Actions selected.
 
 Final native full25288 terminal101: 478 PASS/3 retained original startup FAIL. All jobs terminal; no live heavy job. PCTX01 remains incomplete.
+
+
+## PCTX01 final serialized Run byte budget
+
+Actual native children emit normalized bidi text that is admitted as one record,
+but the safe JSON document exceeds 5000 bytes. The final-byte loop removes that
+record within an explicit 5000-byte budget for JSON/compact and child/PCTX policies,
+while preserving child0/2/signal15, complete capture and absence of processing
+errors. Full saved reread retains normalized text and exact child/signal; five
+invocations per case show no reread rerun. Related32 PASS; format/locked all-target
+Clippy PASS. Disabling only final record trimming produces actual0PASS1FAIL/exit8
+instead of expected0, then exact source restoration. The initial C1 fixture failed
+its >budget guard because normalization removed C1; it is retained, as is an
+invalid test-target selection that ran no tests. Independent review found no
+scoped blocker. [Evidence](../evidence/pctx01-run-final-bytes-verification.json).
+
+This qualifies record trimming, not metadata-only budget fallback or spawn-observer
+failure injection. Production code is unchanged. Native Linux/Windows and the
+remaining PCTX01 error/argument/phase/startup/platform gates remain mandatory.
+Only PCTX01 remains active and incomplete; no next official task or Actions.
+The prior main push approval boundary is unchanged; no rejected push was retried.
+
+Final native full30370 terminal101: 479 PASS/3 original startup FAIL. All jobs terminal; PCTX01 incomplete.
