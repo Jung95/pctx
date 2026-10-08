@@ -326,12 +326,26 @@ fn identity_secrets_are_rejected_before_persistence() {
         account_pool: None,
         adapter_version: "v1".into(),
     };
+    let db = p.connect(true).unwrap();
+    let before_schema: Vec<String> = db
+        .prepare("SELECT name FROM sqlite_master ORDER BY name")
+        .unwrap()
+        .query_map([], |r| r.get(0))
+        .unwrap()
+        .collect::<rusqlite::Result<_>>()
+        .unwrap();
+    drop(db);
     assert_eq!(session(&p, &command).unwrap_err().code, "INVALID_ARGUMENT");
     let db = p.connect(true).unwrap();
-    let n: i64 = db
-        .query_row("SELECT count(*) FROM pctx_sessions", [], |r| r.get(0))
+    let after_schema: Vec<String> = db
+        .prepare("SELECT name FROM sqlite_master ORDER BY name")
+        .unwrap()
+        .query_map([], |r| r.get(0))
+        .unwrap()
+        .collect::<rusqlite::Result<_>>()
         .unwrap();
-    assert_eq!(n, 0);
+    assert_eq!(after_schema, before_schema);
+    assert!(!after_schema.iter().any(|name| name == "pctx_sessions"));
 }
 
 #[test]

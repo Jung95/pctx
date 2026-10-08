@@ -553,9 +553,7 @@ fn quota_status(
     max_age: i64,
 ) -> Result<Value> {
     p.check_deadline()?;
-    if max_age <= 0 || max_age > 86400 {
-        return Err(invalid("Quota max age must be 1..86400 seconds"));
-    }
+    validate_max_age(max_age)?;
     let mut windows: BTreeMap<String, &Observation> = BTreeMap::new();
     for o in observations {
         p.check_deadline()?;
@@ -637,6 +635,85 @@ fn duration(window: &str) -> Result<i64> {
     }
     Ok(seconds)
 }
+fn validate_max_age(max_age: i64) -> Result<()> {
+    if max_age <= 0 || max_age > 86400 {
+        return Err(invalid("Quota max age must be 1..86400 seconds"));
+    }
+    Ok(())
+}
+fn report_arguments(pool: Option<&str>, group_by: &str, window: &str, max_age: i64) -> Result<i64> {
+    if let Some(pool) = pool {
+        label(pool)?;
+    }
+    if !["pool", "task", "session", "role", "model"].contains(&group_by) {
+        return Err(invalid("Unknown grouping"));
+    }
+    let duration = duration(window)?;
+    validate_max_age(max_age)?;
+    Ok(duration)
+}
+fn plan_arguments(pool: &str, max_age: i64) -> Result<()> {
+    label(pool)?;
+    validate_max_age(max_age)
+}
+fn reservation_arguments(
+    pool: &str,
+    unit: &str,
+    amount: f64,
+    limit: f64,
+    policy: &str,
+    key: &str,
+) -> Result<()> {
+    for s in [pool, unit, policy, key] {
+        label(s)?;
+    }
+    if !["tokens", "USD", "EUR", "GBP", "JPY", "percentage"].contains(&unit)
+        || !amount.is_finite()
+        || !limit.is_finite()
+        || amount <= 0.0
+        || limit <= 0.0
+        || amount > limit
+    {
+        return Err(invalid(
+            "Reservation requires a positive amount and explicit same-unit local limit",
+        ));
+    }
+    Ok(())
+}
+/// Existing pure quota grammar for CLI admission, without authority or stored-state checks.
+pub fn validate_quota_request(command: &QuotaCommand) -> Result<()> {
+    match command {
+        QuotaCommand::Report {
+            pool,
+            group_by,
+            window,
+            max_age_seconds,
+            ..
+        } => {
+            report_arguments(pool.as_deref(), group_by, window, *max_age_seconds)?;
+        }
+        QuotaCommand::Plan {
+            pool,
+            max_age_seconds,
+            ..
+        }
+        | QuotaCommand::Reconcile {
+            pool,
+            max_age_seconds,
+        } => plan_arguments(pool, *max_age_seconds)?,
+        QuotaCommand::Reserve {
+            pool,
+            unit,
+            amount,
+            limit,
+            policy,
+            idempotency_key,
+            ..
+        } => reservation_arguments(pool, unit, *amount, *limit, policy, idempotency_key)?,
+        _ => {}
+    }
+    Ok(())
+}
 #[derive(Default)]
 struct Total {
     actual: Option<f64>,
@@ -695,13 +772,7 @@ fn report(
     max_age: i64,
 ) -> Result<Value> {
     p.check_deadline()?;
-    if let Some(pool) = pool {
-        label(pool)?;
-    }
-    if !["pool", "task", "session", "role", "model"].contains(&group_by) {
-        return Err(invalid("Unknown grouping"));
-    }
-    let cutoff = now() - duration(window)?;
+    let cutoff = now() - report_arguments(pool, group_by, window, max_age)?;
     let db = connect(p)?;
     let task_filter = task_filter
         .map(|task| {
@@ -881,7 +952,7 @@ fn barriers(p: &Project, db: &Connection, task: Option<&str>) -> Result<Vec<Stri
 }
 fn plan(p: &Project, pool: &str, task: Option<&str>, max_age: i64) -> Result<Value> {
     p.check_deadline()?;
-    label(pool)?;
+    plan_arguments(pool, max_age)?;
     let db = connect(p)?;
     let observations = observations(p, &db, Some(pool))?;
     let status = quota_status(p, &observations, pool, max_age)?;
@@ -935,21 +1006,9 @@ fn reserve(
     policy: &str,
     key: &str,
 ) -> Result<Value> {
+    p.check_deadline()?;
+    reservation_arguments(pool, unit, amount, limit, policy, key)?;
     owner()?;
-    for s in [pool, unit, policy, key] {
-        label(s)?;
-    }
-    if !["tokens", "USD", "EUR", "GBP", "JPY", "percentage"].contains(&unit)
-        || !amount.is_finite()
-        || !limit.is_finite()
-        || amount <= 0.0
-        || limit <= 0.0
-        || amount > limit
-    {
-        return Err(invalid(
-            "Reservation requires a positive amount and explicit same-unit local limit",
-        ));
-    }
     let mut db = connect(p)?;
     let task = canonical_task(&db, task)?;
     let request = hash(serde_json::to_vec(

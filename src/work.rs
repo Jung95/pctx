@@ -837,6 +837,48 @@ fn gates(db: &Connection, project: &Project, t: &Task) -> Result<Value> {
         json!({"passed":failures.is_empty(),"failures":failures,"target":target,"evidence_hash":evidence_hash}),
     )
 }
+fn work_arguments(command: &WorkCommand) -> Result<()> {
+    match command {
+        WorkCommand::Task {
+            command: TaskCommand::Reassign { reason, .. },
+        } => {
+            if reason.trim().is_empty() {
+                return Err(invalid("Reassignment needs reason"));
+            }
+        }
+        WorkCommand::Task {
+            command:
+                TaskCommand::Block { reason, .. }
+                | TaskCommand::Pause { reason, .. }
+                | TaskCommand::Cancel { reason, .. }
+                | TaskCommand::Reopen { reason, .. },
+        } => {
+            if reason.trim().is_empty() {
+                return Err(invalid("State transition requires reason"));
+            }
+        }
+        WorkCommand::Agent {
+            command:
+                AgentCommand::Register {
+                    name,
+                    kind,
+                    concurrency_limit,
+                },
+        } if crate::reader::redact(name).1
+            || name.trim().is_empty()
+            || !["agent", "human"].contains(&kind.as_str())
+            || *concurrency_limit == 0 =>
+        {
+            return Err(invalid("Invalid agent registration"));
+        }
+        _ => {}
+    }
+    Ok(())
+}
+/// Existing pure work grammar, shared with frontend admission.
+pub fn validate_work_request(command: &WorkCommand) -> Result<()> {
+    work_arguments(command)
+}
 pub fn execute(project: &Project, command: &WorkCommand) -> Result<Value> {
     let finite_read = matches!(
         command,
@@ -863,6 +905,8 @@ pub fn execute(project: &Project, command: &WorkCommand) -> Result<Value> {
     }
 }
 fn execute_inner(project: &Project, command: &WorkCommand) -> Result<Value> {
+    project.check_deadline()?;
+    work_arguments(command)?;
     if let WorkCommand::Check {
         command: CheckCommand::Plan { task_id, key, run },
     } = command
@@ -1032,11 +1076,6 @@ fn task_command(project: &Project, db: &Connection, command: &TaskCommand) -> Re
             }
             let a = agent_id(db, agent)?;
             let reassign = matches!(command, TaskCommand::Reassign { .. });
-            if let TaskCommand::Reassign { reason, .. } = command
-                && reason.trim().is_empty()
-            {
-                return Err(invalid("Reassignment needs reason"));
-            }
             let active: i64 = db.query_row(
                 "SELECT count(*) FROM runs WHERE task=?1 AND status='active'",
                 [&t.id],
@@ -1081,9 +1120,6 @@ fn task_command(project: &Project, db: &Connection, command: &TaskCommand) -> Re
         | TaskCommand::Cancel { task: name, reason }
         | TaskCommand::Reopen { task: name, reason } => {
             let t = task(db, name)?;
-            if reason.trim().is_empty() {
-                return Err(invalid("State transition requires reason"));
-            }
             let state = match command {
                 TaskCommand::Block { .. } => "blocked",
                 TaskCommand::Pause { .. } => "paused",
@@ -1383,13 +1419,6 @@ fn agent_command(project: &Project, db: &Connection, command: &AgentCommand) -> 
             concurrency_limit,
         } => {
             owner()?;
-            if crate::reader::redact(name).1
-                || name.trim().is_empty()
-                || !["agent", "human"].contains(&kind.as_str())
-                || *concurrency_limit == 0
-            {
-                return Err(invalid("Invalid agent registration"));
-            }
             let a = id("AGENT");
             db.execute(
                 "INSERT INTO agents VALUES(?1,?2,?3,?4)",

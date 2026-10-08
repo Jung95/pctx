@@ -1,0 +1,15 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.58s
+     Running tests/control_preflight.rs (target/debug/deps/control_preflight-1104ac0ed832cb66)
+
+running 7 tests
+test direct_producers_refuse_before_database_and_preserve_original_expiry ... ok
+test role_pure_arguments_precede_project_and_response_effects ... ok
+test valid_control_arguments_reach_existing_authorization_and_state_flows ... ok
+test schedule_pure_arguments_precede_project_and_response_effects ... ok
+test session_pure_arguments_precede_project_and_response_effects ... ok
+test work_pure_arguments_precede_project_and_response_effects ... ok
+test quota_pure_arguments_precede_project_and_response_effects ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.96s
+

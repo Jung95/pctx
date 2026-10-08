@@ -850,6 +850,47 @@ fn native_observed(p: &Project, work: bool) {
         }
     });
 }
+fn schedule_plan_arguments(namespace: &str, id: &str, provider: &str, root: &str) -> Result<()> {
+    label(namespace)?;
+    label(id)?;
+    relative_root(root)?;
+    if !["fixture", "launchd", "systemd"].contains(&provider) {
+        return Err(invalid("Unknown managed bridge provider"));
+    }
+    Ok(())
+}
+pub fn validate_schedule_request(c: &ScheduleCommand) -> Result<()> {
+    match c {
+        ScheduleCommand::Plan {
+            namespace,
+            id,
+            provider,
+            staging_root,
+        } => {
+            schedule_plan_arguments(namespace, id, provider, staging_root)?;
+        }
+        ScheduleCommand::Pause {
+            namespace,
+            id,
+            reason,
+            ..
+        }
+        | ScheduleCommand::Resume {
+            namespace,
+            id,
+            reason,
+            ..
+        } => {
+            label(namespace)?;
+            label(id)?;
+            if reason.trim().is_empty() || reason.len() > 2048 {
+                return Err(invalid("Pause/resume needs a bounded reason"));
+            }
+        }
+        _ => {}
+    }
+    Ok(())
+}
 pub fn execute(p: &Project, c: &ScheduleCommand) -> Result<Value> {
     if matches!(
         c,
@@ -870,6 +911,8 @@ pub fn execute(p: &Project, c: &ScheduleCommand) -> Result<Value> {
     }
 }
 fn execute_inner(p: &Project, c: &ScheduleCommand) -> Result<Value> {
+    p.check_deadline()?;
+    validate_schedule_request(c)?;
     match c {
         ScheduleCommand::Plan {
             namespace,
@@ -1081,11 +1124,6 @@ fn execute_inner(p: &Project, c: &ScheduleCommand) -> Result<Value> {
             expect_revision,
         } => {
             owner()?;
-            label(namespace)?;
-            label(id)?;
-            if reason.trim().is_empty() || reason.len() > 2048 {
-                return Err(invalid("Pause/resume needs a bounded reason"));
-            }
             let mut db = connect(p)?;
             let tx = db.transaction_with_behavior(TransactionBehavior::Immediate)?;
             let old = get(&tx, namespace, id)?;
@@ -1307,13 +1345,8 @@ fn environment(p: &Project) -> BTreeMap<String, String> {
 fn plan(p: &Project, namespace: &str, id: &str, provider: &str, root: &str) -> Result<Value> {
     owner()?;
     current_project_policy(p)?;
-    label(namespace)?;
-    label(id)?;
-    relative_root(root)?;
+    schedule_plan_arguments(namespace, id, provider, root)?;
     stage_path(p, root, false)?;
-    if !["fixture", "launchd", "systemd"].contains(&provider) {
-        return Err(invalid("Unknown managed bridge provider"));
-    }
     let db = read_connection(p)?.ok_or_else(|| {
         Error::new(
             "SCHEDULE_NOT_FOUND",

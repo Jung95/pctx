@@ -1043,6 +1043,18 @@ fn finalize_inbox_admissions(
     Ok((visible, suppressed))
 }
 
+pub fn validate_operation_request(command: &OperationCommand) -> Result<()> {
+    if let OperationCommand::Role {
+        command: RoleCommand::Pause { role, reason, .. } | RoleCommand::Resume { role, reason, .. },
+    } = command
+    {
+        label(role)?;
+        if reason.trim().is_empty() {
+            return Err(invalid("Pause/resume requires reason"));
+        }
+    }
+    Ok(())
+}
 pub fn execute(p: &Project, command: &OperationCommand) -> Result<Value> {
     let mut scoped;
     let p = if p.deadline.is_none() {
@@ -1053,6 +1065,7 @@ pub fn execute(p: &Project, command: &OperationCommand) -> Result<Value> {
         p
     };
     p.check_deadline()?;
+    validate_operation_request(command)?;
     let mut db = connect(p)?;
     let tx = db.transaction_with_behavior(TransactionBehavior::Immediate)?;
     let value = match command {
@@ -1081,10 +1094,6 @@ pub fn execute(p: &Project, command: &OperationCommand) -> Result<Value> {
                 recipient,
             } => {
                 owner()?;
-                label(role)?;
-                if reason.trim().is_empty() {
-                    return Err(invalid("Pause/resume requires reason"));
-                }
                 let active = matches!(command, RoleCommand::Pause { .. });
                 let canonical_recipient = recipient
                     .as_deref()

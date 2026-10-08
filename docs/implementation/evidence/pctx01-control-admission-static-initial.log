@@ -1,0 +1,31 @@
+    Checking pctx v0.1.0-dev (/Users/dev/PCTX)
+error: this `if` can be collapsed into the outer `match`
+   --> src/work.rs:868:13
+    |
+868 | /             if crate::reader::redact(name).1
+869 | |                 || name.trim().is_empty()
+870 | |                 || !["agent", "human"].contains(&kind.as_str())
+871 | |                 || *concurrency_limit == 0
+872 | |             {
+873 | |                 return Err(invalid("Invalid agent registration"));
+874 | |             }
+    | |_____________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#collapsible_match
+    = note: `-D clippy::collapsible-match` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::collapsible_match)]`
+help: collapse nested if block
+    |
+867 ~         }
+868 ~             if (crate::reader::redact(name).1
+869 |                 || name.trim().is_empty()
+870 |                 || !["agent", "human"].contains(&kind.as_str())
+871 ~                 || *concurrency_limit == 0)
+872 ~             => {
+873 |                 return Err(invalid("Invalid agent registration"));
+874 ~             }
+    |
+
+error: could not compile `pctx` (lib) due to 1 previous error
+warning: build failed, waiting for other jobs to finish...
+error: could not compile `pctx` (lib test) due to 1 previous error

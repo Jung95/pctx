@@ -1,0 +1,22 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.97s
+     Running tests/control_preflight.rs (target/debug/deps/control_preflight-1104ac0ed832cb66)
+
+running 1 test
+test direct_producers_refuse_before_database_and_preserve_original_expiry ... FAILED
+
+failures:
+
+---- direct_producers_refuse_before_database_and_preserve_original_expiry stdout ----
+
+thread 'direct_producers_refuse_before_database_and_preserve_original_expiry' (8616353) panicked at tests/control_preflight.rs:426:41:
+called `Result::unwrap_err()` on an `Ok` value: Object {"actual_usage_available": Bool(false), "billing_amount_asserted": Bool(false), "collector_status": String("unknown"), "group_by": String("pool"), "groups": Array [], "ignored_duplicate_source_observations": Number(0), "include_coordination": Bool(false), "local_cache_tokens_included": Bool(false), "other_windows": Array [], "quota": Array [], "source_precedence": Array [String("provider_request"), String("statusline"), String("otel"), String("manual_separate")], "subscription_token_conversion": Bool(false), "window": String("7d")}
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    direct_producers_refuse_before_database_and_preserve_original_expiry
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 8 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `--test control_preflight`

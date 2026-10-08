@@ -4,24 +4,17 @@
 
 **PCTX01 — CLI, envelope and stable errors** is the only active task (`implementing`). It is lowest incomplete with no prerequisites. The latest user goal supersedes historical next-action lists: finish all current-task mandatory implementation, validation, documentation and platform gates before choosing another task. Read docs/implementation/tasks/PCTX01.md, requirements.md and progress.md, then inspect actual Git/code/jobs. Other official items and D-series future slices are backlog. A subset/macOS pass is not task completion. No next official task is selected.
 
-## Latest verified integration boundary
+## Latest integration boundary
 
-PCTX01-G03 only; verified runtime revision
-969a5594b7933cf205a213d555ecc06bbf18f880, basebf3c1ea. Pack exact pure Plan grammar/Create ID shared before
-main discovery and producer effects. Native56 no-effects cases/direct errors/
-original expiry and metadata positive (512 part8, distinct64000 feasible) pass.
-Related15PASS including11 pack tests. Initial argument/wrong CLI fixture/item-size
-failures retained; Create initial0PASS1FAIL. Four controlled losses fail/exact
-restore. Static PASS; independent read-only review no scoped blocker. Manifest
-pctx01-pack-admission-verification.json. Final native full86052 terminal101:
-503PASS/4FAIL, original startup failures retained; all jobs terminal, no
-heavy job live. Whole PCTX01 closed0/10; Linux/Windows remain unverified.
-Audit inventory6->11 groups due source-evidenced existing pure rule omissions,
-local evidence6/11, whole groups0/11; global gates remain10. Stable A01–A11 in
-admission audit. Next common five-family matrix Quota/Work-Agent/Schedule/Session
-Attach/Role, no independent features or another official task. No Actions/budget/
-policy changes. Development commits/pushes to Jung95/pctx approved. Normal push70370 terminal0
-publishedbf3c1ea..969a559 to origin/main.
+PCTX01-G03-A07–A11, base234349c; current uncommitted control admission changes.
+Read evidence/pctx01-control-admission-verification.json and independent review.
+Native132 no-effects combinations, reviewed9 PASS, seven loss probes fail/exact
+restore. Original deadline and valid/non-owner paths preserved. Private schedule
+plan also validates reviewed-install provider after an actual panic regression.
+Static PASS; final full31923 terminal101: 512 PASS/4 FAIL. Original startup failures remain. All jobs terminal; no heavy job live. Whole PCTX01
+closed0/10; bounded local groups11/11, platform groups0/11. Linux/Windows remain
+unverified. No other official task selected, no Actions or OS registration.
+Development commits and normal pushes to Jung95/pctx remain authorized.
 
 ## Source, evidence and environment
 
@@ -69,16 +62,13 @@ Original ignored specification SHA256 8914faad57432f524aec0a06aa90c43c18c23f8c19
 
 ## Exact next action
 
-Pack integration969a559 is committed and normally pushed. Stay on PCTX01-G03;
-read fixed A07–A11 source references in tasks/PCTX01-admission-audit.md, then
-extract exact existing pure validators across Quota, Task transitions/Agent
-Register, Schedule, Session Attach, Role Pause/Resume into main and producers.
-One coherent native no-effects/error-code matrix, keeping registered-ID lookup,
-workspace/current state/revision/file contents and authorization in producers.
-No source export/OS scheduler/new business feature or another official task.
-Whole PCTX01 local conditions remain; do not invoke external-only task switch yet.
-No unchanged high-cost reruns to seek green, original budget/interpreter/OS policy
-changes. All latest validation jobs must be terminal before the next heavy job.
+Final full31923 is terminal; all failures are retained without retry-green
+promotion. Current control-admission evidence/documents are ready to commit
+[skip ci] and normally push. Then stay on PCTX01 and audit the complete
+command registry against pure/state-dependent admission; do not activate another
+formal task. Required local gates remain, so external-only switching does not
+apply. Keep original budgets/interpreters/OS policy and preserve historical
+startup failures. No unrelated business feature or new platform qualification.
 
 ## Retained historical results and inactive backlog
 

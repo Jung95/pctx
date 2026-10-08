@@ -1,0 +1,24 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.85s
+     Running tests/control_preflight.rs (target/debug/deps/control_preflight-1104ac0ed832cb66)
+
+running 1 test
+test direct_producers_refuse_before_database_and_preserve_original_expiry ... FAILED
+
+failures:
+
+---- direct_producers_refuse_before_database_and_preserve_original_expiry stdout ----
+
+thread 'direct_producers_refuse_before_database_and_preserve_original_expiry' (8617451) panicked at tests/control_preflight.rs:427:9:
+assertion `left == right` failed
+  left: ("SCHEDULE_NOT_FOUND", 6)
+ right: ("INVALID_ARGUMENT", 2)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    direct_producers_refuse_before_database_and_preserve_original_expiry
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 8 filtered out; finished in 0.02s
+
+error: test failed, to rerun pass `--test control_preflight`

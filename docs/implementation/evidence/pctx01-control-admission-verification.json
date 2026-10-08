@@ -1,0 +1,186 @@
+{
+  "official_task": "PCTX01",
+  "gates": [
+    "PCTX01-G03-A07",
+    "PCTX01-G03-A08",
+    "PCTX01-G03-A09",
+    "PCTX01-G03-A10",
+    "PCTX01-G03-A11"
+  ],
+  "base_revision": "234349c2e0263cc99eafe654183936029c543695",
+  "platform": "native macOS arm64",
+  "source_sha256": {
+    "src/main.rs": "b069d8ad7ceb5df7e14879221e78fa4d57f21f395ac8b4d73e641575d1faa7c9",
+    "src/quota.rs": "b37969848abf75dd15dc1e0fe5b8b289649195b54e6ccfe5bc312b636ffa3f40",
+    "src/work.rs": "447e86e198be187ad493332ef73448ba30c98bb7f01a2a018d15a0979fcf5453",
+    "src/schedule.rs": "3bbd990055d3cb818444a519ee3c25b7ddf5794d2eb3bf4eba7fd29966063794",
+    "src/session.rs": "cf53d5541aa5b31e38ef53e8d4e4397de80d562af65b82c96f5fc3064f253683",
+    "src/operations.rs": "e785a5ec9023efff4ff46419901efe6c5bcacac04627613009e649b9c4a856d3",
+    "tests/control_preflight.rs": "7388f443a820702cccb28f32899c5c340a14bea7e38daabdcf763abda057a652",
+    "tests/session.rs": "545e37c3cd65779d78e13e5efa9e3ee2e9502b9497c2f977908d197b62bb9049"
+  },
+  "native_matrix": {
+    "invalid_forms": 33,
+    "combinations": 132,
+    "environments": [
+      "missing root",
+      "initialized root"
+    ],
+    "formats": [
+      "json",
+      "compact"
+    ],
+    "proof": "INVALID_ARGUMENT2; unchanged project/data/absolute response paths"
+  },
+  "reviewed_native": {
+    "log": "pctx01-control-admission-reviewed-native.log",
+    "exit": 0,
+    "passed": 9,
+    "additional_proofs": [
+      "six direct producers before DB and original expired Instant",
+      "valid state flows",
+      "malformed reviewed schedule provider",
+      "five valid non-owner routes preserve state"
+    ]
+  },
+  "related_prior": {
+    "log": "pctx01-control-admission-verified-related.log",
+    "exit": 0,
+    "passed": 71,
+    "qualification": "Precedes final private-plan repair and extra matrix cases; final full gate qualifies final source."
+  },
+  "controlled_losses": {
+    "driver": "pctx01-control-admission-loss-driver.json",
+    "count": 7,
+    "all_exit": 101,
+    "source_restored": true,
+    "qualification": "Subsequent work.rs match-guard rewrite fixes collapsible_match lint without changing predicate semantics; final hashes above identify final source."
+  },
+  "static": {
+    "log": "pctx01-control-admission-static.log",
+    "exit": 0,
+    "commands": [
+      "cargo fmt --all -- --check",
+      "cargo clippy --locked --all-targets -- -D warnings"
+    ]
+  },
+  "retained_failures": [
+    "initial frontend native5 failures; quota helper was in flight, exact initial all-source hashes unavailable",
+    "unclosed schedule delimiter compile error corrected by restoring parent-owned region",
+    "nonexistent work target selection",
+    "session test assumed invalid attach creates table; now compares unchanged schema",
+    "malformed reviewed provider panic101",
+    "initial work collapsible_match lint"
+  ],
+  "review": "pctx01-control-admission-review.md",
+  "full": {
+    "log": "pctx01-control-admission-full.log",
+    "session": 31923,
+    "status": "terminal",
+    "exit": 101,
+    "passed": 512,
+    "failed": 4,
+    "failed_tests": [
+      "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+      "query_program_resolution_uses_captured_command_path",
+      "simultaneous_streams_are_collected_and_overflow_never_infers_success",
+      "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget"
+    ],
+    "command": "cargo test --locked --all-targets --no-fail-fast",
+    "qualification": "Final source; original startup budgets unchanged. Historical failures remain open; no retry promoted."
+  },
+  "limits": [
+    "whole PCTX01 closed0/10",
+    "bounded local admission groups11/11, whole required-platform groups0/11",
+    "native Linux/Windows unverified",
+    "broader command registry audit, original native startup failures and remaining fixed gates open",
+    "no Actions, native OS scheduling, paid calls or independent business features"
+  ],
+  "log_test_counts": {
+    "pctx01-control-admission-final-native.log": {
+      "passed": 7,
+      "failed": 0,
+      "qualification": "Native test summaries"
+    },
+    "pctx01-control-admission-initial.log": {
+      "passed": 0,
+      "failed": 5,
+      "qualification": "Native test summaries"
+    },
+    "pctx01-control-admission-install-initial.log": {
+      "passed": 0,
+      "failed": 1,
+      "qualification": "Native test summaries"
+    },
+    "pctx01-control-admission-loss-frontend.log": {
+      "passed": 0,
+      "failed": 5,
+      "qualification": "Native test summaries"
+    },
+    "pctx01-control-admission-loss-producer-quota.log": {
+      "passed": 0,
+      "failed": 1,
+      "qualification": "Native test summaries"
+    },
+    "pctx01-control-admission-loss-producer-role.log": {
+      "passed": 0,
+      "failed": 1,
+      "qualification": "Native test summaries"
+    },
+    "pctx01-control-admission-loss-producer-schedule.log": {
+      "passed": 0,
+      "failed": 1,
+      "qualification": "Native test summaries"
+    },
+    "pctx01-control-admission-loss-producer-session.log": {
+      "passed": 0,
+      "failed": 1,
+      "qualification": "Native test summaries"
+    },
+    "pctx01-control-admission-loss-producer-work.log": {
+      "passed": 0,
+      "failed": 1,
+      "qualification": "Native test summaries"
+    },
+    "pctx01-control-admission-loss-reviewed-install.log": {
+      "passed": 0,
+      "failed": 1,
+      "qualification": "Native test summaries"
+    },
+    "pctx01-control-admission-related.log": {
+      "passed": 0,
+      "failed": 0,
+      "qualification": "Zero tests does not imply success; compile/target/static failures are retained separately."
+    },
+    "pctx01-control-admission-reviewed-native.log": {
+      "passed": 9,
+      "failed": 0,
+      "qualification": "Native test summaries"
+    },
+    "pctx01-control-admission-session-fixture.log": {
+      "passed": 46,
+      "failed": 1,
+      "qualification": "Native test summaries"
+    },
+    "pctx01-control-admission-static-initial.log": {
+      "passed": 0,
+      "failed": 0,
+      "qualification": "Zero tests does not imply success; compile/target/static failures are retained separately."
+    },
+    "pctx01-control-admission-static.log": {
+      "passed": 0,
+      "failed": 0,
+      "qualification": "Zero tests does not imply success; compile/target/static failures are retained separately."
+    },
+    "pctx01-control-admission-target-selection.log": {
+      "passed": 0,
+      "failed": 0,
+      "qualification": "Zero tests does not imply success; compile/target/static failures are retained separately."
+    },
+    "pctx01-control-admission-verified-related.log": {
+      "passed": 71,
+      "failed": 0,
+      "qualification": "Native test summaries"
+    }
+  }
+}

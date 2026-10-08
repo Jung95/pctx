@@ -915,6 +915,11 @@ fn main() {
         Command::Checkpoint {
             command: CheckpointCommand::Create { name, scopes, .. },
         } => storage::validate_checkpoint_request(name.as_deref(), scopes),
+        Command::Quota { command } => quota::validate_quota_request(command),
+        Command::Work(command) => work::validate_work_request(command),
+        Command::Schedule { command } => schedule::validate_schedule_request(command),
+        Command::Session { command } => session::validate_session_request(command),
+        Command::Operations(command) => operations::validate_operation_request(command),
         Command::Pack { command } => pack::validate_pack_request(command),
         Command::Repo { command } => broker::validate_repo_request(command),
         Command::Context { command } => session::validate_context_request(command),

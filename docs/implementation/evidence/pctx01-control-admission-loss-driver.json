@@ -1,0 +1,37 @@
+[
+  {
+    "loss": "frontend",
+    "exit": 101,
+    "source_restored_sha256": "b069d8ad7ceb5df7e14879221e78fa4d57f21f395ac8b4d73e641575d1faa7c9"
+  },
+  {
+    "loss": "producer-quota",
+    "exit": 101,
+    "source_restored_sha256": "b37969848abf75dd15dc1e0fe5b8b289649195b54e6ccfe5bc312b636ffa3f40"
+  },
+  {
+    "loss": "producer-work",
+    "exit": 101,
+    "source_restored_sha256": "ac6b5aa5295d5d000770dc043ea8cf3de0ade8e4f3ebd736500820528e1f25c2"
+  },
+  {
+    "loss": "producer-schedule",
+    "exit": 101,
+    "source_restored_sha256": "3bbd990055d3cb818444a519ee3c25b7ddf5794d2eb3bf4eba7fd29966063794"
+  },
+  {
+    "loss": "producer-session",
+    "exit": 101,
+    "source_restored_sha256": "cf53d5541aa5b31e38ef53e8d4e4397de80d562af65b82c96f5fc3064f253683"
+  },
+  {
+    "loss": "producer-role",
+    "exit": 101,
+    "source_restored_sha256": "e785a5ec9023efff4ff46419901efe6c5bcacac04627613009e649b9c4a856d3"
+  },
+  {
+    "loss": "reviewed-install",
+    "exit": 101,
+    "source_restored_sha256": "3bbd990055d3cb818444a519ee3c25b7ddf5794d2eb3bf4eba7fd29966063794"
+  }
+]

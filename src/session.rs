@@ -236,10 +236,38 @@ fn request(p: &Project, operation: impl FnOnce(&Project) -> Result<Value>) -> Re
     p.check_deadline()?;
     result
 }
+pub fn validate_session_request(c: &SessionCommand) -> Result<()> {
+    if let SessionCommand::Attach {
+        agent,
+        runtime,
+        native_session,
+        role,
+        account_pool,
+        adapter_version,
+        ..
+    } = c
+    {
+        for label in [
+            Some(agent),
+            Some(runtime),
+            native_session.as_ref(),
+            role.as_ref(),
+            account_pool.as_ref(),
+            Some(adapter_version),
+        ]
+        .into_iter()
+        .flatten()
+        {
+            validate_label(label)?;
+        }
+    }
+    Ok(())
+}
 pub fn session(p: &Project, c: &SessionCommand) -> Result<Value> {
     request(p, |p| session_inner(p, c))
 }
 fn session_inner(p: &Project, c: &SessionCommand) -> Result<Value> {
+    validate_session_request(c)?;
     // Operational snapshot is read before opening our writer transaction.
     let mut db = connect(p)?;
     let capsule = match c {
@@ -266,19 +294,6 @@ fn session_inner(p: &Project, c: &SessionCommand) -> Result<Value> {
                     "Registering a session binding requires owner authority",
                     5,
                 ));
-            }
-            for label in [
-                Some(agent),
-                Some(runtime),
-                native_session.as_ref(),
-                role.as_ref(),
-                account_pool.as_ref(),
-                Some(adapter_version),
-            ]
-            .into_iter()
-            .flatten()
-            {
-                validate_label(label)?;
             }
             if workspace != "current" && workspace != &p.workspace_id {
                 return Err(invalid("Attach requires the current workspace"));

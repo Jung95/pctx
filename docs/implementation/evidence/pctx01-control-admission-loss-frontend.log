@@ -1,0 +1,60 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.64s
+     Running tests/control_preflight.rs (target/debug/deps/control_preflight-1104ac0ed832cb66)
+
+running 5 tests
+test role_pure_arguments_precede_project_and_response_effects ... FAILED
+test quota_pure_arguments_precede_project_and_response_effects ... FAILED
+test work_pure_arguments_precede_project_and_response_effects ... FAILED
+test session_pure_arguments_precede_project_and_response_effects ... FAILED
+test schedule_pure_arguments_precede_project_and_response_effects ... FAILED
+
+failures:
+
+---- role_pure_arguments_precede_project_and_response_effects stdout ----
+
+thread 'role_pure_arguments_precede_project_and_response_effects' (8615765) panicked at tests/control_preflight.rs:84:5:
+assertion `left == right` failed: Output { status: ExitStatus(unix_wait_status(1792)), stdout: "", stderr: "" }
+  left: Some(7)
+ right: Some(2)
+
+---- quota_pure_arguments_precede_project_and_response_effects stdout ----
+
+thread 'quota_pure_arguments_precede_project_and_response_effects' (8615764) panicked at tests/control_preflight.rs:84:5:
+assertion `left == right` failed: Output { status: ExitStatus(unix_wait_status(1792)), stdout: "", stderr: "" }
+  left: Some(7)
+ right: Some(2)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- work_pure_arguments_precede_project_and_response_effects stdout ----
+
+thread 'work_pure_arguments_precede_project_and_response_effects' (8615768) panicked at tests/control_preflight.rs:84:5:
+assertion `left == right` failed: Output { status: ExitStatus(unix_wait_status(1792)), stdout: "", stderr: "" }
+  left: Some(7)
+ right: Some(2)
+
+---- session_pure_arguments_precede_project_and_response_effects stdout ----
+
+thread 'session_pure_arguments_precede_project_and_response_effects' (8615767) panicked at tests/control_preflight.rs:84:5:
+assertion `left == right` failed: Output { status: ExitStatus(unix_wait_status(1792)), stdout: "", stderr: "" }
+  left: Some(7)
+ right: Some(2)
+
+---- schedule_pure_arguments_precede_project_and_response_effects stdout ----
+
+thread 'schedule_pure_arguments_precede_project_and_response_effects' (8615766) panicked at tests/control_preflight.rs:84:5:
+assertion `left == right` failed: Output { status: ExitStatus(unix_wait_status(1792)), stdout: "", stderr: "" }
+  left: Some(7)
+ right: Some(2)
+
+
+failures:
+    quota_pure_arguments_precede_project_and_response_effects
+    role_pure_arguments_precede_project_and_response_effects
+    schedule_pure_arguments_precede_project_and_response_effects
+    session_pure_arguments_precede_project_and_response_effects
+    work_pure_arguments_precede_project_and_response_effects
+
+test result: FAILED. 0 passed; 5 failed; 0 ignored; 0 measured; 4 filtered out; finished in 0.98s
+
+error: test failed, to rerun pass `--test control_preflight`

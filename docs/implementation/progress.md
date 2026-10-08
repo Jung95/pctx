@@ -585,3 +585,31 @@ Pack integration969a5594b7933cf205a213d555ecc06bbf18f880 committed and published
 to Jung95/pctx main by normal push70370 terminal0 (bf3c1ea..969a559). No Actions.
 Current PCTX01 remains incomplete; whole gates0/10. Next bounded common admission
 matrix A07–A11 retains producer authorization/current state and adds no features.
+
+## PCTX01 control-family common admission — 2026-10-08
+
+Only PCTX01 is active. Specification §14/§38; fixed G03-A07–A11 now share exact
+existing pure Quota, Work/Agent, Schedule, Session Attach and Role grammar before
+CLI discovery/output and producer DB effects. Registered IDs, workspace policy,
+revision/current state and authority remain producer checks. Report max-age is
+validated even with no observations. Original supplied deadlines are checked
+first; no new default write clock. Private schedule plan retains the shared
+provider/root guard for reviewed Install/Uninstall callers.
+
+Native132 refusal combinations preserve project/data/response bytes; reviewed
+suite9 PASS covers direct original expiry, normal state flows, non-owner policy
+and malformed reviewed provider. Related prior71 PASS is separately qualified.
+Seven controlled losses fail with exact restoration. Initial compile/target/
+schema-assumption/lint failures and actual reviewed-provider panic are retained.
+Final formatting/locked all-target Clippy PASS. Independent review identified
+the private-plan regression, then verified the repair; no remaining scoped
+blocker. Evidence: evidence/pctx01-control-admission-verification.json.
+
+Inventory denominator unchanged11: local evidence11/11, required-platform groups
+closed0/11. Whole PCTX01 fixed gates closed0/10. This bounded inventory is not an
+exhaustive G03 claim. Linux/Windows and native startup/full remaining gates stay
+open. Next audit the complete command registry against pure/state-dependent
+admission before choosing further necessary PCTX01 work. No other official task,
+Actions, OS registration or independent business expansion.
+
+Final native full31923 terminal101: 512 PASS/4 FAIL. Failed tests: relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry, query_program_resolution_uses_captured_command_path, simultaneous_streams_are_collected_and_overflow_never_infers_success, concurrent_query_startup_preserves_group_streams_and_original_one_second_budget. All jobs terminal; no heavy job live. Whole PCTX01 remains incomplete0/10; no other official task selected.

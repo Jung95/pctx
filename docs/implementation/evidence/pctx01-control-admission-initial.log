@@ -1,0 +1,72 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+warning: unused import: `pctx::{
+         }`
+ --> tests/control_preflight.rs:2:5
+  |
+2 |   use pctx::{
+  |  _____^
+3 | | };
+  | |_^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: `pctx` (test "control_preflight") generated 1 warning (run `cargo fix --test "control_preflight" -p pctx` to apply 1 suggestion)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.64s
+     Running tests/control_preflight.rs (target/debug/deps/control_preflight-1104ac0ed832cb66)
+
+running 5 tests
+test work_pure_arguments_precede_project_and_response_effects ... FAILED
+test quota_pure_arguments_precede_project_and_response_effects ... FAILED
+test role_pure_arguments_precede_project_and_response_effects ... FAILED
+test session_pure_arguments_precede_project_and_response_effects ... FAILED
+test schedule_pure_arguments_precede_project_and_response_effects ... FAILED
+
+failures:
+
+---- work_pure_arguments_precede_project_and_response_effects stdout ----
+
+thread 'work_pure_arguments_precede_project_and_response_effects' (8601760) panicked at tests/control_preflight.rs:76:5:
+assertion `left == right` failed: Output { status: ExitStatus(unix_wait_status(1792)), stdout: "", stderr: "" }
+  left: Some(7)
+ right: Some(2)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- quota_pure_arguments_precede_project_and_response_effects stdout ----
+
+thread 'quota_pure_arguments_precede_project_and_response_effects' (8601756) panicked at tests/control_preflight.rs:76:5:
+assertion `left == right` failed: Output { status: ExitStatus(unix_wait_status(1792)), stdout: "", stderr: "" }
+  left: Some(7)
+ right: Some(2)
+
+---- role_pure_arguments_precede_project_and_response_effects stdout ----
+
+thread 'role_pure_arguments_precede_project_and_response_effects' (8601757) panicked at tests/control_preflight.rs:76:5:
+assertion `left == right` failed: Output { status: ExitStatus(unix_wait_status(1792)), stdout: "", stderr: "" }
+  left: Some(7)
+ right: Some(2)
+
+---- session_pure_arguments_precede_project_and_response_effects stdout ----
+
+thread 'session_pure_arguments_precede_project_and_response_effects' (8601759) panicked at tests/control_preflight.rs:76:5:
+assertion `left == right` failed: Output { status: ExitStatus(unix_wait_status(1792)), stdout: "", stderr: "" }
+  left: Some(7)
+ right: Some(2)
+
+---- schedule_pure_arguments_precede_project_and_response_effects stdout ----
+
+thread 'schedule_pure_arguments_precede_project_and_response_effects' (8601758) panicked at tests/control_preflight.rs:76:5:
+assertion `left == right` failed: Output { status: ExitStatus(unix_wait_status(1792)), stdout: "", stderr: "" }
+  left: Some(7)
+ right: Some(2)
+
+
+failures:
+    quota_pure_arguments_precede_project_and_response_effects
+    role_pure_arguments_precede_project_and_response_effects
+    schedule_pure_arguments_precede_project_and_response_effects
+    session_pure_arguments_precede_project_and_response_effects
+    work_pure_arguments_precede_project_and_response_effects
+
+test result: FAILED. 0 passed; 5 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.82s
+
+error: test failed, to rerun pass `--test control_preflight`
