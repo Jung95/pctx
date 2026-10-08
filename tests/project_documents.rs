@@ -6,6 +6,8 @@ fn fixture() -> (tempfile::TempDir, Project) {
     let t = tempfile::tempdir().unwrap();
     let root = t.path().join("repo");
     let data = t.path().join("data");
+    pctx::project::private_dir(&data.join("workspace")).unwrap();
+    pctx::project::private_dir(&data.join("control")).unwrap();
     std::fs::create_dir_all(root.join(".pctx/rules")).unwrap();
     std::fs::create_dir_all(root.join(".pctx/decisions")).unwrap();
     std::fs::create_dir_all(root.join("src/api")).unwrap();
@@ -275,4 +277,171 @@ fn proposed_replacement_cannot_retire_current_claim_and_cancellation_cannot_revi
         assert_eq!(old["historical"], true);
         assert_eq!(old["effective_superseded_by"], serde_json::json!(["new"]));
     }
+}
+
+fn retirement_count(p: &Project) -> i64 {
+    pctx::work::connect(p)
+        .unwrap()
+        .query_row(
+            "SELECT count(*) FROM events WHERE type='document_retirement_observed'",
+            [],
+            |r| r.get(0),
+        )
+        .unwrap()
+}
+fn old_decision(p: &Project) -> serde_json::Value {
+    documents::load(p, &[]).unwrap()["decisions"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .find(|d| d["id"] == "old")
+        .unwrap()
+        .clone()
+}
+#[test]
+fn retirement_survives_replacement_deletion_and_explicit_reinstatement_is_required() {
+    let (_t, p) = fixture();
+    decision(&p, "old.md", "old", "[]");
+    decision(&p, "new.md", "new", "old");
+    let original = std::fs::read(p.root.join(".pctx/decisions/old.md")).unwrap();
+    assert_eq!(old_decision(&p)["current_guidance"], false);
+    assert_eq!(retirement_count(&p), 1);
+    // New connections after source removal retain observations, not source bodies.
+    std::fs::remove_file(p.root.join(".pctx/decisions/new.md")).unwrap();
+    let old = old_decision(&p.clone());
+    assert_eq!(old["historical"], true);
+    assert_eq!(old["observed_superseded_by"], serde_json::json!(["new"]));
+    assert_eq!(old["superseded_by"], serde_json::json!([]));
+    assert_eq!(retirement_count(&p), 1);
+    assert_eq!(
+        std::fs::read(p.root.join(".pctx/decisions/old.md")).unwrap(),
+        original
+    );
+    let restored = String::from_utf8(original).unwrap().replacen(
+        "status: accepted",
+        "status: accepted\nreinstates: new",
+        1,
+    );
+    std::fs::write(p.root.join(".pctx/decisions/old.md"), restored).unwrap();
+    let old = old_decision(&p);
+    assert_eq!(old["current_guidance"], true);
+    assert_eq!(old["validity_basis"]["permission_granted"], false);
+    assert_eq!(old["observed_superseded_by"], serde_json::json!(["new"]));
+    decision(&p, "new.md", "new", "old");
+    assert_eq!(
+        old_decision(&p)["current_guidance"],
+        false,
+        "a live accepted replacement still wins"
+    );
+    let mut restricted = p.clone();
+    restricted
+        .config
+        .policy
+        .exclude
+        .push(".pctx/decisions/new.md".into());
+    let hidden = old_decision(&restricted);
+    assert_eq!(hidden["current_guidance"], false);
+    assert_eq!(hidden["historical"], true);
+    assert_eq!(hidden["observed_superseded_by"], serde_json::json!([]));
+    assert_eq!(
+        hidden["validity_basis"]["retirement_history_outside_current_policy"],
+        true
+    );
+    assert_eq!(retirement_count(&p), 1);
+}
+#[test]
+fn invalid_reinstatement_rolls_back_observations_and_workspace_history_is_isolated() {
+    let (_t, p) = fixture();
+    decision(&p, "old.md", "old", "[]");
+    decision(&p, "new.md", "new", "old");
+    let path = p.root.join(".pctx/decisions/old.md");
+    let original = std::fs::read_to_string(&path).unwrap();
+    std::fs::write(
+        &path,
+        original.replacen(
+            "status: accepted",
+            "status: accepted\nreinstates: unknown",
+            1,
+        ),
+    )
+    .unwrap();
+    assert_eq!(documents::load(&p, &[]).unwrap_err().code, "INVALID_CONFIG");
+    assert_eq!(retirement_count(&p), 0);
+    std::fs::write(&path, &original).unwrap();
+    assert_eq!(old_decision(&p)["current_guidance"], false);
+    std::fs::remove_file(p.root.join(".pctx/decisions/new.md")).unwrap();
+    let mut other = p.clone();
+    other.workspace_id = "other-workspace".into();
+    assert_eq!(old_decision(&other)["current_guidance"], true);
+    assert_eq!(old_decision(&p)["current_guidance"], false);
+    let mut restricted = p.clone();
+    restricted
+        .config
+        .policy
+        .exclude
+        .push(".pctx/decisions/new.md".into());
+    let old = old_decision(&restricted);
+    assert_eq!(old["current_guidance"], false);
+    assert_eq!(old["observed_superseded_by"], serde_json::json!([]));
+    assert_eq!(
+        old["validity_basis"]["retirement_history_outside_current_policy"],
+        true
+    );
+    assert!(!old.to_string().contains("\"new\""));
+}
+#[test]
+fn control_backup_preserves_lineage_without_reactivating_guidance() {
+    use pctx::work::{self, ControlCommand, WorkCommand};
+    let (_t, p) = fixture();
+    decision(&p, "old.md", "old", "[]");
+    decision(&p, "new.md", "new", "old");
+    assert_eq!(old_decision(&p)["current_guidance"], false);
+    let archive = p.data_dir.join("lineage-backup.json");
+    work::execute(
+        &p,
+        &WorkCommand::Control {
+            command: ControlCommand::Backup {
+                output: archive.clone(),
+            },
+        },
+    )
+    .unwrap();
+    let restore = work::execute(
+        &p,
+        &WorkCommand::Control {
+            command: ControlCommand::Restore { input: archive },
+        },
+    )
+    .unwrap();
+    assert_eq!(restore["attached"], false);
+    let mut destination = p.clone();
+    destination.coordination_id = restore["coordination_id"].as_str().unwrap().into();
+    destination.control_dir = p
+        .data_dir
+        .join("controls")
+        .join(&destination.coordination_id);
+    std::fs::remove_file(p.root.join(".pctx/decisions/new.md")).unwrap();
+    assert_eq!(old_decision(&destination)["current_guidance"], false);
+    assert_eq!(retirement_count(&destination), 1);
+}
+#[test]
+fn corrupt_lineage_cannot_silently_promote_current_guidance() {
+    let (_t, p) = fixture();
+    decision(&p, "old.md", "old", "[]");
+    decision(&p, "new.md", "new", "old");
+    assert_eq!(old_decision(&p)["current_guidance"], false);
+    let db = pctx::work::connect(&p).unwrap();
+    let (entity, payload): (String, String) = db
+        .query_row(
+            "SELECT entity,payload FROM events WHERE type='document_retirement_observed'",
+            [],
+            |r| Ok((r.get(0)?, r.get(1)?)),
+        )
+        .unwrap();
+    let mut invalid: serde_json::Value = serde_json::from_str(&payload).unwrap();
+    invalid["version"] = serde_json::json!(99);
+    db.execute("INSERT INTO events(entity,type,payload,created) VALUES(?1,'document_retirement_observed',?2,0)", rusqlite::params![entity, invalid.to_string()]).unwrap();
+    std::fs::remove_file(p.root.join(".pctx/decisions/new.md")).unwrap();
+    assert_eq!(documents::load(&p, &[]).unwrap_err().code, "DB_ERROR");
+    assert_eq!(retirement_count(&p), 2);
 }

@@ -1,0 +1,197 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.04s
+     Running tests/query_deadline_cli.rs (target/debug/deps/query_deadline_cli-91fccc6ca25b7a4f)
+
+running 6 tests
+test invalid_or_inapplicable_timeout_has_no_project_effects ... ok
+test finite_saved_routes_accept_timeout_and_reject_zero_before_project_effects ... ok
+test strict_find_waits_only_remaining_budget_and_preserves_active_generation ... ok
+test finite_ndjson_contention_preserves_error_code_without_creating_events ... ok
+test doctor_contention_reports_timeout_with_original_budget_and_unchanged_database ... ok
+test saved_cli_reread_never_reruns_and_failed_metering_preserves_delivery_truth ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.10s
+
+     Running tests/query_filter_guard.rs (target/debug/deps/query_filter_guard-227c495d0a8a5b95)
+
+running 3 tests
+test filter_configuration_query_is_narrow_and_not_general_configuration_access ... ok
+test no_filter_match_is_normal_and_invalid_configuration_is_not_an_empty_observation ... ok
+test effective_clean_or_process_filter_declines_status_without_running_driver ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.32s
+
+     Running tests/quota.rs (target/debug/deps/quota-2eee6f0607f85593)
+
+running 7 tests
+test first_unknown_baseline_and_missing_provider_do_not_become_zero_or_normal ... ok
+test pools_are_isolated_and_manual_estimates_do_not_change_actual_usage ... ok
+test cumulative_counters_are_deltas_and_collector_sources_do_not_double_count ... ok
+test reservations_share_pool_same_unit_and_are_soft_idempotent ... ok
+test quota_thresholds_reset_reobservation_and_persistent_pause_silence ... ok
+test epochs_resets_and_stale_counters_are_not_inherited ... ok
+test restored_quota_requires_fresh_observation_and_event_ledgers_stay_immutable ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.15s
+
+     Running tests/reader_deadline.rs (target/debug/deps/reader_deadline-d7b5d7001a3131cd)
+
+running 4 tests
+test cloned_project_keeps_same_expired_budget_instead_of_starting_a_new_phase ... ok
+test expired_budget_is_timeout_for_read_inventory_manifest_and_path_authorization ... ok
+test expired_inventory_never_returns_empty_or_converts_timeout_to_skipped_metadata ... ok
+test bounded_chunks_keep_hash_utf8_and_source_policy_contracts ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/reader_policy_cache.rs (target/debug/deps/reader_policy_cache-c10dd914991c07d2)
+
+running 8 tests
+test warmed_patterns_do_not_authorize_a_path_replaced_by_a_symlink ... ok
+test cloned_anchor_never_rebinds_after_root_is_deleted_and_recreated ... ok
+test immutable_root_anchor_accepts_in_place_and_atomic_source_edits ... ok
+test warmed_root_and_ancestor_replacement_cannot_redirect_current_source ... ok
+test fifo_source_and_configuration_are_rejected_without_blocking ... ok
+test compiled_patterns_never_cache_path_access_or_source_across_projects ... ok
+test concurrent_eviction_keeps_each_exact_policy_and_current_source ... ok
+test initialized_project_rejects_normal_root_and_ancestor_replacement ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s
+
+     Running tests/render.rs (target/debug/deps/render-cc917b0b7eea1064)
+
+running 9 tests
+test terminal_hidden_unicode_is_json_escaped_without_changing_values ... ok
+test json_formats_are_one_minified_document_including_exact_final_newline ... ok
+test malicious_fences_and_controls_cannot_escape_literal_source_and_roundtrip_exactly ... ok
+test errors_partial_scope_and_negative_report_are_explicit_without_success_claim ... ok
+test preexisting_masking_and_unicode_are_not_changed_or_inferred ... ok
+test signatures_and_outlines_are_visible_with_ranges_and_literal_control_escaping ... ok
+test outline_and_handoff_display_source_provenance_and_keep_unknown_fields ... ok
+test support_is_exact_and_unsupported_markdown_returns_argument_error ... ok
+test renderer_never_enforces_or_silently_cuts_a_reported_budget ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/runner.rs (target/debug/deps/runner-262d46ab6960599b)
+
+running 23 tests
+test legacy_lock_fixture ... ok
+test inherited_canonical_descriptor_retains_lock_after_invalid_proof_and_parent_close ... ok
+test cloud_helper_is_only_durable_intent ... ok
+test explicit_script_input_change_requires_new_trust ... ok
+test legacy_bridge_absence_prevents_execution ... ok
+test changed_script_and_agent_forged_trust_are_denied ... ok
+test linked_slot_child_directory_cannot_redirect_state ... ok
+test profile_change_during_execution_is_stale_at_report_recording ... ok
+test native_pass_is_invalidated_by_external_executable_change_with_sources_unchanged ... ok
+test parent_exit_does_not_release_living_child ... ok
+test synthetic_low_memory_defers_heavy_admission ... ok
+test native_environment_change_or_missing_profile_invalidates_existing_pass ... ok
+test trusted_typed_check_is_real_evidence ... ok
+test timeout_is_observed_without_success_evidence ... ok
+test source_mutation_during_check_is_stale ... ok
+test user_created_host_state_symlink_is_denied ... ok
+test unknown_and_zero_tests_do_not_pass ... ok
+test unknown_memory_requires_disclosed_exact_owner_override ... ok
+test cross_project_heavy_capacity_is_one ... ok
+test local_auxiliary_provider_needs_registered_linked_workspace_and_capacity ... ok
+test canonical_mutex_survives_main_parent_death ... ok
+test killed_guardian_causes_negative_child_observation ... ok
+test canonical_legacy_and_pctx_exclude_each_other ... ok
+
+test result: ok. 23 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 24.24s
+
+     Running tests/runner_spawn_binding.rs (target/debug/deps/runner_spawn_binding-a2f1f8f8bdb40cad)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/schedule.rs (target/debug/deps/schedule-2917b2dde9bd7c95)
+
+running 17 tests
+test non_read_job_requires_matching_operation_decision ... ok
+test berlin_spring_gap_moves_to_next_valid_wall_time ... ok
+test berlin_fall_back_occurs_once_per_local_date_and_restart_reuses_record ... ok
+test project_private_bridge_staging_rejects_user_symlinks_without_changing_target ... ok
+test elapsed_intervals_do_not_change_with_dst_and_missed_ticks_coalesce ... ok
+test namespaces_and_cas_pause_updates_are_independent ... ok
+test empty_readonly_tick_is_successful_without_notification_or_model_wake ... ok
+test paused_role_blocks_actual_tick_and_loop_does_not_acquire_keep_awake ... ok
+test reconcile_singleflight_and_managed_bridge_never_claim_install_or_success ... ok
+test role_pause_topic_silence_do_not_reactivate ... ok
+test session_boundary_invalidates_binding_without_reinstall_or_epoch_inheritance ... ok
+test failed_attempt_is_recorded_and_retry_is_explicit_instead_of_synthetic_success ... ok
+test tick_executes_once_and_only_changed_results_queue_a_local_notice ... ok
+test running_owner_is_never_released_by_ttl_and_restored_binding_is_not_inherited ... ok
+test staged_bridge_uninstall_removes_only_owned_files_and_missing_manifest_can_be_repaired ... ok
+test managed_bridge_requires_current_reviewed_plan_and_preserves_user_changes ... ok
+test actual_cli_concurrent_ticks_claim_one_occurrence_and_fixture_bridge_invokes_tick ... ok
+
+test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 11.37s
+
+     Running tests/search.rs (target/debug/deps/search-751f23ebc1208c2d)
+
+running 27 tests
+test expired_queries_fail_even_when_the_candidate_universe_is_empty ... ok
+test cached_policy_change_hides_metadata_and_boolean_remains_explicit ... ok
+test boolean_complements_validate_candidates_without_positive_hits ... ok
+test alias_and_aggregate_regex_candidates_use_current_validation ... ok
+test indexed_metadata_empty_generation_rejects_replaced_root_before_search ... ok
+test indexed_metadata_invalid_policy_and_foreign_workspace_fail_closed ... ok
+test indexed_metadata_matches_including_complements_authorize_before_limit_even_off ... ok
+test indexed_body_search_does_not_follow_a_matching_or_complement_symlink ... ok
+test markdown_sections_ignore_fenced_examples_and_link_parents ... ok
+test invalid_policy_fails_even_without_metadata_candidates ... ok
+test indexed_body_search_observes_new_text_and_boolean_complements_with_actual_hashes ... ok
+test oversized_non_candidate_is_skipped_but_matching_candidate_fails ... ok
+test indexed_metadata_search_hides_unopened_historical_counts_and_propagates_generation ... ok
+test matched_metadata_validates_stale_candidates_without_discovering_new_names ... ok
+test indexed_body_search_filters_current_policy_scope_language_and_deleted_rows_without_counts ... ok
+test structural_variants_use_real_grammar ... ok
+test unsupported_is_distinct_from_empty_supported ... ok
+test utf8_crlf_locations_and_version_ids ... ok
+test stale_symbol_and_ambiguous_names_never_select_code ... ok
+test indexed_body_search_validates_nonmatching_later_sources_before_limit_even_off ... ok
+test metadata_non_candidates_are_not_opened_as_source ... ok
+test indexed_metadata_staleness_and_body_only_discovery_keep_their_boundaries ... ok
+test text_and_all_still_read_sources_without_metadata_hits_and_policy_hides_candidates ... ok
+test parsing_cancellation_is_timeout_instead_of_empty_or_partial_ast_success ... ok
+test indexed_body_search_preserves_invalid_policy_workspace_and_shared_lock_deadlines ... ok
+test candidate_scan_cap_remains_distinct_from_request_timeout ... ok
+test deadline_partial_keeps_only_verified_matches_and_never_claims_complete_coverage ... ok
+
+test result: ok. 27 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.53s
+
+     Running tests/storage_deadline.rs (target/debug/deps/storage_deadline-8fad1ff023fe83b8)
+
+running 4 tests
+test parser_expiry_retains_previous_generation_instead_of_marking_source_skipped ... ok
+test expired_storage_requests_preserve_generation_and_checkpoint ... ok
+test sqlite_writer_contention_times_out_without_publishing_or_losing_checkpoint ... ok
+test writer_and_snapshot_waits_consume_supplied_budget_without_five_second_reset ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.15s
+
+     Running tests/watch.rs (target/debug/deps/watch-0aa3808534cf4f9e)
+
+running 4 tests
+test closed_stdout_returns_controlled_error_without_panic ... ok
+test finite_ndjson_drains_all_pages_and_resumes_after_cursor ... ok
+test heartbeat_and_expiry_appear_as_ephemeral_observations ... ok
+test compact_watch_renders_essential_columns_and_refreshes ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 6.62s
+
+     Running tests/windows_guardian.rs (target/debug/deps/windows_guardian-2a68fbd6955b978d)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/windows_process.rs (target/debug/deps/windows_process-8ccfc1ee3bcac902)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

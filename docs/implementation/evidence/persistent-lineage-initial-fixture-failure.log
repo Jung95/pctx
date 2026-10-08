@@ -1,0 +1,74 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.52s
+     Running tests/context_delivery_selection.rs (target/debug/deps/context_delivery_selection-2d942bfc32429490)
+
+running 5 tests
+test source_changed_during_delivery_preparation_cannot_publish_stale_spans ... ok
+test consumer_overhead_cannot_remove_mandatory_rules_or_fake_a_fitting_packet ... ok
+test consumer_envelope_and_escaped_overhead_drive_tiers_and_exact_capacity ... ok
+test omitted_replacement_changed_during_delivery_invalidates_unchanged_selected_decision ... ok
+test consumer_failure_and_original_deadline_cannot_publish_a_selection ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.05s
+
+     Running tests/project_documents.rs (target/debug/deps/project_documents-7b87e5d6e076ca8b)
+
+running 10 tests
+test retirement_survives_replacement_deletion_and_explicit_reinstatement_is_required ... FAILED
+test control_backup_preserves_lineage_without_reactivating_guidance ... FAILED
+test invalid_reinstatement_rolls_back_observations_and_workspace_history_is_isolated ... FAILED
+test proposed_replacement_cannot_retire_current_claim_and_cancellation_cannot_revive_predecessor ... FAILED
+test decisions_keep_superseded_records_and_report_unresolved_references ... FAILED
+test decision_lifecycle_never_promotes_retired_or_proposed_claims ... FAILED
+test tags_aliases_duplicate_ids_and_excess_nesting_are_rejected ... ok
+test legacy_instructions_are_opaque_and_all_returned_metadata_is_masked ... ok
+test rules_are_scoped_required_and_keep_source_provenance ... ok
+test structured_conflicts_fail_but_natural_contradictions_remain_data ... ok
+
+failures:
+
+---- retirement_survives_replacement_deletion_and_explicit_reinstatement_is_required stdout ----
+
+thread 'retirement_survives_replacement_deletion_and_explicit_reinstatement_is_required' (7559866) panicked at tests/project_documents.rs:291:29:
+called `Result::unwrap()` on an `Err` value: Error { code: "IO_ERROR", message: "Filesystem operation failed", retryable: false, exit: 7 }
+
+---- control_backup_preserves_lineage_without_reactivating_guidance stdout ----
+
+thread 'control_backup_preserves_lineage_without_reactivating_guidance' (7559860) panicked at tests/project_documents.rs:291:29:
+called `Result::unwrap()` on an `Err` value: Error { code: "IO_ERROR", message: "Filesystem operation failed", retryable: false, exit: 7 }
+
+---- invalid_reinstatement_rolls_back_observations_and_workspace_history_is_isolated stdout ----
+
+thread 'invalid_reinstatement_rolls_back_observations_and_workspace_history_is_isolated' (7559863) panicked at tests/project_documents.rs:352:5:
+assertion `left == right` failed
+  left: "IO_ERROR"
+ right: "INVALID_CONFIG"
+
+---- proposed_replacement_cannot_retire_current_claim_and_cancellation_cannot_revive_predecessor stdout ----
+
+thread 'proposed_replacement_cannot_retire_current_claim_and_cancellation_cannot_revive_predecessor' (7559865) panicked at tests/project_documents.rs:250:38:
+called `Result::unwrap()` on an `Err` value: Error { code: "IO_ERROR", message: "Filesystem operation failed", retryable: false, exit: 7 }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- decisions_keep_superseded_records_and_report_unresolved_references stdout ----
+
+thread 'decisions_keep_superseded_records_and_report_unresolved_references' (7559862) panicked at tests/project_documents.rs:171:38:
+called `Result::unwrap()` on an `Err` value: Error { code: "IO_ERROR", message: "Filesystem operation failed", retryable: false, exit: 7 }
+
+---- decision_lifecycle_never_promotes_retired_or_proposed_claims stdout ----
+
+thread 'decision_lifecycle_never_promotes_retired_or_proposed_claims' (7559861) panicked at tests/project_documents.rs:228:38:
+called `Result::unwrap()` on an `Err` value: Error { code: "IO_ERROR", message: "Filesystem operation failed", retryable: false, exit: 7 }
+
+
+failures:
+    control_backup_preserves_lineage_without_reactivating_guidance
+    decision_lifecycle_never_promotes_retired_or_proposed_claims
+    decisions_keep_superseded_records_and_report_unresolved_references
+    invalid_reinstatement_rolls_back_observations_and_workspace_history_is_isolated
+    proposed_replacement_cannot_retire_current_claim_and_cancellation_cannot_revive_predecessor
+    retirement_survives_replacement_deletion_and_explicit_reinstatement_is_required
+
+test result: FAILED. 4 passed; 6 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s
+
+error: test failed, to rerun pass `--test project_documents`

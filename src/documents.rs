@@ -33,6 +33,218 @@ struct Decision {
     supersedes: Vec<String>,
     #[serde(default = "all")]
     scope: Vec<String>,
+    #[serde(default, deserialize_with = "supersedes")]
+    reinstates: Vec<String>,
+}
+#[derive(Clone)]
+struct ObservedDecision {
+    id: String,
+    path: String,
+    hash: String,
+    status: String,
+    supersedes: Vec<String>,
+    reinstates: Vec<String>,
+}
+#[derive(serde::Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+struct Retirement {
+    version: u32,
+    project: String,
+    workspace: String,
+    subject: String,
+    replacement: String,
+    replacement_path: String,
+    replacement_hash: String,
+    status: String,
+    policy: String,
+}
+fn retirement_entity(p: &Project, subject: &str) -> String {
+    format!(
+        "DOC-{}",
+        crate::domain::hash(
+            serde_json::to_vec(&json!([
+                "document-retirement-v1",
+                p.project_id,
+                p.workspace_id,
+                subject
+            ]))
+            .unwrap()
+        )
+    )
+}
+// Durable observations belong to the existing append-only control event ledger,
+// not a disposable code cache or a second memory engine. They grant no authority.
+fn retirement_history(
+    p: &Project,
+    observed: &[ObservedDecision],
+) -> Result<BTreeMap<String, Vec<Retirement>>> {
+    if observed.is_empty() {
+        return Ok(BTreeMap::new());
+    }
+    p.check_deadline()?;
+    let mut db = crate::work::connect(p)?;
+    let tx = db.transaction_with_behavior(rusqlite::TransactionBehavior::Immediate)?;
+    tx.execute_batch("CREATE INDEX IF NOT EXISTS events_document_lineage ON events(type,entity);")?;
+    let policy = p.policy_hash();
+    let mut subjects = observed
+        .iter()
+        .map(|d| d.id.clone())
+        .collect::<BTreeSet<_>>();
+    for d in observed {
+        if !["proposed", "rejected"].contains(&d.status.as_str()) {
+            subjects.extend(d.supersedes.iter().cloned());
+        }
+    }
+    if subjects.len() > 2048 {
+        return Err(Error::new(
+            "PARTIAL_RESULT",
+            "Document retirement subjects exceed bounded limits",
+            3,
+        ));
+    }
+    let mut history = BTreeMap::new();
+    let mut history_bytes = 0usize;
+    for subject in subjects {
+        p.check_deadline()?;
+        let mut statement = tx.prepare("SELECT payload FROM events WHERE type='document_retirement_observed' AND entity=?1 ORDER BY seq LIMIT 1025")?;
+        let payloads = statement
+            .query_map([retirement_entity(p, &subject)], |r| r.get::<_, String>(0))?
+            .collect::<std::result::Result<Vec<_>, _>>()?;
+        if payloads.len() > 1024 {
+            return Err(Error::new(
+                "PARTIAL_RESULT",
+                "Document retirement history exceeds bounded limits",
+                3,
+            ));
+        }
+        let mut records = Vec::new();
+        for payload in payloads {
+            p.check_deadline()?;
+            history_bytes = history_bytes.saturating_add(payload.len());
+            if history_bytes > 8 * 1024 * 1024 {
+                return Err(Error::new(
+                    "PARTIAL_RESULT",
+                    "Document lineage exceeds aggregate metadata limit",
+                    3,
+                ));
+            }
+            if payload.len() > 4096 {
+                return Err(Error::new(
+                    "DB_ERROR",
+                    "Invalid document lineage observation",
+                    7,
+                ));
+            }
+            let record: Retirement = serde_json::from_str(&payload)
+                .map_err(|_| Error::new("DB_ERROR", "Invalid document lineage observation", 7))?;
+            if record.version != 1
+                || record.project != p.project_id
+                || record.workspace != p.workspace_id
+                || record.subject != subject
+                || record.replacement == subject
+                || record.policy.len() != 64
+                || !record.policy.bytes().all(|b| b.is_ascii_hexdigit())
+                || record.replacement_hash.len() != 64
+                || !record
+                    .replacement_hash
+                    .bytes()
+                    .all(|b| b.is_ascii_hexdigit())
+                || ![
+                    "accepted",
+                    "superseded",
+                    "deprecated",
+                    "cancelled",
+                    "completed",
+                ]
+                .contains(&record.status.as_str())
+            {
+                return Err(Error::new(
+                    "DB_ERROR",
+                    "Invalid document lineage observation",
+                    7,
+                ));
+            }
+            identity(&record.replacement)
+                .map_err(|_| Error::new("DB_ERROR", "Invalid document lineage identity", 7))?;
+            match reader::policy_allows(p, &record.replacement_path) {
+                Ok(()) => {}
+                Err(e) if e.code == "POLICY_DENIED" => {}
+                Err(e) if e.code == "PATH_OUTSIDE_ROOT" => {
+                    return Err(Error::new("DB_ERROR", "Invalid document lineage path", 7));
+                }
+                Err(e) => return Err(e),
+            }
+            records.push(record);
+        }
+        history.insert(subject, records);
+    }
+    let mut additions = 0;
+    for d in observed
+        .iter()
+        .filter(|d| !["proposed", "rejected"].contains(&d.status.as_str()))
+    {
+        for subject in &d.supersedes {
+            p.check_deadline()?;
+            let records = history.get_mut(subject).unwrap();
+            if records
+                .iter()
+                .any(|r| r.replacement == d.id && r.policy == policy)
+            {
+                continue;
+            }
+            additions += 1;
+            if additions > 2048 || records.len() >= 1024 {
+                return Err(Error::new(
+                    "PARTIAL_RESULT",
+                    "Document retirement relations exceed bounded limits",
+                    3,
+                ));
+            }
+            let record = Retirement {
+                version: 1,
+                project: p.project_id.clone(),
+                workspace: p.workspace_id.clone(),
+                subject: subject.clone(),
+                replacement: d.id.clone(),
+                replacement_path: d.path.clone(),
+                replacement_hash: d.hash.clone(),
+                status: d.status.clone(),
+                policy: policy.clone(),
+            };
+            let payload = serde_json::to_string(&record)?;
+            if payload.len() > 4096 {
+                return Err(config("Document lineage metadata exceeds bounded limits"));
+            }
+            history_bytes = history_bytes.saturating_add(payload.len());
+            if history_bytes > 8 * 1024 * 1024 {
+                return Err(Error::new(
+                    "PARTIAL_RESULT",
+                    "Document lineage exceeds aggregate metadata limit",
+                    3,
+                ));
+            }
+            tx.execute("INSERT INTO events(entity,type,payload,created) VALUES(?1,'document_retirement_observed',?2,?3)",
+                rusqlite::params![retirement_entity(p, subject), payload, crate::domain::now()])?;
+            records.push(record);
+        }
+    }
+    // Validate restoration against the same transaction, including observations
+    // made in this load. Invalid requests must not publish partial history.
+    for d in observed {
+        for requested in &d.reinstates {
+            if !history
+                .get(&d.id)
+                .is_some_and(|records| records.iter().any(|r| &r.replacement == requested))
+            {
+                return Err(config(
+                    "Reinstatement refers to an unobserved replacement in this workspace",
+                ));
+            }
+        }
+    }
+    p.check_deadline()?;
+    tx.commit()?;
+    Ok(history)
 }
 fn supersedes<'de, D: serde::Deserializer<'de>>(
     d: D,
@@ -313,6 +525,7 @@ pub fn load(p: &Project, scope: &[String]) -> Result<Value> {
     let mut source_hashes = vec![];
     let mut decision_graph = BTreeMap::new();
     let mut decision_states = BTreeMap::new();
+    let mut observed_decisions = Vec::new();
     let mut document_bytes = 0u64;
     for path in &inventory.paths {
         if !path.starts_with(".pctx/rules/") && !path.starts_with(".pctx/decisions/") {
@@ -390,6 +603,24 @@ pub fn load(p: &Project, scope: &[String]) -> Result<Value> {
                     return Err(config("Decision cannot supersede itself"));
                 }
             }
+            decision.reinstates.sort();
+            decision.reinstates.dedup();
+            for id in &decision.reinstates {
+                identity(id)?;
+                if id == &decision.id || decision.status != "accepted" {
+                    return Err(config(
+                        "Reinstatement requires an accepted decision and another replacement ID",
+                    ));
+                }
+            }
+            observed_decisions.push(ObservedDecision {
+                id: decision.id.clone(),
+                path: path.clone(),
+                hash: item["file_hash"].as_str().unwrap().to_string(),
+                status: decision.status.clone(),
+                supersedes: decision.supersedes.clone(),
+                reinstates: decision.reinstates.clone(),
+            });
             decision_states.insert(decision.id.clone(), decision.status.clone());
             decision_graph.insert(decision.id.clone(), decision.supersedes.clone());
             if !applicable(&decision.scope, scope, &relevant)? {
@@ -400,6 +631,7 @@ pub fn load(p: &Project, scope: &[String]) -> Result<Value> {
             item["date"] = json!(decision.date);
             item["supersedes"] = json!(decision.supersedes);
             item["scope"] = json!(decision.scope);
+            item["reinstates"] = json!(decision.reinstates);
             decisions.push(item);
         }
     }
@@ -429,8 +661,66 @@ pub fn load(p: &Project, scope: &[String]) -> Result<Value> {
     for id in decision_graph.keys() {
         cycles(&decision_graph, id, &mut BTreeSet::new(), &mut done)?;
     }
+    // Only validated source observations are recorded; a later rendering failure
+    // does not erase an observed retirement and does not acknowledge any body.
+    for (path, expected) in &source_hashes {
+        if reader::read(p, path)?.hash != *expected {
+            return Err(Error::new(
+                "CONCURRENT_MODIFICATION",
+                "Project document changed before observation",
+                4,
+            ));
+        }
+    }
+    let history = retirement_history(p, &observed_decisions)?;
+    let policy = p.policy_hash();
     for item in &mut decisions {
         let id = item["id"].as_str().unwrap_or("");
+        let records = history.get(id).map(Vec::as_slice).unwrap_or(&[]);
+        let reinstates = item["reinstates"].as_array().unwrap();
+        for requested in reinstates {
+            if !records
+                .iter()
+                .any(|r| r.replacement == requested.as_str().unwrap_or(""))
+            {
+                return Err(config(
+                    "Reinstatement refers to an unobserved replacement in this workspace",
+                ));
+            }
+        }
+        let mut effective = BTreeSet::new();
+        let mut visible_history = BTreeSet::new();
+        let mut hidden_effective = false;
+        for record in records {
+            p.check_deadline()?;
+            let visible = if record.policy != policy {
+                false
+            } else {
+                match reader::policy_allows(p, &record.replacement_path) {
+                    Ok(()) => true,
+                    Err(e) if e.code == "POLICY_DENIED" => false,
+                    Err(e) => return Err(e),
+                }
+            };
+            if visible {
+                visible_history.insert(record.replacement.clone());
+            }
+            // Absence from a policy-filtered inventory cannot prove deletion.
+            // Restore only a history relation visible under its bound policy.
+            let restored = visible
+                && reinstates.iter().any(|r| r == &record.replacement)
+                && decision_states
+                    .get(&record.replacement)
+                    .is_none_or(|s| s != "accepted");
+            if restored {
+                continue;
+            }
+            if visible {
+                effective.insert(record.replacement.clone());
+            } else {
+                hidden_effective = true;
+            }
+        }
         let replacing = decision_graph
             .iter()
             .filter(|(_, previous)| previous.iter().any(|s| s == id))
@@ -445,20 +735,6 @@ pub fn load(p: &Project, scope: &[String]) -> Result<Value> {
             .collect::<Vec<_>>();
         item["unresolved_supersedes"] = json!(unresolved);
         item["superseded_by"] = json!(replacing);
-        // A proposal/rejection cannot retire an accepted decision. Terminal
-        // replacement claims remain lineage evidence; withdrawing a replacement
-        // must not implicitly reactivate its predecessors.
-        let effective = item["superseded_by"]
-            .as_array()
-            .unwrap()
-            .iter()
-            .filter(|id| {
-                decision_states
-                    .get(id.as_str().unwrap_or(""))
-                    .is_some_and(|status| !["proposed", "rejected"].contains(&status.as_str()))
-            })
-            .cloned()
-            .collect::<Vec<_>>();
         let retired = [
             "superseded",
             "deprecated",
@@ -467,14 +743,15 @@ pub fn load(p: &Project, scope: &[String]) -> Result<Value> {
             "completed",
         ]
         .contains(&item["status"].as_str().unwrap_or(""));
-        item["historical"] = json!(retired || !effective.is_empty());
+        item["historical"] = json!(retired || !effective.is_empty() || hidden_effective);
         item["current_guidance"] =
             json!(item["status"] == "accepted" && item["historical"] == false);
         item["effective_superseded_by"] = json!(effective);
+        item["observed_superseded_by"] = json!(visible_history);
         item["source_id"] = item["id"].clone();
         item["validity_basis"] = json!({"status_source":"document_frontmatter",
-            "supersession_source":"declared_document_links", "implementation_verified":false,
-            "permission_granted":false});
+            "supersession_source":"workspace_control_observations", "implementation_verified":false,
+            "permission_granted":false,"retirement_history_outside_current_policy":hidden_effective});
     }
     for (path, expected) in source_hashes {
         if reader::read(p, &path)?.hash != expected {

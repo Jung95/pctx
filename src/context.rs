@@ -330,6 +330,8 @@ pub(crate) fn select_scoped_with_measurement(
                 "superseded_by",
                 "effective_superseded_by",
                 "validity_basis",
+                "observed_superseded_by",
+                "reinstates",
             ] {
                 tiers[0][key] = decision[key].clone();
             }
@@ -375,7 +377,7 @@ pub(crate) fn select_scoped_with_measurement(
     }
     data["selection_inputs"] = json!({"detail":r.detail,"seed":r.seed,"task_scope":task_scope,
         "changed_since":r.changed_since,"dependency_depth":r.dependency_depth,
-        "parser_set":storage::PARSER_SET,"selector_version":"adaptive-v3",
+        "parser_set":storage::PARSER_SET,"selector_version":"adaptive-v4",
         "format": match format { crate::render::Format::Markdown => "markdown", _ => "json" }});
     finalize(
         p,

@@ -1,0 +1,73 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.46s
+     Running tests/context_delivery_selection.rs (target/debug/deps/context_delivery_selection-2d942bfc32429490)
+
+running 5 tests
+test source_changed_during_delivery_preparation_cannot_publish_stale_spans ... ok
+test consumer_overhead_cannot_remove_mandatory_rules_or_fake_a_fitting_packet ... ok
+test consumer_envelope_and_escaped_overhead_drive_tiers_and_exact_capacity ... ok
+test omitted_replacement_changed_during_delivery_invalidates_unchanged_selected_decision ... ok
+test consumer_failure_and_original_deadline_cannot_publish_a_selection ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.04s
+
+     Running tests/project_documents.rs (target/debug/deps/project_documents-7b87e5d6e076ca8b)
+
+running 11 tests
+test legacy_instructions_are_opaque_and_all_returned_metadata_is_masked ... ok
+test rules_are_scoped_required_and_keep_source_provenance ... ok
+test structured_conflicts_fail_but_natural_contradictions_remain_data ... ok
+test decisions_keep_superseded_records_and_report_unresolved_references ... ok
+test decision_lifecycle_never_promotes_retired_or_proposed_claims ... ok
+test corrupt_lineage_cannot_silently_promote_current_guidance ... ok
+test proposed_replacement_cannot_retire_current_claim_and_cancellation_cannot_revive_predecessor ... ok
+test tags_aliases_duplicate_ids_and_excess_nesting_are_rejected ... ok
+test invalid_reinstatement_rolls_back_observations_and_workspace_history_is_isolated ... ok
+test retirement_survives_replacement_deletion_and_explicit_reinstatement_is_required ... ok
+test control_backup_preserves_lineage_without_reactivating_guidance ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.16s
+
+     Running tests/session.rs (target/debug/deps/session-e37e24e280aa64af)
+
+running 7 tests
+test identity_secrets_are_rejected_before_persistence ... ok
+test suspend_reconcile_preserves_task_pause_and_never_revives_run ... ok
+test expired_outer_budget_cannot_emit_ack_attach_or_change_epoch ... ok
+test minimum_budget_failure_creates_no_emission ... ok
+test independent_sessions_boundaries_and_policy_reject_old_baselines ... ok
+test rule_changes_and_deleted_paths_are_explicit ... ok
+test explicit_ack_unchanged_delta_and_no_source_ledger ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+
+     Running tests/session_render_budget.rs (target/debug/deps/session_render_budget-2e37552a4a4fa12a)
+
+running 7 tests
+test terminal_escape_overflow_is_rejected_before_context_emission_or_event ... ok
+test exact_final_budget_and_representation_receipts_require_explicit_ack ... ok
+test unchanged_git_does_not_hide_decision_or_memory_change_retirement_and_deletion ... ok
+test adaptive_delta_resends_unreceived_body_and_reuses_acknowledged_receipts ... ok
+test original_cli_budget_bounds_writer_admission_without_context_or_epoch_writes ... ok
+test supersession_links_invalidate_unchanged_source_without_reviving_it_on_replacement_cancellation ... ok
+test omitted_sources_are_not_acknowledged_and_later_delivery_is_explicit ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.56s
+
+     Running tests/work_control.rs (target/debug/deps/work_control-8112bcadab3f8486)
+
+running 11 tests
+test database_rejects_event_modification_and_receipt_conflict ... ok
+test external_report_is_an_allowed_claim_without_native_environment_authority ... ok
+test zero_minimum_cannot_make_zero_tests_pass ... ok
+test legacy_native_pass_without_authoritative_binding_is_not_current_evidence ... ok
+test claims_reports_reassignment_and_cursor ... ok
+test schedule_v2_backup_strips_local_binding_and_restore_revokes_running_authority ... ok
+test zero_tests_and_revision_conflict ... ok
+test current_source_change_blocks_completion ... ok
+test backup_restore_revokes_live_leases_and_preserves_pause ... ok
+test evidence_gate_and_historical_completion ... ok
+test restore_preserves_session_history_without_ack_or_epoch_reuse ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.26s
+

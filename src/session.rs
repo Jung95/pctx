@@ -8,7 +8,7 @@ use clap::Subcommand;
 use rusqlite::{Connection, OptionalExtension, TransactionBehavior, params};
 use serde_json::{Value, json};
 use std::collections::BTreeMap;
-const SERIALIZER: &str = "adaptive-context-v4";
+const SERIALIZER: &str = "adaptive-context-v5";
 #[derive(Debug, Clone, Subcommand)]
 pub enum SessionCommand {
     Attach {
@@ -394,6 +394,8 @@ fn representation_metadata(mut metadata: Value, body: &Value) -> Result<Value> {
         "superseded_by",
         "effective_superseded_by",
         "validity_basis",
+        "observed_superseded_by",
+        "reinstates",
     ] {
         if let Some(range) = body.get(key) {
             metadata[key] = range.clone();

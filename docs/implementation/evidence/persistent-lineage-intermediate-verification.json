@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "base_commit": "755f3787dde0c02dc2cab459ba262265bfe13f03",
+  "platform": "native macOS arm64",
+  "serializer": "adaptive-context-v5",
+  "selector": "adaptive-v4",
+  "control_schema": 1,
+  "source_sha256": {
+    "src/documents.rs": "70f1aa42d4c83d1ac3fefef02de21a4d11e55996ab176a97b2c978fbab5a8a5a",
+    "src/context.rs": "6892345f5ab65427b192debbf36d801a84078e29d02b1cd95327d4e3b2326f63",
+    "src/session.rs": "14c87bb2867367741b7da37ec867b50d2380a3cb4f4f8ae1a020408b2f81cdcb",
+    "tests/project_documents.rs": "d3414bb107f6deff8da9e38af141a3cd75e5486d5622c6bb0b54c518e7d913e4",
+    "tests/session_render_budget.rs": "6d16aebcdd98272cfe36d0b7ef308e833ce896a2774852ef59faef2263eebc94",
+    "tests/context_delivery_selection.rs": "66226369362a8c4720cf40d832b3bfaac7a7c470835612a0434c50c8430f5b9c",
+    "tests/session.rs": "934d43592cafa4a1f74cf8756bc8c82f03aa82349bcb7dae6b1bfb7fb2d85511",
+    "tests/work_control.rs": "fc107391f1093867c3bba325501126ad7d17aac611050ff95963ec8b180700e8"
+  },
+  "checks": {
+    "format": "PASS",
+    "locked_all_target_clippy": "PASS",
+    "targeted": {
+      "passed": 41,
+      "failed": 0
+    },
+    "remaining_macos": {
+      "passed": 112,
+      "failed": 0
+    },
+    "complete_native_gate": "FAILED",
+    "unique_executed_native_tests": {
+      "passed": 316,
+      "failed": 1,
+      "deduplication": "context_delivery_selection five passes overlap full attempt and targeted suite"
+    },
+    "failure": "project_deadline::query_program_resolution_uses_captured_command_path exceeded original 1000ms before output/EOF/root exit; root cause remains unknown; no timing relaxation or success relabel"
+  },
+  "limits": [
+    "Whole AC77/PCTX44 and full mandatory goal incomplete",
+    "Other platforms unqualified for these sources",
+    "Topic/paused-role/handoff/task/approval variants remain",
+    "No Actions dispatched; monthly 3000 minute constraint retained"
+  ],
+  "evidence_sha256": {
+    "docs/implementation/evidence/persistent-lineage-static.log": "3166d56692e78c2c25beb75a71c59f0c1929fe8c5e692b1fd12582a80b9fc666",
+    "docs/implementation/evidence/persistent-lineage-format.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/implementation/evidence/persistent-lineage-targeted.log": "1a48e12ca4b72a595cc1516f33d2b4026d353d0920bbb62a111cd15f2d8a975e",
+    "docs/implementation/evidence/persistent-lineage-full-macos-failure.log": "bd27b10e5df045cbb4fa312036f85949d7e739eaf5a8f01031e11de56feb1872",
+    "docs/implementation/evidence/persistent-lineage-remaining-macos.log": "3d240af49255ac6f3142c1bf952299e2aebf60c1a1298d881ad3a7677eefb37d",
+    "docs/implementation/evidence/persistent-lineage-intermediate-targeted-failure.log": "5f256b9c2280152be0a42db1799edaf7b7be12a16a6b4fae00cfc38bb93b3797"
+  }
+}

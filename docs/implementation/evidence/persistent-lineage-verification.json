@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "base_commit": "755f3787dde0c02dc2cab459ba262265bfe13f03",
+  "platform": "native macOS arm64",
+  "serializer": "adaptive-context-v5",
+  "selector": "adaptive-v4",
+  "control_schema": 1,
+  "source_sha256": {
+    "src/documents.rs": "c95f8df2c3e98ef1c641030693590d7a7f83cc48732aebd4dda0bad560f0da2c",
+    "src/context.rs": "6892345f5ab65427b192debbf36d801a84078e29d02b1cd95327d4e3b2326f63",
+    "src/session.rs": "14c87bb2867367741b7da37ec867b50d2380a3cb4f4f8ae1a020408b2f81cdcb",
+    "tests/project_documents.rs": "13a48f9eea6d47b33625c18645dc5461f8044d5c366ee2c4a741d91daa7f8c83",
+    "tests/session_render_budget.rs": "76f696f55ee469b7a0e52b85e662a3beed89408f08c8ba242f8eed9df2600543",
+    "tests/context_delivery_selection.rs": "66226369362a8c4720cf40d832b3bfaac7a7c470835612a0434c50c8430f5b9c",
+    "tests/session.rs": "934d43592cafa4a1f74cf8756bc8c82f03aa82349bcb7dae6b1bfb7fb2d85511",
+    "tests/work_control.rs": "fc107391f1093867c3bba325501126ad7d17aac611050ff95963ec8b180700e8"
+  },
+  "checks": {
+    "format": "PASS",
+    "locked_all_target_clippy": "PASS",
+    "targeted": {
+      "passed": 41,
+      "failed": 0
+    },
+    "complete_native_gate": {
+      "passed": 317,
+      "failed": 0,
+      "exit_code": 0,
+      "handle": 50586
+    },
+    "earlier_failure": "Original 1000ms query_program_resolution_uses_captured_command_path timed out before output/EOF/root exit; retained failure and unknown cause. Final source run PASS does not prove root-cause repair."
+  },
+  "limits": [
+    "Whole AC77/PCTX44 and full mandatory goal incomplete",
+    "Other platforms unqualified for these sources",
+    "Topic/paused-role/handoff/task/approval variants remain",
+    "No Actions dispatched; monthly 3000 minute constraint retained",
+    "Serialized history cap is not hard RSS; corrupt oversized rows need validation before SQL materialization, per independent review"
+  ],
+  "evidence_sha256": {
+    "docs/implementation/evidence/persistent-lineage-format.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/implementation/evidence/persistent-lineage-full-macos-failure.log": "bd27b10e5df045cbb4fa312036f85949d7e739eaf5a8f01031e11de56feb1872",
+    "docs/implementation/evidence/persistent-lineage-full-macos.log": "68683d2966ccf5f8808d09e0187da1282f7b68f3aaf94f498c1ef984a1fbce7e",
+    "docs/implementation/evidence/persistent-lineage-initial-fixture-failure.log": "6f00f3d011d1f2c77c3d2e33c25bef540b0567cb103fd0144d7179be751f6a0a",
+    "docs/implementation/evidence/persistent-lineage-initial-static-failure.log": "44eb23a395426c1c89fa94eacdd4a8c88ff36bc29e306531c0a851a1415db675",
+    "docs/implementation/evidence/persistent-lineage-intermediate-targeted-failure.log": "5f256b9c2280152be0a42db1799edaf7b7be12a16a6b4fae00cfc38bb93b3797",
+    "docs/implementation/evidence/persistent-lineage-remaining-macos.log": "3d240af49255ac6f3142c1bf952299e2aebf60c1a1298d881ad3a7677eefb37d",
+    "docs/implementation/evidence/persistent-lineage-static.log": "918c7dd83ce6799dc66b47925ae0a2efac97228c323f793e0aaab7893890bc5d",
+    "docs/implementation/evidence/persistent-lineage-targeted.log": "2e7146931fc9dba6d7865637880f00cceeefa569e15c63a915951ca8d417c2d5"
+  },
+  "independent_review": "docs/implementation/evidence/persistent-lineage-review.md"
+}
