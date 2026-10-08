@@ -1,0 +1,24 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 5.28s
+     Running unittests src/lib.rs (target/debug/deps/pctx-ae897bec01e143c7)
+
+running 1 test
+test output::capture_tests::registered_native_callback_failures_preserve_processing_truth ... FAILED
+
+failures:
+
+---- output::capture_tests::registered_native_callback_failures_preserve_processing_truth stdout ----
+
+thread 'output::capture_tests::registered_native_callback_failures_preserve_processing_truth' (8477253) panicked at src/output.rs:2016:17:
+assertion `left == right` failed
+  left: 7
+ right: 9
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    output::capture_tests::registered_native_callback_failures_preserve_processing_truth
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 38 filtered out; finished in 0.17s
+
+error: test failed, to rerun pass `--lib`

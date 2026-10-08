@@ -1,0 +1,101 @@
+{
+  "task": "PCTX01",
+  "status": "implementing; incomplete; sole active official task",
+  "base_revision": "c391735d59e6fae858d521dff14b3663ca348a37",
+  "platform": "native macOS arm64",
+  "specification_sections": [
+    "14 stable typed errors/envelope/exit",
+    "38 execution versus capture and no automatic rerun"
+  ],
+  "source_sha256": {
+    "src/output.rs": "5172c95ea1717173eb24eb06d58f7b18beabd348c9ee9e2505dc6ac1ffed1b40",
+    "src/main.rs": "cfb300ccb007fd979456108c14751b979b9f4a05b271e6e689be9ea2c92d97eb",
+    "src/runner.rs": "573691e7894f2af8651e93f66ddb1aa2a20d20e8b57bb051e262a86e3b84a47a",
+    "src/query_process.rs": "2faee00ffc82534c41942adae00e52f81a271072b47338f33cab7b67c43bc5b9",
+    "tests/project_deadline.rs": "8b9fbc97fbd5acaf612b2d75b94cf810faa2b61614b654495082462b1941a8dc",
+    "tests/adapter_deadline.rs": "31f6f52d2be8a073f6c5c1a2a4587a436fdc96a8939393e35e9c5e3007a32506"
+  },
+  "production_delta": "Retain monitor callback Error rather than code string. Artifact code unchanged; immediate response processing_exit/error preserved before any later save-error override.",
+  "runs": [
+    {
+      "path": "pctx01-callback-native-selected.log",
+      "sha256": "c8abe3aa47fa725a15edfe45b1f502a32ed8ffe1345d9a3a4a6aa270d0a22c14",
+      "exit": 101,
+      "session": 12446,
+      "counts": {
+        "passed": 0,
+        "failed": 1
+      },
+      "qualification": "Actual injected native callback monitor CONFIG_CHANGED9 reduced to7; no source repair yet."
+    },
+    {
+      "path": "pctx01-callback-native-repaired.log",
+      "sha256": "1af00d47ea5f2e40ec28cc6571163494b6b317a18f71d9dcfc1261c57ff1baa5",
+      "exit": 0,
+      "session": 61530,
+      "counts": {
+        "passed": 1,
+        "failed": 0
+      },
+      "qualification": "Native spawn observer IO7/monitor CONFIG_CHANGED9; before test panic cleanup guard."
+    },
+    {
+      "path": "pctx01-callback-native-related.log",
+      "sha256": "eb74b416a2472ad947ea5d71147a5313d4daf0aede109abe47772f8291d2b123",
+      "exit": 0,
+      "session": 84291,
+      "counts": {
+        "passed": 89,
+        "failed": 0
+      },
+      "qualification": "Lib39/Run11/Output10/Runner29 pass; before test-only cleanup guard, same production fix."
+    },
+    {
+      "path": "pctx01-callback-native-static.log",
+      "sha256": "aac5744a50959d05dd7c076e7b17fa497bb3f1a9cd3ff62dec83fdebcbf1d879",
+      "exit": 0,
+      "session": 59543,
+      "counts": {
+        "passed": 0,
+        "failed": 0
+      },
+      "qualification": "Final test cleanup guard included; fmt --check and locked all-target Clippy -D warnings."
+    },
+    {
+      "path": "pctx01-callback-native-full.log",
+      "sha256": "dc4a4f70ea666d1ece0af79ec1c495dc124e6e58974ba2dff38eb382615a2eb0",
+      "exit": 101,
+      "session": 60317,
+      "counts": {
+        "passed": 488,
+        "failed": 3
+      },
+      "qualification": "Final exact-source full native gate including test guard. Original startup budgets unchanged."
+    }
+  ],
+  "full_failed_tests": [
+    "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget",
+    "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+    "simultaneous_streams_are_collected_and_overflow_never_infers_success"
+  ],
+  "review": {
+    "path": "pctx01-callback-native-review.txt",
+    "sha256": "79fa0109950e6ac08bff0b7a9ce16550575b0a0d37223b8556ce4adf6085bbde",
+    "result": "No scoped production blocker; final guard reviewed statically."
+  },
+  "qualification": [
+    "Library callback injection through existing run_registered_monitored seam; actual native group/body invoked once. No product fault hook or new runner/schema policy.",
+    "Spawn observer injectedIO7 returns original Err after native cleanup; monitor injectedCONFIG_CHANGED9 now preserves code/message/exit and actualsignal9/nullchildexit.",
+    "Callback counts0/1 and bodycounter1; actual direct child ECHILD after operation. Arbitrary descendants/resource-ledger emptiness not proved.",
+    "Final best-effort NativeCleanup handles attested-owned/unreaped root on ordinary callback/assertion panic; guard EINTR/unboundedwait and no injected panic qualification retained.",
+    "Two-second body readiness is distinct authored fixture criterion, not qualification or relaxation of original1s startup failures."
+  ],
+  "limitations": [
+    "Actual registered frontend guardian/publication-fault paths and Linux/Windows remain unqualified by library injection.",
+    "Saved artifact stores callback error code, not full typed Error; immediate response qualification only.",
+    "Existing three final project_deadline failures remain unresolved; previous adapter and fourth startup failures retained in preceding manifests, not promoted by this run.",
+    "Complete remaining PCTX01 producer/frontend/phase/platform gates before another official task; task and goal incomplete.",
+    "Prior main push remains rejected/pending explicit approval; no retry or Actions."
+  ],
+  "initial_and_related_source_scope": "Final source hashes apply final static/full only. Selected/repaired/related precede test-only guard; initial production behavior is the base revision with the new native fixture. Exact initial modified-source hash not recorded."
+}

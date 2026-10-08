@@ -6,19 +6,22 @@
 
 ## Latest verified integration boundary
 
-PCTX01 only active (`implementing`), baseef11dc7. New raw native read/exit timeline
-terminal12265/exit0:512 attempts8workers×16reps×4 balancedcells,510 within-budget/
-2expiry,0late-unexpired under original1s. Both expired prior-unexecuted paths have
-no observed bytes; reader EOF comes after cancellation. Parent exit-observer gaps
-1609/1544us, last probes999461/999162us, max probes18/9us. No near1s parent-loop
-gap in these rows; no exact child progress or OS cause established. First-byte/
-EOF timestamps are parent observations, not child events. Independent static
-review and manifest in evidence/pctx01-startup-timeline-verification.json.
-No product/original-test changes or full rerun; full17428 remains485PASS5FAIL and
-previous3-expiry diagnostic retained. Cleanup/panic/launch-equivalence limitations
-remain. All jobs terminal; no heavy job live. PCTX01/goal incomplete; no next
-official task, Actions, OS policy changes or rejected-push retry. Prior main push
-still pending explicit approval.
+PCTX01 only active (`implementing`), basec391735. Native registered callback
+injection exposed monitor CONFIG_CHANGED expected9/actual7. output::run_inner
+now preserves original Error code/message/exit in immediate response; saved
+artifact still stores code, later save failure retains precedence. Native seam
+covers spawn observerIO7/monitorCONFIG_CHANGED9, actual group identity/body entry
+once, polls0/1 and direct-child ECHILD after cleanup. No guardian/schema policy
+or product fault hook. Initial0PASS1FAIL retained, repaired1PASS and related89PASS
+before final test-only NativeCleanup guard. Guard signals only owned/unreaped
+root; best effort/unbounded wait/EINTR/no injected-panic limits. Independent
+static review no scoped production blocker. Final static PASS.
+Final native full60317 terminal101: 488 PASS/3 FAIL. Original concurrent startup, relative executable resolution and simultaneous-stream startup failures remain; no budget relaxation or retry promotion. All jobs terminal; PCTX01 incomplete.
+Evidence pctx01-callback-native-verification.json. Actual frontend guardian/
+publication faults and nativeLinuxWindows remain unqualified by this library
+injection; saved full typed Error, arbitrary descendants and resource-ledger
+reconciliation not established. No next official task/Actions or rejected-push
+retry. Goal/task incomplete; prior main push pending explicit approval.
 
 ## Source, evidence and environment
 
@@ -66,19 +69,19 @@ Original ignored specification SHA256 8914faad57432f524aec0a06aa90c43c18c23f8c19
 
 ## Exact next action
 
-Stay on PCTX01. Do not repeat unchanged startup/full runs to seek green. New raw
-read/exit timing proves no near1s parent exit-observation gap for its two no-byte
-expiries, but cannot identify the child's exact delay or qualify production.
-Keep startup/platform failure conditions open. The next independent local gate
-is registered native post-spawn callback failure: read output::run_inner callback
-error cleanup and runner PID-before-publication/guardian callbacks, then build a
-native isolated failure fixture through an existing callable seam. No product
-fault hook, new runner feature or ownership-policy weakening. Verify original
-error code, native spawn attestation, no rerun and actual child/resource outcome;
-retain unknown state where evidence is insufficient. Complete remaining common
-frontend/producer/phase matrix and required native Linux/Windows within PCTX01
-before choosing another official task. Rejected main push remains pending explicit
-approval; no alternate mechanism or retry. All jobs terminal.
+Stay on PCTX01. Read the completion audit and enumerate the remaining common
+frontend/producer argument and response/representation gates against actual
+Command/Work/Runner routes; link each remaining condition to exact evidence or
+concrete missing fixture. Native registered callback seam is now qualified for
+original typed error/body/direct-child outcome; do not claim actual frontend
+ledger/guardian publication faults or arbitrary descendants. Immediate response
+retains typed Error while saved artifact retains code only; audit retrieval
+contract before expanding persistence. Startup failures remain open with raw
+nonproduction diagnostics, not a proven cause. Do not repeat unchanged startup/
+full gates to seek green, relax original budgets, substitute interpreters or
+alter OS policies. Complete required native Linux/Windows executions and all
+remaining PCTX01 conditions before any next official task. Prior main push
+rejected/pending explicit approval; no retry/alternate mechanism. All jobs terminal.
 
 ## Retained historical results and inactive backlog
 

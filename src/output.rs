@@ -1429,7 +1429,7 @@ fn run_inner(
             if let Some(callback) = on_poll.as_mut()
                 && let Err(e) = callback()
             {
-                monitor_error = Some(e.code);
+                monitor_error = Some(e);
                 #[cfg(unix)]
                 unsafe {
                     libc::kill(-(pid as i32), libc::SIGKILL);
@@ -1530,8 +1530,8 @@ fn run_inner(
             termination,
             child_exit_code: status.code(),
             signal,
-            pctx_error: if monitor_error.is_some() {
-                monitor_error
+            pctx_error: if let Some(error) = monitor_error.as_ref() {
+                Some(error.code.clone())
             } else if timed_out {
                 Some("TIMEOUT".into())
             } else if out.io_error || stderr.io_error {
@@ -1550,6 +1550,10 @@ fn run_inner(
         execution_presentation.deadline = None;
         let mut data = compact(&execution_presentation, &a, r.budget_bytes)?;
         data["exit_policy"] = json!(r.exit_policy);
+        if let Some(error) = monitor_error {
+            data["processing_exit"] = json!(error.exit);
+            data["processing_error"] = json!(error);
+        }
         if !retained {
             a.records.clear();
             a.records_hash = hash(serde_json::to_vec(&a.records)?);
@@ -1903,6 +1907,141 @@ pub(crate) fn unverified_report(p: &Project, output_id: &str) -> Result<crate::w
 #[cfg(test)]
 mod capture_tests {
     use super::*;
+    #[cfg(unix)]
+    #[test]
+    fn registered_native_callback_failures_preserve_processing_truth() {
+        use crate::project::{Config, ProjectConfig, RootAnchor};
+        use std::cell::Cell;
+        struct NativeCleanup<'a>(&'a Cell<u32>);
+        impl Drop for NativeCleanup<'_> {
+            fn drop(&mut self) {
+                let pid = self.0.get() as i32;
+                if pid == 0 {
+                    return;
+                }
+                let mut status = 0;
+                // A still-owned, unreaped direct child reserves this PID before group cancellation.
+                if unsafe { libc::waitpid(pid, &mut status, libc::WNOHANG) } == 0 {
+                    unsafe {
+                        libc::kill(-pid, libc::SIGKILL);
+                        libc::kill(pid, libc::SIGKILL);
+                        libc::waitpid(pid, &mut status, 0);
+                    }
+                }
+            }
+        }
+        for spawn_failure in [true, false] {
+            let temp = tempfile::tempdir().unwrap();
+            let base = fs::canonicalize(temp.path()).unwrap();
+            let root = base.join("project");
+            let data = base.join("data");
+            fs::create_dir_all(&root).unwrap();
+            let p = Project {
+                deadline: None,
+                root_anchor: RootAnchor::capture(&root).unwrap(),
+                root,
+                data_dir: data.clone(),
+                workspace_dir: data.join("workspace"),
+                control_dir: data.join("control"),
+                project_id: "fixture".into(),
+                workspace_id: "ws".into(),
+                coordination_id: "coord".into(),
+                config: Config {
+                    schema_version: 1,
+                    project: ProjectConfig {
+                        id: "fixture".into(),
+                        name: "fixture".into(),
+                    },
+                    index: Default::default(),
+                    policy: Default::default(),
+                    search: Default::default(),
+                    context: Default::default(),
+                    roles: Default::default(),
+                },
+            };
+            fs::create_dir_all(&p.workspace_dir).unwrap();
+            fs::create_dir_all(&p.control_dir).unwrap();
+            fs::write(
+                p.root.join("fixture.sh"),
+                "printf x >> invocation\nexec /bin/sleep 30\n",
+            )
+            .unwrap();
+            let r = RunRequest {
+                task_id: None,
+                session: None,
+                retain: "temporary".into(),
+                execution_timeout_ms: Some(5000),
+                budget_bytes: 8192,
+                exit_policy: "pctx".into(),
+                stdin: "closed".into(),
+                argv: vec!["/bin/sh".into(), "fixture.sh".into()],
+            };
+            let binding = registered_binding_at(&p, &r.argv, ".").unwrap();
+            let pid = Cell::new(0);
+            let _cleanup = NativeCleanup(&pid);
+            let polls = Cell::new(0);
+            let result = run_registered_monitored(
+                &p,
+                &r,
+                ".",
+                &BTreeMap::new(),
+                binding["fingerprint"].as_str().unwrap(),
+                &mut |native_pid| {
+                    pid.set(native_pid);
+                    assert_eq!(
+                        unsafe { libc::getpgid(native_pid as i32) },
+                        native_pid as i32
+                    );
+                    // Distinct callback fixture readiness limit; not a change to any startup regression budget.
+                    let end = Instant::now() + Duration::from_secs(2);
+                    while fs::read(p.root.join("invocation")).ok().as_deref() != Some(b"x") {
+                        if Instant::now() >= end {
+                            return Err(err("TIMEOUT", "Fixture body did not start", 7));
+                        }
+                        std::thread::sleep(Duration::from_millis(1));
+                    }
+                    if spawn_failure {
+                        Err(err("IO_ERROR", "Spawn observer publication refused", 7))
+                    } else {
+                        Ok(())
+                    }
+                },
+                &mut || {
+                    polls.set(polls.get() + 1);
+                    Err(err("CONFIG_CHANGED", "Monitor binding changed", 9))
+                },
+            );
+            assert_ne!(pid.get(), 0);
+            // Both paths return only after this native direct child is reaped.
+            let mut status = 0;
+            assert_eq!(
+                unsafe { libc::waitpid(pid.get() as i32, &mut status, libc::WNOHANG) },
+                -1
+            );
+            assert_eq!(
+                std::io::Error::last_os_error().raw_os_error(),
+                Some(libc::ECHILD)
+            );
+            assert_eq!(fs::read(p.root.join("invocation")).unwrap(), b"x");
+            if spawn_failure {
+                let error = result.unwrap_err();
+                assert_eq!(error.code, "IO_ERROR");
+                assert_eq!(error.exit, 7);
+                assert_eq!(polls.get(), 0);
+            } else {
+                let data = result.unwrap();
+                assert_eq!(data["spawned"], true);
+                assert_eq!(data["termination"], "signaled");
+                assert_eq!(data["signal"], libc::SIGKILL);
+                assert!(data["child_exit_code"].is_null());
+                let error = execution_error(&data).unwrap();
+                assert_eq!(error.code, "CONFIG_CHANGED");
+                assert_eq!(error.exit, 9);
+                assert_eq!(error.message, "Monitor binding changed");
+                assert_eq!(polls.get(), 1);
+            }
+        }
+    }
     struct Fragmented {
         data: Vec<u8>,
         offset: usize,

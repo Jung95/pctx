@@ -433,3 +433,22 @@ status does not prove cancellation causation. Cleanup/panic/launch-equivalence
 limits remain. [Evidence](evidence/pctx01-startup-timeline-verification.json).
 No product/original-test changes or unchanged full rerun; full485PASS5FAIL and
 prior3-expiry diagnostic remain. PCTX01 stays implementing, no next official task.
+
+## PCTX01 native callback processing errors
+
+Actual library registered execution callback injection exposed monitor
+CONFIG_CHANGED9 being reduced to default7. Common output run_inner now retains
+original Error, carrying code/message/exit into the immediate response; later
+save failure keeps its existing precedence. No runner/schema/guardian policy
+change. Native spawn-callback IO7 and monitor CONFIG_CHANGED9 fixture confirms
+body entry once, group identity, callback counts and direct-child reaping. This
+is injected library callback qualification, not actual frontend guardian/ledger
+publication-fault qualification. Saved artifact retains code rather than the full
+typed Error; arbitrary descendant/resource reconciliation remains unverified.
+[Evidence](evidence/pctx01-callback-native-verification.json) preserves initial
+0PASS1FAIL exit7-versus9, repaired1PASS and related89PASS before the test cleanup
+guard. Final guard has owned/unreaped-root admission, best-effort/unbounded wait
+and EINTR limitations; no injected panic qualification. PCTX01 stays implementing;
+no next official task, Actions or rejected-push retry.
+
+Final format/locked all-target Clippy PASS. Final native full60317 terminal101: 488 PASS/3 FAIL. Original concurrent startup, relative executable resolution and simultaneous-stream startup failures remain; no budget relaxation or retry promotion. All jobs terminal; PCTX01 incomplete.
