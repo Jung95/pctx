@@ -6,7 +6,9 @@
 
 ## Latest integration boundary
 
-PCTX01-G03-R07/G08 inventory path admission, base ac2099f. Runtime edits
+PCTX01-G03-R07/G08 inventory path admission, runtime 942db870d847f6a76a8e60a20adfa412de1bea42,
+base ac2099f. Normal push76155 terminal0 published ac2099f..942db87 to origin/main.
+Runtime edits
 src/inventory.rs, src/main.rs; new tests/inventory_preflight.rs. Exact reader
 lexical predicate before root/policy/discovery, original supplied expiry first,
 Scan limits before optional path. No business/schema/policy feature added.
@@ -66,10 +68,11 @@ Original ignored specification SHA256 8914faad57432f524aec0a06aa90c43c18c23f8c19
 
 ## Exact next action
 
-Final full99805 is terminal. Normally publish verified development changes [skip ci].
-Then remain on PCTX01 and address fixed R08 existing execution binding argv grammar
+Final full99805 and normal push76155 are terminal. Remain on PCTX01 and address fixed R08 existing execution binding argv grammar
 (nonempty/count256/bytes65536) and library Run modes already Clap-protected.
-Resolution/trust/classification/receipts remain stateful producer contracts. R09–R11
+Current source: src/output.rs binding_inner525 contains the argv predicate;
+RunRequest and Trust Plan/Add own CLI inputs. Resolution/trust/classification/
+receipts remain stateful producer contracts. R09–R11
 and other whole gates remain open. No next official task, unchanged full rerun,
 deadline/interpreter/OS policy change or Actions. External blockers require exact
 needed action while retaining the current task.

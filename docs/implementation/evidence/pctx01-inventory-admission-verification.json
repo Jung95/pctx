@@ -129,5 +129,14 @@
     "Four historical startup conditions unresolved regardless of incidental later pass",
     "Cooperative native filesystem operations and broader phase/race qualification remain open",
     "No independent inventory feature or Actions added; next fixed R08, other gates open"
-  ]
+  ],
+  "runtime_revision": "942db870d847f6a76a8e60a20adfa412de1bea42",
+  "publication": {
+    "normal_push_session": 76155,
+    "exit": 0,
+    "destination": "https://github.com/Jung95/pctx.git",
+    "branch": "main",
+    "range": "ac2099f..942db87",
+    "skip_ci": true
+  }
 }

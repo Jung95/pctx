@@ -765,3 +765,7 @@ startup conditions remain open. Next same-task boundary R08 existing execution
 argv grammar; no next official task or Actions selected.
 
 Final native full99805 terminal101: 527 PASS / 3 FAIL. Failed tests: concurrent_query_startup_preserves_group_streams_and_original_one_second_budget, relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry, simultaneous_streams_are_collected_and_overflow_never_infers_success. Captured-command-path test passed without any startup/resolution code repair; that pass does not qualify a fix. All four historical startup conditions remain unresolved and original budgets unchanged. All jobs terminal; no heavy job live. PCTX01 remains incomplete (0/10 whole gates).
+
+Development integration 942db870d847f6a76a8e60a20adfa412de1bea42 normally pushed to origin/main
+(session76155 terminal0, ac2099f..942db87, [skip ci]). No Actions dispatched.
+Only PCTX01 remains active; next local boundary R08.
