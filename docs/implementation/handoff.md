@@ -4,7 +4,7 @@ The full mandatory v0.6 goal remains active. Read requirements.md, decisions.md 
 
 ## Source, ownership and environment
 
-Latest pushed source is 1a3db97ca39e96be1be9a8d1f08783334894492a (Node24 Actions pins); current integration adds Session/Context request deadlines in src/main.rs and src/session.rs with tests/session.rs and tests/session_render_budget.rs. All files are parent-owned, no live agent jobs or managed worktrees. Preserve current Git changes. Native GitHub authentication is Jung95; restricted network checks can incorrectly report token failure.
+Latest verified runtime source effafd37ed6cd8a26f910a14dc6920ac9c06ca00 is committed and confirmed pushed; its parent1a3db97 contains Node24 Actions pins. The integration adds Session/Context request deadlines in src/main.rs and src/session.rs with tests/session.rs and tests/session_render_budget.rs. All files are parent-owned, no live agent jobs or managed worktrees. Preserve current Git changes. Native GitHub authentication is Jung95; restricted network checks can incorrectly report token failure.
 
 Use RUSTUP_HOME=/Users/dev/PCTX/.toolchain/rustup, CARGO_HOME=/Users/dev/PCTX/.toolchain/cargo, SDKROOT=/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk and local cargo/CLT/Homebrew/system PATH. One heavy build/test/benchmark at a time. Native process fixtures require native execution. Agents search and requirements previously stopped on usage-limit errors; their changes were subsequently reviewed and integrated by the parent.
 
@@ -30,7 +30,7 @@ Git clean/process filter preflight prevents observed configured conversion helpe
 
 ## Next concrete actions
 
-1. Commit/push verified deadline integration with [skip ci] after reviewing Git status; then inspect actual current revision before continuing. No CI dispatch for this local integration.
+1. Deadline integration effafd37 is committed/pushed with [skip ci]; no CI was dispatched. Inspect actual Git status before the next implementation. All gate handles are terminal and no heavy/local/CI job remains.
 2. Continue shared Build/ContextGet adaptive selection and full ranking/span/representation-sensitive baseline invalidation; finish finite Work/control/adapter request coverage.
 3. Resolve the measured body-search target without weakening errors. Proposed reader::read_search_candidate returns Result<Option<VerifiedFile>> and reuses the initial pinned handle. None is allowed only for initial missing/excluded/symlink/local admission rejection. Root/policy/timeouts and post-admission size/encoding/read/hash/revalidation failures remain errors; distinguish denied-open fallback from later failures. Add permission and controlled race fixtures before new immutable M30 measurement.
 4. Complete concurrent Git-conversion isolation; native Windows qualification; authenticated GitHub pagination/PR-head/outbox and installed Claude capabilities; disk-full/recovery/migrations/forward-version install update/remove; paired task/provider quality measurement; complete48+82+prose audit. Existing scoped evidence cannot complete the whole goal.
