@@ -1,0 +1,24 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.55s
+     Running tests/control_preflight.rs (target/debug/deps/control_preflight-1104ac0ed832cb66)
+
+running 1 test
+test operation_remaining_pure_arguments_precede_project_and_response_effects ... FAILED
+
+failures:
+
+---- operation_remaining_pure_arguments_precede_project_and_response_effects stdout ----
+
+thread 'operation_remaining_pure_arguments_precede_project_and_response_effects' (8672193) panicked at tests/control_preflight.rs:84:5:
+assertion `left == right` failed: Output { status: ExitStatus(unix_wait_status(1792)), stdout: "", stderr: "" }
+  left: Some(7)
+ right: Some(2)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    operation_remaining_pure_arguments_precede_project_and_response_effects
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 12 filtered out; finished in 0.77s
+
+error: test failed, to rerun pass `--test control_preflight`

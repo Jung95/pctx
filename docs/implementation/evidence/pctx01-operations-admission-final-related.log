@@ -1,0 +1,80 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.25s
+     Running tests/context_delivery_barriers.rs (target/debug/deps/context_delivery_barriers-557a7f251a35cc4a)
+
+running 7 tests
+test uninitialized_controls_are_read_only_and_partial_schema_fails_closed ... ok
+test canonical_id_wins_over_colliding_alias_and_expired_budget_never_writes ... ok
+test canonical_alias_registered_role_and_wildcard_pauses_block_without_grant ... ok
+test relevant_control_mutation_rebinds_fingerprint_but_unrelated_controls_do_not ... ok
+test durable_role_event_revision_prevents_same_second_pause_resume_reuse ... ok
+test topic_silence_normalizes_aliases_and_is_exact_to_role_recipient_topic ... ok
+test relevant_topic_controls_are_bounded_and_corrupt_labels_fail_closed ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/context_delivery_selection.rs (target/debug/deps/context_delivery_selection-2d942bfc32429490)
+
+running 8 tests
+test source_changed_during_delivery_preparation_cannot_publish_stale_spans ... ok
+test consumer_overhead_cannot_remove_mandatory_rules_or_fake_a_fitting_packet ... ok
+test owner_pause_during_delivery_preparation_cannot_publish_selected_bodies ... ok
+test task_file_source_change_during_measurement_never_emits_captured_body ... ok
+test changed_or_deleted_source_classification_during_measurement_prevents_delivery ... ok
+test consumer_envelope_and_escaped_overhead_drive_tiers_and_exact_capacity ... ok
+test omitted_replacement_changed_during_delivery_invalidates_unchanged_selected_decision ... ok
+test consumer_failure_and_original_deadline_cannot_publish_a_selection ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.08s
+
+     Running tests/control_preflight.rs (target/debug/deps/control_preflight-1104ac0ed832cb66)
+
+running 15 tests
+test operation_direct_refusals_preserve_state_and_original_expiry ... ok
+test direct_producers_refuse_before_database_and_preserve_original_expiry ... ok
+test runner_direct_pure_refusal_preserves_storage_and_original_expiry ... ok
+test runner_valid_boundaries_preserve_existing_non_owner_policy ... ok
+test role_pure_arguments_precede_project_and_response_effects ... ok
+test schedule_pure_arguments_precede_project_and_response_effects ... ok
+test session_pure_arguments_precede_project_and_response_effects ... ok
+test valid_control_arguments_reach_existing_authorization_and_state_flows ... ok
+test valid_grammar_does_not_bypass_non_owner_authority ... ok
+test runner_pure_arguments_precede_project_and_response_effects ... ok
+test quota_pure_arguments_precede_project_and_response_effects ... ok
+test operation_boundaries_aliases_and_valid_non_owner_policy_are_preserved ... ok
+test operation_remaining_pure_arguments_precede_project_and_response_effects ... ok
+test work_pure_arguments_precede_project_and_response_effects ... ok
+test malformed_reviewed_schedule_provider_refuses_without_panic_or_installation ... ok
+
+test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.63s
+
+     Running tests/operations.rs (target/debug/deps/operations-530607f06d0857bd)
+
+running 11 tests
+test forged_agent_owner_decision_does_not_generate_grant ... ok
+test silence_hides_topic_and_body_before_inbox_ranking ... ok
+test omitted_action_role_cannot_bypass_registered_actor_pause ... ok
+test owner_queue_honors_specific_recipients_and_owner_destination_without_globalizing_silence ... ok
+test owner_queue_filters_oldest_hidden_actions_before_limit_without_disclosing_details ... ok
+test role_pause_blocks_claim_without_mutating_task_or_run ... ok
+test mailbox_retry_is_queued_once_and_ack_is_recipient_bound ... ok
+test exact_decisions_deduplicate_but_changed_environment_amount_artifact_do_not ... ok
+test unknown_cost_pause_and_silence_override_valid_grant ... ok
+test owner_queue_delivery_barriers_survive_control_restore ... ok
+test backup_restore_preserves_pause_silence_and_messages_but_revokes_grants ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.24s
+
+     Running tests/policy_controls_cli.rs (target/debug/deps/policy_controls_cli-526f5c770024b1b9)
+
+running 7 tests
+test original_owner_only_release_and_stale_revision_never_mutates_policy ... ok
+test legacy_owner_is_unknown_until_explicit_attestation_and_agent_run_cannot_claim_owner ... ok
+test report_source_topics_require_explicit_coverage_and_unknown_sources_hold ... ok
+test explicitly_authored_reporting_precedence_scope_and_revocation ... ok
+test managed_source_topic_change_blocks_previously_allowed_report_and_ack ... ok
+test reporting_exception_delivers_mailbox_only_and_revocation_blocks_ack ... ok
+test reporting_pause_exception_expires_without_releasing_pause ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.78s
+

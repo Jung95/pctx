@@ -6,25 +6,17 @@
 
 ## Latest integration boundary
 
-PCTX01-G03-R12 runner admission, runtime 8cca512e4b6566ed33ddf9d4ff830f19db6497fd,
-base d0dbaef. Normal push19890 terminal0 published d0dbaef..8cca512 to origin/main.
-No uncommitted runtime changes. Exact runner IDs/mode/scope shared before discovery and
-host/helper/DB effects. Native44 refusal combinations, direct expiry/storage,
-accepted boundaries, sensitive scope and non-owner4 routes; reviewed44PASS,
-tightened actual cloud/native intent1PASS. Three loss probes fail/exact restore;
-staticPASS; independent read-only review no scoped blocker. Evidence manifest:
-pctx01-runner-admission-verification.json. Initial full46531 terminal101:514PASS5FAIL (four original startup failures
-and malformed H001 timeout fixture). One ID corrected to valid HELP-001;
-timeout+control21PASS/final staticPASS. Final native full38671 terminal101: 517PASS2FAIL.
-Original startup failures retained; all jobs terminal, no heavy job live. Whole PCTX01 remains0/10; native Linux/
-Windows and original startup failures remain. No other official task/Actions.
-
-Actual help register172 paths/140 leaves is recorded with binary/source hashes.
-Read tasks/PCTX01-command-admission-registry.md; stable C001–C140 and remaining
-pure groups R01–R12 replace incremental discovery. Historical A01–A11 bounded
-local evidence is not complete G03. After this integration continue R01–R03
-existing Operations/Role pure grammar; no independent messaging/policy feature.
-Development commits/normal pushes to Jung95/pctx remain approved.
+PCTX01-G03-R01–R03 Operations/Role, base7730637; uncommitted parent integration.
+Exact existing pure grammar shared before main discovery/DB; raw recipient alias
+still resolves to canonical ID before strong state-dependent label check. Native
+60 refusal combinations/six direct expiry+storage, accepted limits/label/reason,
+space/tab aliases and non-owner4 proofs; final related48PASS, three loss failures/
+exact restore, staticPASS. Scoped independent review no blocker. Manifest
+pctx01-operations-admission-verification.json. Full35198 terminal101: 518PASS4FAIL, original
+startup failures retained. All jobs terminal; no heavy job live. PCTX01 whole0/10; fixed residual inventory
+local4/12, whole platform0/12. Linux/Windows and four historical startup conditions
+remain unverified/unresolved. No other official task/Actions. Development commit/
+normal push approved. No messaging/policy business feature added.
 
 ## Source, evidence and environment
 
@@ -72,13 +64,13 @@ Original ignored specification SHA256 8914faad57432f524aec0a06aa90c43c18c23f8c19
 
 ## Exact next action
 
-Final full38671 is terminal; original startup failures retained. Runner correction/registry/evidence are committed and normally pushed as8cca512
-[skip ci]. Then stay on PCTX01 and implement R01–R03 existing
-Operations/Role grammar as one common admission boundary. Use downstream
-policy_controls validator for exact stronger Role rules; keep authority/state/
-raw input in producers. Registry R04–R11 and fixed full gates remain open.
-One official task only. No unchanged high-cost rerun, timeout/interpreter/OS
-policy changes, Actions or external-only task switch while local work remains.
+Final full35198 is terminal; source/evidence/documents ready to commit [skip ci]
+and normally push Operations admission. Then stay on PCTX01,
+R04–R06 existing Work Report/Session reason/Ack provenance/Quota Ingest key.
+Keep registered IDs, leases, current sessions and raw observation contracts in
+producers. Fixed registry C001–C140/R01–R12 remains the source of remaining work.
+No unchanged full rerun, deadline/interpreter/OS policy change, Actions or task
+switch while current mandatory local work remains.
 
 ## Retained historical results and inactive backlog
 

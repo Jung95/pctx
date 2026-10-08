@@ -849,3 +849,254 @@ fn runner_valid_boundaries_preserve_existing_non_owner_policy() {
         assert_eq!(f.state(), before);
     }
 }
+
+#[test]
+fn operation_remaining_pure_arguments_precede_project_and_response_effects() {
+    let long = "x".repeat(4097);
+    let long_label = "r".repeat(257);
+    no_effects(&[
+        vec!["owner", "queue", "--limit", "0"],
+        vec!["owner", "queue", "--limit", "1001"],
+        vec!["inbox", "read", "--session", "missing", "--limit", "0"],
+        vec!["inbox", "read", "--session", "missing", "--limit", "1001"],
+        vec!["inbox", "read", "--session", "missing", "--since-seq=-1"],
+        vec!["message", "send", "--from-file", "absent.json"],
+        vec![
+            "message",
+            "send",
+            "--from-file",
+            "absent.json",
+            "--to-role",
+            "review",
+            "--to-agent",
+            "missing",
+        ],
+        vec![
+            "message",
+            "send",
+            "--from-file",
+            "absent.json",
+            "--to-role",
+            "",
+        ],
+        vec!["message", "resolve", "missing", "--evidence", ""],
+        vec!["role", "pause", " review", "--reason", "fixture"],
+        vec!["role", "pause", &long_label, "--reason", "fixture"],
+        vec![
+            "role",
+            "pause",
+            "review",
+            "--reason",
+            "fixture",
+            "--topic",
+            &long_label,
+        ],
+        vec!["role", "resume", "review", "--reason", &long],
+        vec![
+            "role",
+            "pause",
+            "review",
+            "--reason",
+            "fixture",
+            "--recipient",
+            "owner",
+        ],
+        vec![
+            "role", "pause", "review", "--reason", "fixture", "--topic", "",
+        ],
+    ]);
+}
+
+#[test]
+fn operation_direct_refusals_preserve_state_and_original_expiry() {
+    use pctx::operations::{InboxCommand, MessageCommand, OwnerCommand};
+    let f = Fixture::new();
+    fs::create_dir(&f.root).unwrap();
+    let mut p = Project {
+        deadline: None,
+        root_anchor: RootAnchor::capture(&f.root).unwrap(),
+        root: f.root.clone(),
+        data_dir: f.data.clone(),
+        workspace_dir: f.data.join("workspace"),
+        control_dir: f.data.join("control"),
+        project_id: "fixture".into(),
+        workspace_id: "workspace".into(),
+        coordination_id: "coordination".into(),
+        config: Config {
+            schema_version: 1,
+            project: ProjectConfig {
+                id: "fixture".into(),
+                name: "fixture".into(),
+            },
+            index: Default::default(),
+            policy: Default::default(),
+            search: Default::default(),
+            context: Default::default(),
+            roles: Default::default(),
+        },
+    };
+    let before = f.state();
+    let commands = [
+        OperationCommand::Owner {
+            command: OwnerCommand::Queue { limit: 0 },
+        },
+        OperationCommand::Inbox {
+            command: InboxCommand::Read {
+                session: "missing".into(),
+                since_seq: -1,
+                limit: 1,
+            },
+        },
+        OperationCommand::Message {
+            command: MessageCommand::Send {
+                from_file: f.base.join("absent.json"),
+                to_role: None,
+                to_agent: None,
+                to_session: None,
+                task_id: None,
+            },
+        },
+        OperationCommand::Message {
+            command: MessageCommand::Resolve {
+                id: "missing".into(),
+                evidence: "".into(),
+            },
+        },
+        OperationCommand::Role {
+            command: RoleCommand::Pause {
+                role: " review".into(),
+                reason: "fixture".into(),
+                topic: None,
+                recipient: None,
+            },
+        },
+        OperationCommand::Role {
+            command: RoleCommand::Resume {
+                role: "review".into(),
+                reason: "x".repeat(4097),
+                topic: None,
+                recipient: None,
+            },
+        },
+    ];
+    for c in &commands {
+        let e = operations::execute(&p, c).unwrap_err();
+        assert_eq!((e.code.as_str(), e.exit), ("INVALID_ARGUMENT", 2));
+        assert_eq!(f.state(), before);
+    }
+    let original = Instant::now() - Duration::from_secs(1);
+    p.deadline = Some(Deadline::from_instant(original));
+    for c in &commands {
+        assert_eq!(operations::execute(&p, c).unwrap_err().code, "TIMEOUT");
+        assert_eq!(p.deadline.unwrap().instant(), original);
+        assert_eq!(f.state(), before);
+    }
+}
+
+#[test]
+fn operation_boundaries_aliases_and_valid_non_owner_policy_are_preserved() {
+    let f = Fixture::new();
+    f.init();
+    for limit in ["1", "1000"] {
+        let o = f.run(&["owner", "queue", "--limit", limit]);
+        assert!(o.status.success(), "{o:?}");
+    }
+    let registered = f.run(&["agent", "register", "--name", "inbox-fixture"]);
+    assert!(registered.status.success());
+    let attached = f.run(&[
+        "session",
+        "attach",
+        "--agent",
+        "inbox-fixture",
+        "--runtime",
+        "manual",
+    ]);
+    assert!(attached.status.success(), "{attached:?}");
+    let v: Value = serde_json::from_slice(&attached.stdout).unwrap();
+    let sid = v["data"]["session_id"].as_str().unwrap();
+    for limit in ["1", "1000"] {
+        let o = f.run(&["inbox", "read", "--session", sid, "--limit", limit]);
+        assert!(o.status.success(), "{o:?}");
+    }
+    let label = "r".repeat(256);
+    let reason_bound = "x".repeat(4096);
+    pctx::policy_controls::validate_restriction_arguments(
+        &label,
+        Some(&label),
+        Some(&label),
+        &reason_bound,
+    )
+    .unwrap();
+    assert_eq!(
+        pctx::policy_controls::validate_restriction_arguments(
+            &"r".repeat(257),
+            None,
+            None,
+            "fixture"
+        )
+        .unwrap_err()
+        .exit,
+        2
+    );
+    let role = "r".repeat(256);
+    let reason = "x".repeat(4096);
+    let o = f.run(&["role", "pause", &role, "--reason", &reason]);
+    assert!(o.status.success(), "{o:?}");
+    let o = f.run(&["role", "resume", &role, "--reason", &reason]);
+    assert!(o.status.success(), "{o:?}");
+    for alias in [" spaced-alias", "\tcontrol-alias"] {
+        let o = f.run(&["agent", "register", "--name", alias]);
+        assert!(o.status.success(), "{o:?}");
+        let o = f.run(&[
+            "role",
+            "pause",
+            "review",
+            "--reason",
+            "fixture",
+            "--topic",
+            "topic",
+            "--recipient",
+            alias,
+        ]);
+        assert!(o.status.success(), "{o:?}");
+        let v: Value = serde_json::from_slice(&o.stdout).unwrap();
+        assert_eq!(v["data"]["active"], true);
+        let o = f.run(&[
+            "role",
+            "resume",
+            "review",
+            "--reason",
+            "fixture",
+            "--topic",
+            "topic",
+            "--recipient",
+            alias,
+        ]);
+        assert!(o.status.success(), "{o:?}");
+    }
+    let before = f.state();
+    for args in [
+        vec!["owner", "queue", "--limit", "1"],
+        vec!["role", "pause", "review", "--reason", "fixture"],
+        vec!["message", "resolve", "missing", "--evidence", "evidence"],
+        vec![
+            "message",
+            "send",
+            "--from-file",
+            "absent.json",
+            "--to-role",
+            "review",
+        ],
+    ] {
+        let o = f
+            .command()
+            .env("PCTX_ACTOR", "agent:unregistered-fixture")
+            .args(args)
+            .output()
+            .unwrap();
+        assert_eq!(o.status.code(), Some(5), "{o:?}");
+        let v: Value = serde_json::from_slice(&o.stdout).unwrap();
+        assert_eq!(v["errors"][0]["code"], "POLICY_DENIED");
+        assert_eq!(f.state(), before);
+    }
+}

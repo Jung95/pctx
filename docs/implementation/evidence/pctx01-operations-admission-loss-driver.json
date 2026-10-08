@@ -1,0 +1,20 @@
+{
+  "results": [
+    {
+      "loss": "frontend",
+      "exit": 101
+    },
+    {
+      "loss": "producer",
+      "exit": 101
+    },
+    {
+      "loss": "role-frontend",
+      "exit": 101
+    }
+  ],
+  "restored_sha256": {
+    "src/main.rs": "bec520a8ea3f3d634ebc82413070e65779813448b9b681e70e68d329984a4ce4",
+    "src/operations.rs": "244236f6fc7a187c18db5eba0cfd0e8e3389c66f1c9c4b8b89f26d65d326d7f7"
+  }
+}

@@ -1,0 +1,62 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+warning: unused variable: `topic`
+    --> src/operations.rs:1073:21
+     |
+1073 |                     topic,
+     |                     ^^^^^
+...
+1079 |                     topic,
+     |                     ^^^^^
+     |
+     = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+help: try ignoring the field
+     |
+1073 ~                     topic: _,
+1074 |                     recipient,
+ ...
+1078 |                     reason,
+1079 ~                     topic: _,
+     |
+
+warning: unused variable: `recipient`
+    --> src/operations.rs:1074:21
+     |
+1074 |                     recipient,
+     |                     ^^^^^^^^^
+...
+1080 |                     recipient,
+     |                     ^^^^^^^^^
+     |
+help: try ignoring the field
+     |
+1074 ~                     recipient: _,
+1075 |                 }
+ ...
+1079 |                     topic,
+1080 ~                     recipient: _,
+     |
+
+warning: `pctx` (lib) generated 2 warnings (run `cargo fix --lib -p pctx` to apply 2 suggestions)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.43s
+     Running tests/control_preflight.rs (target/debug/deps/control_preflight-1104ac0ed832cb66)
+
+running 1 test
+test operation_direct_refusals_preserve_state_and_original_expiry ... FAILED
+
+failures:
+
+---- operation_direct_refusals_preserve_state_and_original_expiry stdout ----
+
+thread 'operation_direct_refusals_preserve_state_and_original_expiry' (8679184) panicked at tests/control_preflight.rs:973:9:
+assertion `left == right` failed
+  left: ("IO_ERROR", 7)
+ right: ("INVALID_ARGUMENT", 2)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    operation_direct_refusals_preserve_state_and_original_expiry
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 14 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `--test control_preflight`

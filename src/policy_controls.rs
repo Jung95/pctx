@@ -275,6 +275,27 @@ fn write_state(
 fn receipt(r: &Restriction) -> Value {
     json!({"restriction_id":r.id,"revision":r.revision,"active":r.active})
 }
+/// Existing lexical restriction grammar, without principal or recipient-state resolution.
+pub fn validate_restriction_arguments(
+    role: &str,
+    recipient: Option<&str>,
+    topic: Option<&str>,
+    reason: &str,
+) -> Result<()> {
+    label(role)?;
+    evidence(reason)?;
+    if topic.is_none() && recipient.is_some() {
+        return Err(invalid());
+    }
+    // The existing canonical-recipient parser accepts "*" as an ordinary label.
+    // Its database-dependent alias resolution remains in change_restriction.
+    label(recipient.unwrap_or("*"))?;
+    if let Some(topic) = topic {
+        label(topic)?;
+    }
+    Ok(())
+}
+
 /// Creates a new owner binding or changes the original owner's existing one.
 /// A legacy owner must first be explicitly attested, even for an inactive row.
 pub fn change_restriction(
@@ -288,15 +309,9 @@ pub fn change_restriction(
 ) -> Result<Value> {
     p.check_deadline()?;
     let principal = trusted_principal()?;
-    label(role)?;
+    validate_restriction_arguments(role, recipient, topic, reason)?;
     let reason_hash = evidence(reason)?;
-    if topic.is_none() && recipient.is_some() {
-        return Err(invalid());
-    }
     let recipient = canonical_recipient(p, db, recipient.unwrap_or("*"))?;
-    if let Some(topic) = topic {
-        label(topic)?;
-    }
     let topic = topic.unwrap_or("");
     if !topic.is_empty() {
         label(topic)?;

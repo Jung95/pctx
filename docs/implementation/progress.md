@@ -664,3 +664,27 @@ historical startup conditions remain unresolved. No retry-green promotion.
 Runner admission runtime8cca512e4b6566ed33ddf9d4ff830f19db6497fd normally pushed by19890
 terminal0 to origin/main [skip ci]. Worktree runtime changes integrated; all jobs
 terminal. Next same-task boundary R01–R03, no next official task.
+
+## PCTX01 Operations common admission — 2026-10-08
+
+Fixed G03-R01–R03, §14/§38; only PCTX01 active. Exact existing owner/inbox bounds,
+message recipient/evidence grammar and downstream Role role/topic/reason/flag
+relationship now shared before discovery/DB. Private scheduled enqueue retains
+shared recipient checks. Operations raw recipient labels depend on registered
+alias resolution (recipient_key); inventory's pure-recipient claim corrected,
+not a requirement removal. Actual leading-space/tab aliases retain pause/resume.
+
+Native60 refusal combinations preserve project/data/response; six direct original
+expiry/no-schema checks, Queue/Inbox1/1000, Role256/4096 versus257/4097, helper
+bounds and four non-owner routes pass. Final related48PASS, three controlled
+losses fail/exact restore; final staticPASS. Independent read-only scoped review
+no blocker. Manifest evidence/pctx01-operations-admission-verification.json.
+Initial owner-queue failure and incorrect target selection remain preserved.
+Residual inventory denominator12 unchanged: local evidence4/12 (R01–R03,R12),
+whole required-platform residuals0/12; whole PCTX01 gates0/10. Native Linux/Windows
+and historical startup failures remain; no other official task or Actions.
+Next same-task boundary R04–R06 existing Work Report/Session reasons/Ack provenance/
+Quota Ingest key. Registered IDs/leases/current session/observation input remain
+producer responsibilities; do not add independent features.
+
+Final native full35198 terminal101: 518 PASS/4 FAIL. Failed tests: query_program_resolution_uses_captured_command_path, relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry, concurrent_query_startup_preserves_group_streams_and_original_one_second_budget, simultaneous_streams_are_collected_and_overflow_never_infers_success. Original budgets unchanged; all four historical startup conditions remain unresolved. All jobs terminal; no heavy job live. PCTX01 remains0/10.

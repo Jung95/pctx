@@ -13,14 +13,14 @@ an audit denominator, not completed acceptance gates. Official PCTX01 remains
 closed0/10, denominator unchanged. No independent business features added.
 Source review classified every leaf by producer family and separated raw-input,
 authority/state and pure grammar. R01–R12 below freeze currently identified
-residual groups; one shared Runner group R12 now has local evidence. None is whole
+residual groups; R01–R03 and R12 now have local evidence (4/12 groups). None is whole
 required-platform qualified. Native Linux/Windows and broader common gates remain.
 
 | Residual ID | Existing pure contract / exact source boundary | Status and scope |
 | --- | --- | --- |
-| R01 | operations Owner Queue limit1..1000 (1223), Inbox limit1..1000/nonnegative cursor (1402) | Open; currently after schema/transaction |
-| R02 | operations Message Send exactly one recipient/label (1557), Resolve evidence label (1366) | Open; input/authentication/state remain producer-owned |
-| R03 | downstream policy_controls Role label/optional topic/recipient and recipient-needs-topic (38/291), bounded reason4096 (49) | Open; prior A11 covers only weaker outer grammar; do not claim downstream closure |
+| R01 | operations Owner Queue limit1..1000 (1223), Inbox limit1..1000/nonnegative cursor (1402) | Local native60 matrix/six direct expiry/bounds/alias/non-owner proof, related48PASS; pctx01-operations-admission-verification.json; required platforms open |
+| R02 | operations Message Send exactly one recipient/label (1557), Resolve evidence label (1366) | Local native60 matrix/six direct expiry/bounds/alias/non-owner proof, related48PASS; pctx01-operations-admission-verification.json; required platforms open |
+| R03 | downstream policy_controls Role label/optional topic/recipient and recipient-needs-topic (38/291), bounded reason4096 (49); raw Operations recipient alias is state-dependent | Local native60 matrix/six direct expiry/bounds/alias/non-owner proof, related48PASS; pctx01-operations-admission-verification.json; required platforms open |
 | R04 | work Agent Report stage/summary4096/percentage100 (1487) | Open; lease/report ordering remains stateful |
 | R05 | session Suspend/Boundary reason labels (339/354); Context Ack provenance (691) already Clap-protected | Open; snapshot/session authority stays producer-owned; Ack residual is library-only |
 | R06 | quota Ingest idempotency-key label (414) | Open; observation input schemas and windows remain input/state validation |

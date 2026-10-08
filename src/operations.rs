@@ -1043,18 +1043,91 @@ fn finalize_inbox_admissions(
     Ok((visible, suppressed))
 }
 
+fn message_recipient<'a>(
+    to_role: Option<&'a String>,
+    to_agent: Option<&'a String>,
+    to_session: Option<&'a String>,
+) -> Result<(&'static str, &'a String)> {
+    let recipients = [
+        ("role", to_role),
+        ("agent", to_agent),
+        ("session", to_session),
+    ]
+    .into_iter()
+    .filter_map(|(kind, value)| value.map(|v| (kind, v)))
+    .collect::<Vec<_>>();
+    if recipients.len() != 1 {
+        return Err(invalid("Exactly one bounded recipient is required"));
+    }
+    let (kind, recipient) = recipients[0];
+    label(recipient)?;
+    Ok((kind, recipient))
+}
 pub fn validate_operation_request(command: &OperationCommand) -> Result<()> {
-    if let OperationCommand::Role {
-        command: RoleCommand::Pause { role, reason, .. } | RoleCommand::Resume { role, reason, .. },
-    } = command
-    {
-        label(role)?;
-        if reason.trim().is_empty() {
-            return Err(invalid("Pause/resume requires reason"));
+    match command {
+        OperationCommand::Role {
+            command:
+                RoleCommand::Pause {
+                    role,
+                    reason,
+                    topic,
+                    recipient,
+                }
+                | RoleCommand::Resume {
+                    role,
+                    reason,
+                    topic,
+                    recipient,
+                },
+        } => {
+            label(role)?;
+            if reason.trim().is_empty() {
+                return Err(invalid("Pause/resume requires reason"));
+            }
+            // Operations resolves arbitrary registered agent display aliases first.
+            // Raw recipient label validity therefore depends on that lookup.
+            crate::policy_controls::validate_restriction_arguments(
+                role,
+                recipient.as_ref().map(|_| "*"),
+                topic.as_deref(),
+                reason,
+            )?;
         }
+        OperationCommand::Owner {
+            command: OwnerCommand::Queue { limit },
+        } => {
+            if *limit == 0 || *limit > 1000 {
+                return Err(invalid("Queue limit must be 1..1000"));
+            }
+        }
+        OperationCommand::Inbox {
+            command: InboxCommand::Read {
+                limit, since_seq, ..
+            },
+        } => {
+            if *limit == 0 || *limit > 1000 || *since_seq < 0 {
+                return Err(invalid("Inbox limit/cursor invalid"));
+            }
+        }
+        OperationCommand::Message {
+            command:
+                MessageCommand::Send {
+                    to_role,
+                    to_agent,
+                    to_session,
+                    ..
+                },
+        } => {
+            message_recipient(to_role.as_ref(), to_agent.as_ref(), to_session.as_ref())?;
+        }
+        OperationCommand::Message {
+            command: MessageCommand::Resolve { evidence, .. },
+        } => label(evidence)?,
+        _ => {}
     }
     Ok(())
 }
+
 pub fn execute(p: &Project, command: &OperationCommand) -> Result<Value> {
     let mut scoped;
     let p = if p.deadline.is_none() {
@@ -1220,9 +1293,6 @@ pub fn execute(p: &Project, command: &OperationCommand) -> Result<Value> {
             command: OwnerCommand::Queue { limit },
         } => {
             owner()?;
-            if *limit == 0 || *limit > 1000 {
-                return Err(invalid("Queue limit must be 1..1000"));
-            }
             // Suppression is a delivery rule: it precedes ranking/limit and detail projection.
             let has_sessions: bool = tx.query_row(
                 "SELECT EXISTS(SELECT 1 FROM sqlite_master WHERE type='table' AND name='pctx_sessions')",
@@ -1363,7 +1433,6 @@ pub fn execute(p: &Project, command: &OperationCommand) -> Result<Value> {
                     evidence,
                 } => {
                     owner()?;
-                    label(evidence)?;
                     let exists:bool=tx.query_row("SELECT EXISTS(SELECT 1 FROM ops_decisions WHERE id=?1) OR EXISTS(SELECT 1 FROM checks WHERE id=?1)",[evidence],|r|r.get(0))?;
                     if !exists {
                         return Err(invalid(
@@ -1399,9 +1468,6 @@ pub fn execute(p: &Project, command: &OperationCommand) -> Result<Value> {
                     limit,
                 },
         } => {
-            if *limit == 0 || *limit > 1000 || *since_seq < 0 {
-                return Err(invalid("Inbox limit/cursor invalid"));
-            }
             let s = session(&tx, p, sid)?;
             if actor() != "owner" {
                 let caller = authenticate(p, &tx)?;
@@ -1554,19 +1620,8 @@ fn enqueue_message_db(
         }
         label(&m.topic)?;
         label(&m.idempotency_key)?;
-        let recipients = [
-            ("role", to_role),
-            ("agent", to_agent),
-            ("session", to_session),
-        ]
-        .into_iter()
-        .filter_map(|(kind, value)| value.as_ref().map(|v| (kind, v)))
-        .collect::<Vec<_>>();
-        if recipients.len() != 1 {
-            return Err(invalid("Exactly one bounded recipient is required"));
-        }
-        let (kind, recipient) = recipients[0];
-        label(recipient)?;
+        let (kind, recipient) =
+            message_recipient(to_role.as_ref(), to_agent.as_ref(), to_session.as_ref())?;
         let recipient = match kind {
             "agent" => {
                 db.query_row(

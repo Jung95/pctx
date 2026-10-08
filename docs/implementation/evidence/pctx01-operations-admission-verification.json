@@ -1,0 +1,126 @@
+{
+  "official_task": "PCTX01",
+  "gate": "PCTX01-G03",
+  "residuals": [
+    "R01",
+    "R02",
+    "R03"
+  ],
+  "base_revision": "773063788b7ef3844bdcc3e3e41a8f486fa29e81",
+  "source_sha256": {
+    "src/main.rs": "bec520a8ea3f3d634ebc82413070e65779813448b9b681e70e68d329984a4ce4",
+    "src/operations.rs": "244236f6fc7a187c18db5eba0cfd0e8e3389c66f1c9c4b8b89f26d65d326d7f7",
+    "src/policy_controls.rs": "20b5426e447360199584ad0b8e5cf82ea26339d44d7fef384bddd9b1a6c406d9",
+    "tests/control_preflight.rs": "7d860a6ff2bacc9a134b8561b738dd4211b8be7d81373e476fe7bd4647ea1d3b"
+  },
+  "platform": "native macOS arm64",
+  "cli": {
+    "invalid_forms": 15,
+    "combinations": 60,
+    "dimensions": [
+      "missing/initialized project",
+      "JSON/compact",
+      "absent/existing absolute response"
+    ],
+    "proof": "INVALID_ARGUMENT2 before discovery; unchanged project/data paths+bytes and absolute response"
+  },
+  "direct": {
+    "commands": 6,
+    "proof": "INVALID_ARGUMENT2 before DB/schema/files; unchanged original expired Instant and TIMEOUT priority"
+  },
+  "positive": [
+    "Queue/Inbox1 and1000 accepted",
+    "Role label256/reason4096 accepted;257/4097 refused",
+    "Direct policy helper label/recipient/topic256 accepted;257 role refused",
+    "Registered leading-space and leading-tab recipient aliases pause/resume successfully",
+    "Four valid non-owner routes deny5 with unchanged storage"
+  ],
+  "contract_reconciliation": "Operations recipient_key resolves arbitrary registered display aliases before policy strong canonical recipient validation. Preflight validates recipient presence/topic relationship using wildcard placeholder; raw alias syntax remains state-dependent. Direct policy helper retains exact strong recipient grammar. No accepted alias contract narrowed.",
+  "related": {
+    "log": "pctx01-operations-admission-final-related.log",
+    "exit": 0,
+    "passed": 48
+  },
+  "controlled_losses": {
+    "driver": "pctx01-operations-admission-loss-driver.json",
+    "count": 3,
+    "each_exit": 101,
+    "exact_source_restored": true,
+    "qualification": "Product sources restored exactly. Tests subsequently add positive inbox and256/257 bounds; loss filters/initial refusal remain unchanged."
+  },
+  "static": {
+    "log": "pctx01-operations-admission-final-static.log",
+    "exit": 0,
+    "commands": [
+      "cargo fmt --all -- --check",
+      "cargo clippy --locked --all-targets -- -D warnings"
+    ]
+  },
+  "full": {
+    "session": 35198,
+    "log": "pctx01-operations-admission-full.log",
+    "status": "terminal",
+    "exit": 101,
+    "passed": 518,
+    "failed": 4,
+    "failed_tests": [
+      "query_program_resolution_uses_captured_command_path",
+      "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+      "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget",
+      "simultaneous_streams_are_collected_and_overflow_never_infers_success"
+    ],
+    "command": "cargo test --locked --all-targets --no-fail-fast",
+    "qualification": "Final source; original startup budgets unchanged, all four historical startup conditions remain unresolved."
+  },
+  "review": "pctx01-operations-admission-review.md",
+  "limits": [
+    "Whole PCTX01 remains0/10",
+    "Native Linux/Windows unverified",
+    "Four historical startup conditions remain unresolved regardless of later passes",
+    "No independent messaging/policy feature or Actions added",
+    "Remaining residuals R04-R11 and other fixed gates remain open"
+  ],
+  "logs": {
+    "pctx01-operations-admission-final-related.log": {
+      "passed": 48,
+      "failed": 0
+    },
+    "pctx01-operations-admission-final-static.log": {
+      "passed": 0,
+      "failed": 0
+    },
+    "pctx01-operations-admission-initial.log": {
+      "passed": 0,
+      "failed": 1
+    },
+    "pctx01-operations-admission-loss-frontend.log": {
+      "passed": 0,
+      "failed": 1
+    },
+    "pctx01-operations-admission-loss-producer.log": {
+      "passed": 0,
+      "failed": 1
+    },
+    "pctx01-operations-admission-loss-role-frontend.log": {
+      "passed": 0,
+      "failed": 1
+    },
+    "pctx01-operations-admission-related.log": {
+      "passed": 0,
+      "failed": 0
+    },
+    "pctx01-operations-admission-reviewed-related.log": {
+      "passed": 48,
+      "failed": 0
+    },
+    "pctx01-operations-admission-static.log": {
+      "passed": 0,
+      "failed": 0
+    },
+    "pctx01-operations-admission-verified-related.log": {
+      "passed": 46,
+      "failed": 0
+    }
+  },
+  "initial_qualification": "Initial0PASS1FAIL proves unchanged main/operations owner-queue refusal masking; policy helper may already be extracted by worker during compilation, so not claimed as exact all-source baseline. Nonexistent policy_controls target log ran no tests and is retained."
+}
