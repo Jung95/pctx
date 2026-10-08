@@ -11,6 +11,8 @@ use std::collections::{BTreeMap, BTreeSet};
 #[serde(deny_unknown_fields)]
 struct Rule {
     schema_version: u32,
+    #[serde(default)]
+    topics: Option<Vec<String>>,
     id: String,
     #[serde(default = "all")]
     scope: Vec<String>,
@@ -26,6 +28,8 @@ struct Rule {
 struct Decision {
     #[serde(default = "version")]
     schema_version: u32,
+    #[serde(default)]
+    topics: Option<Vec<String>>,
     id: String,
     status: String,
     date: String,
@@ -551,6 +555,10 @@ pub fn load(p: &Project, scope: &[String]) -> Result<Value> {
                 let rule: Rule = serde_json::from_value(meta)
                     .map_err(|_| config("Invalid rule front matter fields"))?;
                 identity(&rule.id)?;
+                if let Some(topics) = &rule.topics {
+                    crate::source_delivery::validate_topics(topics)?;
+                }
+                item["topics"] = json!(rule.topics);
                 if rule.schema_version != 1 || !rule_ids.insert(rule.id.clone()) {
                     return Err(config("Unsupported rule schema or duplicate rule ID"));
                 }
@@ -581,6 +589,10 @@ pub fn load(p: &Project, scope: &[String]) -> Result<Value> {
             let mut decision: Decision = serde_json::from_value(meta)
                 .map_err(|_| config("Invalid decision front matter fields"))?;
             identity(&decision.id)?;
+            if let Some(topics) = &decision.topics {
+                crate::source_delivery::validate_topics(topics)?;
+            }
+            item["topics"] = json!(decision.topics);
             if decision.schema_version != 1
                 || !decision_ids.insert(decision.id.clone())
                 || ![
@@ -768,4 +780,29 @@ pub fn load(p: &Project, scope: &[String]) -> Result<Value> {
     let mut value = json!({"rules":rules,"decisions":decisions,"instructions":instructions,"scope_uncertain":scope.is_empty(),"source_semantics":"document claims do not establish current implementation behavior","natural_language_conflict_detection":false});
     mask(&mut value);
     Ok(value)
+}
+
+/// Read bounded authored classification from a managed document without loading
+/// the decision ledger or granting instruction/exception authority.
+pub(crate) fn source_topics(p: &Project, path: &str) -> Result<Option<Vec<String>>> {
+    if !path.starts_with(".pctx/rules/") && !path.starts_with(".pctx/decisions/") {
+        return Ok(None);
+    }
+    let file = reader::read(p, path)?;
+    let Some(meta) = frontmatter(&file.text)? else {
+        return Ok(None);
+    };
+    let topics = if path.starts_with(".pctx/rules/") {
+        serde_json::from_value::<Rule>(meta)
+            .map_err(|_| config("Invalid rule front matter fields"))?
+            .topics
+    } else {
+        serde_json::from_value::<Decision>(meta)
+            .map_err(|_| config("Invalid decision front matter fields"))?
+            .topics
+    };
+    if let Some(topics) = &topics {
+        crate::source_delivery::validate_topics(topics)?;
+    }
+    Ok(topics)
 }

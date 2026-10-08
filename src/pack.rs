@@ -489,6 +489,12 @@ fn create_plan(
     let (_, delivery_barrier) = crate::session::delivery_binding(p, session, topic, "implementer")?;
     let task = task(p, task_id)?;
     let source_hashes = source_set(p, &scope)?;
+    let source_policy =
+        crate::source_delivery::SourcePolicy::new(p, session, topic, "implementer")?;
+    for path in source_hashes.keys() {
+        source_policy.check(path, crate::documents::source_topics(p, path)?.as_deref())?;
+    }
+    crate::context::validate_task_sources(p, &task, &source_policy)?;
     if source_hashes.is_empty() {
         return Err(invalid("No allowed files in the explicit scope"));
     }
@@ -690,6 +696,9 @@ fn output_path(p: &Project, path: &Path, create_parents: bool) -> Result<PathBuf
 }
 fn validate_delivery(p: &Project, plan: &Plan) -> Result<()> {
     p.check_deadline()?;
+    if plan.policy_hash != p.policy_hash() {
+        return Err(stale("Source delivery policy changed"));
+    }
     if crate::session::delivery_binding(
         p,
         plan.consumer_session.as_deref(),
@@ -699,6 +708,18 @@ fn validate_delivery(p: &Project, plan: &Plan) -> Result<()> {
     .1 != plan.delivery_barrier
     {
         return Err(stale("Consumer session or delivery controls changed"));
+    }
+    let source_policy = crate::source_delivery::SourcePolicy::new(
+        p,
+        plan.consumer_session.as_deref(),
+        plan.topic.as_deref(),
+        "implementer",
+    )?;
+    for item in &plan.items {
+        source_policy.check(
+            &item.path,
+            crate::documents::source_topics(p, &item.path)?.as_deref(),
+        )?;
     }
     p.check_deadline()
 }
@@ -734,6 +755,16 @@ fn validate_inputs_observed(
     if hash(serde_json::to_vec(&manifest)?) != plan.manifest_hash {
         return Err(stale("Source scope inventory or content changed"));
     }
+    let source_policy = crate::source_delivery::SourcePolicy::new(
+        p,
+        plan.consumer_session.as_deref(),
+        plan.topic.as_deref(),
+        "implementer",
+    )?;
+    for path in manifest.keys() {
+        source_policy.check(path, crate::documents::source_topics(p, path)?.as_deref())?;
+    }
+    crate::context::validate_task_sources(p, &task, &source_policy)?;
     after_inventory()?;
     let mut values = Vec::new();
     for item in &plan.items {
@@ -748,6 +779,7 @@ fn validate_inputs_observed(
         }
         values.push(value);
     }
+    source_policy.revalidate()?;
     validate_delivery(p, plan)?;
     Ok((values, task))
 }

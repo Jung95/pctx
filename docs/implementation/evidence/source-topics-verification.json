@@ -1,0 +1,102 @@
+{
+  "decision": "D044-scoped-source-classification",
+  "base_commit": "d626693736b2d3c652026f3ce13d0534c5e4407b",
+  "platform": "native macOS arm64",
+  "source_sha256": {
+    "src/source_delivery.rs": "37c6aebaa939b8f57fcab298909a4ebbaf518c5ca923107598c9897082373690",
+    "src/project.rs": "164bb8b995a23b8f8982c585d6e752b09eed91d3e2e8175e385cc845bb3b72ba",
+    "src/lib.rs": "11861cc1dd06764153b69dd1bfcdf650c9e266a0a008a7e4ed01e1ef278f7e56",
+    "src/context.rs": "abc07ce214cb0139d1144d6fa5655a237dd5865defb39606d2824e6862f2eee0",
+    "src/documents.rs": "0ae1965d81a09cb5cd20c7dc33a7e5b287929d1d4424796b092ead36151ca953",
+    "src/session.rs": "7a55b215bbc5c238ded98d027e6d6a333d890a40b5560d8870a79b31f52daf6f",
+    "src/pack.rs": "533f4b4d206aaa092a4693854681f2fe6b188409a80b980da6261efd7f22ec5d",
+    "tests/source_delivery.rs": "3f600b28a59659e49a59437bc392979a7cb65b13346f8a1dd96d228dd29a5708",
+    "tests/context_delivery_selection.rs": "87afce18d34dddd9a048181bcbf4422b0f37c59fd358a4e7930970dbd7ca2afd",
+    "tests/session_render_budget.rs": "853fffbad04e53ae63d3b7944b54a5d64d9bc39811619d06ce5216f70bfbfb91"
+  },
+  "verification": {
+    "full": {
+      "handle": 45841,
+      "exit": 101,
+      "passed": 343,
+      "failed": 3,
+      "ignored": 0,
+      "failed_target": "project_deadline",
+      "failures": [
+        "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+        "simultaneous_streams_are_collected_and_overflow_never_infers_success",
+        "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget"
+      ]
+    },
+    "related_final": {
+      "source_delivery": 11,
+      "session_render_budget": 11,
+      "context_delivery_selection": 7,
+      "context_delivery_barriers": 7,
+      "pack": 11,
+      "project_documents": 12,
+      "total": 59,
+      "failed": 0
+    },
+    "format_exit": 0,
+    "locked_all_target_clippy_exit": 0
+  },
+  "logs": {
+    "full": {
+      "path": "docs/implementation/evidence/source-topics-full.log",
+      "sha256": "b8aad3b905300e4a00088ddb1f39e70a46bb6209dc085016d790fa2cd32461cc"
+    },
+    "static": {
+      "path": "docs/implementation/evidence/source-topics-static.log",
+      "sha256": "d6553188a756fc22a08b6f79404e683832febb6cf23996d93eba84b408c3b2c3"
+    },
+    "format": {
+      "path": "docs/implementation/evidence/source-topics-format.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "targeted-final": {
+      "path": "docs/implementation/evidence/source-topics-targeted-final.log",
+      "sha256": "295293b3094aed28d067cfe4480778f677475e1ea6df7620555eb9a4d048609c"
+    },
+    "initial-compile-failure": {
+      "path": "docs/implementation/evidence/source-topics-initial-compile-failure.log",
+      "sha256": "ba09105c55e2cef1df9f37c502d42d5a85c5cbd04e150784fbe9f069c108b797"
+    },
+    "initial-policy-classification-failure": {
+      "path": "docs/implementation/evidence/source-topics-initial-policy-classification-failure.log",
+      "sha256": "7a0a81c665706653dcd780e76fe7fe9500ca6a4640f1dd8d3353b59669fc90ea"
+    },
+    "intermediate-fixture-failure": {
+      "path": "docs/implementation/evidence/source-topics-intermediate-fixture-failure.log",
+      "sha256": "6d5f9987f0d13285df9f72789d5c5bd7cc85b220fac8042b82f55d0d738d072b"
+    },
+    "intermediate-targeted": {
+      "path": "docs/implementation/evidence/source-topics-intermediate-targeted.log",
+      "sha256": "cd141cbad8afc2b1ad2d55ca33a325af69c132ccbd45a2c80465817d01e8f222"
+    }
+  },
+  "contracts": [
+    "Bounded authored source_topics assignments union across user/project/overlap; explicit empty public assignment cannot remove other labels",
+    "Rule/Decision optional topics union with owner assignments; opaque per-source delivery fingerprints",
+    "Unknown source under relevant silence does not inherit a public packet topic",
+    "Context optional candidates filtered before cap and representation; generic policy omission unknowncount/path-free, mandatory conflicts failwholepacket",
+    "Handoff checked before task body and hash-revalidated afterselection",
+    "Task source scope checked before raw task serialization in Build/ContextGet/Pack",
+    "All Pack representations/finalvalidation include managed document declarations",
+    "Pinned bounded current project/effective-user policy revalidated after selection, before receiptcommit and before Packpublication; rememberedconfigpresence and registrymissingconfig guard",
+    "Configuration mutation/deletion inside actual delivery measurement returnsCONCURRENT_MODIFICATION4 with no receipt table",
+    "Serializer adaptive-context-v7 and selector adaptive-v6 requirecompatible fresh full acknowledgement"
+  ],
+  "review": "Independent requirements review found handoff and managed-Pack declaration bypasses; parent fixed them and addedactualCLI regressions. Subsequent review found no remaining concrete blocker in scopeddelta. Agent reports are not runtimeevidence.",
+  "agent_handback": "work_control authored helper/config methods/directfixtures; parent integrated, reviewed and executed allverification. No concurrent heavy jobs.",
+  "remaining": [
+    "Original-policy-owner identity/release and reporting exception authoredpriority/provenance/expiry/conflict controls",
+    "Broader task/handoff/approval memory contracts and controlled actualagent epoch race",
+    "Full nativeWindows source delivery/Pack publication and recovery matrix",
+    "Check-to-filesystempublication interval remainscooperative, nottransactionallyexcluded",
+    "Existing effective userconfig raw read remainsunbounded and nativeblocking filesystem calls cooperative",
+    "Native original1s startup failures unresolved; wholemandatory goal incomplete"
+  ],
+  "actions_dispatched": 0,
+  "spec_sha256": "8914faad57432f524aec0a06aa90c43c18c23f8c19e9f54fe69d9ad185db6523"
+}

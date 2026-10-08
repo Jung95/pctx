@@ -282,3 +282,45 @@ fn owner_pause_during_delivery_preparation_cannot_publish_selected_bodies() {
         "Build measurement creates no delivery receipt tables"
     );
 }
+
+#[test]
+fn changed_or_deleted_source_classification_during_measurement_prevents_delivery() {
+    for delete in [false, true] {
+        let (_temp, p, r) = fixture();
+        let config = p.root.join(".pctx/config.toml");
+        fs::write(&config, toml::to_string(&p.config).unwrap()).unwrap();
+        let mut changed = false;
+        let error = select_with_measurement(&p, &r, Format::Json, |data| {
+            if !changed {
+                changed = true;
+                if delete {
+                    fs::remove_file(&config).unwrap();
+                } else {
+                    let mut updated = p.config.clone();
+                    updated
+                        .policy
+                        .source_topics
+                        .push(pctx::project::SourceTopic {
+                            scope: vec!["code.py".into()],
+                            topics: vec!["restricted".into()],
+                        });
+                    fs::write(&config, toml::to_string(&updated).unwrap()).unwrap();
+                }
+            }
+            Ok(render(&packet(&p, data), Format::Json)?.len())
+        })
+        .unwrap_err();
+        assert!(changed, "mutation must follow source admission");
+        assert_eq!(error.code, "CONCURRENT_MODIFICATION");
+        assert!(!error.message.contains("code.py") && !error.message.contains("restricted"));
+        let db = rusqlite::Connection::open(p.control_db()).unwrap();
+        let emissions: i64 = db
+            .query_row(
+                "SELECT COUNT(*) FROM sqlite_master WHERE name='pctx_context_emissions'",
+                [],
+                |row| row.get(0),
+            )
+            .unwrap();
+        assert_eq!(emissions, 0, "Build never writes receipt authority");
+    }
+}

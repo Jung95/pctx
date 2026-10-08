@@ -62,6 +62,14 @@ pub struct PolicyConfig {
     pub exclude: Vec<String>,
     pub network: String,
     pub persist_source: bool,
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub source_topics: Vec<SourceTopic>,
+}
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct SourceTopic {
+    pub scope: Vec<String>,
+    pub topics: Vec<String>,
 }
 impl Default for PolicyConfig {
     fn default() -> Self {
@@ -69,6 +77,7 @@ impl Default for PolicyConfig {
             exclude: vec![],
             network: "deny".into(),
             persist_source: false,
+            source_topics: vec![],
         }
     }
 }
@@ -753,6 +762,117 @@ impl Project {
             config,
         })
     }
+    /// Observe the current effective policy through the captured root authority.
+    /// None is reserved for direct fixtures with no project configuration.
+    pub(crate) fn current_policy_hash(&self) -> Result<Option<String>> {
+        const LIMIT: u64 = 1024 * 1024;
+        self.check_deadline()?;
+        crate::reader::validate_root(self)?;
+        // Distinguish missing manual-fixture configuration from linked/dangling
+        // configuration. Follow no link, including the .pctx parent itself.
+        for path in [self.root.join(".pctx"), self.root.join(".pctx/config.toml")] {
+            self.check_deadline()?;
+            let metadata = fs::symlink_metadata(path);
+            self.check_deadline()?;
+            match metadata {
+                Err(e) if e.kind() == std::io::ErrorKind::NotFound => {
+                    crate::reader::validate_root(self)?;
+                    self.check_deadline()?;
+                    let registry = fs::symlink_metadata(self.data_dir.join("registry.json"));
+                    self.check_deadline()?;
+                    match registry {
+                        Ok(_) => {
+                            return Err(Error::new(
+                                "CONCURRENT_MODIFICATION",
+                                "Initialized project configuration is missing",
+                                4,
+                            ));
+                        }
+                        Err(e) if e.kind() == std::io::ErrorKind::NotFound => {}
+                        Err(e) => return Err(e.into()),
+                    }
+                    crate::reader::validate_root(self)?;
+                    return Ok(None);
+                }
+                Err(e) => return Err(e.into()),
+                Ok(metadata) => {
+                    #[cfg(windows)]
+                    let linked = {
+                        use std::os::windows::fs::MetadataExt;
+                        metadata.file_attributes() & 0x400 != 0
+                    };
+                    #[cfg(not(windows))]
+                    let linked = metadata.file_type().is_symlink();
+                    if linked {
+                        return Err(Error::new(
+                            "POLICY_DENIED",
+                            "Linked project configuration denied",
+                            5,
+                        ));
+                    }
+                }
+            }
+        }
+        let mut file = crate::reader::secure_open(self, ".pctx/config.toml")?;
+        let before = file.metadata()?;
+        self.check_deadline()?;
+        if !before.is_file() || before.len() > LIMIT {
+            return Err(Error::new(
+                "INVALID_CONFIG",
+                "Project configuration must be a bounded regular file",
+                2,
+            ));
+        }
+        let mut bytes = Vec::new();
+        let mut source = Read::by_ref(&mut file).take(LIMIT + 1);
+        let mut chunk = [0u8; 65536];
+        loop {
+            self.check_deadline()?;
+            let count = source.read(&mut chunk);
+            self.check_deadline()?;
+            let count = count?;
+            if count == 0 {
+                break;
+            }
+            bytes.extend_from_slice(&chunk[..count]);
+        }
+        if bytes.len() as u64 > LIMIT {
+            return Err(Error::new(
+                "INVALID_CONFIG",
+                "Project configuration exceeds size limit",
+                2,
+            ));
+        }
+        let after = file.metadata()?;
+        self.check_deadline()?;
+        let reopened_file = crate::reader::secure_open(self, ".pctx/config.toml")?;
+        let reopened = reopened_file.metadata()?;
+        self.check_deadline()?;
+        let same = same_file::Handle::from_file(file.try_clone()?)?
+            == same_file::Handle::from_file(reopened_file)?;
+        if !same
+            || before.len() != after.len()
+            || after.len() != reopened.len()
+            || before.modified().ok() != after.modified().ok()
+            || after.modified().ok() != reopened.modified().ok()
+        {
+            return Err(Error::new(
+                "CONCURRENT_MODIFICATION",
+                "Project policy changed while validating",
+                4,
+            ));
+        }
+        let text = std::str::from_utf8(&bytes)
+            .map_err(|_| Error::new("INVALID_CONFIG", "Project configuration must be UTF-8", 2))?;
+        let config: Config = toml::from_str(text)
+            .map_err(|_| Error::new("INVALID_CONFIG", "Invalid project configuration", 2))?;
+        self.check_deadline()?;
+        let config = effective_config(config, self.deadline)?;
+        let digest = hash(serde_json::to_vec(&config.policy)?);
+        crate::reader::validate_root(self)?;
+        self.check_deadline()?;
+        Ok(Some(digest))
+    }
     pub fn policy_hash(&self) -> String {
         hash(serde_json::to_vec(&self.config.policy).unwrap_or_default())
     }
@@ -986,6 +1106,7 @@ fn effective_config(mut project: Config, deadline: Option<Deadline>) -> Result<C
                 .try_into()
                 .map_err(|_| Error::new("INVALID_CONFIG", "Invalid user policy", 2))?;
             project.policy.exclude.extend(user.exclude);
+            project.policy.source_topics.extend(user.source_topics);
             project.policy.exclude.sort();
             project.policy.exclude.dedup();
             if user.network == "deny" {
@@ -1031,6 +1152,7 @@ fn effective_config(mut project: Config, deadline: Option<Deadline>) -> Result<C
         }
     }
     crate::reader::validate_exclusions(&project.policy.exclude)?;
+    crate::source_delivery::validate_assignments(&project.policy.source_topics)?;
     check_request(deadline)?;
     Ok(project)
 }

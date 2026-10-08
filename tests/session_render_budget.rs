@@ -185,6 +185,10 @@ fn fixture_with_git(git: bool) -> Fixture {
         ]);
     }
     f.ok(&["init"]);
+    let config = f.root.join(".pctx/config.toml");
+    let mut text = fs::read_to_string(&config).unwrap();
+    text.push_str("\n[[policy.source_topics]]\nscope = ['**']\ntopics = []\n");
+    fs::write(config, text).unwrap();
     fs::create_dir_all(f.root.join(".pctx/rules")).unwrap();
     // Valid UTF-8 C1 characters survive masking; terminal-safe JSON expands each
     // two-byte U+0085 into six bytes. This is data, never execution evidence.
@@ -267,7 +271,7 @@ fn exact_final_budget_and_representation_receipts_require_explicit_ack() {
     );
     assert_eq!(bytes.last(), Some(&b'\n'));
     let packet = &full["data"];
-    assert_eq!(packet["serializer"], "adaptive-context-v6");
+    assert_eq!(packet["serializer"], "adaptive-context-v7");
     let context = packet["context_id"].as_str().unwrap();
     let db = f.db();
     let selection: String = db
@@ -1612,4 +1616,165 @@ fn pack_consumer_binding_uses_actual_agent_lease_and_cannot_survive_policy_or_ep
     }
     let (exit, _, public) = plan("full", Some(&session));
     assert_eq!(exit, 0, "{public}");
+}
+
+#[test]
+fn source_topics_cannot_be_bypassed_by_public_packet_seed_or_pack_scope() {
+    let f = fixture();
+    fs::remove_file(f.root.join(".pctx/rules/required.md")).unwrap();
+    let config = f.root.join(".pctx/config.toml");
+    let mut text = fs::read_to_string(&config).unwrap();
+    text.push_str("\n[[policy.source_topics]]\nscope = ['auth.py']\ntopics = ['quiet']\n");
+    fs::write(&config, text).unwrap();
+    fs::write(f.root.join("public.py"), "def public(): return 1\n").unwrap();
+    f.ok(&[
+        "role",
+        "pause",
+        "implementer",
+        "--topic",
+        "quiet",
+        "--recipient",
+        "owner",
+        "--reason",
+        "source topic test",
+    ]);
+    let (exit, bytes, built) = f.run(&[
+        "build",
+        "--task",
+        "inspect code",
+        "--seed",
+        "auth.py",
+        "--seed",
+        "public.py",
+        "--topic",
+        "public",
+        "--budget-bytes",
+        "64000",
+    ]);
+    assert_eq!(exit, 0, "{built}");
+    let output = String::from_utf8(bytes).unwrap();
+    assert!(
+        !output.contains("auth.py") && !output.contains("quiet"),
+        "{output}"
+    );
+    assert!(
+        built["data"]["items"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .any(|item| item["path"] == "public.py")
+    );
+    for content in ["metadata", "signatures", "selected", "full"] {
+        let (exit, bytes, refused) = f.run(&[
+            "pack",
+            "plan",
+            "--task-id",
+            &f.task,
+            "--scope",
+            "auth.py",
+            "--content",
+            content,
+            "--topic",
+            "public",
+        ]);
+        assert_eq!(exit, 5, "{refused}");
+        assert_eq!(refused["errors"][0]["code"], "TOPIC_SILENCED");
+        assert!(!String::from_utf8(bytes).unwrap().contains("auth.py"));
+    }
+    let (exit, bytes, refused) = f.run(&["build", "--task-id", &f.task, "--topic", "public"]);
+    assert_eq!(exit, 7, "{refused}");
+    assert_eq!(refused["errors"][0]["code"], "DELIVERY_POLICY_CONFLICT");
+    assert!(!String::from_utf8(bytes).unwrap().contains("auth.py"));
+    let (exit, bytes, refused) = f.run(&[
+        "pack",
+        "plan",
+        "--task-id",
+        &f.task,
+        "--scope",
+        "public.py",
+        "--topic",
+        "public",
+    ]);
+    assert_eq!(exit, 7, "{refused}");
+    assert!(!String::from_utf8(bytes).unwrap().contains("auth.py"));
+    fs::write(f.root.join(".pctx/rules/private.md"), "---\nschema_version: 1\nid: private-constraint\nrequired: true\nscope: ['**']\ntopics: ['quiet']\n---\nNever disclose this constraint.\n").unwrap();
+    let (exit, bytes, refused) = f.run(&[
+        "build",
+        "--task",
+        "inspect code",
+        "--seed",
+        "public.py",
+        "--topic",
+        "public",
+    ]);
+    assert_eq!(exit, 7, "{refused}");
+    assert_eq!(refused["errors"][0]["code"], "DELIVERY_POLICY_CONFLICT");
+    let output = String::from_utf8(bytes).unwrap();
+    assert!(
+        !output.contains("private-constraint")
+            && !output.contains("private.md")
+            && !output.contains("quiet")
+    );
+}
+
+#[test]
+fn managed_decision_topics_and_handoff_sources_are_not_packet_topic_overrides() {
+    let f = fixture();
+    fs::remove_file(f.root.join(".pctx/rules/required.md")).unwrap();
+    fs::create_dir_all(f.root.join(".pctx/decisions")).unwrap();
+    fs::write(f.root.join(".pctx/decisions/private.md"), "---\nid: private-decision\nstatus: accepted\ndate: 2026-10-08\ntopics: ['quiet']\n---\nwithheld-decision-marker\n").unwrap();
+    let input = f._temp.path().join("handoff-input.md");
+    fs::write(&input, "withheld-handoff-marker\n").unwrap();
+    f.ok(&[
+        "handoff",
+        "create",
+        "--name",
+        "private",
+        "--from-file",
+        input.to_str().unwrap(),
+    ]);
+    let config = f.root.join(".pctx/config.toml");
+    let mut text = fs::read_to_string(&config).unwrap();
+    text.push_str(
+        "\n[[policy.source_topics]]\nscope = ['.pctx/handoffs/private.md']\ntopics = ['quiet']\n",
+    );
+    fs::write(config, text).unwrap();
+    f.ok(&[
+        "role",
+        "pause",
+        "implementer",
+        "--topic",
+        "quiet",
+        "--recipient",
+        "owner",
+        "--reason",
+        "managed source test",
+    ]);
+    let (exit, bytes, refused) = f.run(&["build", "--handoff", "private", "--topic", "public"]);
+    assert_eq!(exit, 7, "{refused}");
+    assert_eq!(refused["errors"][0]["code"], "DELIVERY_POLICY_CONFLICT");
+    let text = String::from_utf8(bytes).unwrap();
+    assert!(!text.contains("withheld-handoff-marker") && !text.contains("private.md"));
+    for content in ["metadata", "signatures", "selected", "full"] {
+        let (exit, bytes, refused) = f.run(&[
+            "pack",
+            "plan",
+            "--task-id",
+            &f.task,
+            "--scope",
+            ".pctx/decisions/private.md",
+            "--content",
+            content,
+            "--topic",
+            "public",
+        ]);
+        assert_eq!(exit, 5, "{refused}");
+        assert_eq!(refused["errors"][0]["code"], "TOPIC_SILENCED");
+        let text = String::from_utf8(bytes).unwrap();
+        assert!(
+            !text.contains("withheld-decision-marker")
+                && !text.contains("private.md")
+                && !text.contains("private-decision")
+        );
+    }
 }

@@ -1,0 +1,128 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.52s
+     Running tests/pack.rs (target/debug/deps/pack-8d09189cdcc06191)
+
+running 11 tests
+test giant_item_and_total_budget_fail_without_plans_or_publication ... ok
+test forged_budgets_parts_and_json_complexity_are_rejected_before_load ... ok
+test legacy_plan_requires_replanning_but_legacy_artifact_remains_readable ... ok
+test stale_source_policy_task_and_wrong_expected_hash_do_not_publish ... ok
+test inspection_reapplies_source_artifact_policy_and_masks_untrusted_manifest ... ok
+test racing_artifact_parent_symlink_never_reads_outside_marker ... ok
+test signatures_keep_notices_and_single_json_verifies ... ok
+test integrity_tamper_missing_parts_and_missing_original_are_distinct ... ok
+test symlink_output_input_overlap_and_overwrite_are_denied ... ok
+test immutable_plan_has_no_source_metadata_default_and_full_masks_preserves_license ... ok
+test task_or_parser_revision_changes_make_current_source_pack_stale ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.76s
+
+     Running tests/project_documents.rs (target/debug/deps/project_documents-7b87e5d6e076ca8b)
+
+running 12 tests
+test rules_are_scoped_required_and_keep_source_provenance ... ok
+test legacy_instructions_are_opaque_and_all_returned_metadata_is_masked ... ok
+test decision_lifecycle_never_promotes_retired_or_proposed_claims ... ok
+test corrupt_lineage_cannot_silently_promote_current_guidance ... ok
+test decisions_keep_superseded_records_and_report_unresolved_references ... ok
+test tags_aliases_duplicate_ids_and_excess_nesting_are_rejected ... ok
+test structured_conflicts_fail_but_natural_contradictions_remain_data ... ok
+test proposed_replacement_cannot_retire_current_claim_and_cancellation_cannot_revive_predecessor ... ok
+test invalid_reinstatement_rolls_back_observations_and_workspace_history_is_isolated ... ok
+test retirement_survives_replacement_deletion_and_explicit_reinstatement_is_required ... ok
+test control_backup_preserves_lineage_without_reactivating_guidance ... ok
+test lineage_payload_byte_limit_precedes_materialization_and_rolls_back_new_edges ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.16s
+
+     Running tests/session_render_budget.rs (target/debug/deps/session_render_budget-2e37552a4a4fa12a)
+
+running 10 tests
+test source_topics_cannot_be_bypassed_by_public_packet_seed_or_pack_scope ... FAILED
+test exact_final_budget_and_representation_receipts_require_explicit_ack ... FAILED
+test terminal_escape_overflow_is_rejected_before_context_emission_or_event ... ok
+test adaptive_delta_resends_unreceived_body_and_reuses_acknowledged_receipts ... ok
+test unchanged_git_does_not_hide_decision_or_memory_change_retirement_and_deletion ... ok
+test supersession_links_invalidate_unchanged_source_without_reviving_it_on_replacement_cancellation ... ok
+test original_cli_budget_bounds_writer_admission_without_context_or_epoch_writes ... ok
+test registered_role_and_topic_controls_precede_context_and_resume_requires_fresh_baseline ... ok
+test pack_consumer_binding_uses_actual_agent_lease_and_cannot_survive_policy_or_epoch_change ... ok
+test omitted_sources_are_not_acknowledged_and_later_delivery_is_explicit ... ok
+
+failures:
+
+---- source_topics_cannot_be_bypassed_by_public_packet_seed_or_pack_scope stdout ----
+
+thread 'source_topics_cannot_be_bypassed_by_public_packet_seed_or_pack_scope' (7674994) panicked at tests/session_render_budget.rs:1655:5:
+{"command":"build","coverage":{"reasons":[],"status":"complete"},"data":{"budget":{"limit":64000,"unit":"bytes","used":4472},"context_fingerprint":"242976d9c4eaebabf8aa16009f4d471317260ea5c58bd6049db6c711e16f7d17","delivery_barrier":"d6cf042d9f3d2e92391e2abeabb9e3fd7731f3d3c8c09cd5f9d13a410f3774cb","import_expansions":[],"items":[{"conflicts_with":[],"content":"---\nschema_version: 1\nid: render-capacity\nrequired: true\nscope: [auth.py]\n---\nPreserve mandatory content \u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\u0085\n","evidence_status":"observed","file_hash":"c2089ad5e9341b793e38067db24a819a562dd8cf53635c266e69fd7a5b15b43d","freshness":"current","id":"render-capacity","implementation_status":"not_verified_by_document","instruction_priority":"external_project_data","path":".pctx/rules/required.md","properties":{},"reason":"required_rule","redacted":false,"representation":"full_span","required":true,"scope":["auth.py"],"source":"user_managed_project_document","topics":null},{"body_omitted":false,"completeness":"complete","content":"def public(): return 1\n","file_hash":"0252080ef85bc66cb0bf7607066b849439a8d8cf54e52f99c72aede15e9099c2","next_read":"pctx read public.py","parser_set":"tree-sitter-0.25/python-0.25/js-0.25/ts-0.23/md-heading-v1","path":"public.py","range":{"end_byte":23,"end_line":1,"start_byte":0,"start_line":1},"reason":"explicit_seed","redacted":false,"representation":"full_span","required":false}],"omission_details_omitted":false,"omission_reasons":[],"omitted_count":0,"omitted_items":[],"role":"implementer","rule_scope_uncertain":false,"search_coverage":{"reasons":["lexical_candidates_only"],"status":"partial"},"selection_complete":true,"selection_inputs":{"changed_since":null,"dependency_depth":0,"detail":"adaptive","format":"json","parser_set":"tree-sitter-0.25/python-0.25/js-0.25/ts-0.23/md-heading-v1","seed_fingerprint":"ff83c7302fabf28c5078733c3c20521baa678dcf08b4a430ce3b6a9e3d68e7ca","selector_version":"adaptive-v6","task_scope_fingerprint":"ff83c7302fabf28c5078733c3c20521baa678dcf08b4a430ce3b6a9e3d68e7ca"},"source_versions":{"policy_hash":"ed80aa20bef690afa696654333cecce9df389fc566e95f87746a4b78fdfbe9a5","project_documents_hash":"ae6b7166b8fe45b905f9d30730e808d1c0dcd14299898dfa4e652fa2fe5c3ab3","source_delivery_hash":"1695aff04c231d3bc04ef040bd236b97e01e1938a2cee9b4525655ad373b74b3"},"task":"inspect code"},"errors":[],"generation_id":null,"project_id":"73f068a2-90b2-4f69-b0af-2994c83b097e","schema_version":"1.0","status":"ok","truncation":{"reasons":[],"truncated":false},"validation":{"checked_at":"2026-10-08T08:23:34.474Z","mode":"strict","scope":[],"workspace_atomic":false},"warnings":[],"workspace_id":"WS-43e1d538-cd22-4787-bcd4-aaf28d97402e"}
+
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- exact_final_budget_and_representation_receipts_require_explicit_ack stdout ----
+
+thread 'exact_final_budget_and_representation_receipts_require_explicit_ack' (7674989) panicked at tests/session_render_budget.rs:274:5:
+assertion `left == right` failed
+  left: String("adaptive-context-v7")
+ right: "adaptive-context-v6"
+
+
+failures:
+    exact_final_budget_and_representation_receipts_require_explicit_ack
+    source_topics_cannot_be_bypassed_by_public_packet_seed_or_pack_scope
+
+test result: FAILED. 8 passed; 2 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.96s
+
+error: test failed, to rerun pass `--test session_render_budget`
+     Running tests/source_delivery.rs (target/debug/deps/source_delivery-44cd435aa4e14b0e)
+
+running 7 tests
+test default_empty_policy_serialization_preserves_existing_hash_input ... ok
+test expired_original_budget_and_noncanonical_paths_never_gain_authority ... FAILED
+test wildcard_pause_rechecks_explicit_public_sources_after_policy_construction ... FAILED
+test unknown_without_quiet_controls_is_allowed_but_bound_to_path_and_classification ... FAILED
+test overlapping_owner_assignments_union_and_public_cannot_declassify_quiet_source ... FAILED
+test unknown_source_under_quiet_controls_is_denied_even_inside_public_packet ... FAILED
+test configuration_scope_and_label_bounds_fail_before_delivery_effects ... ok
+
+failures:
+
+---- expired_original_budget_and_noncanonical_paths_never_gain_authority stdout ----
+
+thread 'expired_original_budget_and_noncanonical_paths_never_gain_authority' (7675229) panicked at tests/source_delivery.rs:212:77:
+called `Result::unwrap()` on an `Err` value: Error { code: "IO_ERROR", message: "Filesystem operation failed", retryable: false, exit: 7 }
+
+---- wildcard_pause_rechecks_explicit_public_sources_after_policy_construction stdout ----
+
+thread 'wildcard_pause_rechecks_explicit_public_sources_after_policy_construction' (7675233) panicked at tests/source_delivery.rs:126:77:
+called `Result::unwrap()` on an `Err` value: Error { code: "IO_ERROR", message: "Filesystem operation failed", retryable: false, exit: 7 }
+
+---- unknown_without_quiet_controls_is_allowed_but_bound_to_path_and_classification stdout ----
+
+thread 'unknown_without_quiet_controls_is_allowed_but_bound_to_path_and_classification' (7675232) panicked at tests/source_delivery.rs:116:67:
+called `Result::unwrap()` on an `Err` value: Error { code: "IO_ERROR", message: "Filesystem operation failed", retryable: false, exit: 7 }
+
+---- overlapping_owner_assignments_union_and_public_cannot_declassify_quiet_source stdout ----
+
+thread 'overlapping_owner_assignments_union_and_public_cannot_declassify_quiet_source' (7675230) panicked at tests/source_delivery.rs:51:6:
+called `Result::unwrap()` on an `Err` value: Error { code: "IO_ERROR", message: "Filesystem operation failed", retryable: false, exit: 7 }
+
+---- unknown_source_under_quiet_controls_is_denied_even_inside_public_packet stdout ----
+
+thread 'unknown_source_under_quiet_controls_is_denied_even_inside_public_packet' (7675231) panicked at tests/source_delivery.rs:51:6:
+called `Result::unwrap()` on an `Err` value: Error { code: "IO_ERROR", message: "Filesystem operation failed", retryable: false, exit: 7 }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    expired_original_budget_and_noncanonical_paths_never_gain_authority
+    overlapping_owner_assignments_union_and_public_cannot_declassify_quiet_source
+    unknown_source_under_quiet_controls_is_denied_even_inside_public_packet
+    unknown_without_quiet_controls_is_allowed_but_bound_to_path_and_classification
+    wildcard_pause_rechecks_explicit_public_sources_after_policy_construction
+
+test result: FAILED. 2 passed; 5 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `--test source_delivery`
+error: 2 targets failed:
+    `--test session_render_budget`
+    `--test source_delivery`

@@ -8,7 +8,7 @@ use clap::Subcommand;
 use rusqlite::{Connection, OptionalExtension, TransactionBehavior, params};
 use serde_json::{Value, json};
 use std::collections::BTreeMap;
-const SERIALIZER: &str = "adaptive-context-v6";
+const SERIALIZER: &str = "adaptive-context-v7";
 #[derive(Debug, Clone, Subcommand)]
 pub enum SessionCommand {
     Attach {
@@ -786,6 +786,13 @@ fn context_inner(p: &Project, c: &ContextCommand) -> Result<Value> {
                         && in_scope(path, &effective_scope)
                 })
                 .collect();
+            let source_policy = crate::source_delivery::SourcePolicy::new(
+                p,
+                Some(session),
+                topic.as_deref(),
+                authorized_session.role.as_deref().unwrap_or("implementer"),
+            )?;
+            crate::context::validate_task_sources(p, &task_value, &source_policy)?;
             let request = crate::context::BuildRequest {
                 task: Some(serde_json::to_string(&task_value)?),
                 task_file: None,
@@ -873,6 +880,7 @@ fn context_inner(p: &Project, c: &ContextCommand) -> Result<Value> {
                     ));
                 }
             }
+            source_policy.revalidate()?;
             let task_revision: (i64, i64) = tx
                 .query_row(
                     "SELECT revision,definition_revision FROM tasks WHERE id=?1",

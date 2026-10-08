@@ -4,7 +4,7 @@ use crate::{
     reader, storage,
 };
 use serde_json::{Value, json};
-use std::collections::BTreeSet;
+use std::collections::{BTreeMap, BTreeSet};
 #[derive(Debug, clap::Args)]
 pub struct BuildRequest {
     #[arg(long,conflicts_with_all=["task_file","task_id"])]
@@ -118,6 +118,15 @@ pub(crate) fn select_scoped_with_measurement(
     }
     let (delivery_role, delivery_barrier) =
         crate::session::delivery_binding(p, r.session.as_deref(), r.topic.as_deref(), &r.role)?;
+    let source_policy = crate::source_delivery::SourcePolicy::new(
+        p,
+        r.session.as_deref(),
+        r.topic.as_deref(),
+        &delivery_role,
+    )?;
+    let mut source_controls = BTreeMap::new();
+    let mut suppressed_sources = false;
+    let mut task_sources = Vec::new();
     let mut task_scope = r.seed.clone();
     let task = if let Some(task) = &r.task {
         reader::redact(task).0
@@ -141,8 +150,15 @@ pub(crate) fn select_scoped_with_measurement(
         if let Some(scopes) = view["definition"]["scope"].as_array() {
             task_scope.extend(scopes.iter().filter_map(|s| s.as_str().map(str::to_string)));
         }
+        validate_task_sources(p, &view, &source_policy)?;
         reader::redact(&serde_json::to_string(&view)?).0
     } else if let Some(h) = &r.handoff {
+        let path = format!(".pctx/handoffs/{h}.md");
+        let control = source_policy
+            .check(&path, None)
+            .map_err(mandatory_delivery_error)?;
+        source_controls.insert(path.clone(), control);
+        task_sources.push((path.clone(), reader::read(p, &path)?.hash));
         storage::handoff_show(p, h, true)?["content"]
             .as_str()
             .unwrap_or_default()
@@ -168,7 +184,7 @@ pub(crate) fn select_scoped_with_measurement(
     }
     let (_, files) = storage::snapshot(p)?;
     let mut items = Vec::new();
-    let mut selected_hashes = Vec::new();
+    let mut selected_hashes = task_sources;
     let mut alternatives: Vec<Vec<Value>> = Vec::new();
     let mut omitted = Vec::new();
     let mut seen = BTreeSet::new();
@@ -180,6 +196,13 @@ pub(crate) fn select_scoped_with_measurement(
         .flatten()
         .filter(|r| r["required"] == true)
     {
+        let control = source_policy
+            .check(
+                rule["path"].as_str().unwrap(),
+                declared_topics(rule).as_deref(),
+            )
+            .map_err(mandatory_delivery_error)?;
+        source_controls.insert(rule["path"].as_str().unwrap().to_owned(), control);
         let mut item = rule.clone();
         item["representation"] = json!("full_span");
         item["reason"] = json!("required_rule");
@@ -198,6 +221,12 @@ pub(crate) fn select_scoped_with_measurement(
         .filter(|d| d["current_guidance"] == true)
     {
         let path = decision["path"].as_str().unwrap().to_string();
+        source_controls.insert(
+            path.clone(),
+            source_policy
+                .check(&path, declared_topics(decision).as_deref())
+                .map_err(mandatory_delivery_error)?,
+        );
         if seen.insert(path.clone()) {
             let mut item = decision.clone();
             item["required"] = json!(true);
@@ -246,13 +275,34 @@ pub(crate) fn select_scoped_with_measurement(
     if r.dependency_depth > 0 {
         let graph_seeds: BTreeSet<_> = explicit.iter().chain(changed.iter()).collect();
         for path in graph_seeds {
+            match source_policy.check(path, document_topics(&docs, path).as_deref()) {
+                Ok(control) => {
+                    source_controls.insert(path.clone(), control);
+                }
+                Err(e) if suppressed(&e) => {
+                    suppressed_sources = true;
+                    continue;
+                }
+                Err(e) => return Err(e),
+            }
             let g = crate::graph::dependencies(p, path, r.dependency_depth, 200)?;
             for node in g["nodes"].as_array().into_iter().flatten() {
                 if let Some(path) = node["path"].as_str() {
-                    imports.push(path.to_string());
+                    match source_policy.check(path, document_topics(&docs, path).as_deref()) {
+                        Ok(control) => {
+                            source_controls.insert(path.to_string(), control);
+                            imports.push(path.to_string());
+                        }
+                        Err(e) if suppressed(&e) => {
+                            suppressed_sources = true;
+                        }
+                        Err(e) => return Err(e),
+                    }
                 }
             }
-            graph_sources.push(g);
+            // Full graph results may contain denied edge targets or diagnostics.
+            // Only retain opaque provenance of this expansion in context.
+            graph_sources.push(json!({"fingerprint":hash(serde_json::to_vec(&g)?)}));
         }
     }
     imports.sort();
@@ -281,6 +331,20 @@ pub(crate) fn select_scoped_with_measurement(
     }
     let mut data = json!({"task":task,"role":delivery_role,"delivery_barrier":delivery_barrier,"items":items,"omitted_items":[],"selection_complete":true,"search_coverage":{"status":"partial","reasons":["lexical_candidates_only"]},"rule_scope_uncertain":docs["scope_uncertain"],"source_versions":{"policy_hash":p.policy_hash(),"project_documents_hash":document_fingerprint},"import_expansions":graph_sources,"budget":{"limit":r.budget_bytes,"used":0,"unit":"bytes"}});
     let mut candidate_seen = BTreeSet::new();
+    let mut permitted = Vec::new();
+    for (path, reason) in candidates {
+        match source_policy.check(&path, document_topics(&docs, &path).as_deref()) {
+            Ok(control) => {
+                source_controls.insert(path.clone(), control);
+                permitted.push((path, reason));
+            }
+            Err(e) if suppressed(&e) => {
+                suppressed_sources = true;
+            }
+            Err(e) => return Err(e),
+        }
+    }
+    let mut candidates = permitted;
     candidates.retain(|(path, reason)| {
         let allowed =
             scope.is_none_or(|scope| *reason == "related_document" || in_scope(path, scope));
@@ -381,10 +445,15 @@ pub(crate) fn select_scoped_with_measurement(
         alternatives.push(chosen);
         selected_hashes.push((path, f.hash));
     }
-    data["selection_inputs"] = json!({"detail":r.detail,"seed":r.seed,"task_scope":task_scope,
+    data["selection_inputs"] = json!({"detail":r.detail,"seed_fingerprint":hash(serde_json::to_vec(&r.seed)?),"task_scope_fingerprint":hash(serde_json::to_vec(&task_scope)?),
         "changed_since":r.changed_since,"dependency_depth":r.dependency_depth,
-        "parser_set":storage::PARSER_SET,"selector_version":"adaptive-v5",
+        "parser_set":storage::PARSER_SET,"selector_version":"adaptive-v6",
         "format": match format { crate::render::Format::Markdown => "markdown", _ => "json" }});
+    if suppressed_sources {
+        omitted.push(json!({"reason":"delivery_policy","omitted_count":"unknown"}));
+    }
+    data["source_versions"]["source_delivery_hash"] =
+        json!(hash(serde_json::to_vec(&source_controls)?));
     finalize(
         p,
         &mut data,
@@ -408,7 +477,7 @@ pub(crate) fn select_scoped_with_measurement(
         .filter_map(|item| item["path"].as_str())
         .collect();
     for (path, expected) in selected_hashes {
-        if !selected_paths.contains(path.as_str()) {
+        if !selected_paths.contains(path.as_str()) && !path.starts_with(".pctx/handoffs/") {
             continue;
         }
         p.check_deadline()?;
@@ -429,6 +498,16 @@ pub(crate) fn select_scoped_with_measurement(
             "Project document dependencies changed before output",
             4,
         ));
+    }
+    source_policy.revalidate()?;
+    for (path, expected) in &source_controls {
+        if source_policy.check(path, document_topics(&docs, path).as_deref())? != *expected {
+            return Err(Error::new(
+                "CONCURRENT_MODIFICATION",
+                "Source delivery controls changed",
+                4,
+            ));
+        }
     }
     p.check_deadline()?;
     if crate::session::delivery_binding(p, r.session.as_deref(), r.topic.as_deref(), &r.role)?.1
@@ -590,7 +669,14 @@ fn finalize(
                 .filter_map(|v| v["reason"].as_str())
                 .collect::<BTreeSet<_>>()
         );
-        data["omitted_count"] = json!(omitted.len());
+        data["omitted_count"] = if omitted
+            .iter()
+            .any(|item| item["reason"] == "delivery_policy")
+        {
+            Value::Null
+        } else {
+            json!(omitted.len())
+        };
         data["selection_complete"] = json!(omitted.is_empty());
         data["budget"]["used"] = json!(0);
         let mut fingerprint = data.clone();
@@ -651,4 +737,70 @@ fn in_scope(path: &str, scope: &[String]) -> bool {
             || path.starts_with(&format!("{s}/"))
             || globset::Glob::new(s).is_ok_and(|g| g.compile_matcher().is_match(path))
     })
+}
+
+fn declared_topics(item: &Value) -> Option<Vec<String>> {
+    item["topics"].as_array().map(|topics| {
+        topics
+            .iter()
+            .filter_map(|v| v.as_str().map(str::to_owned))
+            .collect()
+    })
+}
+fn document_topics(docs: &Value, path: &str) -> Option<Vec<String>> {
+    ["rules", "decisions", "instructions"]
+        .iter()
+        .flat_map(|key| docs[*key].as_array().into_iter().flatten())
+        .find(|item| item["path"] == path)
+        .and_then(declared_topics)
+}
+fn suppressed(error: &Error) -> bool {
+    ["TOPIC_SILENCED", "SOURCE_TOPIC_REQUIRED"].contains(&error.code.as_str())
+}
+fn mandatory_delivery_error(error: Error) -> Error {
+    if suppressed(&error) {
+        Error::new(
+            "DELIVERY_POLICY_CONFLICT",
+            "Required context conflicts with source delivery controls",
+            7,
+        )
+    } else {
+        error
+    }
+}
+
+pub(crate) fn validate_task_sources(
+    p: &Project,
+    task: &Value,
+    policy: &crate::source_delivery::SourcePolicy<'_>,
+) -> Result<()> {
+    let scopes = task["definition"]["scope"]
+        .as_array()
+        .into_iter()
+        .flatten()
+        .filter_map(|v| v.as_str())
+        .collect::<Vec<_>>();
+    if scopes.is_empty() {
+        return Ok(());
+    }
+    let inventory = reader::inventory(p, false)?;
+    if !inventory.skipped.is_empty() {
+        return Err(Error::new(
+            "PARTIAL_RESULT",
+            "Task source attribution inventory is incomplete",
+            3,
+        ));
+    }
+    for path in inventory.paths {
+        if scopes.iter().any(|scope| {
+            path == *scope
+                || path.starts_with(&format!("{scope}/"))
+                || globset::Glob::new(scope).is_ok_and(|g| g.compile_matcher().is_match(&path))
+        }) {
+            policy
+                .check(&path, crate::documents::source_topics(p, &path)?.as_deref())
+                .map_err(mandatory_delivery_error)?;
+        }
+    }
+    Ok(())
 }

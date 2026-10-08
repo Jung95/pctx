@@ -1,0 +1,34 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 5.02s
+     Running tests/pack.rs (target/debug/deps/pack-8d09189cdcc06191)
+
+running 11 tests
+test giant_item_and_total_budget_fail_without_plans_or_publication ... ok
+test stale_source_policy_task_and_wrong_expected_hash_do_not_publish ... FAILED
+test inspection_reapplies_source_artifact_policy_and_masks_untrusted_manifest ... ok
+test signatures_keep_notices_and_single_json_verifies ... ok
+test forged_budgets_parts_and_json_complexity_are_rejected_before_load ... ok
+test legacy_plan_requires_replanning_but_legacy_artifact_remains_readable ... ok
+test racing_artifact_parent_symlink_never_reads_outside_marker ... ok
+test integrity_tamper_missing_parts_and_missing_original_are_distinct ... ok
+test symlink_output_input_overlap_and_overwrite_are_denied ... ok
+test immutable_plan_has_no_source_metadata_default_and_full_masks_preserves_license ... ok
+test task_or_parser_revision_changes_make_current_source_pack_stale ... ok
+
+failures:
+
+---- stale_source_policy_task_and_wrong_expected_hash_do_not_publish stdout ----
+
+thread 'stale_source_policy_task_and_wrong_expected_hash_do_not_publish' (7672802) panicked at tests/pack.rs:139:5:
+assertion `left == right` failed
+  left: "POLICY_DENIED"
+ right: "PACK_PLAN_STALE"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    stale_source_policy_task_and_wrong_expected_hash_do_not_publish
+
+test result: FAILED. 10 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.70s
+
+error: test failed, to rerun pass `--test pack`
