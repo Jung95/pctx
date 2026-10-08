@@ -1,0 +1,10 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.67s
+     Running tests/cli_frontend.rs (target/debug/deps/cli_frontend-4948844b4d514170)
+
+running 2 tests
+test singular_global_duplicates_are_rejected_before_project_and_output_effects ... ok
+test nested_global_positions_select_the_same_root_format_and_timeout ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 15 filtered out; finished in 0.85s
+

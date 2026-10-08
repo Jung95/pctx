@@ -606,3 +606,253 @@ fn undeliverable_plain_parser_diagnostic_returns_io_exit_without_panic() {
     assert!(output.stdout.is_empty());
     f.unchanged();
 }
+
+#[test]
+fn root_version_is_exact_and_ignores_project_output_and_query_options() {
+    let f = Fixture::new();
+    for version in ["--version", "-V"] {
+        for options_first in [false, true] {
+            let globals = args(&[
+                "--root",
+                "absent-project",
+                "--format",
+                "markdown",
+                "--timeout-ms",
+                "0",
+                "--output",
+                "must-not-write",
+                "--no-color",
+            ]);
+            let mut values = if options_first {
+                globals.clone()
+            } else {
+                args(&[version])
+            };
+            values.extend(if options_first {
+                args(&[version])
+            } else {
+                globals
+            });
+            let output = f.run(&values);
+            assert_eq!(output.status.code(), Some(0), "{values:?}: {output:?}");
+            assert_eq!(
+                output.stdout,
+                format!("pctx {}\n", env!("CARGO_PKG_VERSION")).as_bytes()
+            );
+            assert!(output.stderr.is_empty());
+            f.unchanged();
+        }
+    }
+}
+
+#[test]
+fn singular_global_duplicates_are_rejected_before_project_and_output_effects() {
+    for values in [
+        vec!["--format=json", "--format=json", "init"],
+        vec!["--format=json", "checkpoint", "--format=json", "list"],
+        vec![
+            "--format=json",
+            "--root",
+            "first",
+            "--root",
+            "second",
+            "init",
+        ],
+        vec![
+            "--format=json",
+            "--root",
+            "first",
+            "checkpoint",
+            "list",
+            "--root",
+            "second",
+        ],
+        vec![
+            "--format=json",
+            "--timeout-ms",
+            "10000",
+            "--timeout-ms",
+            "10000",
+            "status",
+        ],
+        vec![
+            "--format=json",
+            "--timeout-ms",
+            "10000",
+            "checkpoint",
+            "list",
+            "--timeout-ms",
+            "10000",
+        ],
+        vec![
+            "--format=json",
+            "--output",
+            "first.json",
+            "--output",
+            "second.json",
+            "init",
+        ],
+        vec![
+            "--format=json",
+            "--output",
+            "first.json",
+            "checkpoint",
+            "list",
+            "--output",
+            "second.json",
+        ],
+        vec!["--format=json", "--no-color", "--no-color", "status"],
+        vec![
+            "--format=json",
+            "--no-color",
+            "checkpoint",
+            "list",
+            "--no-color",
+        ],
+    ] {
+        let f = Fixture::new();
+        let output = f.run(&args(&values));
+        argument_error(&output);
+        f.unchanged();
+    }
+}
+
+#[test]
+fn nested_global_positions_select_the_same_root_format_and_timeout() {
+    let f = Fixture::new();
+    fs::create_dir(f.temp.path().join("project")).unwrap();
+    let init = f.run(&args(&["--root", "project", "--format=json", "init"]));
+    assert_eq!(init.status.code(), Some(0), "{init:?}");
+    let init: Value = serde_json::from_slice(&init.stdout).unwrap();
+    let index = f.run(&args(&[
+        "--root",
+        "project",
+        "--format=json",
+        "index",
+        "update",
+    ]));
+    assert_eq!(index.status.code(), Some(0), "{index:?}");
+    for position in 0..3 {
+        let mut values = args(&["checkpoint", "list"]);
+        let globals = args(&[
+            "--root",
+            "project",
+            "--format=json",
+            "--timeout-ms",
+            "10000",
+            "--no-color",
+        ]);
+        values.splice(position..position, globals);
+        let output = f.run(&values);
+        assert_eq!(output.status.code(), Some(0), "{values:?}: {output:?}");
+        assert!(output.stderr.is_empty());
+        let v: Value = serde_json::from_slice(&output.stdout).unwrap();
+        assert_eq!(v["project_id"], init["project_id"]);
+        assert_eq!(v["workspace_id"], init["workspace_id"]);
+        assert_eq!(v["command"], "checkpoint list");
+        assert_eq!(v["status"], "ok");
+        assert!(output.stdout.ends_with(b"\n"));
+        let zero = args(&[
+            "--root",
+            "absent-project",
+            "--format=json",
+            "--timeout-ms",
+            "0",
+        ]);
+        let mut values = args(&["checkpoint", "list"]);
+        values.splice(position..position, zero);
+        argument_error(&f.run(&values));
+    }
+}
+
+#[test]
+fn pack_artifact_output_is_required_once_and_works_at_every_command_depth() {
+    let f = Fixture::new();
+    fs::create_dir_all(f.temp.path().join("project/src")).unwrap();
+    fs::write(
+        f.temp.path().join("project/src/code.ts"),
+        "export const value = 1;\n",
+    )
+    .unwrap();
+    let task_path = f.temp.path().join("project/task.json");
+    fs::write(&task_path, serde_json::json!({"schema_version":1,"title":"Inspect source","scope":["src/**"],"acceptance":[{"id":"AC1","description":"Inspected","evidence_check_keys":["unit"]}],"checks":[{"key":"unit","kind":"test"}]}).to_string()).unwrap();
+    let call = |command: Vec<OsString>| {
+        let mut values = args(&["--root", "project", "--format=json"]);
+        values.extend(command);
+        let output = f.run(&values);
+        assert_eq!(output.status.code(), Some(0), "{values:?}: {output:?}");
+        assert!(output.stderr.is_empty());
+        serde_json::from_slice::<Value>(&output.stdout).unwrap()
+    };
+    call(args(&["init"]));
+    let mut create = args(&["task", "create", "--from-file"]);
+    create.push(task_path.into_os_string());
+    let task = call(create)["data"]["task_id"].as_str().unwrap().to_owned();
+    let plan = call(args(&[
+        "pack",
+        "plan",
+        "--task-id",
+        &task,
+        "--scope",
+        "src",
+        "--content",
+        "metadata",
+    ]));
+    let plan_id = plan["data"]["plan_id"].as_str().unwrap();
+    let plan_hash = plan["data"]["plan_hash"].as_str().unwrap();
+    for position in 0..3 {
+        let path = format!("artifacts/position-{position}");
+        let mut values = args(&[
+            "pack",
+            "create",
+            "--plan",
+            plan_id,
+            "--expect-hash",
+            plan_hash,
+        ]);
+        values.splice(position..position, args(&["--output", &path]));
+        let response = call(values);
+        assert_eq!(response["command"], "pack");
+        assert_eq!(response["status"], "ok");
+        assert!(
+            f.temp
+                .path()
+                .join("project")
+                .join(&path)
+                .join("manifest.json")
+                .is_file()
+        );
+        assert!(
+            f.temp
+                .path()
+                .join("project")
+                .join(&path)
+                .join("context.json")
+                .is_file()
+        );
+    }
+    let mut values = args(&[
+        "--root",
+        "project",
+        "--format=json",
+        "pack",
+        "create",
+        "--plan",
+        plan_id,
+        "--expect-hash",
+        plan_hash,
+    ]);
+    argument_error(&f.run(&values));
+    values.splice(0..0, args(&["--output", "artifacts/first"]));
+    values.extend(args(&["--output", "artifacts/second"]));
+    argument_error(&f.run(&values));
+    assert!(!f.temp.path().join("project/artifacts/first").exists());
+    assert!(!f.temp.path().join("project/artifacts/second").exists());
+    let help = f.run(&args(&["pack", "create", "--help"]));
+    assert!(help.status.success());
+    assert!(
+        String::from_utf8(help.stdout)
+            .unwrap()
+            .contains("supply exactly one --output")
+    );
+}

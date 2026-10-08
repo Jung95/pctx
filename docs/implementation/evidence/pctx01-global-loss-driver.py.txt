@@ -1,0 +1,12 @@
+from pathlib import Path
+import os,subprocess,json,hashlib
+r=Path('/Users/dev/PCTX'); p=r/'src/cli_args.rs'; saved=p.read_bytes(); old=b'if !seen.insert(self.name) {'; assert saved.count(old)==1
+env=os.environ.copy(); env.update(RUSTUP_HOME='/Users/dev/PCTX/.toolchain/rustup', CARGO_HOME='/Users/dev/PCTX/.toolchain/cargo',SDKROOT='/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk',PATH='/Users/dev/PCTX/.toolchain/cargo/bin:/Library/Developer/CommandLineTools/usr/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin')
+try:
+ p.write_bytes(saved.replace(old,b'if { seen.insert(self.name); false } {',1))
+ with (r/'docs/implementation/evidence/pctx01-global-loss.log').open('wb') as out:
+  run=subprocess.run(['cargo','test','--locked','--test','cli_frontend','singular_global_duplicates_are_rejected_before_project_and_output_effects','--','--exact'],cwd=r,env=env,stdout=out,stderr=subprocess.STDOUT)
+ log=(r/'docs/implementation/evidence/pctx01-global-loss.log').read_text(); assert run.returncode==101 and 'test result: FAILED. 0 passed; 1 failed' in log
+ print(json.dumps({'exit':run.returncode,'actual_test_failure':True,'restored_sha256':hashlib.sha256(saved).hexdigest()}))
+finally:
+ p.write_bytes(saved); assert p.read_bytes()==saved

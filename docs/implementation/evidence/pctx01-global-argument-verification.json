@@ -1,0 +1,135 @@
+{
+  "official_task": "PCTX01",
+  "status": "implementing_not_complete",
+  "base_commit": "75fd9e787ee13c8314cae7d4e8d00aac7ea65bda",
+  "platform": "native macOS arm64",
+  "source_sha256": {
+    "src/main.rs": "dc03751bb01c804497c2142ed5884e7810e2ee1e93dda2ea5b055a0258d56480",
+    "src/cli_args.rs": "2ae3676485714fc79c19ceed1f96c94347d7458286a0ae07e9096af308576d39",
+    "src/cli_help.rs": "ccd1cedcbd8ccc3fc7cc1c7805404b46923e50f3629cb709d6f6a1cbf204c9d4",
+    "tests/cli_frontend.rs": "ea2be638426d3b408caf4b1399a1b65f51e09e5fc3a3302eb77b50ec23b39dc1"
+  },
+  "verification": {
+    "initial_global_matrix": {
+      "log": "pctx01-global-initial.log",
+      "handle": 68125,
+      "exit": 101,
+      "passed": 0,
+      "failed": 2,
+      "failed_tests": [
+        "singular_global_duplicates_are_rejected_before_project_and_output_effects",
+        "nested_global_positions_select_the_same_root_format_and_timeout"
+      ]
+    },
+    "repaired_global_matrix": {
+      "log": "pctx01-global-repaired.log",
+      "handle": 72563,
+      "exit": 0,
+      "passed": 2,
+      "failed": 0,
+      "failed_tests": []
+    },
+    "initial_parser_unit": {
+      "log": "pctx01-global-parser-unit.log",
+      "handle": 22828,
+      "exit": 101,
+      "passed": 2,
+      "failed": 1,
+      "failed_tests": [
+        "cli_args::tests::pack_artifact_output_and_global_output_share_one_singular_binding"
+      ]
+    },
+    "repaired_parser_unit": {
+      "log": "pctx01-global-parser-unit-repaired.log",
+      "handle": 80202,
+      "exit": 0,
+      "passed": 3,
+      "failed": 0,
+      "failed_tests": []
+    },
+    "related": {
+      "log": "pctx01-global-targeted.log",
+      "handle": 14226,
+      "exit": 0,
+      "passed": 56,
+      "failed": 0,
+      "failed_tests": []
+    },
+    "actual_pack_cli": {
+      "log": "pctx01-global-pack-cli.log",
+      "handle": 44086,
+      "exit": 0,
+      "passed": 1,
+      "failed": 0,
+      "failed_tests": []
+    },
+    "controlled_guard_loss": {
+      "log": "pctx01-global-loss.log",
+      "handle": 10431,
+      "exit": 101,
+      "passed": 0,
+      "failed": 1,
+      "failed_tests": [
+        "singular_global_duplicates_are_rejected_before_project_and_output_effects"
+      ]
+    },
+    "format": {
+      "exit": 0,
+      "log": "pctx01-global-format.log"
+    },
+    "locked_all_target_clippy": {
+      "handle": 3249,
+      "exit": 0,
+      "log": "pctx01-global-clippy.log"
+    },
+    "final_full_no_fail_fast": {
+      "log": "pctx01-global-full.log",
+      "handle": 82923,
+      "exit": 101,
+      "passed": 459,
+      "failed": 3,
+      "failed_tests": [
+        "query_program_resolution_uses_captured_command_path",
+        "simultaneous_streams_are_collected_and_overflow_never_infers_success",
+        "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget"
+      ]
+    }
+  },
+  "contract": [
+    "One explicit root/format/output/timeout-ms/no-color across a normal selected command path; identical duplicates also refuse. Repeatable producer scopes and literal child argv remain unchanged.",
+    "Fresh per-parse shared TypedValueParser state counts CommandLine only; delegates PathBuf/enum/u64/bool parsing and possible-values metadata. No raw token duplicate heuristic. Guarded command must not be reused for multiple parses.",
+    "Pack Create alone defers builder output presence checking until global propagation; nonoptional PathBuf FromArgMatches still requires output, with explicit required-help text. No default/sentinel.",
+    "Root version/-V exact compiled package string and newline/exit0 with query/project/output options, no project/data/file effects. CLI package version remains distinct from schema1.0."
+  ],
+  "observed_scope": [
+    "Initial global run0PASS2FAIL: cross-level duplicate reached NOT_INITIALIZED6; positional checkpoint list after init returnedDB_ERROR7 before index initialization. Preparation now explicitly creates index to isolate global binding; this is not checkpoint-empty qualification. The independent init/checkpoint-list defect is PCTX14 backlog.",
+    "Initial unit2PASS1FAIL identified Pack output before group as MissingRequiredArgument; repaired3PASS preserves all3 positions, absent output and duplicate refusal.",
+    "Actual ten same/cross-depth singular duplicate cases refuse before missing-root/data/response effects. Three global positions select identical project/workspace IDs and accept10000ms; zero at each position refuses before missing-root effects. These do not prove all downstream deadline phases.",
+    "Four exact version/flag-order cases with unsupported Markdown/query-zero/output options return native plain version/no effects.",
+    "Actual Pack CLI creates artifact manifest/context at all3 command depths, keeps standard response stdout and rejects absent/duplicate output. This is common argument-binding proof, not whole Pack-feature completion.",
+    "Guard loss produces actual0PASS1FAIL/test101 and driver restores cli_args.rs byte-exactly. All initial failures/logs remain retained."
+  ],
+  "independent_review": {
+    "agent": "requirements",
+    "result": "No scoped blocker. Fresh guard/default sharing/native paths/typed validation/possible values and fixed-name diagnostics preserved. Only Pack/Create defers requiredness; help explicit. Native macOS and position proof do not qualify all timeout phases or other platforms."
+  },
+  "remaining": [
+    "Original native startup failures and unchanged1s budgets.",
+    "Full remaining producer argument/representation/envelope/error/exit/phase-race matrix.",
+    "Native Linux/Windows required runs. No Actions dispatched or other official task selected."
+  ],
+  "artifact_sha256": {
+    "pctx01-global-loss.log": "a89bf285047c21e2b8453685d9c1ce058c657a74201bc7e4810539860252188f",
+    "pctx01-global-parser-unit-repaired.log": "ff061fe95566f813d813dfded2cd81f64c5fe048a5acc494b2113addc9fec5eb",
+    "pctx01-global-format.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "pctx01-global-pack-cli.log": "dc450aa2f037e280c644cf55599f126d532f50dba1255d6a5ab99e7eebaaef84",
+    "pctx01-global-full.log": "336c51effacfb8ec1e0f19b32dd743c978654b1141c284d36b75777ddd6b5b05",
+    "pctx01-global-targeted.log": "07b670c118d1b2579ec6f2029227aa50228f651b5076d11f904b4860d6161545",
+    "pctx01-global-loss-driver.log": "d328845500c9208dc411ae4b5ff4efbedc7ebae3988a75e60a726a58ee89f192",
+    "pctx01-global-parser-unit.log": "9403cc6196d1cca0ec9c4e77815b365bef9d9d48d1f53ba396a5b0b4cb68f6a6",
+    "pctx01-global-loss-driver.py.txt": "685043630bf0779cee7dcf75a87329c26bed7a7834f84415f125741452d6b57e",
+    "pctx01-global-initial.log": "6e82bb2f2e61d80711649f61be44f97da81ecb79b1462054abdb4122cb2d4e10",
+    "pctx01-global-repaired.log": "2a5827d124dde99f54aca14da406cf4b5b9930a34f51b7901e8b0cdb1cca45de",
+    "pctx01-global-clippy.log": "4d56ca5101a366023e388cd38639f25560c36425e1ce4f223eabab9188692930"
+  }
+}

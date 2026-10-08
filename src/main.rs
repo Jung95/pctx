@@ -1,3 +1,4 @@
+mod cli_args;
 mod cli_help;
 
 use clap::{ColorChoice, CommandFactory, FromArgMatches, Parser, Subcommand, ValueEnum};
@@ -802,7 +803,7 @@ fn main() {
             .windows(2)
             .any(|pair| pair[0] == "--format" && pair[1] == "json");
     let no_color = options.iter().any(|s| **s == "--no-color");
-    let mut command = cli_help::annotate(Cli::command());
+    let mut command = cli_help::annotate(cli_args::singular_globals(Cli::command()));
     if no_color || json_requested {
         command = command.color(ColorChoice::Never);
     }

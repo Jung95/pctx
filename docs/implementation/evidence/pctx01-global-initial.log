@@ -1,0 +1,33 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.07s
+     Running tests/cli_frontend.rs (target/debug/deps/cli_frontend-4948844b4d514170)
+
+running 2 tests
+test singular_global_duplicates_are_rejected_before_project_and_output_effects ... FAILED
+test nested_global_positions_select_the_same_root_format_and_timeout ... FAILED
+
+failures:
+
+---- singular_global_duplicates_are_rejected_before_project_and_output_effects stdout ----
+
+thread 'singular_global_duplicates_are_rejected_before_project_and_output_effects' (8255286) panicked at tests/cli_frontend.rs:34:5:
+assertion `left == right` failed
+  left: Some(6)
+ right: Some(2)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- nested_global_positions_select_the_same_root_format_and_timeout stdout ----
+
+thread 'nested_global_positions_select_the_same_root_format_and_timeout' (8255285) panicked at tests/cli_frontend.rs:660:9:
+assertion `left == right` failed: ["--root", "project", "--format=json", "--timeout-ms", "10000", "--no-color", "checkpoint", "list"]: Output { status: ExitStatus(unix_wait_status(1792)), stdout: "{\"command\":\"checkpoint\",\"coverage\":{\"reasons\":[\"DB_ERROR\"],\"status\":\"partial\"},\"data\":null,\"errors\":[{\"code\":\"DB_ERROR\",\"message\":\"Database operation failed\",\"retryable\":false}],\"generation_id\":null,\"project_id\":null,\"schema_version\":\"1.0\",\"status\":\"error\",\"truncation\":{\"reasons\":[],\"truncated\":false},\"validation\":{\"checked_at\":\"2026-10-08T15:16:35.199Z\",\"mode\":\"matched\",\"scope\":[],\"workspace_atomic\":false},\"warnings\":[],\"workspace_id\":null}\n", stderr: "" }
+  left: Some(7)
+ right: Some(0)
+
+
+failures:
+    nested_global_positions_select_the_same_root_format_and_timeout
+    singular_global_duplicates_are_rejected_before_project_and_output_effects
+
+test result: FAILED. 0 passed; 2 failed; 0 ignored; 0 measured; 15 filtered out; finished in 0.84s
+
+error: test failed, to rerun pass `--test cli_frontend`
