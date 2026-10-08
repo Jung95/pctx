@@ -6,7 +6,7 @@
 
 ## Source, evidence and environment
 
-Base f81d55ebf64f58a461da14d0bb3249ff2f94a5bc. Current PCTX01 frontend source hashes are in evidence/pctx01-frontend-verification.json. Native full66867 terminal101:373 PASS/3 original query startup FAIL; actual frontend5 PASS, format and locked all-target Clippy PASS. Initial/targeted proofs are retained separately; final full binds latest scope validation. Independent requirements re-review found no blocker in this slice. No live heavy job, benchmark, CI or agent implementation; reviews complete. Confirm actual state on resume.
+Base f81d55ebf64f58a461da14d0bb3249ff2f94a5bc; runtime 9b06c17633e07be993fc91a0b9c83fc7e9acb1a6. Current PCTX01 frontend source hashes are in evidence/pctx01-frontend-verification.json. Native full66867 terminal101:373 PASS/3 original query startup FAIL; actual frontend5 PASS, format and locked all-target Clippy PASS. Initial/targeted proofs are retained separately; final full binds latest scope validation. Independent requirements re-review found no blocker in this slice. No live heavy job, benchmark, CI or agent implementation; reviews complete. Confirm actual state on resume.
 
 Runtime changes: OS-string argv and actual format flags before child delimiter; unsupported NDJSON before project access; shared pure Find/Structure grammar/regex/limit/scope preflight before project discovery, strict refresh and output artifacts. Actual CLI snapshot modifies source after indexing and proves rejected strict requests preserve all database/config/source bytes and absent output path. This does not close no-color/help/schema/common finite routes/full platform gates.
 
