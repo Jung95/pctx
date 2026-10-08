@@ -1,0 +1,133 @@
+{
+  "official_task": "PCTX01",
+  "gates": [
+    "PCTX01-G03",
+    "PCTX01-G08"
+  ],
+  "residuals": [
+    "R07"
+  ],
+  "base_revision": "ac2099f4f795d89faf3a7ae933819b3901745847",
+  "source_sha256": {
+    "src/inventory.rs": "b5508410b77fabe332beb3bb7b793bd94908a6f2b1249fe542cf391078b78612",
+    "src/main.rs": "1de0dc9023a41f36c84c0b88527de7db4d8b6cd5cd2878a4bad9e8471d1e8fdf",
+    "src/reader.rs": "8770ea1bf18a7439d0869d0d366cb3833b37ef1c8fb72c3ced6dba58cffe2281",
+    "tests/inventory_preflight.rs": "e857762e5ad18bde06346369e626b79edf50e9b3bb605c19cad67c1b81fa878b"
+  },
+  "platform": "native macOS arm64",
+  "cli": {
+    "invalid_forms": 15,
+    "combinations": 60,
+    "dimensions": [
+      "missing/initialized project; response absent/existing respectively",
+      "JSON/compact"
+    ],
+    "proof": "PATH_OUTSIDE_ROOT5 before project/data/absolute response effects"
+  },
+  "direct": {
+    "invalid_paths": 5,
+    "entries_per_path": 6,
+    "expired_path_entries": 6,
+    "expired_limit_entries": 8,
+    "proof": "Exact reader path error5 before mismatched root; original expired Instant TIMEOUT7 first; unchanged project/data"
+  },
+  "positive": [
+    "Actual Profile/Audit/Scan valid inputs and no profile Scan, snapshots unchanged",
+    "Actual internal-dot and repeated-separator profile paths",
+    "Actual current-policy denial5 and Audit BASELINE_MISMATCH9, unchanged snapshots",
+    "Trailing separators/whitespace names/exact scan bounds and limit-before-path: shared validator only"
+  ],
+  "related": {
+    "session": 81529,
+    "log": "pctx01-inventory-admission-final-related.log",
+    "exit": 0,
+    "passed": 40
+  },
+  "controlled_losses": {
+    "driver": "pctx01-inventory-admission-loss-driver.json",
+    "count": 5,
+    "each_exit": 101,
+    "each_passed": 0,
+    "each_failed": 1,
+    "exact_source_restored": true
+  },
+  "static": {
+    "session": 26942,
+    "log": "pctx01-inventory-admission-final-static.log",
+    "exit": 0,
+    "commands": [
+      "cargo fmt --all -- --check",
+      "cargo clippy --locked --all-targets -- -D warnings"
+    ]
+  },
+  "full": {
+    "session": 99805,
+    "log": "pctx01-inventory-admission-full.log",
+    "status": "terminal",
+    "command": "cargo test --locked --all-targets --no-fail-fast",
+    "exit": 101,
+    "passed": 527,
+    "failed": 3,
+    "failed_tests": [
+      "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget",
+      "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+      "simultaneous_streams_are_collected_and_overflow_never_infers_success"
+    ],
+    "qualification": "Final source. Captured-command-path test incidentally passed with no startup/resolution code changes; not a repair qualification. All four historical startup conditions remain unresolved and original budgets unchanged."
+  },
+  "review": "pctx01-inventory-admission-review.md",
+  "initial_qualification": "Initial0PASS4FAIL includes duplicate-format parser fixture and error/root assumptions; corrected unchanged-product baseline1PASS3FAIL proves actual CLI IO7 masks path5, root POLICY_DENIED masks PATH_OUTSIDE_ROOT, and Scan INVALID_ARGUMENT masks original expiry. No acceptance weakened.",
+  "logs": {
+    "pctx01-inventory-admission-baseline.log": {
+      "passed": 0,
+      "failed": 4
+    },
+    "pctx01-inventory-admission-corrected-baseline.log": {
+      "passed": 1,
+      "failed": 3
+    },
+    "pctx01-inventory-admission-final-related.log": {
+      "passed": 40,
+      "failed": 0
+    },
+    "pctx01-inventory-admission-final-static.log": {
+      "passed": 0,
+      "failed": 0
+    },
+    "pctx01-inventory-admission-loss-audit-producer.log": {
+      "passed": 0,
+      "failed": 1
+    },
+    "pctx01-inventory-admission-loss-frontend.log": {
+      "passed": 0,
+      "failed": 1
+    },
+    "pctx01-inventory-admission-loss-profile-producer.log": {
+      "passed": 0,
+      "failed": 1
+    },
+    "pctx01-inventory-admission-loss-scan-expiry.log": {
+      "passed": 0,
+      "failed": 1
+    },
+    "pctx01-inventory-admission-loss-scan-producer.log": {
+      "passed": 0,
+      "failed": 1
+    },
+    "pctx01-inventory-admission-related.log": {
+      "passed": 39,
+      "failed": 0
+    },
+    "pctx01-inventory-admission-full.log": {
+      "passed": 527,
+      "failed": 3
+    }
+  },
+  "limits": [
+    "Whole PCTX01 remains0/10; fixed local residual8/12, whole required platform0/12",
+    "Native Linux/Windows unverified",
+    "Four historical startup conditions unresolved regardless of incidental later pass",
+    "Cooperative native filesystem operations and broader phase/race qualification remain open",
+    "No independent inventory feature or Actions added; next fixed R08, other gates open"
+  ]
+}

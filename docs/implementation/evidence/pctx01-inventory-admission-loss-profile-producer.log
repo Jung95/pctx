@@ -1,0 +1,24 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.58s
+     Running tests/inventory_preflight.rs (target/debug/deps/inventory_preflight-07a39eacf3239e33)
+
+running 1 test
+test direct_inventory_paths_precede_root_checks_and_preserve_original_expiry ... FAILED
+
+failures:
+
+---- direct_inventory_paths_precede_root_checks_and_preserve_original_expiry stdout ----
+
+thread 'direct_inventory_paths_precede_root_checks_and_preserve_original_expiry' (8733190) panicked at tests/inventory_preflight.rs:196:13:
+assertion `left == right` failed
+  left: ("POLICY_DENIED", 5)
+ right: ("PATH_OUTSIDE_ROOT", 5)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    direct_inventory_paths_precede_root_checks_and_preserve_original_expiry
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 4 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--test inventory_preflight`

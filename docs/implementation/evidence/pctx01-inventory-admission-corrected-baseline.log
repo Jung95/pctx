@@ -1,0 +1,45 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.29s
+     Running tests/inventory_preflight.rs (target/debug/deps/inventory_preflight-07a39eacf3239e33)
+
+running 4 tests
+test expired_scan_limits_keep_original_timeout_priority ... FAILED
+test direct_inventory_paths_precede_root_checks_and_preserve_original_expiry ... FAILED
+test lexical_inventory_arguments_precede_project_and_response_effects ... FAILED
+test accepted_inventory_paths_preserve_profile_audit_scan_and_policy_contracts ... ok
+
+failures:
+
+---- expired_scan_limits_keep_original_timeout_priority stdout ----
+
+thread 'expired_scan_limits_keep_original_timeout_priority' (8728536) panicked at tests/inventory_preflight.rs:128:13:
+assertion `left == right` failed
+  left: "INVALID_ARGUMENT"
+ right: "TIMEOUT"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- direct_inventory_paths_precede_root_checks_and_preserve_original_expiry stdout ----
+
+thread 'direct_inventory_paths_precede_root_checks_and_preserve_original_expiry' (8728535) panicked at tests/inventory_preflight.rs:100:13:
+assertion `left == right` failed
+  left: ("POLICY_DENIED", 5)
+ right: ("PATH_OUTSIDE_ROOT", 5)
+
+---- lexical_inventory_arguments_precede_project_and_response_effects stdout ----
+
+thread 'lexical_inventory_arguments_precede_project_and_response_effects' (8728537) panicked at tests/inventory_preflight.rs:73:21:
+assertion `left == right` failed: ["inventory", "profile", "--path", ""]: Output { status: ExitStatus(unix_wait_status(1792)), stdout: "", stderr: "" }
+  left: Some(7)
+ right: Some(5)
+
+
+failures:
+    direct_inventory_paths_precede_root_checks_and_preserve_original_expiry
+    expired_scan_limits_keep_original_timeout_priority
+    lexical_inventory_arguments_precede_project_and_response_effects
+
+test result: FAILED. 1 passed; 3 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.78s
+
+error: test failed, to rerun pass `--test inventory_preflight`
+error: 1 target failed:
+    `--test inventory_preflight`

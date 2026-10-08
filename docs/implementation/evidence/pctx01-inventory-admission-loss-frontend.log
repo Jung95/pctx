@@ -1,0 +1,24 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.65s
+     Running tests/inventory_preflight.rs (target/debug/deps/inventory_preflight-07a39eacf3239e33)
+
+running 1 test
+test lexical_inventory_arguments_precede_project_and_response_effects ... FAILED
+
+failures:
+
+---- lexical_inventory_arguments_precede_project_and_response_effects stdout ----
+
+thread 'lexical_inventory_arguments_precede_project_and_response_effects' (8732632) panicked at tests/inventory_preflight.rs:143:21:
+assertion `left == right` failed: ["inventory", "profile", "--path", ""]: Output { status: ExitStatus(unix_wait_status(1792)), stdout: "", stderr: "" }
+  left: Some(7)
+ right: Some(5)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    lexical_inventory_arguments_precede_project_and_response_effects
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 4 filtered out; finished in 0.88s
+
+error: test failed, to rerun pass `--test inventory_preflight`

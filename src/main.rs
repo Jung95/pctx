@@ -956,14 +956,7 @@ fn main() {
             | HandoffCommand::Update { name, .. }
             | HandoffCommand::Show { name, .. } => storage::validate_handoff_name(name),
         },
-        Command::Inventory {
-            command:
-                inventory::InventoryCommand::Scan {
-                    max_files,
-                    max_bytes,
-                    ..
-                },
-        } => inventory::validate_limits(*max_files, *max_bytes),
+        Command::Inventory { command } => inventory::validate_inventory_request(command),
         _ => Ok(()),
     };
     if let Err(error) = preflight {

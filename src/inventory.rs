@@ -349,6 +349,8 @@ fn confirmation(p: &Project, c: Option<&Confirmation>) -> Result<Value> {
     }
 }
 pub fn profile(p: &Project, path: &str) -> Result<Value> {
+    p.check_deadline()?;
+    reader::validate_relative_path(path)?;
     let scope = query_scope(p)?;
     let result = profile_inner(&scope, path);
     scope.check_deadline()?;
@@ -544,13 +546,34 @@ pub fn validate_limits(max_files: usize, max_bytes: usize) -> Result<()> {
         Ok(())
     }
 }
+fn scan_arguments(profile_path: Option<&str>, max_files: usize, max_bytes: usize) -> Result<()> {
+    validate_limits(max_files, max_bytes)?;
+    if let Some(path) = profile_path {
+        reader::validate_relative_path(path)?;
+    }
+    Ok(())
+}
+/// Existing pure inventory grammar for admission without root, policy or source reads.
+pub fn validate_inventory_request(command: &InventoryCommand) -> Result<()> {
+    match command {
+        InventoryCommand::Scan {
+            profile,
+            max_files,
+            max_bytes,
+        } => scan_arguments(profile.as_deref(), *max_files, *max_bytes),
+        InventoryCommand::Profile { path } | InventoryCommand::Audit { registry: path, .. } => {
+            reader::validate_relative_path(path)
+        }
+    }
+}
 pub fn scan(
     p: &Project,
     profile_path: Option<&str>,
     max_files: usize,
     max_bytes: usize,
 ) -> Result<Value> {
-    validate_limits(max_files, max_bytes)?;
+    p.check_deadline()?;
+    scan_arguments(profile_path, max_files, max_bytes)?;
     let scope = query_scope(p)?;
     let result = scan_inner(&scope, profile_path, max_files, max_bytes);
     scope.check_deadline()?;
@@ -1036,6 +1059,8 @@ fn rendered(value: &Value) -> Option<String> {
     }
 }
 pub fn audit(p: &Project, path: &str, since: Option<&str>) -> Result<Value> {
+    p.check_deadline()?;
+    reader::validate_relative_path(path)?;
     let scope = query_scope(p)?;
     let result = audit_inner(&scope, path, since);
     scope.check_deadline()?;

@@ -796,3 +796,39 @@ switch to that single prerequisite and return. Fixed PCTX01 gates and residual
 counts are unchanged; historical next-action lists do not activate other tasks.
 
 Final native full44671 terminal101: 521 PASS / 4 FAIL. Failed tests: relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry, query_program_resolution_uses_captured_command_path, simultaneous_streams_are_collected_and_overflow_never_infers_success, concurrent_query_startup_preserves_group_streams_and_original_one_second_budget. All four historical startup conditions remain unresolved; original budgets unchanged. All jobs terminal; no heavy job live. PCTX01 remains incomplete (0/10 whole gates).
+
+## PCTX01 inventory path admission — 2026-10-08
+
+Only PCTX01 remains active, fixed G03-R07 and G08, specification §14/§38.
+Shared Inventory request validation reuses the exact reader lexical predicate for
+Profile/Audit/optional Scan profile before CLI discovery. Direct calls check the
+original supplied expiry, then Scan limits, then lexical paths before query_scope
+root/policy checks or inventory reads. Invalid paths retain PATH_OUTSIDE_ROOT5;
+invalid Scan limits retain INVALID_ARGUMENT2. No new path syntax or profile,
+registry, policy, authority or inventory business contract was introduced.
+
+Native macOS: 15 invalid route/path forms across 60 JSON/compact and missing/
+initialized project combinations preserve project/data and absent/existing absolute
+response bytes (response existence follows project initialization). Five paths
+through six direct/dispatch entries refuse PATH_OUTSIDE_ROOT5 before a mismatched
+root anchor; six expired path entries and eight expired limit entries retain the
+same original Instant and TIMEOUT7 with unchanged storage. Scan invalid limits
+retain priority over an invalid profile for nonexpired requests. Actual accepted
+Profile/Audit/Scan, internal-dot/repeated-separator paths, Scan without a profile,
+policy denials and Audit baseline mismatch preserve state and no operation/script
+execution. Trailing separators/whitespace names and exact bounds are shared pure
+validator proofs only. Final related 40 PASS; five controlled losses each 0 PASS /
+1 FAIL with exact restoration; format/locked all-target Clippy PASS. Independent
+read-only review found no blocker.
+
+Initial 0 PASS / 4 FAIL mixes actual product failures and fixture mistakes (duplicate
+format, expected root error, project ID assumption). Corrected unchanged-product
+baseline 1 PASS / 3 FAIL proves CLI IO7 masking path5, root POLICY_DENIED masking
+PATH_OUTSIDE_ROOT and Scan invalidity masking original expiry. Both logs retained.
+Evidence: `evidence/pctx01-inventory-admission-verification.json`.
+Fixed residual denominator12 is unchanged: local 8/12 (R01–R07,R12), whole required
+platform 0/12; PCTX01 whole gates 0/10. Native Linux/Windows and four historical
+startup conditions remain open. Next same-task boundary R08 existing execution
+argv grammar; no next official task or Actions selected.
+
+Final native full99805 terminal101: 527 PASS / 3 FAIL. Failed tests: concurrent_query_startup_preserves_group_streams_and_original_one_second_budget, relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry, simultaneous_streams_are_collected_and_overflow_never_infers_success. Captured-command-path test passed without any startup/resolution code repair; that pass does not qualify a fix. All four historical startup conditions remain unresolved and original budgets unchanged. All jobs terminal; no heavy job live. PCTX01 remains incomplete (0/10 whole gates).

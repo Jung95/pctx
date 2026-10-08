@@ -1,0 +1,47 @@
+[
+  {
+    "name": "frontend",
+    "path": "src/main.rs",
+    "exit": 101,
+    "test": "lexical_inventory_arguments_precede_project_and_response_effects",
+    "source_sha256": "1de0dc9023a41f36c84c0b88527de7db4d8b6cd5cd2878a4bad9e8471d1e8fdf",
+    "exact_source_restored": true,
+    "log": "pctx01-inventory-admission-loss-frontend.log"
+  },
+  {
+    "name": "profile-producer",
+    "path": "src/inventory.rs",
+    "exit": 101,
+    "test": "direct_inventory_paths_precede_root_checks_and_preserve_original_expiry",
+    "source_sha256": "b5508410b77fabe332beb3bb7b793bd94908a6f2b1249fe542cf391078b78612",
+    "exact_source_restored": true,
+    "log": "pctx01-inventory-admission-loss-profile-producer.log"
+  },
+  {
+    "name": "audit-producer",
+    "path": "src/inventory.rs",
+    "exit": 101,
+    "test": "direct_inventory_paths_precede_root_checks_and_preserve_original_expiry",
+    "source_sha256": "b5508410b77fabe332beb3bb7b793bd94908a6f2b1249fe542cf391078b78612",
+    "exact_source_restored": true,
+    "log": "pctx01-inventory-admission-loss-audit-producer.log"
+  },
+  {
+    "name": "scan-producer",
+    "path": "src/inventory.rs",
+    "exit": 101,
+    "test": "direct_inventory_paths_precede_root_checks_and_preserve_original_expiry",
+    "source_sha256": "b5508410b77fabe332beb3bb7b793bd94908a6f2b1249fe542cf391078b78612",
+    "exact_source_restored": true,
+    "log": "pctx01-inventory-admission-loss-scan-producer.log"
+  },
+  {
+    "name": "scan-expiry",
+    "path": "src/inventory.rs",
+    "exit": 101,
+    "test": "expired_scan_limits_keep_original_timeout_priority",
+    "source_sha256": "b5508410b77fabe332beb3bb7b793bd94908a6f2b1249fe542cf391078b78612",
+    "exact_source_restored": true,
+    "log": "pctx01-inventory-admission-loss-scan-expiry.log"
+  }
+]

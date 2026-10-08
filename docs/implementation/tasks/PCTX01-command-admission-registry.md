@@ -13,7 +13,7 @@ an audit denominator, not completed acceptance gates. Official PCTX01 remains
 closed0/10, denominator unchanged. No independent business features added.
 Source review classified every leaf by producer family and separated raw-input,
 authority/state and pure grammar. R01–R12 below freeze currently identified
-residual groups; R01–R06 and R12 now have local evidence (7/12 groups). None is whole
+residual groups; R01–R07 and R12 now have local evidence (8/12 groups). None is whole
 required-platform qualified. Native Linux/Windows and broader common gates remain.
 
 | Residual ID | Existing pure contract / exact source boundary | Status and scope |
@@ -24,7 +24,7 @@ required-platform qualified. Native Linux/Windows and broader common gates remai
 | R04 | work Agent Report stage/summary4096/percentage100 (1487) | Local native36 matrix/six direct expiry/accepted report stages and replay, related51PASS; pctx01-report-admission-verification.json; lease/order remain stateful; platforms open |
 | R05 | session Suspend/Boundary reason labels (339/354); Context Ack provenance (691) already Clap-protected | Local native36 matrix/six direct expiry/accepted1024-byte reasons, related51PASS; pctx01-report-admission-verification.json; Ack provenance validator/direct refusal only; platforms open |
 | R06 | quota Ingest idempotency-key label (414) | Local native36 matrix/six direct expiry/actual key256 ingestion+replay/non-owner proof, related51PASS; pctx01-report-admission-verification.json; input schemas/windows remain producer-owned; platforms open |
-| R07 | inventory Profile/Audit/optional Scan profile reader lexical paths (reader94; inventory361/1046); supplied-expiry priority scan553 | Open; path error stays5, not invented2; profile source policy remains producer-owned |
+| R07 | inventory Profile/Audit/optional Scan profile reader lexical paths (reader94; inventory361/1046); supplied-expiry priority scan553 | Local native60 CLI/six-entry direct path+expiry/actual accepted and policy/baseline proofs, related40PASS; pctx01-inventory-admission-verification.json; path5 preserved; platforms open |
 | R08 | output binding argv nonempty/count256/bytes65536 (525), Run modes already Clap-protected | Open; share existing argv predicate; resolution/trust/classification/receipt state remains producer-owned |
 | R09 | filter Activate private identifier (727), Explain argv1..256 (1244), non-UTF8 explicit paths (relative helper208) | Open; Apply accepts identifier OR project filter path and must not be narrowed to identifiers; file definition/fixture content stays producer-owned |
 | R10 | adapter Plan/Event agent, explicit Event key, Uninstall plan, Statusline task/pool/session/counter/key labels (819/449/458/980/1115) | Open; file JSON, protocol, runtime/config receipts stay producer-owned; internal hash equality is stateful |

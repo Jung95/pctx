@@ -1,0 +1,24 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.60s
+     Running tests/inventory_preflight.rs (target/debug/deps/inventory_preflight-07a39eacf3239e33)
+
+running 1 test
+test expired_scan_limits_keep_original_timeout_priority ... FAILED
+
+failures:
+
+---- expired_scan_limits_keep_original_timeout_priority stdout ----
+
+thread 'expired_scan_limits_keep_original_timeout_priority' (8734831) panicked at tests/inventory_preflight.rs:264:13:
+assertion `left == right` failed
+  left: "INVALID_ARGUMENT"
+ right: "TIMEOUT"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    expired_scan_limits_keep_original_timeout_priority
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 4 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--test inventory_preflight`

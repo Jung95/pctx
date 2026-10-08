@@ -6,19 +6,19 @@
 
 ## Latest integration boundary
 
-PCTX01-G03-R04–R06 Report/Session/Ingest, runtime c46f6c4a75de5105efe686b1ba52eb48f38031ce,
-base f506193. Normal push98340 terminal0 published f506193..c46f6c4 to origin/main.
-Runtime changes are
-src/work.rs, src/session.rs, src/quota.rs and tests/control_preflight.rs.
-Native related45118 terminal0:51PASS; five controlled-loss probes85659 terminal0
-with each test101/0PASS1FAIL and exact source restoration; static89953 terminal0.
-Independent read-only review /root/work_control found no blocker. Evidence
-pctx01-report-admission-verification.json. Final full44671 terminal101: 521 PASS / 4 FAIL, all four historical
-startup tests failed at unchanged budgets. All jobs terminal; no heavy job live.
-Local residual7/12 (R01–R06,R12); whole platform0/12; PCTX01 whole0/10.
-Linux/Windows unverified and original four native startup conditions unresolved.
-Latest serial-task instruction overrides the historical external-blocker switch
-exception: report exact external conditions and retain PCTX01. No Actions.
+PCTX01-G03-R07/G08 inventory path admission, base ac2099f. Runtime edits
+src/inventory.rs, src/main.rs; new tests/inventory_preflight.rs. Exact reader
+lexical predicate before root/policy/discovery, original supplied expiry first,
+Scan limits before optional path. No business/schema/policy feature added.
+Corrected native baseline13996 terminal101:1PASS3FAIL (initial fixture mistakes
+retained). Final related81529 terminal0:40PASS; five loss probes56082 terminal0,
+each test101/0PASS1FAIL and exact sources restored. Static26942 terminal0;
+independent read-only /root/work_control review no blocker. Full99805 terminal101: 527 PASS / 3 FAIL; captured-path pass is incidental,
+not a qualified repair. All four historical conditions remain unresolved at original
+budgets. All jobs terminal; no heavy job live. Manifest pctx01-inventory-admission-verification.json.
+Local residual8/12 (R01–R07,R12), whole required platform0/12; PCTX01 whole0/10.
+Linux/Windows and four historical native startup conditions remain open. Latest
+serial instruction retains PCTX01 even on external blockers. No Actions.
 
 ## Source, evidence and environment
 
@@ -66,13 +66,13 @@ Original ignored specification SHA256 8914faad57432f524aec0a06aa90c43c18c23f8c19
 
 ## Exact next action
 
-Final full44671 and normal push98340 are terminal. Remain on PCTX01 and
-address fixed R07 inventory
-Profile/Audit/optional Scan profile lexical paths and original-expiry priority.
-Path-policy errors remain5; do not invent2 or broaden source policy. R08–R11 and
-other whole gates remain open. No next official task, unchanged full rerun,
-deadline/interpreter/OS policy change or Actions. External blockers do not permit
-an arbitrary switch under the latest user instruction.
+Final full99805 is terminal. Normally publish verified development changes [skip ci].
+Then remain on PCTX01 and address fixed R08 existing execution binding argv grammar
+(nonempty/count256/bytes65536) and library Run modes already Clap-protected.
+Resolution/trust/classification/receipts remain stateful producer contracts. R09–R11
+and other whole gates remain open. No next official task, unchanged full rerun,
+deadline/interpreter/OS policy change or Actions. External blockers require exact
+needed action while retaining the current task.
 
 ## Retained historical results and inactive backlog
 
