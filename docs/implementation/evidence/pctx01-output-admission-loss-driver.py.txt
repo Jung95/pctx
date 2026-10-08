@@ -1,0 +1,17 @@
+from pathlib import Path
+import os, subprocess, json, hashlib
+root=Path('/Users/dev/PCTX')
+env=dict(os.environ,RUSTUP_HOME=str(root/'.toolchain/rustup'),CARGO_HOME=str(root/'.toolchain/cargo'),SDKROOT='/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk',PATH=str(root/'.toolchain/cargo/bin')+':/Library/Developer/CommandLineTools/usr/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin')
+results=[]
+for name,path,needle,target,test in [
+ ('frontend','src/main.rs','        Command::Output { command } => output::validate_output_request(command),\n','cli_frontend','saved_output_invalid_arguments_refuse_before_project_and_response_access'),
+ ('producer','src/output.rs','    validate_output_request(command)?;\n','output','invalid_saved_output_queries_precede_artifact_reads')]:
+ p=root/path;original=p.read_bytes();text=original.decode();assert text.count(needle)==1
+ try:
+  p.write_text(text.replace(needle,''))
+  with (root/f'docs/implementation/evidence/pctx01-output-admission-loss-{name}.log').open('wb') as log:
+   result=subprocess.run(['cargo','test','--locked','--test',target,test,'--','--exact'],cwd=root,env=env,stdout=log,stderr=subprocess.STDOUT)
+ finally:p.write_bytes(original)
+ results.append(dict(name=name,exit=result.returncode,original_sha256=hashlib.sha256(original).hexdigest(),restored_sha256=hashlib.sha256(p.read_bytes()).hexdigest()))
+ assert result.returncode==101,results[-1]
+(root/'docs/implementation/evidence/pctx01-output-admission-loss-results.json').write_text(json.dumps(results,indent=2)+'\n')

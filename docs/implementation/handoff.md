@@ -6,22 +6,20 @@
 
 ## Latest verified integration boundary
 
-PCTX01 only active (`implementing`), basec391735. Native registered callback
-injection exposed monitor CONFIG_CHANGED expected9/actual7. output::run_inner
-now preserves original Error code/message/exit in immediate response; saved
-artifact still stores code, later save failure retains precedence. Native seam
-covers spawn observerIO7/monitorCONFIG_CHANGED9, actual group identity/body entry
-once, polls0/1 and direct-child ECHILD after cleanup. No guardian/schema policy
-or product fault hook. Initial0PASS1FAIL retained, repaired1PASS and related89PASS
-before final test-only NativeCleanup guard. Guard signals only owned/unreaped
-root; best effort/unbounded wait/EINTR/no injected-panic limits. Independent
-static review no scoped production blocker. Final static PASS.
-Final native full60317 terminal101: 488 PASS/3 FAIL. Original concurrent startup, relative executable resolution and simultaneous-stream startup failures remain; no budget relaxation or retry promotion. All jobs terminal; PCTX01 incomplete.
-Evidence pctx01-callback-native-verification.json. Actual frontend guardian/
-publication faults and nativeLinuxWindows remain unqualified by this library
-injection; saved full typed Error, arbitrary descendants and resource-ledger
-reconciliation not established. No next official task/Actions or rejected-push
-retry. Goal/task incomplete; prior main push pending explicit approval.
+PCTX01 only active (`implementing`), base04c674c. Saved-output pure admission now
+shared in CLI before discovery and producer before artifactload. IDs, full line
+bounds, Find literal/limit retain existing rules; compact selectors explicitly
+refuse2 requiringfull. Actual26-case JSON/compact missingroot/absolute-response
+no-effects matrix and5-case library missingartifact assertions pass. Initial
+actual7vs2 retained; related39PASS. Two controlled losses each0PASS1FAIL/exact
+restore (frontend7vs2; producerOUTPUT_EXPIREDvsINVALID_ARGUMENT). Final staticPASS.
+Final native full64728 terminal101: 490 PASS/3 FAIL, retaining original concurrent startup, relative resolution and simultaneous-stream failures at unchanged budgets. All jobs terminal; PCTX01 incomplete.
+Independent static review no scoped blocker. Manifest [pctx01-output-admission-verification.json](evidence/pctx01-output-admission-verification.json) and concrete remaining tasks/PCTX01-admission-audit.md.
+Nextcommon defects: Checkpoint name/glob afterwriter/manifest; ContextGet mode/
+since/normalizedscope aftersessionDB. Do not merge their differing grammars or
+activate their independent domain tasks. Native platforms/startup/remaining
+completion gates stay open. No next officialtask/Actions or rejected-push retry;
+prior main push pending explicit approval. Public runner retrieval docs updated.
 
 ## Source, evidence and environment
 
@@ -69,19 +67,19 @@ Original ignored specification SHA256 8914faad57432f524aec0a06aa90c43c18c23f8c19
 
 ## Exact next action
 
-Stay on PCTX01. Read the completion audit and enumerate the remaining common
-frontend/producer argument and response/representation gates against actual
-Command/Work/Runner routes; link each remaining condition to exact evidence or
-concrete missing fixture. Native registered callback seam is now qualified for
-original typed error/body/direct-child outcome; do not claim actual frontend
-ledger/guardian publication faults or arbitrary descendants. Immediate response
-retains typed Error while saved artifact retains code only; audit retrieval
-contract before expanding persistence. Startup failures remain open with raw
-nonproduction diagnostics, not a proven cause. Do not repeat unchanged startup/
-full gates to seek green, relax original budgets, substitute interpreters or
-alter OS policies. Complete required native Linux/Windows executions and all
-remaining PCTX01 conditions before any next official task. Prior main push
-rejected/pending explicit approval; no retry/alternate mechanism. All jobs terminal.
+Stay on PCTX01. Fix Checkpoint common pure name/glob admission before main
+discovery and producer writer/manifest using existing rules; actual missingroot,
+initialized-state and response-file no-effects plus valid flow. Keep checkpoint
+scope dot allowed. Then fix ContextGet pure full+since/mode/normalized-scope
+admission before session DB, keeping its dot-component prohibition and preserving
+capacity-first precedence and project-dependent authorization in producers.
+These are common frontend fixes, not independent PCTX14/session functionality.
+Read tasks/PCTX01-admission-audit.md and actual source first. Remaining native
+callback frontend publication faults, producer/phase/nativeLinuxWindows and
+startup gates stay open. Do not rerun unchanged startup/full gates to seek green,
+relax deadlines, substitute interpreters or change OS policies. No next official
+task until all PCTX01 conditions close. Rejected main push pending explicit
+approval, no alternate mechanism/retry. All jobs terminal.
 
 ## Retained historical results and inactive backlog
 

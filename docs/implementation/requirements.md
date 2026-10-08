@@ -533,3 +533,20 @@ and EINTR limitations; no injected panic qualification. PCTX01 stays implementin
 no next official task, Actions or rejected-push retry.
 
 Final format/locked all-target Clippy PASS. Final native full60317 terminal101: 488 PASS/3 FAIL. Original concurrent startup, relative executable resolution and simultaneous-stream startup failures remain; no budget relaxation or retry promotion. All jobs terminal; PCTX01 incomplete.
+
+## PCTX01 saved-output argument admission
+
+Shared Output request validation now precedes CLI project discovery and producer
+artifact loading. Show/Find/Render IDs, original full line bounds and literal/
+limit rules are reused; compact stream/line selectors explicitly require full
+view instead of silent ignoring (§14). Actual26-case JSON/compact CLI matrix
+refuses2 before missing-root/data/absolute-response effects, and library rejects
+invalid queries before missing artifacts. Related39 PASS. Two controlled losses
+each0PASS1FAIL/exact restore: frontend filesystem7 versus2, producer OUTPUT_EXPIRED
+versus INVALID_ARGUMENT. [Evidence](evidence/pctx01-output-admission-verification.json).
+[Concrete remaining admission gates](tasks/PCTX01-admission-audit.md): Checkpoint
+name/glob before writer/manifest, then ContextGet mode/since/normalized scope before
+session DB. These are PCTX01 common fixes only; no other official task activated.
+Native platforms/startup and remaining completion gates stay open.
+
+Final format/locked all-target Clippy PASS. Final native full64728 terminal101: 490 PASS/3 FAIL, retaining original concurrent startup, relative resolution and simultaneous-stream failures at unchanged budgets. All jobs terminal; PCTX01 incomplete.

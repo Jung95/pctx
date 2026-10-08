@@ -1,0 +1,59 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.60s
+     Running tests/cli_frontend.rs (target/debug/deps/cli_frontend-4948844b4d514170)
+
+running 23 tests
+test non_utf8_argument_returns_structured_error_without_panic_or_effect ... ok
+test help_and_version_are_successful_without_project_access ... ok
+test no_color_suppresses_help_on_a_real_terminal_including_nested_help ... ok
+test parser_diagnostics_mask_secrets_and_escape_control_characters ... ok
+test parser_errors_respect_actual_json_option_and_do_not_load_project ... ok
+test plain_parser_diagnostics_escape_bidi_c1_and_line_controls ... ok
+test parsed_run_preflight_refusals_attest_no_child_before_any_access ... ok
+test native_hook_invalid_transports_refuse_before_project_or_output_access ... ok
+test root_version_is_exact_and_ignores_project_output_and_query_options ... ok
+test semantic_refusals_are_one_safe_json_document_for_every_requested_format ... ok
+test undeliverable_parser_capacity_semantic_and_timeout_refusals_return_io_exit ... ok
+test nested_global_positions_select_the_same_root_format_and_timeout ... ok
+test partial_refresh_does_not_claim_the_requested_outline_is_wholly_unsupported ... ok
+test singular_global_duplicates_are_rejected_before_project_and_output_effects ... ok
+test invalid_strict_queries_preserve_generation_database_sources_and_output_path ... ok
+test unsupported_ndjson_is_rejected_before_project_discovery_or_init ... ok
+test undeliverable_plain_parser_diagnostic_returns_io_exit_without_panic ... ok
+test valid_minimum_capacity_bounds_semantic_and_timeout_refusals_without_writes ... ok
+test saved_output_invalid_arguments_refuse_before_project_and_response_access ... ok
+test unsupported_markdown_refuses_before_response_files_and_stream_dispatch ... ok
+test outline_empty_unsupported_and_partial_are_distinct_in_every_representation ... ok
+test pack_artifact_output_is_required_once_and_works_at_every_command_depth ... ok
+test every_visible_help_path_describes_schema_and_effects_without_project_access ... ok
+
+test result: ok. 23 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.64s
+
+     Running tests/output.rs (target/debug/deps/output-6e0a106d5d0b7325)
+
+running 11 tests
+test opaque_shell_heavy_and_bad_identifiers_rejected ... ok
+test invalid_saved_output_queries_precede_artifact_reads ... ok
+test agent_cannot_mint_execution_trust_and_git_helpers_are_unavailable ... ok
+test masking_is_before_storage_and_cr_preserves_error ... ok
+test typed_full_report_preserves_failed_counts_without_becoming_gate_evidence ... ok
+test exact_trust_child_exit_and_reread_without_execution ... ok
+test none_expiry_tamper_and_policy_change_cannot_restore_records ... ok
+test diagnostic_extract_binds_original_source_and_rereads_without_execution ... ok
+test nonzero_and_timeout_are_not_filter_success ... ok
+test verbose_output_preserves_late_diagnostics_and_full_masked_denominator ... ok
+test bounded_capture_retains_tail_and_original_record_positions ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.25s
+
+     Running tests/output_deadline.rs (target/debug/deps/output_deadline-9a5db5bcae11ac4f)
+
+running 5 tests
+test expired_saved_queries_and_accounting_preserve_exact_artifact ... ok
+test fifo_artifact_is_rejected_without_waiting_for_writer ... ok
+test retention_expiry_is_distinct_from_request_expiry_and_never_rewrites_artifact ... ok
+test failed_accounting_under_contention_never_increments_observed_bytes ... ok
+test saved_views_keep_unicode_and_original_budget_without_executing_or_mutating ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+

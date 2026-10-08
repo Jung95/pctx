@@ -1,0 +1,141 @@
+{
+  "task": "PCTX01",
+  "status": "implementing; incomplete; sole active official task",
+  "base_revision": "04c674c6740f9af1fe6becd540f8fcb729fec384",
+  "platform": "native macOS arm64",
+  "specification_sections": [
+    "14 pure argument admission/stable error2; unsupported options not silently ignored",
+    "38 processing failure versus successful retrieval/no rerun"
+  ],
+  "source_sha256": {
+    "src/main.rs": "898e550b8d725d9459f06b4072399903f71d45df5358172d1a885444edf37340",
+    "src/output.rs": "4ff032ad0a8a0397b445255b9b7d8ee31817aad3fcdfca916d1f2fa1268c2fb7",
+    "tests/cli_frontend.rs": "eb372763a38963189411d69cdf068a35f3475a4439dee3921659fb114e14f016",
+    "tests/output.rs": "e8f6c54afd76e0863f66f133fcc6522312674d2ade454f8d36dbc615a43a4b60",
+    "src/storage.rs": "2806165e9f1e21a66524240192b585d0807433e230f40a535b5e3ee14aa2e301",
+    "src/session.rs": "7a55b215bbc5c238ded98d027e6d6a333d890a40b5560d8870a79b31f52daf6f",
+    "src/query_process.rs": "2faee00ffc82534c41942adae00e52f81a271072b47338f33cab7b67c43bc5b9",
+    "tests/project_deadline.rs": "8b9fbc97fbd5acaf612b2d75b94cf810faa2b61614b654495082462b1941a8dc"
+  },
+  "runs": [
+    {
+      "path": "pctx01-output-admission-selected.log",
+      "sha256": "7fc64d0708ad45b186813803e679a78d73de218b2667e6f4fc6356ac1b197f78",
+      "exit": 101,
+      "session": 86400,
+      "counts": {
+        "passed": 0,
+        "failed": 1
+      },
+      "qualification": "Initial actual invalid ID/missingroot/absolute response:7versus2. Test stops at first failure; initial26-case completion not claimed."
+    },
+    {
+      "path": "pctx01-output-admission-repaired.log",
+      "sha256": "a15356984eea62584fa5ed4cdf1406a5a1fd45557fd8ecffeb8ba5b428d01d56",
+      "exit": 0,
+      "session": 84760,
+      "counts": {
+        "passed": 1,
+        "failed": 0
+      },
+      "qualification": "Actual26-case JSON/compact CLI missingroot/response no-effects matrix."
+    },
+    {
+      "path": "pctx01-output-admission-related.log",
+      "sha256": "74a6259d067635bfb116c735062dbde28d441e4d263ce3df3004d573930a68f3",
+      "exit": 0,
+      "session": 31646,
+      "counts": {
+        "passed": 39,
+        "failed": 0
+      },
+      "qualification": "CLI23/Output11/deadline5; includes5 library invalid-before-artifact cases and valid retrieval/deadline regressions."
+    },
+    {
+      "path": "pctx01-output-admission-loss-frontend.log",
+      "sha256": "61dd724f9c482141720ca9d0e72d327d8399025a067d8217db2515e1e34a6b71",
+      "exit": 101,
+      "session": 80368,
+      "counts": {
+        "passed": 0,
+        "failed": 1
+      },
+      "qualification": "Intentional common CLI admission removal: actual7vs2."
+    },
+    {
+      "path": "pctx01-output-admission-loss-producer.log",
+      "sha256": "ac056da89846fa6b74709c5c61ddd9fdec1b0480b97c265db0cfd5943c55602d",
+      "exit": 101,
+      "session": 80368,
+      "counts": {
+        "passed": 0,
+        "failed": 1
+      },
+      "qualification": "Intentional producer admission removal: OUTPUT_EXPIRED versus INVALID_ARGUMENT."
+    },
+    {
+      "path": "pctx01-output-admission-static.log",
+      "sha256": "591ad1a1e3fa609262b2e6851a0b0d780c1499d29f4c2606743ec3c5f3264fa1",
+      "exit": 0,
+      "session": 83244,
+      "counts": {
+        "passed": 0,
+        "failed": 0
+      },
+      "qualification": "Final fmt --check and locked all-target Clippy -D warnings."
+    },
+    {
+      "path": "pctx01-output-admission-full.log",
+      "sha256": "3fa6de37cc19bc40bdfbd7ffeaf7137a1d67998fe5ea30ecd1a820baf4cca568",
+      "exit": 101,
+      "session": 64728,
+      "counts": {
+        "passed": 490,
+        "failed": 3
+      },
+      "qualification": "Final native exact-source full gate; original startup failures/budgets retained."
+    }
+  ],
+  "full_failed_tests": [
+    "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+    "simultaneous_streams_are_collected_and_overflow_never_infers_success",
+    "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget"
+  ],
+  "controlled_losses": [
+    {
+      "name": "frontend",
+      "exit": 101,
+      "original_sha256": "898e550b8d725d9459f06b4072399903f71d45df5358172d1a885444edf37340",
+      "restored_sha256": "898e550b8d725d9459f06b4072399903f71d45df5358172d1a885444edf37340"
+    },
+    {
+      "name": "producer",
+      "exit": 101,
+      "original_sha256": "4ff032ad0a8a0397b445255b9b7d8ee31817aad3fcdfca916d1f2fa1268c2fb7",
+      "restored_sha256": "4ff032ad0a8a0397b445255b9b7d8ee31817aad3fcdfca916d1f2fa1268c2fb7"
+    }
+  ],
+  "review": {
+    "path": "pctx01-output-admission-review.txt",
+    "sha256": "193d9d664df4131c865eefae4e13f0bb1059f734f69f0c20d5b16d209f8b2455",
+    "result": "No scoped blocker; static independent review only"
+  },
+  "remaining_gate_audit": {
+    "path": "../tasks/PCTX01-admission-audit.md",
+    "sha256": "43166ba1f07446eece6871df844f7d99919068cbec1b162b9e6ebd423d997cf4",
+    "next": "Checkpoint pure name/glob before writer/manifest, then ContextGet mode/since/normalized scopes before session DB; common fixes within PCTX01 only."
+  },
+  "contract": [
+    "CLI and producer share ID/show/find pure validation; full original default1:80 and difference<=1000 retained.",
+    "Compact lines/stream explicitly refuse2(require full view); no selector-rendering feature added.",
+    "ActualCLI invalid26 cases json/compact refuse2 with JSON error/no IDs/no stderr and unchanged temp state including missingroot/data/absolute response.",
+    "Library invalid5 cases refuse2 before absentartifact and no outputs directory; valid retrieval/full stream and deadline behavior retained by existing relatedsuite."
+  ],
+  "initial_source_scope": "Final hashes apply final related/static/full. Initialselected is base producer with addedCLI fixture; no exact initial modified-source hash recorded.",
+  "limitations": [
+    "Current source is not whole PCTX01 qualification; native Linux/Windows and remaining common gates stay open.",
+    "Actual effects matrix is missingroot/absolute absentresponse; initialized database/generation snapshot for this output route not separately authored. Pure shared preflight runs before discovery; existing related producer fixtures have initialized roots.",
+    "Three final original startup failures retained; prior fourth query/adapter failures remain independently recorded, not promoted by later passes.",
+    "No unrelated official task, Actions, paid calls, policy change or rejected push retry."
+  ]
+}

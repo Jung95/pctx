@@ -202,6 +202,75 @@ fn safe_id(value: &str) -> Result<()> {
     }
     Ok(())
 }
+fn line_range(lines: Option<&str>) -> Result<(usize, usize)> {
+    let Some(lines) = lines else {
+        return Ok((1, 80));
+    };
+    let (first, last) = lines
+        .split_once(':')
+        .ok_or_else(|| err("INVALID_ARGUMENT", "Lines must be A:B", 2))?;
+    let first = first
+        .parse::<usize>()
+        .map_err(|_| err("INVALID_ARGUMENT", "Invalid line", 2))?;
+    let last = last
+        .parse::<usize>()
+        .map_err(|_| err("INVALID_ARGUMENT", "Invalid line", 2))?;
+    if first == 0 || last < first || last - first > 1000 {
+        return Err(err(
+            "INVALID_ARGUMENT",
+            "Invalid or excessive line range",
+            2,
+        ));
+    }
+    Ok((first, last))
+}
+
+/// Pure saved-output argument admission shared by CLI and producer.
+pub fn validate_output_request(command: &OutputCommand) -> Result<()> {
+    let id = match command {
+        OutputCommand::Show { id, .. }
+        | OutputCommand::Find { id, .. }
+        | OutputCommand::Render { id, .. } => id,
+    };
+    safe_id(id)?;
+    match command {
+        OutputCommand::Show {
+            view,
+            stream,
+            lines,
+            ..
+        } => {
+            if !matches!(view.as_str(), "compact" | "full") {
+                return Err(err("INVALID_ARGUMENT", "Unknown output view", 2));
+            }
+            if view == "compact" && (stream.is_some() || lines.is_some()) {
+                return Err(err(
+                    "INVALID_ARGUMENT",
+                    "Output selectors require --view full",
+                    2,
+                ));
+            }
+            if stream
+                .as_ref()
+                .is_some_and(|value| !matches!(value.as_str(), "stdout" | "stderr"))
+            {
+                return Err(err("INVALID_ARGUMENT", "Unknown output stream", 2));
+            }
+            line_range(lines.as_deref())?;
+        }
+        OutputCommand::Find { literal, limit, .. }
+            if literal.is_empty() || *limit == 0 || *limit > 1000 =>
+        {
+            return Err(err(
+                "INVALID_ARGUMENT",
+                "Literal and bounded limit required",
+                2,
+            ));
+        }
+        _ => {}
+    }
+    Ok(())
+}
 fn checked_private(path: &Path) -> Result<()> {
     for c in path.ancestors() {
         if fs::symlink_metadata(c).is_ok_and(|m| m.file_type().is_symlink()) {
@@ -1611,6 +1680,7 @@ pub fn output(p: &Project, command: &OutputCommand) -> Result<Value> {
     phase(&scoped, || output_inner(&scoped, command))
 }
 fn output_inner(p: &Project, command: &OutputCommand) -> Result<Value> {
+    validate_output_request(command)?;
     let value = match command {
         OutputCommand::Show { id, .. }
         | OutputCommand::Find { id, .. }
@@ -1634,30 +1704,7 @@ fn output_inner(p: &Project, command: &OutputCommand) -> Result<Value> {
             if view == "compact" {
                 return compact(p, &a, 8192);
             }
-            if view != "full" {
-                return Err(err("INVALID_ARGUMENT", "Unknown output view", 2));
-            }
-            let (first, last) = if let Some(s) = lines {
-                let (x, y) = s
-                    .split_once(':')
-                    .ok_or_else(|| err("INVALID_ARGUMENT", "Lines must be A:B", 2))?;
-                let x = x
-                    .parse::<usize>()
-                    .map_err(|_| err("INVALID_ARGUMENT", "Invalid line", 2))?;
-                let y = y
-                    .parse::<usize>()
-                    .map_err(|_| err("INVALID_ARGUMENT", "Invalid line", 2))?;
-                if x == 0 || y < x || y - x > 1000 {
-                    return Err(err(
-                        "INVALID_ARGUMENT",
-                        "Invalid or excessive line range",
-                        2,
-                    ));
-                }
-                (x, y)
-            } else {
-                (1, 80)
-            };
+            let (first, last) = line_range(lines.as_deref())?;
             let mut records = Vec::new();
             let mut total = 0usize;
             for record in &a.records {
@@ -1676,13 +1723,6 @@ fn output_inner(p: &Project, command: &OutputCommand) -> Result<Value> {
             )
         }
         OutputCommand::Find { literal, limit, .. } => {
-            if literal.is_empty() || *limit == 0 || *limit > 1000 {
-                return Err(err(
-                    "INVALID_ARGUMENT",
-                    "Literal and bounded limit required",
-                    2,
-                ));
-            }
             let mut records = Vec::new();
             for record in &a.records {
                 p.check_deadline()?;

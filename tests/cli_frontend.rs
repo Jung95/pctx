@@ -1089,3 +1089,87 @@ fn partial_refresh_does_not_claim_the_requested_outline_is_wholly_unsupported() 
         assert_eq!(v["errors"], serde_json::json!([]));
     }
 }
+
+#[test]
+fn saved_output_invalid_arguments_refuse_before_project_and_response_access() {
+    let cases = vec![
+        vec!["output", "show", "../invalid"],
+        vec!["output", "find", "invalid", "--literal", "x"],
+        vec!["output", "render", "invalid"],
+        vec![
+            "output",
+            "show",
+            "OUT-fixture",
+            "--view",
+            "full",
+            "--lines",
+            "nonsense",
+        ],
+        vec![
+            "output",
+            "show",
+            "OUT-fixture",
+            "--view",
+            "full",
+            "--lines",
+            "0:1",
+        ],
+        vec![
+            "output",
+            "show",
+            "OUT-fixture",
+            "--view",
+            "full",
+            "--lines",
+            "2:1",
+        ],
+        vec![
+            "output",
+            "show",
+            "OUT-fixture",
+            "--view",
+            "full",
+            "--lines",
+            "1:1002",
+        ],
+        vec!["output", "show", "OUT-fixture", "--lines", "1:2"],
+        vec!["output", "show", "OUT-fixture", "--lines", "nonsense"],
+        vec!["output", "show", "OUT-fixture", "--stream", "stdout"],
+        vec!["output", "find", "OUT-fixture", "--literal", ""],
+        vec![
+            "output",
+            "find",
+            "OUT-fixture",
+            "--literal",
+            "x",
+            "--limit",
+            "0",
+        ],
+        vec![
+            "output",
+            "find",
+            "OUT-fixture",
+            "--literal",
+            "x",
+            "--limit",
+            "1001",
+        ],
+    ];
+    for format in ["json", "compact"] {
+        for case in &cases {
+            let f = Fixture::new();
+            let mut values = args(&["--root", "missing", "--format", format, "--output"]);
+            values.push(f.temp.path().join("response.json").into_os_string());
+            values.extend(args(case));
+            let out = f.run(&values);
+            assert_eq!(
+                out.status.code(),
+                Some(2),
+                "{case:?}: {}",
+                String::from_utf8_lossy(&out.stdout)
+            );
+            argument_error(&out);
+            f.unchanged();
+        }
+    }
+}

@@ -1,0 +1,3 @@
+PCTX01 independent read-only audit/review — /root/requirements
+Spec14/38: identified Output compact selector silence and argument validation after artifact loading, plus Checkpoint name/scope and ContextGet mode/scope effect-before-rejection gaps.
+Final Output review: both Output gaps resolved. Shared validation before CLI project discovery and producer artifact loading. Compact selectors explicitly reject; full defaults/line bounds unchanged. Actual26-case CLI missing-root/response effects and direct invalid-before-missing-artifact fixtures. No scoped blocker; static review only, no jobs/edits. Checkpoint/ContextGet are exact remaining common admission backlog within PCTX01 only.

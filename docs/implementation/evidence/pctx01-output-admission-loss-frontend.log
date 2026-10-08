@@ -1,0 +1,24 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.51s
+     Running tests/cli_frontend.rs (target/debug/deps/cli_frontend-4948844b4d514170)
+
+running 1 test
+test saved_output_invalid_arguments_refuse_before_project_and_response_access ... FAILED
+
+failures:
+
+---- saved_output_invalid_arguments_refuse_before_project_and_response_access stdout ----
+
+thread 'saved_output_invalid_arguments_refuse_before_project_and_response_access' (8500107) panicked at tests/cli_frontend.rs:1165:13:
+assertion `left == right` failed: ["output", "show", "../invalid"]: 
+  left: Some(7)
+ right: Some(2)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    saved_output_invalid_arguments_refuse_before_project_and_response_access
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 22 filtered out; finished in 0.91s
+
+error: test failed, to rerun pass `--test cli_frontend`

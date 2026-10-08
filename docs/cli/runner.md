@@ -83,6 +83,8 @@ OUT=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["data"]["e
 pctx output show "$OUT" --view full --stream stdout --lines 1:80
 ```
 
+Saved-output line and stream selectors require `--view full`; compact view rejects them with `INVALID_ARGUMENT` (exit 2). Invalid identifiers, line ranges and output-find limits are rejected before project or artifact access. Retrieval does not execute the child again.
+
 The child report's source is a claim. Only the supervised artifact-to-check path promotes it to `runner_observed`; arbitrary `check record` JSON cannot supply that provenance. A test check must execute at least one test even when its configured minimum is zero. Invalid counts, native exit mismatch, missing typed output, timeout, signal, capture loss, and changed inputs cannot produce valid passing evidence. An untyped or failed admission attempt is finalized honestly rather than left running. Report timestamps are Unix seconds.
 
 Native evidence retains the locally trusted executable/script, profile, environment/PATH, cwd, workspace and policy binding. Changing or removing that binding invalidates an earlier native pass at acceptance and completion; old native reports without a binding require a new run. The supervisor rechecks immediately before spawn and records `not_started` if the binding changed. Script-resolved tools, dynamic libraries and platform versions are not yet a complete verified dependency closure. Explicitly allowed external reports remain labelled claims without local environment authority.

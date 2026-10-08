@@ -427,3 +427,43 @@ fn bounded_capture_retains_tail_and_original_record_positions() {
     );
     assert!(!tail.to_string().contains("ghp_abcdefghijklmnop123456789"));
 }
+
+#[test]
+fn invalid_saved_output_queries_precede_artifact_reads() {
+    let (_temp, p) = fixture();
+    for command in [
+        OutputCommand::Show {
+            id: "OUT-absent".into(),
+            view: "full".into(),
+            stream: None,
+            lines: Some("nonsense".into()),
+        },
+        OutputCommand::Show {
+            id: "OUT-absent".into(),
+            view: "compact".into(),
+            stream: None,
+            lines: Some("1:2".into()),
+        },
+        OutputCommand::Show {
+            id: "OUT-absent".into(),
+            view: "compact".into(),
+            stream: Some("stdout".into()),
+            lines: None,
+        },
+        OutputCommand::Find {
+            id: "OUT-absent".into(),
+            literal: "".into(),
+            limit: 5,
+        },
+        OutputCommand::Find {
+            id: "OUT-absent".into(),
+            literal: "x".into(),
+            limit: 1001,
+        },
+    ] {
+        let error = output::output(&p, &command).unwrap_err();
+        assert_eq!(error.code, "INVALID_ARGUMENT");
+        assert_eq!(error.exit, 2);
+        assert!(!p.data_dir.join("outputs").exists());
+    }
+}
