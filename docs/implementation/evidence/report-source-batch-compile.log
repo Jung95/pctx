@@ -1,0 +1,16 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+error[E0599]: no method named `clone` found for struct `operations::Message` in the current scope
+    --> src/operations.rs:1867:27
+     |
+ 202 | pub struct Message {
+     | ------------------ method `clone` not found for this struct
+...
+1867 |         let mut later = m.clone();
+     |                           ^^^^^ method not found in `operations::Message`
+     |
+     = help: items from traits can only be used if the trait is implemented and in scope
+     = note: the following trait defines an item `clone`, perhaps you need to implement it:
+             candidate #1: `Clone`
+
+For more information about this error, try `rustc --explain E0599`.
+error: could not compile `pctx` (lib test) due to 1 previous error

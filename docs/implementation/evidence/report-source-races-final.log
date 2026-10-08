@@ -1,0 +1,11 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.36s
+     Running unittests src/lib.rs (target/debug/deps/pctx-ae897bec01e143c7)
+
+running 3 tests
+test operations::reporting_aggregation_tests::source_classification_changed_after_last_admission_is_not_emitted ... ok
+test operations::reporting_aggregation_tests::inbox_batch_drops_earlier_expired_admission_and_rechecks_earlier_sources ... ok
+test operations::reporting_aggregation_tests::expiry_during_later_role_evaluation_never_accepts_earlier_admission ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 10 filtered out; finished in 1.79s
+

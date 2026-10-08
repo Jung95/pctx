@@ -14,6 +14,10 @@ impl Fixture {
         let data = temp.path().join("data");
         let f = Self { temp, root, data };
         f.ok("alice", &["init"]);
+        let config = f.root.join(".pctx/config.toml");
+        let mut text = fs::read_to_string(&config).unwrap();
+        text.push_str("\n[[policy.source_topics]]\nscope=['**']\ntopics=[]\n");
+        fs::write(config, text).unwrap();
         f
     }
     fn run(&self, principal: &str, args: &[&str]) -> (i32, Value) {
@@ -399,4 +403,187 @@ fn reporting_pause_exception_expires_without_releasing_pause() {
         "held"
     );
     assert_eq!(f.restrictions()[0]["active"], true);
+}
+
+#[test]
+fn report_source_topics_require_explicit_coverage_and_unknown_sources_hold() {
+    let f = Fixture::new();
+    let config = f.root.join(".pctx/config.toml");
+    let mut text = fs::read_to_string(&config).unwrap();
+    text.push_str("\n[[policy.source_topics]]\nscope=['src/**']\ntopics=['medical']\n");
+    fs::write(&config, text).unwrap();
+    let packet = f.ok(
+        "alice",
+        &[
+            "role",
+            "pause",
+            "legal",
+            "--topic",
+            "quiet",
+            "--recipient",
+            "owner",
+            "--reason",
+            "packet restriction",
+        ],
+    );
+    let source = f.ok(
+        "alice",
+        &[
+            "role",
+            "pause",
+            "legal",
+            "--topic",
+            "medical",
+            "--recipient",
+            "owner",
+            "--reason",
+            "source restriction",
+        ],
+    );
+    let report = json!({"schema_version":1,"role":"legal","recipient":"owner","topic":"quiet","category":"security","source_paths":["src/check.rs"],"payload_hash":pctx::domain::hash("authorized report projection")});
+    let now = pctx::domain::now();
+    let mut exception = json!({"schema_version":1,"restriction_refs":[{"id":packet["restriction_id"],"revision":packet["revision"],"precedence":"exception"}],"role":"legal","recipient":"owner","topic":"quiet","source_scope":["src/**"],"payload_hash":report["payload_hash"],"category":"security","not_before":now-1,"expires_at":now+600,"reason":"exact packet exception","owner_evidence":"fixture:owner"});
+    let path = f.input("packet-exception.json", exception.clone());
+    f.ok(
+        "alice",
+        &["policy", "exception-record", "--from-file", &path],
+    );
+    let path = f.input("source-report.json", report.clone());
+    let held = f.ok(
+        "alice",
+        &["policy", "report-evaluate", "--from-file", &path],
+    );
+    assert_eq!(held["state"], "held");
+    assert!(!held.to_string().contains("medical"));
+    exception["restriction_refs"].as_array_mut().unwrap().push(json!({"id":source["restriction_id"],"revision":source["revision"],"precedence":"exception"}));
+    let path = f.input("all-source-exception.json", exception);
+    f.ok(
+        "alice",
+        &["policy", "exception-record", "--from-file", &path],
+    );
+    let path = f.input("source-report.json", report.clone());
+    assert_eq!(
+        f.ok(
+            "alice",
+            &["policy", "report-evaluate", "--from-file", &path]
+        )["state"],
+        "allowed"
+    );
+    // Removing source assignments cannot turn unknown sources into public input.
+    let text = fs::read_to_string(&config).unwrap();
+    let marker = text.find("\n[[policy.source_topics]]").unwrap();
+    fs::write(&config, &text[..marker]).unwrap();
+    let path = f.input("unknown-source.json", report);
+    let held = f.ok(
+        "alice",
+        &["policy", "report-evaluate", "--from-file", &path],
+    );
+    assert_eq!(held["state"], "held");
+    assert_eq!(held["reason_code"], "SOURCE_TOPIC_REQUIRED");
+    assert!(!held.to_string().contains("src/check.rs"));
+}
+
+#[test]
+fn managed_source_topic_change_blocks_previously_allowed_report_and_ack() {
+    let f = Fixture::new();
+    let agent = f.ok("alice", &["agent", "register", "--name", "topic-worker"])["agent_id"]
+        .as_str()
+        .unwrap()
+        .to_owned();
+    let sid = f.ok(
+        "alice",
+        &[
+            "session",
+            "attach",
+            "--agent",
+            &agent,
+            "--runtime",
+            "manual",
+            "--role",
+            "legal",
+        ],
+    )["session_id"]
+        .as_str()
+        .unwrap()
+        .to_owned();
+    let source_path = ".pctx/decisions/report-source.md";
+    fs::create_dir_all(f.root.join(".pctx/decisions")).unwrap();
+    let source = f.root.join(source_path);
+    let write_source = |topics: &str| {
+        fs::write(&source,format!("---\nid: report-source\nstatus: accepted\ndate: '2026-10-08'\nscope: [code.py]\ntopics: {topics}\n---\nsource-body-marker\n")).unwrap()
+    };
+    write_source("[]");
+    let packet = f.ok(
+        "alice",
+        &[
+            "role",
+            "pause",
+            "legal",
+            "--topic",
+            "quiet",
+            "--recipient",
+            &agent,
+            "--reason",
+            "packet restriction",
+        ],
+    );
+    f.ok(
+        "alice",
+        &[
+            "role",
+            "pause",
+            "legal",
+            "--topic",
+            "medical",
+            "--recipient",
+            &agent,
+            "--reason",
+            "source restriction",
+        ],
+    );
+    let message=f.input("managed-report.json",json!({"schema_version":1,"type":"security","topic":"quiet","body":"authorized-managed-report-marker","priority":0,"idempotency_key":"managed-report","reporting":{"category":"security","source_paths":[source_path]}}));
+    let payload_hash = f.ok(
+        "alice",
+        &["policy", "report-fingerprint", "--from-file", &message],
+    )["payload_hash"]
+        .clone();
+    let now = pctx::domain::now();
+    let path=f.input("managed-exception.json",json!({"schema_version":1,"restriction_refs":[{"id":packet["restriction_id"],"revision":packet["revision"],"precedence":"exception"}],"role":"legal","recipient":agent,"topic":"quiet","source_scope":[".pctx/decisions/**"],"payload_hash":payload_hash,"category":"security","not_before":now-1,"expires_at":now+600,"reason":"bounded metadata report","owner_evidence":"fixture:owner"}));
+    f.ok(
+        "alice",
+        &["policy", "exception-record", "--from-file", &path],
+    );
+    let queued = f.ok(
+        "alice",
+        &[
+            "message",
+            "send",
+            "--from-file",
+            &message,
+            "--to-session",
+            &sid,
+        ],
+    );
+    let before = f.ok("alice", &["inbox", "read", "--session", &sid]);
+    assert_eq!(before["messages"].as_array().unwrap().len(), 1);
+    write_source("[medical]");
+    let after = f.ok("alice", &["inbox", "read", "--session", &sid]);
+    assert!(after["messages"].as_array().unwrap().is_empty());
+    let text = after.to_string();
+    assert!(
+        !text.contains("authorized-managed-report-marker")
+            && !text.contains("medical")
+            && !text.contains("report-source.md")
+    );
+    let (n, error) = f.run(
+        "alice",
+        &[
+            "message",
+            "ack",
+            queued["message_id"].as_str().unwrap(),
+            "--session",
+            &sid,
+        ],
+    );
+    assert_eq!(n, 5, "{error}");
 }

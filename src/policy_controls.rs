@@ -659,8 +659,7 @@ pub fn record_exception(p: &Project, db: &Connection, input: &Value) -> Result<V
         if !r.active || r.revision != reference.revision {
             return Err(stale());
         }
-        if (!r.topic.is_empty() && r.topic != policy.topic)
-            || !(r.role == "*" || r.role == policy.role)
+        if !(r.role == "*" || r.role == policy.role)
             || !(r.recipient == "*" || r.recipient == policy.recipient)
         {
             return Err(conflict());
@@ -728,7 +727,12 @@ struct ReportInput {
     source_paths: Vec<String>,
     payload_hash: String,
 }
-fn decision(p: &Project, state: &str, code: &str, facts: &Value) -> Result<Value> {
+pub(crate) struct ReportAdmission {
+    pub(crate) data: Value,
+    pub(crate) valid_until: Option<i64>,
+    pub(crate) source_hash: Option<String>,
+}
+fn decision(p: &Project, state: &str, code: &str, facts: &Value) -> Result<ReportAdmission> {
     p.check_deadline()?;
     if p.current_policy_hash()?
         .as_ref()
@@ -736,9 +740,11 @@ fn decision(p: &Project, state: &str, code: &str, facts: &Value) -> Result<Value
     {
         return Err(unavailable());
     }
-    Ok(
-        json!({"state":state,"reason_code":code,"fingerprint":hash(serde_json::to_vec(&json!({"state":state,"reason_code":code,"facts":facts}))?)}),
-    )
+    Ok(ReportAdmission {
+        data: json!({"state":state,"reason_code":code,"fingerprint":hash(serde_json::to_vec(&json!({"state":state,"reason_code":code,"facts":facts}))?)}),
+        valid_until: None,
+        source_hash: None,
+    })
 }
 /// Read-only reporting admission, never execution authority or policy release.
 /// Every conflicting restriction must have a current explicit higher-priority
@@ -746,6 +752,13 @@ fn decision(p: &Project, state: &str, code: &str, facts: &Value) -> Result<Value
 /// wakes and schedules; this method can only authorize a reporting delivery.
 /// Source content is never inspected.
 pub fn evaluate_report(p: &Project, db: &Connection, input: &Value) -> Result<Value> {
+    Ok(report_admission(p, db, input)?.data)
+}
+pub(crate) fn report_admission(
+    p: &Project,
+    db: &Connection,
+    input: &Value,
+) -> Result<ReportAdmission> {
     p.check_deadline()?;
     let request: ReportInput = parsed(input)?;
     if request.schema_version != 1
@@ -757,6 +770,89 @@ pub fn evaluate_report(p: &Project, db: &Connection, input: &Value) -> Result<Va
     }
     label(&request.role)?;
     label(&request.topic)?;
+    let classifier = crate::source_delivery::SourceClassifier::new(p)?;
+    // Reader excludes are checked before reading managed declaration metadata.
+    for path in &request.source_paths {
+        relative(path)?;
+        if reader::policy_allows(p, path).is_err() {
+            p.check_deadline()?;
+            return decision(
+                p,
+                "held",
+                "SOURCE_POLICY_DENIED",
+                &json!({"request":hash(serde_json::to_vec(input)?)}),
+            );
+        }
+    }
+    let (mut topics, unknown, source_hash) =
+        report_source_classes(p, &classifier, &request.source_paths)?;
+    topics.insert(request.topic.clone());
+    let mut admission =
+        evaluate_classified_report(p, db, input, &request, &topics, unknown, &source_hash)?;
+    classifier.revalidate()?;
+    if report_source_classes(p, &classifier, &request.source_paths)?.2 != source_hash {
+        return Err(Error::new(
+            "CONCURRENT_MODIFICATION",
+            "Reporting source classification changed",
+            4,
+        ));
+    }
+    classifier.revalidate()?;
+    if admission.valid_until.is_some_and(|end| end <= now()) {
+        return decision(
+            p,
+            "held",
+            "POLICY_CONFLICT",
+            &json!({"request":hash(serde_json::to_vec(input)?),"source_classification_hash":source_hash}),
+        );
+    }
+    p.check_deadline()?;
+    admission.source_hash = Some(source_hash);
+    Ok(admission)
+}
+pub(crate) fn report_source_binding(p: &Project, paths: &[String]) -> Result<String> {
+    let classifier = crate::source_delivery::SourceClassifier::new(p)?;
+    let result = report_source_classes(p, &classifier, paths)?.2;
+    classifier.revalidate()?;
+    Ok(result)
+}
+fn report_source_classes(
+    p: &Project,
+    classifier: &crate::source_delivery::SourceClassifier<'_>,
+    paths: &[String],
+) -> Result<(std::collections::BTreeSet<String>, bool, String)> {
+    let mut topics = std::collections::BTreeSet::new();
+    let mut unknown = false;
+    let mut entries = Vec::new();
+    for path in paths {
+        p.check_deadline()?;
+        let declared = crate::documents::source_topics(p, path).map_err(|error| {
+            if error.code == "TIMEOUT" {
+                error
+            } else {
+                unavailable()
+            }
+        })?;
+        let labels = classifier.labels(path, declared.as_deref())?;
+        match &labels {
+            None => unknown = true,
+            Some(labels) => topics.extend(labels.iter().cloned()),
+        }
+        entries.push(json!({"path_hash":hash(path.as_bytes()),"labels":labels}));
+    }
+    p.check_deadline()?;
+    Ok((topics, unknown, hash(serde_json::to_vec(&entries)?)))
+}
+#[allow(clippy::too_many_arguments)]
+fn evaluate_classified_report(
+    p: &Project,
+    db: &Connection,
+    input: &Value,
+    request: &ReportInput,
+    topics: &std::collections::BTreeSet<String>,
+    unknown: bool,
+    source_hash: &str,
+) -> Result<ReportAdmission> {
     let recipient = canonical_recipient(p, db, &request.recipient)?;
     for path in &request.source_paths {
         relative(path)?;
@@ -800,8 +896,12 @@ pub fn evaluate_report(p: &Project, db: &Connection, input: &Value) -> Result<Va
     } else {
         0
     };
-    let base = json!({"request":request_hash,"policy":p.policy_hash(),"workspace":hash(p.workspace_id.as_bytes()),"revision":watermark});
-    let count:i64=db.query_row("SELECT COUNT(*) FROM (SELECT 1 FROM ops_silences WHERE active=1 AND (role=?1 OR role='*') AND (recipient=?2 OR recipient='*') AND topic=?3 UNION ALL SELECT 1 FROM ops_roles WHERE paused=1 AND (role=?1 OR role='*') LIMIT 4097)",params![request.role,recipient,request.topic],|r|r.get(0))?;
+    let base = json!({"request":request_hash,"policy":p.policy_hash(),"workspace":hash(p.workspace_id.as_bytes()),"revision":watermark,"source_classification_hash":source_hash});
+    if unknown && db.query_row("SELECT EXISTS(SELECT 1 FROM ops_silences WHERE active=1 AND (role=?1 OR role='*') AND (recipient=?2 OR recipient='*'))", params![request.role, recipient], |r| r.get::<_,bool>(0))? {
+        return decision(p, "held", "SOURCE_TOPIC_REQUIRED", &base);
+    }
+    let topic_json = serde_json::to_string(topics)?;
+    let count:i64=db.query_row("SELECT COUNT(*) FROM (SELECT 1 FROM ops_silences WHERE active=1 AND (role=?1 OR role='*') AND (recipient=?2 OR recipient='*') AND topic IN (SELECT value FROM json_each(?3)) UNION ALL SELECT 1 FROM ops_roles WHERE paused=1 AND (role=?1 OR role='*') LIMIT 4097)",params![request.role,recipient,topic_json],|r|r.get(0))?;
     if count > MAX_POLICIES {
         return Err(unavailable());
     }
@@ -822,8 +922,8 @@ pub fn evaluate_report(p: &Project, db: &Connection, input: &Value) -> Result<Va
         return Err(unavailable());
     }
     let mut conflicts = Vec::new();
-    let mut query=db.prepare("SELECT CASE WHEN length(CAST(m.id AS BLOB))<=256 THEN m.id END,m.role,m.recipient,m.topic,CASE WHEN length(CAST(m.original_owner AS BLOB))<=256 THEN m.original_owner END,m.revision,m.active FROM (SELECT role,recipient,topic FROM ops_silences WHERE active=1 AND (role=?1 OR role='*') AND (recipient=?2 OR recipient='*') AND topic=?3 UNION ALL SELECT role,'*','' FROM ops_roles WHERE paused=1 AND (role=?1 OR role='*')) s LEFT JOIN ops_restrictions m ON m.role=s.role AND m.recipient=s.recipient AND m.topic=s.topic LIMIT 4097")?;
-    let rows = query.query_map(params![request.role, recipient, request.topic], |row| {
+    let mut query=db.prepare("SELECT CASE WHEN length(CAST(m.id AS BLOB))<=256 THEN m.id END,m.role,m.recipient,m.topic,CASE WHEN length(CAST(m.original_owner AS BLOB))<=256 THEN m.original_owner END,m.revision,m.active FROM (SELECT role,recipient,topic FROM ops_silences WHERE active=1 AND (role=?1 OR role='*') AND (recipient=?2 OR recipient='*') AND topic IN (SELECT value FROM json_each(?3)) UNION ALL SELECT role,'*','' FROM ops_roles WHERE paused=1 AND (role=?1 OR role='*')) s LEFT JOIN ops_restrictions m ON m.role=s.role AND m.recipient=s.recipient AND m.topic=s.topic LIMIT 4097")?;
+    let rows = query.query_map(params![request.role, recipient, topic_json], |row| {
         if row.get::<_, Option<String>>(0)?.is_none() {
             Ok(None)
         } else {
@@ -928,10 +1028,15 @@ pub fn evaluate_report(p: &Project, db: &Connection, input: &Value) -> Result<Va
     if conflicts.iter().any(|r| !coverage.contains(&r.id)) {
         return decision(p, "held", "POLICY_CONFLICT", &base);
     }
-    decision(
+    let mut result = decision(
         p,
         "allowed",
         "EXPLICIT_REPORTING_EXCEPTION",
         &json!({"base":base,"exceptions":applied,"restrictions":conflicts.iter().map(|r|json!({"id":r.id,"revision":r.revision})).collect::<Vec<_>>()}),
-    )
+    )?;
+    result.valid_until = applied
+        .iter()
+        .filter_map(|entry| entry["expires_at"].as_i64())
+        .min();
+    Ok(result)
 }

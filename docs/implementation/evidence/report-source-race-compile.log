@@ -1,0 +1,38 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+error[E0425]: cannot find function `execute` in module `crate::session`
+    --> src/operations.rs:1654:35
+     |
+1654 |         let sid = crate::session::execute(
+     |                                   ^^^^^^^ not found in `crate::session`
+     |
+help: consider importing one of these functions
+     |
+1601 +     use crate::adapter::execute;
+     |
+1601 +     use crate::filters::execute;
+     |
+1601 +     use crate::graph::execute;
+     |
+1601 +     use crate::inventory::execute;
+     |
+     = and 6 other candidates
+help: if you import `execute`, refer to it directly
+     |
+1654 -         let sid = crate::session::execute(
+1654 +         let sid = execute(
+     |
+
+error[E0594]: cannot assign to `admission.source_hash`, as `admission` is not declared as mutable
+   --> src/policy_controls.rs:810:5
+    |
+810 |     admission.source_hash = Some(source_hash);
+    |     ^^^^^^^^^^^^^^^^^^^^^ cannot assign
+    |
+help: consider changing this to be mutable
+    |
+790 |     let mut admission =
+    |         +++
+
+Some errors have detailed explanations: E0425, E0594.
+For more information about an error, try `rustc --explain E0425`.
+error: could not compile `pctx` (lib test) due to 2 previous errors

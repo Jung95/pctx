@@ -1,0 +1,32 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.18s
+     Running tests/policy_controls_cli.rs (target/debug/deps/policy_controls_cli-526f5c770024b1b9)
+
+running 7 tests
+test original_owner_only_release_and_stale_revision_never_mutates_policy ... ok
+test legacy_owner_is_unknown_until_explicit_attestation_and_agent_run_cannot_claim_owner ... ok
+test report_source_topics_require_explicit_coverage_and_unknown_sources_hold ... ok
+test explicitly_authored_reporting_precedence_scope_and_revocation ... ok
+test managed_source_topic_change_blocks_previously_allowed_report_and_ack ... ok
+test reporting_exception_delivers_mailbox_only_and_revocation_blocks_ack ... ok
+test reporting_pause_exception_expires_without_releasing_pause ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.42s
+
+     Running tests/source_delivery.rs (target/debug/deps/source_delivery-44cd435aa4e14b0e)
+
+running 11 tests
+test default_empty_policy_serialization_preserves_existing_hash_input ... ok
+test linked_or_oversized_current_configuration_is_never_a_missing_fixture ... ok
+test captured_policy_cannot_authorize_changed_current_project_configuration ... ok
+test configuration_scope_and_label_bounds_fail_before_delivery_effects ... ok
+test expired_original_budget_and_noncanonical_paths_never_gain_authority ... ok
+test initialized_registry_marker_prevents_missing_configuration_fixture_exception ... ok
+test retained_policy_detects_configuration_deletion_creation_and_policy_changes ... ok
+test unknown_without_quiet_controls_is_allowed_but_bound_to_path_and_classification ... ok
+test overlapping_owner_assignments_union_and_public_cannot_declassify_quiet_source ... ok
+test wildcard_pause_rechecks_explicit_public_sources_after_policy_construction ... ok
+test unknown_source_under_quiet_controls_is_denied_even_inside_public_packet ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+

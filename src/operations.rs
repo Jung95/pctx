@@ -911,6 +911,16 @@ fn message_delivery(
     sid: &str,
     m: &Message,
 ) -> Result<Option<String>> {
+    message_delivery_observed(p, db, s, sid, m, |_| Ok(()))
+}
+fn message_delivery_observed(
+    p: &Project,
+    db: &Connection,
+    s: &RecipientSession,
+    sid: &str,
+    m: &Message,
+    mut observe: impl FnMut(&crate::policy_controls::ReportAdmission) -> Result<()>,
+) -> Result<Option<String>> {
     p.check_deadline()?;
     if let Some(reporting) = &m.reporting {
         let report: ReportingClaims = serde_json::from_value(reporting.clone())?;
@@ -935,9 +945,11 @@ fn message_delivery(
         label(&name)?;
         roles.insert(name);
         let mut bindings = Vec::new();
+        let mut expires_at = None::<i64>;
+        let mut source_hash = None::<String>;
         for role in &roles {
             for recipient in [s.agent.as_str(), sid] {
-                let result = crate::policy_controls::evaluate_report(
+                let admission = crate::policy_controls::report_admission(
                     p,
                     db,
                     &json!({
@@ -946,11 +958,38 @@ fn message_delivery(
                         "source_paths":report.source_paths,"payload_hash":report_payload_hash(m)?
                     }),
                 )?;
-                if result["state"] != "allowed" {
+                if admission.data["state"] != "allowed" {
                     return Ok(None);
                 }
-                bindings.push(result["fingerprint"].clone());
+                if let Some(end) = admission.valid_until {
+                    expires_at = Some(expires_at.map_or(end, |old| old.min(end)));
+                }
+                if let Some(current) = &admission.source_hash {
+                    if source_hash.as_ref().is_some_and(|old| old != current) {
+                        return Err(Error::new(
+                            "CONCURRENT_MODIFICATION",
+                            "Reporting source controls changed",
+                            4,
+                        ));
+                    }
+                    source_hash = Some(current.clone());
+                }
+                bindings.push(admission.data["fingerprint"].clone());
+                observe(&admission)?;
             }
+        }
+        let current_source =
+            crate::policy_controls::report_source_binding(p, &report.source_paths)?;
+        if source_hash.as_ref() != Some(&current_source) {
+            return Err(Error::new(
+                "CONCURRENT_MODIFICATION",
+                "Reporting source controls changed",
+                4,
+            ));
+        }
+        p.check_deadline()?;
+        if expires_at.is_some_and(|end| end <= now()) {
+            return Ok(None);
         }
         return Ok(Some(hash(serde_json::to_vec(&bindings)?)));
     }
@@ -962,6 +1001,48 @@ fn message_delivery(
     }
     Ok(Some(hash("ordinary_message_delivery")))
 }
+struct InboxAdmission {
+    projection: Value,
+    valid_until: Option<i64>,
+    sources: Option<(Vec<String>, String)>,
+}
+
+fn finalize_inbox_admissions(
+    p: &Project,
+    admissions: Vec<InboxAdmission>,
+) -> Result<(Vec<Value>, usize)> {
+    for admission in &admissions {
+        p.check_deadline()?;
+        if let Some((paths, expected)) = &admission.sources
+            && crate::policy_controls::report_source_binding(p, paths)? != *expected
+        {
+            return Err(Error::new(
+                "CONCURRENT_MODIFICATION",
+                "Reporting source controls changed",
+                4,
+            ));
+        }
+    }
+    p.check_deadline()?;
+    let at = now();
+    let mut visible = Vec::new();
+    let mut suppressed = 0;
+    for admission in admissions {
+        if admission.valid_until.is_some_and(|end| end <= at) {
+            suppressed += 1;
+        } else {
+            visible.push(admission.projection);
+        }
+    }
+    visible.sort_by(|a, b| {
+        a["message"]["priority"]
+            .as_u64()
+            .cmp(&b["message"]["priority"].as_u64())
+            .then_with(|| a["message_seq"].as_i64().cmp(&b["message_seq"].as_i64()))
+    });
+    Ok((visible, suppressed))
+}
+
 pub fn execute(p: &Project, command: &OperationCommand) -> Result<Value> {
     let mut scoped;
     let p = if p.deadline.is_none() {
@@ -1338,7 +1419,15 @@ pub fn execute(p: &Project, command: &OperationCommand) -> Result<Value> {
             for (seq, id, _kind, _recipient, payload, state) in rows {
                 let m: Message = serde_json::from_str(&payload)?;
                 cursor = seq;
-                let binding = message_delivery(p, &tx, &s, sid, &m)?;
+                let mut valid_until = m.expires_at;
+                let mut source_hash = None;
+                let binding = message_delivery_observed(p, &tx, &s, sid, &m, |admission| {
+                    if let Some(end) = admission.valid_until {
+                        valid_until = Some(valid_until.map_or(end, |old| old.min(end)));
+                    }
+                    source_hash = admission.source_hash.clone();
+                    Ok(())
+                })?;
                 if m.expires_at.is_some_and(|t| t <= now())
                     || s.status != "active"
                     || binding.is_none()
@@ -1346,19 +1435,27 @@ pub fn execute(p: &Project, command: &OperationCommand) -> Result<Value> {
                     suppressed += 1;
                     continue;
                 }
-                visible.push(
-                    json!({"message_seq":seq,"message_id":id,"message":m,"delivery_state":state,"delivery_policy_hash":binding}),
-                );
+                let sources = if let Some(fingerprint) = source_hash {
+                    let claims: ReportingClaims = serde_json::from_value(
+                        m.reporting
+                            .clone()
+                            .ok_or_else(|| invalid("Missing reporting claims"))?,
+                    )?;
+                    Some((claims.source_paths, fingerprint))
+                } else {
+                    None
+                };
+                visible.push(InboxAdmission {
+                    projection: json!({"message_seq":seq,"message_id":id,"message":m,"delivery_state":state,"delivery_policy_hash":binding}),
+                    valid_until,
+                    sources,
+                });
                 if visible.len() >= *limit {
                     break;
                 }
             }
-            visible.sort_by(|a, b| {
-                a["message"]["priority"]
-                    .as_u64()
-                    .cmp(&b["message"]["priority"].as_u64())
-                    .then_with(|| a["message_seq"].as_i64().cmp(&b["message_seq"].as_i64()))
-            });
+            let (visible, newly_suppressed) = finalize_inbox_admissions(p, visible)?;
+            suppressed += newly_suppressed;
             json!({"session_id":sid,"messages":visible,"next_cursor":cursor,"suppressed_count":suppressed,"delivery_inferred":false,"model_woken":false})
         }
     };
@@ -1555,4 +1652,234 @@ fn enqueue_message_db(
             response
         }
     })
+}
+
+#[cfg(test)]
+mod reporting_aggregation_tests {
+    use super::*;
+    use crate::project::{Config, ProjectConfig, RootAnchor, SourceTopic};
+
+    fn fixture() -> (tempfile::TempDir, Project, String, Message, i64) {
+        let temp = tempfile::tempdir().unwrap();
+        let root = temp.path().join("project");
+        let data = temp.path().join("data");
+        std::fs::create_dir_all(&root).unwrap();
+        std::fs::create_dir_all(data.join("workspace")).unwrap();
+        std::fs::create_dir_all(data.join("control")).unwrap();
+        std::fs::create_dir_all(root.join(".pctx/decisions")).unwrap();
+        std::fs::write(root.join(".pctx/decisions/source.md"), "---\nid: report-source\nstatus: accepted\ndate: '2026-10-08'\nscope: [code.py]\ntopics: []\n---\nSource body\n").unwrap();
+        let mut p = Project {
+            deadline: Some(crate::deadline::Deadline::from_millis(10_000).unwrap()),
+            root_anchor: RootAnchor::capture(&root).unwrap(),
+            root,
+            data_dir: data.clone(),
+            workspace_dir: data.join("workspace"),
+            control_dir: data.join("control"),
+            project_id: "aggregation-project".into(),
+            workspace_id: "aggregation-workspace".into(),
+            coordination_id: "aggregation-control".into(),
+            config: Config {
+                schema_version: 1,
+                project: ProjectConfig {
+                    id: "aggregation-project".into(),
+                    name: "fixture".into(),
+                },
+                index: Default::default(),
+                policy: Default::default(),
+                search: Default::default(),
+                context: Default::default(),
+                roles: Default::default(),
+            },
+        };
+        p.config.policy.source_topics = vec![SourceTopic {
+            scope: vec!["**".into()],
+            topics: vec![],
+        }];
+        let agent = work::execute(
+            &p,
+            &work::WorkCommand::Agent {
+                command: work::AgentCommand::Register {
+                    name: "late-agent".into(),
+                    kind: "agent".into(),
+                    concurrency_limit: 1,
+                },
+            },
+        )
+        .unwrap()["agent_id"]
+            .as_str()
+            .unwrap()
+            .to_owned();
+        let sid = crate::session::session(
+            &p,
+            &crate::session::SessionCommand::Attach {
+                agent: agent.clone(),
+                runtime: "manual".into(),
+                workspace: "current".into(),
+                native_session: None,
+                role: Some("legal".into()),
+                account_pool: None,
+                adapter_version: "manual-v1".into(),
+            },
+        )
+        .unwrap()["session_id"]
+            .as_str()
+            .unwrap()
+            .to_owned();
+        let restriction = execute(
+            &p,
+            &OperationCommand::Role {
+                command: RoleCommand::Pause {
+                    role: "legal".into(),
+                    reason: "bounded report".into(),
+                    topic: Some("quiet".into()),
+                    recipient: Some(agent.clone()),
+                },
+            },
+        )
+        .unwrap();
+        let m: Message = serde_json::from_value(json!({"schema_version":1,"type":"security","topic":"quiet","body":"exact report","priority":0,"idempotency_key":"aggregation-report","reporting":{"category":"security","source_paths":[".pctx/decisions/source.md"]}})).unwrap();
+        let expires = now() + 600;
+        let path = temp.path().join("exception.json");
+        std::fs::write(&path,json!({"schema_version":1,"restriction_refs":[{"id":restriction["restriction_id"],"revision":restriction["revision"],"precedence":"exception"}],"role":"legal","recipient":agent,"topic":"quiet","source_scope":[".pctx/decisions/**"],"payload_hash":report_payload_hash(&m).unwrap(),"category":"security","not_before":now()-1,"expires_at":expires,"reason":"aggregation fixture","owner_evidence":"fixture:owner"}).to_string()).unwrap();
+        execute(
+            &p,
+            &OperationCommand::Policy {
+                command: PolicyCommand::ExceptionRecord { from_file: path },
+            },
+        )
+        .unwrap();
+        (temp, p, sid, m, expires)
+    }
+
+    #[test]
+    fn expiry_during_later_role_evaluation_never_accepts_earlier_admission() {
+        let (_temp, p, sid, m, _) = fixture();
+        let mut db = connect(&p).unwrap();
+        let tx = db
+            .transaction_with_behavior(TransactionBehavior::Immediate)
+            .unwrap();
+        let end = now() + 2;
+        // Use a current valid owner-authored rule with a controlled near expiry.
+        let body: String = tx
+            .query_row(
+                "SELECT policy_json FROM ops_reporting_exceptions",
+                [],
+                |r| r.get(0),
+            )
+            .unwrap();
+        let mut policy: Value = serde_json::from_str(&body).unwrap();
+        policy["expires_at"] = json!(end);
+        tx.execute(
+            "UPDATE ops_reporting_exceptions SET policy_json=?1,revision=revision+1",
+            [policy.to_string()],
+        )
+        .unwrap();
+        let consumer = session(&tx, &p, &sid).unwrap();
+        let mut observed = false;
+        let result = message_delivery_observed(&p, &tx, &consumer, &sid, &m, |admission| {
+            if !observed && admission.valid_until.is_some() {
+                observed = true;
+                while now() < end {
+                    p.check_deadline()?;
+                    std::thread::sleep(std::time::Duration::from_millis(10));
+                }
+            }
+            Ok(())
+        })
+        .unwrap();
+        assert!(observed);
+        assert!(result.is_none());
+        assert!(p.deadline.unwrap().remaining().is_ok());
+    }
+
+    #[test]
+    fn source_classification_changed_after_last_admission_is_not_emitted() {
+        let (_temp, p, sid, m, _) = fixture();
+        let mut db = connect(&p).unwrap();
+        let tx = db
+            .transaction_with_behavior(TransactionBehavior::Immediate)
+            .unwrap();
+        let consumer = session(&tx, &p, &sid).unwrap();
+        let mut observed = 0;
+        let error=message_delivery_observed(&p,&tx,&consumer,&sid,&m,|_| {
+            observed+=1;
+            if observed==6 {
+                std::fs::write(p.root.join(".pctx/decisions/source.md"), "---\nid: report-source\nstatus: accepted\ndate: '2026-10-08'\nscope: [code.py]\ntopics: [medical]\n---\nChanged source\n")?;
+            }
+            Ok(())
+        }).unwrap_err();
+        assert_eq!(observed, 6);
+        assert_eq!(error.code, "CONCURRENT_MODIFICATION");
+        assert!(!error.message.contains("medical") && !error.message.contains("source.md"));
+    }
+    #[test]
+    fn inbox_batch_drops_earlier_expired_admission_and_rechecks_earlier_sources() {
+        let (_temp, p, sid, m, _) = fixture();
+        let mut db = connect(&p).unwrap();
+        let tx = db
+            .transaction_with_behavior(TransactionBehavior::Immediate)
+            .unwrap();
+        let end = now() + 2;
+        let body: String = tx
+            .query_row(
+                "SELECT policy_json FROM ops_reporting_exceptions",
+                [],
+                |r| r.get(0),
+            )
+            .unwrap();
+        let mut policy: Value = serde_json::from_str(&body).unwrap();
+        policy["expires_at"] = json!(end);
+        tx.execute(
+            "UPDATE ops_reporting_exceptions SET policy_json=?1,revision=revision+1",
+            [policy.to_string()],
+        )
+        .unwrap();
+        let consumer = session(&tx, &p, &sid).unwrap();
+        let mut original_expiry = None;
+        let mut original_source = None;
+        assert!(
+            message_delivery_observed(&p, &tx, &consumer, &sid, &m, |proof| {
+                original_expiry = proof.valid_until.or(original_expiry);
+                original_source = proof.source_hash.clone();
+                Ok(())
+            })
+            .unwrap()
+            .is_some()
+        );
+        assert!(original_expiry.is_some());
+        let paths = vec![".pctx/decisions/source.md".to_owned()];
+        let fingerprint = original_source.unwrap();
+        let first = || InboxAdmission {
+            projection: json!({"message_seq":1,"message":{"body":"first restricted report","priority":0}}),
+            valid_until: original_expiry,
+            sources: Some((paths.clone(), fingerprint.clone())),
+        };
+        let second = || InboxAdmission {
+            projection: json!({"message_seq":2,"message":{"body":"second report","priority":0}}),
+            valid_until: None,
+            sources: None,
+        };
+        // A later message is admitted after the first rule really expires.
+        while now() < end {
+            p.check_deadline().unwrap();
+            std::thread::sleep(std::time::Duration::from_millis(10));
+        }
+        let mut later: Message = serde_json::from_value(serde_json::to_value(&m).unwrap()).unwrap();
+        later.reporting = None;
+        later.topic = "public".into();
+        assert!(
+            message_delivery(&p, &tx, &consumer, &sid, &later)
+                .unwrap()
+                .is_some()
+        );
+        let (visible, suppressed) = finalize_inbox_admissions(&p, vec![first(), second()]).unwrap();
+        assert_eq!(suppressed, 1);
+        assert_eq!(visible.len(), 1);
+        assert_eq!(visible[0]["message_seq"], 2);
+        // A later message's evaluation can also change an earlier source.
+        std::fs::write(p.root.join(&paths[0]), "---\nid: report-source\nstatus: accepted\ndate: '2026-10-08'\nscope: [code.py]\ntopics: [medical]\n---\nChanged source\n").unwrap();
+        let error = finalize_inbox_admissions(&p, vec![first(), second()]).unwrap_err();
+        assert_eq!(error.code, "CONCURRENT_MODIFICATION");
+        assert!(!error.message.contains("medical") && !error.message.contains("source.md"));
+    }
 }

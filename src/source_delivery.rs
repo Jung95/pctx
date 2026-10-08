@@ -63,23 +63,15 @@ pub(crate) fn validate_assignments(assignments: &[SourceTopic]) -> Result<()> {
     compile(assignments)?;
     Ok(())
 }
-pub struct SourcePolicy<'a> {
+/// Authored classification only. It has no session, owner permission or
+/// delivery binding, so reporting can evaluate explicit exceptions separately.
+pub(crate) struct SourceClassifier<'a> {
     project: &'a Project,
-    session: Option<&'a str>,
-    packet_topic: Option<&'a str>,
-    owner_role: &'a str,
     compiled: Vec<(GlobSet, Vec<String>)>,
-    initial_binding: String,
-    policy_hash: String,
     initial_policy: Option<String>,
 }
-impl<'a> SourcePolicy<'a> {
-    pub fn new(
-        p: &'a Project,
-        consumer: Option<&'a str>,
-        packet_topic: Option<&'a str>,
-        owner_role: &'a str,
-    ) -> Result<Self> {
+impl<'a> SourceClassifier<'a> {
+    pub(crate) fn new(p: &'a Project) -> Result<Self> {
         p.check_deadline()?;
         let compiled = compile(&p.config.policy.source_topics)?;
         reader::validate_root(p)?;
@@ -94,37 +86,20 @@ impl<'a> SourcePolicy<'a> {
                 4,
             ));
         }
-        let (_, initial_binding) =
-            session::delivery_binding(p, consumer, packet_topic, owner_role)?;
         p.check_deadline()?;
         Ok(Self {
             project: p,
-            session: consumer,
-            packet_topic,
-            owner_role,
             compiled,
-            initial_binding,
-            policy_hash: p.policy_hash(),
             initial_policy,
         })
     }
-    /// Recheck the original presence and effective policy, not a fresh binding
-    /// which could mistake a deleted initialized configuration for a fixture.
-    pub fn revalidate(&self) -> Result<()> {
-        self.project.check_deadline()?;
-        if self.project.current_policy_hash()? != self.initial_policy {
-            return Err(Error::new(
-                "CONCURRENT_MODIFICATION",
-                "Source delivery policy changed",
-                4,
-            ));
-        }
-        self.project.check_deadline()?;
-        Ok(())
-    }
-    /// Some(empty) is an authored public classification. Owner assignments always
-    /// contribute their union; no source declaration can remove assigned labels.
-    pub fn check(&self, path: &str, declared: Option<&[String]>) -> Result<String> {
+    /// None means unknown, Some(empty) explicitly public. Overlapping owner
+    /// assignments and declarations form a sorted union, never declassification.
+    pub(crate) fn labels(
+        &self,
+        path: &str,
+        declared: Option<&[String]>,
+    ) -> Result<Option<Vec<String>>> {
         let p = self.project;
         p.check_deadline()?;
         if !relative(path) || path.len() > 4096 {
@@ -135,6 +110,7 @@ impl<'a> SourcePolicy<'a> {
             ));
         }
         reader::policy_allows(p, path)?;
+        reader::validate_root(p)?;
         if let Some(topics) = declared {
             validate_topics(topics)?;
         }
@@ -150,6 +126,66 @@ impl<'a> SourcePolicy<'a> {
         if let Some(labels) = declared {
             topics.extend(labels.iter().cloned());
         }
+        p.check_deadline()?;
+        Ok(classified.then(|| topics.into_iter().collect()))
+    }
+    /// Keep the initial configuration presence bound across classification work.
+    pub(crate) fn revalidate(&self) -> Result<()> {
+        self.project.check_deadline()?;
+        if self.project.current_policy_hash()? != self.initial_policy {
+            return Err(Error::new(
+                "CONCURRENT_MODIFICATION",
+                "Source delivery policy changed",
+                4,
+            ));
+        }
+        self.project.check_deadline()
+    }
+}
+pub struct SourcePolicy<'a> {
+    project: &'a Project,
+    session: Option<&'a str>,
+    packet_topic: Option<&'a str>,
+    owner_role: &'a str,
+    classifier: SourceClassifier<'a>,
+    initial_binding: String,
+    policy_hash: String,
+}
+impl<'a> SourcePolicy<'a> {
+    pub fn new(
+        p: &'a Project,
+        consumer: Option<&'a str>,
+        packet_topic: Option<&'a str>,
+        owner_role: &'a str,
+    ) -> Result<Self> {
+        p.check_deadline()?;
+        let classifier = SourceClassifier::new(p)?;
+        let (_, initial_binding) =
+            session::delivery_binding(p, consumer, packet_topic, owner_role)?;
+        p.check_deadline()?;
+        Ok(Self {
+            project: p,
+            session: consumer,
+            packet_topic,
+            owner_role,
+            classifier,
+            initial_binding,
+            policy_hash: p.policy_hash(),
+        })
+    }
+    /// Recheck the original presence and effective policy, not a fresh binding
+    /// which could mistake a deleted initialized configuration for a fixture.
+    pub fn revalidate(&self) -> Result<()> {
+        self.classifier.revalidate()
+    }
+    /// Some(empty) is an authored public classification. Owner assignments always
+    /// contribute their union; no source declaration can remove assigned labels.
+    pub fn check(&self, path: &str, declared: Option<&[String]>) -> Result<String> {
+        let p = self.project;
+        p.check_deadline()?;
+        let labels = self.classifier.labels(path, declared)?;
+        let classified = labels.is_some();
+        let topics: BTreeSet<String> = labels.unwrap_or_default().into_iter().collect();
         let mut barriers = Vec::new();
         if !classified {
             // A public packet cannot declassify an unknown source under quiet

@@ -1,0 +1,42 @@
+    Checking pctx v0.1.0-dev (/Users/dev/PCTX)
+error[E0599]: no method named `clone` found for struct `operations::Message` in the current scope
+    --> src/operations.rs:1867:27
+     |
+ 202 | pub struct Message {
+     | ------------------ method `clone` not found for this struct
+...
+1867 |         let mut later = m.clone();
+     |                           ^^^^^ method not found in `operations::Message`
+     |
+     = help: items from traits can only be used if the trait is implemented and in scope
+     = note: the following trait defines an item `clone`, perhaps you need to implement it:
+             candidate #1: `std::clone::Clone`
+
+For more information about this error, try `rustc --explain E0599`.
+error: could not compile `pctx` (lib test) due to 1 previous error
+warning: build failed, waiting for other jobs to finish...
+error: this `if` statement can be collapsed
+    --> src/operations.rs:1016:9
+     |
+1016 | /         if let Some((paths, expected)) = &admission.sources {
+1017 | |             if crate::policy_controls::report_source_binding(p, paths)? != *expected {
+1018 | |                 return Err(Error::new(
+1019 | |                     "CONCURRENT_MODIFICATION",
+...    |
+1024 | |         }
+     | |_________^
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#collapsible_if
+     = note: `-D clippy::collapsible-if` implied by `-D warnings`
+     = help: to override `-D warnings` add `#[allow(clippy::collapsible_if)]`
+help: collapse nested if block
+     |
+1016 ~         if let Some((paths, expected)) = &admission.sources
+1017 ~             && crate::policy_controls::report_source_binding(p, paths)? != *expected {
+1018 |                 return Err(Error::new(
+ ...
+1022 |                 ));
+1023 ~             }
+     |
+
+error: could not compile `pctx` (lib) due to 1 previous error

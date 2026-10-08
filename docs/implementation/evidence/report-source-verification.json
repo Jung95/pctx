@@ -1,0 +1,95 @@
+{
+  "decision": "D047-report-source-classification-and-final-admission-proofs",
+  "base_commit": "2d6708aca4dd456fb1ac656cf2b2866b82926351",
+  "platform": "native macOS arm64",
+  "source_sha256": {
+    "src/source_delivery.rs": "947c4ae8dafdd685449d49b4b4dcd267426374dae3bb6e29276fdde667356d47",
+    "src/policy_controls.rs": "efbcb8591ca9ca314a85a20545daba5f054ec5538e05db4a79312df039f7e52c",
+    "src/operations.rs": "fa051383395a2bb020fca8c22dcb693d3db82231303d061c2fef98e0c5d6f504",
+    "tests/policy_controls_cli.rs": "8320a78ca9e04d0dfa1e37df7db3e0fda0518140614074131306b6a1e9564a34"
+  },
+  "verification": {
+    "full": {
+      "handle": 55189,
+      "exit": 101,
+      "passed": 363,
+      "failed": 3,
+      "failed_target": "project_deadline",
+      "failures": [
+        "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+        "simultaneous_streams_are_collected_and_overflow_never_infers_success",
+        "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget"
+      ]
+    },
+    "related_full_counts": {
+      "policy_controls_cli": 7,
+      "source_delivery": 11,
+      "operations": 11,
+      "session_render_budget": 13,
+      "schedule": 17
+    },
+    "controlled_helper_races": {
+      "passed": 3,
+      "failed": 0,
+      "real_expiry": true,
+      "actual_cli_batch_race": false
+    },
+    "format_exit": 0,
+    "locked_all_target_clippy_exit": 0
+  },
+  "review": {
+    "independent_agent": "requirements",
+    "findings": [
+      "Earlier role/recipient grant could expire during later admissions",
+      "Earlier Inbox report could expire or change classification during later selection"
+    ],
+    "repair": "Retain earliest rule/message expiry and classification binding; revalidate after role/recipient evaluation and selected Inbox batch, then remove expired projections using one final clock observation.",
+    "remaining_scoped_blockers": 0
+  },
+  "logs": {
+    "full-final": {
+      "path": "docs/implementation/evidence/report-source-full-final.log",
+      "sha256": "73fc8938ebd7ae964bc3196c01191beea746b2f8133180a48db4f87291f1768a"
+    },
+    "cli-before-batch": {
+      "path": "docs/implementation/evidence/report-source-cli-before-batch.log",
+      "sha256": "1b29b3012c7438f6305a19a90b289e26c67f7b31ce3573adece82a7e5461d667"
+    },
+    "races-final": {
+      "path": "docs/implementation/evidence/report-source-races-final.log",
+      "sha256": "419e22449ffb6fbb01e4ceabfd46d7317a9dcfcd70decc093aa1c875d869e60c"
+    },
+    "static-final": {
+      "path": "docs/implementation/evidence/report-source-static-final.log",
+      "sha256": "a58cbabe5cb41a04ed9bf69381e667d3b9fcf17f206ac768c684479fc2a33175"
+    },
+    "initial-compile": {
+      "path": "docs/implementation/evidence/report-source-initial-compile.log",
+      "sha256": "46eae1144e07f4fe16b3b980d415262e0e67a689f25909224d229140ada0f271"
+    },
+    "second-compile": {
+      "path": "docs/implementation/evidence/report-source-second-compile.log",
+      "sha256": "08d53da908bd6c5d9ca8cf1330fed05eac2bb40db3793df030aed89ce516772f"
+    },
+    "race-compile": {
+      "path": "docs/implementation/evidence/report-source-race-compile.log",
+      "sha256": "89855e9ffb20bc225cb9a205dc0853cb4c70aa7b911a7101398346d0cc8bdce7"
+    },
+    "batch-compile": {
+      "path": "docs/implementation/evidence/report-source-batch-compile.log",
+      "sha256": "4da1f8e201a7970d0066dba8b4abbf1aa792d3062d29cc26e29dec89ca103b6b"
+    },
+    "batch-static-initial": {
+      "path": "docs/implementation/evidence/report-source-batch-static-initial.log",
+      "sha256": "a964e34ef06e177223993ade580b1d90a24323d5f9182d8fe07b69ed9077b5be"
+    }
+  },
+  "limitations": [
+    "Source paths are owner-reviewed attribution claims; source-body truth is not verified.",
+    "Final filesystem/output boundary remains cooperative; no atomic check-to-write or native Windows/Linux proof.",
+    "Whole AC77 automatic memory/approval/receipt/Pack variants, authenticated external owner transport and full mandatory specification remain incomplete.",
+    "Three original native query startup failures remain unresolved; no retry or timeout extension promotes them."
+  ],
+  "actions_dispatched": 0,
+  "original_spec_sha256": "8914faad57432f524aec0a06aa90c43c18c23f8c19e9f54fe69d9ad185db6523"
+}
