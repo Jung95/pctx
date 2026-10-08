@@ -1,0 +1,24 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.04s
+     Running tests/cli_frontend.rs (target/debug/deps/cli_frontend-4948844b4d514170)
+
+running 1 test
+test partial_refresh_does_not_claim_the_requested_outline_is_wholly_unsupported ... FAILED
+
+failures:
+
+---- partial_refresh_does_not_claim_the_requested_outline_is_wholly_unsupported stdout ----
+
+thread 'partial_refresh_does_not_claim_the_requested_outline_is_wholly_unsupported' (8433886) panicked at tests/cli_frontend.rs:1071:9:
+assertion `left == right` failed: {"command":"outline","coverage":{"reasons":["structure_analysis_unsupported"],"status":"unsupported"},"data":{"coverage":{"omitted_count":null,"refresh_reasons":["FILE_TOO_LARGE"],"status":"partial"},"files":[{"coverage":{"status":"unsupported"},"evidence_status":"observed","file_hash":"82be84ab06491c73799a004332cfb83dbb7005b56e22eb9e210af96bb870905a","freshness":"current","language":"text","parse_status":"unsupported","path":"scope/unsupported.rb","symbols":[]}],"omitted_count":null,"refresh":{"coverage":"partial","generation_id":"GEN-c2363e4f-aea0-48fd-b3b4-b97e6d0a4445","reasons":["FILE_TOO_LARGE"],"skipped_count":1}},"errors":[{"code":"CAPABILITY_UNAVAILABLE","message":"Structure analysis is unsupported for requested files","retryable":false}],"generation_id":null,"project_id":"210baf02-530a-451e-90d8-c51f231a2837","schema_version":"1.0","status":"error","truncation":{"reasons":[],"truncated":false},"validation":{"checked_at":"2026-10-08T17:22:45.886Z","mode":"strict","scope":[],"workspace_atomic":false},"warnings":[],"workspace_id":"WS-1cab9c6e-14ef-46a1-b873-a0467b2524a6"}
+  left: Some(6)
+ right: Some(3)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    partial_refresh_does_not_claim_the_requested_outline_is_wholly_unsupported
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 21 filtered out; finished in 0.68s
+
+error: test failed, to rerun pass `--test cli_frontend`

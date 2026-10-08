@@ -451,3 +451,29 @@ manual run_cli's attestation callback always returns Ok; registered execution
 uses fallible callbacks. Do not invent a production environment hook solely to
 exercise an unreachable manual callback failure. Keep PCTX34/40 independent
 execution features inactive while qualifying the required PCTX01 frontend status.
+
+
+## PCTX01 Outline capability coverage propagation
+
+Specification §4 distinguishes unsupported structural analysis from successful
+text reads/searches; §8 defines complete/partial/unsupported coverage; §14 maps
+necessary unavailable capabilities to exit6. Aggregate existing Outline file
+coverage in the common frontend. When source coverage is complete, nonempty all-unsupported files return error,
+coverage unsupported and CAPABILITY_UNAVAILABLE6 while preserving file metadata.
+Mixed supported/unsupported requests return partial3 with an unsupported reason.
+Supported empty structures stay ok0; syntax-partial stays partial3. No analyzer
+or generic other-command status rule is added. Actual JSON/compact/Markdown and
+text no-match fixtures qualify this boundary.
+
+Manual run_cli's attestation callback always returns Ok. Registered callbacks
+are fallible; runner::spawned sets in-memory pid/process_group before durable
+publication can fail, and caller branches use job.pid to preserve started truth.
+This is a source audit, not native fault injection or general cleanup evidence.
+No additional runner feature or product fault environment hook is introduced.
+
+Independent review found that visible all-unsupported files do not establish a
+complete source universe after strict refresh skips supported sources. The native
+oversized-Python plus unsupported-Ruby regression reproduced erroneous6 versus3.
+Source incomplete coverage now takes precedence: retain partial3, skipped-source
+reasons and per-file unsupported metadata. Final combined regression includes
+JSON/compact/Markdown, and controlled loss of this precedence fails again.

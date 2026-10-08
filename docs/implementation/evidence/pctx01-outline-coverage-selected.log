@@ -1,0 +1,22 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.40s
+     Running tests/cli_frontend.rs (target/debug/deps/cli_frontend-4948844b4d514170)
+
+running 1 test
+test outline_empty_unsupported_and_partial_are_distinct_in_every_representation ... FAILED
+
+failures:
+
+---- outline_empty_unsupported_and_partial_are_distinct_in_every_representation stdout ----
+
+thread 'outline_empty_unsupported_and_partial_are_distinct_in_every_representation' (8422529) panicked at tests/cli_frontend.rs:939:5:
+Output { status: ExitStatus(unix_wait_status(768)), stdout: "{\"command\":\"index update\",\"coverage\":{\"reasons\":[\"request_incomplete\"],\"status\":\"partial\"},\"data\":{\"coverage\":\"partial\",\"files\":10,\"generation_id\":\"GEN-3a8a2e36-fac3-483b-a2d3-0a1785bdedfa\",\"reused_files\":0,\"skipped\":[{\"path\":\"data/workspaces/WS-b1643ea8-af61-4def-935d-4c5203e212e2/index.sqlite3\",\"reason\":\"UNSUPPORTED_ENCODING\"},{\"path\":\"data/workspaces/WS-b1643ea8-af61-4def-935d-4c5203e212e2/index.sqlite3-shm\",\"reason\":\"UNSUPPORTED_ENCODING\"},{\"path\":\"data/workspaces/WS-b1643ea8-af61-4def-935d-4c5203e212e2/index.sqlite3-wal\",\"reason\":\"UNSUPPORTED_ENCODING\"}]},\"errors\":[],\"generation_id\":\"GEN-3a8a2e36-fac3-483b-a2d3-0a1785bdedfa\",\"project_id\":\"e5b2973b-72d7-415c-94be-b8f45d281be5\",\"schema_version\":\"1.0\",\"status\":\"partial\",\"truncation\":{\"reasons\":[],\"truncated\":false},\"validation\":{\"checked_at\":\"2026-10-08T17:15:59.329Z\",\"mode\":\"matched\",\"scope\":[],\"workspace_atomic\":false},\"warnings\":[],\"workspace_id\":\"WS-b1643ea8-af61-4def-935d-4c5203e212e2\"}\n", stderr: "" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    outline_empty_unsupported_and_partial_are_distinct_in_every_representation
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 20 filtered out; finished in 0.82s
+
+error: test failed, to rerun pass `--test cli_frontend`

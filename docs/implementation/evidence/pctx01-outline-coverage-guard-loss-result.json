@@ -1,0 +1,6 @@
+{
+  "test_exit": 101,
+  "original_sha256": "a34ee997faef895d555b30b809f2789e7c38c08a314f819b4531de6fe4b4ff7b",
+  "restored_sha256": "a34ee997faef895d555b30b809f2789e7c38c08a314f819b4531de6fe4b4ff7b",
+  "mutation": "ignore only per-file unsupported coverage aggregation"
+}

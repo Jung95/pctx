@@ -448,3 +448,24 @@ producer/phase/startup gates and native Linux/Windows remain open. Only PCTX01 i
 active and incomplete. No next official task, Actions or rejected-push retry.
 
 Final native full30035 terminal101: 480 PASS/4 original startup FAIL. All jobs terminal; PCTX01 incomplete.
+
+
+## PCTX01 Outline unsupported versus empty coverage
+
+Existing per-file unsupported structure now reaches the common envelope:
+complete source scope/all-unsupported Outline6/error/coverageunsupported; mixed requests3/
+partial; supported empty0 and syntax-partial3 remain. Actual JSON/compact/Markdown
+matrix and empty text Find on unsupported .rb pass. No analyzer feature added.
+Initial fixture self-indexed an in-root data override (partial3), retained in
+backlog; sibling project/data fixture then proved actual unsupported0/complete
+failure. Initial guard loss produces actual0PASS1FAIL. Final unsupported/refresh guard
+losses each0PASS1FAIL with exact restoration. Initial related73 PASS; reviewed final related74 PASS including incomplete strict
+refresh JSON/compact/Markdown. Final format/locked all-target Clippy PASS.
+[Evidence](evidence/pctx01-outline-coverage-verification.json).
+
+Manual callback always-Ok and registered PID-before-publication paths are source
+audited only; native registered failure injection remains unqualified. Remaining
+frontend/producer/phase/startup and native Linux/Windows gates remain open.
+Only PCTX01 is active and incomplete; no next task, Actions or rejected-push retry.
+
+Initial full76840 terminal101: 482PASS3FAIL retained before the independent review fix. Final full43620 terminal101: 482 PASS/4 original startup FAIL; all jobs terminal, PCTX01 incomplete.

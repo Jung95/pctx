@@ -1,0 +1,18 @@
+import hashlib,json,pathlib,shlex,subprocess
+p=pathlib.Path("src/main.rs")
+original=p.read_bytes()
+old=b'file["coverage"]["status"] == "unsupported"'
+new=b'file["coverage"]["status"] == "__ignored_unsupported"'
+assert original.count(old)==1
+e=pathlib.Path("docs/implementation/evidence")
+try:
+ p.write_bytes(original.replace(old,new))
+ with (e/"pctx01-outline-coverage-guard-loss.log").open("w") as f:
+  r=subprocess.run(shlex.split("env RUSTUP_HOME=/Users/dev/PCTX/.toolchain/rustup CARGO_HOME=/Users/dev/PCTX/.toolchain/cargo SDKROOT=/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk PATH=/Users/dev/PCTX/.toolchain/cargo/bin:/Library/Developer/CommandLineTools/usr/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin ")+["cargo","test","--locked","--test","cli_frontend","outline_empty_unsupported_and_partial_are_distinct_in_every_representation","--","--exact"],stdout=f,stderr=subprocess.STDOUT,timeout=40)
+ code=r.returncode
+finally:
+ p.write_bytes(original)
+(e/"pctx01-outline-coverage-guard-loss-result.json").write_text(json.dumps({"test_exit":code,"original_sha256":hashlib.sha256(original).hexdigest(),"restored_sha256":hashlib.sha256(p.read_bytes()).hexdigest(),"mutation":"ignore only per-file unsupported coverage aggregation"},indent=2)+"\n")
+print("mutation exit",code,"exact restore",p.read_bytes()==original)
+assert code==101
+

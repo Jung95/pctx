@@ -1,0 +1,24 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.86s
+     Running tests/cli_frontend.rs (target/debug/deps/cli_frontend-4948844b4d514170)
+
+running 1 test
+test outline_empty_unsupported_and_partial_are_distinct_in_every_representation ... FAILED
+
+failures:
+
+---- outline_empty_unsupported_and_partial_are_distinct_in_every_representation stdout ----
+
+thread 'outline_empty_unsupported_and_partial_are_distinct_in_every_representation' (8437393) panicked at tests/cli_frontend.rs:999:13:
+assertion `left == right` failed: json/unsupported.rb: {"command":"outline","coverage":{"reasons":[],"status":"complete"},"data":{"files":[{"coverage":{"status":"unsupported"},"evidence_status":"observed","file_hash":"8c02903fbade5e9ce3244ebec972249df44886962cf4ed7db1f314fcbfd20378","freshness":"current","language":"text","parse_status":"unsupported","path":"unsupported.rb","symbols":[]}]},"errors":[],"generation_id":null,"project_id":"88ffefca-d2a0-48cb-8d18-60e2efd55de1","schema_version":"1.0","status":"ok","truncation":{"reasons":[],"truncated":false},"validation":{"checked_at":"2026-10-08T17:25:25.936Z","mode":"strict","scope":[],"workspace_atomic":false},"warnings":[],"workspace_id":"WS-5bfdb2eb-add3-4cda-9c72-054e14637831"}
+  left: Some(0)
+ right: Some(6)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    outline_empty_unsupported_and_partial_are_distinct_in_every_representation
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 21 filtered out; finished in 0.83s
+
+error: test failed, to rerun pass `--test cli_frontend`

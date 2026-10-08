@@ -920,3 +920,172 @@ fn parsed_run_preflight_refusals_attest_no_child_before_any_access() {
         }
     }
 }
+
+fn outline_document(out: &Output, format: &str) -> Value {
+    if format == "markdown" {
+        let text = std::str::from_utf8(&out.stdout).unwrap();
+        let metadata = text
+            .split("## Complete envelope metadata\n")
+            .nth(1)
+            .unwrap();
+        let body = metadata
+            .split("```json\n")
+            .nth(1)
+            .unwrap()
+            .split("\n```")
+            .next()
+            .unwrap();
+        serde_json::from_str(body).unwrap()
+    } else {
+        serde_json::from_slice(&out.stdout).unwrap()
+    }
+}
+
+#[test]
+fn outline_empty_unsupported_and_partial_are_distinct_in_every_representation() {
+    let f = Fixture::new();
+    fs::create_dir(f.temp.path().join("project")).unwrap();
+    let invoke = |values: Vec<OsString>| {
+        let mut options = args(&["--root", "project"]);
+        options.extend(values);
+        f.run(&options)
+    };
+    assert!(invoke(args(&["--format", "json", "init"])).status.success());
+    fs::create_dir(f.temp.path().join("project/mixed")).unwrap();
+    fs::write(
+        f.temp.path().join("project/empty.py"),
+        "# no declarations\n",
+    )
+    .unwrap();
+    fs::write(
+        f.temp.path().join("project/unsupported.rb"),
+        "puts 'ordinary text'\n",
+    )
+    .unwrap();
+    fs::write(
+        f.temp.path().join("project/partial.py"),
+        "def unfinished(\n",
+    )
+    .unwrap();
+    fs::write(
+        f.temp.path().join("project/mixed/empty.py"),
+        "# no declarations\n",
+    )
+    .unwrap();
+    fs::write(
+        f.temp.path().join("project/mixed/unsupported.rb"),
+        "puts 1\n",
+    )
+    .unwrap();
+    let update = invoke(args(&["--format", "json", "index", "update"]));
+    assert!(update.status.success(), "{update:?}");
+    for format in ["json", "compact", "markdown"] {
+        for (path, exit, status, coverage) in [
+            ("empty.py", 0, "ok", "complete"),
+            ("unsupported.rb", 6, "error", "unsupported"),
+            ("partial.py", 3, "partial", "partial"),
+            ("mixed", 3, "partial", "partial"),
+        ] {
+            let out = invoke(args(&[
+                "--format",
+                format,
+                "outline",
+                path,
+                "--freshness",
+                "strict",
+            ]));
+            assert!(out.stderr.is_empty(), "{out:?}");
+            let v = outline_document(&out, format);
+            assert_eq!(out.status.code(), Some(exit), "{format}/{path}: {v}");
+            assert_eq!(v["status"], status);
+            assert_eq!(v["coverage"]["status"], coverage);
+            assert_eq!(v["validation"]["mode"], "strict");
+            assert!(v["project_id"].is_string() && v["workspace_id"].is_string());
+            let files = v["data"]["files"].as_array().unwrap();
+            assert_eq!(files.len(), if path == "mixed" { 2 } else { 1 });
+            if path == "empty.py" {
+                assert_eq!(files[0]["symbols"], serde_json::json!([]));
+                assert_eq!(files[0]["coverage"]["status"], "complete");
+                assert_eq!(v["errors"], serde_json::json!([]));
+            } else if path == "unsupported.rb" {
+                assert_eq!(files[0]["parse_status"], "unsupported");
+                assert_eq!(files[0]["symbols"], serde_json::json!([]));
+                assert_eq!(v["errors"][0]["code"], "CAPABILITY_UNAVAILABLE");
+            } else if path == "mixed" {
+                assert!(
+                    files
+                        .iter()
+                        .any(|f| f["coverage"]["status"] == "unsupported")
+                );
+                assert!(files.iter().any(|f| f["coverage"]["status"] == "complete"));
+            } else {
+                assert_eq!(files[0]["parse_status"], "partial");
+            }
+        }
+    }
+    // Text search in an unsupported structural language remains valid.
+    let out = invoke(args(&[
+        "--format",
+        "json",
+        "find",
+        "absent_fixture_word",
+        "--kind",
+        "text",
+        "--scope",
+        "unsupported.rb",
+        "--freshness",
+        "strict",
+    ]));
+    assert_eq!(out.status.code(), Some(0), "{out:?}");
+    let v: Value = serde_json::from_slice(&out.stdout).unwrap();
+    assert_eq!(v["data"]["items"], serde_json::json!([]));
+}
+
+#[test]
+fn partial_refresh_does_not_claim_the_requested_outline_is_wholly_unsupported() {
+    let f = Fixture::new();
+    fs::create_dir(f.temp.path().join("project")).unwrap();
+    let invoke = |values: Vec<OsString>| {
+        let mut options = args(&["--root", "project"]);
+        options.extend(values);
+        f.run(&options)
+    };
+    assert!(invoke(args(&["--format", "json", "init"])).status.success());
+    fs::create_dir(f.temp.path().join("project/scope")).unwrap();
+    fs::write(
+        f.temp.path().join("project/scope/unsupported.rb"),
+        "puts 1\n",
+    )
+    .unwrap();
+    fs::File::create(f.temp.path().join("project/scope/oversized.py"))
+        .unwrap()
+        .set_len(1_048_577)
+        .unwrap();
+    for format in ["json", "compact", "markdown"] {
+        let out = invoke(args(&[
+            "--format",
+            format,
+            "outline",
+            "scope",
+            "--freshness",
+            "strict",
+        ]));
+        assert!(out.stderr.is_empty(), "{out:?}");
+        let v = outline_document(&out, format);
+        assert_eq!(out.status.code(), Some(3), "{v}");
+        assert_eq!(v["status"], "partial");
+        assert_eq!(v["coverage"]["status"], "partial");
+        assert_eq!(v["data"]["coverage"]["status"], "partial");
+        assert!(
+            v["data"]["coverage"]["refresh_reasons"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .any(|v| v == "FILE_TOO_LARGE")
+        );
+        let files = v["data"]["files"].as_array().unwrap();
+        assert_eq!(files.len(), 1);
+        assert_eq!(files[0]["coverage"]["status"], "unsupported");
+        assert_eq!(v["errors"], serde_json::json!([]));
+    }
+}

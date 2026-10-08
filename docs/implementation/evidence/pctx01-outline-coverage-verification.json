@@ -1,0 +1,238 @@
+{
+  "task": "PCTX01",
+  "status": "implementing; incomplete; sole active official task",
+  "base_revision": "ce41af4f86ea146923578ed2a2bfcf449432f565",
+  "previous_goal_turn": "progress: shared fallback refactor and boundary injection evidence/local commit",
+  "platform": "native macOS arm64",
+  "source_sha256": {
+    "src/main.rs": "ddabe20a2ced14a8e2668cc953059a279ecdd7f3e7f0e6b67bda7c67f61affcd",
+    "tests/cli_frontend.rs": "d859135338890e526b33158b77935ea14edbdb8e24b004cf9c373d116a925dd6"
+  },
+  "callback_source_audit_sha256": {
+    "src/output.rs": "69e1b365abba2986ec1e04b1648c8dbff1fe1eddfa762816e85379f4c3be7940",
+    "src/runner.rs": "573691e7894f2af8651e93f66ddb1aa2a20d20e8b57bb051e262a86e3b84a47a",
+    "src/work.rs": "9776271eef1a8f9a6c8e68e71395b62d8a63600d30fd5934a7a6324a2f9cce5d"
+  },
+  "initial_full_sources": {
+    "qualification": "Initial full source before independent refresh-partial blocker repair; not final qualification",
+    "sha256": {
+      "src/main.rs": "a34ee997faef895d555b30b809f2789e7c38c08a314f819b4531de6fe4b4ff7b",
+      "tests/cli_frontend.rs": "d5d9ab60c3514980e260662939d45944f9876390e5a2c761ca541f190295ba97"
+    }
+  },
+  "runs": [
+    {
+      "path": "pctx01-outline-coverage-selected.log",
+      "sha256": "12fb9a1cbdaf6b0c99e67f5b9df20c1fba2ee89c6cce48d647f18164325ec944",
+      "exit": 101,
+      "session": 55179,
+      "counts": {
+        "passed": 0,
+        "failed": 1
+      },
+      "qualification": "Initial in-root data override self-indexed SQLite; fixture isolation failure."
+    },
+    {
+      "path": "pctx01-outline-coverage-fixture.log",
+      "sha256": "24cd6f428da69e2507801364a3af17a10e1f56ffe802396a8146f167957673bd",
+      "exit": 101,
+      "session": 1808,
+      "counts": {
+        "passed": 0,
+        "failed": 1
+      },
+      "qualification": "Sibling-root fixture proves unsupported6 expected but original0/complete observed."
+    },
+    {
+      "path": "pctx01-outline-coverage-repaired.log",
+      "sha256": "ef58ada72265a2e8fb33a5e3ed8bb979e2fd20c26e361d5a4c360786d61139c4",
+      "exit": 0,
+      "session": 49552,
+      "counts": {
+        "passed": 1,
+        "failed": 0
+      },
+      "qualification": "First visible-file aggregation; lacks refresh-incomplete precedence."
+    },
+    {
+      "path": "pctx01-outline-coverage-guard-loss.log",
+      "sha256": "ed38e6d793061143c6699d548c9754c5843a6ffdfb010e053c1e5f975836a439",
+      "exit": 101,
+      "session": 8671,
+      "counts": {
+        "passed": 0,
+        "failed": 1
+      },
+      "qualification": "Initial visible unsupported aggregation controlled loss, restored initial SHA."
+    },
+    {
+      "path": "pctx01-outline-coverage-related.log",
+      "sha256": "c459193ef1dbbee867148f12761a74f1dc88898c3191379c8f0e1db2db8db3af",
+      "exit": 0,
+      "session": 46510,
+      "counts": {
+        "passed": 73,
+        "failed": 0
+      },
+      "qualification": "Initial related73 PASS; review blocker still present."
+    },
+    {
+      "path": "pctx01-outline-coverage-static.log",
+      "sha256": "4bf35dabcac215574801be040471a7f78841024aa830027c2ffdd059bc166d31",
+      "exit": 0,
+      "session": 74286,
+      "counts": {
+        "passed": 0,
+        "failed": 0
+      },
+      "qualification": "Initial static before review blocker repair."
+    },
+    {
+      "path": "pctx01-outline-coverage-full.log",
+      "sha256": "5d70921b2ecb59c7153532290b5794bcd388269db06d365ebc44b568ae14a1de",
+      "exit": 101,
+      "session": 76840,
+      "counts": {
+        "passed": 482,
+        "failed": 3
+      },
+      "qualification": "Initial full; source hashes archived, does not qualify omitted-source aggregation."
+    },
+    {
+      "path": "pctx01-outline-coverage-review-failure.log",
+      "sha256": "8525d115cc2805ef643cbcb797461dc59eedd639dec015d4f818ab78b5e21040",
+      "exit": 101,
+      "session": 51987,
+      "counts": {
+        "passed": 0,
+        "failed": 1
+      },
+      "qualification": "Independent combined oversized supported/unsupported case reproduced6 vs3."
+    },
+    {
+      "path": "pctx01-outline-coverage-reviewed-related.log",
+      "sha256": "190a97ec5bbdd36d19614c6de2a51ea59736bf8147fe7bf9c62ce27ecadb76bc",
+      "exit": 0,
+      "session": 4628,
+      "counts": {
+        "passed": 74,
+        "failed": 0
+      },
+      "qualification": "Repaired refresh precedence related74 PASS before combined Markdown extension."
+    },
+    {
+      "path": "pctx01-outline-coverage-final-loss-unsupported.log",
+      "sha256": "27cce8bfe037338dc0e7d9556d0cee482d2eb32b5fef7378846444324efe22cc",
+      "exit": 101,
+      "session": 59489,
+      "counts": {
+        "passed": 0,
+        "failed": 1
+      },
+      "qualification": "Final source guard loss: ignore unsupported aggregation ->0 instead6."
+    },
+    {
+      "path": "pctx01-outline-coverage-final-loss-refresh.log",
+      "sha256": "40a8daac683729ce2a14e6b62fa72c9a3802689a8292cba4325f2017028a6c88",
+      "exit": 101,
+      "session": 59489,
+      "counts": {
+        "passed": 0,
+        "failed": 1
+      },
+      "qualification": "Final source guard loss: disregard incomplete refresh ->6 instead3."
+    },
+    {
+      "path": "pctx01-outline-coverage-final-related.log",
+      "sha256": "a55bf9da169c2d5d47dfb4b6d3a2a98968e759da1a09926951f89f84ef80eccc",
+      "exit": 0,
+      "session": 85601,
+      "counts": {
+        "passed": 74,
+        "failed": 0
+      },
+      "qualification": "Final related74 PASS including combined Markdown case."
+    },
+    {
+      "path": "pctx01-outline-coverage-final-static.log",
+      "sha256": "812655f6511aa24b6d023e0a4c43442c149b38ff98b025fff69f96c6efa9cdc5",
+      "exit": 0,
+      "session": 86395,
+      "counts": {
+        "passed": 0,
+        "failed": 0
+      },
+      "qualification": "Final format/locked all-target Clippy."
+    },
+    {
+      "path": "pctx01-outline-coverage-final-full.log",
+      "sha256": "799916cbe485f4f55660b2967a27a8581d62e3c2172d504ca10352b3fe3d9f25",
+      "exit": 101,
+      "session": 43620,
+      "counts": {
+        "passed": 482,
+        "failed": 4
+      },
+      "qualification": "Final exact-source full after independent review fix; original startup failures retained."
+    }
+  ],
+  "guard_loss_results": {
+    "results": [
+      {
+        "mutation": "unsupported",
+        "test_exit": 101
+      },
+      {
+        "mutation": "refresh",
+        "test_exit": 101
+      }
+    ],
+    "original_sha256": "ddabe20a2ced14a8e2668cc953059a279ecdd7f3e7f0e6b67bda7c67f61affcd",
+    "restored_sha256": "ddabe20a2ced14a8e2668cc953059a279ecdd7f3e7f0e6b67bda7c67f61affcd"
+  },
+  "initial_guard_loss": {
+    "test_exit": 101,
+    "original_sha256": "a34ee997faef895d555b30b809f2789e7c38c08a314f819b4531de6fe4b4ff7b",
+    "restored_sha256": "a34ee997faef895d555b30b809f2789e7c38c08a314f819b4531de6fe4b4ff7b",
+    "mutation": "ignore only per-file unsupported coverage aggregation"
+  },
+  "proof_scope": [
+    "Complete source universe with all returned Outline files unsupported -> error/CAPABILITY_UNAVAILABLE6/coverageunsupported.",
+    "Mixed visible supported+unsupported and syntaxpartial ->partial3; supported empty structure ->ok0.",
+    "Strict skipped oversized.py plus visible unsupported.rb ->partial3 with FILE_TOO_LARGE refresh reasons and no capability error.",
+    "Both matrices run actual JSON/compact/Markdown; text Find no match in unsupported structural language remains0/emptyitems.",
+    "Manual callback alwaysOk and registered PID-before-publication ordering source-audited only."
+  ],
+  "limits": [
+    "Native registered observer-error injection and ownership remain unqualified.",
+    "Supported platforms other than native macOS not qualified.",
+    "Original startup failures and remaining frontend/producer/phase/platform gates unresolved.",
+    "Whole PCTX01 and goal incomplete; no other official task."
+  ],
+  "specification_sections": [
+    "\u00a74 unsupported languages",
+    "\u00a78 independent coverage status",
+    "\u00a714 common result and exit codes",
+    "\u00a721 PCTX01"
+  ],
+  "review_sha256": "427d068648719c936899202c93153140ca4bc14de99e61b45e5bd840801b8e68",
+  "driver_sha256": "99b09e30f1f00015238114e46bbd8d8de7f772939b59bee1e72d01e16093bc06",
+  "commands": {
+    "related": "cargo test --locked --no-fail-fast --test cli_frontend --test search --test render --test cli_contract",
+    "full": "cargo test --locked --no-fail-fast"
+  },
+  "push_state": "prior automatic rejection unchanged; explicit approval pending, no retry",
+  "actions_dispatched": false,
+  "next_official_task": null,
+  "final_failed_tests": [
+    "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+    "query_program_resolution_uses_captured_command_path",
+    "simultaneous_streams_are_collected_and_overflow_never_infers_success",
+    "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget"
+  ],
+  "initial_full_failed_tests": [
+    "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+    "simultaneous_streams_are_collected_and_overflow_never_infers_success",
+    "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget"
+  ]
+}

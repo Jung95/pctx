@@ -6,22 +6,25 @@
 
 ## Latest verified integration boundary
 
-PCTX01 remains the only active official task (`implementing`). Base860f2fd;
-CLI oversized reduction delegates unchanged semantics to shared budget_fallback.
-Real native observations plus injected oversized presentation verify child0/1/2/
-signal15, prelaunch denial5, incomplete capture and publication failure7 truth.
-Nested retrieval and unattested/no-fabrication tests pass. Related22 PASS;
-format/locked all-target Clippy PASS. Two guard losses actual0PASS1FAIL each:
-child0 becomes missing; denial5 becomes8. Exact source restore. Initial import
-and crate-path build failures ran no tests and are retained. Final full30035
-terminal101: 480 PASS/4 original startup FAIL at unchanged original1s budgets.
-Independent review found no scoped blocker. All jobs terminal; no live heavy job.
-Manifest: evidence/pctx01-budget-fallback-verification.json.
-Boundary injection is not naturally occurring CLI metadata fallback; universal
-size bounds, native observer error propagation, remaining producer/phase/startup
-and native Linux/Windows gates remain open. No next official task or Actions.
-Prior automatic main push rejection remains; no retry/alternate mechanism.
-Local commits remain unpushed pending explicit approval. Whole goal incomplete.
+PCTX01 remains the only active official task (`implementing`). Basece41af4;
+Outline common envelope now distinguishes complete-source all-unsupported6,
+supported empty0, visible mixed/parse-partial3, and incomplete strict refresh3.
+Metadata remains intact; text Find in unsupported language stays valid0/empty.
+Initial fixture self-indexed data override (backlog), then actualunsupported0/
+complete failed6 expectation. Independent review found all visible unsupported
+incorrectly overriding omitted supported sources; native oversizePython/Ruby
+reproduced6vs3. Source-incomplete precedence repairs it. Both final actual matrices
+include JSON/compact/Markdown. Related74 PASS, format/locked all-target Clippy PASS.
+Two final guard losses each0PASS1FAIL and exact source restoration. Initial full
+76840 terminal101: 482PASS3FAIL retained; final full43620 terminal101:
+482 PASS/4 original startup FAIL at unchanged original1s budgets.
+Independent scoped review found no remaining blocker after repair. Manual alwaysOk
+callback and registered PID-before-publication ordering source-audited only.
+All jobs terminal; no live heavy job. Manifest:
+evidence/pctx01-outline-coverage-verification.json. Native registered faults,
+remaining frontend/producer/phase/startup and native Linux/Windows still required.
+No next official task/Actions. Prior main push rejection unchanged, no retry;
+local commits unpushed pending explicit approval. Whole task/goal incomplete.
 
 ## Source, evidence and environment
 
@@ -69,20 +72,21 @@ Original ignored specification SHA256 8914faad57432f524aec0a06aa90c43c18c23f8c19
 
 ## Exact next action
 
-Within PCTX01, audit the actual fallible callback/producer error paths and the
-remaining error/argument/supported-empty/unavailable/partial envelope contracts.
-Manual run_cli's spawn attestation always returns Ok; registered callbacks are
-fallible. Qualify the actual frontend state without inventing a product test hook
-or expanding independent PCTX34/40 execution features. Shared budget reduction
-is qualified at an injected presentation boundary; naturally triggered metadata
-fallback and universal size bounds are not claimed. Preserve original startup
-budgets and every failed attempt. Counterbalanced fresh/reused byte-identical
-native executable/group factors remain the next causal startup investigation;
-record identity, actual signal and expiry, without warm-up production retry,
-interpreter substitution, deadline increases or OS-policy changes. Native Linux/
-Windows executions remain mandatory. No other official task before PCTX01 fully
-closes. Prior rejected main push remains pending explicit approval; do not retry
-through alternate mechanisms. All current jobs terminal.
+Within PCTX01, audit the remaining common envelope/error/exit matrix, especially
+nested registered execution processing errors and unavailable/partial results.
+Manual run_cli's native attestation is not fallible; registered callbacks are.
+Native registered failure injection remains unqualified, and no product fault
+hook or independent runner feature is authorized by this audit. Outline file
+coverage and incomplete strict-refresh priority are locally qualified; preserve
+source-level omission reasons and avoid declaring an incomplete universe wholly
+unsupported. Shared budget reduction remains boundary-injected qualification.
+Keep original startup budgets and every failure. Counterbalanced fresh/reused
+native executable/group factors remain the next causal startup investigation,
+recording identity, actual signal and expiry without warm-up retries, interpreter
+substitution, deadline increases or OS-policy changes. Required native Linux/
+Windows executions remain open. Finish all PCTX01 gates before another official
+task. Prior rejected main push remains pending explicit approval; no alternate
+mechanism or retry. All current jobs terminal.
 
 ## Retained historical results and inactive backlog
 

@@ -1006,15 +1006,47 @@ fn main() {
             if let Some(g) = out["data"]["generation_id"].as_str() {
                 out["generation_id"] = json!(g);
             }
-            let partial = out["data"]["coverage"] == "partial"
+            let outline_files = if matches!(&cli.command, Command::Outline { .. }) {
+                out["data"]["files"].as_array()
+            } else {
+                None
+            };
+            let unsupported = outline_files
+                .map(|files| {
+                    files
+                        .iter()
+                        .filter(|file| file["coverage"]["status"] == "unsupported")
+                        .count()
+                })
+                .unwrap_or(0);
+            let source_incomplete = out["data"]["coverage"] == "partial"
                 || out["data"]["coverage"]["status"] == "partial"
-                || out["data"]["completeness"] == "partial"
+                || out["data"]["completeness"] == "partial";
+            let wholly_unsupported = !source_incomplete
+                && outline_files
+                    .is_some_and(|files| !files.is_empty() && unsupported == files.len());
+            let partial = unsupported > 0
+                || source_incomplete
                 || out["data"]["files"]
                     .as_array()
                     .is_some_and(|fs| fs.iter().any(|f| f["coverage"]["status"] == "partial"));
-            let exit = if partial {
+            let exit = if wholly_unsupported {
+                out["status"] = json!("error");
+                out["coverage"] =
+                    json!({"status":"unsupported","reasons":["structure_analysis_unsupported"]});
+                out["errors"] = json!([Error::new(
+                    "CAPABILITY_UNAVAILABLE",
+                    "Structure analysis is unsupported for requested files",
+                    6
+                )]);
+                6
+            } else if partial {
                 out["status"] = json!("partial");
-                out["coverage"] = json!({"status":"partial","reasons":["request_incomplete"]});
+                let mut reasons = vec!["request_incomplete"];
+                if unsupported > 0 {
+                    reasons.push("structure_analysis_unsupported");
+                }
+                out["coverage"] = json!({"status":"partial","reasons":reasons});
                 3
             } else {
                 0

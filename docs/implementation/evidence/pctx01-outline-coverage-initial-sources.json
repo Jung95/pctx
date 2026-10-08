@@ -1,0 +1,7 @@
+{
+  "qualification": "Initial full source before independent refresh-partial blocker repair; not final qualification",
+  "sha256": {
+    "src/main.rs": "a34ee997faef895d555b30b809f2789e7c38c08a314f819b4531de6fe4b4ff7b",
+    "tests/cli_frontend.rs": "d5d9ab60c3514980e260662939d45944f9876390e5a2c761ca541f190295ba97"
+  }
+}

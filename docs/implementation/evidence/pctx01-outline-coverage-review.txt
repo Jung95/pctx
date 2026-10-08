@@ -1,0 +1,10 @@
+Independent read-only review by /root/requirements; no edits or tests performed.
+Initial blocker: all returned Outline files unsupported was incorrectly treated
+as proof the requested source universe was wholly unsupported, overriding partial
+strict refresh after an oversized supported file was skipped.
+Native review-failure regression reproduced exit6 instead of3.
+Reviewed repair: source_incomplete prevents wholly_unsupported and retains
+partial/exit3 and refresh details. No further scoped blocker found.
+Static review covered the combined JSON/compact regression; Markdown was added
+afterward and executed by main's final related/full checks. Other native platforms
+and broader producer/callback ownership gates remain unqualified.

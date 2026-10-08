@@ -1,0 +1,14 @@
+{
+  "results": [
+    {
+      "mutation": "unsupported",
+      "test_exit": 101
+    },
+    {
+      "mutation": "refresh",
+      "test_exit": 101
+    }
+  ],
+  "original_sha256": "ddabe20a2ced14a8e2668cc953059a279ecdd7f3e7f0e6b67bda7c67f61affcd",
+  "restored_sha256": "ddabe20a2ced14a8e2668cc953059a279ecdd7f3e7f0e6b67bda7c67f61affcd"
+}
