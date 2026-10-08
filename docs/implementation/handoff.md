@@ -4,9 +4,10 @@
 
 **PCTX01 — CLI, envelope and stable errors** is the only active task (`implementing`). It is lowest incomplete with no prerequisites. The latest user goal supersedes historical next-action lists: finish all current-task mandatory implementation, validation, documentation and platform gates before choosing another task. Read docs/implementation/tasks/PCTX01.md, requirements.md and progress.md, then inspect actual Git/code/jobs. Other official items and D-series future slices are backlog. A subset/macOS pass is not task completion. No next official task is selected.
 
-## Latest integration boundary
+## Latest verified integration boundary
 
-PCTX01 only, base dfde21c. ContextGet existing pure mode/full+since/explicit
+PCTX01 only; verified runtime revision aab2602597635fd96d750b66b4400af4a8f50fc7,
+base dfde21c. ContextGet existing pure mode/full+since/explicit
 normalized scope/budget shared before main discovery and producer DB; original
 library deadline first, valid session/delivery authorization retained. Native18
 no-effects cases, direct producer/expiry, valid full/delta absent-session refusal
@@ -18,8 +19,9 @@ Final native full21292 terminal101: 496PASS/3FAIL, original startup
 failures retained; all jobs terminal, no heavy job live. PCTX01 incomplete; fixed existing checklist0/10 whole gates,
 IDs G01–G10, denominator unchanged. Next local existing gap Repo Status grammar
 before discovery; no independent PCTX28 feature and no next official task.
-Latest user goal explicitly authorizes development commits/pushes to Jung95/pctx;
-previous rejection remains historical until a newly authorized push is reviewed.
+Latest user goal explicitly authorizes development commits/pushes to Jung95/pctx.
+Normal push13833 terminal0 published02979e1..aab2602 to origin/main. Previous
+auto-review rejection is historical and resolved under that new authorization.
 No Actions, paid calls or policy/deadline changes.
 
 ## Source, evidence and environment
@@ -68,13 +70,13 @@ Original ignored specification SHA256 8914faad57432f524aec0a06aa90c43c18c23f8c19
 
 ## Exact next action
 
-Finish this integration's full gate/evidence and commit first. Stay on PCTX01-G03:
+ContextGet integration and normal push are finished. Stay on PCTX01-G03:
 share Repo Status existing workspace/field grammar between broker and main before
 discovery; native missing/initialized tree and absolute response snapshots.
 Common source fix only, no independent PCTX28 features. Required platform,
 startup and remaining PCTX01 gates stay open. No unchanged expensive rerun to
 seek green. Latest goal authorizes development push to the configured repository;
-review exact pending commits and submit normal push for approval review, preserving
+publication aab2602 is verified. Keep later integration pushes scoped and preserve
 any renewed rejection. Never bypass a rejection. After local work is exhausted,
 external-only blocker may be recorded and one ready task selected per latest goal;
 that condition is not met now.
@@ -86,7 +88,13 @@ Pre-existing M30 handle63324 terminal0; immutable clean-build source f81d55ebf64
 Package target-directory defect and task-linked approval snapshot omission are in backlog.md; package patch backlog/package-target-directory.patch is prepared, not applied. No new archive created. D047 source/report exceptions, D048 candidate admission, other historical scope and evidence are in decisions.md and source verification manifests; these do not complete whole-task AC77/platform/recovery/forward migration. Original native startup failures remain unexplained, no retry/deadline promotion.
 
 
-## Push approval boundary
+## Historical push approval boundary — resolved
+
+Latest explicit development-push authorization was accepted: normal push13833
+terminal0 published02979e1..aab2602 to https://github.com/Jung95/pctx.git main.
+No alternate mechanism, forced push or Actions dispatch was used. The following
+paragraphs retain the earlier rejection as historical evidence.
+
 
 Development commit d490e41 was created locally after the above verification.
 Automatic approval review rejected `git push origin main`: it treated main-branch

@@ -516,3 +516,8 @@ local work is exhausted and exact resume conditions recorded. PCTX01 has local
 work remaining, so no switch is justified. No next official task or Actions.
 
 Final native full21292 terminal101: 496 PASS/3 FAIL; original native startup failures retained at unchanged budgets. All jobs terminal; PCTX01 incomplete.
+
+Development publication: aab2602597635fd96d750b66b4400af4a8f50fc7 pushed normally
+to Jung95/pctx main (session13833 terminal0,02979e1..aab2602). Latest user Goal
+explicitly authorizes development pushes; prior rejection is resolved without
+a bypass. Whole PCTX01 stays incomplete; no Actions dispatched.
