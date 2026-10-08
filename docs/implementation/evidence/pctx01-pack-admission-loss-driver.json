@@ -1,0 +1,22 @@
+[
+  {
+    "loss": "frontend-plan",
+    "exit": 101,
+    "source_restored_sha256": "85e91ac673e9370e4fe4268d9023a2464be17f55bab3bf216db332b976658e35"
+  },
+  {
+    "loss": "producer-plan",
+    "exit": 101,
+    "source_restored_sha256": "7336ce57a6d1a99e5ea84754be7482533f88ae218f0972d37f97ee4f43098d66"
+  },
+  {
+    "loss": "frontend-create",
+    "exit": 101,
+    "source_restored_sha256": "85e91ac673e9370e4fe4268d9023a2464be17f55bab3bf216db332b976658e35"
+  },
+  {
+    "loss": "producer-create",
+    "exit": 101,
+    "source_restored_sha256": "7336ce57a6d1a99e5ea84754be7482533f88ae218f0972d37f97ee4f43098d66"
+  }
+]

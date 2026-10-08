@@ -1,0 +1,24 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.41s
+     Running tests/pack_preflight.rs (target/debug/deps/pack_preflight-b27b32b47eb4d308)
+
+running 1 test
+test pack_plan_producer_preserves_pure_errors_and_original_expiry ... FAILED
+
+failures:
+
+---- pack_plan_producer_preserves_pure_errors_and_original_expiry stdout ----
+
+thread 'pack_plan_producer_preserves_pure_errors_and_original_expiry' (8582627) panicked at tests/pack_preflight.rs:190:9:
+assertion `left == right` failed
+  left: ("TASK_NOT_FOUND", 6)
+ right: ("INVALID_ARGUMENT", 2)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    pack_plan_producer_preserves_pure_errors_and_original_expiry
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 3 filtered out; finished in 0.02s
+
+error: test failed, to rerun pass `--test pack_preflight`

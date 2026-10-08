@@ -622,3 +622,32 @@ Next existing G03 gap: Pack Plan scope/content/budget/split admission before mai
 discovery, not independent PCTX47 functionality. No next official task or Actions.
 
 Final native full76492 terminal101: 500 PASS/3 FAIL; original relative resolution, concurrent startup and simultaneous-stream failures retained at unchanged budgets. All jobs terminal; PCTX01 incomplete.
+
+## PCTX01 Pack admission integration
+
+Only PCTX01-G03 is active. Exact existing Plan scope/content/budget/split grammar
+now shares plan_arguments before main discovery and producer delivery/task/source;
+Create plan IDs share validate_plan_id before discovery and plan-directory access.
+Original execute clock and error2/8 remain unchanged. Native36 Plan and20 Create
+JSON/compact missing/initialized tree/response/artifact snapshots pass. Direct
+producer pure errors and original expiry preserve state. Metadata plan duplicate
+scopes succeeds with64000 budget/part; separate512 part remains a required8
+refusal when an item cannot fit. No independent pack export/publication feature.
+Related15 PASS including11 existing pack policy/stale/tamper/security tests.
+Initial1PASS2FAIL, wrong flattened task fixture and actual512 item-size failure
+are retained in distinct logs; neither product bounds nor deadlines changed.
+Create initial0PASS1FAIL retains IO7mask2. Four controlled losses each0PASS1FAIL,
+exact source restored. Format/locked all-target Clippy PASS. Independent read-only
+review found no scoped blocker; required Linux/Windows and whole gates remain open.
+[Evidence](evidence/pctx01-pack-admission-verification.json).
+
+The admission source inventory now has stable IDs A01–A11. Previous6 groups,
+current11: added5 are existing Quota, Work/Agent, Schedule, Session Attach and
+Role pure-grammar omissions identified with source references under §14. No new
+business feature or official gate; global PCTX01 denominator10 unchanged, closed
+0/10. Local evidence recorded6/11 inventory groups; whole platform-qualified
+inventory groups closed0/11. Next work is that bounded five-family common matrix,
+keeping registered IDs/revisions/authorization/current-state rules in producers.
+No other official task is active and no Actions are dispatched.
+
+Final native full86052 terminal101: 503 PASS/4 FAIL; original captured-path resolution, relative resolution, concurrent startup and simultaneous-stream failures retained at unchanged budgets. All jobs terminal; PCTX01 incomplete.

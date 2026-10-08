@@ -430,7 +430,7 @@ fn plan_dir(p: &Project) -> Result<PathBuf> {
     private_dir(&dir)?;
     Ok(dir)
 }
-fn plan_path(p: &Project, name: &str) -> Result<PathBuf> {
+fn validate_plan_id(name: &str) -> Result<()> {
     if !name.starts_with("PACKPLAN-")
         || name.contains('/')
         || name.contains('\\')
@@ -439,6 +439,10 @@ fn plan_path(p: &Project, name: &str) -> Result<PathBuf> {
     {
         return Err(invalid("Invalid plan ID"));
     }
+    Ok(())
+}
+fn plan_path(p: &Project, name: &str) -> Result<PathBuf> {
+    validate_plan_id(name)?;
     Ok(plan_dir(p)?.join(format!("{name}.json")))
 }
 fn load_plan(p: &Project, name: &str) -> Result<Plan> {
@@ -465,16 +469,12 @@ fn load_plan(p: &Project, name: &str) -> Result<Plan> {
     }
     Ok(plan)
 }
-fn create_plan(
-    p: &Project,
-    task_id: &str,
-    consumer: (Option<&str>, Option<&str>),
+fn plan_arguments(
     scope: &[String],
     content: &str,
     budget_bytes: usize,
     split_bytes: Option<usize>,
-) -> Result<Value> {
-    let (session, topic) = consumer;
+) -> Result<Vec<String>> {
     let scope = scopes(scope)?;
     if !["metadata", "signatures", "selected", "full"].contains(&content) {
         return Err(invalid("Unknown pack representation"));
@@ -486,6 +486,36 @@ fn create_plan(
             "Pack budget must be 1024..67108864 bytes and split bound 512..budget",
         ));
     }
+    Ok(scope)
+}
+/// Reuses the producer's pure plan grammar before CLI project discovery.
+pub fn validate_pack_request(c: &PackCommand) -> Result<()> {
+    match c {
+        PackCommand::Plan {
+            scopes,
+            content,
+            budget_bytes,
+            split_bytes,
+            ..
+        } => {
+            plan_arguments(scopes, content, *budget_bytes, *split_bytes)?;
+        }
+        PackCommand::Create { plan, .. } => validate_plan_id(plan)?,
+        _ => {}
+    }
+    Ok(())
+}
+fn create_plan(
+    p: &Project,
+    task_id: &str,
+    consumer: (Option<&str>, Option<&str>),
+    scope: &[String],
+    content: &str,
+    budget_bytes: usize,
+    split_bytes: Option<usize>,
+) -> Result<Value> {
+    let (session, topic) = consumer;
+    let scope = plan_arguments(scope, content, budget_bytes, split_bytes)?;
     let (_, delivery_barrier) = crate::session::delivery_binding(p, session, topic, "implementer")?;
     let task = task(p, task_id)?;
     let source_hashes = source_set(p, &scope)?;

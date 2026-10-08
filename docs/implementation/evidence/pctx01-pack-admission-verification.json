@@ -1,0 +1,155 @@
+{
+  "task": "PCTX01",
+  "fixed_gate": "PCTX01-G03",
+  "status": "implementing; only active official task; whole gates closed0/10",
+  "base_revision": "bf3c1ea32832a6777aa57673aa6876ffb75a5f71",
+  "platform": "native macOS arm64",
+  "specification_sections": [
+    "14 argument admission before effects and error distinctions",
+    "8/38 original clock"
+  ],
+  "source_sha256": {
+    "src/main.rs": "85e91ac673e9370e4fe4268d9023a2464be17f55bab3bf216db332b976658e35",
+    "src/pack.rs": "7336ce57a6d1a99e5ea84754be7482533f88ae218f0972d37f97ee4f43098d66",
+    "tests/pack_preflight.rs": "40cd4567e405b59b12c59ebd737267470d845c7e0ce1abbe0ca79785ad01c194",
+    "src/query_process.rs": "2faee00ffc82534c41942adae00e52f81a271072b47338f33cab7b67c43bc5b9",
+    "tests/project_deadline.rs": "8b9fbc97fbd5acaf612b2d75b94cf810faa2b61614b654495082462b1941a8dc"
+  },
+  "runs": [
+    {
+      "path": "pctx01-pack-admission-initial.log",
+      "sha256": "1a0d3fad89559eb0bd1e8fc63b1fb8252cf019295a99ac64019a558bb64759d6",
+      "exit": 101,
+      "counts": {
+        "passed": 1,
+        "failed": 2
+      }
+    },
+    {
+      "path": "pctx01-pack-admission-related.log",
+      "sha256": "2a480e401b868d78d51721c76d8e42c85e35ba971723130d80fd3b84b8f20c24",
+      "exit": 101,
+      "counts": {
+        "passed": 13,
+        "failed": 1
+      }
+    },
+    {
+      "path": "pctx01-pack-admission-split-fixture.log",
+      "sha256": "48c9de33638443b95ffdff2641ee57378ea9b89bcd2db801befb90125c9170ca",
+      "exit": 101,
+      "counts": {
+        "passed": 13,
+        "failed": 1
+      }
+    },
+    {
+      "path": "pctx01-pack-admission-final-related.log",
+      "sha256": "f53e1c14e1133b88f3238011e72cc238c0ed0c38721cbdf9ad481a77453d6d55",
+      "exit": 0,
+      "counts": {
+        "passed": 14,
+        "failed": 0
+      }
+    },
+    {
+      "path": "pctx01-pack-admission-create-initial.log",
+      "sha256": "3cebdf5e3e3ca53893c4520918be6879683c91ba0975e012ce852167418ff174",
+      "exit": 101,
+      "counts": {
+        "passed": 0,
+        "failed": 1
+      }
+    },
+    {
+      "path": "pctx01-pack-admission-create-related.log",
+      "sha256": "d4759caf83be291f577ed24276afa05f35c87c70865a7bbe1fffcb2f9d94467f",
+      "exit": 0,
+      "counts": {
+        "passed": 15,
+        "failed": 0
+      }
+    },
+    {
+      "path": "pctx01-pack-admission-loss-frontend-plan.log",
+      "sha256": "2778bc97b59e9e16a3dea64d5d46d731fde27c69151db7729c4b1f72aad7304e",
+      "exit": 101,
+      "counts": {
+        "passed": 0,
+        "failed": 1
+      }
+    },
+    {
+      "path": "pctx01-pack-admission-loss-producer-plan.log",
+      "sha256": "d0ad6030c537b1c5ec58c4c7fca80ef77bbd10d108bc60db871dd8ee53758f24",
+      "exit": 101,
+      "counts": {
+        "passed": 0,
+        "failed": 1
+      }
+    },
+    {
+      "path": "pctx01-pack-admission-loss-frontend-create.log",
+      "sha256": "2a2179e4dad36d29dce9216888f0dae69787f6b0e1cb76880953ec72378aaeb7",
+      "exit": 101,
+      "counts": {
+        "passed": 0,
+        "failed": 1
+      }
+    },
+    {
+      "path": "pctx01-pack-admission-loss-producer-create.log",
+      "sha256": "cc892e2212d72cadda53c5f8013e8c352fd4d49f7d3a1942aa918d7525b4e295",
+      "exit": 101,
+      "counts": {
+        "passed": 0,
+        "failed": 1
+      }
+    },
+    {
+      "path": "pctx01-pack-admission-static.log",
+      "sha256": "a57d8affdf1c96c4f5ea0c7cc291d971b19651f74fd21d44c0b6336e92ec5927",
+      "exit": 0,
+      "counts": {
+        "passed": 0,
+        "failed": 0
+      }
+    }
+  ],
+  "qualification": [
+    "Shared exact existing Plan scope/content/budget/split rules, error2 versus8 preserved; existing execute checks original deadline first. Main checks pure grammar before project discovery; producer remains before delivery binding/task/source.",
+    "Create existing plan ID rule shared before main discovery and plan directory. No new source pack/export/policy feature.",
+    "36 actual CLI Plan refusals and20 Create ID refusals, JSON/compact times missing/initialized project and absent/existing response or artifact. Snapshots include names and byte content. Direct producer errors/expired original Instant unchanged.",
+    "Actual valid metadata plan with duplicate scopes succeeds under declared64000 budget/part bound;512 syntax-valid part refuses8 because item cannot fit. No source body returned. Existing11 pack tests preserve source masking, tamper/stale/policy/budgets/publication. Final related15PASS.",
+    "Initial1PASS2FAIL retains missingrootIO7mask2 and incorrect work/task CLI fixture. First repaired related13PASS1FAIL retains wrong path. Correct flattened task fixture13PASS1FAIL retains actual item-size8 at512; amended test explicitly requires that8 and uses a distinct feasible64000 part. Product bounds unchanged.",
+    "Create initial0PASS1FAIL retains missingroot7versus2. Four intentional losses each0PASS1FAIL/exact restoration; no error-success retry promotion. Format and locked all-target Clippy -Dwarnings pass."
+  ],
+  "scope_record": "Same G03 rule omission in Pack Create found during independent Plan review; reused existing grammar only. Previous denominator10/current10, no new official task/gate. Remaining source inventory6->11 groups from5 existing pure-rule families; fixed A01\u2013A11, local evidence6/11, whole required-platform inventory0/11. Official denominator10 unchanged.",
+  "limitations": [
+    "Required Linux/Windows not executed; original native startup failures and remaining PCTX01 whole gates open.",
+    "New positive fixture covers metadata planning only; content export covered only by existing local pack suite, not entire PCTX47 completion.",
+    "Scope grammar remains platform Path components behavior; no stricter dot/glob/path parser introduced. No Actions, paid calls, host policy changes, interpreter substitution or original deadline relaxation."
+  ],
+  "full_gate": {
+    "path": "pctx01-pack-admission-full.log",
+    "sha256": "2e6e193a20c20c0247987664fffae75d091af4ced53f39acb4b31a2471a1a9d3",
+    "session": 86052,
+    "exit": 101,
+    "counts": {
+      "passed": 503,
+      "failed": 4
+    },
+    "failed_tests": [
+      "query_program_resolution_uses_captured_command_path",
+      "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget",
+      "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+      "simultaneous_streams_are_collected_and_overflow_never_infers_success"
+    ],
+    "qualification": "Original native startup failures retained without retry promotion or original budget relaxation; all jobs terminal."
+  },
+  "review": {
+    "path": "pctx01-pack-admission-review.md",
+    "sha256": "4eed4aabb38f810c282393d2db6a3faba63be83fe1608914875f0434d35256e6"
+  },
+  "next_local_gap": "Bounded existing Quota/Task-Agent/Schedule/Session Attach/Role pure-admission matrix A07\u2013A11; no independent features."
+}

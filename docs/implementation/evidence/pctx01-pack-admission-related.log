@@ -1,0 +1,41 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.83s
+     Running tests/pack.rs (target/debug/deps/pack-8d09189cdcc06191)
+
+running 11 tests
+test giant_item_and_total_budget_fail_without_plans_or_publication ... ok
+test inspection_reapplies_source_artifact_policy_and_masks_untrusted_manifest ... ok
+test forged_budgets_parts_and_json_complexity_are_rejected_before_load ... ok
+test signatures_keep_notices_and_single_json_verifies ... ok
+test stale_source_policy_task_and_wrong_expected_hash_do_not_publish ... ok
+test legacy_plan_requires_replanning_but_legacy_artifact_remains_readable ... ok
+test racing_artifact_parent_symlink_never_reads_outside_marker ... ok
+test symlink_output_input_overlap_and_overwrite_are_denied ... ok
+test integrity_tamper_missing_parts_and_missing_original_are_distinct ... ok
+test immutable_plan_has_no_source_metadata_default_and_full_masks_preserves_license ... ok
+test task_or_parser_revision_changes_make_current_source_pack_stale ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.73s
+
+     Running tests/pack_preflight.rs (target/debug/deps/pack_preflight-b27b32b47eb4d308)
+
+running 3 tests
+test pack_plan_producer_preserves_pure_errors_and_original_expiry ... ok
+test valid_pack_plan_preserves_metadata_and_duplicate_scopes ... FAILED
+test invalid_pack_plan_arguments_have_no_project_or_response_effects ... ok
+
+failures:
+
+---- valid_pack_plan_preserves_metadata_and_duplicate_scopes stdout ----
+
+thread 'valid_pack_plan_preserves_metadata_and_duplicate_scopes' (8578352) panicked at tests/pack_preflight.rs:231:5:
+Output { status: ExitStatus(unix_wait_status(512)), stdout: "{\"command\":\"arguments\",\"coverage\":{\"reasons\":[],\"status\":\"complete\"},\"data\":null,\"errors\":[{\"code\":\"INVALID_ARGUMENT\",\"message\":\"Invalid command or option; see pctx --help\",\"retryable\":false}],\"generation_id\":null,\"project_id\":null,\"schema_version\":\"1.0\",\"status\":\"error\",\"truncation\":{\"reasons\":[],\"truncated\":false},\"validation\":{\"checked_at\":\"2026-10-08T18:49:37.050Z\",\"mode\":\"matched\",\"scope\":[],\"workspace_atomic\":false},\"warnings\":[],\"workspace_id\":null}\n", stderr: "" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    valid_pack_plan_preserves_metadata_and_duplicate_scopes
+
+test result: FAILED. 2 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.97s
+
+error: test failed, to rerun pass `--test pack_preflight`

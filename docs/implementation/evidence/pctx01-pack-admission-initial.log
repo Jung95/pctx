@@ -1,0 +1,32 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.48s
+     Running tests/pack_preflight.rs (target/debug/deps/pack_preflight-b27b32b47eb4d308)
+
+running 3 tests
+test pack_plan_producer_preserves_pure_errors_and_original_expiry ... ok
+test invalid_pack_plan_arguments_have_no_project_or_response_effects ... FAILED
+test valid_pack_plan_preserves_metadata_and_duplicate_scopes ... FAILED
+
+failures:
+
+---- invalid_pack_plan_arguments_have_no_project_or_response_effects stdout ----
+
+thread 'invalid_pack_plan_arguments_have_no_project_or_response_effects' (8577090) panicked at tests/pack_preflight.rs:80:5:
+assertion `left == right` failed: Output { status: ExitStatus(unix_wait_status(1792)), stdout: "", stderr: "" }
+  left: Some(7)
+ right: Some(2)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- valid_pack_plan_preserves_metadata_and_duplicate_scopes stdout ----
+
+thread 'valid_pack_plan_preserves_metadata_and_duplicate_scopes' (8577092) panicked at tests/pack_preflight.rs:176:5:
+Output { status: ExitStatus(unix_wait_status(512)), stdout: "{\"command\":\"arguments\",\"coverage\":{\"reasons\":[],\"status\":\"complete\"},\"data\":null,\"errors\":[{\"code\":\"INVALID_ARGUMENT\",\"message\":\"Invalid command or option; see pctx --help\",\"retryable\":false}],\"generation_id\":null,\"project_id\":null,\"schema_version\":\"1.0\",\"status\":\"error\",\"truncation\":{\"reasons\":[],\"truncated\":false},\"validation\":{\"checked_at\":\"2026-10-08T18:49:04.175Z\",\"mode\":\"matched\",\"scope\":[],\"workspace_atomic\":false},\"warnings\":[],\"workspace_id\":null}\n", stderr: "" }
+
+
+failures:
+    invalid_pack_plan_arguments_have_no_project_or_response_effects
+    valid_pack_plan_preserves_metadata_and_duplicate_scopes
+
+test result: FAILED. 1 passed; 2 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.85s
+
+error: test failed, to rerun pass `--test pack_preflight`

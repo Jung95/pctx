@@ -47,3 +47,12 @@ whitespace and other workspaces return `INVALID_ARGUMENT` (exit 2) without writi
 a response file. Duplicate valid fields remain accepted. A workspace without Git
 returns unsupported coverage and exit 6; supported observations remain exit 0.
 The broker's data, permission isolation and refresh ownership remain unchanged.
+
+Pack Plan applies its existing relative file/directory scope and representation
+rules before project discovery. Its plan budget remains 1024..67108864 bytes;
+a split bound must be 512..budget. Invalid scopes/content return exit 2, and
+invalid capacity bounds return `BUDGET_TOO_SMALL` (exit 8). A syntactically valid
+split bound does not guarantee that an item fits. Pack Create checks its existing
+`PACKPLAN-` identifier rule before project access or artifact publication.
+These refusals leave response/artifact destinations unchanged. Valid requests
+still require current task, session, source and publication policy checks.

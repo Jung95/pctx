@@ -1,0 +1,24 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.36s
+     Running tests/pack_preflight.rs (target/debug/deps/pack_preflight-b27b32b47eb4d308)
+
+running 1 test
+test invalid_pack_create_ids_have_no_project_or_artifact_effects ... FAILED
+
+failures:
+
+---- invalid_pack_create_ids_have_no_project_or_artifact_effects stdout ----
+
+thread 'invalid_pack_create_ids_have_no_project_or_artifact_effects' (8580534) panicked at tests/pack_preflight.rs:80:5:
+assertion `left == right` failed: Output { status: ExitStatus(unix_wait_status(1792)), stdout: "{\"command\":\"pack\",\"coverage\":{\"reasons\":[\"IO_ERROR\"],\"status\":\"partial\"},\"data\":null,\"errors\":[{\"code\":\"IO_ERROR\",\"message\":\"Filesystem operation failed\",\"retryable\":false}],\"generation_id\":null,\"project_id\":null,\"schema_version\":\"1.0\",\"status\":\"error\",\"truncation\":{\"reasons\":[],\"truncated\":false},\"validation\":{\"checked_at\":\"2026-10-08T18:51:45.999Z\",\"mode\":\"matched\",\"scope\":[],\"workspace_atomic\":false},\"warnings\":[],\"workspace_id\":null}\n", stderr: "" }
+  left: Some(7)
+ right: Some(2)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    invalid_pack_create_ids_have_no_project_or_artifact_effects
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 3 filtered out; finished in 0.61s
+
+error: test failed, to rerun pass `--test pack_preflight`
