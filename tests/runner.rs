@@ -966,3 +966,63 @@ fn check_plan_with_finite_budget_inspects_registered_auxiliary_workspace_without
         "A plan launched execution or acquired host resources"
     );
 }
+
+#[test]
+fn finite_auxiliary_plan_refuses_fifo_metadata_without_waiting_or_launching() {
+    use std::os::unix::ffi::OsStrExt;
+    struct ChildGuard(Option<std::process::Child>);
+    impl Drop for ChildGuard {
+        fn drop(&mut self) {
+            if let Some(child) = &mut self.0 {
+                let _ = child.kill();
+                let _ = child.wait();
+            }
+        }
+    }
+    let f = Fixture::new(&report(1), false, None);
+    let target = linked_provider(&f);
+    let text = fs::read_to_string(target.join(".git")).unwrap();
+    let gitdir =
+        fs::canonicalize(target.join(text.trim().strip_prefix("gitdir: ").unwrap())).unwrap();
+    for name in ["commondir", "gitdir"] {
+        let path = gitdir.join(name);
+        let original = fs::read(&path).unwrap();
+        fs::remove_file(&path).unwrap();
+        let native = std::ffi::CString::new(path.as_os_str().as_bytes()).unwrap();
+        assert_eq!(unsafe { libc::mkfifo(native.as_ptr(), 0o600) }, 0);
+        let started = Instant::now();
+        let mut child = ChildGuard(Some(
+            f.command(&[
+                "check",
+                "plan",
+                "--task-id",
+                &f.task,
+                "--key",
+                "unit",
+                "--timeout-ms",
+                "1000",
+            ])
+            .stdout(Stdio::piped())
+            .stderr(Stdio::piped())
+            .spawn()
+            .unwrap(),
+        ));
+        loop {
+            if child.0.as_mut().unwrap().try_wait().unwrap().is_some() {
+                break;
+            }
+            assert!(
+                started.elapsed() < Duration::from_secs(3),
+                "Plan blocked opening {name} FIFO"
+            );
+            std::thread::sleep(Duration::from_millis(5));
+        }
+        let output = child.0.take().unwrap().wait_with_output().unwrap();
+        let response: Value = serde_json::from_slice(&output.stdout).unwrap();
+        assert_eq!(output.status.code(), Some(9), "{name}: {response}");
+        assert_eq!(response["errors"][0]["code"], "WORKSPACE_MISMATCH");
+        assert!(!f.host.exists(), "Rejected plan acquired host resources");
+        fs::remove_file(&path).unwrap();
+        fs::write(&path, original).unwrap();
+    }
+}

@@ -13,6 +13,7 @@ use serde_json::{Value, json};
 use std::{
     collections::BTreeMap,
     fs,
+    io::Read,
     path::{Path, PathBuf},
 };
 
@@ -23,7 +24,6 @@ use std::process::{Command, Stdio};
 #[cfg(any(unix, test))]
 use std::{
     collections::VecDeque,
-    io::Read,
     sync::{
         Arc,
         atomic::{AtomicBool, Ordering},
@@ -308,16 +308,126 @@ fn classification(_argv: &[String], executable: &Path) -> Result<()> {
 fn binding(p: &Project, argv: &[String]) -> Result<Binding> {
     binding_inner(p, argv, false, ".")
 }
+#[cfg(test)]
+#[derive(Clone, Copy)]
+pub(crate) enum HashPhase {
+    ChunkRead,
+    ChunkHashed,
+}
+#[cfg(test)]
+type HashObserver = Box<dyn FnMut(HashPhase, usize, Option<Deadline>)>;
+#[cfg(test)]
+thread_local! {static HASH_OBSERVER:std::cell::RefCell<Option<HashObserver>>=const {std::cell::RefCell::new(None)};}
+#[cfg(test)]
+pub(crate) struct HashObserverGuard;
+#[cfg(test)]
+impl Drop for HashObserverGuard {
+    fn drop(&mut self) {
+        HASH_OBSERVER.with(|s| *s.borrow_mut() = None);
+    }
+}
+#[cfg(test)]
+pub(crate) fn observe_hash(
+    callback: impl FnMut(HashPhase, usize, Option<Deadline>) + 'static,
+) -> HashObserverGuard {
+    HASH_OBSERVER.with(|s| {
+        assert!(s.borrow().is_none());
+        *s.borrow_mut() = Some(Box::new(callback));
+    });
+    HashObserverGuard
+}
+#[cfg(test)]
+fn hash_observation(phase: HashPhase, bytes: usize, p: &Project) {
+    HASH_OBSERVER.with(|s| {
+        if let Some(callback) = s.borrow_mut().as_mut() {
+            callback(phase, bytes, p.deadline);
+        }
+    });
+}
+/// External native executable domain, distinct from project-source policy.
+/// Retains the regular-file authority throughout bounded streaming hashing.
+pub(crate) fn hash_executable(p: &Project, path: &Path) -> Result<String> {
+    use sha2::{Digest, Sha256};
+    p.check_deadline()?;
+    let parent = path
+        .parent()
+        .ok_or_else(|| err("POLICY_DENIED", "Invalid executable authority", 5))?;
+    let leaf = path
+        .file_name()
+        .and_then(|s| s.to_str())
+        .ok_or_else(|| err("POLICY_DENIED", "Invalid executable authority", 5))?;
+    let anchor = crate::project::RootAnchor::capture(parent)?;
+    p.check_deadline()?;
+    let mut file = reader::anchored_open_deadline(parent, &anchor, leaf, p.deadline)?;
+    let before = file.metadata()?;
+    if !before.is_file() || before.len() > 128 * 1024 * 1024 {
+        return Err(err(
+            "POLICY_DENIED",
+            "Executable is not a bounded regular file",
+            5,
+        ));
+    }
+    let identity = same_file::Handle::from_file(file.try_clone()?)?;
+    let mut sha = Sha256::new();
+    let mut chunk = [0; 65536];
+    let mut total = 0usize;
+    loop {
+        p.check_deadline()?;
+        let count = file.read(&mut chunk);
+        #[cfg(test)]
+        if let Ok(count) = &count
+            && *count > 0
+        {
+            hash_observation(HashPhase::ChunkRead, *count, p);
+        }
+        p.check_deadline()?;
+        let count = count?;
+        if count == 0 {
+            break;
+        }
+        total += count;
+        if total > 128 * 1024 * 1024 {
+            return Err(err("POLICY_DENIED", "Executable exceeds size bound", 5));
+        }
+        sha.update(&chunk[..count]);
+        #[cfg(test)]
+        hash_observation(HashPhase::ChunkHashed, count, p);
+    }
+    p.check_deadline()?;
+    let after = file.metadata()?;
+    let reopened = reader::anchored_open_deadline(parent, &anchor, leaf, p.deadline)?;
+    let current = reopened.metadata()?;
+    if identity != same_file::Handle::from_file(reopened)?
+        || before.len() != after.len()
+        || before.len() != current.len()
+        || before.modified().ok() != after.modified().ok()
+        || before.modified().ok() != current.modified().ok()
+    {
+        return Err(err("CONFIG_CHANGED", "Executable changed while hashing", 9));
+    }
+    #[cfg(unix)]
+    {
+        use std::os::unix::fs::MetadataExt;
+        if (before.ctime(), before.ctime_nsec()) != (after.ctime(), after.ctime_nsec())
+            || (before.ctime(), before.ctime_nsec()) != (current.ctime(), current.ctime_nsec())
+        {
+            return Err(err("CONFIG_CHANGED", "Executable changed while hashing", 9));
+        }
+    }
+    p.check_deadline()?;
+    Ok(format!("{:x}", sha.finalize()))
+}
 fn binding_inner(p: &Project, argv: &[String], registered: bool, cwd: &str) -> Result<Binding> {
     if argv.is_empty() || argv.len() > 256 || argv.iter().map(String::len).sum::<usize>() > 65536 {
         return Err(err("INVALID_ARGUMENT", "Bounded nonempty argv required", 2));
     }
-    let executable = resolve(&argv[0])?;
+    let executable = phase(p, || resolve(&argv[0]))?;
     if !registered {
         classification(argv, &executable)?;
     }
     let mut scripts = BTreeMap::new();
     for arg in argv.iter().skip(1) {
+        p.check_deadline()?;
         let path = Path::new(arg);
         if path.is_absolute() && path.exists() {
             if !registered {
@@ -351,13 +461,14 @@ fn binding_inner(p: &Project, argv: &[String], registered: bool, cwd: &str) -> R
             scripts.insert(input, f.hash);
         }
     }
-    let executable_hash = hash(fs::read(&executable)?);
+    let executable_hash = hash_executable(p, &executable)?;
     let argv_hash = hash(serde_json::to_vec(argv)?);
     let workspace_id = p.workspace_id.clone();
     let policy_hash = p.policy_hash();
     let fingerprint = hash(serde_json::to_vec(
         &json!({"executable":executable.to_string_lossy(),"executable_hash":executable_hash,"scripts":scripts,"argv_hash":argv_hash,"workspace":workspace_id,"policy":policy_hash,"cwd":cwd}),
     )?);
+    p.check_deadline()?;
     Ok(Binding {
         executable: executable.to_string_lossy().into_owned(),
         executable_hash,

@@ -1,0 +1,39 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.56s
+     Running unittests src/lib.rs (target/debug/deps/pctx-ae897bec01e143c7)
+
+running 1 test
+test runner::auxiliary_deadline_tests::registered_fingerprint_expires_after_actual_executable_chunk_read ... FAILED
+
+failures:
+
+---- runner::auxiliary_deadline_tests::registered_fingerprint_expires_after_actual_executable_chunk_read stdout ----
+
+thread 'runner::auxiliary_deadline_tests::registered_fingerprint_expires_after_actual_executable_chunk_read' (7997788) panicked at src/runner.rs:2231:9:
+
+running 1 test
+test runner::auxiliary_deadline_tests::registered_fingerprint_expires_after_actual_executable_chunk_read ... FAILED
+
+failures:
+
+failures:
+    runner::auxiliary_deadline_tests::registered_fingerprint_expires_after_actual_executable_chunk_read
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 22 filtered out; finished in 2.05s
+
+ 
+thread 'runner::auxiliary_deadline_tests::registered_fingerprint_expires_after_actual_executable_chunk_read' (7997790) panicked at src/runner.rs:2447:9:
+assertion `left == right` failed
+  left: 1
+ right: 0
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    runner::auxiliary_deadline_tests::registered_fingerprint_expires_after_actual_executable_chunk_read
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 22 filtered out; finished in 2.07s
+
+error: test failed, to rerun pass `--lib`

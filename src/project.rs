@@ -509,6 +509,44 @@ pub fn detect_root_with_deadline(
         }
     }
 }
+#[cfg(test)]
+#[derive(Clone, Copy)]
+pub(crate) enum LoadPhase {
+    ConfigAdmitted,
+    RegistryRead,
+    ResultReady,
+}
+#[cfg(test)]
+type LoadObserver = Box<dyn FnMut(&Path, Option<Deadline>, LoadPhase)>;
+#[cfg(test)]
+thread_local! {static LOAD_OBSERVER:std::cell::RefCell<Option<LoadObserver>>=const {std::cell::RefCell::new(None)};}
+#[cfg(test)]
+pub(crate) struct LoadObserverGuard;
+#[cfg(test)]
+impl Drop for LoadObserverGuard {
+    fn drop(&mut self) {
+        LOAD_OBSERVER.with(|s| *s.borrow_mut() = None);
+    }
+}
+#[cfg(test)]
+pub(crate) fn observe_load(
+    callback: impl FnMut(&Path, Option<Deadline>, LoadPhase) + 'static,
+) -> LoadObserverGuard {
+    LOAD_OBSERVER.with(|s| {
+        assert!(s.borrow().is_none());
+        *s.borrow_mut() = Some(Box::new(callback));
+    });
+    LoadObserverGuard
+}
+#[cfg(test)]
+fn load_observation(root: &Path, deadline: Option<Deadline>, phase: LoadPhase) {
+    LOAD_OBSERVER.with(|s| {
+        if let Some(callback) = s.borrow_mut().as_mut() {
+            callback(root, deadline, phase);
+        }
+    });
+}
+
 impl Project {
     pub fn check_deadline(&self) -> Result<()> {
         self.deadline
@@ -571,16 +609,19 @@ impl Project {
         // Capture before loading policy, then read through that same authority.
         let root_anchor = RootAnchor::capture(&root)?;
         check_request(deadline)?;
-        let mut config_file =
-            crate::reader::anchored_open(&root, &root_anchor, ".pctx/config.toml").map_err(
-                |e| {
-                    if e.code == "IO_ERROR" {
-                        Error::new("NOT_INITIALIZED", "Run pctx init first", 6)
-                    } else {
-                        e
-                    }
-                },
-            )?;
+        let mut config_file = crate::reader::anchored_open_deadline(
+            &root,
+            &root_anchor,
+            ".pctx/config.toml",
+            deadline,
+        )
+        .map_err(|e| {
+            if e.code == "IO_ERROR" {
+                Error::new("NOT_INITIALIZED", "Run pctx init first", 6)
+            } else {
+                e
+            }
+        })?;
         check_request(deadline)?;
         let config_metadata = config_file.metadata()?;
         if !config_metadata.is_file() || config_metadata.len() > 1024 * 1024 {
@@ -603,8 +644,12 @@ impl Project {
             ));
         }
         crate::reader::validate_anchor(&root, &root_anchor)?;
-        let config_reopened =
-            crate::reader::anchored_open(&root, &root_anchor, ".pctx/config.toml")?;
+        let config_reopened = crate::reader::anchored_open_deadline(
+            &root,
+            &root_anchor,
+            ".pctx/config.toml",
+            deadline,
+        )?;
         if same_file::Handle::from_file(config_file.try_clone()?)?
             != same_file::Handle::from_file(config_reopened)?
         {
@@ -632,6 +677,8 @@ impl Project {
                 2,
             ));
         }
+        #[cfg(test)]
+        load_observation(&root, deadline, LoadPhase::ConfigAdmitted);
         check_request(deadline)?;
         let data_dir = data_dir()?;
         if register {
@@ -679,6 +726,9 @@ impl Project {
         };
         check_request(deadline)?;
         let registry_path = data_dir.join("registry.json");
+        #[cfg(test)]
+        load_observation(&root, deadline, LoadPhase::RegistryRead);
+        check_request(deadline)?;
         let mut registry: Registry = match fs::read(&registry_path) {
             Ok(b) => serde_json::from_slice(&b)?,
             Err(e) if e.kind() == std::io::ErrorKind::NotFound => Registry::default(),
@@ -748,6 +798,9 @@ impl Project {
             private_dir(&control_dir)?;
         }
         crate::reader::validate_anchor(&root, &root_anchor)?;
+        check_request(deadline)?;
+        #[cfg(test)]
+        load_observation(&root, deadline, LoadPhase::ResultReady);
         check_request(deadline)?;
         Ok(Self {
             deadline,

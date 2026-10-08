@@ -1,0 +1,37 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.97s
+     Running unittests src/lib.rs (target/debug/deps/pctx-ae897bec01e143c7)
+
+running 1 test
+test runner::auxiliary_deadline_tests::auxiliary_loading_expires_after_actual_config_admission ... FAILED
+
+failures:
+
+---- runner::auxiliary_deadline_tests::auxiliary_loading_expires_after_actual_config_admission stdout ----
+
+thread 'runner::auxiliary_deadline_tests::auxiliary_loading_expires_after_actual_config_admission' (7997464) panicked at src/runner.rs:2231:9:
+
+running 1 test
+test runner::auxiliary_deadline_tests::auxiliary_loading_expires_after_actual_config_admission ... FAILED
+
+failures:
+
+failures:
+    runner::auxiliary_deadline_tests::auxiliary_loading_expires_after_actual_config_admission
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 22 filtered out; finished in 0.01s
+
+ 
+thread 'runner::auxiliary_deadline_tests::auxiliary_loading_expires_after_actual_config_admission' (7997466) panicked at src/runner.rs:2365:41:
+Auxiliary scope must be retained
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    runner::auxiliary_deadline_tests::auxiliary_loading_expires_after_actual_config_admission
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 22 filtered out; finished in 0.03s
+
+error: test failed, to rerun pass `--lib`

@@ -1,0 +1,27 @@
+from pathlib import Path
+import subprocess,hashlib,json
+root=Path('/Users/dev/PCTX'); E=root/'docs/implementation/evidence'
+sha=lambda data:hashlib.sha256(data).hexdigest()
+cases=[('load-inheritance-loss','src/runner.rs',['--lib','auxiliary_loading_expires_after_actual_config_admission'],'Auxiliary scope must be retained'),('hash-postread-guard-loss','src/output.rs',['--lib','registered_fingerprint_expires_after_actual_executable_chunk_read'],'assertion `left == right` failed'),('fifo-admission-loss','src/runner.rs',['--test','runner','finite_auxiliary_plan_refuses_fifo_metadata_without_waiting_or_launching'],'Plan blocked opening commondir FIFO')]
+for name,relative,args,needle in cases:
+ path=root/relative; original=path.read_bytes()
+ try:
+  source=original.decode()
+  if name=='load-inheritance-loss':
+   before='let target = Project::open_with_deadline(path, p.deadline)?;'; assert source.count(before)==1
+   mutated=source.replace(before,'let target = Project::open(path)?;',1)
+  elif name=='hash-postread-guard-loss':
+   start=source.index('pub(crate) fn hash_executable('); end=source.index('fn binding_inner(',start)
+   body=source[start:end]; before='        p.check_deadline()?;\n        let count = count?;'; assert body.count(before)==1
+   mutated=source[:start]+body.replace(before,'        let count = count?;',1)+source[end:]
+  else:
+   start=source.index('fn inert_text('); end=source.index('fn inert_git_common(',start)
+   mutated=source[:start]+'fn inert_text(p: &Project, path: &Path) -> Result<String> {\n    let _ = p;\n    Ok(fs::read_to_string(path)?)\n}\n'+source[end:]
+  path.write_text(mutated)
+  log=E/f'pctx01-auxiliary-phase-{name}.log'
+  with log.open('wb') as output: result=subprocess.run(['cargo','test','--locked',*args],cwd=root,stdout=output,stderr=subprocess.STDOUT,timeout=120)
+  assert result.returncode==101,(name,result.returncode)
+  assert needle in log.read_text(),(name,log.read_text()[-4000:])
+ finally:
+  path.write_bytes(original); assert sha(path.read_bytes())==sha(original)
+ print(json.dumps({'probe':name,'expected_test_exit':result.returncode,'restored_sha256':sha(original)}),flush=True)

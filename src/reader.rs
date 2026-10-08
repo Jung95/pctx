@@ -729,13 +729,6 @@ fn non_unix_candidate_open(path: &Path, directory: bool) -> Result<Option<fs::Fi
     Ok(Some(file))
 }
 
-pub(crate) fn anchored_open(
-    root: &Path,
-    anchor: &crate::project::RootAnchor,
-    path: &str,
-) -> Result<fs::File> {
-    anchored_open_deadline(root, anchor, path, None)
-}
 pub(crate) fn anchored_open_deadline(
     root: &Path,
     anchor: &crate::project::RootAnchor,

@@ -1,0 +1,3 @@
+{"probe": "load-inheritance-loss", "expected_test_exit": 101, "restored_sha256": "8733ac471027cea7de5ac73e4ffa27dcfa33d6dd6d633887704558c7141e9acc"}
+{"probe": "hash-postread-guard-loss", "expected_test_exit": 101, "restored_sha256": "e36233ac6616c6015f471170bb424fcfe6751e4ba358fbad15b578fd74bf8e68"}
+{"probe": "fifo-admission-loss", "expected_test_exit": 101, "restored_sha256": "8733ac471027cea7de5ac73e4ffa27dcfa33d6dd6d633887704558c7141e9acc"}

@@ -447,7 +447,7 @@ fn profile(p: &Project, key: &str) -> Result<Binding> {
                 2,
             ));
         }
-        Some(hash(fs::read(std::env::current_exe()?)?))
+        Some(output::hash_executable(p, &std::env::current_exe()?)?)
     } else {
         None
     };
@@ -1591,7 +1591,7 @@ fn start_guardian(p: &Project, b: &Binding, dir: &Path, job: &mut Job) -> Result
         };
         use std::process::{Command, Stdio};
         let executable = std::env::current_exe()?;
-        if Some(hash(fs::read(&executable)?)) != b.guardian_hash {
+        if Some(output::hash_executable(p, &executable)?) != b.guardian_hash {
             return Err(error(
                 "CONFIG_CHANGED",
                 "Guardian executable or host identity unavailable",
@@ -1769,12 +1769,91 @@ fn guardian_main(fd: i32, path: &Path) -> Result<Value> {
     }
 }
 
-fn inert_git_common(root: &Path, require_linked: bool) -> Result<PathBuf> {
+fn inert_text(p: &Project, path: &Path) -> Result<String> {
+    use std::io::Read;
+    reader::validate_root(p)?;
+    checked(path)?;
+    let parent = path
+        .parent()
+        .ok_or_else(|| error("WORKSPACE_MISMATCH", "Invalid inert Git metadata", 9))?;
+    let leaf = path
+        .file_name()
+        .and_then(|s| s.to_str())
+        .ok_or_else(|| error("WORKSPACE_MISMATCH", "Invalid inert Git metadata", 9))?;
+    let anchor = crate::project::RootAnchor::capture(parent)?;
+    p.check_deadline()?;
+    let mut file = reader::anchored_open_deadline(parent, &anchor, leaf, p.deadline)?;
+    let before = file.metadata()?;
+    if !before.is_file() || before.len() > 4096 {
+        return Err(error(
+            "WORKSPACE_MISMATCH",
+            "Git metadata must be bounded regular files",
+            9,
+        ));
+    }
+    let identity = same_file::Handle::from_file(file.try_clone()?)?;
+    let mut data = Vec::new();
+    let mut chunk = [0; 1024];
+    loop {
+        p.check_deadline()?;
+        let count = file.read(&mut chunk);
+        p.check_deadline()?;
+        let count = count?;
+        if count == 0 {
+            break;
+        }
+        if data.len() + count > 4096 {
+            return Err(error("WORKSPACE_MISMATCH", "Git metadata exceeds bound", 9));
+        }
+        data.extend_from_slice(&chunk[..count]);
+    }
+    let after = file.metadata()?;
+    let reopened = reader::anchored_open_deadline(parent, &anchor, leaf, p.deadline)?;
+    let current = reopened.metadata()?;
+    if identity != same_file::Handle::from_file(reopened)?
+        || before.len() != after.len()
+        || before.len() != current.len()
+        || before.modified().ok() != after.modified().ok()
+        || before.modified().ok() != current.modified().ok()
+    {
+        return Err(error(
+            "WORKSPACE_MISMATCH",
+            "Git metadata changed during discovery",
+            9,
+        ));
+    }
+    #[cfg(unix)]
+    {
+        use std::os::unix::fs::MetadataExt;
+        if (before.ctime(), before.ctime_nsec()) != (after.ctime(), after.ctime_nsec())
+            || (before.ctime(), before.ctime_nsec()) != (current.ctime(), current.ctime_nsec())
+        {
+            return Err(error(
+                "WORKSPACE_MISMATCH",
+                "Git metadata changed during discovery",
+                9,
+            ));
+        }
+    }
+    reader::validate_root(p)?;
+    String::from_utf8(data).map_err(|_| {
+        error(
+            "WORKSPACE_MISMATCH",
+            "Invalid inert Git metadata encoding",
+            9,
+        )
+    })
+}
+fn inert_git_common(p: &Project, root: &Path, require_linked: bool) -> Result<PathBuf> {
+    reader::validate_root(p)?;
     let entry = root.join(".git");
     checked(&entry)?;
     let metadata = fs::metadata(&entry)?;
+    p.check_deadline()?;
     if metadata.is_dir() && !require_linked {
-        return Ok(fs::canonicalize(entry)?);
+        let common = fs::canonicalize(entry)?;
+        reader::validate_root(p)?;
+        return Ok(common);
     }
     if !metadata.is_file() || metadata.len() > 4096 {
         return Err(error(
@@ -1783,12 +1862,13 @@ fn inert_git_common(root: &Path, require_linked: bool) -> Result<PathBuf> {
             9,
         ));
     }
-    let text = fs::read_to_string(&entry)?;
+    let text = inert_text(p, &entry)?;
     let value = text
         .trim()
         .strip_prefix("gitdir: ")
         .ok_or_else(|| error("WORKSPACE_MISMATCH", "Invalid inert worktree gitdir", 9))?;
     let gitdir = fs::canonicalize(root.join(value))?;
+    p.check_deadline()?;
     checked(&gitdir)?;
     let common_file = gitdir.join("commondir");
     let backref = gitdir.join("gitdir");
@@ -1801,18 +1881,16 @@ fn inert_git_common(root: &Path, require_linked: bool) -> Result<PathBuf> {
             9,
         ));
     }
-    if fs::canonicalize(gitdir.join(fs::read_to_string(backref)?.trim()))?
-        != fs::canonicalize(entry)?
-    {
+    if fs::canonicalize(gitdir.join(inert_text(p, &backref)?.trim()))? != fs::canonicalize(entry)? {
         return Err(error(
             "WORKSPACE_MISMATCH",
             "Git worktree backreference differs",
             9,
         ));
     }
-    Ok(fs::canonicalize(
-        gitdir.join(fs::read_to_string(common_file)?.trim()),
-    )?)
+    let common = fs::canonicalize(gitdir.join(inert_text(p, &common_file)?.trim()))?;
+    reader::validate_root(p)?;
+    Ok(common)
 }
 fn auxiliary_workspace(p: &Project, path: &Path) -> Result<Project> {
     p.check_deadline()?;
@@ -1828,7 +1906,7 @@ fn auxiliary_workspace(p: &Project, path: &Path) -> Result<Project> {
         || target.workspace_id == p.workspace_id
         || target.project_id != p.project_id
         || target.coordination_id != p.coordination_id
-        || inert_git_common(&target.root, true)? != inert_git_common(&p.root, false)?
+        || inert_git_common(&target, &target.root, true)? != inert_git_common(p, &p.root, false)?
     {
         return Err(error(
             "WORKSPACE_MISMATCH",
@@ -2116,40 +2194,55 @@ mod auxiliary_deadline_tests {
         time::{Duration, Instant},
     };
 
-    #[test]
-    fn opened_auxiliary_keeps_budget_for_subsequent_source_reads() {
-        const PROBE: &str = "PCTX_AUXILIARY_DEADLINE_TEST_ROOT";
-        let Some(base) = std::env::var_os(PROBE).map(PathBuf::from) else {
-            // Isolate data/config environment from concurrent library tests.
-            let temp = tempfile::tempdir().unwrap();
-            let mut child = std::process::Command::new(std::env::current_exe().unwrap())
-                .args(["--exact", "runner::auxiliary_deadline_tests::opened_auxiliary_keeps_budget_for_subsequent_source_reads", "--nocapture"])
-                .env(PROBE, temp.path())
-                .env("PCTX_DATA_DIR", temp.path().join("data"))
-                .env("PCTX_USER_CONFIG", temp.path().join("absent-user-config"))
-                .stdout(Stdio::piped()).stderr(Stdio::piped())
-                .spawn().unwrap();
-            let limit = Instant::now() + Duration::from_secs(10);
-            loop {
-                if child.try_wait().unwrap().is_some() {
-                    break;
-                }
-                if Instant::now() >= limit {
-                    let _ = child.kill();
-                    let _ = child.wait();
-                    panic!("Isolated auxiliary deadline probe did not finish within ten seconds");
-                }
-                std::thread::sleep(Duration::from_millis(5));
+    const PROBE: &str = "PCTX_AUXILIARY_DEADLINE_TEST_ROOT";
+
+    fn isolated(name: &str) -> Option<PathBuf> {
+        if let Some(base) = std::env::var_os(PROBE).map(PathBuf::from) {
+            return Some(base);
+        }
+        // Environment changes belong only to this independently selected child.
+        let temp = tempfile::tempdir().unwrap();
+        let mut child = std::process::Command::new(std::env::current_exe().unwrap())
+            .args([
+                "--exact",
+                &format!("runner::auxiliary_deadline_tests::{name}"),
+                "--nocapture",
+            ])
+            .env(PROBE, temp.path())
+            .env("PCTX_DATA_DIR", temp.path().join("data"))
+            .env("PCTX_USER_CONFIG", temp.path().join("absent-user-config"))
+            .stdout(Stdio::piped())
+            .stderr(Stdio::piped())
+            .spawn()
+            .unwrap();
+        let limit = Instant::now() + Duration::from_secs(10);
+        loop {
+            if child.try_wait().unwrap().is_some() {
+                break;
             }
-            let output = child.wait_with_output().unwrap();
-            assert!(
-                output.status.success(),
-                "{} {}",
-                String::from_utf8_lossy(&output.stdout),
-                String::from_utf8_lossy(&output.stderr)
-            );
-            return;
-        };
+            if Instant::now() >= limit {
+                let _ = child.kill();
+                let _ = child.wait();
+                panic!("Isolated auxiliary deadline probe did not finish within ten seconds");
+            }
+            std::thread::sleep(Duration::from_millis(5));
+        }
+        let output = child.wait_with_output().unwrap();
+        assert!(
+            output.status.success(),
+            "{} {}",
+            String::from_utf8_lossy(&output.stdout),
+            String::from_utf8_lossy(&output.stderr)
+        );
+        None
+    }
+    struct Fixture {
+        auxiliary: PathBuf,
+        data: PathBuf,
+        project: Project,
+        target: Project,
+    }
+    fn fixture(base: PathBuf) -> Fixture {
         let base = fs::canonicalize(base).unwrap();
         let primary = base.join("primary");
         let auxiliary = base.join("auxiliary");
@@ -2201,10 +2294,33 @@ mod auxiliary_deadline_tests {
         )
         .unwrap();
         fs::write(auxiliary.join("source.rs"), "fn original() {}\n").unwrap();
-        let mut project = Project::open(&primary).unwrap();
+        let project = Project::open(&primary).unwrap();
+        assert!(project.deadline.is_none());
+        let target = auxiliary_workspace(&project, &auxiliary).unwrap();
+        assert!(target.deadline.is_none());
+        assert_eq!(
+            reader::read(&target, "source.rs").unwrap().text,
+            "fn original() {}\n"
+        );
+        Fixture {
+            auxiliary,
+            data,
+            project,
+            target,
+        }
+    }
+    #[test]
+    fn opened_auxiliary_keeps_budget_for_subsequent_source_reads() {
+        let Some(base) = isolated("opened_auxiliary_keeps_budget_for_subsequent_source_reads")
+        else {
+            return;
+        };
+        let fixture = fixture(base);
+        let auxiliary = &fixture.auxiliary;
+        let mut project = fixture.project.clone();
         let original = crate::deadline::Deadline::from_millis(1000).unwrap();
         project.deadline = Some(original);
-        let target = auxiliary_workspace(&project, &auxiliary).unwrap();
+        let target = auxiliary_workspace(&project, auxiliary).unwrap();
         assert_eq!(
             reader::read(&target, "source.rs").unwrap().text,
             "fn original() {}\n"
@@ -2223,5 +2339,127 @@ mod auxiliary_deadline_tests {
         assert_eq!(target.deadline.unwrap().instant(), original.instant());
         assert!(!target.control_db().exists());
         assert!(!target.index_db().exists());
+    }
+    #[test]
+    fn auxiliary_loading_expires_after_actual_config_admission() {
+        let Some(base) = isolated("auxiliary_loading_expires_after_actual_config_admission") else {
+            return;
+        };
+        let fixture = fixture(base);
+        let auxiliary = fixture.auxiliary.clone();
+        let data = &fixture.data;
+        use std::{cell::RefCell, rc::Rc};
+        let registry_before = fs::read(data.join("registry.json")).unwrap();
+        let loading_deadline = crate::deadline::Deadline::from_millis(2000).unwrap();
+        let mut project = fixture.project.clone();
+        project.deadline = Some(loading_deadline);
+        let phases = Rc::new(RefCell::new((0usize, 0usize, 0usize)));
+        let observed = phases.clone();
+        let expected_root = auxiliary.clone();
+        let loading_end = loading_deadline.instant();
+        {
+            let _guard = crate::project::observe_load(move |root, deadline, phase| {
+                if root != expected_root {
+                    return;
+                }
+                let deadline = deadline.expect("Auxiliary scope must be retained");
+                assert_eq!(deadline.instant(), loading_end);
+                let mut trace = observed.borrow_mut();
+                match phase {
+                    crate::project::LoadPhase::ConfigAdmitted => {
+                        trace.0 += 1;
+                        while let Ok(remaining) = deadline.remaining() {
+                            std::thread::sleep(remaining.min(Duration::from_millis(10)));
+                        }
+                    }
+                    crate::project::LoadPhase::RegistryRead => trace.1 += 1,
+                    crate::project::LoadPhase::ResultReady => trace.2 += 1,
+                }
+            });
+            let start = Instant::now();
+            let error = auxiliary_workspace(&project, &auxiliary).unwrap_err();
+            assert_eq!(error.code, "TIMEOUT");
+            assert_eq!(error.exit, 7);
+            assert!(start.elapsed() < Duration::from_secs(4));
+        }
+        assert_eq!(*phases.borrow(), (1, 0, 0));
+        assert_eq!(project.deadline.unwrap().instant(), loading_end);
+        assert_eq!(
+            fs::read(data.join("registry.json")).unwrap(),
+            registry_before
+        );
+        assert!(!fixture.target.control_db().exists());
+        assert!(!fixture.target.index_db().exists());
+    }
+    #[test]
+    fn registered_fingerprint_expires_after_actual_executable_chunk_read() {
+        let Some(base) =
+            isolated("registered_fingerprint_expires_after_actual_executable_chunk_read")
+        else {
+            return;
+        };
+        let fixture = fixture(base);
+        let auxiliary = &fixture.auxiliary;
+        let data = &fixture.data;
+        let registry_before = fs::read(data.join("registry.json")).unwrap();
+        use std::{cell::RefCell, rc::Rc};
+        // Real registered-binding hashing over the opened auxiliary authority.
+        // This is a fingerprint-only fixture, never executable admission/spawn.
+        let mut fingerprint_project = Project::open(auxiliary).unwrap();
+        let binary = auxiliary.join("native-fixture");
+        let bytes: Vec<u8> = (0..(4 * 65536 + 31)).map(|i| (i % 251) as u8).collect();
+        fs::write(&binary, &bytes).unwrap();
+        let argv = vec![binary.to_str().unwrap().to_string()];
+        let positive = output::registered_binding_at(&fingerprint_project, &argv, ".").unwrap();
+        assert_eq!(positive["executable_hash"], hash(&bytes));
+        let hashing_deadline = crate::deadline::Deadline::from_millis(2000).unwrap();
+        let hashing_end = hashing_deadline.instant();
+        fingerprint_project.deadline = Some(hashing_deadline);
+        let chunks = Rc::new(RefCell::new((0usize, 0usize, 0usize)));
+        let observed = chunks.clone();
+        {
+            let _guard = output::observe_hash(move |phase, count, deadline| {
+                assert_eq!(deadline.unwrap().instant(), hashing_end);
+                let mut trace = observed.borrow_mut();
+                match phase {
+                    output::HashPhase::ChunkRead => {
+                        trace.0 += 1;
+                        trace.2 += count;
+                        assert!(count > 0);
+                        if trace.0 == 1 {
+                            while let Ok(remaining) = hashing_deadline.remaining() {
+                                std::thread::sleep(remaining.min(Duration::from_millis(10)));
+                            }
+                        }
+                    }
+                    output::HashPhase::ChunkHashed => trace.1 += 1,
+                }
+            });
+            let start = Instant::now();
+            let error =
+                output::registered_binding_at(&fingerprint_project, &argv, ".").unwrap_err();
+            assert_eq!(error.code, "TIMEOUT");
+            assert_eq!(error.exit, 7);
+            assert!(start.elapsed() < Duration::from_secs(4));
+        }
+        let trace = chunks.borrow();
+        assert_eq!(trace.0, 1);
+        assert_eq!(trace.1, 0);
+        assert!(trace.2 > 0);
+        drop(trace);
+        assert_eq!(fingerprint_project.deadline.unwrap().instant(), hashing_end);
+        assert_eq!(
+            fs::read(data.join("registry.json")).unwrap(),
+            registry_before
+        );
+        assert!(!fingerprint_project.control_db().exists());
+        assert!(!fingerprint_project.index_db().exists());
+        for path in [
+            data.join("outputs"),
+            fingerprint_project.workspace_dir.join("jobs"),
+            data.join("trust"),
+        ] {
+            assert!(!path.exists());
+        }
     }
 }

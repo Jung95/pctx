@@ -1,0 +1,22 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.59s
+     Running tests/runner.rs (target/debug/deps/runner-262d46ab6960599b)
+
+running 1 test
+test finite_auxiliary_plan_refuses_fifo_metadata_without_waiting_or_launching ... FAILED
+
+failures:
+
+---- finite_auxiliary_plan_refuses_fifo_metadata_without_waiting_or_launching stdout ----
+
+thread 'finite_auxiliary_plan_refuses_fifo_metadata_without_waiting_or_launching' (7998366) panicked at tests/runner.rs:1014:13:
+Plan blocked opening commondir FIFO
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    finite_auxiliary_plan_refuses_fifo_metadata_without_waiting_or_launching
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 24 filtered out; finished in 4.00s
+
+error: test failed, to rerun pass `--test runner`

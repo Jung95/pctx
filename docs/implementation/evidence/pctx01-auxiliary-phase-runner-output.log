@@ -1,0 +1,49 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.37s
+     Running tests/output.rs (target/debug/deps/output-6e0a106d5d0b7325)
+
+running 10 tests
+test opaque_shell_heavy_and_bad_identifiers_rejected ... ok
+test typed_full_report_preserves_failed_counts_without_becoming_gate_evidence ... ok
+test masking_is_before_storage_and_cr_preserves_error ... ok
+test exact_trust_child_exit_and_reread_without_execution ... ok
+test none_expiry_tamper_and_policy_change_cannot_restore_records ... ok
+test diagnostic_extract_binds_original_source_and_rereads_without_execution ... ok
+test nonzero_and_timeout_are_not_filter_success ... ok
+test agent_cannot_mint_execution_trust_and_git_helpers_are_unavailable ... ok
+test verbose_output_preserves_late_diagnostics_and_full_masked_denominator ... ok
+test bounded_capture_retains_tail_and_original_record_positions ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.25s
+
+     Running tests/runner.rs (target/debug/deps/runner-262d46ab6960599b)
+
+running 25 tests
+test inherited_canonical_descriptor_retains_lock_after_invalid_proof_and_parent_close ... ok
+test cloud_helper_is_only_durable_intent ... ok
+test legacy_lock_fixture ... ok
+test changed_script_and_agent_forged_trust_are_denied ... ok
+test explicit_script_input_change_requires_new_trust ... ok
+test finite_auxiliary_plan_refuses_fifo_metadata_without_waiting_or_launching ... ok
+test check_plan_with_finite_budget_inspects_registered_auxiliary_workspace_without_launch ... ok
+test legacy_bridge_absence_prevents_execution ... ok
+test linked_slot_child_directory_cannot_redirect_state ... ok
+test profile_change_during_execution_is_stale_at_report_recording ... ok
+test native_pass_is_invalidated_by_external_executable_change_with_sources_unchanged ... ok
+test parent_exit_does_not_release_living_child ... ok
+test synthetic_low_memory_defers_heavy_admission ... ok
+test native_environment_change_or_missing_profile_invalidates_existing_pass ... ok
+test trusted_typed_check_is_real_evidence ... ok
+test timeout_is_observed_without_success_evidence ... ok
+test user_created_host_state_symlink_is_denied ... ok
+test source_mutation_during_check_is_stale ... ok
+test unknown_memory_requires_disclosed_exact_owner_override ... ok
+test unknown_and_zero_tests_do_not_pass ... ok
+test cross_project_heavy_capacity_is_one ... ok
+test local_auxiliary_provider_needs_registered_linked_workspace_and_capacity ... ok
+test canonical_mutex_survives_main_parent_death ... ok
+test killed_guardian_causes_negative_child_observation ... ok
+test canonical_legacy_and_pctx_exclude_each_other ... ok
+
+test result: ok. 25 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 25.03s
+

@@ -1,0 +1,154 @@
+{
+  "official_task": "PCTX01",
+  "status": "implementing_not_complete",
+  "base_commit": "314860ede412ae8ce673f7020ca80c352a24bc1e",
+  "platform": "native macOS arm64",
+  "source_sha256": {
+    "src/project.rs": "b26681e04129cc2d533d83249dc27764f5678fce326b5461a3d854b564db70b3",
+    "src/output.rs": "d4e6e6d2fe29baa26ac528b7f763a3d141c79c33074b5175451a8c801d0472ae",
+    "src/runner.rs": "8733ac471027cea7de5ac73e4ffa27dcfa33d6dd6d633887704558c7141e9acc",
+    "src/reader.rs": "8e298b824a461dc160c8c023b2df7b1bb362c8508e89ecaac5bf037dbb5ecb4f",
+    "tests/runner.rs": "7ded31f08f7272441213a9f26f135e4a584585da86709a33e94d851aeeadc16a"
+  },
+  "verification": {
+    "initial_combined_targeted": {
+      "handle": 59032,
+      "exit": 0,
+      "passed": 1,
+      "failed": 0,
+      "note": "Before independent test split and removal of unused anchored_open wrapper; retained warning, not final-source proof"
+    },
+    "split_targeted": {
+      "handle": 72261,
+      "exit": 0,
+      "passed": 3,
+      "failed": 0
+    },
+    "runner_output": {
+      "handle": 70767,
+      "exit": 0,
+      "passed": 35,
+      "failed": 0,
+      "runner": 25,
+      "output": 10
+    },
+    "mutation": {
+      "driver_handle": 38470,
+      "driver_exit": 0,
+      "probes": [
+        {
+          "probe": "load-inheritance-loss",
+          "expected_test_exit": 101,
+          "restored_sha256": "8733ac471027cea7de5ac73e4ffa27dcfa33d6dd6d633887704558c7141e9acc"
+        },
+        {
+          "probe": "hash-postread-guard-loss",
+          "expected_test_exit": 101,
+          "restored_sha256": "e36233ac6616c6015f471170bb424fcfe6751e4ba358fbad15b578fd74bf8e68"
+        },
+        {
+          "probe": "fifo-admission-loss",
+          "expected_test_exit": 101,
+          "restored_sha256": "8733ac471027cea7de5ac73e4ffa27dcfa33d6dd6d633887704558c7141e9acc"
+        }
+      ],
+      "each_expected_test_exit": 101,
+      "each_passed": 0,
+      "each_failed": 1,
+      "note": "Before test-observer nested-if style-only lint correction; exact restoration hashes retained. Final full verifies final source."
+    },
+    "full": {
+      "handle": 42750,
+      "exit": 101,
+      "passed": 399,
+      "failed": 3,
+      "suites": 48,
+      "failures": [
+        "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+        "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget",
+        "simultaneous_streams_are_collected_and_overflow_never_infers_success"
+      ],
+      "unresolved_previous_variant": "query_program_resolution_uses_captured_command_path remains unresolved despite passing this run"
+    },
+    "format_exit": 0,
+    "initial_clippy": {
+      "handle": 99934,
+      "exit": 101,
+      "cause": "Test observer nested if; fixed without lint suppression"
+    },
+    "final_locked_all_target_clippy": {
+      "handle": 17744,
+      "exit": 0
+    }
+  },
+  "proof_scope": [
+    "Separate isolated tests preserve old source-after-open1s proof and add actual ConfigAdmitted original2s expiry before RegistryRead/ResultReady, unchanged registry/no databases. Each is a fresh deadline-free scope before its own supplied request. Parent child10s cleanup bound.",
+    "Actual registered_binding_at over opened auxiliary: positive full-byte SHA256 matches domain::hash; original2s expires after first real64KiB read, before hash update, with read1/hash0 and no later chunks/trust/job/output/database. This is fingerprint input-phase proof, not preemption during SHA computation.",
+    "Actual CLI linked-Git-worktree CheckPlan refuses FIFO commondir and gitdir with WORKSPACE_MISMATCH9, complete error envelope and no host resources. Per-case request1000ms, parent3s kill/reap bound. Removing regular/nonblocking reader actually hangs until fixture bound, proving sensitivity.",
+    "External executable/guardian hashes stream pinned regular files with original budget and existing128MiB cap including growth; final identity/mtime/ctime checks. Inert metadata uses shared anchored reader, pinned regular4096-byte cap, Unix nonblocking admission and budget checks. Source scripts keep the shared policy reader. No new deadline default for None child execution.",
+    "Controlled load-inheritance loss, fingerprint post-read guard loss and FIFO admission loss each fail their specific regression. Exact source restored. Cooperative filesystem calls and untested races remain explicit."
+  ],
+  "review": {
+    "agent": "requirements",
+    "scoped_blockers": 0,
+    "tests_or_edits_by_reviewer": false
+  },
+  "remaining_required_gates": [
+    "Remaining finite resource/runner/trust/filter/schedule/inventory reads",
+    "Additional metadata/input/content races and command CPU phases; cooperative filesystem syscalls are not hard cancellation",
+    "Full semantic pre-effect argument/envelope/representation/error/exit/budget matrix",
+    "Original native query startup root cause and required native Linux/Windows matrix"
+  ],
+  "logs": {
+    "targeted": {
+      "path": "docs/implementation/evidence/pctx01-auxiliary-phase-targeted.log",
+      "sha256": "ae05dd41911959acb62ff90a61bc3124c1c36b733a4844c9c4f7e6f35e0765aa"
+    },
+    "targeted-final": {
+      "path": "docs/implementation/evidence/pctx01-auxiliary-phase-targeted-final.log",
+      "sha256": "a4a34bf924622eb230c4549a8b8fd73c49c7e70f8bb77b38c42537399d8bca4c"
+    },
+    "runner-output": {
+      "path": "docs/implementation/evidence/pctx01-auxiliary-phase-runner-output.log",
+      "sha256": "bb2ed270e436a8e4808b66bc2fe22b3901a4e66a5fc4dab8d04f4a60fc6fd8d7"
+    },
+    "load-inheritance-loss": {
+      "path": "docs/implementation/evidence/pctx01-auxiliary-phase-load-inheritance-loss.log",
+      "sha256": "1874a6b31b9a955d1ff65b15b165198a864a787dd03adaddd6ac5f6ecdc5d385"
+    },
+    "hash-postread-guard-loss": {
+      "path": "docs/implementation/evidence/pctx01-auxiliary-phase-hash-postread-guard-loss.log",
+      "sha256": "c9749e8a4a46c8849a0677b348450801f626d84cc111cc76983ecb7aecc6393a"
+    },
+    "fifo-admission-loss": {
+      "path": "docs/implementation/evidence/pctx01-auxiliary-phase-fifo-admission-loss.log",
+      "sha256": "aaf177615fdecc9a50e605d1864cdff884a86f8abfd9cbc1fd664d5ee6666f91"
+    },
+    "mutation-driver": {
+      "path": "docs/implementation/evidence/pctx01-auxiliary-phase-mutation-driver.log",
+      "sha256": "d0e3eba869c75d8ef9e96cb2801be4f1737da3566a6fb88135108eb0da3a2ed3"
+    },
+    "format": {
+      "path": "docs/implementation/evidence/pctx01-auxiliary-phase-format.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "clippy-initial": {
+      "path": "docs/implementation/evidence/pctx01-auxiliary-phase-clippy-initial.log",
+      "sha256": "2a6c3fee0d09eb4a9d65b608ffa04ecbdec362d425078268f2f509d288964644"
+    },
+    "clippy": {
+      "path": "docs/implementation/evidence/pctx01-auxiliary-phase-clippy.log",
+      "sha256": "b686f3e58a56235ff545e4a07e536855ecf77fa5bc2515d1283d6d6ee8ae2f2c"
+    },
+    "full-native": {
+      "path": "docs/implementation/evidence/pctx01-auxiliary-phase-full-native.log",
+      "sha256": "009d3149504a21ff7b01843a0a97160e764e52e3cc1ef03f2f28cc151a67802c"
+    }
+  },
+  "mutation_driver": {
+    "path": "docs/implementation/evidence/pctx01-auxiliary-phase-mutation-driver.py.txt",
+    "sha256": "860a853960356210afe8a09c8100c9ef019ec54bcb2890668974c1a45e739ed9"
+  },
+  "actions_dispatched": 0,
+  "other_active_official_tasks": []
+}
