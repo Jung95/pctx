@@ -60,7 +60,8 @@ fn json_text(value: &Value, pretty: bool) -> Result<String> {
     }
     Ok(text)
 }
-fn literal_source(source: &str) -> String {
+/// Escape terminal controls in literal source and plain CLI diagnostics.
+pub fn diagnostic_text(source: &str) -> String {
     let mut text = String::with_capacity(source.len());
     for c in source.chars() {
         if (c.is_control() && c != '\n' && c != '\t') || hidden(c) {
@@ -204,7 +205,7 @@ fn source_section(out: &mut String, item: &Value) -> Result<()> {
     for key in ["content", "text"] {
         if let Some(text) = item.get(key).and_then(Value::as_str) {
             out.push_str("Source/content (literal, already masked):\n\n");
-            fence(out, &literal_source(text), "text");
+            fence(out, &diagnostic_text(text), "text");
         }
     }
     if let Some(signatures) = item.get("signatures").and_then(Value::as_array) {
@@ -212,7 +213,7 @@ fn source_section(out: &mut String, item: &Value) -> Result<()> {
             out.push_str("Verified signature:\n\n");
             provenance(out, signature)?;
             if let Some(content) = signature.get("content").and_then(Value::as_str) {
-                fence(out, &literal_source(content), "text");
+                fence(out, &diagnostic_text(content), "text");
             }
         }
     }

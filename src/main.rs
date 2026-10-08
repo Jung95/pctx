@@ -753,6 +753,28 @@ fn minimum_error_budget(command: &str) -> Result<usize> {
     ))
 }
 
+// Argument refusal never grants response-file or project authority. Render it
+// through the same terminal-safe serializer as ordinary command responses.
+fn refuse_arguments(command: &str, error: Error, limit: Option<usize>) -> ! {
+    let mut exit = error.exit;
+    let mut response = domain::envelope(command, None, Value::Null);
+    response["status"] = json!("error");
+    response["errors"] = json!([error]);
+    let mut bytes = encoded(&mut response, &Format::Json, &mut exit, None);
+    if let Some(limit) = limit
+        && bytes.len() > limit
+    {
+        // Keep the refusal classification when detailed presentation cannot fit.
+        response["errors"][0]["message"] = json!("Request refused");
+        bytes = encoded(&mut response, &Format::Json, &mut exit, None);
+    }
+    use std::io::Write;
+    if std::io::stdout().write_all(&bytes).is_err() {
+        exit = 7;
+    }
+    std::process::exit(exit)
+}
+
 fn main() {
     #[cfg(windows)]
     {
@@ -794,22 +816,18 @@ fn main() {
                 let mut out = domain::envelope("arguments", None, Value::Null);
                 out["status"] = json!("error");
                 out["errors"] = json!([err]);
-                println!("{}", out);
-                std::process::exit(2);
+                let mut exit = 2;
+                let bytes = encoded(&mut out, &Format::Json, &mut exit, None);
+                use std::io::Write;
+                if std::io::stdout().write_all(&bytes).is_err() {
+                    exit = 7;
+                }
+                std::process::exit(exit);
             }
             if e.use_stderr() {
                 // Parser diagnostics also cross the shared secret/control boundary.
                 let (message, _) = pctx::reader::redact(&e.to_string());
-                let message = message
-                    .chars()
-                    .flat_map(|c| {
-                        if c.is_control() && !matches!(c, '\n' | '\t') {
-                            c.escape_unicode().collect::<Vec<_>>()
-                        } else {
-                            vec![c]
-                        }
-                    })
-                    .collect::<String>();
+                let message = pctx::render::diagnostic_text(&message);
                 eprintln!("{message}");
                 std::process::exit(e.exit_code());
             }
@@ -822,18 +840,17 @@ fn main() {
                 let response = minimum_budget_error(cli.command.name(), minimum);
                 // Invalid capacity is always one JSON error on stdout. --output
                 // must not turn rejected arguments into a filesystem write.
-                if let Ok(bytes) = pctx::render::render(&response, pctx::render::Format::Json) {
-                    use std::io::Write;
-                    let _ = std::io::stdout().write_all(&bytes);
+                let mut exit = 2;
+                let mut response = response;
+                let bytes = encoded(&mut response, &Format::Json, &mut exit, None);
+                use std::io::Write;
+                if std::io::stdout().write_all(&bytes).is_err() {
+                    exit = 7;
                 }
-                std::process::exit(2);
+                std::process::exit(exit);
             }
             Err(e) => {
-                let mut response = domain::envelope(cli.command.name(), None, Value::Null);
-                response["status"] = json!("error");
-                response["errors"] = json!([e]);
-                println!("{}", response);
-                std::process::exit(2);
+                refuse_arguments(cli.command.name(), e, None);
             }
             _ => {}
         }
@@ -872,12 +889,7 @@ fn main() {
         _ => Ok(()),
     };
     if let Err(error) = preflight {
-        let exit = error.exit;
-        let mut response = domain::envelope(cli.command.name(), None, Value::Null);
-        response["status"] = json!("error");
-        response["errors"] = json!([error]);
-        println!("{}", response);
-        std::process::exit(exit);
+        refuse_arguments(cli.command.name(), error, output_budget(&cli.command));
     }
     let follows = matches!(
         &cli.command,
@@ -889,20 +901,12 @@ fn main() {
             "JSON watch is unavailable; use compact or ndjson",
             2,
         );
-        let mut response = domain::envelope("arguments", None, Value::Null);
-        response["status"] = json!("error");
-        response["errors"] = json!([e]);
-        println!("{}", response);
-        std::process::exit(2);
+        refuse_arguments("arguments", e, output_budget(&cli.command));
     }
     let deadline = match query_deadline(&cli) {
         Ok(deadline) => deadline,
         Err(e) => {
-            let mut response = domain::envelope("arguments", None, Value::Null);
-            response["status"] = json!("error");
-            response["errors"] = json!([e]);
-            println!("{}", response);
-            std::process::exit(2);
+            refuse_arguments("arguments", e, output_budget(&cli.command));
         }
     };
     if follows || matches!(cli.format, Format::Ndjson) {

@@ -1,0 +1,22 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.43s
+     Running tests/cli_frontend.rs (target/debug/deps/cli_frontend-4948844b4d514170)
+
+running 1 test
+test plain_parser_diagnostics_escape_bidi_c1_and_line_controls ... FAILED
+
+failures:
+
+---- plain_parser_diagnostics_escape_bidi_c1_and_line_controls stdout ----
+
+thread 'plain_parser_diagnostics_escape_bidi_c1_and_line_controls' (8185248) panicked at tests/cli_frontend.rs:534:9:
+"error: unexpected argument '--unknown-\u{202e}-name' found\n\nUsage: pctx --no-color <COMMAND>\n\nFor more information, try '--help'.\n\n"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    plain_parser_diagnostics_escape_bidi_c1_and_line_controls
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 11 filtered out; finished in 0.69s
+
+error: test failed, to rerun pass `--test cli_frontend`

@@ -1,0 +1,8 @@
+from pathlib import Path
+import subprocess,os,json,hashlib
+p=Path('/Users/dev/PCTX/src/main.rs');saved=p.read_bytes();s=saved.decode();old='let message = pctx::render::diagnostic_text(&message);';assert old in s;changed=s.replace(old,'let message = message;',1);env=os.environ.copy();env.update(RUSTUP_HOME='/Users/dev/PCTX/.toolchain/rustup',CARGO_HOME='/Users/dev/PCTX/.toolchain/cargo',SDKROOT='/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk',PATH='/Users/dev/PCTX/.toolchain/cargo/bin:/Library/Developer/CommandLineTools/usr/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin')
+try:
+ p.write_text(changed)
+ with open('/tmp/pctx-refusal-bidi-mutation.log','w') as f:r=subprocess.run(['cargo','test','--locked','--test','cli_frontend','plain_parser_diagnostics_escape_bidi_c1_and_line_controls','--','--exact','--test-threads=1'],cwd='/Users/dev/PCTX',env=env,stdout=f,stderr=subprocess.STDOUT,timeout=120)
+finally:p.write_bytes(saved)
+log=Path('/tmp/pctx-refusal-bidi-mutation.log').read_text();result={'exit':r.returncode,'actual_test_failure':r.returncode==101 and '0 passed; 1 failed' in log,'restored_main_sha256':hashlib.sha256(p.read_bytes()).hexdigest()};Path('/tmp/pctx-refusal-bidi-mutation.json').write_text(json.dumps(result,indent=2));print(result);assert result['actual_test_failure']

@@ -8,6 +8,8 @@ Transport exceptions are explicit: `adapter claude event --hook` emits native ho
 
 `markdown` is supported for `build`, `outline`, `read`, and `handoff` (including create, update and show). Unsupported commands must reject this format before execution, so a formatting error cannot occur after a write or child launch. NDJSON streaming is a separate CLI contract and is not implemented by this renderer.
 
+Source-independent argument rejection uses one JSON error envelope on stdout even when compact or Markdown was requested. This includes parsed semantic options, invalid finite-query timeout/watch combinations and insufficient error-envelope capacity; rejected requests never write `--output`. Capacity validation remains exit 2 and precedes semantic validation. Parser failures use masked stderr unless JSON was explicitly requested. Unsupported NDJSON uses its existing error-event stderr contract. These pre-execution transports are distinct from source-dependent command errors rendered after admission.
+
 These examples use the supported format names:
 
 ```sh

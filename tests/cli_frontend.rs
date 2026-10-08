@@ -402,3 +402,140 @@ fn every_visible_help_path_describes_schema_and_effects_without_project_access()
     }
     f.unchanged();
 }
+
+#[test]
+fn semantic_refusals_are_one_safe_json_document_for_every_requested_format() {
+    let f = Fixture::new();
+    for format in ["compact", "json", "markdown"] {
+        for tail in [
+            vec!["read", "code.py", "--lines", "0:2"],
+            vec!["build", "--task", "fixture", "--detail", "unknown"],
+            vec!["--timeout-ms", "0", "read", "code.py"],
+        ] {
+            let mut values = args(&[
+                "--root",
+                "absent-project",
+                "--format",
+                format,
+                "--output",
+                "refused-response.json",
+                "--no-color",
+            ]);
+            values.extend(args(&tail));
+            let output = f.run(&values);
+            argument_error(&output);
+            let documents = serde_json::Deserializer::from_slice(&output.stdout)
+                .into_iter::<Value>()
+                .collect::<Result<Vec<_>, _>>()
+                .unwrap();
+            assert_eq!(documents.len(), 1);
+            assert_eq!(output.stdout.last(), Some(&b'\n'));
+            assert!(!output.stdout.contains(&27));
+            f.unchanged();
+        }
+    }
+}
+
+#[test]
+fn valid_minimum_capacity_bounds_semantic_and_timeout_refusals_without_writes() {
+    let f = Fixture::new();
+    let tiny = f.run(&args(&[
+        "--format",
+        "json",
+        "build",
+        "--task",
+        "fixture",
+        "--budget-bytes",
+        "1",
+    ]));
+    argument_error(&tiny);
+    let value: Value = serde_json::from_slice(&tiny.stdout).unwrap();
+    let minimum = value["data"]["minimum_budget_bytes"].as_u64().unwrap() as usize;
+    for format in ["compact", "json", "markdown"] {
+        for tail in [
+            vec!["--detail", "unknown"],
+            vec!["--dependency-depth", "3"],
+            vec!["--timeout-ms", "0"],
+        ] {
+            let mut values = args(&[
+                "--root",
+                "absent-project",
+                "--format",
+                format,
+                "--output",
+                "refused-response.json",
+                "build",
+                "--task",
+                "fixture",
+                "--budget-bytes",
+                &minimum.to_string(),
+            ]);
+            values.extend(args(&tail));
+            let output = f.run(&values);
+            argument_error(&output);
+            assert!(
+                output.stdout.len() <= minimum,
+                "{} > {minimum}",
+                output.stdout.len()
+            );
+            f.unchanged();
+        }
+    }
+}
+
+#[cfg(unix)]
+#[test]
+fn undeliverable_parser_capacity_semantic_and_timeout_refusals_return_io_exit() {
+    use std::os::fd::FromRawFd;
+    use std::process::Stdio;
+    let f = Fixture::new();
+    for values in [
+        vec!["--format", "json", "--unknown"],
+        vec![
+            "--format",
+            "json",
+            "build",
+            "--task",
+            "fixture",
+            "--budget-bytes",
+            "1",
+        ],
+        vec!["--format", "json", "read", "code.py", "--lines", "0:2"],
+        vec!["--format", "json", "--timeout-ms", "0", "read", "code.py"],
+    ] {
+        let mut descriptors = [-1; 2];
+        assert_eq!(unsafe { libc::pipe(descriptors.as_mut_ptr()) }, 0);
+        let reader = unsafe { fs::File::from_raw_fd(descriptors[0]) };
+        let writer = unsafe { fs::File::from_raw_fd(descriptors[1]) };
+        drop(reader); // No reader exists when the actual CLI starts writing.
+        let output = Command::new(env!("CARGO_BIN_EXE_pctx"))
+            .current_dir(f.temp.path())
+            .args(&values)
+            .env("PCTX_DATA_DIR", f.temp.path().join("data"))
+            .env("PCTX_USER_CONFIG", f.temp.path().join("absent-config"))
+            .stdout(Stdio::from(writer))
+            .output()
+            .unwrap();
+        assert_eq!(output.status.code(), Some(7), "{values:?}: {output:?}");
+        assert!(output.stderr.is_empty());
+        f.unchanged();
+    }
+}
+
+#[test]
+fn plain_parser_diagnostics_escape_bidi_c1_and_line_controls() {
+    let f = Fixture::new();
+    for control in ['\u{202e}', '\u{2066}', '\u{200f}', '\u{85}', '\u{2028}'] {
+        let option = format!("--unknown-{control}-name");
+        let output = f.run(&args(&["--no-color", &option]));
+        assert_eq!(output.status.code(), Some(2));
+        assert!(output.stdout.is_empty());
+        let diagnostic = String::from_utf8(output.stderr).unwrap();
+        assert!(!diagnostic.contains(control), "{diagnostic:?}");
+        assert!(
+            diagnostic.contains(&format!("\\u{{{:04x}}}", control as u32)),
+            "{diagnostic:?}"
+        );
+        f.unchanged();
+    }
+}

@@ -1,0 +1,122 @@
+{
+  "official_task": "PCTX01",
+  "status": "implementing_not_complete",
+  "base_commit": "16627f860e41f034dd4dc13cf194343d4a74db54",
+  "platform": "native macOS arm64",
+  "source_sha256": {
+    "src/main.rs": "f1e6353b79fbc4806513e9ceb2ed025132cea97872468cf6b5897579b9ee7d10",
+    "src/render.rs": "00604836931e43f1ba7a79fa55ab76171a3360e122cf2f20a0ab568b868cce06",
+    "tests/cli_frontend.rs": "836cbfd0f9e3e9d4b6a2df7cb0aa5704fcabbb96f8961e38776c36e448e13a14",
+    "docs/cli/formats.md": "02e5533b47e534b0aa8410404086489c5a578837d182e0b9399b62cb157a142e"
+  },
+  "verification": {
+    "initial_targeted": {
+      "handle": 97319,
+      "exit": 0,
+      "passed": 36,
+      "failed": 0,
+      "log": "pctx-refusal-targeted.log"
+    },
+    "final_targeted": {
+      "handle": 3871,
+      "exit": 0,
+      "passed": 37,
+      "failed": 0,
+      "log": "pctx-refusal-targeted-final.log"
+    },
+    "interrupted_full": {
+      "handle": 80733,
+      "exit": 130,
+      "complete": false,
+      "reason": "Independent review identified ignored tiny-capacity stdout write failure; stopped cargo and waited for actual runner child33822 to terminate before final validation. Not full success evidence.",
+      "log": "pctx-refusal-full.log"
+    },
+    "controlled_loss": {
+      "handle": 92419,
+      "driver_exit": 0,
+      "exit": 101,
+      "actual_test_failure": true,
+      "restored_main_sha256": "33341be6d69c5dfc3cf050745d2173270c3d9fa5377c221fa834c8a823383efc"
+    },
+    "format": {
+      "exit": 0,
+      "log": "pctx-refusal-format-check.log"
+    },
+    "clippy": {
+      "exit": 0,
+      "log": "pctx-refusal-clippy-final.log"
+    },
+    "full": {
+      "handle": 11657,
+      "exit": 101,
+      "passed": 447,
+      "failed": 1,
+      "failed_tests": [
+        "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget"
+      ],
+      "log": "pctx-refusal-full-bidi.log",
+      "original_one_second_budgets_unchanged": true
+    },
+    "pre_bidi_full": {
+      "handle": 2682,
+      "exit": 101,
+      "passed": 446,
+      "failed": 1,
+      "failed_tests": [
+        "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget"
+      ],
+      "log": "pctx-refusal-full-final.log"
+    },
+    "bidi_targeted": {
+      "handle": 54211,
+      "exit": 0,
+      "passed": 38,
+      "failed": 0,
+      "failed_tests": [],
+      "log": "pctx-refusal-targeted-bidi.log"
+    },
+    "bidi_mutation": {
+      "handle": 30950,
+      "driver_exit": 0,
+      "exit": 101,
+      "actual_test_failure": true,
+      "restored_main_sha256": "f1e6353b79fbc4806513e9ceb2ed025132cea97872468cf6b5897579b9ee7d10"
+    },
+    "format_bidi": {
+      "exit": 0,
+      "log": "pctx-refusal-format-bidi-check.log"
+    },
+    "clippy_bidi": {
+      "handle": 40621,
+      "exit": 0,
+      "log": "pctx-refusal-clippy-bidi.log"
+    },
+    "independent_review": "requirements agent read-only review: preserved JSON exception contract, capacity/closed-pipe fixes consistent; no blocker, no builds/tests/edits; Windows and long-message overflow not qualified",
+    "actual_bidi_observation": {
+      "exit": 2,
+      "stdout_empty": true,
+      "raw_bidi_in_stderr": true,
+      "files_created": []
+    }
+  },
+  "contracts": [
+    "Preserve pre-effect argument refusal JSON stdout transport across compact/json/markdown, parser masked stderr unless JSON explicitly requested and existing unsupported NDJSON stderr event exception.",
+    "Use shared terminal-safe final JSON renderer for parser JSON, semantic/watch/deadline/capacity errors and error newline. No rejected request writes --output or opens project.",
+    "Admitted exact-min capacity bounds actual semantic/depth/timeout errors without source or response writes. Capacity-first invalid-budget exit2 remains; semantic capability/policy refusal classifications unchanged.",
+    "Unix actual closed stdout pipe returns IO_ERROR process exit7 without panic/diagnostics for parser/capacity/semantic/timeout refusal. Removing capacity write failure guard produces actual0PASS1FAIL, then restores exact source.",
+    "If refusal detail exceeds admitted capacity, shorten message without replacing original error code or exit.",
+    "Actual --no-color unknown-option diagnostic exposed raw U+202E before repair. Shared render::diagnostic_text now escapes C0/C1/bidi/line controls for plain diagnostics and literal source. Five actual CLI control values emit literal Unicode escapes, no raw controls/effects; removing helper call yields actual failed test."
+  ],
+  "limits": [
+    "PCTX01 remains incomplete; no next official task or Actions.",
+    "No present static refusal identified that reaches shortened-message overflow branch; this branch is not dynamic CLI qualification.",
+    "Closed-pipe proof is Unix/macOS only; native Windows equivalent needed.",
+    "Full argument/duplicate/global-position/representation/exit matrix and original startup failure root cause remain open.",
+    "Linux/Windows native required execution remains unqualified."
+  ],
+  "pre_bidi_source_sha256": {
+    "src/main.rs": "33341be6d69c5dfc3cf050745d2173270c3d9fa5377c221fa834c8a823383efc",
+    "tests/cli_frontend.rs": "3cc9007ddd9a104f45a5517df54a5b41985bc7f7c1ab05f9ed1464a893d87c1a",
+    "docs/cli/formats.md": "02e5533b47e534b0aa8410404086489c5a578837d182e0b9399b62cb157a142e"
+  }
+}

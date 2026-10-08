@@ -1,0 +1,24 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.56s
+     Running tests/cli_frontend.rs (target/debug/deps/cli_frontend-4948844b4d514170)
+
+running 1 test
+test undeliverable_parser_capacity_semantic_and_timeout_refusals_return_io_exit ... FAILED
+
+failures:
+
+---- undeliverable_parser_capacity_semantic_and_timeout_refusals_return_io_exit stdout ----
+
+thread 'undeliverable_parser_capacity_semantic_and_timeout_refusals_return_io_exit' (8177240) panicked at tests/cli_frontend.rs:519:9:
+assertion `left == right` failed: ["--format", "json", "build", "--task", "fixture", "--budget-bytes", "1"]: Output { status: ExitStatus(unix_wait_status(512)), stdout: "", stderr: "" }
+  left: Some(2)
+ right: Some(7)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    undeliverable_parser_capacity_semantic_and_timeout_refusals_return_io_exit
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 10 filtered out; finished in 0.75s
+
+error: test failed, to rerun pass `--test cli_frontend`
