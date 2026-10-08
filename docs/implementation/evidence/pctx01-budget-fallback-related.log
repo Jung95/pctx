@@ -1,0 +1,36 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.63s
+     Running tests/cli_run_exit.rs (target/debug/deps/cli_run_exit-6950b2b7b4cecebc)
+
+running 11 tests
+test missing_project_is_prelaunch_failure_in_both_modes_without_files ... ok
+test project_refusal_near_minimum_keeps_original_exit_and_fits ... ok
+test project_refusals_preserve_typed_exit_and_message_before_spawn ... ok
+test actual_prelaunch_refusal_has_no_child_outcome_or_invocation ... ok
+test admitted_small_run_budgets_preserve_prelaunch_truth_without_artifact ... ok
+test actual_spawn_failure_never_becomes_success_or_child_exit ... ok
+test incomplete_capture_is_partial_without_replacing_child_success ... ok
+test actual_execution_timeout_preserves_observation_but_returns_wrapper_error ... ok
+test publication_failure_preserves_child_outcome_and_never_retries ... ok
+test actual_child_codes_and_signal_are_distinct_from_wrapper_status ... ok
+test final_serialized_budget_preserves_actual_child_truth_and_full_reread ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.00s
+
+     Running tests/render.rs (target/debug/deps/render-cc917b0b7eea1064)
+
+running 11 tests
+test budget_fallback_never_fabricates_child_truth_without_attestation ... ok
+test malicious_fences_and_controls_cannot_escape_literal_source_and_roundtrip_exactly ... ok
+test json_formats_are_one_minified_document_including_exact_final_newline ... ok
+test budget_fallback_keeps_nested_execution_truth_and_retrieval_kind ... ok
+test preexisting_masking_and_unicode_are_not_changed_or_inferred ... ok
+test errors_partial_scope_and_negative_report_are_explicit_without_success_claim ... ok
+test signatures_and_outlines_are_visible_with_ranges_and_literal_control_escaping ... ok
+test terminal_hidden_unicode_is_json_escaped_without_changing_values ... ok
+test outline_and_handoff_display_source_provenance_and_keep_unknown_fields ... ok
+test support_is_exact_and_unsupported_markdown_returns_argument_error ... ok
+test renderer_never_enforces_or_silently_cuts_a_reported_budget ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

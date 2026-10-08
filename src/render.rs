@@ -1,7 +1,7 @@
 //! Pure final-document rendering. Budgets are enforced by the caller on returned bytes.
 //! Source strings are already masked by producers; this module never reads or executes them.
 use crate::domain::{Error, Result};
-use serde_json::{Map, Value};
+use serde_json::{Map, Value, json};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Format {
@@ -23,6 +23,60 @@ pub fn supports(command: &str) -> bool {
             | "handoff update"
             | "handoff show"
     )
+}
+
+/// Reduce an oversized presentation while preserving independently observed execution
+/// and typed refusal truth. The caller measures final bytes and chooses this path.
+/// This function neither executes children nor establishes budget admission.
+pub fn budget_fallback(
+    command: &str,
+    original: &Value,
+    execution_pointer: &str,
+    mut exit: i32,
+) -> (Value, i32) {
+    let e = Error::new("BUDGET_TOO_SMALL", "Output exceeds byte budget", 8);
+    // Keep the durable reread handle and original execution outcome even when
+    // presentation cannot fit. The wrapper failure never replaces child truth.
+    let mut proof = serde_json::Map::new();
+    if let Some(execution) = original.pointer(execution_pointer)
+        && (execution["spawned"].is_boolean() || execution["output_id"].is_string())
+    {
+        for key in [
+            "output_id",
+            "query_ref",
+            "spawned",
+            "child_exit_code",
+            "signal",
+            "termination",
+            "pctx_error",
+            "capture_complete",
+            "raw_available",
+            "task_completion",
+            "test_result",
+            "execution_status",
+            "delivery_kind",
+        ] {
+            if let Some(value) = execution.get(key) {
+                proof.insert(key.into(), value.clone());
+            }
+        }
+    }
+    let previous_errors = original["errors"].clone();
+    let preserve_refusal = original["status"] == "error"
+        && previous_errors
+            .as_array()
+            .is_some_and(|errors| !errors.is_empty());
+    let mut response = crate::domain::envelope(command, None, Value::Object(proof));
+    response["status"] = json!("error");
+    response["coverage"] = json!({"status":"partial","reasons":["presentation_budget"]});
+    if preserve_refusal {
+        response["errors"] = previous_errors;
+        response["errors"][0]["message"] = json!("Request refused");
+    } else {
+        response["errors"] = json!([e]);
+        exit = 8;
+    }
+    (response, exit)
 }
 
 /// Returns the entire UTF-8 document, including its final newline. Never truncates data.

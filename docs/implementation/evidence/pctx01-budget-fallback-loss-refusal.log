@@ -1,0 +1,33 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+warning: unused variable: `preserve_refusal`
+  --> src/render.rs:65:9
+   |
+65 |     let preserve_refusal = original["status"] == "error"
+   |         ^^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_preserve_refusal`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `pctx` (lib) generated 1 warning (run `cargo fix --lib -p pctx` to apply 1 suggestion)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.03s
+     Running tests/cli_run_exit.rs (target/debug/deps/cli_run_exit-6950b2b7b4cecebc)
+
+running 1 test
+test actual_prelaunch_refusal_has_no_child_outcome_or_invocation ... FAILED
+
+failures:
+
+---- actual_prelaunch_refusal_has_no_child_outcome_or_invocation stdout ----
+
+thread 'actual_prelaunch_refusal_has_no_child_outcome_or_invocation' (8407074) panicked at tests/cli_run_exit.rs:125:5:
+assertion `left == right` failed
+  left: 8
+ right: 5
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    actual_prelaunch_refusal_has_no_child_outcome_or_invocation
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 10 filtered out; finished in 0.88s
+
+error: test failed, to rerun pass `--test cli_run_exit`

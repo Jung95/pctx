@@ -436,3 +436,18 @@ FIFO O_RDWR distinguishes real nested cancellation from EOF caused by root death
 The root-only guard-loss test must fail and clean its still-owned group. Product
 process supervision, native startup budgets and all original failure criteria
 remain unchanged. Separate runner groups and other platforms stay unqualified.
+
+
+## PCTX01 shared budget reduction boundary
+
+Extract the existing CLI oversized-envelope reduction into render::budget_fallback
+without changing admission or byte measurement. A pure boundary permits inserting
+oversized presentation metadata into real native observations, then checking that
+reduction preserves independently recorded child and typed-refusal truth. Caller
+measurement and serialization remain necessary. The injected metadata is a test
+condition and cannot be reported as naturally occurring frontend fallback or a
+universal size bound. Native observer errors require a separate ownership audit:
+manual run_cli's attestation callback always returns Ok; registered execution
+uses fallible callbacks. Do not invent a production environment hook solely to
+exercise an unreachable manual callback failure. Keep PCTX34/40 independent
+execution features inactive while qualifying the required PCTX01 frontend status.

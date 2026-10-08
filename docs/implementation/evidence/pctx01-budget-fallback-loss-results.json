@@ -1,0 +1,14 @@
+{
+  "results": [
+    {
+      "mutation": "child",
+      "test_exit": 101
+    },
+    {
+      "mutation": "refusal",
+      "test_exit": 101
+    }
+  ],
+  "original_sha256": "020c3e4303829c4ac12c2db85120e41d5b901422849d67513a78fce9608a5633",
+  "restored_sha256": "020c3e4303829c4ac12c2db85120e41d5b901422849d67513a78fce9608a5633"
+}

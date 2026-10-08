@@ -202,3 +202,51 @@ fn signatures_and_outlines_are_visible_with_ranges_and_literal_control_escaping(
     assert!(!visible.contains('\u{202e}'));
     assert_eq!(metadata(&markdown), original);
 }
+
+#[test]
+fn budget_fallback_keeps_nested_execution_truth_and_retrieval_kind() {
+    let observed = json!({"output_id":"OUT-fixture","query_ref":"pctx output show OUT-fixture --view full",
+        "spawned":true,"child_exit_code":2,"signal":null,"termination":"exited",
+        "pctx_error":null,"capture_complete":true,"raw_available":true,
+        "task_completion":"not_evaluated","test_result":"not_evaluated",
+        "execution_status":"child_exited","delivery_kind":"retrieval"});
+    let mut original = envelope(
+        "check",
+        json!({"execution":observed,"independent_report":"not copied"}),
+    );
+    original["warnings"] = json!(["x".repeat(10_000)]);
+    let (fallback, exit) = render::budget_fallback("check", &original, "/data/execution", 2);
+    assert_eq!(exit, 8);
+    assert_eq!(fallback["data"], observed);
+    assert_eq!(fallback["errors"][0]["code"], "BUDGET_TOO_SMALL");
+    assert_eq!(
+        fallback["coverage"]["reasons"],
+        json!(["presentation_budget"])
+    );
+    let bytes = render::render(&fallback, Format::Json).unwrap();
+    assert_eq!(serde_json::from_slice::<Value>(&bytes).unwrap(), fallback);
+    assert!(bytes.len() < 3000);
+}
+
+#[test]
+fn budget_fallback_never_fabricates_child_truth_without_attestation() {
+    for data in [
+        Value::Null,
+        json!({"spawned":"true","child_exit_code":0}),
+        json!({"child_exit_code":0,"secret_fixture":"omit"}),
+    ] {
+        let original = envelope("run", data);
+        let (fallback, exit) = render::budget_fallback("run", &original, "/data", 0);
+        assert_eq!(exit, 8);
+        assert_eq!(fallback["data"], json!({}));
+    }
+    // A saved retrieval handle is valid without inventing a spawn observation.
+    let original = envelope(
+        "output",
+        json!({"output_id":"OUT-fixture","delivery_kind":"retrieval","raw_available":false}),
+    );
+    let (fallback, exit) = render::budget_fallback("output", &original, "/data", 0);
+    assert_eq!(exit, 8);
+    assert_eq!(fallback["data"], original["data"]);
+    assert!(fallback["data"].get("spawned").is_none());
+}

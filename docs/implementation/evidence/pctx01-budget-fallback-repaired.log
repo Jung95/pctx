@@ -1,0 +1,15 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+error[E0433]: cannot find module or crate `render` in this scope
+    --> src/main.rs:1153:13
+     |
+1153 |             render::budget_fallback(cli.command.name(), &response, execution_pointer, exit);
+     |             ^^^^^^ use of unresolved module or unlinked crate `render`
+     |
+help: to make use of source file src/render.rs, use `mod render` in this file to declare the module
+     |
+   1 + mod render;
+     |
+
+For more information about this error, try `rustc --explain E0433`.
+error: could not compile `pctx` (bin "pctx") due to 1 previous error
+warning: build failed, waiting for other jobs to finish...

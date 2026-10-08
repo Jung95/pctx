@@ -1,0 +1,24 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.10s
+     Running tests/cli_run_exit.rs (target/debug/deps/cli_run_exit-6950b2b7b4cecebc)
+
+running 1 test
+test actual_child_codes_and_signal_are_distinct_from_wrapper_status ... FAILED
+
+failures:
+
+---- actual_child_codes_and_signal_are_distinct_from_wrapper_status stdout ----
+
+thread 'actual_child_codes_and_signal_are_distinct_from_wrapper_status' (8406535) panicked at tests/cli_run_exit.rs:96:5:
+assertion `left == right` failed
+  left: Null
+ right: Number(0)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    actual_child_codes_and_signal_are_distinct_from_wrapper_status
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 10 filtered out; finished in 1.10s
+
+error: test failed, to rerun pass `--test cli_run_exit`

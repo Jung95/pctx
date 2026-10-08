@@ -1,0 +1,7 @@
+Independent read-only review by /root/requirements; no edits or tests performed.
+No blocker in extraction. Shared helper preserves the prior mapping, attested
+child fields, reread handles, retrieval kind and existing fatal classifications.
+Main serializes its result and prevents child propagation overriding a budget error.
+Tests inject a presentation boundary into real observations, not a naturally
+triggered CLI fallback. Native observer failure, universal fallback-size bounds
+and Windows behavior remain unqualified. Budget enforcement stays with the caller.

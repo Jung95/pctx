@@ -1149,49 +1149,9 @@ fn main() {
     if let Some(limit) = limit
         && bytes.len() > limit
     {
-        let e = Error::new("BUDGET_TOO_SMALL", "Output exceeds byte budget", 8);
-        // Keep the durable reread handle and original execution outcome even when
-        // presentation cannot fit. The wrapper failure never replaces child truth.
-        let mut proof = serde_json::Map::new();
-        if let Some(execution) = response.pointer(execution_pointer)
-            && (execution["spawned"].is_boolean() || execution["output_id"].is_string())
-        {
-            for key in [
-                "output_id",
-                "query_ref",
-                "spawned",
-                "child_exit_code",
-                "signal",
-                "termination",
-                "pctx_error",
-                "capture_complete",
-                "raw_available",
-                "task_completion",
-                "test_result",
-                "execution_status",
-                "delivery_kind",
-            ] {
-                if let Some(value) = execution.get(key) {
-                    proof.insert(key.into(), value.clone());
-                }
-            }
-        }
-        let previous_errors = response["errors"].clone();
-        let preserve_refusal = response["status"] == "error"
-            && previous_errors
-                .as_array()
-                .is_some_and(|errors| !errors.is_empty());
-        response = domain::envelope(cli.command.name(), None, Value::Object(proof));
+        (response, exit) =
+            pctx::render::budget_fallback(cli.command.name(), &response, execution_pointer, exit);
         execution_pointer = "/data";
-        response["status"] = json!("error");
-        response["coverage"] = json!({"status":"partial","reasons":["presentation_budget"]});
-        if preserve_refusal {
-            response["errors"] = previous_errors;
-            response["errors"][0]["message"] = json!("Request refused");
-        } else {
-            response["errors"] = json!([e]);
-            exit = 8;
-        }
         // The complete JSON error is the smallest reversible fallback. Budgets
         // smaller than that envelope cannot hold a valid error document.
         bytes = encoded(&mut response, &Format::Json, &mut exit, deadline);

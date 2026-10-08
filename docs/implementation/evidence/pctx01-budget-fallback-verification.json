@@ -1,0 +1,137 @@
+{
+  "task": "PCTX01",
+  "status": "implementing; incomplete; sole active official task",
+  "base_revision": "860f2fd6935b2e79b60f589084449d71c084e2f6",
+  "previous_goal_turn": "progress: actual final-byte native fixture, evidence and local commit",
+  "platform": "native macOS arm64; other native platforms unqualified",
+  "sources_sha256": {
+    "src/main.rs": "342f3812a38ed087223e30a62adaba2b87b791e87b00ed9f3f33a403ed7cdbc4",
+    "src/render.rs": "020c3e4303829c4ac12c2db85120e41d5b901422849d67513a78fce9608a5633",
+    "tests/cli_run_exit.rs": "0cc85bdb016e6c655f18a4b1ce788530b2e2debcb42763e1afaea044fd55e8b2",
+    "tests/render.rs": "ebe00986d9b5c7c2bc3af9978e2d45e77406cd87c1d31e1353bc7d743abb2c5b"
+  },
+  "runs": [
+    {
+      "path": "pctx01-budget-fallback-selected.log",
+      "sha256": "414709b3ededdd71b39ad48221525dda64e7754cc73e2ae5dfe62614c82611f4",
+      "exit": 101,
+      "session": 10133,
+      "counts": {
+        "passed": 0,
+        "failed": 0
+      },
+      "qualification": "Missing json macro import; build failure, no tests."
+    },
+    {
+      "path": "pctx01-budget-fallback-repaired.log",
+      "sha256": "8ef96f19d68a1966f38856cfaecbdde0222acfdc4af65048b451b63d1d8e4e97",
+      "exit": 101,
+      "session": 54876,
+      "counts": {
+        "passed": 0,
+        "failed": 0
+      },
+      "qualification": "Missing crate-qualified main path; build failure, no tests."
+    },
+    {
+      "path": "pctx01-budget-fallback-related.log",
+      "sha256": "d8c16d3be8c5dc57d3cb0e467f243ced29d60542c71b166dbd4f3cfd37f4e31d",
+      "exit": 0,
+      "session": 25441,
+      "counts": {
+        "passed": 22,
+        "failed": 0
+      },
+      "qualification": "Final shared boundary and native observations22 PASS."
+    },
+    {
+      "path": "pctx01-budget-fallback-loss-child.log",
+      "sha256": "5aaed5a1dfa485bd65335f3ecfe16bfa034f130de5809172061bec9d87b38c6e",
+      "exit": 101,
+      "session": 9369,
+      "counts": {
+        "passed": 0,
+        "failed": 1
+      },
+      "qualification": "Controlled omitted child_exit_code; actual child0 observation differs."
+    },
+    {
+      "path": "pctx01-budget-fallback-loss-refusal.log",
+      "sha256": "dc7f4bcac1fa1a36d57129b5cfab02c24a4e452e71476821ab9d94889b2f5b05",
+      "exit": 101,
+      "session": 9369,
+      "counts": {
+        "passed": 0,
+        "failed": 1
+      },
+      "qualification": "Controlled discarded original refusal; native denial5 becomes8."
+    },
+    {
+      "path": "pctx01-budget-fallback-static.log",
+      "sha256": "1eff64053127581e6abccb2ae77b83e465e3a8e87867702cdd93f34d9321a1d4",
+      "exit": 0,
+      "session": 26005,
+      "counts": {
+        "passed": 0,
+        "failed": 0
+      },
+      "qualification": "Final format/locked all-target Clippy."
+    },
+    {
+      "path": "pctx01-budget-fallback-full.log",
+      "sha256": "f3f68a93dccceae9adf11451f002c3b0b9b5122398f0d8921de524759b61e9e7",
+      "exit": 101,
+      "session": 30035,
+      "counts": {
+        "passed": 480,
+        "failed": 4
+      },
+      "qualification": "Final restored-source full; original startup failures preserved, original1s deadlines unchanged."
+    }
+  ],
+  "guard_losses": {
+    "results": [
+      {
+        "mutation": "child",
+        "test_exit": 101
+      },
+      {
+        "mutation": "refusal",
+        "test_exit": 101
+      }
+    ],
+    "original_sha256": "020c3e4303829c4ac12c2db85120e41d5b901422849d67513a78fce9608a5633",
+    "restored_sha256": "020c3e4303829c4ac12c2db85120e41d5b901422849d67513a78fce9608a5633"
+  },
+  "proof_scope": [
+    "CLI uses unchanged shared fallback reduction; admission/final serialization/exit precedence remain with caller.",
+    "Presentation padding injected into actual native child0/1/2/signal15 and both policy observations; exact child truth/reread fields preserved.",
+    "Actual prelaunch denial5 and publicationfailure7 retain codes; incomplete capture retains observed state.",
+    "Nested execution/retrieval kinds retained; invalid/missing attestation never fabricates child success."
+  ],
+  "limits": [
+    "Boundary injection is not naturally triggered CLI metadata fallback.",
+    "Helper has no universal budget/size guarantee; caller performs measurement.",
+    "Native spawn-observer failures, original startup failures, other remaining frontend/phase/native Linux/Windows gates unqualified.",
+    "Whole PCTX01 and goal incomplete."
+  ],
+  "commands": {
+    "related": "cargo test --locked --no-fail-fast --test cli_run_exit --test render",
+    "static": [
+      "cargo fmt --all -- --check",
+      "cargo clippy --locked --all-targets -- -D warnings"
+    ],
+    "full": "cargo test --locked --no-fail-fast"
+  },
+  "review_sha256": "1aafbdaca34615d8db8bc24ba6eb4e140642f105ed02875b8348ca22630f9dad",
+  "driver_sha256": "d20681923677e0203a7ddc27018e86224f9892e690ab783d1eac2f5477a7a1ea",
+  "push_state": "prior automatic review rejection pending exact authorization; no retry or workaround",
+  "actions_dispatched": false,
+  "next_official_task": null,
+  "full_failed_tests": [
+    "query_program_resolution_uses_captured_command_path",
+    "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+    "simultaneous_streams_are_collected_and_overflow_never_infers_success",
+    "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget"
+  ]
+}

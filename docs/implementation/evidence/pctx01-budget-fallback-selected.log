@@ -1,0 +1,26 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+error: cannot find macro `json` in this scope
+  --> src/render.rs:70:26
+   |
+70 |     response["status"] = json!("error");
+   |                          ^^^^
+
+error: cannot find macro `json` in this scope
+  --> src/render.rs:71:28
+   |
+71 |     response["coverage"] = json!({"status":"partial","reasons":["presentation_budget"]});
+   |                            ^^^^
+
+error: cannot find macro `json` in this scope
+  --> src/render.rs:74:44
+   |
+74 |         response["errors"][0]["message"] = json!("Request refused");
+   |                                            ^^^^
+
+error: cannot find macro `json` in this scope
+  --> src/render.rs:76:30
+   |
+76 |         response["errors"] = json!([e]);
+   |                              ^^^^
+
+error: could not compile `pctx` (lib) due to 4 previous errors

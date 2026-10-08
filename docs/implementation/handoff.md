@@ -6,21 +6,21 @@
 
 ## Latest verified integration boundary
 
-PCTX01 remains the only active official task (`implementing`). Base
-e57c5ed; current test-only delta qualifies actual native final Run record trimming.
-Normalized bidi text expands in safe JSON; baseline8192 response exceeds5000 with
-one admitted record. Explicit5000 JSON/compact responses omit that record and
-preserve child0/2/signal15 for both exit policies. Full reread retains normalized
-text/child/signal and never reruns; five invocations per case. Related32 PASS;
-format/locked all-target Clippy PASS. Guard loss actual0PASS1FAIL/exit8 instead
-of expected0; exact source restoration. Initial C1 normalization guard failure
-and invalid test-target selection/no tests retained. Final full30370 terminal101:
-479 PASS/3 original startup FAIL. Independent review found no scoped blocker.
-All jobs terminal; no live heavy job. Manifest:
-evidence/pctx01-run-final-bytes-verification.json. Production unchanged.
-Metadata-only budget fallback, spawn-observer error injection, remaining frontend/
-phase/startup and native Linux/Windows gates remain open. No next official task.
-Prior auto-review main push rejection remains; no retry or alternate mechanism.
+PCTX01 remains the only active official task (`implementing`). Base860f2fd;
+CLI oversized reduction delegates unchanged semantics to shared budget_fallback.
+Real native observations plus injected oversized presentation verify child0/1/2/
+signal15, prelaunch denial5, incomplete capture and publication failure7 truth.
+Nested retrieval and unattested/no-fabrication tests pass. Related22 PASS;
+format/locked all-target Clippy PASS. Two guard losses actual0PASS1FAIL each:
+child0 becomes missing; denial5 becomes8. Exact source restore. Initial import
+and crate-path build failures ran no tests and are retained. Final full30035
+terminal101: 480 PASS/4 original startup FAIL at unchanged original1s budgets.
+Independent review found no scoped blocker. All jobs terminal; no live heavy job.
+Manifest: evidence/pctx01-budget-fallback-verification.json.
+Boundary injection is not naturally occurring CLI metadata fallback; universal
+size bounds, native observer error propagation, remaining producer/phase/startup
+and native Linux/Windows gates remain open. No next official task or Actions.
+Prior automatic main push rejection remains; no retry/alternate mechanism.
 Local commits remain unpushed pending explicit approval. Whole goal incomplete.
 
 ## Source, evidence and environment
@@ -69,19 +69,20 @@ Original ignored specification SHA256 8914faad57432f524aec0a06aa90c43c18c23f8c19
 
 ## Exact next action
 
-Within PCTX01, audit metadata-only post-spawn presentation fallback and spawn-observer
-error truth, remaining oversized error and supported-empty/unavailable/partial
-envelope propagation, and the remaining producer argument/phase matrix. Preserve
-producer semantics and original native startup budgets. Normal delivery fixtures
-await their CLIs; owned same-group timeout proof is integrated, not general runner
-containment. Keep separate runner ownership with PCTX34/40. Do not repeat already
-qualified slices without a source change or new evidence. Startup isolation remains
-archived: fresh/reused byte-identical executable controls and direct/group factors
-must be counterbalanced, with identity, actual signal and expiry recorded; no
-warm-up production retry, interpreter substitution, time-limit increase or OS
-policy change. Native Linux/Windows execution remains mandatory and unavailable
-conditions must be recorded precisely. Do not select another official task while
-PCTX01 remains incomplete or expand unrelated functionality.
+Within PCTX01, audit the actual fallible callback/producer error paths and the
+remaining error/argument/supported-empty/unavailable/partial envelope contracts.
+Manual run_cli's spawn attestation always returns Ok; registered callbacks are
+fallible. Qualify the actual frontend state without inventing a product test hook
+or expanding independent PCTX34/40 execution features. Shared budget reduction
+is qualified at an injected presentation boundary; naturally triggered metadata
+fallback and universal size bounds are not claimed. Preserve original startup
+budgets and every failed attempt. Counterbalanced fresh/reused byte-identical
+native executable/group factors remain the next causal startup investigation;
+record identity, actual signal and expiry, without warm-up production retry,
+interpreter substitution, deadline increases or OS-policy changes. Native Linux/
+Windows executions remain mandatory. No other official task before PCTX01 fully
+closes. Prior rejected main push remains pending explicit approval; do not retry
+through alternate mechanisms. All current jobs terminal.
 
 ## Retained historical results and inactive backlog
 

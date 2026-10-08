@@ -426,3 +426,25 @@ Only PCTX01 remains active and incomplete; no next official task or Actions.
 The prior main push approval boundary is unchanged; no rejected push was retried.
 
 Final native full30370 terminal101: 479 PASS/3 original startup FAIL. All jobs terminal; PCTX01 incomplete.
+
+
+## PCTX01 budget fallback execution truth
+
+CLI oversized fallback now delegates its unchanged reduction to shared
+`render::budget_fallback`; admission, byte measurement, final serialization and
+child exit precedence remain with the CLI. Boundary injection into actual native
+child0/1/2/signal, prelaunch denial, incomplete capture and publication-failure
+observations verifies retained child state/handles and existing fatal codes.
+Nested execution/retrieval and unattested/no fabricated-child tests also pass.
+Related22 PASS; format/locked all-target Clippy PASS. Controlled losses each
+0PASS1FAIL: child0 becomes missing, and denial5 becomes8. Exact source restored.
+Initial missing import and crate-path build failures ran no tests and are retained.
+Independent review found no scoped blocker.
+[Evidence](evidence/pctx01-budget-fallback-verification.json).
+
+This is shared-boundary injection, not a naturally occurring CLI metadata fallback.
+Universal fallback-size bounds, native spawn-observer failure injection, remaining
+producer/phase/startup gates and native Linux/Windows remain open. Only PCTX01 is
+active and incomplete. No next official task, Actions or rejected-push retry.
+
+Final native full30035 terminal101: 480 PASS/4 original startup FAIL. All jobs terminal; PCTX01 incomplete.
