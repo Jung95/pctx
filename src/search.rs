@@ -573,11 +573,11 @@ pub fn find_indexed(p: &Project, req: &FindRequest) -> Result<Value> {
     Ok(value)
 }
 
-pub fn find(p: &Project, files: &[FileEntry], req: &FindRequest) -> Result<Value> {
-    let bounded = query_project(p)?;
-    let p = &bounded;
-    reader::validate_policy(p)?;
-    reader::validate_root(p)?;
+pub fn validate_find_request(req: &FindRequest) -> Result<()> {
+    prepare_find(req).map(|_| ())
+}
+fn prepare_find(req: &FindRequest) -> Result<(Expr, Option<regex::Regex>)> {
+    validate_query_scopes(&req.scopes)?;
     if req.regex && req.boolean_query.is_some() {
         return Err(invalid("Regex and Boolean modes cannot be combined"));
     }
@@ -596,9 +596,6 @@ pub fn find(p: &Project, files: &[FileEntry], req: &FindRequest) -> Result<Value
         }
         Expr::Term(q.clone())
     };
-    let mut positive = Vec::new();
-    expr.terms(false, &mut positive);
-    let (alias, expanded) = aliases(p, &positive)?;
     let regex = if req.regex {
         Some(
             regex::RegexBuilder::new(req.query.as_deref().unwrap())
@@ -611,6 +608,18 @@ pub fn find(p: &Project, files: &[FileEntry], req: &FindRequest) -> Result<Value
     } else {
         None
     };
+    Ok((expr, regex))
+}
+
+pub fn find(p: &Project, files: &[FileEntry], req: &FindRequest) -> Result<Value> {
+    let bounded = query_project(p)?;
+    let p = &bounded;
+    reader::validate_policy(p)?;
+    reader::validate_root(p)?;
+    let (expr, regex) = prepare_find(req)?;
+    let mut positive = Vec::new();
+    expr.terms(false, &mut positive);
+    let (alias, expanded) = aliases(p, &positive)?;
     let matches = |hay: &str, term: &str| {
         regex.as_ref().map(|r| r.is_match(hay)).unwrap_or_else(|| {
             literal(hay, term)
@@ -1142,12 +1151,8 @@ pub struct StructureRequest {
     #[arg(long,default_value="matched",value_parser=["matched","strict"])]
     pub freshness: String,
 }
-/// Limited structural predicates use grammar tokens, never guessed source patterns.
-pub fn query_structure(p: &Project, files: &[FileEntry], req: &StructureRequest) -> Result<Value> {
-    let bounded = query_project(p)?;
-    let p = &bounded;
-    reader::validate_policy(p)?;
-    reader::validate_root(p)?;
+pub fn validate_structure_request(req: &StructureRequest) -> Result<()> {
+    validate_query_scopes(&req.scopes)?;
     if req.limit > 1000 {
         return Err(invalid("Limit exceeds supported bound"));
     }
@@ -1165,6 +1170,34 @@ pub fn query_structure(p: &Project, files: &[FileEntry], req: &StructureRequest)
             "Async predicate applies only to functions and methods",
         ));
     }
+    Ok(())
+}
+fn validate_query_scopes(scopes: &[String]) -> Result<()> {
+    for scope in scopes {
+        if scope.is_empty()
+            || scope.contains('\\')
+            || scope.as_bytes().get(1) == Some(&b':')
+            || std::path::Path::new(scope).components().any(|part| {
+                !matches!(
+                    part,
+                    std::path::Component::Normal(_) | std::path::Component::CurDir
+                )
+            })
+        {
+            return Err(invalid(
+                "Scope must be a project-relative path without traversal",
+            ));
+        }
+    }
+    Ok(())
+}
+/// Limited structural predicates use grammar tokens, never guessed source patterns.
+pub fn query_structure(p: &Project, files: &[FileEntry], req: &StructureRequest) -> Result<Value> {
+    let bounded = query_project(p)?;
+    let p = &bounded;
+    reader::validate_policy(p)?;
+    reader::validate_root(p)?;
+    validate_structure_request(req)?;
     let mut results = Vec::new();
     for f in files {
         p.check_deadline()?;

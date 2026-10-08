@@ -1,0 +1,45 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.42s
+     Running tests/cli_frontend.rs (target/debug/deps/cli_frontend-4948844b4d514170)
+
+running 4 tests
+test non_utf8_argument_returns_structured_error_without_panic_or_effect ... ok
+test unsupported_ndjson_is_rejected_before_project_discovery_or_init ... ok
+test help_and_version_are_successful_without_project_access ... ok
+test parser_errors_respect_actual_json_option_and_do_not_load_project ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.83s
+
+     Running tests/search.rs (target/debug/deps/search-751f23ebc1208c2d)
+
+running 27 tests
+test expired_queries_fail_even_when_the_candidate_universe_is_empty ... ok
+test boolean_complements_validate_candidates_without_positive_hits ... ok
+test cached_policy_change_hides_metadata_and_boolean_remains_explicit ... ok
+test alias_and_aggregate_regex_candidates_use_current_validation ... ok
+test indexed_metadata_empty_generation_rejects_replaced_root_before_search ... ok
+test indexed_metadata_invalid_policy_and_foreign_workspace_fail_closed ... ok
+test indexed_metadata_matches_including_complements_authorize_before_limit_even_off ... ok
+test invalid_policy_fails_even_without_metadata_candidates ... ok
+test markdown_sections_ignore_fenced_examples_and_link_parents ... ok
+test indexed_body_search_does_not_follow_a_matching_or_complement_symlink ... ok
+test indexed_body_search_observes_new_text_and_boolean_complements_with_actual_hashes ... ok
+test oversized_non_candidate_is_skipped_but_matching_candidate_fails ... ok
+test indexed_metadata_search_hides_unopened_historical_counts_and_propagates_generation ... ok
+test indexed_body_search_validates_nonmatching_later_sources_before_limit_even_off ... ok
+test indexed_body_search_filters_current_policy_scope_language_and_deleted_rows_without_counts ... ok
+test matched_metadata_validates_stale_candidates_without_discovering_new_names ... ok
+test unsupported_is_distinct_from_empty_supported ... ok
+test utf8_crlf_locations_and_version_ids ... ok
+test structural_variants_use_real_grammar ... ok
+test stale_symbol_and_ambiguous_names_never_select_code ... ok
+test metadata_non_candidates_are_not_opened_as_source ... ok
+test indexed_metadata_staleness_and_body_only_discovery_keep_their_boundaries ... ok
+test text_and_all_still_read_sources_without_metadata_hits_and_policy_hides_candidates ... ok
+test parsing_cancellation_is_timeout_instead_of_empty_or_partial_ast_success ... ok
+test indexed_body_search_preserves_invalid_policy_workspace_and_shared_lock_deadlines ... ok
+test candidate_scan_cap_remains_distinct_from_request_timeout ... ok
+test deadline_partial_keeps_only_verified_matches_and_never_claims_complete_coverage ... ok
+
+test result: ok. 27 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.53s
+

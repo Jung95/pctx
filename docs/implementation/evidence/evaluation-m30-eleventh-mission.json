@@ -1,0 +1,102 @@
+{
+  "plan_sha256": "c672dfa4f015082ee801be2ea7940a8062b3a68909077cd31799535ef614223c",
+  "config": {
+    "schema_version": 1,
+    "profile": "M",
+    "seed": 1048,
+    "repetitions": 30,
+    "context_budget_bytes": 12000,
+    "extract_budget_bytes": 10000,
+    "timeout_seconds": 150,
+    "output_fixtures": true,
+    "session_workloads": true,
+    "local_git_broker": true,
+    "cold_cache_control": "unknown",
+    "reference_environment": {
+      "cpu_cores": 8,
+      "memory_bytes": 17179869184,
+      "storage": "local_ssd",
+      "network": "not_used"
+    }
+  },
+  "mission": {
+    "schema_version": 1,
+    "mode": "plan_only_no_execution",
+    "minimum_tasks": {
+      "bug_fix": 10,
+      "small_feature": 10,
+      "review_impact": 10
+    },
+    "minimum_repetitions_per_task_arm": 3,
+    "experimental_unit": "task",
+    "arms": [
+      "baseline_direct_tools",
+      "pctx_v05",
+      "output_only",
+      "extract_only",
+      "adaptive_only",
+      "all"
+    ],
+    "conditions": [
+      "warm_provider_cache",
+      "cold_provider_cache",
+      "native_resume",
+      "new_session",
+      "compact",
+      "quota_interruption",
+      "idle_unchanged"
+    ],
+    "fixed_inputs": [
+      "repository_snapshot",
+      "model_and_version",
+      "agent_configuration",
+      "task_time_limit",
+      "completion_checks",
+      "policy",
+      "tool_output_policy",
+      "price_table_version",
+      "account_pool_scope"
+    ],
+    "required_observations": [
+      "request_id",
+      "input_tokens_uncached",
+      "input_tokens_cached",
+      "output_tokens",
+      "cache_write_tokens",
+      "price_table_currency",
+      "estimated_api_cost",
+      "hidden_test_or_rubric_success",
+      "rework",
+      "elapsed_seconds",
+      "additional_queries",
+      "coordination_tokens",
+      "reread_tokens",
+      "retry_tokens",
+      "recovery_tokens",
+      "provider_quota_source_and_window"
+    ],
+    "analysis": {
+      "paired_bootstrap_unit": "task",
+      "confidence_level": 0.95,
+      "noninferiority_margin_percentage_points": -5,
+      "insufficient_sample_result": "judgment_pending"
+    },
+    "targets": {
+      "input_token_reduction_fraction": 0.2,
+      "duplicate_upstream_reduction_fraction": 0.8,
+      "new_session_recovery_token_reduction_fraction": 0.4,
+      "pctx_idle_model_wakes": 0
+    },
+    "restrictions": [
+      "no_model_launch",
+      "no_paid_calls",
+      "no_account_changes",
+      "no_credential_reads",
+      "no_external_publication",
+      "no_local_bytes_as_provider_usage",
+      "do_not_weaken_baseline",
+      "preserve_negative_savings"
+    ]
+  },
+  "integrity_is_not_owner_authorization": true
+}

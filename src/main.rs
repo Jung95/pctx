@@ -615,6 +615,16 @@ fn stream(cli: &Cli, deadline: Option<pctx::deadline::Deadline>) -> Result<()> {
             2,
         ));
     }
+    if !matches!(
+        &cli.command,
+        Command::Board { .. } | Command::Activity { .. }
+    ) {
+        return Err(Error::new(
+            "INVALID_ARGUMENT",
+            "NDJSON supports board and activity",
+            2,
+        ));
+    }
     let root = project::detect_root_with_deadline(cli.root.as_deref(), deadline)?;
     let p = Project::open_with_deadline(&root, deadline)?;
     let ndjson = matches!(cli.format, Format::Ndjson);
@@ -700,11 +710,16 @@ fn main() {
             std::process::exit(status);
         }
     }
-    let raw = std::env::args().collect::<Vec<_>>();
+    let raw = std::env::args_os().collect::<Vec<_>>();
     let cli = match Cli::try_parse() {
         Ok(c) => c,
         Err(e) => {
-            if e.use_stderr() && raw.iter().any(|s| s == "json" || s == "--format=json") {
+            let options = raw.iter().take_while(|s| *s != "--").collect::<Vec<_>>();
+            let json_requested = options.iter().any(|s| **s == "--format=json")
+                || options
+                    .windows(2)
+                    .any(|pair| pair[0] == "--format" && pair[1] == "json");
+            if e.use_stderr() && json_requested {
                 let err = Error::new(
                     "INVALID_ARGUMENT",
                     "Invalid command or option; see pctx --help",
@@ -719,6 +734,20 @@ fn main() {
             e.exit()
         }
     };
+    // Pure argument checks precede project discovery, refresh and output paths.
+    let preflight = match &cli.command {
+        Command::Find(request) => search::validate_find_request(request),
+        Command::Query(request) => search::validate_structure_request(request),
+        _ => Ok(()),
+    };
+    if let Err(error) = preflight {
+        let exit = error.exit;
+        let mut response = domain::envelope(cli.command.name(), None, Value::Null);
+        response["status"] = json!("error");
+        response["errors"] = json!([error]);
+        println!("{}", response);
+        std::process::exit(exit);
+    }
     if let Some(limit) = output_budget(&cli.command) {
         match minimum_error_budget(cli.command.name()) {
             Ok(minimum) if limit < minimum => {

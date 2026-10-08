@@ -2,6 +2,12 @@
 
 Baseline: specification 0.6, all 45 sections read; 2026-10-08. The repository began with the owner's source specification only. Original input remains unchanged locally. Full required scope, including concrete follow-ups, remains active.
 
+## Current official task
+
+**PCTX01 — CLI, envelope and stable errors** is the only active task (`implementing`). Selection: lowest incomplete official ID, no prerequisites. Required gates: complete help/version/invalid-argument matrix; structured envelope/JSON budget and supported-empty distinctions; stable process/refusal/error exit contracts; options validated before effects; necessary common finite-request timeout coverage; required supported-platform execution. Existing module/subset tests are evidence only, not task completion. PCTX02 and all other incomplete tasks remain backlog until this task completes, unless a documented mandatory prerequisite requires a single-task switch.
+
+The already-started eleventh M30 is a legacy running job to drain and retain, not a second active official task. Packaging target-directory repair and approval-memory integration are backlog. No new unrelated implementation or verification is to start. Current requirements/source audit is in progress.
+
 ## Integrated behavior
 
 - Project/workspace bindings, safe descriptor-based source reads, metadata-only SQLite generations, five Tree-sitter grammar variants, Boolean/literal search, extraction, bounded byte context, checkpoints and explicit handoffs.
@@ -211,3 +217,5 @@ D047 final native55189 terminal101:363 PASS/3 original query startup FAIL. Relat
 D048 search candidate admission implements the proposed pinned-reader optimization for body/freshness search without matching ambiguous public error codes. Initial candidate-local rejection is separated from root/config/deadline and post-admission failures; ordinary reader retry/timeout partial contracts remain distinct. Independent review caught and repaired a non-Unix missing-candidate regression. See search-candidate-verification.json for exact evidence. Native Windows reparse/access behavior and a new immutable M30 remain required; the historical 2691.926416ms body-search p95 is still a target miss, not superseded by unit tests.
 
 D048 final native18183 terminal101:367 PASS/4 original query startup FAIL. Candidate admission tests5 PASS, related search/reader/security/CLI/source/task/session tests PASS, format and locked all-target Clippy PASS. search-candidate-verification.json binds source hashes/final logs and retains initial static permission-literal failure. No Actions or new benchmark result.
+
+PCTX01 is the only active official task. Current frontend integration: native66867 terminal101,373 PASS/3 original query startup FAIL; frontend actualCLI5 PASS, format/Clippy PASS, independent scoped review no blocker. See tasks/PCTX01.md and pctx01-frontend-verification.json. Whole-task no-color/help/schema/finite-route/full contract and required platform gates remain open; PCTX01 stays implementing, no next task selected. Pre-existing eleventh M30 terminal0 is retained historical evidence only; packaging/approval-memory changes are inactive backlog.

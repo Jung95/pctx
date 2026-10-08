@@ -1,0 +1,12 @@
+{
+  "source_revision": "f81d55ebf64f58a461da14d0bb3249ff2f94a5bc",
+  "binary_sha256": "e0bacfa558d6a81641d84c457d2c9efcea5d4da5d33f41f6bcaf251eb39e59b2",
+  "binary_path": "/Users/dev/PCTX/target/measurement-eleventh/pctx",
+  "build_log": "eleventh-release.log",
+  "source_was_clean_at_build": true,
+  "report_sha256": "90ba86cbddcce7ff866ffde0c8f1c49edb4b717e535de3b526edcf521f4240b1",
+  "samples_sha256": "49d32e0cefe9233380851bf16168e6a614df788423741420dc5f3d2b3ba24977",
+  "legacy_job_handle": 63324,
+  "terminal_exit": 0,
+  "completed_after_sequential_policy": "Retained pre-existing job only; no PCTX05/PCTX17 completion or new active task."
+}

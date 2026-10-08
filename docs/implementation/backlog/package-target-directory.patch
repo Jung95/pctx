@@ -1,0 +1,19 @@
+diff --git a/scripts/package.sh b/scripts/package.sh
+index a056d03..df03e62 100755
+--- a/scripts/package.sh
++++ b/scripts/package.sh
+@@ -6,12 +6,13 @@ system=$(uname -s | tr '[:upper:]' '[:lower:]')
+ arch=$(uname -m)
+ name="pctx-$version-$system-$arch"
+ cargo build --release --locked
++target_dir=$(cargo metadata --no-deps --format-version 1 | python3 -c 'import json,sys; print(json.load(sys.stdin)["target_directory"])')
+ python3 scripts/notices.py
+ mkdir -p dist
+ stage=$(mktemp -d "${TMPDIR:-/tmp}/pctx-package.XXXXXX")
+ trap 'rm -rf "$stage"' EXIT HUP INT TERM
+ mkdir "$stage/$name"
+-cp target/release/pctx LICENSE README.md "$stage/$name/"
++cp "$target_dir/release/pctx" LICENSE README.md "$stage/$name/"
+ cp dist/THIRD_PARTY_NOTICES.txt "$stage/$name/"
+ cp dist/sbom.json "$stage/$name/"
+ # Include the public guides referenced by README; preserve the private input locally.

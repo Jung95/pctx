@@ -1,0 +1,70 @@
+{
+  "official_task": "PCTX01",
+  "status": "implementing_not_complete",
+  "base_commit": "f81d55ebf64f58a461da14d0bb3249ff2f94a5bc",
+  "platform": "native macOS arm64",
+  "source_sha256": {
+    "src/main.rs": "0d7b30217db6b1f294b94ed9f8bb965d16da4ed7979d67eac697c04b63f3feec",
+    "src/search.rs": "7dfde90ae24a505ec49b80675a1c96d4343a1c231d08c91e6cb0c961a7f71acd",
+    "tests/cli_frontend.rs": "786fabb73dd18a513de36dee24ec8c1e59eefec6aa730f442862d197c887eb15"
+  },
+  "verification": {
+    "full": {
+      "handle": 66867,
+      "exit": 101,
+      "passed": 373,
+      "failed": 3,
+      "failures": [
+        "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+        "simultaneous_streams_are_collected_and_overflow_never_infers_success",
+        "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget"
+      ]
+    },
+    "frontend_actual_cli": {
+      "passed": 5,
+      "failed": 0,
+      "snapshot_proof": "Source edited after indexing; invalid strict limit/regex/Boolean/scope/structure request preserves every durable file hash and absent output path."
+    },
+    "format_exit": 0,
+    "locked_all_target_clippy_exit": 0
+  },
+  "review": {
+    "agent": "requirements",
+    "scoped_blockers": 0,
+    "whole_task_complete": false
+  },
+  "remaining_required_gates": [
+    "Full help/schema/effect and no-color matrix",
+    "Remaining finite route original-deadline propagation and semantic option-before-effect validators",
+    "Full frontend error/budget/child outcome matrix",
+    "Native Linux/Windows executions and unresolved original query startup failures"
+  ],
+  "logs": {
+    "full": {
+      "path": "docs/implementation/evidence/pctx01-frontend-full.log",
+      "sha256": "db160df61112d266f4a64541a6182991e2d4485acef6dc26657bfa077ee7ed25"
+    },
+    "static": {
+      "path": "docs/implementation/evidence/pctx01-frontend-static.log",
+      "sha256": "6f1c3afd6c5ad9d570f8a33c1b695fe61347e81f41dd692cced8074bd0708af3"
+    },
+    "format": {
+      "path": "docs/implementation/evidence/pctx01-frontend-format.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "targeted-before-scopes": {
+      "path": "docs/implementation/evidence/pctx01-frontend-targeted-before-scopes.log",
+      "sha256": "8c7020f47606bcb0b8e66d8d5f9f4601eaf8cba663617ecb62238c45260082a3"
+    },
+    "initial-parser": {
+      "path": "docs/implementation/evidence/pctx01-frontend-initial-parser.log",
+      "sha256": "781e0c4b5d07f3e5a0615f4236a767edf85db4af65fdd6dcb0290c4c2de6c968"
+    },
+    "query-preflight-before-scope-tests": {
+      "path": "docs/implementation/evidence/pctx01-frontend-query-preflight-before-scope-tests.log",
+      "sha256": "fa84c0523462b46c4aaf7e225639a8aec1708da4d6d7854eb4f82e098dd7f374"
+    }
+  },
+  "actions_dispatched": 0,
+  "other_active_official_tasks": []
+}
