@@ -161,3 +161,25 @@ actual post-spawn presentation fallback and observer-error outcome, then remaini
 oversized-error/argument/representation/phase and original native startup gates.
 Native Linux/Windows qualification remains mandatory.
 [Current boundary](evidence/pctx01-run-budget-verification.json); no next task or Actions.
+
+
+## PCTX01 delivery fixture ownership
+
+PCTX01 is the only active official task (`implementing`). All seven discovered
+raw-pipe delivery cases now use one exact-case worker and verified close-on-exec
+pipe descriptors; outer-suite concurrency and original product deadlines remain.
+Worker output uses private files. Timeout cancellation signals the owned process
+group, and WNOWAIT reserves the leader identity through the observer and reap.
+A real native-hook CLI holds an O_RDWR FIFO: root-only cancellation cannot end
+its input through EOF. Positive related coverage: 34 PASS. Controlled root-only
+cancellation: 0 PASS/1 FAIL, remaining owned group cancelled, exact source restored.
+Format and locked all-target Clippy PASS. Independent scoped review found no
+blocker. See [evidence manifest](evidence/pctx01-delivery-ownership-verification.json).
+
+Normal fixture completion awaits its CLIs; it does not qualify early failed-root
+cleanup. Panic cleanup is best effort, and kernel kill/wait latency is not a hard
+bound. The control covers a directly enrolled CLI, not separate runner groups or
+arbitrary descendants. Native Linux/Windows, original startup failures and other
+PCTX01 gates remain open. No next official task or Actions selected.
+
+Final native full25288 terminal101: 478 PASS/3 retained original startup FAIL. All jobs terminal; no live heavy job. PCTX01 remains incomplete.

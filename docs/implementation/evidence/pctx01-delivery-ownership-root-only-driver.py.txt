@@ -1,0 +1,20 @@
+import hashlib,json,pathlib,shlex,subprocess
+p=pathlib.Path("tests/support/delivery.rs")
+original=p.read_bytes()
+old=b"let killed = unsafe { libc::kill(-(worker_pid as i32), libc::SIGKILL) };"
+new=b"let killed = if worker.kill().is_ok() { 0 } else { -1 };"
+assert original.count(old)==1
+e=pathlib.Path("docs/implementation/evidence")
+try:
+ p.write_bytes(original.replace(old,new))
+ (e/"pctx01-delivery-ownership-root-only-source.rs.txt").write_bytes(p.read_bytes())
+ with (e/"pctx01-delivery-ownership-root-only.log").open("w") as f:
+  result=subprocess.run(shlex.split("env RUSTUP_HOME=/Users/dev/PCTX/.toolchain/rustup CARGO_HOME=/Users/dev/PCTX/.toolchain/cargo SDKROOT=/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk PATH=/Users/dev/PCTX/.toolchain/cargo/bin:/Library/Developer/CommandLineTools/usr/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin ")+["cargo","test","--locked","--test","delivery_isolation","owned_worker_timeout_kills_enrolled_cli","--","--exact"],stdout=f,stderr=subprocess.STDOUT,timeout=40)
+ code=result.returncode
+finally:
+ p.write_bytes(original)
+ restored=hashlib.sha256(p.read_bytes()).hexdigest()
+(e/"pctx01-delivery-ownership-root-only-result.json").write_text(json.dumps({"test_exit":code,"restored_sha256":restored,"original_sha256":hashlib.sha256(original).hexdigest()},indent=2)+"\n")
+print("mutation test exit",code,"exact restore",p.read_bytes()==original)
+assert code==101
+

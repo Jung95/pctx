@@ -6,22 +6,20 @@
 
 ## Latest verified integration boundary
 
-PCTX01 remains the only active official task (implementing). Base
-50a5307c96f466a8d485b0a9e51f4a1fe4cf8dba; current delta retains parsed Run
-prelaunch truth through minimum-capacity/preflight/presentation errors.
-Both-policy minimum−1/minimum/minimum+1 and original project6 fit proofs pass.
-Related62 PASS; final format/locked all-target Clippy PASS.
-Final full58827 terminal101: 477 PASS/3 original startup FAIL.
-Initial full475PASS5FAIL (pipe ownership ambiguity plus4 startup failures),
-native held-reader/CLOEXEC2-versus7 control and isolated worker repair retained.
-This is fixture ownership evidence, not original-failure causal binding.
-All jobs terminal; no live heavy job. Manifest:
-evidence/pctx01-run-budget-verification.json (source/log hashes and review).
-Next local action: complete owned group/nested CLI cleanup for the isolated
-delivery worker's timeout and audit other raw-pipe fixtures, then actual
-post-spawn presentation/observer-error and remaining oversized-error/argument/
-phase/startup/platform gates. Outer worker timeout currently kills/reaps only
-worker; do not claim nested CLI cleanup. Native Linux/Windows unqualified.
+PCTX01 remains the only active official task (`implementing`). Base
+02979e1634a205fd2a54605da41d563dde08aeae; current test-only delta isolates all
+seven discovered raw-pipe fixtures with exact-case workers and verified CLOEXEC.
+Related34 PASS; final format/locked all-target Clippy PASS. Final full25288
+terminal101: 478 PASS/3 original startup FAIL. Initial stages and normal-ended
+EPERM signal failures are retained in the manifest; no absence inference.
+Real native-hook CLI O_RDWR FIFO timeout cancellation verifies same-group CLI
+absence before WNOWAIT leader reap, then ECHILD. Root-only guard loss fails
+0PASS1FAIL and exact source restoration is recorded. Independent review finds
+no scoped blocker; panic cleanup is best effort, kernel kill/wait latency not
+hard-bounded, separate runner groups/general descendants/early-failed-root paths
+unqualified. All jobs terminal; no live heavy job. Manifest:
+evidence/pctx01-delivery-ownership-verification.json.
+Native Linux/Windows and full frontend/phase/startup gates remain required.
 No next official task, Actions or external calls; whole task/goal incomplete.
 
 ## Source, evidence and environment
@@ -70,7 +68,19 @@ Original ignored specification SHA256 8914faad57432f524aec0a06aa90c43c18c23f8c19
 
 ## Exact next action
 
-Within PCTX01, finish the remaining frontend argument/envelope/representation/error/exit matrix and investigate the retained original native startup failure. Current global/representation/diagnostic jobs are terminal; no live heavy job. The global/Pack binding matrix is locally integrated; do not repeat it absent a source change. Primary delivery/stream escaping is integrated; all current jobs terminal and no live heavy job. Next bounded frontend audit: native-hook stdout-only output/from-file admission before effects and first-import failure timing; then supported-empty versus unavailable/partial envelope propagation and real frontend child exit0/1/2/signal/prelaunch errors across requested representations. Preserve producer semantics and original startup budgets. Startup isolation is archived: do not repeat these fixed-order controls as a retry. Independent review found no blocker. Next causal investigation should counterbalance fresh versus reused byte-identical script paths with group/no-group as a separate factor, recording spawn duration, actual signal and expiry separately. Warm-up is an explicit diagnostic condition, never a production retry or repair. Bind exact executable identity to launch observations while preserving direct execution and the original1s scope. Privacy-redacted scan timing alone is insufficient. All three diagnostic drivers and OS-log reads are terminal; no live heavy job. Production source is unchanged, so no new full gate was run. Pure Read/Outline/Extract/Build/Graph grammar is locally integrated after capacity admission; Handoff name/input admission is locally integrated. Source-dependent producer checks remain mandatory. Pre-effect JSON refusal rendering/capacity/Unix closed-pipe delivery is locally integrated with documented transport exceptions. Audit remaining invalid/duplicate/global-position/representation/error/exit cases against the producer contracts. The finite-leaf routing audit found no clear omission, not full phase/platform qualification. Required native Linux/Windows execution remains open. Preserve original one-second startup budgets and every failed attempt. Do not select another official task or expand independent features.
+Within PCTX01, audit actual post-spawn presentation fallback and spawn-observer
+error truth, remaining oversized error and supported-empty/unavailable/partial
+envelope propagation, and the remaining producer argument/phase matrix. Preserve
+producer semantics and original native startup budgets. Normal delivery fixtures
+await their CLIs; owned same-group timeout proof is integrated, not general runner
+containment. Keep separate runner ownership with PCTX34/40. Do not repeat already
+qualified slices without a source change or new evidence. Startup isolation remains
+archived: fresh/reused byte-identical executable controls and direct/group factors
+must be counterbalanced, with identity, actual signal and expiry recorded; no
+warm-up production retry, interpreter substitution, time-limit increase or OS
+policy change. Native Linux/Windows execution remains mandatory and unavailable
+conditions must be recorded precisely. Do not select another official task while
+PCTX01 remains incomplete or expand unrelated functionality.
 
 ## Retained historical results and inactive backlog
 

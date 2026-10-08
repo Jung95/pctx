@@ -1,0 +1,22 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.62s
+     Running tests/cli_delivery.rs (target/debug/deps/cli_delivery-d6142b38e0664ae4)
+
+running 1 test
+test undeliverable_help_and_version_return_io_exit_without_project_effects ... FAILED
+
+failures:
+
+---- undeliverable_help_and_version_return_io_exit_without_project_effects stdout ----
+
+thread 'undeliverable_help_and_version_return_io_exit_without_project_effects' (8379774) panicked at tests/support/delivery.rs:61:13:
+worker=75000 ended=true signal_result=-1 error=Os { code: 1, kind: PermissionDenied, message: "Operation not permitted" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    undeliverable_help_and_version_return_io_exit_without_project_effects
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 3 filtered out; finished in 0.78s
+
+error: test failed, to rerun pass `--test cli_delivery`

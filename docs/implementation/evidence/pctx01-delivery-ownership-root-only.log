@@ -1,0 +1,22 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.35s
+     Running tests/delivery_isolation.rs (target/debug/deps/delivery_isolation-088b20bb0a629f1d)
+
+running 1 test
+test owned_worker_timeout_kills_enrolled_cli ... FAILED
+
+failures:
+
+---- owned_worker_timeout_kills_enrolled_cli stdout ----
+
+thread 'owned_worker_timeout_kills_enrolled_cli' (8384567) panicked at tests/delivery_isolation.rs:117:21:
+Nested CLI remains present after worker cleanup; owned group cancelled
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    owned_worker_timeout_kills_enrolled_cli
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 7.01s
+
+error: test failed, to rerun pass `--test delivery_isolation`

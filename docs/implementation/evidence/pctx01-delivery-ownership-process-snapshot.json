@@ -1,0 +1,6 @@
+{
+  "check": "native held-input fixture CLI process snapshot after negative control",
+  "matching_process_count": 0,
+  "previous_sandbox_attempt": "ps spawn EPERM; no snapshot recorded",
+  "qualification": "Snapshot only; pinned-leader observer supplies ownership proof."
+}

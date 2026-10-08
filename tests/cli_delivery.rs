@@ -1,10 +1,11 @@
 //! PCTX01 primary output delivery never becomes successful absence or a panic.
 #![cfg(unix)]
+#[path = "support/delivery.rs"]
+mod delivery;
 use serde_json::Value;
 use std::{
     fs,
     io::Write,
-    os::fd::FromRawFd,
     process::{Command, Output, Stdio},
 };
 struct Fixture {
@@ -31,16 +32,14 @@ impl Fixture {
         assert_eq!(fs::read_dir(self.temp.path()).unwrap().count(), 0);
     }
 }
-fn closed_pipe() -> Stdio {
-    let mut fds = [-1; 2];
-    assert_eq!(unsafe { libc::pipe(fds.as_mut_ptr()) }, 0);
-    let reader = unsafe { fs::File::from_raw_fd(fds[0]) };
-    let writer = unsafe { fs::File::from_raw_fd(fds[1]) };
-    drop(reader);
-    Stdio::from(writer)
-}
+
 #[test]
 fn undeliverable_help_and_version_return_io_exit_without_project_effects() {
+    if !delivery::isolated_case(
+        "undeliverable_help_and_version_return_io_exit_without_project_effects",
+    ) {
+        return;
+    }
     let f = Fixture::new();
     for args in [
         vec!["--help"],
@@ -50,7 +49,11 @@ fn undeliverable_help_and_version_return_io_exit_without_project_effects() {
         let normal = f.run(&args);
         assert_eq!(normal.status.code(), Some(0));
         assert!(!normal.stdout.is_empty() && normal.stderr.is_empty());
-        let output = f.command(&args).stdout(closed_pipe()).output().unwrap();
+        let output = f
+            .command(&args)
+            .stdout(delivery::closed_pipe())
+            .output()
+            .unwrap();
         assert_eq!(output.status.code(), Some(7), "{args:?}: {output:?}");
         assert!(output.stderr.is_empty());
         f.unchanged();
@@ -58,6 +61,11 @@ fn undeliverable_help_and_version_return_io_exit_without_project_effects() {
 }
 #[test]
 fn undeliverable_stream_refusal_returns_io_exit_without_project_effects() {
+    if !delivery::isolated_case(
+        "undeliverable_stream_refusal_returns_io_exit_without_project_effects",
+    ) {
+        return;
+    }
     let f = Fixture::new();
     let args = ["--root", "missing", "--format", "ndjson", "init"];
     let normal = f.run(&args);
@@ -66,13 +74,22 @@ fn undeliverable_stream_refusal_returns_io_exit_without_project_effects() {
     let v: Value = serde_json::from_slice(&normal.stderr).unwrap();
     assert_eq!(v["type"], "error");
     assert_eq!(v["data"]["code"], "INVALID_ARGUMENT");
-    let output = f.command(&args).stderr(closed_pipe()).output().unwrap();
+    let output = f
+        .command(&args)
+        .stderr(delivery::closed_pipe())
+        .output()
+        .unwrap();
     assert_eq!(output.status.code(), Some(7), "{output:?}");
     assert!(output.stdout.is_empty());
     f.unchanged();
 }
 #[test]
 fn undeliverable_native_hook_output_is_io_error_without_repeating_import() {
+    if !delivery::isolated_case(
+        "undeliverable_native_hook_output_is_io_error_without_repeating_import",
+    ) {
+        return;
+    }
     let f = Fixture::new();
     fs::create_dir(f.temp.path().join("project")).unwrap();
     let init = f.run(&["--root", "project", "--format", "json", "init"]);
@@ -99,7 +116,7 @@ fn undeliverable_native_hook_output_is_io_error_without_repeating_import() {
         c.stdin(Stdio::piped())
             .stderr(Stdio::piped())
             .stdout(if broken {
-                closed_pipe()
+                delivery::closed_pipe()
             } else {
                 Stdio::piped()
             });
@@ -155,6 +172,11 @@ fn undeliverable_native_hook_output_is_io_error_without_repeating_import() {
 }
 #[test]
 fn failed_response_file_and_closed_diagnostic_are_io_error_without_overwrite() {
+    if !delivery::isolated_case(
+        "failed_response_file_and_closed_diagnostic_are_io_error_without_overwrite",
+    ) {
+        return;
+    }
     let f = Fixture::new();
     let target = f.temp.path().join("existing.json");
     fs::write(&target, b"owner-content").unwrap();
@@ -170,7 +192,11 @@ fn failed_response_file_and_closed_diagnostic_are_io_error_without_overwrite() {
     let normal = f.run(&args);
     assert!(!normal.status.success());
     assert!(normal.stdout.is_empty());
-    let broken = f.command(&args).stderr(closed_pipe()).output().unwrap();
+    let broken = f
+        .command(&args)
+        .stderr(delivery::closed_pipe())
+        .output()
+        .unwrap();
     assert_eq!(broken.status.code(), Some(7), "{broken:?}");
     assert!(broken.stdout.is_empty());
     assert_eq!(fs::read(target).unwrap(), b"owner-content");

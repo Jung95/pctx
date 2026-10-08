@@ -1,0 +1,151 @@
+{
+  "official_task": "PCTX01",
+  "status": "implementing; incomplete; sole active official task",
+  "base_revision": "02979e1634a205fd2a54605da41d563dde08aeae",
+  "production_changed": false,
+  "platform": "native macOS arm64; Rust1.99",
+  "final_sources_sha256": {
+    "tests/support/delivery.rs": "ba08917f9e25060e3ca1d6d8eaa541c19eea72fced7a61bfa6088420da9f7d45",
+    "tests/delivery_isolation.rs": "03093446cee0230dee75e232eedb315be6a149bbf3fe703225fad8d8c91613f2",
+    "tests/cli_delivery.rs": "fbb12ef07684a861988368f46d5ea04b44bf7273967ddb0d36abc56f37097058",
+    "tests/cli_frontend.rs": "f9af280a907a41e0222ff7cd75983849b88859eb1b4284a1e45f8923b632f2f7",
+    "tests/query_deadline_cli.rs": "db5ea27ae33584db160eafb56e2f4b97e677c9ca3f8dadc630ce2d5d91bef03f"
+  },
+  "runs": [
+    {
+      "path": "pctx01-delivery-ownership-targeted.log",
+      "sha256": "cba40acbd4157baf73d9322074d548a4e28d29a1a75b8913039a9379ee3ae3b0",
+      "exit": 0,
+      "session": 55483,
+      "counts": {
+        "passed": 34,
+        "failed": 0
+      },
+      "qualification": "Initial root-timeout group cancellation; piped input control can EOF when root dies, not strict nested proof."
+    },
+    {
+      "path": "pctx01-delivery-ownership-fifo.log",
+      "sha256": "a0b1bf658aad463718a906245fe978cd0b15aa51dc496fbbdb2c451e94a6d672",
+      "exit": 0,
+      "session": 17928,
+      "counts": {
+        "passed": 34,
+        "failed": 0
+      },
+      "qualification": "O_RDWR FIFO control; prior try_wait version."
+    },
+    {
+      "path": "pctx01-delivery-ownership-final-targeted.log",
+      "sha256": "cbb204c8c5c773c67f52384235cd74f3ad9092999e62f1771f48990fca1cbe0e",
+      "exit": 101,
+      "session": 73408,
+      "counts": {
+        "passed": 27,
+        "failed": 7
+      },
+      "qualification": "WNOWAIT/unconditional signalling: seven normal completion signal failures retained."
+    },
+    {
+      "path": "pctx01-delivery-ownership-completion-observation.log",
+      "sha256": "b31acbdf3ea385a956186edbeed449847f06dadd7c52f3a92f7d7ac8316b1b10",
+      "exit": 101,
+      "session": 4541,
+      "counts": {
+        "passed": 0,
+        "failed": 1
+      },
+      "qualification": "Exact normal-ended worker signal failed EPERM1; no absence inference."
+    },
+    {
+      "path": "pctx01-delivery-ownership-repaired.log",
+      "sha256": "3e90eae0a015ba27553a3fcd886dd9dbe0d302c5aff71a55e762ad421ca3ec2e",
+      "exit": 0,
+      "session": 77744,
+      "counts": {
+        "passed": 34,
+        "failed": 0
+      },
+      "qualification": "Final source targeted, same-group FIFO timeout proof."
+    },
+    {
+      "path": "pctx01-delivery-ownership-root-only.log",
+      "sha256": "afc4a1400573a8b2bf93ea107ace770a32c77fa8e46d67fcacae41fdf3752d00",
+      "exit": 101,
+      "session": 61317,
+      "counts": {
+        "passed": 0,
+        "failed": 1
+      },
+      "qualification": "Controlled root-only cancellation fails actual nested absence test; owned group cleaned, exact restore."
+    },
+    {
+      "path": "pctx01-delivery-ownership-static.log",
+      "sha256": "809df66fafd1cbded25bbc52de60d6f01edb181dfb9bd24c348c88e57af880fe",
+      "exit": 0,
+      "session": 33978,
+      "counts": {
+        "passed": 0,
+        "failed": 0
+      },
+      "qualification": "Final format and locked all-target Clippy."
+    },
+    {
+      "path": "pctx01-delivery-ownership-full.log",
+      "sha256": "392c91055ce8c104221ea58f3bfae032ea1de3a2bbf61b66b067f66840418feb",
+      "exit": 101,
+      "session": 25288,
+      "counts": {
+        "passed": 478,
+        "failed": 3
+      },
+      "qualification": "Final exact-source full, original startup failures retained."
+    }
+  ],
+  "full_failed_tests": [
+    "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+    "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget",
+    "simultaneous_streams_are_collected_and_overflow_never_infers_success"
+  ],
+  "proofs": [
+    "Seven raw-pipe cases isolated exact-case/thread1 with verified FD_CLOEXEC; outer suites concurrent.",
+    "Private worker output files avoid inherited output pipe waits.",
+    "WNOWAIT leader reservation through nested observer and final reap.",
+    "Real CLI same-group enrollment, O_RDWR held FIFO, timeout SIGKILL, enrolled CLI ESRCH and leader ECHILD.",
+    "Root-only guard loss fails, exact restoration; review resolves panic reaping and pre-reap observer ownership."
+  ],
+  "limits": [
+    "Normal completion relies on synchronous fixture child waits; early failed-root descendants not qualified.",
+    "RAII cancellation/reaping best effort; native kill/wait can exceed polling deadline.",
+    "Separate runner groups and arbitrary descendants unqualified.",
+    "Native Linux/Windows required; original startup failures unresolved.",
+    "No claim of original pipe failure cause binding or whole PCTX01 completion."
+  ],
+  "commands": {
+    "related": "cargo test --locked --no-fail-fast --test cli_delivery --test cli_frontend --test delivery_isolation --test query_deadline_cli",
+    "static": [
+      "cargo fmt --all -- --check",
+      "cargo clippy --locked --all-targets -- -D warnings"
+    ],
+    "full": "cargo test --locked --no-fail-fast"
+  },
+  "extra_evidence_sha256": {
+    "pctx01-delivery-ownership-review.txt": "2175cbeec2bd969394bec7f5346939e30cbd34f82f41fdccb4f454e8c4b43b82",
+    "pctx01-delivery-ownership-root-only-result.json": "a0cb287ee8f443973436dafed8d9407c1f584fa1b8934a62396718689f991eb8",
+    "pctx01-delivery-ownership-root-only-driver.py.txt": "5e203f10ab3e25171fe89d3f4eb20341ac1befc9e825b9e5e36195640a823b23",
+    "pctx01-delivery-ownership-root-only-source.rs.txt": "50f23a34ef600a07e97d5fee0989a9c2791a28c2c5979b5d544e0ee702cb8350",
+    "pctx01-delivery-ownership-process-snapshot.json": "460ff95dfce78250c4f1ab020c84036aab287117afbdf22f9a7ebb5d01abec42"
+  },
+  "root_only_restoration": {
+    "test_exit": 101,
+    "restored_sha256": "ba08917f9e25060e3ca1d6d8eaa541c19eea72fced7a61bfa6088420da9f7d45",
+    "original_sha256": "ba08917f9e25060e3ca1d6d8eaa541c19eea72fced7a61bfa6088420da9f7d45"
+  },
+  "process_snapshot": {
+    "check": "native held-input fixture CLI process snapshot after negative control",
+    "matching_process_count": 0,
+    "previous_sandbox_attempt": "ps spawn EPERM; no snapshot recorded",
+    "qualification": "Snapshot only; pinned-leader observer supplies ownership proof."
+  },
+  "next_official_task": null,
+  "actions_dispatched": false
+}

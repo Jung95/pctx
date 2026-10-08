@@ -1,0 +1,10 @@
+Independent read-only review by /root/requirements; no edits or tests performed.
+Initial findings: an assertion could bypass worker reap, and fallback group kill
+after reap had released the reserved process-group identity.
+Final reviewed fixes: OwnedWorker provides panic cleanup; run_worker_observed
+holds the WNOWAIT leader through nested CLI absence/fallback observation and reap.
+No concrete blocker found within the direct enrolled-CLI scope.
+Normal completion relies on fixture bodies awaiting their CLIs; observed EPERM
+is not interpreted as an absence proof. Drop cleanup remains best effort and
+polling does not hard-bound native kill/wait latency. Separate runner groups,
+general descendants and native Linux/Windows are not qualified by this control.

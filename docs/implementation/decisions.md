@@ -421,3 +421,18 @@ takes precedence over a presentation-size issue when shortening an error.
 Admitted oversized results retain the presentation BUDGET_TOO_SMALL contract.
 Only parsed Run intent receives Run prelaunch metadata.
 Basis: §8/40/AC63; [boundary proof](evidence/pctx01-run-budget-verification.json).
+
+
+## PCTX01 isolated delivery worker completion versus timeout
+
+Observed native macOS normal-ended WNOWAIT worker group signalling returned
+EPERM (see pctx01-delivery-ownership-completion-observation.log). This is not evidence
+that descendants are absent. Do not require or interpret a zombie-only group
+signal as cleanup qualification. Normal fixture bodies await their CLI children;
+only timed-out live groups use the cancellation proof. A reserved leader identity
+is retained through nested absence observation before final reap; error paths
+use RAII best-effort cancellation/reaping without claiming successful verification.
+FIFO O_RDWR distinguishes real nested cancellation from EOF caused by root death.
+The root-only guard-loss test must fail and clean its still-owned group. Product
+process supervision, native startup budgets and all original failure criteria
+remain unchanged. Separate runner groups and other platforms stay unqualified.

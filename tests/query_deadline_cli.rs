@@ -1,3 +1,6 @@
+#[cfg(unix)]
+#[path = "support/delivery.rs"]
+mod delivery;
 use fs2::FileExt;
 use serde_json::Value;
 use std::{
@@ -336,6 +339,11 @@ fn finite_ndjson_contention_preserves_error_code_without_creating_events() {
 #[cfg(unix)]
 #[test]
 fn saved_cli_reread_never_reruns_and_failed_metering_preserves_delivery_truth() {
+    if !delivery::isolated_case(
+        "saved_cli_reread_never_reruns_and_failed_metering_preserves_delivery_truth",
+    ) {
+        return;
+    }
     use std::os::unix::fs::PermissionsExt;
     let (_temp, root, data) = initialized();
     let emitter = root.join("saved-fixture-emitter");
@@ -417,13 +425,6 @@ fn saved_cli_reread_never_reruns_and_failed_metering_preserves_delivery_truth() 
     }
     // Warning delivery after completed stdout is best effort and cannot change
     // the established retrieval result or claim that metering succeeded.
-    use std::os::fd::FromRawFd;
-    use std::process::Stdio;
-    let mut fds = [-1; 2];
-    assert_eq!(unsafe { libc::pipe(fds.as_mut_ptr()) }, 0);
-    let reader = unsafe { fs::File::from_raw_fd(fds[0]) };
-    let writer = unsafe { fs::File::from_raw_fd(fds[1]) };
-    drop(reader);
     let output = command(&root, &data)
         .args([
             "output",
@@ -434,7 +435,7 @@ fn saved_cli_reread_never_reruns_and_failed_metering_preserves_delivery_truth() 
             "--timeout-ms",
             "5000",
         ])
-        .stderr(Stdio::from(writer))
+        .stderr(delivery::closed_pipe())
         .output()
         .unwrap();
     assert!(output.status.success(), "{output:?}");

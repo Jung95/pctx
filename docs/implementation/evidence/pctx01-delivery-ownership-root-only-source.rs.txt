@@ -1,0 +1,149 @@
+//! Isolated native delivery fixtures; production deadlines and argv are untouched.
+use std::{
+    fs,
+    os::{fd::FromRawFd, unix::process::CommandExt},
+    process::{Child, Command, Output, Stdio},
+    time::{Duration, Instant},
+};
+const MARKER: &str = "PCTX_TEST_DELIVERY_CASE";
+pub fn is_worker(case: &str) -> bool {
+    std::env::var(MARKER).as_deref() == Ok(case)
+}
+pub struct WorkerResult {
+    pub output: Output,
+    pub timed_out: bool,
+    pub worker_pid: u32,
+}
+// On an observation/verification panic, best-effort cancel and reap the owned
+// leader. This is a cleanup safeguard, not a successful verification result.
+struct OwnedWorker(Option<Child>);
+impl Drop for OwnedWorker {
+    fn drop(&mut self) {
+        if let Some(worker) = self.0.as_mut() {
+            unsafe {
+                libc::kill(-(worker.id() as i32), libc::SIGKILL);
+            }
+            let _ = worker.kill();
+            let _ = worker.wait();
+        }
+    }
+}
+pub fn run_worker(
+    case: &str,
+    timeout: Duration,
+    environment: &[(&str, &std::path::Path)],
+) -> WorkerResult {
+    run_worker_observed(case, timeout, environment, |_| {})
+}
+pub fn run_worker_observed(
+    case: &str,
+    timeout: Duration,
+    environment: &[(&str, &std::path::Path)],
+    before_reap: impl FnOnce(u32),
+) -> WorkerResult {
+    let logs = tempfile::tempdir().unwrap();
+    let stdout = logs.path().join("stdout");
+    let stderr = logs.path().join("stderr");
+    let mut command = Command::new(std::env::current_exe().unwrap());
+    command
+        .args(["--exact", case, "--test-threads=1"])
+        .env(MARKER, case)
+        .stdin(Stdio::null())
+        .stdout(fs::File::create(&stdout).unwrap())
+        .stderr(fs::File::create(&stderr).unwrap())
+        .process_group(0);
+    for (key, path) in environment {
+        command.env(key, path);
+    }
+    let mut owned = OwnedWorker(Some(command.spawn().unwrap()));
+    let worker = owned.0.as_mut().unwrap();
+    let worker_pid = worker.id();
+    let start = Instant::now();
+    let (status, timed_out) = loop {
+        // Observe completion without reaping: reserve the group leader PID until
+        // timeout cancellation and its observer finish before releasing that identity.
+        let mut info: libc::siginfo_t = unsafe { std::mem::zeroed() };
+        let observed = unsafe {
+            libc::waitid(
+                libc::P_PID,
+                worker_pid,
+                &mut info,
+                libc::WEXITED | libc::WNOHANG | libc::WNOWAIT,
+            )
+        };
+        if observed == -1 && std::io::Error::last_os_error().raw_os_error() == Some(libc::EINTR) {
+            continue;
+        }
+        assert_eq!(
+            observed,
+            0,
+            "Cannot observe owned worker: {:?}",
+            std::io::Error::last_os_error()
+        );
+        let ended = unsafe { info.si_pid() } == worker_pid as i32;
+        let timed_out = !ended && start.elapsed() >= timeout;
+        if ended || timed_out {
+            if timed_out {
+                // Signal a live timed-out group; normal case bodies await their
+                // CLI themselves. A completed zombie-only group is not a
+                // signal-permission or descendant-absence qualification.
+                let killed = if worker.kill().is_ok() { 0 } else { -1 };
+                let signal_error = std::io::Error::last_os_error();
+                assert!(
+                    killed == 0 || signal_error.raw_os_error() == Some(libc::ESRCH),
+                    "worker={worker_pid} ended={ended} signal_result={killed} error={signal_error:?}"
+                );
+            }
+            before_reap(worker_pid);
+            break (worker.wait().unwrap(), timed_out);
+        }
+        std::thread::sleep(Duration::from_millis(5));
+    };
+    owned.0.take(); // Leader has been reaped; never signal a reusable identity.
+    WorkerResult {
+        output: Output {
+            status,
+            stdout: fs::read(stdout).unwrap(),
+            stderr: fs::read(stderr).unwrap(),
+        },
+        timed_out,
+        worker_pid,
+    }
+}
+pub fn isolated_case(case: &str) -> bool {
+    if is_worker(case) {
+        return true;
+    }
+    let result = run_worker(case, Duration::from_secs(10), &[]);
+    assert!(
+        !result.timed_out,
+        "Delivery worker {} exceeded bound: {:?}",
+        result.worker_pid, result.output
+    );
+    assert!(result.output.status.success(), "{:?}", result.output);
+    false
+}
+pub fn closed_pipe() -> Stdio {
+    assert!(
+        std::env::var(MARKER).is_ok(),
+        "Raw pipe must belong to isolated worker"
+    );
+    let mut fds = [-1; 2];
+    assert_eq!(unsafe { libc::pipe(fds.as_mut_ptr()) }, 0);
+    let reader = unsafe { fs::File::from_raw_fd(fds[0]) };
+    let writer = unsafe { fs::File::from_raw_fd(fds[1]) };
+    for fd in fds {
+        let flags = unsafe { libc::fcntl(fd, libc::F_GETFD) };
+        assert!(flags >= 0);
+        assert_eq!(
+            unsafe { libc::fcntl(fd, libc::F_SETFD, flags | libc::FD_CLOEXEC) },
+            0
+        );
+        assert_ne!(
+            unsafe { libc::fcntl(fd, libc::F_GETFD) } & libc::FD_CLOEXEC,
+            0
+        );
+    }
+    drop(reader);
+    Stdio::from(writer)
+}

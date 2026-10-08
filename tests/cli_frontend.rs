@@ -1,4 +1,7 @@
 //! PCTX01 frontend contracts before project discovery or effects.
+#[cfg(unix)]
+#[path = "support/delivery.rs"]
+mod delivery;
 use serde_json::Value;
 use std::{
     ffi::OsString,
@@ -486,37 +489,11 @@ fn valid_minimum_capacity_bounds_semantic_and_timeout_refusals_without_writes() 
 #[cfg(unix)]
 #[test]
 fn undeliverable_parser_capacity_semantic_and_timeout_refusals_return_io_exit() {
-    // Raw descriptor creation must not race other tests' native spawns.
-    // The worker owns its newly created pipe and runs exactly this test.
-    const CASE: &str = "undeliverable_parser_capacity_semantic_and_timeout_refusals_return_io_exit";
-    if std::env::var("PCTX_TEST_DELIVERY_CASE").as_deref() != Ok(CASE) {
-        use std::process::Stdio;
-        use std::time::{Duration, Instant};
-        let mut worker = Command::new(std::env::current_exe().unwrap())
-            .args(["--exact", CASE, "--test-threads=1"])
-            .env("PCTX_TEST_DELIVERY_CASE", CASE)
-            .stdout(Stdio::piped())
-            .stderr(Stdio::piped())
-            .spawn()
-            .unwrap();
-        let start = Instant::now();
-        loop {
-            if worker.try_wait().unwrap().is_some() {
-                break;
-            }
-            if start.elapsed() > Duration::from_secs(10) {
-                let _ = worker.kill();
-                let result = worker.wait_with_output().unwrap();
-                panic!("Delivery worker exceeded parent bound: {result:?}");
-            }
-            std::thread::sleep(Duration::from_millis(5));
-        }
-        let result = worker.wait_with_output().unwrap();
-        assert!(result.status.success(), "{result:?}");
+    if !delivery::isolated_case(
+        "undeliverable_parser_capacity_semantic_and_timeout_refusals_return_io_exit",
+    ) {
         return;
     }
-    use std::os::fd::FromRawFd;
-    use std::process::Stdio;
     let f = Fixture::new();
     for values in [
         vec!["--format", "json", "--unknown"],
@@ -532,29 +509,12 @@ fn undeliverable_parser_capacity_semantic_and_timeout_refusals_return_io_exit() 
         vec!["--format", "json", "read", "code.py", "--lines", "0:2"],
         vec!["--format", "json", "--timeout-ms", "0", "read", "code.py"],
     ] {
-        let mut descriptors = [-1; 2];
-        assert_eq!(unsafe { libc::pipe(descriptors.as_mut_ptr()) }, 0);
-        let reader = unsafe { fs::File::from_raw_fd(descriptors[0]) };
-        let writer = unsafe { fs::File::from_raw_fd(descriptors[1]) };
-        for descriptor in descriptors {
-            let flags = unsafe { libc::fcntl(descriptor, libc::F_GETFD) };
-            assert!(flags >= 0);
-            assert_eq!(
-                unsafe { libc::fcntl(descriptor, libc::F_SETFD, flags | libc::FD_CLOEXEC) },
-                0
-            );
-            assert_ne!(
-                unsafe { libc::fcntl(descriptor, libc::F_GETFD) } & libc::FD_CLOEXEC,
-                0
-            );
-        }
-        drop(reader); // Worker isolation rules out concurrent reader inheritance.
         let output = Command::new(env!("CARGO_BIN_EXE_pctx"))
             .current_dir(f.temp.path())
             .args(&values)
             .env("PCTX_DATA_DIR", f.temp.path().join("data"))
             .env("PCTX_USER_CONFIG", f.temp.path().join("absent-config"))
-            .stdout(Stdio::from(writer))
+            .stdout(delivery::closed_pipe())
             .output()
             .unwrap();
         assert_eq!(output.status.code(), Some(7), "{values:?}: {output:?}");
@@ -623,24 +583,22 @@ fn unsupported_markdown_refuses_before_response_files_and_stream_dispatch() {
 #[cfg(unix)]
 #[test]
 fn undeliverable_plain_parser_diagnostic_returns_io_exit_without_panic() {
-    use std::os::fd::FromRawFd;
-    use std::process::Stdio;
+    if !delivery::isolated_case(
+        "undeliverable_plain_parser_diagnostic_returns_io_exit_without_panic",
+    ) {
+        return;
+    }
     let f = Fixture::new();
     let normal = f.run(&args(&["--no-color", "--unknown"]));
     assert_eq!(normal.status.code(), Some(2));
     assert!(normal.stdout.is_empty());
     assert!(!normal.stderr.is_empty());
-    let mut descriptors = [-1; 2];
-    assert_eq!(unsafe { libc::pipe(descriptors.as_mut_ptr()) }, 0);
-    let reader = unsafe { fs::File::from_raw_fd(descriptors[0]) };
-    let writer = unsafe { fs::File::from_raw_fd(descriptors[1]) };
-    drop(reader);
     let output = Command::new(env!("CARGO_BIN_EXE_pctx"))
         .current_dir(f.temp.path())
         .args(["--no-color", "--unknown"])
         .env("PCTX_DATA_DIR", f.temp.path().join("data"))
         .env("PCTX_USER_CONFIG", f.temp.path().join("absent-config"))
-        .stderr(Stdio::from(writer))
+        .stderr(delivery::closed_pipe())
         .output()
         .unwrap();
     assert_eq!(output.status.code(), Some(7), "{output:?}");
