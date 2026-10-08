@@ -1,0 +1,2 @@
+{"probe": "aggregation-loop-loss", "expected_test_exit": 101, "restored_sha256": "37a1fddb97ed822f9b202c0afc78babb9b2e7ce6a3102443092f779636f47002"}
+{"probe": "sql-handler-loss", "expected_test_exit": 101, "restored_sha256": "2834ebf3a4c608c90bdaf3284fb8a8c23a7e8fb33a2d2dca2c7b7246f03abbd3"}

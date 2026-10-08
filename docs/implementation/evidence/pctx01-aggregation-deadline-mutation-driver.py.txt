@@ -1,0 +1,22 @@
+from pathlib import Path
+import hashlib, subprocess, json
+root=Path('/Users/dev/PCTX')
+e=root/'docs/implementation/evidence'
+def digest(raw): return hashlib.sha256(raw).hexdigest()
+cases=[('aggregation-loop-loss',root/'src/quota.rs','        observe_report(ReportPhase::IterationEntered, all.len(), p);\n        p.check_deadline()?;','        observe_report(ReportPhase::IterationEntered, all.len(), p);',['--lib','aggregation_deadline_tests'],'assertion `left == right` failed'),('sql-handler-loss',root/'src/project.rs','            db.progress_handler(1000, Some(move || deadline.check().is_err()))?;','            db.progress_handler(0, None::<fn() -> bool>)?;',['--test','work_quota_deadline','cpu_bound_sql_expires_inside_the_engine_under_the_original_budget'],'SQL fixture required emergency interruption')]
+for name,path,before,after,args,needle in cases:
+    original=path.read_bytes()
+    try:
+        source=original.decode()
+        assert before in source,name
+        path.write_text(source.replace(before,after,1))
+        log=e/f'pctx01-aggregation-deadline-{name}.log'
+        with log.open('wb') as output:
+            run=subprocess.run(['cargo','test','--locked',*args],cwd=root,stdout=output,stderr=subprocess.STDOUT,timeout=120)
+        text=log.read_text()
+        assert run.returncode==101,(name,run.returncode)
+        assert needle in text,(name,text[-4000:])
+    finally:
+        path.write_bytes(original)
+        assert digest(path.read_bytes())==digest(original),name
+    print(json.dumps({'probe':name,'expected_test_exit':run.returncode,'restored_sha256':digest(original)}),flush=True)

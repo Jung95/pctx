@@ -42,6 +42,30 @@ fn fixture() -> (tempfile::TempDir, Project) {
     };
     (t, p)
 }
+
+// A missing progress handler must fail this regression rather than leave the
+// billion-row fixture computing indefinitely. This never renews the request.
+fn guarded_sql<T>(db: &rusqlite::Connection, call: impl FnOnce() -> T) -> T {
+    let interrupt = db.get_interrupt_handle();
+    let (cancel, receiver) = std::sync::mpsc::channel();
+    let watchdog = std::thread::spawn(move || {
+        if receiver.recv_timeout(Duration::from_secs(2))
+            == Err(std::sync::mpsc::RecvTimeoutError::Timeout)
+        {
+            interrupt.interrupt();
+            true
+        } else {
+            false
+        }
+    });
+    let result = call();
+    let _ = cancel.send(());
+    assert!(
+        !watchdog.join().unwrap(),
+        "SQL fixture required emergency interruption"
+    );
+    result
+}
 fn quota_reads() -> Vec<QuotaCommand> {
     vec![
         QuotaCommand::Report {
@@ -195,9 +219,10 @@ fn cpu_bound_sql_expires_inside_the_engine_under_the_original_budget() {
     p.deadline = Some(Deadline::from_millis(50).unwrap());
     let original = p.deadline.unwrap().instant();
     let started = Instant::now();
-    let error = p
-        .sqlite_call(&db, || statement.query_row([], |row| row.get::<_, i64>(0)))
-        .unwrap_err();
+    let error = guarded_sql(&db, || {
+        p.sqlite_call(&db, || statement.query_row([], |row| row.get::<_, i64>(0)))
+    })
+    .unwrap_err();
     assert_eq!(error.code, "TIMEOUT");
     assert_eq!(error.exit, 7);
     assert!(
@@ -216,7 +241,7 @@ fn reused_sql_connection_does_not_inherit_an_expired_prior_request_handler() {
     let (_temp, mut p) = fixture();
     let db = rusqlite::Connection::open_in_memory().unwrap();
     p.deadline = Some(Deadline::from_millis(50).unwrap());
-    let error = p.sqlite_call(&db, || db.query_row("WITH RECURSIVE numbers(n) AS (VALUES(1) UNION ALL SELECT n+1 FROM numbers WHERE n<1000000000) SELECT sum(n) FROM numbers", [], |row| row.get::<_, i64>(0))).unwrap_err();
+    let error = guarded_sql(&db, || p.sqlite_call(&db, || db.query_row("WITH RECURSIVE numbers(n) AS (VALUES(1) UNION ALL SELECT n+1 FROM numbers WHERE n<1000000000) SELECT sum(n) FROM numbers", [], |row| row.get::<_, i64>(0)))).unwrap_err();
     assert_eq!(error.code, "TIMEOUT");
     // This is a distinct caller scope, not a renewal of the expired query.
     p.deadline = None;

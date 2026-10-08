@@ -660,6 +660,28 @@ fn lane(o: &Observation) -> String {
         o.window_id
     )
 }
+#[cfg(test)]
+#[derive(Clone, Copy)]
+enum ReportPhase {
+    RowsAdmitted,
+    IterationEntered,
+    AggregateWork,
+}
+#[cfg(test)]
+type ReportObserver = Box<dyn FnMut(ReportPhase, usize, Option<crate::deadline::Deadline>)>;
+#[cfg(test)]
+thread_local! {
+    static REPORT_OBSERVER: std::cell::RefCell<Option<ReportObserver>> = const { std::cell::RefCell::new(None) };
+}
+#[cfg(test)]
+fn observe_report(phase: ReportPhase, rows: usize, p: &Project) {
+    REPORT_OBSERVER.with(|slot| {
+        if let Some(observer) = slot.borrow_mut().as_mut() {
+            observer(phase, rows, p.deadline);
+        }
+    });
+}
+
 // Parameters mirror independent CLI filters; none imply unit conversion.
 #[allow(clippy::too_many_arguments)]
 fn report(
@@ -688,6 +710,8 @@ fn report(
         })
         .transpose()?;
     let all = observations(p, &db, pool)?;
+    #[cfg(test)]
+    observe_report(ReportPhase::RowsAdmitted, all.len(), p);
     // One actual source per model/session/metric/window prevents statusline/OTel/request overlap.
     let mut preferred: BTreeMap<String, (usize, String)> = BTreeMap::new();
     for o in &all {
@@ -706,7 +730,11 @@ fn report(
     let mut requests = BTreeSet::new();
     let mut ignored = 0;
     for o in &all {
+        #[cfg(test)]
+        observe_report(ReportPhase::IterationEntered, all.len(), p);
         p.check_deadline()?;
+        #[cfg(test)]
+        observe_report(ReportPhase::AggregateWork, all.len(), p);
         if o.kind == "quota" {
             continue;
         }
@@ -805,8 +833,16 @@ fn report(
         .iter()
         .map(|pool| quota_status(p, &all, pool, max_age))
         .collect::<Result<Vec<_>>>()?;
+    let mut other_windows = Vec::new();
+    for observation in &all {
+        p.check_deadline()?;
+        if observation.kind == "quota" && observation.metric != "subscription_quota" {
+            other_windows.push(observation);
+        }
+    }
+    p.check_deadline()?;
     Ok(
-        json!({"group_by":group_by,"window":window,"include_coordination":include_coordination,"groups":groups,"quota":statuses,"other_windows":all.iter().filter(|o|o.kind=="quota"&&o.metric!="subscription_quota").collect::<Vec<_>>(),"collector_status":if all.is_empty(){"unknown"}else{"explicit_imported_observations"},"actual_usage_available":groups.iter().any(|g|!g["actual_amount"].is_null()),"ignored_duplicate_source_observations":ignored,"source_precedence":["provider_request","statusline","otel","manual_separate"],"local_cache_tokens_included":false,"subscription_token_conversion":false,"billing_amount_asserted":false}),
+        json!({"group_by":group_by,"window":window,"include_coordination":include_coordination,"groups":groups,"quota":statuses,"other_windows":other_windows,"collector_status":if all.is_empty(){"unknown"}else{"explicit_imported_observations"},"actual_usage_available":groups.iter().any(|g|!g["actual_amount"].is_null()),"ignored_duplicate_source_observations":ignored,"source_precedence":["provider_request","statusline","otel","manual_separate"],"local_cache_tokens_included":false,"subscription_token_conversion":false,"billing_amount_asserted":false}),
     )
 }
 fn barriers(p: &Project, db: &Connection, task: Option<&str>) -> Result<Vec<String>> {
@@ -1106,5 +1142,281 @@ fn execute_inner(p: &Project, c: &QuotaCommand) -> Result<Value> {
             tx.commit()?;
             Ok(json!({"reservation_id":reservation,"state":state,"model_started":false}))
         }
+    }
+}
+
+#[cfg(test)]
+mod aggregation_deadline_tests {
+    use super::*;
+    use crate::{
+        deadline::Deadline,
+        project::{Config, ProjectConfig, RootAnchor},
+        session::{self, SessionCommand},
+        work::{AgentCommand, TaskCommand, WorkCommand},
+    };
+    use std::{
+        cell::RefCell,
+        rc::Rc,
+        time::{Duration, Instant},
+    };
+    struct ObserverGuard;
+    impl Drop for ObserverGuard {
+        fn drop(&mut self) {
+            REPORT_OBSERVER.with(|slot| *slot.borrow_mut() = None);
+        }
+    }
+    fn observer(
+        callback: impl FnMut(ReportPhase, usize, Option<Deadline>) + 'static,
+    ) -> ObserverGuard {
+        REPORT_OBSERVER.with(|slot| {
+            assert!(slot.borrow().is_none());
+            *slot.borrow_mut() = Some(Box::new(callback));
+        });
+        ObserverGuard
+    }
+    fn fixture() -> (tempfile::TempDir, Project) {
+        let temp = tempfile::tempdir().unwrap();
+        let base = temp.path().canonicalize().unwrap();
+        let root = base.join("project");
+        let data = base.join("data");
+        std::fs::create_dir_all(&root).unwrap();
+        std::fs::create_dir_all(data.join("control")).unwrap();
+        std::fs::create_dir_all(data.join("workspace")).unwrap();
+        let p = Project {
+            deadline: None,
+            root_anchor: RootAnchor::capture(&root).unwrap(),
+            root,
+            data_dir: data.clone(),
+            control_dir: data.join("control"),
+            workspace_dir: data.join("workspace"),
+            project_id: "fixture".into(),
+            workspace_id: "ws".into(),
+            coordination_id: "coord".into(),
+            config: Config {
+                schema_version: 1,
+                project: ProjectConfig {
+                    id: "fixture".into(),
+                    name: "fixture".into(),
+                },
+                index: Default::default(),
+                policy: Default::default(),
+                search: Default::default(),
+                context: Default::default(),
+                roles: Default::default(),
+            },
+        };
+        let task_file = p.root.join("task.json");
+        std::fs::write(&task_file,json!({"schema_version":1,"title":"Aggregate fixture","scope":["src/**"],"acceptance":[{"id":"done","description":"Fixture"}],"checks":[]}).to_string()).unwrap();
+        let task = work::execute(
+            &p,
+            &WorkCommand::Task {
+                command: TaskCommand::Create {
+                    from_file: task_file,
+                    idempotency_key: None,
+                },
+            },
+        )
+        .unwrap()["task_id"]
+            .as_str()
+            .unwrap()
+            .to_string();
+        let agent = work::execute(
+            &p,
+            &WorkCommand::Agent {
+                command: AgentCommand::Register {
+                    name: "aggregate-agent".into(),
+                    kind: "agent".into(),
+                    concurrency_limit: 1,
+                },
+            },
+        )
+        .unwrap()["agent_id"]
+            .as_str()
+            .unwrap()
+            .to_string();
+        let session = session::session(
+            &p,
+            &SessionCommand::Attach {
+                agent,
+                runtime: "manual".into(),
+                workspace: "current".into(),
+                native_session: None,
+                role: Some("implementer".into()),
+                account_pool: Some("main".into()),
+                adapter_version: "fixture-v1".into(),
+            },
+        )
+        .unwrap()["session_id"]
+            .as_str()
+            .unwrap()
+            .to_string();
+        let mut db = connect(&p).unwrap();
+        let tx = db.transaction().unwrap();
+        let n = now();
+        let time = |value| {
+            chrono::DateTime::from_timestamp(value, 0)
+                .unwrap()
+                .to_rfc3339()
+        };
+        // Insert valid stored observations in one setup transaction; the public
+        // one-MiB import cap is not weakened to manufacture a large report.
+        {
+            let mut insert=tx.prepare("INSERT INTO quota_observations(observation_id,pool,provider,model,metric,unit,source,session,context_epoch,counter_epoch,observed,window_start,window_end,payload,payload_hash) VALUES(?1,?2,?3,?4,?5,?6,?7,?8,?9,NULL,?10,?11,?12,?13,?14)").unwrap();
+            for index in 0..10000 {
+                let o = Observation {
+                    observation_id: format!("obs-{index:05}"),
+                    pool_id: "main".into(),
+                    provider: "fixture-provider".into(),
+                    model: "fixture-model".into(),
+                    metric: "input_tokens".into(),
+                    unit: "tokens".into(),
+                    source: "provider_request".into(),
+                    collector: "fixture-v1".into(),
+                    source_revision: "request-v1".into(),
+                    observed_at: time(n - 60),
+                    window_id: "fixture-window".into(),
+                    window_start: time(n - 3600),
+                    window_end: time(n + 3600),
+                    reset_at: None,
+                    timezone: None,
+                    status: "actual".into(),
+                    amount: Some(2.0),
+                    kind: "request".into(),
+                    request_id: Some(format!("request-{index:05}")),
+                    session_id: Some(session.clone()),
+                    context_epoch: Some(1),
+                    counter_epoch: None,
+                    task_id: Some(task.clone()),
+                    role: Some("implementer".into()),
+                    pricing_table_version: None,
+                    counter_origin_zero: false,
+                    workload: "execution".into(),
+                };
+                validate(&tx, &p, &o).unwrap();
+                let payload = serde_json::to_string(&o).unwrap();
+                insert
+                    .execute(params![
+                        o.observation_id,
+                        o.pool_id,
+                        o.provider,
+                        o.model,
+                        o.metric,
+                        o.unit,
+                        o.source,
+                        o.session_id,
+                        o.context_epoch,
+                        n - 60,
+                        n - 3600,
+                        n + 3600,
+                        payload,
+                        hash(payload.as_bytes())
+                    ])
+                    .unwrap();
+            }
+        }
+        tx.commit().unwrap();
+        (temp, p)
+    }
+    fn report_command() -> QuotaCommand {
+        QuotaCommand::Report {
+            pool: Some("main".into()),
+            task_id: None,
+            session: None,
+            group_by: "pool".into(),
+            window: "7d".into(),
+            include_coordination: false,
+            max_age_seconds: 900,
+        }
+    }
+    fn snapshot(p: &Project) -> (i64, String, i64) {
+        let db = connect(p).unwrap();
+        let (count,payload):(i64,String)=db.query_row("SELECT count(*),group_concat(payload,'') FROM (SELECT payload FROM quota_observations ORDER BY observation_id)",[],|r|Ok((r.get(0)?,r.get(1)?))).unwrap();
+        let events: i64 = db
+            .query_row("SELECT count(*) FROM quota_events", [], |r| r.get(0))
+            .unwrap();
+        (count, hash(payload.as_bytes()), events)
+    }
+    #[derive(Default)]
+    struct Trace {
+        admitted: usize,
+        entered: usize,
+        worked: usize,
+        expired: bool,
+        later_entries: usize,
+        later_work: usize,
+    }
+    #[test]
+    fn public_report_stops_real_aggregation_at_original_deadline_after_rows_admitted() {
+        let (_temp, mut p) = fixture();
+        let original_snapshot = snapshot(&p);
+        let command = report_command();
+        let positive = execute(&p, &command).unwrap();
+        assert_eq!(positive["groups"].as_array().unwrap().len(), 1);
+        assert_eq!(positive["groups"][0]["actual_amount"], 20000.0);
+        assert_eq!(positive["groups"][0]["observations"], 10000);
+        assert_eq!(positive["ignored_duplicate_source_observations"], 0);
+        assert_eq!(snapshot(&p), original_snapshot);
+        let deadline = Deadline::from_millis(2000).unwrap();
+        let original_end = deadline.instant();
+        p.deadline = Some(deadline);
+        let trace = Rc::new(RefCell::new(Trace::default()));
+        let observed = trace.clone();
+        let _guard = observer(move |phase, count, received| {
+            let received = received.expect("Report must retain its finite scope");
+            assert_eq!(
+                received.instant(),
+                original_end,
+                "Original budget was reset"
+            );
+            let mut state = observed.borrow_mut();
+            match phase {
+                ReportPhase::RowsAdmitted => {
+                    assert_eq!(count, 10000);
+                    state.admitted = count;
+                }
+                ReportPhase::IterationEntered => {
+                    if state.expired {
+                        state.later_entries += 1;
+                    }
+                    state.entered += 1;
+                    if state.entered == 101 {
+                        assert_eq!(state.admitted, 10000);
+                        assert_eq!(state.worked, 100);
+                        // Pause precisely before the existing per-iteration guard,
+                        // without changing the caller's monotonic deadline.
+                        while let Ok(remaining) = received.remaining() {
+                            std::thread::sleep(remaining.min(Duration::from_millis(10)));
+                        }
+                        state.expired = true;
+                    }
+                }
+                ReportPhase::AggregateWork => {
+                    if state.expired {
+                        state.later_work += 1;
+                    }
+                    state.worked += 1;
+                }
+            }
+        });
+        let started = Instant::now();
+        let error = execute(&p, &command).unwrap_err();
+        assert_eq!(error.code, "TIMEOUT");
+        assert_eq!(error.exit, 7);
+        assert!(started.elapsed() < Duration::from_secs(4));
+        let state = trace.borrow();
+        assert_eq!(state.admitted, 10000);
+        assert!(
+            state.expired,
+            "Did not reach controlled aggregation boundary"
+        );
+        assert_eq!(state.entered, 101);
+        assert_eq!(state.worked, 100);
+        assert_eq!(state.later_entries, 0);
+        assert_eq!(state.later_work, 0);
+        drop(state);
+        assert_eq!(p.deadline.unwrap().instant(), original_end);
+        let mut inspection = p.clone();
+        inspection.deadline = None;
+        assert_eq!(snapshot(&inspection), original_snapshot);
     }
 }

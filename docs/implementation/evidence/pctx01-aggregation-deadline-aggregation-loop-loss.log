@@ -1,0 +1,24 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.15s
+     Running unittests src/lib.rs (target/debug/deps/pctx-ae897bec01e143c7)
+
+running 1 test
+test quota::aggregation_deadline_tests::public_report_stops_real_aggregation_at_original_deadline_after_rows_admitted ... FAILED
+
+failures:
+
+---- quota::aggregation_deadline_tests::public_report_stops_real_aggregation_at_original_deadline_after_rows_admitted stdout ----
+
+thread 'quota::aggregation_deadline_tests::public_report_stops_real_aggregation_at_original_deadline_after_rows_admitted' (7965816) panicked at src/quota.rs:1411:9:
+assertion `left == right` failed
+  left: 10000
+ right: 101
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    quota::aggregation_deadline_tests::public_report_stops_real_aggregation_at_original_deadline_after_rows_admitted
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 20 filtered out; finished in 3.56s
+
+error: test failed, to rerun pass `--lib`

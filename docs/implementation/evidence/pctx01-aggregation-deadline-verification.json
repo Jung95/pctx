@@ -1,0 +1,111 @@
+{
+  "official_task": "PCTX01",
+  "status": "implementing_not_complete",
+  "base_commit": "b0eea9401005cdfb4539cca0eb9916abee5a0f50",
+  "platform": "native macOS arm64",
+  "source_sha256": {
+    "src/quota.rs": "37a1fddb97ed822f9b202c0afc78babb9b2e7ce6a3102443092f779636f47002",
+    "tests/work_quota_deadline.rs": "862371e83e4bc354e9d10a7195feec233332c1c744487404069952e25321e4ec",
+    "src/project.rs": "2834ebf3a4c608c90bdaf3284fb8a8c23a7e8fb33a2d2dca2c7b7246f03abbd3"
+  },
+  "verification": {
+    "aggregation_targeted": {
+      "handle": 49328,
+      "exit": 0,
+      "passed": 1,
+      "failed": 0,
+      "source_note": "Before review-only restoration of existing report lint attribute; final full binds final source"
+    },
+    "guarded_sql": {
+      "handle": 58154,
+      "exit": 0,
+      "passed": 5,
+      "failed": 0
+    },
+    "controlled_mutation": {
+      "driver_handle": 71925,
+      "driver_exit": 0,
+      "aggregation_loop_loss": {
+        "expected_test_exit": 101,
+        "passed": 0,
+        "failed": 1,
+        "proof": "Actual10000 entered iterations versus required101 despite outer TIMEOUT; detects post-expiry aggregation"
+      },
+      "sql_handler_loss": {
+        "expected_test_exit": 101,
+        "passed": 0,
+        "failed": 1,
+        "proof": "Emergency2s interrupt explicitly fails, cannot satisfy original50ms regression"
+      },
+      "exact_source_restoration_verified": true
+    },
+    "full": {
+      "handle": 14811,
+      "exit": 101,
+      "passed": 395,
+      "failed": 4,
+      "suites": 48,
+      "failures": [
+        "query_program_resolution_uses_captured_command_path",
+        "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+        "simultaneous_streams_are_collected_and_overflow_never_infers_success",
+        "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget"
+      ]
+    },
+    "format_exit": 0,
+    "locked_all_target_clippy_exit": 0
+  },
+  "proof_scope": "Public quota Report over10000 individually validated observations with real registered Task/Agent/Session. Positive exact20000 tokens/10000 observations/0 duplicates. After all rows parsed,100 real aggregation steps complete; original2s expires before101 work. Require TIMEOUT7/no later entries or work, unchanged instant and observation/event snapshot. Test-only TLS/RAII observer has no production hooks. Final other_windows scan now checks original deadline per row without changing data/order. SQL50ms tests gain emergency2s test-only guard whose activation explicitly fails.",
+  "review": {
+    "agent": "requirements",
+    "scoped_blockers": 0,
+    "resolved_finding": "Restored existing too_many_arguments allowance to report after observer insertion",
+    "tests_or_edits_by_reviewer": false
+  },
+  "remaining_required_gates": [
+    "Expiry during auxiliary discovery/hash",
+    "Remaining finite resource/runner/trust/filter/schedule/inventory reads and adapter phase races",
+    "Full semantic pre-effect argument/envelope/representation/error/exit/budget matrix",
+    "Other command CPU phases, original native startup root cause and native Linux/Windows matrix"
+  ],
+  "logs": {
+    "targeted": {
+      "path": "docs/implementation/evidence/pctx01-aggregation-deadline-targeted.log",
+      "sha256": "3ccc4e617206e6478cb7d9d5f7f91d56cdfef4d1007afb21078299dd1d0c3005"
+    },
+    "sql-guard": {
+      "path": "docs/implementation/evidence/pctx01-aggregation-deadline-sql-guard.log",
+      "sha256": "209fce5cde6f9685001081e43330012445f73af2d034d71c57c7fa928bf0647d"
+    },
+    "aggregation-loop-loss": {
+      "path": "docs/implementation/evidence/pctx01-aggregation-deadline-aggregation-loop-loss.log",
+      "sha256": "c205471167bfe5147e046fd6dcfdbdddce375a397df3a617a6952ad865b10295"
+    },
+    "sql-handler-loss": {
+      "path": "docs/implementation/evidence/pctx01-aggregation-deadline-sql-handler-loss.log",
+      "sha256": "19a77e8f6f9d89024ea249218f0853ab8320264b7e1ca3c7415d9531f051e87a"
+    },
+    "mutation-driver": {
+      "path": "docs/implementation/evidence/pctx01-aggregation-deadline-mutation-driver.log",
+      "sha256": "95ff90e98f2a97aaca609f263cf28fb75cecffb196ec1bfee19e8b53ba93bfe7"
+    },
+    "format": {
+      "path": "docs/implementation/evidence/pctx01-aggregation-deadline-format.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "clippy": {
+      "path": "docs/implementation/evidence/pctx01-aggregation-deadline-clippy.log",
+      "sha256": "21d728f51f07b7e285ccf412cff1348ac51d6ed240607e5dbd70b5002dbc443c"
+    },
+    "full-native": {
+      "path": "docs/implementation/evidence/pctx01-aggregation-deadline-full-native.log",
+      "sha256": "6fddffb81bd0aaff417313fd3606bf91ba5029f33ec127079b27db458f17d4ca"
+    }
+  },
+  "mutation_driver": {
+    "path": "docs/implementation/evidence/pctx01-aggregation-deadline-mutation-driver.py.txt",
+    "sha256": "e142e7ba06e3c56809a027084d0a1f76e0033dbee11697ff9ae84e82e429050d"
+  },
+  "actions_dispatched": 0,
+  "other_active_official_tasks": []
+}
