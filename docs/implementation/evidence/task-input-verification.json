@@ -96,5 +96,6 @@
     "External/stdin/raw caller input topics are not inferred; original-policy-owner reporting exceptions and broader approval/memory delivery remain mandatory"
   ],
   "actions_dispatched": 0,
-  "spec_sha256": "8914faad57432f524aec0a06aa90c43c18c23f8c19e9f54fe69d9ad185db6523"
+  "spec_sha256": "8914faad57432f524aec0a06aa90c43c18c23f8c19e9f54fe69d9ad185db6523",
+  "runtime_commit": "2b55f277754e3b913d1f9ffd3b427d0bf189b4a8"
 }
