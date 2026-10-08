@@ -13,7 +13,7 @@ an audit denominator, not completed acceptance gates. Official PCTX01 remains
 closed0/10, denominator unchanged. No independent business features added.
 Source review classified every leaf by producer family and separated raw-input,
 authority/state and pure grammar. R01–R12 below freeze currently identified
-residual groups; one shared Runner group R12 is being repaired. None is whole
+residual groups; one shared Runner group R12 now has local evidence. None is whole
 required-platform qualified. Native Linux/Windows and broader common gates remain.
 
 | Residual ID | Existing pure contract / exact source boundary | Status and scope |

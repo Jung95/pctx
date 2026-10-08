@@ -161,5 +161,14 @@
     "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
     "simultaneous_streams_are_collected_and_overflow_never_infers_success",
     "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget"
-  ]
+  ],
+  "runtime_revision": "8cca512e4b6566ed33ddf9d4ff830f19db6497fd",
+  "publication": {
+    "normal_push_session": 19890,
+    "exit": 0,
+    "destination": "https://github.com/Jung95/pctx.git",
+    "branch": "main",
+    "range": "d0dbaef..8cca512",
+    "skip_ci": true
+  }
 }

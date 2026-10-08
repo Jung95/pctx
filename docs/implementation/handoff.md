@@ -6,8 +6,9 @@
 
 ## Latest integration boundary
 
-PCTX01-G03-R12 runner admission, base d0dbaef; uncommitted parent-owned source,
-tests and documents. Exact runner IDs/mode/scope shared before discovery and
+PCTX01-G03-R12 runner admission, runtime 8cca512e4b6566ed33ddf9d4ff830f19db6497fd,
+base d0dbaef. Normal push19890 terminal0 published d0dbaef..8cca512 to origin/main.
+No uncommitted runtime changes. Exact runner IDs/mode/scope shared before discovery and
 host/helper/DB effects. Native44 refusal combinations, direct expiry/storage,
 accepted boundaries, sensitive scope and non-owner4 routes; reviewed44PASS,
 tightened actual cloud/native intent1PASS. Three loss probes fail/exact restore;
@@ -71,9 +72,8 @@ Original ignored specification SHA256 8914faad57432f524aec0a06aa90c43c18c23f8c19
 
 ## Exact next action
 
-Final full38671 is terminal; original startup failures retained. Current parent
-runner correction/registry/evidence/documents are ready to commit [skip ci] and
-normally push. Then stay on PCTX01 and implement R01–R03 existing
+Final full38671 is terminal; original startup failures retained. Runner correction/registry/evidence are committed and normally pushed as8cca512
+[skip ci]. Then stay on PCTX01 and implement R01–R03 existing
 Operations/Role grammar as one common admission boundary. Use downstream
 policy_controls validator for exact stronger Role rules; keep authority/state/
 raw input in producers. Registry R04–R11 and fixed full gates remain open.
