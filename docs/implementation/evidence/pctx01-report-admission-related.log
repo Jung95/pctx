@@ -1,0 +1,87 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 5.31s
+     Running tests/context_preflight.rs (target/debug/deps/context_preflight-8e4a1d8597c82b95)
+
+running 3 tests
+test context_producer_validation_precedes_session_database ... ok
+test valid_context_arguments_still_require_a_project_session ... ok
+test invalid_context_arguments_have_no_project_or_response_effects ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.97s
+
+     Running tests/control_preflight.rs (target/debug/deps/control_preflight-1104ac0ed832cb66)
+
+running 16 tests
+test operation_direct_refusals_preserve_state_and_original_expiry ... ok
+test direct_producers_refuse_before_database_and_preserve_original_expiry ... ok
+test runner_direct_pure_refusal_preserves_storage_and_original_expiry ... ok
+test runner_valid_boundaries_preserve_existing_non_owner_policy ... ok
+test role_pure_arguments_precede_project_and_response_effects ... ok
+test schedule_pure_arguments_precede_project_and_response_effects ... ok
+test report_session_ingest_arguments_precede_project_and_response_effects ... ok
+test valid_control_arguments_reach_existing_authorization_and_state_flows ... ok
+test valid_grammar_does_not_bypass_non_owner_authority ... ok
+test operation_boundaries_aliases_and_valid_non_owner_policy_are_preserved ... ok
+test session_pure_arguments_precede_project_and_response_effects ... ok
+test runner_pure_arguments_precede_project_and_response_effects ... ok
+test quota_pure_arguments_precede_project_and_response_effects ... ok
+test operation_remaining_pure_arguments_precede_project_and_response_effects ... ok
+test work_pure_arguments_precede_project_and_response_effects ... ok
+test malformed_reviewed_schedule_provider_refuses_without_panic_or_installation ... ok
+
+test result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.65s
+
+     Running tests/quota.rs (target/debug/deps/quota-2eee6f0607f85593)
+
+running 7 tests
+test first_unknown_baseline_and_missing_provider_do_not_become_zero_or_normal ... ok
+test pools_are_isolated_and_manual_estimates_do_not_change_actual_usage ... ok
+test cumulative_counters_are_deltas_and_collector_sources_do_not_double_count ... ok
+test reservations_share_pool_same_unit_and_are_soft_idempotent ... ok
+test epochs_resets_and_stale_counters_are_not_inherited ... ok
+test quota_thresholds_reset_reobservation_and_persistent_pause_silence ... ok
+test restored_quota_requires_fresh_observation_and_event_ledgers_stay_immutable ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.16s
+
+     Running tests/session.rs (target/debug/deps/session-e37e24e280aa64af)
+
+running 7 tests
+test identity_secrets_are_rejected_before_persistence ... ok
+test suspend_reconcile_preserves_task_pause_and_never_revives_run ... ok
+test expired_outer_budget_cannot_emit_ack_attach_or_change_epoch ... ok
+test minimum_budget_failure_creates_no_emission ... ok
+test independent_sessions_boundaries_and_policy_reject_old_baselines ... ok
+test rule_changes_and_deleted_paths_are_explicit ... ok
+test explicit_ack_unchanged_delta_and_no_source_ledger ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s
+
+     Running tests/work_control.rs (target/debug/deps/work_control-8112bcadab3f8486)
+
+running 11 tests
+test database_rejects_event_modification_and_receipt_conflict ... ok
+test zero_minimum_cannot_make_zero_tests_pass ... ok
+test external_report_is_an_allowed_claim_without_native_environment_authority ... ok
+test legacy_native_pass_without_authoritative_binding_is_not_current_evidence ... ok
+test claims_reports_reassignment_and_cursor ... ok
+test zero_tests_and_revision_conflict ... ok
+test current_source_change_blocks_completion ... ok
+test backup_restore_revokes_live_leases_and_preserves_pause ... ok
+test evidence_gate_and_historical_completion ... ok
+test schedule_v2_backup_strips_local_binding_and_restore_revokes_running_authority ... ok
+test restore_preserves_session_history_without_ack_or_epoch_reuse ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.33s
+
+     Running tests/work_quota_deadline.rs (target/debug/deps/work_quota_deadline-b12539874124d6ff)
+
+running 5 tests
+test already_expired_reads_do_not_initialize_control_storage_or_validate_missing_targets ... ok
+test cpu_bound_sql_expires_inside_the_engine_under_the_original_budget ... ok
+test reused_sql_connection_does_not_inherit_an_expired_prior_request_handler ... ok
+test quota_read_exclusive_contention_returns_timeout_instead_of_empty_unknown_success ... ok
+test work_read_transaction_contention_uses_remaining_budget_without_control_events ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.20s
+

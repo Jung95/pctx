@@ -1,0 +1,47 @@
+[
+  {
+    "name": "frontend",
+    "path": "src/main.rs",
+    "exit": 101,
+    "test": "report_session_ingest_arguments_precede_project_and_response_effects",
+    "source_sha256": "bec520a8ea3f3d634ebc82413070e65779813448b9b681e70e68d329984a4ce4",
+    "exact_source_restored": true,
+    "log": "pctx01-report-admission-loss-frontend.log"
+  },
+  {
+    "name": "work-producer",
+    "path": "src/work.rs",
+    "exit": 101,
+    "test": "report_session_ingest_direct_refusals_preserve_storage_and_original_expiry",
+    "source_sha256": "91d29bc9f0ef1452cd51f555665326d727e31e90dde308fc5e61d6f60fe2abd6",
+    "exact_source_restored": true,
+    "log": "pctx01-report-admission-loss-work-producer.log"
+  },
+  {
+    "name": "session-producer",
+    "path": "src/session.rs",
+    "exit": 101,
+    "test": "report_session_ingest_direct_refusals_preserve_storage_and_original_expiry",
+    "source_sha256": "16184a48353c55bfdddcffe955d6401f74cecc8e3f08696fe979c7bb7e5c74df",
+    "exact_source_restored": true,
+    "log": "pctx01-report-admission-loss-session-producer.log"
+  },
+  {
+    "name": "context-producer",
+    "path": "src/session.rs",
+    "exit": 101,
+    "test": "report_session_ingest_direct_refusals_preserve_storage_and_original_expiry",
+    "source_sha256": "16184a48353c55bfdddcffe955d6401f74cecc8e3f08696fe979c7bb7e5c74df",
+    "exact_source_restored": true,
+    "log": "pctx01-report-admission-loss-context-producer.log"
+  },
+  {
+    "name": "quota-producer",
+    "path": "src/quota.rs",
+    "exit": 101,
+    "test": "report_session_ingest_direct_refusals_preserve_storage_and_original_expiry",
+    "source_sha256": "c85bb611421632a9b8a8eca20b6dfe74d78aa3736a8848b094a4c9090fd625e8",
+    "exact_source_restored": true,
+    "log": "pctx01-report-admission-loss-quota-producer.log"
+  }
+]

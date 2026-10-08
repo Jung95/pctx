@@ -331,6 +331,7 @@ enum Request {
     Schedule(ScheduleCommand),
     Session(SessionCommand),
     Role(OperationCommand),
+    Context(pctx::session::ContextCommand),
 }
 impl Request {
     fn execute(&self, p: &Project) -> pctx::domain::Result<Value> {
@@ -340,6 +341,7 @@ impl Request {
             Self::Schedule(c) => schedule::execute(p, c),
             Self::Session(c) => session::session(p, c),
             Self::Role(c) => operations::execute(p, c),
+            Self::Context(c) => session::context(p, c),
         }
     }
 }
@@ -1099,4 +1101,324 @@ fn operation_boundaries_aliases_and_valid_non_owner_policy_are_preserved() {
         assert_eq!(v["errors"][0]["code"], "POLICY_DENIED");
         assert_eq!(f.state(), before);
     }
+}
+
+#[test]
+fn report_session_ingest_arguments_precede_project_and_response_effects() {
+    let long_key = "k".repeat(257);
+    let summary = "x".repeat(4097);
+    let reason = "r".repeat(1025);
+    let report = vec![
+        "agent",
+        "report",
+        "--run",
+        "missing",
+        "--lease-epoch",
+        "1",
+        "--report-seq",
+        "1",
+        "--idempotency-key",
+        "key",
+        "--stage",
+        "bogus",
+        "--summary",
+        "fixture",
+    ];
+    let mut large = report.clone();
+    large[11] = "planning";
+    large[13] = &summary;
+    let mut estimate = report.clone();
+    estimate[11] = "testing";
+    estimate.extend(["--estimate-percent", "101"]);
+    // All scalar options remain parseable; refusal belongs to shared semantic admission.
+    no_effects(&[
+        vec![
+            "quota",
+            "ingest",
+            "--from-file",
+            "absent.json",
+            "--idempotency-key",
+            &long_key,
+        ],
+        report.clone(),
+        large,
+        estimate,
+        vec![
+            "session",
+            "boundary",
+            "--session",
+            "missing",
+            "--reason",
+            "",
+        ],
+        vec![
+            "session",
+            "suspend",
+            "--session",
+            "missing",
+            "--reason",
+            " ",
+        ],
+        vec![
+            "session",
+            "boundary",
+            "--session",
+            "missing",
+            "--reason",
+            &reason,
+        ],
+        vec![
+            "session",
+            "suspend",
+            "--session",
+            "missing",
+            "--reason",
+            "sk-proj-FAKE01234567890123456789012345678901234567890",
+        ],
+        vec![
+            "quota",
+            "ingest",
+            "--from-file",
+            "absent.json",
+            "--idempotency-key",
+            "",
+        ],
+    ]);
+}
+
+#[test]
+fn report_session_ingest_direct_refusals_preserve_storage_and_original_expiry() {
+    use pctx::session::ContextCommand;
+    use pctx::work::{AgentCommand, CheckCommand};
+    let f = Fixture::new();
+    fs::create_dir(&f.root).unwrap();
+    let mut p = Project {
+        deadline: None,
+        root_anchor: RootAnchor::capture(&f.root).unwrap(),
+        root: f.root.clone(),
+        data_dir: f.data.clone(),
+        workspace_dir: f.data.join("workspace"),
+        control_dir: f.data.join("control"),
+        project_id: "fixture".into(),
+        workspace_id: "workspace".into(),
+        coordination_id: "coordination".into(),
+        config: Config {
+            schema_version: 1,
+            project: ProjectConfig {
+                id: "fixture".into(),
+                name: "fixture".into(),
+            },
+            index: Default::default(),
+            policy: Default::default(),
+            search: Default::default(),
+            context: Default::default(),
+            roles: Default::default(),
+        },
+    };
+    let before = f.state();
+    let keyless = WorkCommand::Check {
+        command: CheckCommand::Run {
+            key: None,
+            registered_key: None,
+            task_id: "missing".into(),
+            run: "missing".into(),
+            budget_bytes: 8192,
+        },
+    };
+    assert_eq!(work::validate_work_request(&keyless).unwrap_err().exit, 2);
+    let ack = ContextCommand::Ack {
+        context: "missing".into(),
+        session: "missing".into(),
+        epoch: 1,
+        provenance: "bogus".into(),
+    };
+    assert_eq!(session::validate_context_request(&ack).unwrap_err().exit, 2);
+    let requests = [
+        Request::Work(WorkCommand::Agent {
+            command: AgentCommand::Report {
+                run: "missing".into(),
+                lease_epoch: 1,
+                report_seq: 1,
+                idempotency_key: "fixture".into(),
+                stage: "bogus".into(),
+                summary: "fixture".into(),
+                estimate_percent: None,
+            },
+        }),
+        Request::Work(keyless),
+        Request::Session(SessionCommand::Boundary {
+            session: "missing".into(),
+            reason: "".into(),
+        }),
+        Request::Session(SessionCommand::Suspend {
+            session: "missing".into(),
+            reason: "r".repeat(1025),
+        }),
+        Request::Context(ack),
+        Request::Quota(QuotaCommand::Ingest {
+            from_file: f.base.join("absent.json"),
+            idempotency_key: "".into(),
+        }),
+    ];
+    for r in &requests {
+        let e = r.execute(&p).unwrap_err();
+        assert_eq!((e.code.as_str(), e.exit), ("INVALID_ARGUMENT", 2));
+        assert_eq!(f.state(), before);
+    }
+    let original = Instant::now() - Duration::from_secs(1);
+    p.deadline = Some(Deadline::from_instant(original));
+    for r in &requests {
+        assert_eq!(r.execute(&p).unwrap_err().code, "TIMEOUT");
+        assert_eq!(p.deadline.unwrap().instant(), original);
+        assert_eq!(f.state(), before);
+    }
+}
+
+#[test]
+fn report_and_session_accepted_boundaries_keep_replay_and_state_contracts() {
+    use pctx::session::ContextCommand;
+    use pctx::work::AgentCommand;
+    let f = Fixture::new();
+    f.init();
+    let input = f.base.join("task.json");
+    fs::write(&input,serde_json::json!({"schema_version":1,"title":"Report fixture","scope":["code.py"],"acceptance":[{"id":"behavior","description":"Observed","evidence_check_keys":["unit"]}],"checks":[{"key":"unit","kind":"test"}]}).to_string()).unwrap();
+    let o = f
+        .command()
+        .args(["task", "create", "--from-file"])
+        .arg(&input)
+        .output()
+        .unwrap();
+    assert!(o.status.success(), "{o:?}");
+    let v: Value = serde_json::from_slice(&o.stdout).unwrap();
+    let task = v["data"]["task_id"].as_str().unwrap();
+    assert!(
+        f.run(&["agent", "register", "--name", "report-fixture"])
+            .status
+            .success()
+    );
+    assert!(f.run(&["task", "ready", task]).status.success());
+    assert!(
+        f.run(&["task", "assign", task, "--agent", "report-fixture"])
+            .status
+            .success()
+    );
+    let o = f.run(&["task", "start", task]);
+    assert!(o.status.success(), "{o:?}");
+    let v: Value = serde_json::from_slice(&o.stdout).unwrap();
+    let run = v["data"]["run_id"].as_str().unwrap();
+    let epoch = v["data"]["lease_epoch"].as_i64().unwrap().to_string();
+    let summary = "x".repeat(4096);
+    for (i, stage) in [
+        "planning",
+        "implementing",
+        "testing",
+        "waiting",
+        "submitting",
+    ]
+    .iter()
+    .enumerate()
+    {
+        let seq = (i + 1).to_string();
+        let key = format!("boundary-{i}");
+        let args = [
+            "agent",
+            "report",
+            "--run",
+            run,
+            "--lease-epoch",
+            &epoch,
+            "--report-seq",
+            &seq,
+            "--idempotency-key",
+            &key,
+            "--stage",
+            stage,
+            "--summary",
+            &summary,
+            "--estimate-percent",
+            "100",
+        ];
+        let o = f.run(&args);
+        assert!(o.status.success(), "{o:?}");
+        let first: Value = serde_json::from_slice(&o.stdout).unwrap();
+        let before_replay = f.state();
+        let replay = f.run(&args);
+        assert!(replay.status.success());
+        let second: Value = serde_json::from_slice(&replay.stdout).unwrap();
+        assert_eq!(first["data"], second["data"]);
+        assert_eq!(f.state(), before_replay);
+    }
+    let empty = WorkCommand::Agent {
+        command: AgentCommand::Report {
+            run: run.into(),
+            lease_epoch: 1,
+            report_seq: 1,
+            idempotency_key: "fixture".into(),
+            stage: "planning".into(),
+            summary: "".into(),
+            estimate_percent: Some(0),
+        },
+    };
+    work::validate_work_request(&empty).unwrap();
+    let o = f.run(&[
+        "session",
+        "attach",
+        "--agent",
+        "report-fixture",
+        "--runtime",
+        "manual",
+    ]);
+    assert!(o.status.success());
+    let v: Value = serde_json::from_slice(&o.stdout).unwrap();
+    let sid = v["data"]["session_id"].as_str().unwrap();
+    let reason = "r".repeat(1024);
+    let o = f.run(&["session", "boundary", "--session", sid, "--reason", &reason]);
+    assert!(o.status.success(), "{o:?}");
+    let o = f.run(&["session", "suspend", "--session", sid, "--reason", &reason]);
+    assert!(o.status.success(), "{o:?}");
+    for provenance in ["explicit-agent", "transport-receipt"] {
+        session::validate_context_request(&ContextCommand::Ack {
+            context: "missing".into(),
+            session: sid.into(),
+            epoch: 1,
+            provenance: provenance.into(),
+        })
+        .unwrap();
+    }
+    quota::validate_quota_request(&QuotaCommand::Ingest {
+        from_file: f.base.join("absent.json"),
+        idempotency_key: "k".repeat(256),
+    })
+    .unwrap();
+    let now = chrono::Utc::now();
+    let usage = f.base.join("usage.json");
+    fs::write(&usage,serde_json::json!({"schema_version":1,"observations":[{"observation_id":"quota-boundary-fixture","pool_id":"fixture","provider":"fixture","model":"none","metric":"subscription_quota","unit":"percentage","source":"manual","collector":"fixture-v1","source_revision":"fixture-v1","observed_at":now.to_rfc3339(),"window_id":"fixture","window_start":(now-chrono::Duration::hours(1)).to_rfc3339(),"window_end":(now+chrono::Duration::hours(1)).to_rfc3339(),"status":"actual","amount":10.0,"kind":"quota","counter_origin_zero":false,"workload":"coordination"}]}).to_string()).unwrap();
+    let key = "k".repeat(256);
+    let ingest = || {
+        f.command()
+            .args(["quota", "ingest", "--from-file"])
+            .arg(&usage)
+            .args(["--idempotency-key", &key])
+            .output()
+            .unwrap()
+    };
+    let first = ingest();
+    assert!(first.status.success(), "{first:?}");
+    let first: Value = serde_json::from_slice(&first.stdout).unwrap();
+    let before = f.state();
+    let second = ingest();
+    assert!(second.status.success());
+    let second: Value = serde_json::from_slice(&second.stdout).unwrap();
+    assert_eq!(first["data"], second["data"]);
+    assert_eq!(f.state(), before);
+    let denied = f
+        .command()
+        .env("PCTX_ACTOR", "agent:unregistered-fixture")
+        .args(["quota", "ingest", "--from-file"])
+        .arg(&usage)
+        .args(["--idempotency-key", &key])
+        .output()
+        .unwrap();
+    assert_eq!(denied.status.code(), Some(5));
+    assert_eq!(f.state(), before);
 }

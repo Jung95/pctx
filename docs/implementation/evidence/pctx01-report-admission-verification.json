@@ -1,0 +1,137 @@
+{
+  "official_task": "PCTX01",
+  "gate": "PCTX01-G03",
+  "residuals": [
+    "R04",
+    "R05",
+    "R06"
+  ],
+  "base_revision": "f506193eb4f6cddc15fc0ee7990cc1002c9a2d9e",
+  "source_sha256": {
+    "src/main.rs": "bec520a8ea3f3d634ebc82413070e65779813448b9b681e70e68d329984a4ce4",
+    "src/work.rs": "91d29bc9f0ef1452cd51f555665326d727e31e90dde308fc5e61d6f60fe2abd6",
+    "src/session.rs": "16184a48353c55bfdddcffe955d6401f74cecc8e3f08696fe979c7bb7e5c74df",
+    "src/quota.rs": "c85bb611421632a9b8a8eca20b6dfe74d78aa3736a8848b094a4c9090fd625e8",
+    "tests/control_preflight.rs": "7d5678713e661bbfeb049c09dbfaf373356e99dbe28391e6d9449b4b251754ec"
+  },
+  "platform": "native macOS arm64",
+  "cli": {
+    "invalid_forms": 9,
+    "combinations": 36,
+    "dimensions": [
+      "missing/initialized project",
+      "JSON/compact",
+      "absent/existing absolute response"
+    ],
+    "proof": "INVALID_ARGUMENT2 before project/data/response effects; exact names and bytes preserved"
+  },
+  "direct": {
+    "commands": 6,
+    "proof": "INVALID_ARGUMENT2 before storage/input; original expired Instant gives TIMEOUT first with no effects"
+  },
+  "positive": [
+    "Actual all five Report stages summary4096 estimate100, same-data/no-storage replay",
+    "Actual Boundary/Suspend reason1024",
+    "Actual QuotaIngest key256/manual observation, same-data/no-storage replay",
+    "Valid QuotaIngest non-owner5 without effects",
+    "Empty summary/estimate0 and both Ack provenances shared-validator only"
+  ],
+  "related": {
+    "session": 45118,
+    "log": "pctx01-report-admission-final-related.log",
+    "exit": 0,
+    "passed": 51
+  },
+  "controlled_losses": {
+    "driver": "pctx01-report-admission-loss-driver.json",
+    "count": 5,
+    "each_exit": 101,
+    "each_passed": 0,
+    "each_failed": 1,
+    "exact_source_restored": true
+  },
+  "static": {
+    "session": 89953,
+    "log": "pctx01-report-admission-final-static.log",
+    "exit": 0,
+    "commands": [
+      "cargo fmt --all -- --check",
+      "cargo clippy --locked --all-targets -- -D warnings"
+    ]
+  },
+  "full": {
+    "session": 44671,
+    "log": "pctx01-report-admission-full.log",
+    "status": "terminal",
+    "command": "cargo test --locked --all-targets --no-fail-fast",
+    "exit": 101,
+    "passed": 521,
+    "failed": 4,
+    "failed_tests": [
+      "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+      "query_program_resolution_uses_captured_command_path",
+      "simultaneous_streams_are_collected_and_overflow_never_infers_success",
+      "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget"
+    ],
+    "qualification": "Final source; original startup budgets unchanged. All four historical conditions remain unresolved."
+  },
+  "review": "pctx01-report-admission-review.md",
+  "initial_qualification": "Initial fixture index panic0PASS1FAIL retained; repaired vector then exact unchanged-product baseline0PASS1FAIL proves IO7 masks2. No reduced boundaries.",
+  "logs": {
+    "pctx01-report-admission-baseline.log": {
+      "passed": 0,
+      "failed": 1
+    },
+    "pctx01-report-admission-final-related.log": {
+      "passed": 51,
+      "failed": 0
+    },
+    "pctx01-report-admission-final-static.log": {
+      "passed": 0,
+      "failed": 0
+    },
+    "pctx01-report-admission-initial.log": {
+      "passed": 0,
+      "failed": 1
+    },
+    "pctx01-report-admission-loss-context-producer.log": {
+      "passed": 0,
+      "failed": 1
+    },
+    "pctx01-report-admission-loss-frontend.log": {
+      "passed": 0,
+      "failed": 1
+    },
+    "pctx01-report-admission-loss-quota-producer.log": {
+      "passed": 0,
+      "failed": 1
+    },
+    "pctx01-report-admission-loss-session-producer.log": {
+      "passed": 0,
+      "failed": 1
+    },
+    "pctx01-report-admission-loss-work-producer.log": {
+      "passed": 0,
+      "failed": 1
+    },
+    "pctx01-report-admission-related.log": {
+      "passed": 49,
+      "failed": 0
+    },
+    "pctx01-report-admission-reviewed-related.log": {
+      "passed": 51,
+      "failed": 0
+    },
+    "pctx01-report-admission-full.log": {
+      "passed": 521,
+      "failed": 4
+    }
+  },
+  "limits": [
+    "Whole PCTX01 remains0/10; local residual7/12 and required-platform residual0/12",
+    "Native Linux/Windows unverified",
+    "Four historical native startup conditions unresolved regardless of incidental pass",
+    "No independent Work/session/quota business feature or Actions added",
+    "R07\u2013R11 and remaining whole gates stay open"
+  ]
+}

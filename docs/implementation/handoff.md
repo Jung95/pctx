@@ -6,19 +6,17 @@
 
 ## Latest integration boundary
 
-PCTX01-G03-R01–R03 Operations/Role, runtime 2defc049c69ee07091ee8f67c8ad823e1a35e42c,
-base7730637. Normal push11262 terminal0 published7730637..2defc04 to origin/main.
-No uncommitted runtime changes.
-Exact existing pure grammar shared before main discovery/DB; raw recipient alias
-still resolves to canonical ID before strong state-dependent label check. Native
-60 refusal combinations/six direct expiry+storage, accepted limits/label/reason,
-space/tab aliases and non-owner4 proofs; final related48PASS, three loss failures/
-exact restore, staticPASS. Scoped independent review no blocker. Manifest
-pctx01-operations-admission-verification.json. Full35198 terminal101: 518PASS4FAIL, original
-startup failures retained. All jobs terminal; no heavy job live. PCTX01 whole0/10; fixed residual inventory
-local4/12, whole platform0/12. Linux/Windows and four historical startup conditions
-remain unverified/unresolved. No other official task/Actions. Development commit/
-normal push approved. No messaging/policy business feature added.
+PCTX01-G03-R04–R06 Report/Session/Ingest, base f506193. Runtime changes are
+src/work.rs, src/session.rs, src/quota.rs and tests/control_preflight.rs.
+Native related45118 terminal0:51PASS; five controlled-loss probes85659 terminal0
+with each test101/0PASS1FAIL and exact source restoration; static89953 terminal0.
+Independent read-only review /root/work_control found no blocker. Evidence
+pctx01-report-admission-verification.json. Final full44671 terminal101: 521 PASS / 4 FAIL, all four historical
+startup tests failed at unchanged budgets. All jobs terminal; no heavy job live.
+Local residual7/12 (R01–R06,R12); whole platform0/12; PCTX01 whole0/10.
+Linux/Windows unverified and original four native startup conditions unresolved.
+Latest serial-task instruction overrides the historical external-blocker switch
+exception: report exact external conditions and retain PCTX01. No Actions.
 
 ## Source, evidence and environment
 
@@ -66,13 +64,13 @@ Original ignored specification SHA256 8914faad57432f524aec0a06aa90c43c18c23f8c19
 
 ## Exact next action
 
-Final full35198 is terminal; Operations admission/evidence/documents committed
-and normally pushed as2defc04 [skip ci]. Then stay on PCTX01,
-R04–R06 existing Work Report/Session reason/Ack provenance/Quota Ingest key.
-Keep registered IDs, leases, current sessions and raw observation contracts in
-producers. Fixed registry C001–C140/R01–R12 remains the source of remaining work.
-No unchanged full rerun, deadline/interpreter/OS policy change, Actions or task
-switch while current mandatory local work remains.
+Final full44671 is terminal. Normally publish this verified development
+integration with [skip ci]. Then remain on PCTX01 and address fixed R07 inventory
+Profile/Audit/optional Scan profile lexical paths and original-expiry priority.
+Path-policy errors remain5; do not invent2 or broaden source policy. R08–R11 and
+other whole gates remain open. No next official task, unchanged full rerun,
+deadline/interpreter/OS policy change or Actions. External blockers do not permit
+an arbitrary switch under the latest user instruction.
 
 ## Retained historical results and inactive backlog
 

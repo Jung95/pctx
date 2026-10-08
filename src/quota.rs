@@ -410,8 +410,9 @@ fn receipt(db: &Connection, key: &str, request: &str) -> Result<Option<Value>> {
     Ok(None)
 }
 fn ingest(p: &Project, path: &PathBuf, key: &str) -> Result<Value> {
-    owner()?;
+    p.check_deadline()?;
     label(key)?;
+    owner()?;
     let metadata = std::fs::symlink_metadata(path)?;
     if !metadata.is_file() || metadata.file_type().is_symlink() || metadata.len() > 1048576 {
         return Err(invalid("Usage import must be regular JSON at most one MiB"));
@@ -683,6 +684,9 @@ fn reservation_arguments(
 /// Existing pure quota grammar for CLI admission, without authority or stored-state checks.
 pub fn validate_quota_request(command: &QuotaCommand) -> Result<()> {
     match command {
+        QuotaCommand::Ingest {
+            idempotency_key, ..
+        } => label(idempotency_key)?,
         QuotaCommand::Report {
             pool,
             group_by,

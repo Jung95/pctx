@@ -746,3 +746,36 @@ Quota Ingest key. Registered IDs/leases/current session/observation input remain
 producer responsibilities; do not add independent features.
 
 Final native full35198 terminal101: 518 PASS/4 FAIL. Failed tests: query_program_resolution_uses_captured_command_path, relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry, concurrent_query_startup_preserves_group_streams_and_original_one_second_budget, simultaneous_streams_are_collected_and_overflow_never_infers_success. Original budgets unchanged; all four historical startup conditions remain unresolved. All jobs terminal; no heavy job live. PCTX01 remains0/10.
+
+## PCTX01 Report, Session and Ingest admission — 2026-10-08
+
+Only PCTX01 remains active (`implementing`), fixed G03-R04–R06, specification
+§14/§38. Existing Work Report stage/summary 4096 bytes / percentage 100 predicates and
+library CheckRun key presence now run before storage. Session Suspend/Boundary
+reuse existing reason grammar before snapshot/DB; ContextAck provenance is shared
+before DB (already Clap-protected). QuotaIngest reuses its existing key label
+before owner/input/DB, checking an original supplied expiry first. Valid report
+receipt/lease/order, session epoch and observation/authority contracts remain
+producer-owned; no independent business feature added.
+
+Native macOS: nine invalid forms across 36 missing/initialized, JSON/compact,
+absent/existing absolute response combinations refuse with exit 2 without project/data/output
+effects. Six direct invalid/expired requests preserve storage and the original
+Instant. Actual all five Report stages accept summary 4096 bytes / estimate 100 and replay
+with identical data and no extra storage; Session Boundary/Suspend accept 1024-byte
+reasons. Actual manual QuotaIngest accepts key 256, replays identically without new
+storage and denies an unregistered actor with exit 5 without effects. Empty Report summary/
+estimate 0 and both Ack provenances are shared-validator proofs only, not new native
+Ack-flow qualification. Final related: 51 PASS; five controlled admission losses each
+0 PASS / 1 FAIL, exact source restoration; format/locked all-target Clippy PASS. Scoped
+independent read-only review found no blocker. Initial vector-index fixture panic
+and subsequent actual baseline IO7 masking2 are retained separately.
+
+Evidence: `evidence/pctx01-report-admission-verification.json` and review/logs.
+Fixed residual denominator remains12: local 7/12 (R01–R06,R12), whole required
+platform 0/12. Whole PCTX01 gates remain 0/10. Linux/Windows remain unverified and
+all four historical native startup conditions remain unresolved regardless of
+incidental later passes. Next local boundary is R07 within PCTX01. No next official
+task or Actions is selected.
+
+Final native full44671 terminal101: 521 PASS / 4 FAIL. Failed tests: relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry, query_program_resolution_uses_captured_command_path, simultaneous_streams_are_collected_and_overflow_never_infers_success, concurrent_query_startup_preserves_group_streams_and_original_one_second_budget. All four historical startup conditions remain unresolved; original budgets unchanged. All jobs terminal; no heavy job live. PCTX01 remains incomplete (0/10 whole gates).

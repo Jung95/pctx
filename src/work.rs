@@ -837,8 +837,43 @@ fn gates(db: &Connection, project: &Project, t: &Task) -> Result<Value> {
         json!({"passed":failures.is_empty(),"failures":failures,"target":target,"evidence_hash":evidence_hash}),
     )
 }
+fn report_arguments(stage: &str, summary: &str, estimate_percent: Option<u8>) -> Result<()> {
+    if summary.len() > 4096
+        || estimate_percent.is_some_and(|v| v > 100)
+        || ![
+            "planning",
+            "implementing",
+            "testing",
+            "waiting",
+            "submitting",
+        ]
+        .contains(&stage)
+    {
+        return Err(invalid("Invalid progress report"));
+    }
+    Ok(())
+}
 fn work_arguments(command: &WorkCommand) -> Result<()> {
     match command {
+        WorkCommand::Agent {
+            command:
+                AgentCommand::Report {
+                    stage,
+                    summary,
+                    estimate_percent,
+                    ..
+                },
+        } => report_arguments(stage, summary, *estimate_percent)?,
+        WorkCommand::Check {
+            command:
+                CheckCommand::Run {
+                    key,
+                    registered_key,
+                    ..
+                },
+        } if key.is_none() && registered_key.is_none() => {
+            return Err(invalid("Check key is required"));
+        }
         WorkCommand::Task {
             command: TaskCommand::Reassign { reason, .. },
         } => {
@@ -1484,19 +1519,6 @@ fn agent_command(project: &Project, db: &Connection, command: &AgentCommand) -> 
                 return Ok(serde_json::from_str(&response)?);
             }
             let (task_id, _, _) = lease(db, run, Some(*lease_epoch), project)?;
-            if summary.len() > 4096
-                || estimate_percent.is_some_and(|v| v > 100)
-                || ![
-                    "planning",
-                    "implementing",
-                    "testing",
-                    "waiting",
-                    "submitting",
-                ]
-                .contains(&stage.as_str())
-            {
-                return Err(invalid("Invalid progress report"));
-            }
             let seq: i64 = db.query_row("SELECT seq FROM runs WHERE id=?1", [run], |r| r.get(0))?;
             if *report_seq <= seq {
                 return Err(conflict(

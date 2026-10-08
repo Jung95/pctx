@@ -13,7 +13,7 @@ an audit denominator, not completed acceptance gates. Official PCTX01 remains
 closed0/10, denominator unchanged. No independent business features added.
 Source review classified every leaf by producer family and separated raw-input,
 authority/state and pure grammar. R01–R12 below freeze currently identified
-residual groups; R01–R03 and R12 now have local evidence (4/12 groups). None is whole
+residual groups; R01–R06 and R12 now have local evidence (7/12 groups). None is whole
 required-platform qualified. Native Linux/Windows and broader common gates remain.
 
 | Residual ID | Existing pure contract / exact source boundary | Status and scope |
@@ -21,9 +21,9 @@ required-platform qualified. Native Linux/Windows and broader common gates remai
 | R01 | operations Owner Queue limit1..1000 (1223), Inbox limit1..1000/nonnegative cursor (1402) | Local native60 matrix/six direct expiry/bounds/alias/non-owner proof, related48PASS; pctx01-operations-admission-verification.json; required platforms open |
 | R02 | operations Message Send exactly one recipient/label (1557), Resolve evidence label (1366) | Local native60 matrix/six direct expiry/bounds/alias/non-owner proof, related48PASS; pctx01-operations-admission-verification.json; required platforms open |
 | R03 | downstream policy_controls Role label/optional topic/recipient and recipient-needs-topic (38/291), bounded reason4096 (49); raw Operations recipient alias is state-dependent | Local native60 matrix/six direct expiry/bounds/alias/non-owner proof, related48PASS; pctx01-operations-admission-verification.json; required platforms open |
-| R04 | work Agent Report stage/summary4096/percentage100 (1487) | Open; lease/report ordering remains stateful |
-| R05 | session Suspend/Boundary reason labels (339/354); Context Ack provenance (691) already Clap-protected | Open; snapshot/session authority stays producer-owned; Ack residual is library-only |
-| R06 | quota Ingest idempotency-key label (414) | Open; observation input schemas and windows remain input/state validation |
+| R04 | work Agent Report stage/summary4096/percentage100 (1487) | Local native36 matrix/six direct expiry/accepted report stages and replay, related51PASS; pctx01-report-admission-verification.json; lease/order remain stateful; platforms open |
+| R05 | session Suspend/Boundary reason labels (339/354); Context Ack provenance (691) already Clap-protected | Local native36 matrix/six direct expiry/accepted1024-byte reasons, related51PASS; pctx01-report-admission-verification.json; Ack provenance validator/direct refusal only; platforms open |
+| R06 | quota Ingest idempotency-key label (414) | Local native36 matrix/six direct expiry/actual key256 ingestion+replay/non-owner proof, related51PASS; pctx01-report-admission-verification.json; input schemas/windows remain producer-owned; platforms open |
 | R07 | inventory Profile/Audit/optional Scan profile reader lexical paths (reader94; inventory361/1046); supplied-expiry priority scan553 | Open; path error stays5, not invented2; profile source policy remains producer-owned |
 | R08 | output binding argv nonempty/count256/bytes65536 (525), Run modes already Clap-protected | Open; share existing argv predicate; resolution/trust/classification/receipt state remains producer-owned |
 | R09 | filter Activate private identifier (727), Explain argv1..256 (1244), non-UTF8 explicit paths (relative helper208) | Open; Apply accepts identifier OR project filter path and must not be narrowed to identifiers; file definition/fixture content stays producer-owned |

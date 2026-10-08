@@ -237,6 +237,9 @@ fn request(p: &Project, operation: impl FnOnce(&Project) -> Result<Value>) -> Re
     result
 }
 pub fn validate_session_request(c: &SessionCommand) -> Result<()> {
+    if let SessionCommand::Suspend { reason, .. } | SessionCommand::Boundary { reason, .. } = c {
+        validate_label(reason)?;
+    }
     if let SessionCommand::Attach {
         agent,
         runtime,
@@ -336,7 +339,6 @@ fn session_inner(p: &Project, c: &SessionCommand) -> Result<Value> {
             json!({"session_id":session,"agent_id":agent_id,"workspace_id":p.workspace_id,"context_epoch":1,"status":"active","full_required":true,"ack_inherited":false})
         }
         SessionCommand::Boundary { session, reason } => {
-            validate_label(reason)?;
             let s = get(&tx, p, session)?;
             tx.execute(
                 "UPDATE pctx_sessions SET epoch=epoch+1,updated=?1 WHERE id=?2",
@@ -351,7 +353,6 @@ fn session_inner(p: &Project, c: &SessionCommand) -> Result<Value> {
             json!({"session_id":session,"context_epoch":s.epoch+1,"status":s.status,"full_required":true})
         }
         SessionCommand::Suspend { session, reason } => {
-            validate_label(reason)?;
             let s = get(&tx, p, session)?;
             let mut metadata = capsule.unwrap();
             metadata["context_epoch"] = json!(s.epoch);
@@ -644,6 +645,11 @@ impl ReceiptSpec<'_> {
 }
 /// Existing pure context arguments, shared with CLI admission before discovery.
 pub fn validate_context_request(c: &ContextCommand) -> Result<()> {
+    if let ContextCommand::Ack { provenance, .. } = c
+        && !["explicit-agent", "transport-receipt"].contains(&provenance.as_str())
+    {
+        return Err(invalid("Unknown ack provenance"));
+    }
     if let ContextCommand::Get {
         mode,
         since,
@@ -681,6 +687,7 @@ pub fn context(p: &Project, c: &ContextCommand) -> Result<Value> {
     request(p, |p| context_inner(p, c))
 }
 fn context_inner(p: &Project, c: &ContextCommand) -> Result<Value> {
+    validate_context_request(c)?;
     match c {
         ContextCommand::Ack {
             context,
@@ -688,9 +695,6 @@ fn context_inner(p: &Project, c: &ContextCommand) -> Result<Value> {
             epoch,
             provenance,
         } => {
-            if !["explicit-agent", "transport-receipt"].contains(&provenance.as_str()) {
-                return Err(invalid("Unknown ack provenance"));
-            }
             let mut db = connect(p)?;
             let tx = db.transaction_with_behavior(TransactionBehavior::Immediate)?;
             let s = get(&tx, p, session)?;
@@ -743,7 +747,6 @@ fn context_inner(p: &Project, c: &ContextCommand) -> Result<Value> {
             scope,
             budget_bytes,
         } => {
-            validate_context_request(c)?;
             let mut scope = scope.clone();
             scope.sort();
             scope.dedup();

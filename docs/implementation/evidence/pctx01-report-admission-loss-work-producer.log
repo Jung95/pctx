@@ -1,0 +1,24 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.51s
+     Running tests/control_preflight.rs (target/debug/deps/control_preflight-1104ac0ed832cb66)
+
+running 1 test
+test report_session_ingest_direct_refusals_preserve_storage_and_original_expiry ... FAILED
+
+failures:
+
+---- report_session_ingest_direct_refusals_preserve_storage_and_original_expiry stdout ----
+
+thread 'report_session_ingest_direct_refusals_preserve_storage_and_original_expiry' (8709037) panicked at tests/control_preflight.rs:1265:9:
+assertion `left == right` failed
+  left: ("IO_ERROR", 7)
+ right: ("INVALID_ARGUMENT", 2)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    report_session_ingest_direct_refusals_preserve_storage_and_original_expiry
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 17 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `--test control_preflight`
