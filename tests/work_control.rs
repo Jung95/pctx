@@ -5,10 +5,11 @@ use pctx::{
 use serde_json::{Value, json};
 fn setup() -> (tempfile::TempDir, Project) {
     let dir = tempfile::tempdir().unwrap();
-    let root = dir.path().join("repo");
+    let base = dir.path().canonicalize().unwrap();
+    let root = base.join("repo");
     std::fs::create_dir(&root).unwrap();
     std::fs::write(root.join("code.rs"), "fn value() -> u32 { 1 }\n").unwrap();
-    let data = dir.path().join("data");
+    let data = base.join("data");
     std::fs::create_dir_all(data.join("workspace")).unwrap();
     std::fs::create_dir_all(data.join("control")).unwrap();
     let p = Project {
@@ -656,9 +657,15 @@ fn restore_preserves_session_history_without_ack_or_epoch_reuse() {
 fn schedule_v2_backup_strips_local_binding_and_restore_revokes_running_authority() {
     let (_dir, p) = setup();
     work::board(&p).unwrap();
+    // Explicit mutation prepares schema; a read query must not initialize tables.
+    let definition = p.data_dir.join("schedule-definition.json");
+    std::fs::write(&definition, json!({"schema_version":1,"namespace":"owner","id":"digest","timezone":"Europe/Berlin","cadence":{"kind":"daily","at":"09:00"},"valid_from":"2024-01-01T00:00:00Z","job":"read_query","bridge":"manual","role":"assistant","recipient":"owner","topic":"digest"}).to_string()).unwrap();
     pctx::schedule::execute(
         &p,
-        &pctx::schedule::ScheduleCommand::List { namespace: None },
+        &pctx::schedule::ScheduleCommand::Add {
+            from_file: definition,
+            idempotency_key: "backup-fixture".into(),
+        },
     )
     .unwrap();
     let db = p.connect(true).unwrap();

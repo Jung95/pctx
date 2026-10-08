@@ -251,6 +251,99 @@ CREATE TRIGGER schedule_events_no_delete BEFORE DELETE ON schedule_events BEGIN 
     upgrade(&mut db)?;
     Ok(db)
 }
+/// Read existing control state without migrating or installing schedule tables.
+fn read_connection(p: &Project) -> Result<Option<Connection>> {
+    p.check_deadline()?;
+    reader::validate_root(p)?;
+    let path = p.control_db();
+    for ancestor in path.ancestors() {
+        p.check_deadline()?;
+        match fs::symlink_metadata(ancestor) {
+            Ok(m) if m.file_type().is_symlink() => {
+                return Err(Error::new(
+                    "POLICY_DENIED",
+                    "Linked control store denied",
+                    5,
+                ));
+            }
+            Ok(_) => {}
+            Err(e) if e.kind() == std::io::ErrorKind::NotFound => {}
+            Err(e) => return Err(e.into()),
+        }
+    }
+    match fs::symlink_metadata(&path) {
+        Err(e) if e.kind() == std::io::ErrorKind::NotFound => return Ok(None),
+        Err(e) => return Err(e.into()),
+        Ok(m) if !m.is_file() => {
+            return Err(Error::new(
+                "POLICY_DENIED",
+                "Control store must be regular",
+                5,
+            ));
+        }
+        Ok(_) => {}
+    }
+    let anchor = crate::project::RootAnchor::capture(&p.control_dir)?;
+    let initial =
+        reader::anchored_open_deadline(&p.control_dir, &anchor, "control.sqlite3", p.deadline)?;
+    let identity = same_file::Handle::from_file(initial)?;
+    p.check_deadline()?;
+    let db = Connection::open_with_flags(&path, rusqlite::OpenFlags::SQLITE_OPEN_READ_ONLY)
+        .map_err(|e| p.map_sqlite_error(e))?;
+    p.configure_sqlite(&db)?;
+    let current =
+        reader::anchored_open_deadline(&p.control_dir, &anchor, "control.sqlite3", p.deadline)?;
+    if identity != same_file::Handle::from_file(current)? {
+        return Err(Error::new(
+            "CONCURRENT_MODIFICATION",
+            "Control authority changed during query",
+            4,
+        ));
+    }
+    let user_version: i64 = p.sqlite_call(&db, || {
+        db.pragma_query_value(None, "user_version", |r| r.get(0))
+    })?;
+    if user_version > 1 {
+        return Err(Error::new(
+            "DB_SCHEMA_TOO_NEW",
+            "Database schema is newer than this binary",
+            7,
+        ));
+    }
+    let initialized:bool=p.sqlite_call(&db,||db.query_row("SELECT EXISTS(SELECT 1 FROM sqlite_master WHERE type='table' AND name='schedule_schema')",[],|r|r.get(0)))?;
+    if !initialized {
+        return Ok(None);
+    }
+    let version: i64 = p.sqlite_call(&db, || {
+        db.query_row("SELECT version FROM schedule_schema", [], |r| r.get(0))
+    })?;
+    if version != 1 && version != 2 {
+        return Err(Error::new(
+            "DB_SCHEMA_TOO_NEW",
+            "Unsupported schedule schema",
+            7,
+        ));
+    }
+    p.check_deadline()?;
+    Ok(Some(db))
+}
+fn read_get(p: &Project, db: &Connection, namespace: &str, id: &str) -> Result<Stored> {
+    let row=p.sqlite_call(db,||db.query_row("SELECT definition,revision,workspace,enabled,pause_source,removed,cursor_at,last_success,next_due FROM schedule_definitions WHERE namespace=?1 AND id=?2",params![namespace,id],|r|Ok((r.get::<_,String>(0)?,r.get(1)?,r.get(2)?,r.get(3)?,r.get(4)?,r.get(5)?,r.get(6)?,r.get(7)?,r.get(8)?))).optional())?.ok_or_else(||Error::new("SCHEDULE_NOT_FOUND","No schedule in the exact namespace",6))?;
+    p.check_deadline()?;
+    let definition = serde_json::from_str(&row.0)?;
+    p.check_deadline()?;
+    Ok(Stored {
+        definition,
+        revision: row.1,
+        workspace: row.2,
+        enabled: row.3,
+        pause: row.4,
+        removed: row.5,
+        cursor: row.6,
+        success: row.7,
+        next: row.8,
+    })
+}
 fn upgrade(db: &mut Connection) -> Result<()> {
     let tx = db.transaction_with_behavior(TransactionBehavior::Immediate)?;
     tx.execute_batch("CREATE TABLE IF NOT EXISTS schedule_bindings(namespace TEXT NOT NULL,schedule TEXT NOT NULL,revision INTEGER NOT NULL,workspace TEXT NOT NULL,policy TEXT NOT NULL,fingerprint TEXT NOT NULL,profile TEXT NOT NULL,created INTEGER NOT NULL,PRIMARY KEY(namespace,schedule));
@@ -400,26 +493,32 @@ fn grant_reason(
     let Some(decision) = &d.decision_id else {
         return Ok(Some("missing_operation_decision".into()));
     };
-    let exists: bool = db.query_row(
-        "SELECT EXISTS(SELECT 1 FROM sqlite_master WHERE name='ops_decisions')",
-        [],
-        |r| r.get(0),
-    )?;
+    p.check_deadline()?;
+    let exists: bool = p.sqlite_call(db, || {
+        db.query_row(
+            "SELECT EXISTS(SELECT 1 FROM sqlite_master WHERE name='ops_decisions')",
+            [],
+            |r| r.get(0),
+        )
+    })?;
     if !exists {
         return Ok(Some("operation_decision_unavailable".into()));
     }
     type DecisionRow = (String, String, String, Option<i64>, Option<String>);
-    let row: Option<DecisionRow> = db
-        .query_row(
+    let row: Option<DecisionRow> = p.sqlite_call(db, || {
+        db.query_row(
             "SELECT action,policy,state,expires_at,provenance FROM ops_decisions WHERE id=?1",
             [decision],
             |r| Ok((r.get(0)?, r.get(1)?, r.get(2)?, r.get(3)?, r.get(4)?)),
         )
-        .optional()?;
+        .optional()
+    })?;
     let Some((stored, policy, state, expires, provenance)) = row else {
         return Ok(Some("operation_decision_missing".into()));
     };
+    p.check_deadline()?;
     let action: Action = serde_json::from_str(&stored)?;
+    p.check_deadline()?;
     if policy != p.policy_hash()
         || state != "approved"
         || !expires.is_some_and(|e| e > at)
@@ -437,33 +536,40 @@ fn policy_reasons(
     at: i64,
 ) -> Result<Vec<String>> {
     let mut reasons = Vec::new();
-    let ops: bool = db.query_row(
-        "SELECT EXISTS(SELECT 1 FROM sqlite_master WHERE name='ops_roles')",
-        [],
-        |r| r.get(0),
-    )?;
-    if ops {
-        let paused: bool = db.query_row(
-            "SELECT EXISTS(SELECT 1 FROM ops_roles WHERE paused=1 AND (role=?1 OR role='*'))",
-            [&d.role],
+    p.check_deadline()?;
+    let ops: bool = p.sqlite_call(db, || {
+        db.query_row(
+            "SELECT EXISTS(SELECT 1 FROM sqlite_master WHERE name='ops_roles')",
+            [],
             |r| r.get(0),
-        )?;
+        )
+    })?;
+    if ops {
+        let paused: bool = p.sqlite_call(db, || {
+            db.query_row(
+                "SELECT EXISTS(SELECT 1 FROM ops_roles WHERE paused=1 AND (role=?1 OR role='*'))",
+                [&d.role],
+                |r| r.get(0),
+            )
+        })?;
         if paused {
             reasons.push("role_paused".into());
         }
-        let silenced:bool=db.query_row("SELECT EXISTS(SELECT 1 FROM ops_silences WHERE active=1 AND (role=?1 OR role='*') AND (recipient=?2 OR recipient='*') AND topic=?3)",params![d.role,d.recipient,d.topic],|r|r.get(0))?;
+        let silenced:bool=p.sqlite_call(db,||db.query_row("SELECT EXISTS(SELECT 1 FROM ops_silences WHERE active=1 AND (role=?1 OR role='*') AND (recipient=?2 OR recipient='*') AND topic=?3)",params![d.role,d.recipient,d.topic],|r|r.get(0)))?;
         if silenced {
             reasons.push("topic_silenced".into());
         }
     }
     if let Some(s) = &d.session_id {
-        let sessions: bool = db.query_row(
-            "SELECT EXISTS(SELECT 1 FROM sqlite_master WHERE name='pctx_sessions')",
-            [],
-            |r| r.get(0),
-        )?;
+        let sessions: bool = p.sqlite_call(db, || {
+            db.query_row(
+                "SELECT EXISTS(SELECT 1 FROM sqlite_master WHERE name='pctx_sessions')",
+                [],
+                |r| r.get(0),
+            )
+        })?;
         let valid = if sessions {
-            db.query_row("SELECT EXISTS(SELECT 1 FROM pctx_sessions WHERE id=?1 AND epoch=?2 AND workspace=?3 AND status='active')",params![s,d.context_epoch,p.workspace_id],|r|r.get::<_,bool>(0))?
+            p.sqlite_call(db,||db.query_row("SELECT EXISTS(SELECT 1 FROM pctx_sessions WHERE id=?1 AND epoch=?2 AND workspace=?3 AND status='active')",params![s,d.context_epoch,p.workspace_id],|r|r.get::<_,bool>(0)))?
         } else {
             false
         };
@@ -474,6 +580,7 @@ fn policy_reasons(
     if let Some(reason) = grant_reason(p, db, d, at)? {
         reasons.push(reason);
     }
+    p.check_deadline()?;
     Ok(reasons)
 }
 fn daily_instant(zone: Tz, date: NaiveDate, time: NaiveTime) -> Result<i64> {
@@ -689,7 +796,80 @@ fn reconcile(p: &Project, namespace: Option<&str>, at: i64) -> Result<Value> {
         json!({"evaluated_at":at,"schedules":rows,"created_occurrences":created,"execution_started":false,"bridge_registration_performed":false,"model_calls":0,"external_messages":0,"missed_policy":"latest_only_no_synthetic_success","dst_policy":{"ambiguous":"earliest_once_per_local_date","nonexistent":"next_valid_minute_within_180_minutes"}}),
     )
 }
+#[cfg(test)]
+type ReadObserver = Box<dyn FnMut(Option<crate::deadline::Deadline>, bool)>;
+#[cfg(test)]
+thread_local! {static ROW_OBSERVER:std::cell::RefCell<Option<ReadObserver>>=const{std::cell::RefCell::new(None)};static NATIVE_OBSERVER:std::cell::RefCell<Option<ReadObserver>>=const{std::cell::RefCell::new(None)};}
+#[cfg(test)]
+struct ReadGuard {
+    native: bool,
+}
+#[cfg(test)]
+impl Drop for ReadGuard {
+    fn drop(&mut self) {
+        if self.native {
+            NATIVE_OBSERVER.with(|s| *s.borrow_mut() = None);
+        } else {
+            ROW_OBSERVER.with(|s| *s.borrow_mut() = None);
+        }
+    }
+}
+#[cfg(test)]
+fn observe_rows(
+    callback: impl FnMut(Option<crate::deadline::Deadline>, bool) + 'static,
+) -> ReadGuard {
+    ROW_OBSERVER.with(|s| {
+        assert!(s.borrow().is_none());
+        *s.borrow_mut() = Some(Box::new(callback));
+    });
+    ReadGuard { native: false }
+}
+#[cfg(all(test, any(target_os = "macos", target_os = "linux")))]
+fn observe_native(
+    callback: impl FnMut(Option<crate::deadline::Deadline>, bool) + 'static,
+) -> ReadGuard {
+    NATIVE_OBSERVER.with(|s| {
+        assert!(s.borrow().is_none());
+        *s.borrow_mut() = Some(Box::new(callback));
+    });
+    ReadGuard { native: true }
+}
+#[cfg(test)]
+fn row_observation(p: &Project, work: bool) {
+    ROW_OBSERVER.with(|s| {
+        if let Some(callback) = s.borrow_mut().as_mut() {
+            callback(p.deadline, work);
+        }
+    });
+}
+#[cfg(test)]
+fn native_observed(p: &Project, work: bool) {
+    NATIVE_OBSERVER.with(|s| {
+        if let Some(callback) = s.borrow_mut().as_mut() {
+            callback(p.deadline, work);
+        }
+    });
+}
 pub fn execute(p: &Project, c: &ScheduleCommand) -> Result<Value> {
+    if matches!(
+        c,
+        ScheduleCommand::List { .. }
+            | ScheduleCommand::Plan { .. }
+            | ScheduleCommand::Inspect { .. }
+    ) {
+        let mut scope = p.clone();
+        if scope.deadline.is_none() {
+            scope.deadline = Some(crate::deadline::Deadline::from_millis(10000)?);
+        }
+        scope.check_deadline()?;
+        let result = execute_inner(&scope, c);
+        scope.check_deadline()?;
+        result
+    } else {
+        execute_inner(p, c)
+    }
+}
+fn execute_inner(p: &Project, c: &ScheduleCommand) -> Result<Value> {
     match c {
         ScheduleCommand::Plan {
             namespace,
@@ -767,21 +947,39 @@ pub fn execute(p: &Project, c: &ScheduleCommand) -> Result<Value> {
             if let Some(namespace) = namespace {
                 label(namespace)?;
             }
-            let db = connect(p)?;
-            let mut stmt=db.prepare("SELECT namespace,id FROM schedule_definitions WHERE ?1 IS NULL OR namespace=?1 ORDER BY namespace,id")?;
-            let keys = stmt
-                .query_map([namespace], |r| {
-                    Ok((r.get::<_, String>(0)?, r.get::<_, String>(1)?))
-                })?
-                .collect::<std::result::Result<Vec<_>, _>>()?;
-            let mut rows = Vec::new();
-            for (namespace, id) in keys {
-                let stored = get(&db, &namespace, &id)?;
-                let d = &stored.definition;
-                rows.push(json!({"namespace":namespace,"schedule_id":id,"definition_revision":stored.revision,"definition":d,"workspace_id":stored.workspace,"enabled":stored.enabled,"pause_source":stored.pause,"removed":stored.removed,"cursor_at":stored.cursor,"last_success":stored.success,"next_due":stored.next,"policy_barriers":policy_reasons(p,&db,d,now())?,"bridge_actual_state":"unknown","registration_performed":false,"execution_started":false}));
+            let mut output_rows = Vec::new();
+            if let Some(db) = read_connection(p)? {
+                let mut stmt=p.sqlite_call(&db,||db.prepare("SELECT namespace,id FROM schedule_definitions WHERE ?1 IS NULL OR namespace=?1 ORDER BY namespace,id"))?;
+                let mut rows = p.sqlite_call(&db, || stmt.query([namespace]))?;
+                let mut keys = Vec::new();
+                loop {
+                    p.configure_sqlite(&db)?;
+                    let row = rows.next().map_err(|e| p.map_sqlite_error(e))?;
+                    p.check_deadline()?;
+                    let Some(row) = row else {
+                        break;
+                    };
+                    keys.push((
+                        row.get::<_, String>(0).map_err(|e| p.map_sqlite_error(e))?,
+                        row.get::<_, String>(1).map_err(|e| p.map_sqlite_error(e))?,
+                    ));
+                }
+                for (namespace, id) in keys {
+                    #[cfg(test)]
+                    row_observation(p, false);
+                    p.check_deadline()?;
+                    #[cfg(test)]
+                    row_observation(p, true);
+                    let stored = read_get(p, &db, &namespace, &id)?;
+                    let d = &stored.definition;
+                    let barriers = policy_reasons(p, &db, d, now())?;
+                    p.check_deadline()?;
+                    output_rows.push(json!({"namespace":namespace,"schedule_id":id,"definition_revision":stored.revision,"definition":d,"workspace_id":stored.workspace,"enabled":stored.enabled,"pause_source":stored.pause,"removed":stored.removed,"cursor_at":stored.cursor,"last_success":stored.success,"next_due":stored.next,"policy_barriers":barriers,"bridge_actual_state":"unknown","registration_performed":false,"execution_started":false}));
+                }
             }
+            p.check_deadline()?;
             Ok(
-                json!({"schedules":rows,"registry_authoritative":true,"bridge_actual_state":"unknown","execution_started":false}),
+                json!({"schedules":output_rows,"registry_authoritative":true,"bridge_actual_state":"unknown","execution_started":false}),
             )
         }
         ScheduleCommand::Add {
@@ -946,8 +1144,14 @@ pub fn execute(p: &Project, c: &ScheduleCommand) -> Result<Value> {
 }
 
 fn current_project_policy(p: &Project) -> Result<()> {
-    if fs::symlink_metadata(p.root.join(".pctx/config.toml")).is_ok() {
-        let actual = Project::open(&p.root)?;
+    p.check_deadline()?;
+    let present = match fs::symlink_metadata(p.root.join(".pctx/config.toml")) {
+        Ok(_) => true,
+        Err(e) if e.kind() == std::io::ErrorKind::NotFound => false,
+        Err(e) => return Err(e.into()),
+    };
+    if present {
+        let actual = Project::open_with_deadline(&p.root, p.deadline)?;
         if actual.policy_hash() != p.policy_hash()
             || actual.workspace_id != p.workspace_id
             || actual.coordination_id != p.coordination_id
@@ -982,13 +1186,16 @@ fn barriers(p: &Project, db: &Connection, s: &Stored, revision: i64) -> Result<(
     }
     Ok(())
 }
-fn runtime_identity() -> Result<Value> {
+fn runtime_identity(p: &Project) -> Result<Value> {
+    p.check_deadline()?;
     let path = std::env::current_exe()?.canonicalize()?;
     let meta = fs::symlink_metadata(&path)?;
     if !meta.is_file() || meta.len() > 256 * 1024 * 1024 {
         return Err(invalid("Runtime executable identity unavailable"));
     }
-    Ok(json!({"executable":path,"hash":hash(fs::read(path)?),"version":env!("CARGO_PKG_VERSION")}))
+    Ok(
+        json!({"executable":path,"hash":output::hash_executable_with_limit(p,&path,256*1024*1024)?,"version":env!("CARGO_PKG_VERSION")}),
+    )
 }
 fn relative_root(root: &str) -> Result<()> {
     if !root.starts_with(".pctx/")
@@ -1005,9 +1212,12 @@ fn relative_root(root: &str) -> Result<()> {
 }
 /// Check each component before any directory creation. Never chmod or follow a user link.
 fn stage_path(p: &Project, root: &str, create: bool) -> Result<PathBuf> {
+    p.check_deadline()?;
+    reader::validate_root(p)?;
     relative_root(root)?;
     let mut path = p.root.canonicalize()?;
     for component in Path::new(root).components() {
+        p.check_deadline()?;
         path.push(component.as_os_str());
         match fs::symlink_metadata(&path) {
             Ok(m) if m.file_type().is_symlink() || !m.is_dir() => {
@@ -1026,6 +1236,7 @@ fn stage_path(p: &Project, root: &str, create: bool) -> Result<PathBuf> {
             Err(e) => return Err(e.into()),
         }
     }
+    p.check_deadline()?;
     Ok(path)
 }
 fn escaped_xml(s: &str) -> String {
@@ -1053,7 +1264,8 @@ fn user_id() -> u32 {
         0
     }
 }
-fn native_runtime(provider: &str) -> Result<Value> {
+fn native_runtime(p: &Project, provider: &str) -> Result<Value> {
+    p.check_deadline()?;
     let path = match provider {
         "launchd" => "/bin/launchctl",
         "systemd" => "/usr/bin/systemctl",
@@ -1069,7 +1281,7 @@ fn native_runtime(provider: &str) -> Result<Value> {
         ));
     }
     let canonical = Path::new(path).canonicalize()?;
-    Ok(json!({"executable":canonical,"hash":hash(fs::read(canonical)?)}))
+    Ok(json!({"executable":canonical,"hash":output::hash_executable(p,&canonical)?}))
 }
 fn environment(p: &Project) -> BTreeMap<String, String> {
     let env = BTreeMap::from([
@@ -1102,12 +1314,18 @@ fn plan(p: &Project, namespace: &str, id: &str, provider: &str, root: &str) -> R
     if !["fixture", "launchd", "systemd"].contains(&provider) {
         return Err(invalid("Unknown managed bridge provider"));
     }
-    let db = connect(p)?;
-    let s = get(&db, namespace, id)?;
+    let db = read_connection(p)?.ok_or_else(|| {
+        Error::new(
+            "SCHEDULE_NOT_FOUND",
+            "No schedule in the exact namespace",
+            6,
+        )
+    })?;
+    let s = read_get(p, &db, namespace, id)?;
     if s.removed || s.workspace != p.workspace_id {
         return Err(conflict("Removed or unmapped schedule cannot be installed"));
     }
-    let runtime = runtime_identity()?;
+    let runtime = runtime_identity(p)?;
     let label = format!(
         "org.pctx.schedule.{}",
         &hash(format!("{}:{namespace}:{id}", p.workspace_id))[..24]
@@ -1173,9 +1391,11 @@ fn plan(p: &Project, namespace: &str, id: &str, provider: &str, root: &str) -> R
         }
         _ => Value::Null,
     };
-    let mut proposal = json!({"schema_version":1,"namespace":namespace,"schedule_id":id,"revision":s.revision,"definition_hash":hash(serde_json::to_vec(&s.definition)?),"workspace":p.workspace_id,"coordination":p.coordination_id,"policy":p.policy_hash(),"provider":provider,"staging_root":root,"label":label,"runtime":runtime,"native_runtime":native_runtime(provider)?,"native_commands":native_commands,"cwd":p.root,"environment":env,"files":files,"argv":argv,"native_registration_requires_explicit_opt_in":true});
+    let mut proposal = json!({"schema_version":1,"namespace":namespace,"schedule_id":id,"revision":s.revision,"definition_hash":hash(serde_json::to_vec(&s.definition)?),"workspace":p.workspace_id,"coordination":p.coordination_id,"policy":p.policy_hash(),"provider":provider,"staging_root":root,"label":label,"runtime":runtime,"native_runtime":native_runtime(p,provider)?,"native_commands":native_commands,"cwd":p.root,"environment":env,"files":files,"argv":argv,"native_registration_requires_explicit_opt_in":true});
+    p.check_deadline()?;
     let digest = hash(serde_json::to_vec(&proposal)?);
     proposal["plan_hash"] = json!(digest);
+    p.check_deadline()?;
     Ok(proposal)
 }
 fn read_plan(path: &Path) -> Result<Value> {
@@ -1211,19 +1431,98 @@ fn exact_plan(p: &Project, v: &Value, expected: &str) -> Result<Value> {
     }
     Ok(fresh)
 }
+fn staged_bytes(p: &Project, path: &Path) -> Result<Vec<u8>> {
+    if p.deadline.is_none() {
+        return Ok(fs::read(path)?);
+    }
+    use std::io::Read;
+    p.check_deadline()?;
+    let parent = path
+        .parent()
+        .ok_or_else(|| invalid("Invalid managed file authority"))?;
+    let leaf = path
+        .file_name()
+        .and_then(|v| v.to_str())
+        .ok_or_else(|| invalid("Invalid managed filename"))?;
+    let anchor = crate::project::RootAnchor::capture(parent)?;
+    let mut file = reader::anchored_open_deadline(parent, &anchor, leaf, p.deadline)?;
+    let before = file.metadata()?;
+    if !before.is_file() || before.len() > 256 * 1024 {
+        return Err(Error::new(
+            "POLICY_DENIED",
+            "Managed manifest must be bounded regular data",
+            5,
+        ));
+    }
+    let identity = same_file::Handle::from_file(file.try_clone()?)?;
+    let mut bytes = Vec::new();
+    let mut chunk = [0; 8192];
+    loop {
+        p.check_deadline()?;
+        let count = file.read(&mut chunk);
+        p.check_deadline()?;
+        let count = count?;
+        if count == 0 {
+            break;
+        }
+        if bytes.len() + count > 256 * 1024 {
+            return Err(Error::new(
+                "POLICY_DENIED",
+                "Managed manifest exceeds bound",
+                5,
+            ));
+        }
+        bytes.extend_from_slice(&chunk[..count]);
+    }
+    let after = file.metadata()?;
+    let reopened = reader::anchored_open_deadline(parent, &anchor, leaf, p.deadline)?;
+    let current = reopened.metadata()?;
+    if identity != same_file::Handle::from_file(reopened)?
+        || before.len() != after.len()
+        || before.len() != current.len()
+        || before.modified().ok() != after.modified().ok()
+        || before.modified().ok() != current.modified().ok()
+    {
+        return Err(Error::new(
+            "CONCURRENT_MODIFICATION",
+            "Managed manifest changed during read",
+            4,
+        ));
+    }
+    #[cfg(unix)]
+    {
+        use std::os::unix::fs::MetadataExt;
+        if (before.ctime(), before.ctime_nsec()) != (after.ctime(), after.ctime_nsec())
+            || (before.ctime(), before.ctime_nsec()) != (current.ctime(), current.ctime_nsec())
+        {
+            return Err(Error::new(
+                "CONCURRENT_MODIFICATION",
+                "Managed manifest changed during read",
+                4,
+            ));
+        }
+    }
+    p.check_deadline()?;
+    reader::validate_root(p)?;
+    Ok(bytes)
+}
 fn verify_files(p: &Project, v: &Value) -> Result<bool> {
     let root = stage_path(p, string(v, "staging_root")?, false)?;
     for (name, body) in v["files"]
         .as_object()
         .ok_or_else(|| invalid("Missing bridge files"))?
     {
+        p.check_deadline()?;
         if Path::new(name).components().count() != 1 {
             return Err(invalid("Invalid managed filename"));
         }
         let path = root.join(name);
-        let Ok(meta) = fs::symlink_metadata(&path) else {
-            return Ok(false);
+        let meta = match fs::symlink_metadata(&path) {
+            Ok(m) => m,
+            Err(e) if e.kind() == std::io::ErrorKind::NotFound => return Ok(false),
+            Err(e) => return Err(e.into()),
         };
+        p.check_deadline()?;
         if meta.file_type().is_symlink() || !meta.is_file() || meta.len() > 256 * 1024 {
             return Err(Error::new(
                 "POLICY_DENIED",
@@ -1231,10 +1530,11 @@ fn verify_files(p: &Project, v: &Value) -> Result<bool> {
                 5,
             ));
         }
-        if fs::read(path)? != string_body(body)?.as_bytes() {
+        if staged_bytes(p, &path)? != string_body(body)?.as_bytes() {
             return Ok(false);
         }
     }
+    p.check_deadline()?;
     Ok(true)
 }
 fn string_body(v: &Value) -> Result<&str> {
@@ -1294,6 +1594,49 @@ fn succeeded(v: &Value) -> bool {
         && v["capture_complete"] == true
         && v["pctx_error"].is_null()
 }
+fn finite_native_observation(p: &Project, v: &Value, args: Vec<String>) -> Result<Value> {
+    let original = p
+        .deadline
+        .ok_or_else(|| invalid("Native query requires an original deadline"))?;
+    p.check_deadline()?;
+    reader::validate_root(p)?;
+    let executable = string(&v["native_runtime"], "executable")?;
+    if output::hash_executable(p, Path::new(executable))? != string(&v["native_runtime"], "hash")? {
+        return Err(Error::new(
+            "CONFIG_CHANGED",
+            "Native bridge executable changed",
+            9,
+        ));
+    }
+    let mut command = std::process::Command::new(executable);
+    command
+        .args(args)
+        .current_dir(&p.root)
+        .env_clear()
+        .envs(environment(p));
+    if let Some(home) = std::env::var_os("HOME") {
+        command.env("HOME", home);
+    }
+    let observed = crate::query_process::output(command, original, 128 * 1024)?;
+    #[cfg(test)]
+    native_observed(p, false);
+    p.check_deadline()?;
+    #[cfg(test)]
+    native_observed(p, true);
+    reader::validate_root(p)?;
+    if output::hash_executable(p, Path::new(executable))? != string(&v["native_runtime"], "hash")? {
+        return Err(Error::new(
+            "CONFIG_CHANGED",
+            "Native bridge executable changed during observation",
+            9,
+        ));
+    }
+    p.check_deadline()?;
+    let success = observed.status.success();
+    Ok(
+        json!({"registered":success,"state":if success{"registered"}else{"registration_unknown"},"receipt":{"child_exit_code":observed.status.code(),"capture_complete":true,"stdout_bytes":observed.stdout.len(),"stderr_bytes":observed.stderr.len(),"stdout_hash":hash(&observed.stdout),"stderr_hash":hash(&observed.stderr),"execution_started":true,"durable_artifact_created":false},"observation":"native_readonly_query","registration_performed":false}),
+    )
+}
 fn native_observation(p: &Project, v: &Value) -> Result<Value> {
     let label = string(v, "label")?;
     let args = match string(v, "provider")? {
@@ -1309,6 +1652,9 @@ fn native_observation(p: &Project, v: &Value) -> Result<Value> {
             );
         }
     };
+    if p.deadline.is_some() {
+        return finite_native_observation(p, v, args);
+    }
     let receipt = native_call(p, v, args)?;
     // Exit success for `print` proves registration; is-active proves active timer.
     Ok(
@@ -1410,14 +1756,22 @@ fn install(p: &Project, path: &Path, expected: &str, apply_native: bool) -> Resu
         json!({"namespace":namespace,"schedule_id":id,"plan_hash":expected,"installation":observed,"registration_receipts":native_receipts,"model_calls":0,"external_messages":0}),
     )
 }
-fn installed_plan(db: &Connection, namespace: &str, id: &str) -> Result<(String, Value)> {
-    let (state, metadata): (String, String) = db
+fn installed_plan(
+    p: &Project,
+    db: &Connection,
+    namespace: &str,
+    id: &str,
+) -> Result<(String, Value)> {
+    let (state, metadata): (String, String) = p
+        .sqlite_call(db, || {
+            db
         .query_row(
             "SELECT state,metadata FROM schedule_installations WHERE namespace=?1 AND schedule=?2",
             params![namespace, id],
             |r| Ok((r.get(0)?, r.get(1)?)),
         )
-        .optional()?
+        .optional()
+        })?
         .ok_or_else(|| {
             Error::new(
                 "CAPABILITY_UNVERIFIED",
@@ -1425,19 +1779,50 @@ fn installed_plan(db: &Connection, namespace: &str, id: &str) -> Result<(String,
                 6,
             )
         })?;
+    p.check_deadline()?;
+    if metadata.len() > 1024 * 1024 {
+        return Err(invalid("Managed installation metadata exceeds bound"));
+    }
     let value: Value = serde_json::from_str(&metadata)?;
+    p.check_deadline()?;
     Ok((state, value.get("plan").cloned().unwrap_or(value)))
 }
 fn inspect(p: &Project, namespace: &str, id: &str, observe_native: bool) -> Result<Value> {
-    let db = connect(p)?;
-    let (state, v) = installed_plan(&db, namespace, id)?;
+    p.check_deadline()?;
+    let db = read_connection(p)?.ok_or_else(|| {
+        Error::new(
+            "CAPABILITY_UNVERIFIED",
+            "No reviewed local bridge installation",
+            6,
+        )
+    })?;
+    let installations: bool = p.sqlite_call(&db, || {
+        db.query_row(
+            "SELECT EXISTS(SELECT 1 FROM sqlite_master WHERE name='schedule_installations')",
+            [],
+            |r| r.get(0),
+        )
+    })?;
+    if !installations {
+        return Err(Error::new(
+            "CAPABILITY_UNVERIFIED",
+            "No reviewed local bridge installation",
+            6,
+        ));
+    }
+    let (state, v) = installed_plan(p, &db, namespace, id)?;
     if state == "unknown_restored" {
         return Ok(
             json!({"namespace":namespace,"schedule_id":id,"stored_state":state,"owned_files_match":null,"current_binding":false,"registration_observation":"unknown_restored","registration_performed":false,"requires_reapproval":true,"plan_hash":v["plan_hash"]}),
         );
     }
     let present = verify_files(p, &v)?;
-    let current = exact_plan(p, &v, string(&v, "plan_hash")?).is_ok();
+    let current = match exact_plan(p, &v, string(&v, "plan_hash")?) {
+        Ok(_) => true,
+        Err(e) if matches!(e.code.as_str(), "CONFIG_CHANGED" | "SCHEDULE_NOT_FOUND") => false,
+        Err(e) => return Err(e),
+    };
+    p.check_deadline()?;
     let observation = if observe_native && state != "unknown_restored" && present && current {
         Some(native_observation(p, &v)?)
     } else {
@@ -1456,7 +1841,7 @@ fn uninstall(
 ) -> Result<Value> {
     owner()?;
     let db = connect(p)?;
-    let (state, v) = installed_plan(&db, namespace, id)?;
+    let (state, v) = installed_plan(p, &db, namespace, id)?;
     if state == "unknown_restored" {
         return Err(Error::new(
             "CAPABILITY_UNVERIFIED",
@@ -2058,5 +2443,192 @@ fn recover(
         )?;
         tx.commit()?;
         Ok(value)
+    }
+}
+
+#[cfg(test)]
+mod deadline_tests {
+    use super::*;
+    use crate::project::{Config, ProjectConfig, RootAnchor};
+    use std::{cell::RefCell, rc::Rc};
+    fn fixture() -> (tempfile::TempDir, Project) {
+        let t = tempfile::tempdir().unwrap();
+        let base = t.path().canonicalize().unwrap();
+        let root = base.join("project");
+        fs::create_dir_all(&root).unwrap();
+        let p = Project {
+            deadline: None,
+            root_anchor: RootAnchor::capture(&root).unwrap(),
+            root,
+            data_dir: base.join("data"),
+            workspace_dir: base.join("data/workspace"),
+            control_dir: base.join("data/control"),
+            project_id: "fixture".into(),
+            workspace_id: "workspace".into(),
+            coordination_id: "coordination".into(),
+            config: Config {
+                schema_version: 1,
+                project: ProjectConfig {
+                    id: "fixture".into(),
+                    name: "fixture".into(),
+                },
+                index: Default::default(),
+                policy: Default::default(),
+                search: Default::default(),
+                context: Default::default(),
+                roles: Default::default(),
+            },
+        };
+        fs::create_dir_all(&p.control_dir).unwrap();
+        fs::create_dir_all(&p.workspace_dir).unwrap();
+        (t, p)
+    }
+    fn definition() -> ScheduleDefinition {
+        ScheduleDefinition {
+            schema_version: 1,
+            namespace: "fixture".into(),
+            id: "fixture".into(),
+            timezone: "Europe/Berlin".into(),
+            cadence: Cadence::Daily { at: "02:30".into() },
+            valid_from: "2024-01-01T00:00:00Z".into(),
+            job: "read_query".into(),
+            bridge: "manual".into(),
+            role: "assistant".into(),
+            recipient: "owner".into(),
+            topic: "digest".into(),
+            session_id: None,
+            context_epoch: None,
+            action: None,
+            decision_id: None,
+            enabled: true,
+            misfire: "coalesce_latest".into(),
+        }
+    }
+    #[test]
+    fn list_original_budget_expires_after_actual_rows_before_assembly() {
+        let (_t, mut p) = fixture();
+        let db = connect(&p).unwrap();
+        let d = definition();
+        validate(&p, &db, &d).unwrap();
+        for i in 0..1000 {
+            let mut d = d.clone();
+            d.id = format!("schedule-{i}");
+            let body = serde_json::to_string(&d).unwrap();
+            db.execute("INSERT INTO schedule_definitions(namespace,id,revision,workspace,definition,definition_hash,enabled,removed,created,updated)VALUES(?1,?2,1,?3,?4,?5,1,0,0,0)",params![d.namespace,d.id,p.workspace_id,body,hash(&body)]).unwrap();
+        }
+        let events: i64 = db
+            .query_row("SELECT count(*) FROM schedule_events", [], |r| r.get(0))
+            .unwrap();
+        let counts = Rc::new(RefCell::new((0usize, 0usize)));
+        let observed = counts.clone();
+        {
+            let _guard = observe_rows(move |deadline, work| {
+                assert!(deadline.is_some());
+                let mut counts = observed.borrow_mut();
+                if work {
+                    counts.1 += 1;
+                } else {
+                    counts.0 += 1;
+                }
+            });
+            let positive = execute(&p, &ScheduleCommand::List { namespace: None }).unwrap();
+            assert_eq!(positive["schedules"].as_array().unwrap().len(), 1000);
+        }
+        assert_eq!(*counts.borrow(), (1000, 1000));
+        assert!(p.deadline.is_none());
+        let original = crate::deadline::Deadline::from_millis(250).unwrap();
+        p.deadline = Some(original);
+        let trace = Rc::new(RefCell::new((0usize, 0usize)));
+        let observed = trace.clone();
+        {
+            let _guard = observe_rows(move |deadline, work| {
+                assert_eq!(deadline.unwrap().instant(), original.instant());
+                let mut trace = observed.borrow_mut();
+                if work {
+                    trace.1 += 1;
+                } else {
+                    trace.0 += 1;
+                    if trace.0 == 1 {
+                        while let Ok(left) = original.remaining() {
+                            std::thread::sleep(left.min(StdDuration::from_millis(5)));
+                        }
+                    }
+                }
+            });
+            let e = execute(&p, &ScheduleCommand::List { namespace: None }).unwrap_err();
+            assert_eq!(e.code, "TIMEOUT");
+            assert_eq!(e.exit, 7);
+        }
+        assert_eq!(*trace.borrow(), (1, 0));
+        assert_eq!(p.deadline.unwrap().instant(), original.instant());
+        assert_eq!(
+            db.query_row("SELECT count(*) FROM schedule_events", [], |r| r
+                .get::<_, i64>(0))
+                .unwrap(),
+            events
+        );
+        assert_eq!(
+            db.query_row("SELECT count(*) FROM schedule_definitions", [], |r| r
+                .get::<_, i64>(0))
+                .unwrap(),
+            1000
+        );
+    }
+    #[cfg(any(target_os = "macos", target_os = "linux"))]
+    #[test]
+    fn native_observation_original_expiry_does_not_become_registration_absence() {
+        let (_t, mut p) = fixture();
+        let name = if cfg!(target_os = "macos") {
+            "launchctl"
+        } else {
+            "systemctl"
+        };
+        let path = p.root.join(name);
+        fs::write(&path, "#!/bin/sh\nprintf 'fixture native observation\\n'\n").unwrap();
+        use std::os::unix::fs::PermissionsExt;
+        fs::set_permissions(&path, fs::Permissions::from_mode(0o700)).unwrap();
+        let digest = output::hash_executable(&p, &path).unwrap();
+        let label = "org.pctx.schedule.0123456789abcdef01234567";
+        let args = if cfg!(target_os = "macos") {
+            vec!["print".into(), format!("gui/{}/{label}", user_id())]
+        } else {
+            vec![
+                "--user".into(),
+                "is-active".into(),
+                format!("{label}.timer"),
+            ]
+        };
+        let v = json!({"native_runtime":{"executable":path,"hash":digest}});
+        // This explicitly synthetic query exercises only the native query transport,
+        // never host registration or a claim of actual OS service installation.
+        p.deadline = Some(crate::deadline::Deadline::from_millis(2000).unwrap());
+        let positive = finite_native_observation(&p, &v, args.clone()).unwrap();
+        assert_eq!(positive["receipt"]["child_exit_code"], 0);
+        assert_eq!(positive["registration_performed"], false);
+        let original = crate::deadline::Deadline::from_millis(2000).unwrap();
+        p.deadline = Some(original);
+        let trace = Rc::new(RefCell::new((0usize, 0usize)));
+        let observed = trace.clone();
+        {
+            let _guard = observe_native(move |deadline, work| {
+                assert_eq!(deadline.unwrap().instant(), original.instant());
+                let mut trace = observed.borrow_mut();
+                if work {
+                    trace.1 += 1;
+                } else {
+                    trace.0 += 1;
+                    while let Ok(left) = original.remaining() {
+                        std::thread::sleep(left.min(StdDuration::from_millis(5)));
+                    }
+                }
+            });
+            let e = finite_native_observation(&p, &v, args).unwrap_err();
+            assert_eq!(e.code, "TIMEOUT");
+            assert_eq!(e.exit, 7);
+        }
+        assert_eq!(*trace.borrow(), (1, 0));
+        assert_eq!(p.deadline.unwrap().instant(), original.instant());
+        assert!(!p.control_db().exists());
+        assert!(!p.data_dir.join("outputs").exists());
     }
 }

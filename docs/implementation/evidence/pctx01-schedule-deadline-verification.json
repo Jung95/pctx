@@ -1,0 +1,102 @@
+{
+  "official_task": "PCTX01",
+  "status": "implementing_not_complete",
+  "base_commit": "69ddd6be830f442e1399add84675bc819dc807c8",
+  "platform": "native macOS arm64",
+  "source_sha256": {
+    "src/main.rs": "004470bcbe0f344d1427b56db1d7e64ab3e29482893fee72611515f1ba250c97",
+    "src/output.rs": "da7f04e89b96bf2d32d73abace32aecdc8874eedf9f63622a262bd2b546955cc",
+    "src/query_process.rs": "2faee00ffc82534c41942adae00e52f81a271072b47338f33cab7b67c43bc5b9",
+    "src/schedule.rs": "16282d5411c86c148e6e275008adfbf027ee7b6c7e7b043e48ea9ae725902159",
+    "tests/schedule.rs": "e3879f85d8b5ab10665a6e90f70965652baad27e969a3bdca9f91b9ad758b88e",
+    "tests/schedule_deadline.rs": "25a29710056bb695d649094689e7b9d4427ef8f367e651ec00823942602f8afd",
+    "tests/schedule_deadline_cli.rs": "d090c5a650fb8902452bc9988fa1dc9c3e1566ed513e758f578dc33fad99d5ea",
+    "tests/work_control.rs": "3ce7d7369fca704595756de28a9b279704bbfd0e7168854d2a1b739a65ed28b6"
+  },
+  "verification": {
+    "unit": {
+      "handle": 70797,
+      "exit": 0,
+      "passed": 2
+    },
+    "targeted_initial": {
+      "handle": 84922,
+      "exit": 101,
+      "passed": 14,
+      "failed": 3,
+      "reason": "Existing direct fixture used macOS /var symlink alias. Canonicalized fixture base only, preserving policy. Initial failure retained."
+    },
+    "targeted": {
+      "handle": 23888,
+      "exit": 0,
+      "passed": 23,
+      "failed": 0,
+      "suite_counts": {
+        "schedule": 17,
+        "schedule_deadline": 4,
+        "schedule_deadline_cli": 2
+      }
+    },
+    "controlled_mutations": {
+      "handle": 48665,
+      "exit": 0,
+      "probes": [
+        {
+          "probe": "row_guard",
+          "exit": 101,
+          "expected_failure": true
+        },
+        {
+          "probe": "native_guard",
+          "exit": 101,
+          "expected_failure": true
+        }
+      ],
+      "qualification": "Actual0PASS1FAIL, no compilation failure, exact source restored before static/full gate."
+    },
+    "work_control_initial": {
+      "handle": 66549,
+      "exit": 101,
+      "passed": 10,
+      "failed": 1,
+      "reason": "After path canonicalization, backup fixture depended on removed List schema initialization; corrected to explicit Add."
+    },
+    "work_control": {
+      "handle": 3074,
+      "exit": 0,
+      "passed": 11
+    },
+    "full_initial": {
+      "handle": 38971,
+      "exit": 101,
+      "passed": 424,
+      "failed": 2,
+      "reason": "One retained original startup failure and backup fixture alias failure; initial result never replaced."
+    },
+    "format": {
+      "exit": 0
+    },
+    "clippy": {
+      "handle": 61099,
+      "exit": 0
+    },
+    "full": {
+      "handle": 61099,
+      "exit": 101,
+      "passed": 425,
+      "failed": 1,
+      "original_one_second_budgets_unchanged": true,
+      "failed_test": "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget"
+    },
+    "independent_review": "requirements agent read-only final scoped review no blocker; no test/build/edit"
+  },
+  "qualification": "PCTX01 is the only active official task (`implementing`). Final native full61099 terminal101:425 PASS/1 retained original startup FAIL; schedule unit2 and related34 PASS; format/locked all-target Clippy PASS. Evidence: pctx01-schedule-deadline-verification.json. Schedule List/Plan/Inspect use one absent default10s or supplied instant from pre-discovery through SQLite rows, parsed state, current project reopening, runtime/native hashes, owned manifest reads and final assembly. Mutation/execution routes gain no default query clock. Existing control state opens read-only without Work/schedule initialization or migration; missing List is empty and absent Plan/Inspect retain explicit unavailable errors. Runtime hash preserves256MiB and native128MiB; bounded pinned regular256KiB manifests reject FIFO without blocking. Exact native observations use shared supervised current-user/managed-label query whitelist, cleared minimal environment and numeric/hash receipts with no raw captured output or durable artifact. Nonzero gives registration_unknown; expiry propagates TIMEOUT7 instead of absence or stale binding. Public1000-row positive/default one instant followed by original250ms admission expiry requires1 admitted/0 worked/unchanged events. Synthetic native query completes before controlled original2s expiry after observation, then refuses local admission with1 observed/0 worked/no DB/output. Two local guard losses each produce actual0PASS1FAIL and exact restoration before final checks. Actual CLI zero budget refuses before discovery; positive List/Plan/fixture Install/Inspect retain state/no query outputs, and original100ms exclusive DB contention returns TIMEOUT7/null data with unchanged installation/events. Opening contention is not row-phase proof. Initial related14PASS3FAIL used macOS /var alias in old direct fixture; canonicalized test base only, retaining policy and initial log. First full38971 yielded424PASS2FAIL: original startup plus backup fixture alias. After canonicalization, work-control66549 yielded10PASS1FAIL because backup setup relied on List schema initialization; explicit Add now prepares the schema and3074 gives11PASS. Both failures retained. Independent scoped review found no blocker. Filesystem/serializer/SQLite opening remain cooperative; SQLite pathname ABA binding and live OS service/native other-platform evidence are unqualified. Inventory, full frontend matrix and original startup root cause remain required. No next official task or Actions.",
+  "limits": [
+    "PCTX01 remains incomplete; no next official task",
+    "Native Linux/Windows and live OS service observation unverified",
+    "Cooperative syscalls/parser/serializer; SQLite pathname ABA binding not proven",
+    "Original native startup failures remain unresolved; no retry promotion",
+    "No Actions dispatched; no operational OS schedule installation or start",
+    "Historical original startup failures remain unresolved even when a particular latest run passes them; this result does not promote retries or establish their root cause."
+  ]
+}

@@ -6,14 +6,15 @@ use pctx::{
 use serde_json::Value;
 fn fixture() -> (tempfile::TempDir, Project) {
     let t = tempfile::tempdir().unwrap();
-    std::fs::create_dir_all(t.path().join("project")).unwrap();
+    let base = t.path().canonicalize().unwrap();
+    std::fs::create_dir_all(base.join("project")).unwrap();
     let p = Project {
         deadline: None,
-        root_anchor: pctx::project::RootAnchor::capture(&t.path().join("project")).unwrap(),
-        root: t.path().join("project"),
-        data_dir: t.path().join("data"),
-        workspace_dir: t.path().join("data/ws"),
-        control_dir: t.path().join("data/control"),
+        root_anchor: pctx::project::RootAnchor::capture(&base.join("project")).unwrap(),
+        root: base.join("project"),
+        data_dir: base.join("data"),
+        workspace_dir: base.join("data/ws"),
+        control_dir: base.join("data/control"),
         project_id: "project".into(),
         workspace_id: "ws".into(),
         coordination_id: "coord".into(),

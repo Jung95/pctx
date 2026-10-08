@@ -1,0 +1,20 @@
+from pathlib import Path
+import os, subprocess, json
+p=Path('/Users/dev/PCTX/src/schedule.rs'); original=p.read_bytes(); source=original.decode()
+env=os.environ.copy(); env.update(RUSTUP_HOME='/Users/dev/PCTX/.toolchain/rustup',CARGO_HOME='/Users/dev/PCTX/.toolchain/cargo',SDKROOT='/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk',PATH='/Users/dev/PCTX/.toolchain/cargo/bin:/Library/Developer/CommandLineTools/usr/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin')
+probes=[('row_guard','row_observation(p, false);\n                    p.check_deadline()?;','row_observation(p, false);','schedule::deadline_tests::list_original_budget_expires_after_actual_rows_before_assembly'),('native_guard','native_observed(p, false);\n    p.check_deadline()?;','native_observed(p, false);','schedule::deadline_tests::native_observation_original_expiry_does_not_become_registration_absence')]
+results=[]
+try:
+ for name,old,new,test in probes:
+  assert source.count(old)==1,(name,source.count(old))
+  p.write_text(source.replace(old,new))
+  with open('/tmp/pctx-schedule-mutation-'+name+'.log','w') as log:
+   r=subprocess.run(['cargo','test','--locked','--lib',test,'--','--exact','--test-threads=1'],cwd='/Users/dev/PCTX',env=env,stdout=log,stderr=subprocess.STDOUT,timeout=120)
+  s=Path('/tmp/pctx-schedule-mutation-'+name+'.log').read_text()
+  results.append(dict(probe=name,exit=r.returncode,expected_failure=r.returncode==101 and '0 passed; 1 failed' in s))
+  p.write_bytes(original)
+finally:
+ p.write_bytes(original)
+ Path('/tmp/pctx-schedule-mutation-results.json').write_text(json.dumps(results,indent=2))
+print(json.dumps(results))
+assert len(results)==2 and all(r['expected_failure'] for r in results)

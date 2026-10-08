@@ -1,4 +1,5 @@
-//! Finite local Git/ps and adapter version observations. No mutation commands or execution admission bypass.
+//! Finite local Git/ps, adapter version and managed schedule observations.
+//! No mutation commands or execution admission bypass.
 use crate::{
     deadline::Deadline,
     domain::{Error, Result},
@@ -322,6 +323,45 @@ fn executable(
         "Local query executable unavailable",
     ))
 }
+fn managed_label(value: &str) -> bool {
+    value
+        .strip_prefix("org.pctx.schedule.")
+        .is_some_and(|suffix| {
+            suffix.len() == 24
+                && suffix
+                    .bytes()
+                    .all(|b| b.is_ascii_digit() || (b'a'..=b'f').contains(&b))
+        })
+}
+fn managed_observation(name: &str, args: &[&str]) -> bool {
+    match name {
+        "launchctl" => {
+            #[cfg(target_os = "macos")]
+            {
+                if args.len() != 2 || args[0] != "print" {
+                    return false;
+                }
+                let parts = args[1].split('/').collect::<Vec<_>>();
+                parts.len() == 3
+                    && parts[0] == "gui"
+                    && parts[1] == unsafe { libc::getuid() }.to_string()
+                    && managed_label(parts[2])
+            }
+            #[cfg(not(target_os = "macos"))]
+            {
+                false
+            }
+        }
+        "systemctl" => {
+            cfg!(target_os = "linux")
+                && args.len() == 3
+                && args[0] == "--user"
+                && args[1] == "is-active"
+                && args[2].strip_suffix(".timer").is_some_and(managed_label)
+        }
+        _ => false,
+    }
+}
 fn validate(command: &Command, cwd: &Path, deadline: Deadline) -> Result<PathBuf> {
     let name = Path::new(command.get_program())
         .file_stem()
@@ -374,6 +414,7 @@ fn validate(command: &Command, cwd: &Path, deadline: Deadline) -> Result<PathBuf
             }
         }
         "claude" => args == ["--version"],
+        "launchctl" | "systemctl" => managed_observation(name, &args),
         "ps" => {
             args.len() == 4
                 && args[0] == "-p"
@@ -386,7 +427,7 @@ fn validate(command: &Command, cwd: &Path, deadline: Deadline) -> Result<PathBuf
     if !permitted {
         return Err(error(
             "POLICY_DENIED",
-            "Only exact local Git/ps or adapter version queries may use query supervision",
+            "Only exact local Git/ps, adapter version or managed schedule queries may use query supervision",
         ));
     }
     let configured_path = command
@@ -943,5 +984,76 @@ mod adapter_version_policy_tests {
             assert_eq!(error.code, "POLICY_DENIED", "{args:?}");
             assert_eq!(error.exit, 5);
         }
+    }
+}
+
+#[cfg(test)]
+mod managed_observation_policy_tests {
+    use super::*;
+    #[test]
+    fn schedule_queries_reject_mutations_wildcards_and_extra_arguments() {
+        let label = "org.pctx.schedule.0123456789abcdef01234567";
+        assert!(managed_label(label));
+        for value in [
+            "org.pctx.schedule.*",
+            "org.pctx.schedule.0123",
+            "org.pctx.schedule.0123456789abcdef0123456G",
+            "org.pctx.schedule.0123456789abcdef01234567/extra",
+        ] {
+            assert!(!managed_label(value));
+        }
+        let root = tempfile::tempdir().unwrap();
+        for (program, args) in [
+            ("launchctl", vec!["bootstrap", "gui/0", "fixture.plist"]),
+            ("launchctl", vec!["print", "gui/0/*"]),
+            (
+                "launchctl",
+                vec![
+                    "print",
+                    "gui/0/org.pctx.schedule.0123456789abcdef01234567",
+                    "extra",
+                ],
+            ),
+            (
+                "systemctl",
+                vec![
+                    "--user",
+                    "start",
+                    "org.pctx.schedule.0123456789abcdef01234567.timer",
+                ],
+            ),
+            ("systemctl", vec!["--user", "is-active", "*.timer"]),
+            (
+                "systemctl",
+                vec![
+                    "--user",
+                    "is-active",
+                    "org.pctx.schedule.0123456789abcdef01234567.timer",
+                    "extra",
+                ],
+            ),
+            ("systemctl", vec!["--user", "show-environment"]),
+        ] {
+            let mut command = Command::new(program);
+            command.args(&args);
+            let e =
+                validate(&command, root.path(), Deadline::from_millis(1000).unwrap()).unwrap_err();
+            assert_eq!(e.code, "POLICY_DENIED", "{program} {args:?}");
+            assert_eq!(e.exit, 5);
+        }
+        #[cfg(target_os = "macos")]
+        {
+            let domain = format!("gui/{}/{label}", unsafe { libc::getuid() });
+            assert!(managed_observation("launchctl", &["print", &domain]));
+            assert!(!managed_observation(
+                "launchctl",
+                &["print", &domain, "extra"]
+            ));
+        }
+        #[cfg(target_os = "linux")]
+        assert!(managed_observation(
+            "systemctl",
+            &["--user", "is-active", &format!("{label}.timer")]
+        ));
     }
 }

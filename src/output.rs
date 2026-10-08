@@ -349,6 +349,15 @@ fn hash_observation(phase: HashPhase, bytes: usize, p: &Project) {
 pub(crate) fn hash_executable(p: &Project, path: &Path) -> Result<String> {
     hash_executable_with_limit_error(p, path, |message| err("POLICY_DENIED", message, 5))
 }
+pub(crate) fn hash_executable_with_limit(
+    p: &Project,
+    path: &Path,
+    max_bytes: usize,
+) -> Result<String> {
+    hash_executable_bounded(p, path, max_bytes, |message| {
+        err("POLICY_DENIED", message, 5)
+    })
+}
 /// Domain-specific limit errors are constructed only at the actual size guard.
 /// Authority, I/O, identity and timeout errors keep their original classification.
 pub(crate) fn hash_executable_with_limit_error(
@@ -356,8 +365,23 @@ pub(crate) fn hash_executable_with_limit_error(
     path: &Path,
     limit_error: impl Fn(&'static str) -> Error,
 ) -> Result<String> {
+    hash_executable_bounded(p, path, 128 * 1024 * 1024, limit_error)
+}
+fn hash_executable_bounded(
+    p: &Project,
+    path: &Path,
+    max_bytes: usize,
+    limit_error: impl Fn(&'static str) -> Error,
+) -> Result<String> {
     use sha2::{Digest, Sha256};
     p.check_deadline()?;
+    if max_bytes == 0 || max_bytes > 256 * 1024 * 1024 {
+        return Err(err(
+            "INVALID_ARGUMENT",
+            "Unsupported executable hash bound",
+            2,
+        ));
+    }
     let parent = path
         .parent()
         .ok_or_else(|| err("POLICY_DENIED", "Invalid executable authority", 5))?;
@@ -376,7 +400,7 @@ pub(crate) fn hash_executable_with_limit_error(
             5,
         ));
     }
-    if before.len() > 128 * 1024 * 1024 {
+    if before.len() > max_bytes as u64 {
         return Err(limit_error("Executable is not a bounded regular file"));
     }
     let identity = same_file::Handle::from_file(file.try_clone()?)?;
@@ -398,7 +422,7 @@ pub(crate) fn hash_executable_with_limit_error(
             break;
         }
         total += count;
-        if total > 128 * 1024 * 1024 {
+        if total > max_bytes {
             return Err(limit_error("Executable exceeds size bound"));
         }
         sha.update(&chunk[..count]);

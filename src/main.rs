@@ -379,7 +379,13 @@ fn query_deadline(cli: &Cli) -> Result<Option<pctx::deadline::Deadline>> {
                 | quota::QuotaCommand::Plan { .. }
                 | quota::QuotaCommand::Reconcile { .. },
         } => Some(10_000),
-        Command::Filter {
+        Command::Schedule {
+            command:
+                schedule::ScheduleCommand::List { .. }
+                | schedule::ScheduleCommand::Plan { .. }
+                | schedule::ScheduleCommand::Inspect { .. },
+        }
+        | Command::Filter {
             command:
                 filters::FilterCommand::Validate { .. }
                 | filters::FilterCommand::Apply { .. }
@@ -1151,6 +1157,16 @@ mod finite_route_tests {
                 "1",
             ],
             vec!["filter", "explain", "--", "fixture"],
+            vec!["schedule", "list"],
+            vec!["schedule", "plan", "--namespace", "local", "digest"],
+            vec![
+                "schedule",
+                "inspect",
+                "--namespace",
+                "local",
+                "digest",
+                "--observe-native",
+            ],
         ] {
             let mut argv = vec!["pctx", "--timeout-ms", "100"];
             argv.extend(values.clone());
@@ -1219,6 +1235,25 @@ mod finite_route_tests {
                 "fixtures",
             ],
             vec!["filter", "activate", "sample", "--expect-hash", "hash"],
+            vec![
+                "schedule",
+                "add",
+                "--from-file",
+                "definition",
+                "--idempotency-key",
+                "key",
+            ],
+            vec![
+                "schedule",
+                "install",
+                "--from-file",
+                "plan",
+                "--expect-hash",
+                "hash",
+            ],
+            vec!["schedule", "tick"],
+            vec!["schedule", "run-loop"],
+            vec!["schedule", "reconcile"],
         ] {
             let mut argv = vec!["pctx"];
             argv.extend(values.clone());

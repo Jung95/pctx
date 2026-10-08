@@ -1,0 +1,24 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.52s
+     Running unittests src/lib.rs (target/debug/deps/pctx-ae897bec01e143c7)
+
+running 1 test
+test schedule::deadline_tests::native_observation_original_expiry_does_not_become_registration_absence ... FAILED
+
+failures:
+
+---- schedule::deadline_tests::native_observation_original_expiry_does_not_become_registration_absence stdout ----
+
+thread 'schedule::deadline_tests::native_observation_original_expiry_does_not_become_registration_absence' (8085679) panicked at src/schedule.rs:2628:9:
+assertion `left == right` failed
+  left: (1, 1)
+ right: (1, 0)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    schedule::deadline_tests::native_observation_original_expiry_does_not_become_registration_absence
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 31 filtered out; finished in 2.13s
+
+error: test failed, to rerun pass `--lib`

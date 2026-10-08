@@ -1,0 +1,10 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 5.78s
+     Running unittests src/lib.rs (target/debug/deps/pctx-ae897bec01e143c7)
+
+running 2 tests
+test schedule::deadline_tests::list_original_budget_expires_after_actual_rows_before_assembly ... ok
+test schedule::deadline_tests::native_observation_original_expiry_does_not_become_registration_absence ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 30 filtered out; finished in 2.78s
+

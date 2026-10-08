@@ -1,0 +1,19 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.31s
+     Running tests/work_control.rs (target/debug/deps/work_control-8112bcadab3f8486)
+
+running 11 tests
+test backup_restore_revokes_live_leases_and_preserves_pause ... ok
+test claims_reports_reassignment_and_cursor ... ok
+test current_source_change_blocks_completion ... ok
+test database_rejects_event_modification_and_receipt_conflict ... ok
+test evidence_gate_and_historical_completion ... ok
+test external_report_is_an_allowed_claim_without_native_environment_authority ... ok
+test legacy_native_pass_without_authoritative_binding_is_not_current_evidence ... ok
+test restore_preserves_session_history_without_ack_or_epoch_reuse ... ok
+test schedule_v2_backup_strips_local_binding_and_restore_revokes_running_authority ... ok
+test zero_minimum_cannot_make_zero_tests_pass ... ok
+test zero_tests_and_revision_conflict ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.57s
+

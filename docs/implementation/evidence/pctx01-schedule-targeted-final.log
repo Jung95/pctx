@@ -1,0 +1,43 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.50s
+     Running tests/schedule.rs (target/debug/deps/schedule-2917b2dde9bd7c95)
+
+running 17 tests
+test actual_cli_concurrent_ticks_claim_one_occurrence_and_fixture_bridge_invokes_tick ... ok
+test berlin_fall_back_occurs_once_per_local_date_and_restart_reuses_record ... ok
+test berlin_spring_gap_moves_to_next_valid_wall_time ... ok
+test elapsed_intervals_do_not_change_with_dst_and_missed_ticks_coalesce ... ok
+test empty_readonly_tick_is_successful_without_notification_or_model_wake ... ok
+test failed_attempt_is_recorded_and_retry_is_explicit_instead_of_synthetic_success ... ok
+test managed_bridge_requires_current_reviewed_plan_and_preserves_user_changes ... ok
+test namespaces_and_cas_pause_updates_are_independent ... ok
+test non_read_job_requires_matching_operation_decision ... ok
+test paused_role_blocks_actual_tick_and_loop_does_not_acquire_keep_awake ... ok
+test project_private_bridge_staging_rejects_user_symlinks_without_changing_target ... ok
+test reconcile_singleflight_and_managed_bridge_never_claim_install_or_success ... ok
+test role_pause_topic_silence_do_not_reactivate ... ok
+test running_owner_is_never_released_by_ttl_and_restored_binding_is_not_inherited ... ok
+test session_boundary_invalidates_binding_without_reinstall_or_epoch_inheritance ... ok
+test staged_bridge_uninstall_removes_only_owned_files_and_missing_manifest_can_be_repaired ... ok
+test tick_executes_once_and_only_changed_results_queue_a_local_notice ... ok
+
+test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 24.09s
+
+     Running tests/schedule_deadline.rs (target/debug/deps/schedule_deadline-c1da61e345709366)
+
+running 4 tests
+test default_empty_schedule_read_does_not_initialize_control_state ... ok
+test expired_schedule_reads_have_no_control_or_staging_effects ... ok
+test initialized_control_without_schedule_tables_stays_unchanged_after_read ... ok
+test inspect_fifo_owned_manifest_is_refused_without_blocking ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/schedule_deadline_cli.rs (target/debug/deps/schedule_deadline_cli-4eff725f6f36b33d)
+
+running 2 tests
+test finite_schedule_queries_preserve_state_and_expire_under_sql_contention ... ok
+test schedule_read_budget_preflight_never_creates_missing_project ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.89s
+
