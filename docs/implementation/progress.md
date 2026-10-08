@@ -849,3 +849,7 @@ startup conditions remain open. Next same-task boundary R10 existing adapter
 labels; no independent filter feature, next official task or Actions.
 
 Final native full27236 terminal101: 535 PASS / 4 FAIL. Failed tests: query_program_resolution_uses_captured_command_path, relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry, concurrent_query_startup_preserves_group_streams_and_original_one_second_budget, simultaneous_streams_are_collected_and_overflow_never_infers_success. All four historical startup conditions remain unresolved and original budgets unchanged. All jobs terminal; no heavy job live. Whole PCTX01 remains incomplete0/10.
+
+Development integration 824a7d630f8f2234bab1b69ad7abcbce27e8d331 normally pushed to origin/main
+(session79593 terminal0, 0b970ea..824a7d6, [skip ci]). No Actions dispatched.
+Only PCTX01 remains active; next local boundary R10.

@@ -6,7 +6,9 @@
 
 ## Latest integration boundary
 
-PCTX01-G03-R09/G08 filter admission, base0b970ea. Runtime edits src/filters.rs
+PCTX01-G03-R09/G08 filter admission, runtime 824a7d630f8f2234bab1b69ad7abcbce27e8d331,
+base0b970ea. Normal push79593 terminal0 published0b970ea..824a7d6 to origin/main.
+Runtime edits src/filters.rs
 (plural), src/main.rs; tests/filter_preflight.rs. Exact ID/count and relative
 UTF-8 grammar before discovery/producer reads; absolute paths deferred before
 root stripping, Apply ID-or-path preserved, supplied expiry first. No feature.
@@ -67,8 +69,7 @@ Original ignored specification SHA256 8914faad57432f524aec0a06aa90c43c18c23f8c19
 
 ## Exact next action
 
-Final full27236 is terminal. Normally publish verified development changes [skip ci].
-Then remain on PCTX01, fixed R10: existing adapter Plan/Event agent, explicit
+Final full27236 and normal push79593 are terminal. Remain on PCTX01, fixed R10: existing adapter Plan/Event agent, explicit
 Event key, Uninstall plan and Statusline task/pool/session/counter/key labels.
 File JSON/protocol/config/runtime receipts and internal hash equality remain
 producer-owned. R11 and other whole gates remain open. No next official task,
