@@ -379,7 +379,16 @@ fn query_deadline(cli: &Cli) -> Result<Option<pctx::deadline::Deadline>> {
                 | quota::QuotaCommand::Plan { .. }
                 | quota::QuotaCommand::Reconcile { .. },
         } => Some(10_000),
-        Command::Find(_)
+        Command::Adapter {
+            command:
+                adapter::AdapterCommand::Claude {
+                    command:
+                        adapter::ClaudeCommand::Doctor
+                        | adapter::ClaudeCommand::Verify
+                        | adapter::ClaudeCommand::ProtocolFixture { .. },
+                },
+        }
+        | Command::Find(_)
         | Command::Query(_)
         | Command::Extract(_)
         | Command::Graph(_)
@@ -1085,7 +1094,7 @@ fn main() {
 mod finite_route_tests {
     use super::*;
     #[test]
-    fn work_and_quota_reads_share_query_deadline_without_timing_execution() {
+    fn finite_work_quota_adapter_reads_do_not_time_execution() {
         for values in [
             vec!["task", "list"],
             vec!["task", "show", "T001"],
@@ -1095,6 +1104,15 @@ mod finite_route_tests {
             vec!["check", "list"],
             vec!["check", "show", "C001"],
             vec!["check", "plan", "--task-id", "T001", "--key", "test"],
+            vec!["adapter", "claude", "doctor"],
+            vec!["adapter", "claude", "verify"],
+            vec![
+                "adapter",
+                "claude",
+                "protocol-fixture",
+                "--from-file",
+                "fixture.json",
+            ],
             vec!["quota", "report"],
             vec!["quota", "plan", "--pool", "local"],
             vec!["quota", "reconcile", "--pool", "local"],
@@ -1111,6 +1129,16 @@ mod finite_route_tests {
         for values in [
             vec!["task", "complete", "T001"],
             vec!["task", "cancel", "T001", "--reason", "fixture"],
+            vec!["adapter", "claude", "plan", "--agent", "A001"],
+            vec![
+                "adapter",
+                "claude",
+                "install",
+                "--plan",
+                "plan",
+                "--expect-hash",
+                "hash",
+            ],
             vec!["quota", "release", "Q001"],
             vec!["check", "run", "test", "--task-id", "T001", "--run", "R001"],
             vec!["board", "--watch"],

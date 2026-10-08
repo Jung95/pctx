@@ -1,5 +1,6 @@
 //! Offline Claude protocol bridge. Never reads native transcripts or executes a model.
 use crate::{
+    deadline::Deadline,
     domain::{Error, Result, hash, now},
     project::{Project, atomic_write, private_dir},
     quota::{self, Observation, QuotaCommand, UsageBatch},
@@ -17,6 +18,7 @@ use std::{
     io::Read,
     path::{Path, PathBuf},
     process::Command,
+    time::Duration,
 };
 const LIMIT: usize = 128 * 1024;
 #[derive(Debug, Subcommand)]
@@ -115,9 +117,12 @@ fn owner() -> Result<()> {
     Ok(())
 }
 #[cfg(unix)]
-fn safe_open(path: &Path) -> Result<fs::File> {
+fn safe_open(path: &Path, deadline: Option<Deadline>) -> Result<fs::File> {
     use std::os::fd::{AsRawFd, FromRawFd};
     use std::os::unix::ffi::OsStrExt;
+    if let Some(deadline) = deadline {
+        deadline.check()?;
+    }
     let absolute = if path.is_absolute() {
         path.to_path_buf()
     } else {
@@ -133,6 +138,9 @@ fn safe_open(path: &Path) -> Result<fs::File> {
         })
         .collect::<Result<Vec<_>>>()?;
     for (i, part) in parts.iter().enumerate() {
+        if let Some(deadline) = deadline {
+            deadline.check()?;
+        }
         let name =
             std::ffi::CString::new(part.as_bytes()).map_err(|_| err("PATH_DENIED", "NUL path"))?;
         let flags = libc::O_RDONLY
@@ -141,7 +149,11 @@ fn safe_open(path: &Path) -> Result<fs::File> {
             | if i + 1 < parts.len() {
                 libc::O_DIRECTORY
             } else {
-                0
+                if deadline.is_some() {
+                    libc::O_NONBLOCK
+                } else {
+                    0
+                }
             };
         let fd = unsafe { libc::openat(dir.as_raw_fd(), name.as_ptr(), flags) };
         if fd < 0 {
@@ -149,16 +161,26 @@ fn safe_open(path: &Path) -> Result<fs::File> {
         }
         dir = unsafe { fs::File::from_raw_fd(fd) };
     }
+    if let Some(deadline) = deadline {
+        deadline.check()?;
+    }
     Ok(dir)
 }
 #[cfg(not(unix))]
-fn safe_open(path: &Path) -> Result<fs::File> {
+fn safe_open(path: &Path, deadline: Option<Deadline>) -> Result<fs::File> {
     for ancestor in path.ancestors() {
+        if let Some(deadline) = deadline {
+            deadline.check()?;
+        }
         if fs::symlink_metadata(ancestor)?.file_type().is_symlink() {
             return Err(err("PATH_DENIED", "Symlink adapter path"));
         }
     }
-    Ok(fs::File::open(path)?)
+    let file = fs::File::open(path)?;
+    if let Some(deadline) = deadline {
+        deadline.check()?;
+    }
+    Ok(file)
 }
 fn bounded(path: Option<&Path>) -> Result<Vec<u8>> {
     let mut data = Vec::new();
@@ -167,7 +189,7 @@ fn bounded(path: Option<&Path>) -> Result<Vec<u8>> {
             if fs::symlink_metadata(path)?.file_type().is_symlink() {
                 return Err(err("PATH_DENIED", "Symlink adapter input"));
             }
-            safe_open(path)?
+            safe_open(path, None)?
                 .take((LIMIT + 1) as u64)
                 .read_to_end(&mut data)?;
         }
@@ -182,7 +204,60 @@ fn bounded(path: Option<&Path>) -> Result<Vec<u8>> {
     }
     Ok(data)
 }
+fn bounded_read(p: &Project, path: &Path) -> Result<Vec<u8>> {
+    p.check_deadline()?;
+    if p.deadline.is_none() {
+        return bounded(Some(path));
+    }
+    let metadata = fs::symlink_metadata(path)?;
+    p.check_deadline()?;
+    if metadata.file_type().is_symlink() {
+        return Err(err("PATH_DENIED", "Symlink adapter input"));
+    }
+    if !metadata.is_file() {
+        return Err(err(
+            "INVALID_ARGUMENT",
+            "Adapter input must be a regular file",
+        ));
+    }
+    let mut file = safe_open(path, p.deadline)?;
+    p.check_deadline()?;
+    let metadata = file.metadata()?;
+    if !metadata.is_file() {
+        return Err(err(
+            "INVALID_ARGUMENT",
+            "Adapter input must be a regular file",
+        ));
+    }
+    if metadata.len() > LIMIT as u64 {
+        return Err(err("BUDGET_EXCEEDED", "Adapter input exceeds 128 KiB"));
+    }
+    let mut data = Vec::new();
+    let mut chunk = [0; 8192];
+    loop {
+        p.check_deadline()?;
+        let count = file.read(&mut chunk);
+        p.check_deadline()?;
+        let count = count?;
+        if count == 0 {
+            break;
+        }
+        if data.len() + count > LIMIT {
+            return Err(err("BUDGET_EXCEEDED", "Adapter input exceeds 128 KiB"));
+        }
+        data.extend_from_slice(&chunk[..count]);
+    }
+    p.check_deadline()?;
+    Ok(data)
+}
+fn request_phase<T>(p: &Project, call: impl FnOnce() -> Result<T>) -> Result<T> {
+    p.check_deadline()?;
+    let result = call();
+    p.check_deadline()?;
+    result
+}
 fn acquire(p: &Project) -> Result<fs::File> {
+    p.check_deadline()?;
     private_dir(&p.control_dir)?;
     let mut options = fs::OpenOptions::new();
     options.create(true).truncate(false).read(true).write(true);
@@ -192,23 +267,47 @@ fn acquire(p: &Project) -> Result<fs::File> {
         options.custom_flags(libc::O_NOFOLLOW | libc::O_CLOEXEC);
     }
     let lock = options.open(p.control_dir.join("adapter.lock"))?;
-    lock.lock_exclusive()?;
+    p.check_deadline()?;
+    if let Some(deadline) = p.deadline {
+        loop {
+            deadline.check()?;
+            match lock.try_lock_exclusive() {
+                Ok(()) => break,
+                Err(e) if e.kind() == std::io::ErrorKind::WouldBlock => {
+                    std::thread::sleep(deadline.remaining()?.min(Duration::from_millis(5)))
+                }
+                Err(e) => return Err(e.into()),
+            }
+        }
+    } else {
+        lock.lock_exclusive()?;
+    }
+    p.check_deadline()?;
     Ok(lock)
 }
 fn config(p: &Project) -> Result<(PathBuf, Vec<u8>, Value)> {
+    p.check_deadline()?;
     let dir = p.root.join(".claude");
-    if dir.exists() && fs::symlink_metadata(&dir)?.file_type().is_symlink() {
+    let directory = fs::symlink_metadata(&dir);
+    p.check_deadline()?;
+    if matches!(&directory,Ok(m) if m.file_type().is_symlink()) {
         return Err(err(
             "PATH_DENIED",
             "Claude configuration directory is a symlink",
         ));
     }
+    match directory {
+        Ok(_) => {}
+        Err(e) if e.kind() == std::io::ErrorKind::NotFound => {}
+        Err(e) => return Err(e.into()),
+    }
     let path = dir.join("settings.local.json");
-    let bytes = if path.exists() {
-        bounded(Some(&path))?
-    } else {
-        Vec::new()
+    let bytes = match fs::symlink_metadata(&path) {
+        Ok(_) => bounded_read(p, &path)?,
+        Err(e) if e.kind() == std::io::ErrorKind::NotFound => Vec::new(),
+        Err(e) => return Err(e.into()),
     };
+    p.check_deadline()?;
     let value = if bytes.is_empty() {
         json!({})
     } else {
@@ -221,6 +320,7 @@ fn config(p: &Project) -> Result<(PathBuf, Vec<u8>, Value)> {
             "Claude configuration must be an object",
         ));
     }
+    p.check_deadline()?;
     Ok((path, bytes, value))
 }
 fn additions(agent: &str) -> Value {
@@ -511,7 +611,7 @@ fn import(p: &Project, agent: &str, path: Option<&Path>, key: Option<&str>) -> R
 fn publish_config(p: &Project, expected: &[u8], desired: &[u8]) -> Result<()> {
     use std::io::Write;
     use std::os::fd::{AsRawFd, FromRawFd};
-    let dir = safe_open(&p.root.join(".claude"))?;
+    let dir = safe_open(&p.root.join(".claude"), None)?;
     let target = std::ffi::CString::new("settings.local.json").unwrap();
     let name =
         std::ffi::CString::new(format!(".pctx-adapter-{}", crate::domain::id("tmp"))).unwrap();
@@ -584,21 +684,132 @@ fn publish_config(_p: &Project, _expected: &[u8], _desired: &[u8]) -> Result<()>
     ))
 }
 
+fn version_probe(p: &Project) -> Result<Option<String>> {
+    let deadline = p
+        .deadline
+        .ok_or_else(|| Error::new("INVALID_ARGUMENT", "Finite adapter query scope required", 2))?;
+    let path = std::env::var_os("PATH").unwrap_or_default();
+    let cwd = std::env::current_dir()?;
+    deadline.check()?;
+    let mut found = false;
+    for directory in std::env::split_paths(&path) {
+        deadline.check()?;
+        let directory = if directory.is_absolute() {
+            directory
+        } else {
+            cwd.join(directory)
+        };
+        #[cfg(windows)]
+        let candidates = [directory.join("claude"), directory.join("claude.exe")];
+        #[cfg(not(windows))]
+        let candidates = [directory.join("claude")];
+        for candidate in candidates {
+            deadline.check()?;
+            match fs::metadata(&candidate) {
+                Ok(m) if m.is_file() => {
+                    #[cfg(unix)]
+                    {
+                        use std::os::unix::ffi::OsStrExt;
+                        let name = std::ffi::CString::new(candidate.as_os_str().as_bytes())
+                            .map_err(|_| {
+                                Error::new("INVALID_ARGUMENT", "Invalid runtime search path", 2)
+                            })?;
+                        if unsafe { libc::access(name.as_ptr(), libc::X_OK) } != 0 {
+                            continue;
+                        }
+                    }
+                    found = true;
+                    break;
+                }
+                Ok(_) => {}
+                Err(e) if e.kind() == std::io::ErrorKind::NotFound => {}
+                Err(e) => return Err(e.into()),
+            }
+        }
+        if found {
+            break;
+        }
+    }
+    deadline.check()?;
+    if !found {
+        return Ok(None);
+    }
+    let mut command = Command::new("claude");
+    command
+        .arg("--version")
+        .current_dir(&cwd)
+        .env_clear()
+        .env("PATH", path);
+    for key in [
+        "HOME",
+        "USERPROFILE",
+        "SYSTEMROOT",
+        "WINDIR",
+        "TMP",
+        "TEMP",
+        "LANG",
+        "LC_ALL",
+    ] {
+        if let Some(value) = std::env::var_os(key) {
+            command.env(key, value);
+        }
+    }
+    let output = crate::query_process::output(command, deadline, LIMIT)?;
+    deadline.check()?;
+    if !output.status.success() {
+        return Err(Error::new(
+            "SOURCE_UNAVAILABLE",
+            "Runtime version query failed",
+            6,
+        ));
+    }
+    let text = std::str::from_utf8(&output.stdout).map_err(|_| {
+        Error::new(
+            "SOURCE_UNAVAILABLE",
+            "Runtime version response is not valid UTF-8",
+            6,
+        )
+    })?;
+    let version = reader::redact(text).0.trim().to_string();
+    if version.is_empty() {
+        return Err(Error::new(
+            "SOURCE_UNAVAILABLE",
+            "Runtime version response is empty",
+            6,
+        ));
+    }
+    deadline.check()?;
+    Ok(Some(version))
+}
 pub fn execute(p: &Project, c: &AdapterCommand) -> Result<Value> {
+    if matches!(
+        c,
+        AdapterCommand::Claude {
+            command: ClaudeCommand::Doctor
+                | ClaudeCommand::Verify
+                | ClaudeCommand::ProtocolFixture { .. }
+        }
+    ) {
+        let mut scope = p.clone();
+        if scope.deadline.is_none() {
+            scope.deadline = Some(Deadline::from_millis(10_000)?);
+        }
+        request_phase(&scope, || {
+            reader::validate_root(&scope)?;
+            let result = execute_inner(&scope, c);
+            scope.check_deadline()?;
+            reader::validate_root(&scope)?;
+            result
+        })
+    } else {
+        execute_inner(p, c)
+    }
+}
+fn execute_inner(p: &Project, c: &AdapterCommand) -> Result<Value> {
     let AdapterCommand::Claude { command } = c;
     match command {
         ClaudeCommand::Doctor => {
-            let version = Command::new("claude")
-                .arg("--version")
-                .output()
-                .ok()
-                .filter(|o| o.status.success())
-                .map(|o| {
-                    reader::redact(&String::from_utf8_lossy(&o.stdout))
-                        .0
-                        .trim()
-                        .to_string()
-                });
+            let version = version_probe(p)?;
             Ok(
                 json!({"runtime":"claude-code","installed":version.is_some(),"version":version,"hooks_documented":["SessionStart","PreCompact","PostCompact","SessionEnd"],"installed_hook_support":if version.is_some(){json!("unknown")}else{json!(false)},"fixture_protocol":"claude-protocol-v1","account_live_check":"unknown","host_permissions":"independent","automatic_shell_wrapping":false,"managed_scheduler_receipt":"missing","keep_awake":"missing"}),
             )
@@ -735,7 +946,10 @@ pub fn execute(p: &Project, c: &AdapterCommand) -> Result<Value> {
             Ok(value)
         }
         ClaudeCommand::ProtocolFixture { from_file } => {
-            let safe = parse(&bounded(Some(from_file))?)?;
+            let bytes = bounded_read(p, from_file)?;
+            p.check_deadline()?;
+            let safe = parse(&bytes)?;
+            p.check_deadline()?;
             Ok(
                 json!({"fixture_valid":true,"metadata":safe,"mutated":false,"live_verified":false,"acknowledged":false,"hook_output":{}}),
             )

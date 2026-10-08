@@ -1,4 +1,4 @@
-//! Finite local Git/ps observations. No mutation commands or execution admission bypass.
+//! Finite local Git/ps and adapter version observations. No mutation commands or execution admission bypass.
 use crate::{
     deadline::Deadline,
     domain::{Error, Result},
@@ -137,7 +137,7 @@ fn mac_child_observation(pid: u32) -> String {
 
 // Native group membership is observed while the exited root remains unreaped.
 // The pinned root prevents PGID reuse. This does not contain descendants that
-// deliberately escape the group; only admitted local Git/ps queries use it.
+// deliberately escape the group; only exact admitted local observations use it.
 #[cfg(unix)]
 fn group_has_other_members(root: u32, deadline: Deadline) -> Result<bool> {
     deadline.check()?;
@@ -373,6 +373,7 @@ fn validate(command: &Command, cwd: &Path, deadline: Deadline) -> Result<PathBuf
                 _ => false,
             }
         }
+        "claude" => args == ["--version"],
         "ps" => {
             args.len() == 4
                 && args[0] == "-p"
@@ -385,7 +386,7 @@ fn validate(command: &Command, cwd: &Path, deadline: Deadline) -> Result<PathBuf
     if !permitted {
         return Err(error(
             "POLICY_DENIED",
-            "Only exact local Git/ps queries may use query supervision",
+            "Only exact local Git/ps or adapter version queries may use query supervision",
         ));
     }
     let configured_path = command
@@ -919,5 +920,28 @@ mod linux_group_tests {
         let result = output(query, Deadline::from_millis(3000).unwrap(), 4096).unwrap();
         assert!(result.status.success());
         assert_eq!(result.stdout, b"observed");
+    }
+}
+
+#[cfg(test)]
+mod adapter_version_policy_tests {
+    use super::*;
+
+    #[test]
+    fn version_observation_does_not_admit_inference_or_extra_arguments() {
+        let root = tempfile::tempdir().unwrap();
+        for args in [
+            vec![],
+            vec!["--version", "--help"],
+            vec!["--print", "fixture"],
+            vec!["--version=fixture"],
+        ] {
+            let mut command = Command::new("claude");
+            command.args(&args);
+            let error =
+                validate(&command, root.path(), Deadline::from_millis(1000).unwrap()).unwrap_err();
+            assert_eq!(error.code, "POLICY_DENIED", "{args:?}");
+            assert_eq!(error.exit, 5);
+        }
     }
 }

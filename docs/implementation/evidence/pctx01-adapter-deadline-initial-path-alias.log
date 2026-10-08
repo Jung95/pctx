@@ -1,0 +1,58 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 5.37s
+     Running unittests src/main.rs (target/debug/deps/pctx-5861ab217462b7f0)
+
+running 2 tests
+test cli_help::tests::every_declared_leaf_has_an_explicit_effect_contract ... ok
+test finite_route_tests::finite_work_quota_adapter_reads_do_not_time_execution ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/adapter.rs (target/debug/deps/adapter-8bd8637316f7f388)
+
+running 10 tests
+test pretool_decisions_never_rewrite_or_execute_declared_commands ... ok
+test malformed_and_version_variation_are_rejected_without_mutation ... ok
+test symlink_configuration_is_rejected ... ok
+test stale_plans_do_not_change_config ... ok
+test permission_events_are_observation_only ... ok
+test plans_are_hash_bound_and_preserve_existing_settings ... ok
+test edited_owned_hook_conflicts_without_partial_removal ... ok
+test uninstall_preserves_user_changes_and_only_removes_new_entries ... ok
+test events_delegate_epoch_and_never_ack_or_store_dialogue ... ok
+test statusline_cost_is_estimate_context_is_snapshot_and_epoch_is_checked ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.23s
+
+     Running tests/adapter_deadline.rs (target/debug/deps/adapter_deadline-71f8a5b8d2a2921f)
+
+running 5 tests
+test expired_read_leaves_have_no_lock_config_or_storage_effects ... ok
+test existing_install_lock_obeys_explicit_budget_without_installation_effects ... ok
+test version_success_empty_and_invalid_encoding_are_distinct ... ok
+test version_absence_and_native_failure_are_distinct ... ok
+test delayed_version_probe_times_out_after_actual_start_not_installed_false ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.33s
+
+     Running tests/adapter_deadline_cli.rs (target/debug/deps/adapter_deadline_cli-7e44093534f8bb63)
+
+running 2 tests
+test adapter_query_zero_budget_is_rejected_before_discovery_or_input ... ok
+test adapter_finite_reads_keep_envelope_and_do_not_install_configuration ... FAILED
+
+failures:
+
+---- adapter_finite_reads_keep_envelope_and_do_not_install_configuration stdout ----
+
+thread 'adapter_finite_reads_keep_envelope_and_do_not_install_configuration' (7944547) panicked at tests/adapter_deadline_cli.rs:70:9:
+["protocol-fixture", "--from-file", "/var/folders/dh/vzwzck1n4rx_bntdyff83ssc0000gp/T/.tmp8nifyK/protocol.json"]: Output { status: ExitStatus(unix_wait_status(1792)), stdout: "{\"command\":\"adapter\",\"coverage\":{\"reasons\":[\"IO_ERROR\"],\"status\":\"partial\"},\"data\":null,\"errors\":[{\"code\":\"IO_ERROR\",\"message\":\"Filesystem operation failed\",\"retryable\":false}],\"generation_id\":null,\"project_id\":null,\"schema_version\":\"1.0\",\"status\":\"error\",\"truncation\":{\"reasons\":[],\"truncated\":false},\"validation\":{\"checked_at\":\"2026-10-08T11:37:09.501Z\",\"mode\":\"matched\",\"scope\":[],\"workspace_atomic\":false},\"warnings\":[],\"workspace_id\":null}\n", stderr: "" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    adapter_finite_reads_keep_envelope_and_do_not_install_configuration
+
+test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+
+error: test failed, to rerun pass `--test adapter_deadline_cli`

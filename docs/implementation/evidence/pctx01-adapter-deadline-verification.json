@@ -1,0 +1,95 @@
+{
+  "official_task": "PCTX01",
+  "status": "implementing_not_complete",
+  "base_commit": "d8254dc481947420574a8bd6acc8d8a08ba9ea2c",
+  "platform": "native macOS arm64",
+  "source_sha256": {
+    "src/adapter.rs": "0a83bec3a4a830802898b39f5f755e12cbe498fcb75dd04d2b4c5d32049d10e9",
+    "src/main.rs": "fbfd03455fac3f0eac037af6e946fc2500eeb5607d461632ca333595cf453b04",
+    "src/query_process.rs": "b47d0aad2f987c94fd098f566ac61c2ea394e281b45530287534e2e2bc674a80",
+    "tests/adapter_deadline.rs": "31f6f52d2be8a073f6c5c1a2a4587a436fdc96a8939393e35e9c5e3007a32506",
+    "tests/adapter_deadline_cli.rs": "d536410f5750c0870802776b8734f740661296ca34097fff1b5400dbc9310fc2"
+  },
+  "verification": {
+    "initial_path_alias": {
+      "handle": 32633,
+      "exit": 101,
+      "passed": 18,
+      "failed": 1,
+      "cause": "Parent positive protocol input used /var symlink alias; pinned no-symlink open correctly refuses it. Canonicalize fixture base, preserve production policy and initial log."
+    },
+    "targeted": {
+      "handle": 7275,
+      "exit": 0,
+      "passed": 19,
+      "failed": 0
+    },
+    "overflow": {
+      "handle": 16549,
+      "exit": 0,
+      "passed": 1,
+      "failed": 0
+    },
+    "full": {
+      "handle": 83611,
+      "exit": 101,
+      "passed": 395,
+      "failed": 3,
+      "suites": 48,
+      "failures": [
+        "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget",
+        "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+        "simultaneous_streams_are_collected_and_overflow_never_infers_success"
+      ],
+      "historical_unresolved_variant": "query_program_resolution_uses_captured_command_path remains unresolved despite passing this run"
+    },
+    "format_exit": 0,
+    "locked_all_target_clippy_exit": 0
+  },
+  "proof_scope": [
+    "Only Doctor/Verify/ProtocolFixture gain one10s default when absent; supplied deadline retained. CLI rejects zero before project/input access; writes and hook/statusline lifetimes retain separate contracts.",
+    "Verify succeeds while the existing install lock is held, creates no new adapter lock/configuration. Supplied50ms Install lock contention returns TIMEOUT7 without installation or control DB effects; no query clock added to CLI Install.",
+    "Synthetic private-HOME actual version child reaches entry marker then times out under original1.5s budget. No installed:false inference from timeout, nonzero, empty, invalid UTF8 or capture overflow. Missing executable and positive version are distinct. Overflow requires PARTIAL_RESULT3/null data. No raw failure stderr is returned.",
+    "Finite regular input/config reads check original budget around filesystem/chunks/parsing/final output; Unix leaf nonblocking open prevents swapped special file from indefinite ordinary open. Filesystem/parsing are cooperative, not preemptive.",
+    "Shared supervisor admits exact claude argv[--version] only; regression rejects inference/extra/empty/version=value arguments before execution. Native group ownership/capture/cancellation remain shared."
+  ],
+  "review": {
+    "agent": "requirements",
+    "scoped_blockers": 0,
+    "tests_or_edits_by_reviewer": false
+  },
+  "remaining_required_gates": [
+    "Controlled expiry during auxiliary discovery/hash and command-level large-row aggregation",
+    "Remaining finite resource/runner/trust/filter/schedule/inventory read routes",
+    "Full semantic pre-effect argument/envelope/representation/error/exit/budget matrix, including adapter phase-race coverage",
+    "Original native startup root cause and native Linux/Windows required matrix; synthetic probes do not establish live Claude capability"
+  ],
+  "logs": {
+    "initial-path-alias": {
+      "path": "docs/implementation/evidence/pctx01-adapter-deadline-initial-path-alias.log",
+      "sha256": "cebc48326a23a8e67924be2bb0e5995e7003b439c8968697c64c59f3aa2bfa65"
+    },
+    "targeted": {
+      "path": "docs/implementation/evidence/pctx01-adapter-deadline-targeted.log",
+      "sha256": "ca8ed35bcc61b088868309bc4097e4f5a7a852b08d6c99a81db1a35fed599ef4"
+    },
+    "overflow": {
+      "path": "docs/implementation/evidence/pctx01-adapter-deadline-overflow.log",
+      "sha256": "7c1c15017d64af69f787d8556c59ebfdea955a6cde0739c82dd64ef11ae6efd9"
+    },
+    "full-native": {
+      "path": "docs/implementation/evidence/pctx01-adapter-deadline-full-native.log",
+      "sha256": "395aa8dc1070f13851ae78326500d0d5384ccd820b3c06fa848dbe242d1b31e0"
+    },
+    "format": {
+      "path": "docs/implementation/evidence/pctx01-adapter-deadline-format.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "clippy": {
+      "path": "docs/implementation/evidence/pctx01-adapter-deadline-clippy.log",
+      "sha256": "7206810d0420cf81da33e5e35b6d71999e2d0c926d9c4af0c031f2f44f6f3497"
+    }
+  },
+  "actions_dispatched": 0,
+  "other_active_official_tasks": []
+}
