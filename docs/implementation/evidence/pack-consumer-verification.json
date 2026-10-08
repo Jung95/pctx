@@ -1,0 +1,96 @@
+{
+  "decision": "D043",
+  "base_commit": "0c8a2fd3a5b204ee4107b9b5245605c126142c68",
+  "platform": "native macOS arm64",
+  "source_sha256": {
+    "src/pack.rs": "51a7ab0f7ff5085ae11a768ca3e65c1878532ea55052dd34e2c48fc1f8d7eafe",
+    "src/main.rs": "dc9169bc5bf7f2f4efa05e8804b2684857b5eaff6dc742d543e7a72e684fa32c",
+    "tests/pack.rs": "60d176f8250112d263ea5f254cc4bd56dabe8459f92444a09b597a187062270f",
+    "tests/session_render_budget.rs": "50d53867192aed9996feb4b256b2216745e956f3e3ba1f9c635b12a3b4b998af"
+  },
+  "verification": {
+    "full": {
+      "exit": 101,
+      "handle": 16627,
+      "passed": 327,
+      "failed": 3,
+      "ignored": 0,
+      "failed_target": "project_deadline",
+      "failures": [
+        "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+        "simultaneous_streams_are_collected_and_overflow_never_infers_success",
+        "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget"
+      ]
+    },
+    "related_final": {
+      "pack": 11,
+      "session_render_budget": 9,
+      "failed": 0,
+      "source": "final full log"
+    },
+    "format": {
+      "exit": 0
+    },
+    "locked_all_target_clippy": {
+      "exit": 0
+    }
+  },
+  "logs": {
+    "full": {
+      "path": "docs/implementation/evidence/pack-consumer-full.log",
+      "sha256": "a31d7e4d06ca1150e4cc145d4c7e66ef3c92ff98beaff8eec8d3aae57e8c3ccb"
+    },
+    "static": {
+      "path": "docs/implementation/evidence/pack-consumer-static.log",
+      "sha256": "b46e3d498a746ae10ec3ab5e7b1e71675707cb74fabfefa3642462b50327c040"
+    },
+    "format": {
+      "path": "docs/implementation/evidence/pack-consumer-format.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "initial-capability-failure": {
+      "path": "docs/implementation/evidence/pack-consumer-initial-capability-failure.log",
+      "sha256": "013a8151006e295fb44a371e8a21ffb2a57434b0f0d532721e5a41634511be7e"
+    },
+    "initial-output-failure": {
+      "path": "docs/implementation/evidence/pack-consumer-initial-output-failure.log",
+      "sha256": "b4cd1c12545a94adde420c25dac63764dca326a9cb85a81eea58d33756869f89"
+    },
+    "duplicate-option-failure": {
+      "path": "docs/implementation/evidence/pack-consumer-duplicate-option-failure.log",
+      "sha256": "d1124e519552e9a3dfe7fb87f2f8b0b553fa06b6056d0e9007cb4cce54a0fb87"
+    },
+    "registration-grammar-failure": {
+      "path": "docs/implementation/evidence/pack-consumer-registration-grammar-failure.log",
+      "sha256": "cf9bf9df269873100f922858fa85536e8eeaa650fa5ef9a6f43ec4ed42cc4cd1"
+    },
+    "intermediate-targeted": {
+      "path": "docs/implementation/evidence/pack-consumer-intermediate-targeted.log",
+      "sha256": "a20b18ab8916ba074113f53b04e3da25b1b6c147e7b5911ad037a1ff550ab271"
+    }
+  },
+  "contracts": [
+    "actual agent lease capability and own registered session for all four representations",
+    "no session and foreign session denied before source disclosure",
+    "pause blocks creation before parent creation; resume invalidates old plan",
+    "epoch change invalidates old plan",
+    "declared silenced topic or ambiguous missing topic rejects before private plan publication",
+    "legacy private schema1 plans require replan; public schema1 artifact remains inspectable/verifiable",
+    "opaque exported barrier without session/topic labels and no authority restoration",
+    "Pack Create artifact --output does not capture stdout envelope",
+    "original10s cooperative default in CLI/library; pre-source, post-source and immediate prepublication binding checks"
+  ],
+  "review": "Independent requirements agent identified missing post-source check; fixed and re-reviewed without remaining blocker in scoped delta. No agent tests substituted for native evidence.",
+  "remaining": [
+    "concurrent policy change during final validation unqualified",
+    "check-to-publication interval not transactionally excluded",
+    "direct library source timeout classification maps stale instead of TIMEOUT",
+    "Windows pinned Pack publication unavailable",
+    "per-item source topic attribution and owner exception conflicts",
+    "handoff/task/approval memory variants",
+    "native dyld-entry startup cause and full gate repair",
+    "full PCTX46 AC78\u201380 and entire mandatory specification incomplete"
+  ],
+  "actions_dispatched": 0,
+  "spec_sha256": "8914faad57432f524aec0a06aa90c43c18c23f8c19e9f54fe69d9ad185db6523"
+}

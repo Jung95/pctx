@@ -55,6 +55,8 @@ fn plan(p: &Project, task: &str, content: &str, split_bytes: Option<usize>) -> V
     execute(
         p,
         &PackCommand::Plan {
+            session: None,
+            topic: None,
             task_id: task.into(),
             scopes: vec!["src".into()],
             content: content.into(),
@@ -216,6 +218,8 @@ fn giant_item_and_total_budget_fail_without_plans_or_publication() {
     let result = execute(
         &p,
         &PackCommand::Plan {
+            session: None,
+            topic: None,
             task_id: task.clone(),
             scopes: vec!["src".into()],
             content: "full".into(),
@@ -227,6 +231,8 @@ fn giant_item_and_total_budget_fail_without_plans_or_publication() {
     let small = execute(
         &p,
         &PackCommand::Plan {
+            session: None,
+            topic: None,
             task_id: task,
             scopes: vec!["src".into()],
             content: "full".into(),
@@ -288,6 +294,39 @@ fn rewrite_manifest(path: &std::path::Path, change: impl FnOnce(&mut Value)) {
     manifest["manifest_integrity_hash"] =
         json!(pctx::domain::hash(serde_json::to_vec(&digest).unwrap()));
     std::fs::write(path, serde_json::to_vec(&manifest).unwrap()).unwrap();
+}
+#[test]
+fn legacy_plan_requires_replanning_but_legacy_artifact_remains_readable() {
+    let (_t, p, task) = fixture();
+    std::fs::write(p.root.join("src/auth.ts"), "export const auth=1;\n").unwrap();
+    let a = plan(&p, &task, "full", None);
+    create(&p, &a, "artifacts/legacy").unwrap();
+    rewrite_manifest(&p.root.join("artifacts/legacy/manifest.json"), |m| {
+        m.as_object_mut().unwrap().remove("delivery_barrier");
+    });
+    verify(&p, "artifacts/legacy", false).unwrap();
+    execute(
+        &p,
+        &PackCommand::Inspect {
+            path: "artifacts/legacy".into(),
+        },
+    )
+    .unwrap();
+    let path = p
+        .control_dir
+        .join("pack-plans")
+        .join(format!("{}.json", a["plan_id"].as_str().unwrap()));
+    let mut legacy: Value = serde_json::from_slice(&std::fs::read(&path).unwrap()).unwrap();
+    legacy["schema_version"] = json!(1);
+    for field in ["consumer_session", "topic", "delivery_barrier"] {
+        legacy.as_object_mut().unwrap().remove(field);
+    }
+    std::fs::write(path, serde_json::to_vec(&legacy).unwrap()).unwrap();
+    assert_eq!(
+        create(&p, &a, "never-created/legacy").unwrap_err().code,
+        "PACK_PLAN_STALE"
+    );
+    assert!(!p.root.join("never-created").exists());
 }
 #[test]
 fn inspection_reapplies_source_artifact_policy_and_masks_untrusted_manifest() {

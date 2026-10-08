@@ -371,6 +371,7 @@ fn query_deadline(cli: &Cli) -> Result<Option<pctx::deadline::Deadline>> {
         | Command::Savings { .. }
         | Command::Session { .. }
         | Command::Context { .. }
+        | Command::Pack { .. }
         | Command::Handoff {
             command: HandoffCommand::Show { .. },
         }
@@ -951,7 +952,15 @@ fn main() {
             .or_else(|| response["data"]["signal"].as_i64().map(|s| 128 + s as i32))
             .unwrap_or(exit);
     }
-    let delivered = if let Some(output) = &cli.output {
+    // Clap propagates the shared --output argument to the global field. For
+    // Pack Create it names the artifact; its response still belongs on stdout.
+    let response_output = match &cli.command {
+        Command::Pack {
+            command: pack::PackCommand::Create { .. },
+        } => None,
+        _ => cli.output.as_ref(),
+    };
+    let delivered = if let Some(output) = response_output {
         match project::atomic_write(output, &bytes, false) {
             Ok(()) => true,
             Err(e) => {

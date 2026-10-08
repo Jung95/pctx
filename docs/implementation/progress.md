@@ -177,3 +177,11 @@ Build accepts session/topic binding and uses the authenticated registered role i
 Final source gate61111:325 macOS PASS/3 native startup FAIL. Related adaptive/barrier/delivery/Pack/session/receipt/work suites56 PASS within that gate; format and locked all-target Clippy PASS. Evidence delivery-barriers-verification.json binds sources, final logs and retained initial CLI grammar/Pack constructor failures. Independent review found and confirmed repair of the alternate-role fingerprint gap. No agent report is substituted for runtime evidence.
 
 Still required: per-item topic attribution, explicit owner exception conflicts, handoff/task/approval memory variants, authenticated agent-bound selected Pack plumbing, race/platform/recovery matrix and original dyld startup repair. Declared packet topics are not a content classifier. Whole AC77/PCTX44 and full mandatory goal remain implementing; no Actions dispatched.
+
+## D043 consumer-bound Pack plan/create
+
+Pack shares registered consumer/declared-topic controls across metadata, signatures, selected and full. Plan schema2 binds consumer session/epoch and opaque barrier; selected Build receives the same session/topic. Role pause blocks before output parent creation; resume and epoch changes require new plans. Silence/missing-topic errors reveal no source path and publish no private plan. Public schema1 artifacts remain readable, exporting only an opaque barrier. CLI Pack Create's --output names the artifact and its response remains on stdout; actual CLI exposed and repaired the previous global-option double-write.
+
+Native final gate16627 terminal101:327 PASS/3 original startup FAIL. Pack11+session_render_budget9 PASS, format and locked all-target Clippy PASS. pack-consumer-verification.json binds final sources and retains capability/option/grammar intermediate failures. Independent review found the missing post-source barrier check; fixed, rechecked and integrated. No Actions dispatched.
+
+Concurrent final-pass policy/epoch changes still lack runtime proof; final check and filesystem publication are not one transaction. Direct library source-validation timeout classification, Windows publication, source-topic attribution/owner exceptions and memory variants remain required. Entire mandatory goal stays active.

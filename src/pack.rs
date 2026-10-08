@@ -23,6 +23,10 @@ pub enum PackCommand {
     Plan {
         #[arg(long)]
         task_id: String,
+        #[arg(long)]
+        session: Option<String>,
+        #[arg(long)]
+        topic: Option<String>,
         #[arg(long = "scope", required = true)]
         scopes: Vec<String>,
         #[arg(long,default_value="metadata",value_parser=["metadata","signatures","selected","full"])]
@@ -76,6 +80,12 @@ struct Plan {
     id: String,
     project_id: String,
     workspace_id: String,
+    #[serde(default)]
+    consumer_session: Option<String>,
+    #[serde(default)]
+    topic: Option<String>,
+    #[serde(default)]
+    delivery_barrier: String,
     task_id: String,
     task_revision: i64,
     definition_revision: i64,
@@ -382,7 +392,7 @@ fn render(plan: &Plan, items: Vec<Value>, task: Value) -> Result<RenderedPack> {
         );
         files.insert(name.into(), bytes);
     }
-    let mut manifest = json!({"schema_version":1,"manifest_integrity_hash":"0".repeat(64),"pack_id":plan.id,"plan_hash":plan.plan_hash,"project_id":plan.project_id,"workspace_fingerprint":hash(&plan.workspace_id),"task_id":plan.task_id,"task_revision":plan.task_revision,"definition_revision":plan.definition_revision,"task_hash":plan.task_hash,"task":sanitized(task),"tool_version":VERSION,"parser_hash":plan.parser_hash,"policy_hash":plan.policy_hash,"config_hash":plan.config_hash,"source_manifest_hash":plan.manifest_hash,"scope":plan.scopes,"content":plan.content,"files":plan.items.iter().map(|i|json!({"path":i.path,"source_hash":i.source_hash,"ranges":i.spans,"representation":i.representation,"redacted":i.redacted,"semantic_change_possible":i.redacted,"body_omitted":i.body_omitted,"content_hash":i.content_hash})).collect::<Vec<_>>(),"parts":parts,"budget":{"limit_bytes":plan.budget_bytes,"directory_bytes":0,"single_json_bytes":0,"token_measurement":"unavailable"},"omissions":plan.omissions,"security_scan":"configured_policy_and_pattern_redaction","author_authenticated":false,"acknowledged":false,"restores_authority":false});
+    let mut manifest = json!({"schema_version":1,"manifest_integrity_hash":"0".repeat(64),"pack_id":plan.id,"plan_hash":plan.plan_hash,"project_id":plan.project_id,"workspace_fingerprint":hash(&plan.workspace_id),"task_id":plan.task_id,"task_revision":plan.task_revision,"definition_revision":plan.definition_revision,"task_hash":plan.task_hash,"task":sanitized(task),"tool_version":VERSION,"parser_hash":plan.parser_hash,"policy_hash":plan.policy_hash,"config_hash":plan.config_hash,"delivery_barrier":plan.delivery_barrier,"source_manifest_hash":plan.manifest_hash,"scope":plan.scopes,"content":plan.content,"files":plan.items.iter().map(|i|json!({"path":i.path,"source_hash":i.source_hash,"ranges":i.spans,"representation":i.representation,"redacted":i.redacted,"semantic_change_possible":i.redacted,"body_omitted":i.body_omitted,"content_hash":i.content_hash})).collect::<Vec<_>>(),"parts":parts,"budget":{"limit_bytes":plan.budget_bytes,"directory_bytes":0,"single_json_bytes":0,"token_measurement":"unavailable"},"omissions":plan.omissions,"security_scan":"configured_policy_and_pattern_redaction","author_authenticated":false,"acknowledged":false,"restores_authority":false});
     let mut single;
     for _ in 0..8 {
         let mut digest = manifest.clone();
@@ -441,7 +451,12 @@ fn load_plan(p: &Project, name: &str) -> Result<Plan> {
         return Err(invalid("Plan exceeds size bound"));
     }
     let plan: Plan = serde_json::from_slice(&bytes)?;
-    if plan.schema_version != 1 || plan.id != name || plan.plan_hash != plan_hash(&plan)? {
+    if plan.schema_version == 1 {
+        return Err(stale(
+            "Legacy plan lacks consumer delivery binding; create a new plan",
+        ));
+    }
+    if plan.schema_version != 2 || plan.id != name || plan.plan_hash != plan_hash(&plan)? {
         return Err(Error::new(
             "PACK_INTEGRITY_FAILED",
             "Plan integrity mismatch",
@@ -453,11 +468,13 @@ fn load_plan(p: &Project, name: &str) -> Result<Plan> {
 fn create_plan(
     p: &Project,
     task_id: &str,
+    consumer: (Option<&str>, Option<&str>),
     scope: &[String],
     content: &str,
     budget_bytes: usize,
     split_bytes: Option<usize>,
 ) -> Result<Value> {
+    let (session, topic) = consumer;
     let scope = scopes(scope)?;
     if !["metadata", "signatures", "selected", "full"].contains(&content) {
         return Err(invalid("Unknown pack representation"));
@@ -469,6 +486,7 @@ fn create_plan(
             "Pack budget must be 1024..67108864 bytes and split bound 512..budget",
         ));
     }
+    let (_, delivery_barrier) = crate::session::delivery_binding(p, session, topic, "implementer")?;
     let task = task(p, task_id)?;
     let source_hashes = source_set(p, &scope)?;
     if source_hashes.is_empty() {
@@ -476,8 +494,8 @@ fn create_plan(
     }
     let chosen = if content == "selected" {
         let request = context::BuildRequest {
-            session: None,
-            topic: None,
+            session: session.map(str::to_owned),
+            topic: topic.map(str::to_owned),
             task: Some(format!(
                 "{}\n{}",
                 task["title"].as_str().unwrap_or(""),
@@ -563,10 +581,13 @@ fn create_plan(
         items.push(item);
     }
     let mut plan = Plan {
-        schema_version: 1,
+        schema_version: 2,
         id: id("PACKPLAN"),
         project_id: p.project_id.clone(),
         workspace_id: p.workspace_id.clone(),
+        consumer_session: session.map(str::to_owned),
+        topic: topic.map(str::to_owned),
+        delivery_barrier,
         task_id: task["task_id"]
             .as_str()
             .ok_or_else(|| invalid("Task ID missing"))?
@@ -667,7 +688,22 @@ fn output_path(p: &Project, path: &Path, create_parents: bool) -> Result<PathBuf
     }
     Ok(current)
 }
+fn validate_delivery(p: &Project, plan: &Plan) -> Result<()> {
+    p.check_deadline()?;
+    if crate::session::delivery_binding(
+        p,
+        plan.consumer_session.as_deref(),
+        plan.topic.as_deref(),
+        "implementer",
+    )?
+    .1 != plan.delivery_barrier
+    {
+        return Err(stale("Consumer session or delivery controls changed"));
+    }
+    p.check_deadline()
+}
 fn validate_inputs(p: &Project, plan: &Plan) -> Result<(Vec<Value>, Value)> {
+    validate_delivery(p, plan)?;
     if plan.project_id != p.project_id
         || plan.workspace_id != p.workspace_id
         || plan.policy_hash != p.policy_hash()
@@ -701,6 +737,7 @@ fn validate_inputs(p: &Project, plan: &Plan) -> Result<(Vec<Value>, Value)> {
         }
         values.push(value);
     }
+    validate_delivery(p, plan)?;
     Ok((values, task))
 }
 #[cfg(unix)]
@@ -853,6 +890,7 @@ fn pinned_publish(
         {
             return Err(stale("Output parent was replaced"));
         }
+        validate_delivery(p, plan)?;
         if is_single {
             if unsafe {
                 libc::linkat(
@@ -1458,6 +1496,7 @@ fn inspection_metadata(mut manifest: Value) -> Value {
                 "parser_hash",
                 "policy_hash",
                 "config_hash",
+                "delivery_barrier",
                 "source_manifest_hash",
                 "scope",
                 "content",
@@ -1599,14 +1638,33 @@ fn inspect(p: &Project, path: &Path, against: bool) -> Result<Value> {
     )
 }
 pub fn execute(p: &Project, c: &PackCommand) -> Result<Value> {
+    let mut scoped;
+    let p = if p.deadline.is_none() {
+        scoped = p.clone();
+        scoped.deadline = Some(crate::deadline::Deadline::from_millis(10_000)?);
+        &scoped
+    } else {
+        p
+    };
+    p.check_deadline()?;
     match c {
         PackCommand::Plan {
             task_id,
+            session,
+            topic,
             scopes,
             content,
             budget_bytes,
             split_bytes,
-        } => create_plan(p, task_id, scopes, content, *budget_bytes, *split_bytes),
+        } => create_plan(
+            p,
+            task_id,
+            (session.as_deref(), topic.as_deref()),
+            scopes,
+            content,
+            *budget_bytes,
+            *split_bytes,
+        ),
         PackCommand::Create {
             plan,
             expect_hash,

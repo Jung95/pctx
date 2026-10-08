@@ -1,0 +1,48 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.56s
+     Running tests/pack.rs (target/debug/deps/pack-8d09189cdcc06191)
+
+running 11 tests
+test giant_item_and_total_budget_fail_without_plans_or_publication ... ok
+test inspection_reapplies_source_artifact_policy_and_masks_untrusted_manifest ... ok
+test legacy_plan_requires_replanning_but_legacy_artifact_remains_readable ... ok
+test forged_budgets_parts_and_json_complexity_are_rejected_before_load ... ok
+test signatures_keep_notices_and_single_json_verifies ... ok
+test stale_source_policy_task_and_wrong_expected_hash_do_not_publish ... ok
+test integrity_tamper_missing_parts_and_missing_original_are_distinct ... ok
+test racing_artifact_parent_symlink_never_reads_outside_marker ... ok
+test symlink_output_input_overlap_and_overwrite_are_denied ... ok
+test immutable_plan_has_no_source_metadata_default_and_full_masks_preserves_license ... ok
+test task_or_parser_revision_changes_make_current_source_pack_stale ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.54s
+
+     Running tests/session_render_budget.rs (target/debug/deps/session_render_budget-2e37552a4a4fa12a)
+
+running 9 tests
+test pack_consumer_binding_uses_actual_agent_lease_and_cannot_survive_policy_or_epoch_change ... FAILED
+test terminal_escape_overflow_is_rejected_before_context_emission_or_event ... ok
+test exact_final_budget_and_representation_receipts_require_explicit_ack ... ok
+test adaptive_delta_resends_unreceived_body_and_reuses_acknowledged_receipts ... ok
+test supersession_links_invalidate_unchanged_source_without_reviving_it_on_replacement_cancellation ... ok
+test unchanged_git_does_not_hide_decision_or_memory_change_retirement_and_deletion ... ok
+test registered_role_and_topic_controls_precede_context_and_resume_requires_fresh_baseline ... ok
+test original_cli_budget_bounds_writer_admission_without_context_or_epoch_writes ... ok
+test omitted_sources_are_not_acknowledged_and_later_delivery_is_explicit ... ok
+
+failures:
+
+---- pack_consumer_binding_uses_actual_agent_lease_and_cannot_survive_policy_or_epoch_change stdout ----
+
+thread 'pack_consumer_binding_uses_actual_agent_lease_and_cannot_survive_policy_or_epoch_change' (7638337) panicked at tests/session_render_budget.rs:86:33:
+["pack", "create", "--plan", "PACKPLAN-776f6eae-bcea-4bc8-8907-6f70f91d6110", "--expect-hash", "b17d4fcd67750b858131b59114c9bff4b4099ad418017b808f733f0c3538c71b", "--output", "consumer-metadata.json"]: invalid JSON EOF while parsing a value at line 1 column 0; stderr=IO_ERROR: Output parent does not exist
+
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    pack_consumer_binding_uses_actual_agent_lease_and_cannot_survive_policy_or_epoch_change
+
+test result: FAILED. 8 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.83s
+
+error: test failed, to rerun pass `--test session_render_budget`

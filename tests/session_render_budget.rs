@@ -24,6 +24,22 @@ struct Fixture {
 }
 impl Fixture {
     fn run(&self, args: &[&str]) -> (i32, Vec<u8>, Value) {
+        self.run_as(args, "owner", None)
+    }
+    fn run_as(&self, args: &[&str], actor: &str, run: Option<&str>) -> (i32, Vec<u8>, Value) {
+        let capability = run.map(|run| {
+            let workspace = fs::read_dir(self.data.join("workspaces"))
+                .unwrap()
+                .next()
+                .unwrap()
+                .unwrap()
+                .path();
+            let credential: Value = serde_json::from_slice(
+                &fs::read(workspace.join("credentials").join(format!("{run}.json"))).unwrap(),
+            )
+            .unwrap();
+            credential["capability"].as_str().unwrap().to_owned()
+        });
         let mut stdout = tempfile::tempfile().unwrap();
         let mut stderr = tempfile::tempfile().unwrap();
         let mut child = Reap(
@@ -33,7 +49,9 @@ impl Fixture {
                 .args(["--format", "json"])
                 .args(args)
                 .env("PCTX_DATA_DIR", &self.data)
-                .env("PCTX_ACTOR", "owner")
+                .env("PCTX_ACTOR", actor)
+                .env("PCTX_RUN_ID", run.unwrap_or(""))
+                .env("PCTX_RUN_CAPABILITY", capability.as_deref().unwrap_or(""))
                 .env(
                     "GIT_CONFIG_GLOBAL",
                     self._temp.path().join("empty.gitconfig"),
@@ -1409,4 +1427,189 @@ fn registered_role_and_topic_controls_precede_context_and_resume_requires_fresh_
         0,
         "unrelated explicit topic remains deliverable"
     );
+}
+
+#[test]
+fn pack_consumer_binding_uses_actual_agent_lease_and_cannot_survive_policy_or_epoch_change() {
+    let f = fixture();
+    let session = f.ok(&[
+        "session",
+        "attach",
+        "--agent",
+        &f.agent,
+        "--runtime",
+        "manual",
+        "--role",
+        "developer",
+    ])["data"]["session_id"]
+        .as_str()
+        .unwrap()
+        .to_owned();
+    f.ok(&["task", "ready", &f.task]);
+    let lease = f.ok(&["task", "claim", &f.task, "--agent", &f.agent]);
+    let run = lease["data"]["run_id"].as_str().unwrap();
+    let plan = |content: &str, session: Option<&str>| {
+        let mut args = vec![
+            "pack",
+            "plan",
+            "--task-id",
+            &f.task,
+            "--scope",
+            "auth.py",
+            "--content",
+            content,
+            "--topic",
+            "public",
+            "--budget-bytes",
+            "64000",
+        ];
+        if let Some(session) = session {
+            args.extend(["--session", session]);
+        }
+        f.run_as(&args, &f.agent, Some(run))
+    };
+    let create = |plan: &Value, output: &str| {
+        f.run_as(
+            &[
+                "pack",
+                "create",
+                "--plan",
+                plan["data"]["plan_id"].as_str().unwrap(),
+                "--expect-hash",
+                plan["data"]["plan_hash"].as_str().unwrap(),
+                "--output",
+                output,
+            ],
+            &f.agent,
+            Some(run),
+        )
+    };
+    for content in ["metadata", "signatures", "selected", "full"] {
+        let (exit, _, planned) = plan(content, Some(&session));
+        assert_eq!(exit, 0, "{planned}");
+        let output = format!("consumer-{content}.json");
+        let (exit, _, created) = create(&planned, &output);
+        assert_eq!(exit, 0, "{created}");
+        let artifact: Value =
+            serde_json::from_slice(&fs::read(f.root.join(output)).unwrap()).unwrap();
+        assert_eq!(
+            artifact["manifest"]["delivery_barrier"]
+                .as_str()
+                .unwrap()
+                .len(),
+            64
+        );
+        assert!(artifact["manifest"].get("consumer_session").is_none());
+        assert!(artifact["manifest"].get("topic").is_none());
+        assert_eq!(artifact["manifest"]["author_authenticated"], false);
+        assert_eq!(artifact["manifest"]["restores_authority"], false);
+    }
+    assert_eq!(
+        plan("full", None).0,
+        5,
+        "authenticated agent requires session binding"
+    );
+    let other = f.ok(&[
+        "agent",
+        "register",
+        "--name",
+        "foreign-worker",
+        "--kind",
+        "agent",
+    ])["data"]["agent_id"]
+        .as_str()
+        .unwrap()
+        .to_owned();
+    let foreign = f.ok(&[
+        "session",
+        "attach",
+        "--agent",
+        &other,
+        "--runtime",
+        "manual",
+    ])["data"]["session_id"]
+        .as_str()
+        .unwrap()
+        .to_owned();
+    let (exit, bytes, denied) = plan("full", Some(&foreign));
+    assert_eq!(exit, 5, "{denied}");
+    assert!(!String::from_utf8(bytes).unwrap().contains("auth.py"));
+    let (exit, _, old) = plan("selected", Some(&session));
+    assert_eq!(exit, 0, "{old}");
+    f.ok(&["role", "pause", "developer", "--reason", "owner test pause"]);
+    let (exit, _, denied) = create(&old, "never-created/paused.json");
+    assert_eq!(exit, 5, "{denied}");
+    assert_eq!(denied["errors"][0]["code"], "ROLE_PAUSED");
+    assert!(!f.root.join("never-created").exists());
+    f.ok(&[
+        "role",
+        "resume",
+        "developer",
+        "--reason",
+        "explicit owner resume",
+    ]);
+    let (exit, _, stale) = create(&old, "stale.json");
+    assert_eq!(exit, 9, "{stale}");
+    assert_eq!(stale["errors"][0]["code"], "PACK_PLAN_STALE");
+    assert!(!f.root.join("stale.json").exists());
+    let (exit, _, fresh) = plan("selected", Some(&session));
+    assert_eq!(exit, 0, "{fresh}");
+    f.ok(&[
+        "session",
+        "boundary",
+        "--session",
+        &session,
+        "--reason",
+        "test compact",
+    ]);
+    assert_eq!(create(&fresh, "old-epoch.json").0, 9);
+    assert!(!f.root.join("old-epoch.json").exists());
+    f.ok(&[
+        "role",
+        "pause",
+        "developer",
+        "--topic",
+        "quiet",
+        "--recipient",
+        &f.agent,
+        "--reason",
+        "test topic",
+    ]);
+    let plan_count = || {
+        let control = fs::read_dir(f.data.join("controls"))
+            .unwrap()
+            .next()
+            .unwrap()
+            .unwrap()
+            .path();
+        fs::read_dir(control.join("pack-plans")).unwrap().count()
+    };
+    let before = plan_count();
+    for (topic, code) in [
+        (Some("quiet"), "TOPIC_SILENCED"),
+        (None, "DELIVERY_TOPIC_REQUIRED"),
+    ] {
+        let mut args = vec![
+            "pack",
+            "plan",
+            "--task-id",
+            &f.task,
+            "--scope",
+            "auth.py",
+            "--content",
+            "full",
+            "--session",
+            &session,
+        ];
+        if let Some(topic) = topic {
+            args.extend(["--topic", topic]);
+        }
+        let (exit, bytes, denied) = f.run_as(&args, &f.agent, Some(run));
+        assert_eq!(exit, 5, "{denied}");
+        assert_eq!(denied["errors"][0]["code"], code);
+        assert!(!String::from_utf8(bytes).unwrap().contains("auth.py"));
+        assert_eq!(plan_count(), before);
+    }
+    let (exit, _, public) = plan("full", Some(&session));
+    assert_eq!(exit, 0, "{public}");
 }
