@@ -6,7 +6,7 @@
 
 ## Source, evidence and environment
 
-Base ee4b9e744a724a1be69928139b2a8416b8aad542; current runtime commit is recorded in evidence/pctx01-help-color-verification.json after integration. Source hashes/logs bind final help/color code. Native full52787 terminal101:377 PASS/3 original query startup FAIL across45 suites. Actual frontend8 PASS, registry coverage1 PASS, format/locked all-target Clippy PASS; independent scoped review findings all resolved. No live heavy job or CI. Confirm actual Git/process state on resume.
+Base ee4b9e744a724a1be69928139b2a8416b8aad542; runtime de0b6d4b88e2e3c8bb03eeaba777319296e362a9. Source hashes/logs bind final help/color code. Native full52787 terminal101:377 PASS/3 original query startup FAIL across45 suites. Actual frontend8 PASS, registry coverage1 PASS, format/locked all-target Clippy PASS; independent scoped review findings all resolved. No live heavy job or CI. Confirm actual Git/process state on resume.
 
 Help/effect registry covers every declared leaf and actual public help path. Standard JSON envelope schema1.0 plus hook/NDJSON and Pack output exceptions; conditional read/write/execute effects are explicit. No-color applies before parser/help including nested real Unix PTY; parser errors redact reflected secrets and escape controls. PTY reads/exit have bounded original ten-second fixture deadline and kill/reap on failure. Earlier frontend OS argv, NDJSON/preflight and strict rejected-request durable snapshot proof remain unchanged. This does not close full matrix, original startup root cause or required native Linux/Windows.
 
@@ -16,7 +16,7 @@ Original ignored specification SHA256 8914faad57432f524aec0a06aa90c43c18c23f8c19
 
 ## Exact next action
 
-Within PCTX01, help/color slice is locally integrated. Finish remaining argument/error/representation matrix and close the remaining finite route and options-before-effects coverage using shared validators/deadlines, preserving child/watch separation and all original budget/failure evidence. Required native Linux/Windows matrix and query startup root-cause qualification remain open. Complete independent local work before reporting minimal external platform prerequisites. Do not switch to approval memory, packaging, search ranking or other independent features.
+Within PCTX01, help/color slice is locally integrated. Next narrow implementation: explicit finite read leaves omitted from query_deadline (Work task/agent/check reads and dry-run, quota report/plan/reconcile, resource/runner/trust plan/status, inert filter previews, adapter verify/protocol/doctor, schedule list/plan/inspect and inventory). Pass original Project.deadline through dispatch/DB/loops and bound adapter lock/capability child plus native schedule observation; classifier-only change is insufficient. Preserve separate child execution/watch lifetime and original budget. Read-only requirements audit completed; no module changes started. Finish remaining argument/error/representation matrix and close the remaining finite route and options-before-effects coverage using shared validators/deadlines, preserving child/watch separation and all original budget/failure evidence. Required native Linux/Windows matrix and query startup root-cause qualification remain open. Complete independent local work before reporting minimal external platform prerequisites. Do not switch to approval memory, packaging, search ranking or other independent features.
 
 ## Retained historical results and inactive backlog
 
