@@ -1,0 +1,51 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.30s
+     Running tests/cli_delivery.rs (target/debug/deps/cli_delivery-d6142b38e0664ae4)
+
+running 4 tests
+test undeliverable_stream_refusal_returns_io_exit_without_project_effects ... FAILED
+test undeliverable_help_and_version_return_io_exit_without_project_effects ... FAILED
+test failed_response_file_and_closed_diagnostic_are_io_error_without_overwrite ... FAILED
+test undeliverable_native_hook_output_is_io_error_without_repeating_import ... FAILED
+
+failures:
+
+---- undeliverable_stream_refusal_returns_io_exit_without_project_effects stdout ----
+
+thread 'undeliverable_stream_refusal_returns_io_exit_without_project_effects' (8279382) panicked at tests/cli_delivery.rs:70:5:
+assertion `left == right` failed: Output { status: ExitStatus(unix_wait_status(512)), stdout: "", stderr: "" }
+  left: Some(2)
+ right: Some(7)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- undeliverable_help_and_version_return_io_exit_without_project_effects stdout ----
+
+thread 'undeliverable_help_and_version_return_io_exit_without_project_effects' (8279380) panicked at tests/cli_delivery.rs:54:9:
+assertion `left == right` failed: ["--help"]: Output { status: ExitStatus(unix_wait_status(0)), stdout: "", stderr: "" }
+  left: Some(0)
+ right: Some(7)
+
+---- failed_response_file_and_closed_diagnostic_are_io_error_without_overwrite stdout ----
+
+thread 'failed_response_file_and_closed_diagnostic_are_io_error_without_overwrite' (8279379) panicked at tests/cli_delivery.rs:144:5:
+assertion `left == right` failed: Output { status: ExitStatus(unix_wait_status(25856)), stdout: "", stderr: "" }
+  left: Some(101)
+ right: Some(7)
+
+---- undeliverable_native_hook_output_is_io_error_without_repeating_import stdout ----
+
+thread 'undeliverable_native_hook_output_is_io_error_without_repeating_import' (8279381) panicked at tests/cli_delivery.rs:120:5:
+assertion `left == right` failed: Output { status: ExitStatus(unix_wait_status(25856)), stdout: "", stderr: "\nthread 'main' (8279397) panicked at /rustc/b940084d7eb6a299eb4bfeb8e34901bc051e7ac4/library/std/src/io/stdio.rs:1168:9:\nfailed printing to stdout: Broken pipe (os error 32)\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n" }
+  left: Some(101)
+ right: Some(7)
+
+
+failures:
+    failed_response_file_and_closed_diagnostic_are_io_error_without_overwrite
+    undeliverable_help_and_version_return_io_exit_without_project_effects
+    undeliverable_native_hook_output_is_io_error_without_repeating_import
+    undeliverable_stream_refusal_returns_io_exit_without_project_effects
+
+test result: FAILED. 0 passed; 4 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.84s
+
+error: test failed, to rerun pass `--test cli_delivery`

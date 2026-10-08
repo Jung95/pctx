@@ -12,11 +12,10 @@ use std::{
 };
 const POLL: Duration = Duration::from_secs(2);
 fn text(value: &Value) -> String {
-    value
-        .as_str()
-        .unwrap_or("-")
+    crate::render::diagnostic_text(value.as_str().unwrap_or("-"))
+        .replace('\n', "\\n")
+        .replace('\t', "\\t")
         .chars()
-        .filter(|c| !c.is_control())
         .take(70)
         .collect()
 }
@@ -66,8 +65,7 @@ fn compact(board: &Value) -> String {
 }
 fn emit(writer: &mut impl Write, value: &Value, ndjson: bool, board: bool) -> Result<()> {
     if ndjson {
-        writer.write_all(&serde_json::to_vec(value)?)?;
-        writer.write_all(b"\n")?;
+        writer.write_all(&crate::render::render(value, crate::render::Format::Json)?)?;
     } else if board {
         writer.write_all(compact(&value["data"]).as_bytes())?;
     } else {
@@ -133,5 +131,57 @@ pub fn run(project: &Project, board: bool, since: i64, follow: bool, ndjson: boo
         }
         // No independent daemon, upstream polling, durable writes, or model wakeup.
         thread::sleep(POLL);
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn frames_escape_hidden_controls_without_changing_ndjson_values() {
+        let hidden = "stage\u{202e}\u{85}\u{2028}\n";
+        let frame = json!({"schema_version":"1.0","event_namespace":"work","event_seq":3,"type":hidden,"entity_id":hidden});
+        let mut json_bytes = Vec::new();
+        emit(&mut json_bytes, &frame, true, false).unwrap();
+        assert_eq!(serde_json::from_slice::<Value>(&json_bytes).unwrap(), frame);
+        let json_text = String::from_utf8(json_bytes).unwrap();
+        assert_eq!(json_text.lines().count(), 1);
+        for control in ['\u{202e}', '\u{85}', '\u{2028}'] {
+            assert!(!json_text.contains(control));
+        }
+        let mut plain = Vec::new();
+        emit(&mut plain, &frame, false, false).unwrap();
+        let plain = String::from_utf8(plain).unwrap();
+        assert_eq!(plain.lines().count(), 1);
+        for control in ['\u{202e}', '\u{85}', '\u{2028}'] {
+            assert!(!plain.contains(control));
+        }
+        assert!(plain.contains("\\u{202e}") && plain.contains("\\n"));
+    }
+    #[test]
+    fn frame_delivery_and_flush_failures_propagate_io_errors() {
+        struct Fail {
+            flush: bool,
+        }
+        impl Write for Fail {
+            fn write(&mut self, bytes: &[u8]) -> io::Result<usize> {
+                if self.flush {
+                    Ok(bytes.len())
+                } else {
+                    Err(io::Error::from(io::ErrorKind::BrokenPipe))
+                }
+            }
+            fn flush(&mut self) -> io::Result<()> {
+                Err(io::Error::from(io::ErrorKind::BrokenPipe))
+            }
+        }
+        for ndjson in [false, true] {
+            for flush in [false, true] {
+                let error =
+                    emit(&mut Fail { flush }, &json!({"type":"event"}), ndjson, false).unwrap_err();
+                assert_eq!(error.code, "IO_ERROR");
+                assert_eq!(error.exit, 7);
+            }
+        }
     }
 }

@@ -415,6 +415,33 @@ fn saved_cli_reread_never_reruns_and_failed_metering_preserves_delivery_truth() 
         assert_eq!(fs::read(&artifact).unwrap(), before);
         assert_eq!(fs::read(root.join("invocation-count")).unwrap(), b"x");
     }
+    // Warning delivery after completed stdout is best effort and cannot change
+    // the established retrieval result or claim that metering succeeded.
+    use std::os::fd::FromRawFd;
+    use std::process::Stdio;
+    let mut fds = [-1; 2];
+    assert_eq!(unsafe { libc::pipe(fds.as_mut_ptr()) }, 0);
+    let reader = unsafe { fs::File::from_raw_fd(fds[0]) };
+    let writer = unsafe { fs::File::from_raw_fd(fds[1]) };
+    drop(reader);
+    let output = command(&root, &data)
+        .args([
+            "output",
+            "show",
+            id,
+            "--view",
+            "full",
+            "--timeout-ms",
+            "5000",
+        ])
+        .stderr(Stdio::from(writer))
+        .output()
+        .unwrap();
+    assert!(output.status.success(), "{output:?}");
+    let response: Value = serde_json::from_slice(&output.stdout).unwrap();
+    assert_eq!(response["data"]["command_rerun"], false);
+    assert_eq!(fs::read(&artifact).unwrap(), before);
+    assert_eq!(fs::read(root.join("invocation-count")).unwrap(), b"x");
     // Failed output delivery never reaches accounting, even when the metrics lock is available.
     FileExt::unlock(&lock).unwrap();
     let destination = root.join("already-exists.json");

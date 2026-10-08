@@ -842,7 +842,8 @@ fn main() {
                 };
                 std::process::exit(exit);
             }
-            e.exit()
+            let exit = if e.print().is_err() { 7 } else { e.exit_code() };
+            std::process::exit(exit)
         }
     };
     if let Some(limit) = output_budget(&cli.command) {
@@ -933,8 +934,11 @@ fn main() {
             let e = request_error(deadline, e);
             let response = json!({"schema_version":"1.0","event_namespace":"work","event_seq":null,"type":"error","data":e});
             use std::io::Write;
-            let _ = writeln!(std::io::stderr(), "{}", response);
-            std::process::exit(e.exit);
+            let exit = match pctx::render::render(&response, pctx::render::Format::Json) {
+                Ok(bytes) if std::io::stderr().write_all(&bytes).is_ok() => e.exit,
+                _ => 7,
+            };
+            std::process::exit(exit);
         }
         return;
     }
@@ -1008,8 +1012,20 @@ fn main() {
         && response["data"]["hook_output"].is_object()
         && exit == 0
     {
-        println!("{}", response["data"]["hook_output"]);
-        return;
+        use std::io::Write;
+        let bytes = match pctx::render::render(
+            &response["data"]["hook_output"],
+            pctx::render::Format::Json,
+        ) {
+            Ok(bytes) => bytes,
+            Err(error) => std::process::exit(error.exit),
+        };
+        let exit = if std::io::stdout().write_all(&bytes).is_err() {
+            7
+        } else {
+            0
+        };
+        std::process::exit(exit);
     }
     let render_format = if response["errors"].as_array().is_some_and(|errors| {
         errors
@@ -1127,8 +1143,13 @@ fn main() {
             Ok(()) => true,
             Err(e) => {
                 let e = request_error(deadline, e);
-                eprintln!("{e}");
-                exit = e.exit;
+                use std::io::Write;
+                let message = pctx::render::diagnostic_text(&e.to_string());
+                exit = if writeln!(std::io::stderr(), "{message}").is_err() {
+                    7
+                } else {
+                    e.exit
+                };
                 false
             }
         }
@@ -1160,7 +1181,10 @@ fn main() {
             let diagnostic = json!({"code":"OUTPUT_MEASUREMENT_UNRECORDED",
                 "message":"Output was written; byte accounting could not be confirmed",
                 "reason":error.code,"delivery_written":true,"measurement_recorded":"unknown"});
-            eprintln!("{diagnostic}");
+            use std::io::Write;
+            if let Ok(bytes) = pctx::render::render(&diagnostic, pctx::render::Format::Json) {
+                let _ = std::io::stderr().write_all(&bytes);
+            }
         }
     }
     std::process::exit(exit)

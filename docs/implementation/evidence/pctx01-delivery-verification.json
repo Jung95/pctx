@@ -1,0 +1,100 @@
+{
+  "official_task": "PCTX01",
+  "status": "implementing_not_complete",
+  "base_commit": "cca88672677b7cb7e6216f3d0f88ee96d6f4fa36",
+  "platform": "native macOS arm64",
+  "source_sha256": {
+    "src/main.rs": "d342babc7e2921b6032a7ad876c3d87330271d1c69f43c15d638eeeda397b03f",
+    "src/watch.rs": "8326f37e22387ec1c6ad09cc9545d2366942f0b65ed1722b0757d95d11918364",
+    "tests/cli_delivery.rs": "b0b198ebfeaf48da98cf73cfac8da156cd06693491b89ab8e692b3353f58ac8b",
+    "tests/query_deadline_cli.rs": "50b9c34a95619675ea8c55d8b5306257bb5276f30b75b1aaff86c35c1cda2daf"
+  },
+  "verification": {
+    "initial_actual_delivery": {
+      "log": "pctx01-delivery-initial.log",
+      "handle": 1416,
+      "exit": 101,
+      "passed": 0,
+      "failed": 4,
+      "failed_tests": [
+        "undeliverable_stream_refusal_returns_io_exit_without_project_effects",
+        "undeliverable_help_and_version_return_io_exit_without_project_effects",
+        "failed_response_file_and_closed_diagnostic_are_io_error_without_overwrite",
+        "undeliverable_native_hook_output_is_io_error_without_repeating_import"
+      ]
+    },
+    "related": {
+      "log": "pctx01-delivery-targeted.log",
+      "handle": 73165,
+      "exit": 0,
+      "passed": 28,
+      "failed": 0,
+      "failed_tests": []
+    },
+    "watch_unit": {
+      "log": "pctx01-delivery-watch-unit.log",
+      "handle": 26358,
+      "exit": 0,
+      "passed": 2,
+      "failed": 0,
+      "failed_tests": []
+    },
+    "final_delivery_and_metering": {
+      "log": "pctx01-delivery-final-targeted.log",
+      "handle": 15988,
+      "exit": 0,
+      "passed": 13,
+      "failed": 0,
+      "failed_tests": []
+    },
+    "format": {
+      "exit": 0,
+      "log": "pctx01-delivery-format.log"
+    },
+    "locked_all_target_clippy": {
+      "handle": 49559,
+      "exit": 0,
+      "log": "pctx01-delivery-clippy.log"
+    },
+    "final_full": {
+      "log": "pctx01-delivery-full.log",
+      "handle": 84654,
+      "exit": 101,
+      "passed": 464,
+      "failed": 4,
+      "failed_tests": [
+        "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+        "query_program_resolution_uses_captured_command_path",
+        "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget",
+        "simultaneous_streams_are_collected_and_overflow_never_infers_success"
+      ]
+    }
+  },
+  "proofs": [
+    "Initial actual closed-pipe tests0PASS4FAIL: help returns0, unsupported NDJSON error returns2 despite absent delivery, hook println and response-file diagnostic panic101. Failures retained.",
+    "Check Clap print and primary stdout/stderr writes; successful help/version/parser/hook semantics remain, primary delivery failure returnsIO7. Existing destination bytes preserved on error.",
+    "Native-hook/stream-error/NDJSON frame objects use shared reversible JSON serializer without an added envelope. Compact columns use shared diagnostic escaping and literal newline/tab, retaining one-row framing. Unit2 PASS binds hidden values by JSON roundtrip and actual write/flush error7.",
+    "Hook fixture imports PermissionDenied once successfully, then replays same key with broken stdout and again normally. COUNT adapter_receipts for key=1; this qualifies idempotent replay delivery failure, not failure on first import or rollback timing. No live provider or installation.",
+    "Saved-output actual CLI with metrics lock held and closed stderr preserves completed stdout/exit0, unchanged artifact, command_rerunfalse and one original invocation. Accounting warning stays best effort/unknown without inference or panic.",
+    "Related28PASS and final delivery/metering13PASS; all tests native Unix pipe fixtures. Full gate preserves original startup tests and budgets."
+  ],
+  "independent_review": {
+    "agent": "requirements",
+    "result": "No scoped blocker; checked primary7, same protocol objects/reversible escapes, compact rows safe, best-effort accounting preserves established outcome. Hook replay is not first-import failure; native hook input/output preflight and child exit matrix remain."
+  },
+  "remaining": [
+    "Native-hook --output/from-file common preflight and first-import delivery timing.",
+    "Actual frontend child exit0/1/2/signal/prelaunch and remaining envelope/argument/phase-race gates.",
+    "Original native startup failures with original1s budgets and native Linux/Windows qualification.",
+    "No next official task, Actions, external service calls or OS policy changes."
+  ],
+  "artifact_sha256": {
+    "pctx01-delivery-targeted.log": "b56134a48f1ecb67aa0b2a4b85e6f9f88ae2fb056f8cb4489c338f165b8673e7",
+    "pctx01-delivery-watch-unit.log": "cdcc5deef950b88ed475f39141ea2f8823a4f75651c278f4a589a853e5f08196",
+    "pctx01-delivery-final-targeted.log": "53802184e596fa779ed7aa77d0172f877652190adb65f22c59b56270c22bb15e",
+    "pctx01-delivery-clippy.log": "69cc7c215096f659ddc945a4ff32b29d19eee539b9e3b0f089a26f6f42690201",
+    "pctx01-delivery-full.log": "b85f1ff6a90ea5d418ad73bc4a2e74e845779376eccb99411bf654c17bab0183",
+    "pctx01-delivery-format.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "pctx01-delivery-initial.log": "2852a9f05904576c360bb31462a056e1ea39e596b7916b27aefd59970793869b"
+  }
+}
