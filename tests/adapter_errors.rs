@@ -287,7 +287,8 @@ fn direct_adapter_plan_input_source_and_binding_are_distinct() {
         "PLAN_MISMATCH",
         2,
     );
-    // Install admission retains its existing lock creation; config publication is absent.
+    // Pure hash refusal precedes lock/storage/config effects.
+    assert_eq!(f.state(), before);
     assert!(!p.root.join(".claude").exists());
     fs::write(&file, b"changed bytes").unwrap();
     classified(

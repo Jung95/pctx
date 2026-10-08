@@ -49,7 +49,7 @@ for currently unrestricted lookup keys.
 | C001 | `activity` | src/work.rs | Existing parser/shared admission or state/input-dependent checks; whole matrix open |
 | C002 | `adapter claude doctor` | src/adapter.rs | Existing parser/shared admission or state/input-dependent checks; whole matrix open |
 | C003 | `adapter claude event` | src/adapter.rs | R10 |
-| C004 | `adapter claude install` | src/adapter.rs | G03-C004 residual: provided hash length/hex/equality is pure but currently after discovery/lock; stored bytes/identity equality is stateful; whole matrix open |
+| C004 | `adapter claude install` | src/adapter.rs | G03-C004 local admission proof: exact existing provided hash length/hex/equality before discovery/lock, pctx01-install-admission-verification.json; stored bytes/identity stateful; required platforms/full matrix open |
 | C005 | `adapter claude plan` | src/adapter.rs | R10 |
 | C006 | `adapter claude protocol-fixture` | src/adapter.rs | Existing parser/shared admission or state/input-dependent checks; whole matrix open |
 | C007 | `adapter claude statusline` | src/adapter.rs | R10 |

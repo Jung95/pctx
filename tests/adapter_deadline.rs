@@ -86,8 +86,8 @@ fn existing_install_lock_obeys_explicit_budget_without_installation_effects() {
         call(
             &p,
             ClaudeCommand::Install {
-                plan: "invalid".into(),
-                expect_hash: "invalid".into()
+                plan: "a".repeat(64),
+                expect_hash: "a".repeat(64)
             }
         )
         .err()

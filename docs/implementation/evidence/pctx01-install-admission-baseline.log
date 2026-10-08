@@ -1,0 +1,54 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.14s
+     Running tests/adapter_install_preflight.rs (target/debug/deps/adapter_install_preflight-c596ba16db1decb6)
+
+running 5 tests
+test direct_invalid_install_keeps_state_and_original_expiry ... FAILED
+test install_hash_admission_preserves_exact_hex_grammar ... FAILED
+test isolated_nonowner_direct_install_admission_and_authority ... 
+thread 'isolated_nonowner_direct_install_admission_and_authority' (8904867) panicked at tests/adapter_install_preflight.rs:211:9:
+assertion `left == right` failed
+  left: ("POLICY_DENIED", 5)
+ right: ("PLAN_MISMATCH", 2)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+FAILED
+test native_accepted_install_keeps_authority_and_publishes_only_planned_settings ... ok
+test native_invalid_install_is_before_scope_authority_and_response ... FAILED
+
+failures:
+
+---- direct_invalid_install_keeps_state_and_original_expiry stdout ----
+
+thread 'direct_invalid_install_keeps_state_and_original_expiry' (8904863) panicked at tests/adapter_install_preflight.rs:164:9:
+assertion `left == right` failed
+  left: ({"": None}, {"": None, "control": None, "control/adapter.lock": Some([])})
+ right: ({"": None}, {})
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- install_hash_admission_preserves_exact_hex_grammar stdout ----
+
+thread 'install_hash_admission_preserves_exact_hex_grammar' (8904864) panicked at tests/adapter_install_preflight.rs:181:79:
+called `Result::unwrap_err()` on an `Ok` value: ()
+
+---- isolated_nonowner_direct_install_admission_and_authority stdout ----
+
+thread 'isolated_nonowner_direct_install_admission_and_authority' (8904865) panicked at tests/adapter_install_preflight.rs:196:17:
+isolated child exit status: 101
+
+---- native_invalid_install_is_before_scope_authority_and_response stdout ----
+
+thread 'native_invalid_install_is_before_scope_authority_and_response' (8904879) panicked at tests/adapter_install_preflight.rs:142:21:
+assertion `left == right` failed: Output { status: ExitStatus(unix_wait_status(1792)), stdout: "", stderr: "" }
+  left: Some(7)
+ right: Some(2)
+
+
+failures:
+    direct_invalid_install_keeps_state_and_original_expiry
+    install_hash_admission_preserves_exact_hex_grammar
+    isolated_nonowner_direct_install_admission_and_authority
+    native_invalid_install_is_before_scope_authority_and_response
+
+test result: FAILED. 1 passed; 4 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.92s
+
+error: test failed, to rerun pass `--test adapter_install_preflight`

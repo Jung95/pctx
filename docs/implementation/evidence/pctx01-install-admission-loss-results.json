@@ -1,0 +1,26 @@
+{
+  "results": [
+    {
+      "guard": "frontend",
+      "exit": 101,
+      "passed": 0,
+      "failed": 1,
+      "log": "pctx01-install-admission-loss-frontend.log"
+    },
+    {
+      "guard": "producer",
+      "exit": 101,
+      "passed": 0,
+      "failed": 1,
+      "log": "pctx01-install-admission-loss-producer.log"
+    },
+    {
+      "guard": "equality",
+      "exit": 101,
+      "passed": 0,
+      "failed": 1,
+      "log": "pctx01-install-admission-loss-equality.log"
+    }
+  ],
+  "exact_restoration": true
+}

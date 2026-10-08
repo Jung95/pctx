@@ -502,3 +502,17 @@ before lock; no new task/feature/Actions. Native platforms/startup gates remain.
 
 
 Final native full4105 terminal101: 555 PASS / 4 FAIL. Failed tests: query_program_resolution_uses_captured_command_path, relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry, simultaneous_streams_are_collected_and_overflow_never_infers_success, concurrent_query_startup_preserves_group_streams_and_original_one_second_budget. All four historical startup conditions remain unresolved, original budgets unchanged. All jobs terminal; no heavy job live. PCTX01 remains incomplete0/10.
+
+
+## PCTX01 C004 Install hash admission — 2026-10-08
+
+G03 existing leaf C004 now has local exact-hash/no-effects admission proof:
+evidence/pctx01-install-admission-verification.json. Related38PASS, three actual
+loss failures/restoration, static PASS and scoped independent review. Whole
+G03 remains open for required native platforms and remaining semantic/
+representation matrix. Denominators10 whole gates,140 visible leaves and12
+historical groups unchanged. PCTX01 remains implementing; no next official task.
+
+Final native full32591 terminal101: 560 PASS / 4 FAIL. All four historical
+startup conditions fail at unchanged budgets; failure names/source hashes in
+the manifest. All jobs terminal, no heavy job live. PCTX01 remains incomplete0/10.

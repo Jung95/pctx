@@ -116,11 +116,18 @@ fn label(s: &str) -> Result<()> {
     }
     Ok(())
 }
-/// Existing pure adapter identities and transport grammar, without protocol/state reads.
+fn install_arguments(plan: &str, expect_hash: &str) -> Result<()> {
+    if plan.len() != 64 || !plan.bytes().all(|b| b.is_ascii_hexdigit()) || plan != expect_hash {
+        return Err(Error::new("PLAN_MISMATCH", "Exact plan hash required", 2));
+    }
+    Ok(())
+}
+/// Existing pure adapter arguments and transport grammar, without protocol/state reads.
 pub fn validate_adapter_request(c: &AdapterCommand) -> Result<()> {
     let AdapterCommand::Claude { command } = c;
     match command {
         ClaudeCommand::Plan { agent } => label(agent)?,
+        ClaudeCommand::Install { plan, expect_hash } => install_arguments(plan, expect_hash)?,
         ClaudeCommand::Event {
             agent,
             from_file,
@@ -913,12 +920,7 @@ fn execute_inner(p: &Project, c: &AdapterCommand) -> Result<Value> {
         ClaudeCommand::Install { plan, expect_hash } => {
             owner()?;
             let _lock = acquire(p)?;
-            if plan.len() != 64
-                || !plan.bytes().all(|b| b.is_ascii_hexdigit())
-                || plan != expect_hash
-            {
-                return Err(Error::new("PLAN_MISMATCH", "Exact plan hash required", 2));
-            }
+            install_arguments(plan, expect_hash)?;
             let bytes = bounded(Some(
                 &p.control_dir
                     .join("adapter-plans")

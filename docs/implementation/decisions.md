@@ -969,3 +969,16 @@ G03 residual under the already existing leaf C004; fixed public denominator140,
 historical residual label groups12 and official gate denominator10 unchanged.
 Local12/12 is not all-leaf completion. Next implementation reuses existing
 predicate without new business functionality or actor/state bypass.
+
+
+## PCTX01: preserve Install hash grammar before effects — 2026-10-08
+
+C004 reuses exactly the existing pure predicate in shared admission and retained
+producer defense. Equality is byte-exact and ASCII hex accepts upper/mixed case.
+Case normalization would alter the request contract; file-content digest matching
+remains stateful and may still reject an admitted uppercase digest. No new label
+or secret-detection grammar. Direct original-expiry priority stays ahead of the
+pure predicate. The existing lock-deadline test used invalid hash input, so it now
+uses valid64 hex to test actual contention with the same50ms request. Invalid
+requests get input2 before authority/discovery/lock; valid requests retain owner5.
+Fixed denominators10/140/12 and latest serial-task rule remain unchanged.

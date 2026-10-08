@@ -6,28 +6,26 @@
 
 ## Latest integration boundary
 
-PCTX01-G05/G06 adapter error classification, runtime
-064ab5597af2b5ce35f8f8412931aec4c0335c49, base
-352186bce081af6907f685bb929ead524996d683. Normal push75577 terminal0 published
-352186b..064ab55 to origin/main. Runtime edits: src/adapter.rs,
-tests/adapter_errors.rs, tests/adapter_preflight.rs policy5 assertion, docs/evidence.
-§14 classes2/4/5/6/7 with §27/§38 state9 preserved; contextual plan/config errors;
-persisted DB JSON/shape corruption7, no ownership-array panic. No clock/owner/
-replay/publication/business change. Baseline37694 terminal101:0PASS4FAIL; related
-87098 terminal0:35PASS and54548 terminal0:36PASS. First full61665 terminal101:
-554PASS4FAIL before storage repair, retained log full-before-storage-json.
-Storage baseline66073 terminal101:0PASS1FAIL. Final related36322 terminal0:
-37PASS; target41532 terminal0:9PASS after expanded shape fixture. Classification
-loss95578 terminal0 (five actual failed tests/exact restoration), storage loss
-95323 terminal0 (two actual failures/exact restoration). Static8792 and final
-85773 terminal0; final format0. Independent /root/work_control read-only review
-no blocker. Final full4105 terminal101: 555PASS4FAIL, all four original startup
-conditions fail at unchanged budgets/no-fail-fast. All jobs terminal; no heavy
-job live.
-Manifest pctx01-adapter-errors-verification.json. Whole gates0/10; historical
-local residual groups12/12, platform0/12. Install invalid hash still creates lock
-(G03-C004), unbound PreCompact persists incomplete intent, no rollback claim.
-Linux/Windows and four original startup conditions remain open. No Actions.
+PCTX01-G03-C004 existing Install pure hash admission, base
+0ce593bd0f57271be98f7c22d33ed141772b4885. Runtime revision follows the development
+commit below. Shared exact64 ASCII hex and byte-equality predicate precedes
+CLI discovery and direct authority/lock; upper/mixed case accepted unchanged.
+Original expiry first; saved bytes/schema/identity/config/owner checks retained.
+Files: src/adapter.rs, tests/adapter_install_preflight.rs, strengthened
+tests/adapter_errors.rs, valid-hash held-lock fixture tests/adapter_deadline.rs.
+Baseline97591 terminal101:1PASS4FAIL. Initial target selection101 ran no tests;
+related4408 terminal101 retains invalid-hash contention fixture failure. Fixture
+now reaches held-lock path with same50ms deadline/no config/DB effects.
+Repaired related83436 terminal0:38PASS; loss28056 terminal0:three individual
+0PASS1FAIL/exact restoration; static64074 terminal0/formatPASS. Independent
+/root/work_control read-only review no scoped blocker/no criterion weakening.
+Final full32591 terminal101:560PASS4FAIL, all four historical startup tests
+failed with original budgets. All jobs terminal; no heavy job live.
+Manifest evidence/pctx01-install-admission-verification.json; exact source hashes
+and all failed observations retained. Uppercase success is pure grammar proof,
+not actual saved-plan installation. Native Linux/Windows remain unverified.
+Whole gates0/10; visible leaves140 and historical label groups12/12/platform0/12
+unchanged. PCTX01 is the only active official task. No Actions/next official task.
 
 ## Source, evidence and environment
 
@@ -75,16 +73,21 @@ Original ignored specification SHA256 8914faad57432f524aec0a06aa90c43c18c23f8c19
 
 ## Exact next action
 
-Final full4105 and normal push75577 are terminal, counts/failures/hashes recorded.
-Resume published runtime064ab55 and remain on PCTX01. Next is
-G03-C004: extract existing Install provided hash length/hex/equality before
-CLI discovery/producer lock, keep stored-byte/identity comparisons stateful and
-original expiry first. Fixed leaf140 and historical label groups12 unchanged;
-no next official task. Broader G05/other whole gates and native platforms remain.
-External blockers require exact needed action while retaining current task.
-Native G09 requires actual Linux/Windows current-source all-target tests plus
-required CLI input/transport matrix, complete logs/source/environment IDs. No
-Actions authorization from this record; monthly limit respected. Local work remains.
+Remain on PCTX01. C004 pure Install predicate is locally integrated, not whole
+leaf/task completion. Next same-task G02/G04 action: verify C004 required flags
+and malformed/duplicate CLI options plus complete JSON/compact refusal envelopes
+for input2, policy5, saved bytes4 and storage7/state9, distinguishing preflight
+no-output effects from valid admitted requests. Reuse exact existing contracts,
+not new adapter features or grammars. Frozen140-leaf/10-gate/12-group denominators
+remain; no next official task.
+
+Four original startup tests remain unresolved; do not retry to promote a pass or
+weaken original1000ms/stream/group checks. G09 requires native Linux and Windows
+current-source all-target tests plus required CLI input/transport matrix, complete
+logs/source/environment IDs. Those environments are unavailable here. Provision
+native runners with the existing workflows or supply native execution evidence;
+Actions remain undispatched under monthly3000-minute constraint. External
+blockers do not authorize switching official tasks. Local matrix work remains.
 
 ## Retained historical results and inactive backlog
 

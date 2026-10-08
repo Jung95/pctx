@@ -920,3 +920,19 @@ Final native full4105 terminal101: 555 PASS / 4 FAIL. Failed tests: query_progra
 Runtime064ab5597af2b5ce35f8f8412931aec4c0335c49 normally pushed to origin/main
 by75577 terminal0 (352186b..064ab55), [skip ci]. All jobs terminal, no Actions.
 Only PCTX01 active, next local G03-C004 Install admission; whole task0/10.
+
+
+## PCTX01 C004 Install hash admission — 2026-10-08
+
+Only PCTX01 active. Existing C004 hash grammar now shared before discovery/
+authority/lock, with original expiry and stateful checks preserved. Baseline
+1PASS4FAIL, final related38PASS, three loss failures/exact restoration, static
+PASS and independent read-only review no blocker. Manifest:
+evidence/pctx01-install-admission-verification.json. Initial invalid-target and
+contention-fixture failures retained; valid-hash repair keeps50ms/no-effects
+criteria. Whole0/10/platforms/startup conditions remain open. Final full and
+publication status are in current handoff; no Actions/next official task.
+
+Final native full32591 terminal101: 560 PASS / 4 FAIL. All four historical
+startup conditions fail at unchanged budgets; failure names/source hashes in
+the manifest. All jobs terminal, no heavy job live. PCTX01 remains incomplete0/10.

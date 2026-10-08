@@ -1033,8 +1033,9 @@ qualify input/source/schema/binding distinctions, original TIMEOUT7, future/empt
 DB schema7, stored ownership/JSON7 and same-key replay/conflict/reconciliation9.
 Snapshot is taken after initialization/corruption, not treated as rollback.
 
-Install's existing invalid-hash path creates the adapter lock before refusal;
-this remains G03-C004, not a no-effects qualification. Unbound PreCompact stores
+At runtime064ab55, Install's invalid-hash path created the adapter lock before
+refusal. This historical G03-C004 defect is repaired in the later C004 integration
+below; its original observation remains source-bound. Unbound PreCompact stores
 an incomplete intent before binding9; retry9 requires reconciliation, not rollback.
 Five initial classification losses and two stored-JSON/shape losses each actual
 0PASS1FAIL/exact restoration. Both stages are hash-bound; new shape subcases were
@@ -1053,3 +1054,35 @@ Four historical startup conditions remain unresolved; no Actions/next task.
 
 
 Final native full4105 terminal101: 555 PASS / 4 FAIL. Failed tests: query_program_resolution_uses_captured_command_path, relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry, simultaneous_streams_are_collected_and_overflow_never_infers_success, concurrent_query_startup_preserves_group_streams_and_original_one_second_budget. All four historical startup conditions remain unresolved, original budgets unchanged. All jobs terminal; no heavy job live. PCTX01 remains incomplete0/10.
+
+
+## PCTX01 C004 Install hash admission — 2026-10-08
+
+PCTX01 remains the only active official task. C004 now shares its exact existing
+64-byte ASCII-hex and byte-equality predicate before CLI project discovery and
+direct authority/lock effects. Original supplied expiry remains first. No case
+normalization or separate expected-hash grammar; uppercase/mixed hex remain
+admitted. Stored bytes/schema/project/workspace/additions/config comparisons stay
+in the producer, with owner authority and publication unchanged.
+
+Evidence: evidence/pctx01-install-admission-verification.json. Baseline1PASS4FAIL
+retains created lock, policy-priority and missing-root failures. Related38PASS
+covers64 native invalid combinations, eight direct invalid plus eight original
+expired requests, isolated nonowner priority, exact accepted grammar and actual
+isolated Plan→Install preserving permissions/statusLine. Existing stored-byte4,
+schema2, binding9 and stale-config4 tests remain. The contention fixture now uses
+a valid64 hash to reach its held lock; original50ms request and no-effects
+criteria unchanged. Initial invalid target selection and pre-repair contention
+failure are retained. Three actual guard-loss failures restore source exactly;
+format/locked all-target Clippy PASS. Independent read-only review no blocker.
+Upper/mixed-case successful stored-plan installation is not claimed.
+
+Whole gates0/10, visible leaves140 and historical local groups12/12/platform0/12
+unchanged. This repairs a predicate of the existing leaf, not a new residual
+group or official task. Native Linux/Windows and all four historical startup
+conditions remain open. Final full results are recorded in the manifest and
+current handoff. No next official task or Actions.
+
+Final native full32591 terminal101: 560 PASS / 4 FAIL. All four historical
+startup conditions fail at unchanged budgets; failure names/source hashes in
+the manifest. All jobs terminal, no heavy job live. PCTX01 remains incomplete0/10.

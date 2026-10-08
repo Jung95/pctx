@@ -1,0 +1,130 @@
+{
+  "official_task": "PCTX01",
+  "gate": "PCTX01-G03",
+  "existing_leaf": "C004",
+  "base_revision": "0ce593bd0f57271be98f7c22d33ed141772b4885",
+  "baseline_sections": [
+    "\u00a714",
+    "\u00a738",
+    "\u00a721 PCTX01"
+  ],
+  "source_sha256": {
+    "src/adapter.rs": "a61ed524d6abad0f127ed2ff6553c014682148c37e678833a3cd245fddb8c129",
+    "tests/adapter_install_preflight.rs": "96560232ae1e15ba5310d4ed546e62b3275c29a6a95fa704acd07973f84bcd98",
+    "tests/adapter_deadline.rs": "a1f49392b69edb906df381beefa5b4bee813a9c1590e0c75e021efa9513e7095",
+    "tests/adapter_errors.rs": "41dbf4622ad12477a710c815a048e4e13ff647eccb361f909402d45b3aeedd60"
+  },
+  "platform": "native macOS arm64",
+  "contract": "Existing plan64 UTF-8 bytes, ASCII hexadecimal only, byte-exact plan/expect_hash equality; preserve upper/mixed case acceptance. Shared CLI/direct admission precedes discovery/authority/lock; supplied original expiry remains first. Saved plan bytes/schema/identity/config predicates remain stateful.",
+  "baseline": {
+    "session": 97591,
+    "exit": 101,
+    "passed": 1,
+    "failed": 4,
+    "log": "pctx01-install-admission-baseline.log",
+    "observations": [
+      "direct invalid request creates control/adapter.lock",
+      "isolated nonowner invalid request yields policy5 rather than hash2",
+      "CLI missing root yields7 rather than2",
+      "shared validator accepts invalid hash"
+    ]
+  },
+  "initial_selection": {
+    "exit": 101,
+    "tests_run": 0,
+    "log": "pctx01-install-admission-related.log",
+    "reason": "nonexistent adapter_delivery target"
+  },
+  "initial_related": {
+    "session": 4408,
+    "exit": 101,
+    "log": "pctx01-install-admission-related-final.log",
+    "reason": "Existing contention fixture used invalid hash and failed after new admission priority. It is corrected to valid64 hash; original50ms deadline and no-publication criterion unchanged."
+  },
+  "related": {
+    "session": 83436,
+    "exit": 0,
+    "passed": 38,
+    "failed": 0,
+    "log": "pctx01-install-admission-related-repaired.log"
+  },
+  "coverage": {
+    "native_invalid_combinations": 64,
+    "invalid_forms": 8,
+    "dimensions": "missing/initialized project \u00d7 absent/existing response \u00d7 JSON/compact \u00d7 eight forms, nonowner actor; full root/data and response-byte snapshots",
+    "direct": "eight invalid and eight same-original-expired requests; no storage effects; isolated nonowner eight invalid plus valid policy5",
+    "accepted": "lowercase, uppercase, mixed pure grammar; actual CLI owner Plan\u2192Install preserves permissions/statusLine; native valid nonowner policy5 with unchanged state; existing stored-bytes4/schema2/binding9/config-stale4 and lock deadline unchanged"
+  },
+  "controlled_loss": {
+    "results": [
+      {
+        "guard": "frontend",
+        "exit": 101,
+        "passed": 0,
+        "failed": 1,
+        "log": "pctx01-install-admission-loss-frontend.log"
+      },
+      {
+        "guard": "producer",
+        "exit": 101,
+        "passed": 0,
+        "failed": 1,
+        "log": "pctx01-install-admission-loss-producer.log"
+      },
+      {
+        "guard": "equality",
+        "exit": 101,
+        "passed": 0,
+        "failed": 1,
+        "log": "pctx01-install-admission-loss-equality.log"
+      }
+    ],
+    "exact_restoration": true
+  },
+  "static": {
+    "session": 64074,
+    "exit": 0,
+    "format_log": "pctx01-install-admission-format.log",
+    "clippy_log": "pctx01-install-admission-static.log",
+    "commands": [
+      "cargo fmt --all -- --check",
+      "cargo clippy --locked --all-targets -- -D warnings"
+    ]
+  },
+  "full": {
+    "session": 32591,
+    "status": "terminal",
+    "command": "cargo test --locked --all-targets --no-fail-fast",
+    "log": "pctx01-install-admission-full-macos.log",
+    "exit": 101,
+    "passed": 560,
+    "failed": 4,
+    "failed_tests": [
+      "query_program_resolution_uses_captured_command_path",
+      "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget",
+      "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+      "simultaneous_streams_are_collected_and_overflow_never_infers_success"
+    ]
+  },
+  "independent_review": {
+    "agent": "/root/work_control",
+    "mode": "read-only",
+    "result": "no scoped blocker; preserved exact grammar, deadline priority, authority and stateful producer checks",
+    "fixture_reconciliation": "No criterion weakening; valid hash reaches original held-lock50ms path, no config/DB effects unchanged; verified source hashes/counts/denominators."
+  },
+  "status": {
+    "whole_gates_closed": 0,
+    "whole_gates_total": 10,
+    "historical_bounded_local_groups": "12/12",
+    "historical_required_platform_groups": "0/12",
+    "visible_leaves": 140,
+    "next_official_task": null
+  },
+  "limits": [
+    "Native Linux/Windows unverified; no Actions dispatched",
+    "All four historical startup conditions remain unresolved; original budgets unchanged",
+    "Uppercase/mixed acceptance is pure validation proof, not successful stored-plan installation",
+    "No live Claude/global settings or OS registration; isolated fixture publication only",
+    "Remaining full error-envelope/budget/representation/phase matrices mandatory"
+  ]
+}
