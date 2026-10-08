@@ -122,5 +122,14 @@
       "failed": 0
     }
   },
-  "initial_qualification": "Initial0PASS1FAIL proves unchanged main/operations owner-queue refusal masking; policy helper may already be extracted by worker during compilation, so not claimed as exact all-source baseline. Nonexistent policy_controls target log ran no tests and is retained."
+  "initial_qualification": "Initial0PASS1FAIL proves unchanged main/operations owner-queue refusal masking; policy helper may already be extracted by worker during compilation, so not claimed as exact all-source baseline. Nonexistent policy_controls target log ran no tests and is retained.",
+  "runtime_revision": "2defc049c69ee07091ee8f67c8ad823e1a35e42c",
+  "publication": {
+    "normal_push_session": 11262,
+    "exit": 0,
+    "destination": "https://github.com/Jung95/pctx.git",
+    "branch": "main",
+    "range": "7730637..2defc04",
+    "skip_ci": true
+  }
 }

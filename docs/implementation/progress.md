@@ -688,3 +688,7 @@ Quota Ingest key. Registered IDs/leases/current session/observation input remain
 producer responsibilities; do not add independent features.
 
 Final native full35198 terminal101: 518 PASS/4 FAIL. Failed tests: query_program_resolution_uses_captured_command_path, relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry, concurrent_query_startup_preserves_group_streams_and_original_one_second_budget, simultaneous_streams_are_collected_and_overflow_never_infers_success. Original budgets unchanged; all four historical startup conditions remain unresolved. All jobs terminal; no heavy job live. PCTX01 remains0/10.
+
+Operations admission runtime2defc049c69ee07091ee8f67c8ad823e1a35e42c normally pushed by11262
+terminal0 to origin/main [skip ci]. All jobs terminal; no heavy job live. Next
+same-task R04–R06; PCTX01 remains incomplete, no next official task selected.

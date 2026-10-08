@@ -6,7 +6,9 @@
 
 ## Latest integration boundary
 
-PCTX01-G03-R01–R03 Operations/Role, base7730637; uncommitted parent integration.
+PCTX01-G03-R01–R03 Operations/Role, runtime 2defc049c69ee07091ee8f67c8ad823e1a35e42c,
+base7730637. Normal push11262 terminal0 published7730637..2defc04 to origin/main.
+No uncommitted runtime changes.
 Exact existing pure grammar shared before main discovery/DB; raw recipient alias
 still resolves to canonical ID before strong state-dependent label check. Native
 60 refusal combinations/six direct expiry+storage, accepted limits/label/reason,
@@ -64,8 +66,8 @@ Original ignored specification SHA256 8914faad57432f524aec0a06aa90c43c18c23f8c19
 
 ## Exact next action
 
-Final full35198 is terminal; source/evidence/documents ready to commit [skip ci]
-and normally push Operations admission. Then stay on PCTX01,
+Final full35198 is terminal; Operations admission/evidence/documents committed
+and normally pushed as2defc04 [skip ci]. Then stay on PCTX01,
 R04–R06 existing Work Report/Session reason/Ack provenance/Quota Ingest key.
 Keep registered IDs, leases, current sessions and raw observation contracts in
 producers. Fixed registry C001–C140/R01–R12 remains the source of remaining work.
