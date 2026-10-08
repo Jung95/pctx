@@ -8,7 +8,7 @@ use clap::Subcommand;
 use rusqlite::{Connection, OptionalExtension, TransactionBehavior, params};
 use serde_json::{Value, json};
 use std::collections::BTreeMap;
-const SERIALIZER: &str = "minimal-context-v1";
+const SERIALIZER: &str = "minimal-context-v2";
 #[derive(Debug, Clone, Subcommand)]
 pub enum SessionCommand {
     Attach {
@@ -347,6 +347,24 @@ fn in_scope(path: &str, scope: &[String]) -> bool {
                 || globset::Glob::new(s).is_ok_and(|g| g.compile_matcher().is_match(path))
         })
 }
+// Evidence hashes describe the actual masked representation, not merely the
+// original file. Text offsets below are delivered UTF-8 offsets; original source
+// ranges are copied only when the producer supplies them.
+fn representation_metadata(mut metadata: Value, body: &Value) -> Result<Value> {
+    metadata["representation"] = body["representation"].clone();
+    metadata["delivered_body_hash"] = json!(hash(serde_json::to_vec(body)?));
+    metadata["body_hash_format"] = json!("canonical-json-v1");
+    if let Some(text) = body["text"].as_str() {
+        metadata["delivered_text_hash"] = json!(hash(text.as_bytes()));
+        metadata["delivered_text_byte_range"] = json!([0, text.len()]);
+    }
+    for key in ["byte_range", "line_range", "source_range"] {
+        if let Some(range) = body.get(key) {
+            metadata[key] = range.clone();
+        }
+    }
+    Ok(metadata)
+}
 fn selection(
     p: &Project,
     task: &str,
@@ -361,8 +379,9 @@ fn selection(
     let task_value = redact_value(task_value);
     let mut metadata = BTreeMap::new();
     let mut bodies = BTreeMap::new();
-    metadata.insert("task".into(),json!({"hash":hash(task_value.to_string()),"task_id":task_value["task_id"],"revision":task_value["task_revision"],"definition_revision":task_value["definition_revision"],"kind":"task"}));
-    bodies.insert("task".into(), json!({"kind":"task","metadata":task_value}));
+    let task_body = json!({"kind":"task","representation":"metadata","metadata":task_value});
+    metadata.insert("task".into(), representation_metadata(json!({"hash":hash(task_value.to_string()),"task_id":task_value["task_id"],"revision":task_value["task_revision"],"definition_revision":task_value["definition_revision"],"kind":"task"}), &task_body)?);
+    bodies.insert("task".into(), task_body);
     let inventory = reader::inventory(p, false)?;
     if !inventory.skipped.is_empty() {
         return Err(Error::new(
@@ -395,11 +414,11 @@ fn selection(
             } else {
                 "project_document"
             };
-            metadata.insert(key.clone(),json!({"path":path,"hash":doc["file_hash"],"kind":kind,"scope":doc["scope"],"required":doc["required"]}));
             let mut body = doc.clone();
             body["text"] = body["content"].take();
             body["kind"] = json!(kind);
             body["representation"] = json!("full_span");
+            metadata.insert(key.clone(), representation_metadata(json!({"path":path,"hash":doc["file_hash"],"kind":kind,"scope":doc["scope"],"required":doc["required"]}), &body)?);
             bodies.insert(key, body);
         }
     }
@@ -413,11 +432,12 @@ fn selection(
         }
         let f = reader::read(p, &path)?;
         let key = format!("file:{path}");
+        let body = json!({"path":path,"file_hash":f.hash,"kind":"reference","representation":"reference","evidence_status":"observed","freshness":"current"});
         metadata.insert(
             key.clone(),
-            json!({"path":path,"hash":f.hash,"kind":"reference"}),
+            representation_metadata(json!({"path":path,"hash":f.hash,"kind":"reference"}), &body)?,
         );
-        bodies.insert(key,json!({"path":path,"file_hash":f.hash,"kind":"reference","representation":"reference","evidence_status":"observed","freshness":"current"}));
+        bodies.insert(key, body);
     }
     Ok((metadata, bodies))
 }
@@ -559,9 +579,11 @@ pub fn context(p: &Project, c: &ContextCommand) -> Result<Value> {
                 added = bodies.values().cloned().collect();
             }
             let value = json!({"context_id":context_id,"session_id":session,"context_epoch":s.epoch,"task_id":task_id,"mode":mode,"baseline":since,"content_hash":content_hash,"policy_hash":policy,"scope":scope,"serializer":SERIALIZER,"added":added,"changed":changed,"removed":removed,"invalidated":[],"unchanged_count":unchanged,"ack_required":true,"required_minimum_complete":true,"session_status":s.status});
-            if serde_json::to_vec(&crate::domain::envelope("context", Some(p), value.clone()))?
-                .len()
-                + 1
+            if crate::render::render(
+                &crate::domain::envelope("context", Some(p), value.clone()),
+                crate::render::Format::Json,
+            )?
+            .len()
                 > *budget_bytes
             {
                 return Err(Error::new(

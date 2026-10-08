@@ -1,0 +1,36 @@
+Diff in /Users/dev/PCTX/src/main.rs:564:
+             }
+             ("read", data)
+         }
+-        Command::Build(r) => ("build", context::build_with_format(&p, r, match cli.format {
+-            Format::Markdown => pctx::render::Format::Markdown,
+-            Format::Compact => pctx::render::Format::Compact,
+-            Format::Json | Format::Ndjson => pctx::render::Format::Json,
+-        })?),
++        Command::Build(r) => (
++            "build",
++            context::build_with_format(
++                &p,
++                r,
++                match cli.format {
++                    Format::Markdown => pctx::render::Format::Markdown,
++                    Format::Compact => pctx::render::Format::Compact,
++                    Format::Json | Format::Ndjson => pctx::render::Format::Json,
++                },
++            )?,
++        ),
+         Command::Checkpoint { command } => match command {
+             CheckpointCommand::Create { name, pin, scopes } => (
+                 "checkpoint create",
+Diff in /Users/dev/PCTX/tests/render.rs:190:
+         json!({"items":[{"path":"header.py","representation":"signature","details_omitted":true,"signatures":[{"content":"def example(\n    label: str = '\u{202e}',\n):","range":{"start_line":1,"end_line":3}}]},{"path":"outline.py","representation":"outline","symbols":[{"name":"example","kind":"function"}]}]}),
+     );
+     let markdown = String::from_utf8(render::render(&original, Format::Markdown).unwrap()).unwrap();
+-    let visible = markdown.split("## Complete envelope metadata").next().unwrap();
++    let visible = markdown
++        .split("## Complete envelope metadata")
++        .next()
++        .unwrap();
+     assert!(visible.contains("Verified signature:"));
+     assert!(visible.contains("Source range (reported)"));
+     assert!(visible.contains("def example(\n    label: str = '\\u{202e}',\n):"));

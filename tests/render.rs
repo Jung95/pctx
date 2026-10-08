@@ -182,3 +182,23 @@ fn terminal_hidden_unicode_is_json_escaped_without_changing_values() {
         assert_eq!(serde_json::from_slice::<Value>(&bytes).unwrap(), original);
     }
 }
+
+#[test]
+fn signatures_and_outlines_are_visible_with_ranges_and_literal_control_escaping() {
+    let original = envelope(
+        "build",
+        json!({"items":[{"path":"header.py","representation":"signature","details_omitted":true,"signatures":[{"content":"def example(\n    label: str = '\u{202e}',\n):","range":{"start_line":1,"end_line":3}}]},{"path":"outline.py","representation":"outline","symbols":[{"name":"example","kind":"function"}]}]}),
+    );
+    let markdown = String::from_utf8(render::render(&original, Format::Markdown).unwrap()).unwrap();
+    let visible = markdown
+        .split("## Complete envelope metadata")
+        .next()
+        .unwrap();
+    assert!(visible.contains("Verified signature:"));
+    assert!(visible.contains("Source range (reported)"));
+    assert!(visible.contains("def example(\n    label: str = '\\u{202e}',\n):"));
+    assert!(visible.contains("Selected outline metadata"));
+    assert!(visible.contains("example"));
+    assert!(!visible.contains('\u{202e}'));
+    assert_eq!(metadata(&markdown), original);
+}

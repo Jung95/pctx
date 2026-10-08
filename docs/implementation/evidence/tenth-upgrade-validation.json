@@ -1,0 +1,138 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "claim": "forward_source_replacement_and_data_retention",
+  "old": {
+    "archive_sha256": "fc9d9a334849135bcb49f9158edacdb4e6685663ad8fd894937df53c43882103",
+    "binary_sha256": "b76af8e21ef0e1df24a9dff2527e7784f2d5bd3d813e6e986cd2393a8c810ee0",
+    "entry_count": 93,
+    "allowlist": "validate-archive.py regular-file/directory contract",
+    "cli_version": "pctx 0.1.0-dev",
+    "source_revision": "9c8b694b8916c3a65875b074d85b2790cb58962b",
+    "source_binding": "caller_supplied"
+  },
+  "new": {
+    "archive_sha256": "4d165e80eefa2df42d6b0d77b273d7b1b2f8ec3859b16786a7ce86d2379eb954",
+    "binary_sha256": "dcf14408ca3dbb22b9c01817e1320c7a607cd2561f45502bbb07004ba9da4022",
+    "entry_count": 142,
+    "allowlist": "validate-archive.py regular-file/directory contract",
+    "cli_version": "pctx 0.1.0-dev",
+    "source_revision": "beeda2ffb7f077d57f08610d46cf0f662bf6e067",
+    "source_binding": "caller_supplied"
+  },
+  "same_cli_version": true,
+  "forward_version_upgrade": "not_verified",
+  "schema_migration": "not_verified",
+  "semantic_differences": "not_verified",
+  "checks": {
+    "same_project_workspace_control_binding": true,
+    "existing_index_lookup": true,
+    "checkpoint_manifest_retained": true,
+    "task_session_context_logical_rows_retained": true,
+    "source_config_immutable_before_explicit_fixture_edit": true,
+    "explicit_modification_detected": true,
+    "read_returns_current_source": true,
+    "prefix_removal_preserves_project_and_data": true
+  },
+  "logical_database_count": 2,
+  "commands": [
+    {
+      "phase": "old_version",
+      "exit": 0,
+      "elapsed_ms": 443
+    },
+    {
+      "phase": "old_init",
+      "exit": 0,
+      "elapsed_ms": 417
+    },
+    {
+      "phase": "old_index",
+      "exit": 0,
+      "elapsed_ms": 17
+    },
+    {
+      "phase": "old_symbol_lookup",
+      "exit": 0,
+      "elapsed_ms": 16
+    },
+    {
+      "phase": "old_checkpoint",
+      "exit": 0,
+      "elapsed_ms": 12
+    },
+    {
+      "phase": "old_task",
+      "exit": 0,
+      "elapsed_ms": 16
+    },
+    {
+      "phase": "old_agent",
+      "exit": 0,
+      "elapsed_ms": 12
+    },
+    {
+      "phase": "old_session",
+      "exit": 0,
+      "elapsed_ms": 16
+    },
+    {
+      "phase": "old_context",
+      "exit": 0,
+      "elapsed_ms": 16
+    },
+    {
+      "phase": "new_version",
+      "exit": 0,
+      "elapsed_ms": 335
+    },
+    {
+      "phase": "new_status",
+      "exit": 0,
+      "elapsed_ms": 14
+    },
+    {
+      "phase": "new_existing_index_lookup",
+      "exit": 0,
+      "elapsed_ms": 17
+    },
+    {
+      "phase": "new_read",
+      "exit": 0,
+      "elapsed_ms": 17
+    },
+    {
+      "phase": "new_checkpoint_list",
+      "exit": 0,
+      "elapsed_ms": 17
+    },
+    {
+      "phase": "new_task_show",
+      "exit": 0,
+      "elapsed_ms": 17
+    },
+    {
+      "phase": "new_session_reconcile",
+      "exit": 0,
+      "elapsed_ms": 17
+    },
+    {
+      "phase": "new_changes",
+      "exit": 0,
+      "elapsed_ms": 16
+    },
+    {
+      "phase": "new_changed_read",
+      "exit": 0,
+      "elapsed_ms": 17
+    }
+  ],
+  "provider_usage": "unknown",
+  "delivery_receipt": "not_observed",
+  "limitations": [
+    "POSIX isolated CLI fixture only; no Windows runtime proof",
+    "source revision/order binding supplied by caller; ancestry unknown; binary/archive hashes verified",
+    "no version transition, schema migration, rollback or all historical versions proof",
+    "owned process-group timeout cleanup; no escaped-process containment claim"
+  ]
+}

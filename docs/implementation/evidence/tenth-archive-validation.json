@@ -1,0 +1,47 @@
+{
+  "archive_sha256": "4d165e80eefa2df42d6b0d77b273d7b1b2f8ec3859b16786a7ce86d2379eb954",
+  "entries": 142,
+  "binary_sha256": "dcf14408ca3dbb22b9c01817e1320c7a607cd2561f45502bbb07004ba9da4022",
+  "isolated_archive_install": true,
+  "commands": [
+    {
+      "arguments": [
+        "init"
+      ],
+      "exit": 0
+    },
+    {
+      "arguments": [
+        "index",
+        "update"
+      ],
+      "exit": 0
+    },
+    {
+      "arguments": [
+        "find",
+        "auth",
+        "--kind",
+        "symbol"
+      ],
+      "exit": 0
+    },
+    {
+      "arguments": [
+        "inventory",
+        "scan"
+      ],
+      "exit": 0
+    },
+    {
+      "arguments": [
+        "doctor"
+      ],
+      "exit": 0
+    }
+  ],
+  "explicit_binary_removal_preserves_project": true,
+  "private_spec_excluded": true,
+  "global_settings_unchanged": true,
+  "forward_version_update_and_migration": "not_verified"
+}

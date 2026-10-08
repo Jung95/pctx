@@ -182,6 +182,9 @@ fn provenance(out: &mut String, item: &Value) -> Result<()> {
         ("coverage", "Coverage"),
         ("truncated", "Truncated"),
         ("body_omitted", "Body omitted"),
+        ("details_omitted", "Details omitted"),
+        ("omitted_count", "Omitted count"),
+        ("omission_reasons", "Omission reasons"),
         ("redacted", "Redaction applied"),
         ("next_read", "Follow-up read reference"),
         ("query_ref", "Follow-up query reference"),
@@ -203,6 +206,18 @@ fn source_section(out: &mut String, item: &Value) -> Result<()> {
             out.push_str("Source/content (literal, already masked):\n\n");
             fence(out, &literal_source(text), "text");
         }
+    }
+    if let Some(signatures) = item.get("signatures").and_then(Value::as_array) {
+        for signature in signatures {
+            out.push_str("Verified signature:\n\n");
+            provenance(out, signature)?;
+            if let Some(content) = signature.get("content").and_then(Value::as_str) {
+                fence(out, &literal_source(content), "text");
+            }
+        }
+    }
+    if let Some(symbols) = item.get("symbols") {
+        json_section(out, "Selected outline metadata", symbols)?;
     }
     Ok(())
 }

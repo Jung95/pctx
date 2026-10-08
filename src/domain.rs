@@ -83,5 +83,5 @@ pub struct FileEntry {
     pub symbols: Vec<Symbol>,
 }
 pub fn envelope(command: &str, project: Option<&crate::project::Project>, data: Value) -> Value {
-    json!({"schema_version":"1.0","command":command,"status":"ok","project_id":project.map(|p| &p.project_id),"workspace_id":project.map(|p| &p.workspace_id),"generation_id":null,"validation":{"mode":"matched","scope":[],"checked_at":chrono::Utc::now().to_rfc3339(),"workspace_atomic":false},"coverage":{"status":"complete","reasons":[]},"data":data,"truncation":{"truncated":false,"reasons":[]},"warnings":[],"errors":[]})
+    json!({"schema_version":"1.0","command":command,"status":"ok","project_id":project.map(|p| &p.project_id),"workspace_id":project.map(|p| &p.workspace_id),"generation_id":null,"validation":{"mode":"matched","scope":[],"checked_at":chrono::Utc::now().to_rfc3339_opts(chrono::SecondsFormat::Millis, true),"workspace_atomic":false},"coverage":{"status":"complete","reasons":[]},"data":data,"truncation":{"truncated":false,"reasons":[]},"warnings":[],"errors":[]})
 }

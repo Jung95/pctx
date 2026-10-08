@@ -564,7 +564,18 @@ fn execute(
             }
             ("read", data)
         }
-        Command::Build(r) => ("build", context::build(&p, r)?),
+        Command::Build(r) => (
+            "build",
+            context::build_with_format(
+                &p,
+                r,
+                match cli.format {
+                    Format::Markdown => pctx::render::Format::Markdown,
+                    Format::Compact => pctx::render::Format::Compact,
+                    Format::Json | Format::Ndjson => pctx::render::Format::Json,
+                },
+            )?,
+        ),
         Command::Checkpoint { command } => match command {
             CheckpointCommand::Create { name, pin, scopes } => (
                 "checkpoint create",

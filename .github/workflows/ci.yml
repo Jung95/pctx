@@ -1,7 +1,20 @@
 name: Rust validation
+run-name: Rust validation · ${{ inputs.scope || 'full' }}
 on:
   push:
   pull_request:
+  workflow_dispatch:
+    inputs:
+      scope:
+        description: Native failure diagnostic or full platform validation
+        type: choice
+        default: windows-publication
+        options:
+          - windows-publication
+          - full
+concurrency:
+  group: rust-validation-${{ github.workflow }}-${{ github.ref }}-${{ github.event_name }}
+  cancel-in-progress: true
 permissions:
   contents: read
 jobs:
@@ -10,21 +23,28 @@ jobs:
       fail-fast: false
       max-parallel: 1
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: ${{ fromJSON(github.event_name == 'workflow_dispatch' && inputs.scope == 'windows-publication' && '["windows-latest"]' || '["ubuntu-latest","macos-latest","windows-latest"]') }}
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 30
+    timeout-minutes: ${{ github.event_name == 'workflow_dispatch' && inputs.scope == 'windows-publication' && 10 || 30 }}
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
         with:
           components: rustfmt, clippy
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target/debug
+          key: ${{ runner.os }}-rust-${{ hashFiles('Cargo.lock') }}
       - name: Formatting
         run: cargo fmt --all -- --check
       - name: Native Windows containment primitives
-        if: runner.os == 'Windows'
+        if: runner.os == 'Windows' && inputs.scope != 'windows-publication'
         run: cargo test --locked --test windows_process
       - name: Native Windows finite query supervision
-        if: runner.os == 'Windows'
+        if: runner.os == 'Windows' && inputs.scope != 'windows-publication'
         run: cargo test --locked --lib query_process
       - name: Native Windows atomic publication
         if: runner.os == 'Windows'
@@ -33,9 +53,11 @@ jobs:
         if: runner.os == 'Windows'
         run: cargo test --locked --test windows_guardian
       - name: Native Windows reader and CLI boundaries
-        if: runner.os == 'Windows'
+        if: runner.os == 'Windows' && inputs.scope != 'windows-publication'
         run: cargo test --locked --test reader_policy_cache --test cli_contract
       - name: Static checks
+        if: inputs.scope != 'windows-publication'
         run: cargo clippy --all-targets --locked -- -D warnings
       - name: Unit and integration tests
+        if: inputs.scope != 'windows-publication'
         run: cargo test --locked

@@ -192,9 +192,22 @@ fn windows_publish_file(
         mem::{MaybeUninit, offset_of, size_of},
         os::windows::{ffi::OsStrExt, io::AsRawHandle},
     };
-    use windows_sys::Win32::Storage::FileSystem::{
-        FILE_RENAME_INFO, FILE_RENAME_INFO_0, FileRenameInfoEx, SetFileInformationByHandle,
-    };
+    use windows_sys::Win32::Storage::FileSystem::{FILE_RENAME_INFO, FILE_RENAME_INFO_0};
+    use windows_sys::Win32::{Foundation::HANDLE, System::IO::IO_STATUS_BLOCK};
+    // The native information class is distinct from Win32 FileRenameInfoEx=22.
+    // windows SDK ntifs.h / windows-sys Wdk FileRenameInformationEx = 65.
+    const FILE_RENAME_INFORMATION_EX: i32 = 65;
+    #[link(name = "ntdll")]
+    unsafe extern "system" {
+        fn NtSetInformationFile(
+            file: HANDLE,
+            status: *mut IO_STATUS_BLOCK,
+            information: *const std::ffi::c_void,
+            length: u32,
+            class: i32,
+        ) -> i32;
+        fn RtlNtStatusToDosError(status: i32) -> u32;
+    }
     let name = path
         .file_name()
         .ok_or_else(|| Error::new("INVALID_ARGUMENT", "Output needs a filename", 2))?;
@@ -237,18 +250,34 @@ fn windows_publish_file(
             .add(offset_of!(FILE_RENAME_INFO, FileName))
             .cast::<u16>();
         std::ptr::copy_nonoverlapping(name.as_ptr(), payload, name.len());
-        if SetFileInformationByHandle(
+        // Call the native handle-relative contract, preserving the pinned
+        // directory and simple UTF-16 leaf rather than translating it through
+        // Win32 pathname handling. No absolute-path fallback or retry occurs.
+        // CreateFile/OpenOptions without FILE_FLAG_OVERLAPPED yields a synchronous
+        // source handle: this operation completes before these buffers are dropped.
+        // https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-ntsetinformationfile
+        let mut completion = IO_STATUS_BLOCK::default();
+        let status = NtSetInformationFile(
             source.as_raw_handle(),
-            FileRenameInfoEx,
+            &mut completion,
             base.cast(),
             bytes as u32,
-        ) == 0
-        {
-            let error = std::io::Error::last_os_error();
+            FILE_RENAME_INFORMATION_EX,
+        );
+        if status != 0 {
+            let win32 = RtlNtStatusToDosError(status);
+            let error = std::io::Error::from_raw_os_error(win32 as i32);
             if !overwrite && error.kind() == std::io::ErrorKind::AlreadyExists {
                 return Err(Error::new("REVISION_CONFLICT", "Output already exists", 9));
             }
-            return Err(windows_publication_error("rename", &error, overwrite));
+            return Err(Error::new(
+                "IO_ERROR",
+                format!(
+                    "Windows atomic publication failed (phase=native_rename, ntstatus=0x{:08x}, win32={win32}, overwrite={overwrite})",
+                    status as u32
+                ),
+                7,
+            ));
         }
     }
     // Source data was WRITE_THROUGH + sync_all before publication. Do not claim

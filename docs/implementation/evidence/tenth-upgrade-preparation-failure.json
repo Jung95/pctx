@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "code": "ARCHIVE_CHECKSUM_MISSING",
+  "phase": "archive_validation",
+  "claim": "forward_source_replacement_and_data_retention",
+  "raw_cli_output": "omitted",
+  "forward_version_upgrade": "not_verified",
+  "schema_migration": "not_verified",
+  "old_expected_binary_sha256": "b76af8e21ef0e1df24a9dff2527e7784f2d5bd3d813e6e986cd2393a8c810ee0",
+  "new_expected_binary_sha256": "dcf14408ca3dbb22b9c01817e1320c7a607cd2561f45502bbb07004ba9da4022",
+  "old_declared_source_revision": "9c8b694b8916c3a65875b074d85b2790cb58962b",
+  "new_declared_source_revision": "beeda2ffb7f077d57f08610d46cf0f662bf6e067"
+}
