@@ -1,0 +1,11 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.19s
+     Running tests/query_filter_guard.rs (target/debug/deps/query_filter_guard-227c495d0a8a5b95)
+
+running 3 tests
+test filter_configuration_query_is_narrow_and_not_general_configuration_access ... ok
+test no_filter_match_is_normal_and_invalid_configuration_is_not_an_empty_observation ... ok
+test effective_clean_or_process_filter_declines_status_without_running_driver ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.40s
+

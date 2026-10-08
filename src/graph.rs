@@ -1,5 +1,6 @@
 //! Static import graph, recomputed from verified files in this workspace.
 use crate::{
+    deadline::Deadline,
     domain::{Error, Result, hash},
     project::Project,
     reader, storage,
@@ -7,11 +8,8 @@ use crate::{
 use clap::Subcommand;
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
-use std::{
-    collections::{BTreeMap, BTreeSet, VecDeque},
-    time::{Duration, Instant},
-};
-use tree_sitter::{Node, Parser};
+use std::collections::{BTreeMap, BTreeSet, VecDeque};
+use tree_sitter::{Node, ParseOptions, Parser};
 const VERSION: &str = "static-import-v1";
 #[derive(Debug, Clone, Subcommand)]
 pub enum GraphCommand {
@@ -98,7 +96,8 @@ fn source_language(path: &str) -> Option<&'static str> {
     }
 }
 type ImportSpan = (String, usize, usize, usize, usize, Option<String>);
-fn extract<'a>(node: Node<'a>, text: &str, out: &mut Vec<ImportSpan>) {
+fn extract<'a>(p: &Project, node: Node<'a>, text: &str, out: &mut Vec<ImportSpan>) -> Result<()> {
+    p.check_deadline()?;
     let mut found = None;
     if matches!(node.kind(), "import_statement" | "export_statement") {
         if let Some(source) = node.child_by_field_name("source") {
@@ -143,8 +142,9 @@ fn extract<'a>(node: Node<'a>, text: &str, out: &mut Vec<ImportSpan>) {
     }
     let mut cursor = node.walk();
     for child in node.named_children(&mut cursor) {
-        extract(child, text, out);
+        extract(p, child, text, out)?;
     }
+    p.check_deadline()
 }
 fn candidate(base: &str, paths: &BTreeSet<String>) -> Option<String> {
     if paths.contains(base) {
@@ -187,18 +187,20 @@ fn mapping(pattern: &str, spec: &str) -> Option<String> {
     }
 }
 fn resolve(
+    p: &Project,
     source: &str,
     spec: &str,
     paths: &BTreeSet<String>,
     configs: &[Config],
-) -> (Option<String>, String, BTreeSet<String>) {
+) -> Result<(Option<String>, String, BTreeSet<String>)> {
+    p.check_deadline()?;
     let mut proof = BTreeSet::new();
     if spec.starts_with('.') {
-        return (
+        return Ok((
             join(&directory(source), spec).and_then(|b| candidate(&b, paths)),
             "relative_import".into(),
             proof,
-        );
+        ));
     }
     if spec.starts_with('/')
         || spec.contains(':')
@@ -206,31 +208,38 @@ fn resolve(
         || spec.contains('#')
         || spec.contains('?')
     {
-        return (None, "unsupported_specifier".into(), proof);
+        return Ok((None, "unsupported_specifier".into(), proof));
     }
-    let config = configs
-        .iter()
-        .filter(|c| {
-            c.path.ends_with("tsconfig.json")
-                && (c.dir.is_empty() || source.starts_with(&format!("{}/", c.dir)))
-        })
-        .max_by_key(|c| c.dir.len());
+    let mut config = None;
+    for c in configs {
+        p.check_deadline()?;
+        if c.path.ends_with("tsconfig.json")
+            && (c.dir.is_empty() || source.starts_with(&format!("{}/", c.dir)))
+            && config.is_none_or(|old: &Config| c.dir.len() >= old.dir.len())
+        {
+            config = Some(c);
+        }
+    }
     if let Some(c) = config
         && let Some(maps) = c
             .body
             .pointer("/compilerOptions/paths")
             .and_then(Value::as_object)
     {
-        let mut matched: Vec<_> = maps
-            .iter()
-            .filter_map(|(key, v)| mapping(key, spec).map(|capture| (key, capture, v)))
-            .collect();
+        let mut matched = Vec::new();
+        for (key, v) in maps {
+            p.check_deadline()?;
+            if let Some(capture) = mapping(key, spec) {
+                matched.push((key, capture, v));
+            }
+        }
         matched.sort_by(|a, b| {
             b.0.trim_end_matches('*')
                 .len()
                 .cmp(&a.0.trim_end_matches('*').len())
                 .then_with(|| a.0.cmp(b.0))
         });
+        p.check_deadline()?;
         if let Some((_, capture, value)) = matched.first() {
             proof.insert(c.path.clone());
             let base = c
@@ -240,7 +249,11 @@ fn resolve(
                 .unwrap_or(".");
             let mut targets = BTreeSet::new();
             if let Some(values) = value.as_array() {
-                for target in values.iter().filter_map(Value::as_str) {
+                for value in values {
+                    p.check_deadline()?;
+                    let Some(target) = value.as_str() else {
+                        continue;
+                    };
                     if let Some(target) = join(&c.dir, base)
                         .and_then(|b| join(&b, &target.replace('*', capture)))
                         .and_then(|b| candidate(&b, paths))
@@ -249,7 +262,7 @@ fn resolve(
                     }
                 }
             }
-            return if targets.len() == 1 {
+            return Ok(if targets.len() == 1 {
                 (targets.into_iter().next(), "tsconfig_paths".into(), proof)
             } else {
                 (
@@ -262,23 +275,24 @@ fn resolve(
                     .into(),
                     proof,
                 )
-            };
+            });
         }
     }
-    let mut packages: Vec<_> = configs
-        .iter()
-        .filter(|c| c.path.ends_with("package.json"))
-        .filter_map(|c| {
-            c.body["name"]
-                .as_str()
-                .filter(|name| spec == *name || spec.starts_with(&format!("{name}/")))
-                .map(|name| (c, name))
-        })
-        .collect();
+    let mut packages = Vec::new();
+    for c in configs {
+        p.check_deadline()?;
+        if c.path.ends_with("package.json")
+            && let Some(name) = c.body["name"].as_str()
+            && (spec == name || spec.starts_with(&format!("{name}/")))
+        {
+            packages.push((c, name));
+        }
+    }
     packages.sort_by_key(|(_, name)| std::cmp::Reverse(name.len()));
+    p.check_deadline()?;
     if let Some((c, name)) = packages.first() {
         if packages.iter().filter(|(_, n)| n == name).count() > 1 {
-            return (None, "ambiguous_workspace_package".into(), proof);
+            return Ok((None, "ambiguous_workspace_package".into(), proof));
         }
         proof.insert(c.path.clone());
         let key = if spec == *name {
@@ -290,13 +304,15 @@ fn resolve(
         let value = if exports.is_string() && key == "." {
             Some((exports.clone(), String::new()))
         } else if let Some(m) = exports.as_object() {
-            let mut options: Vec<_> = m
-                .iter()
-                .filter_map(|(pattern, value)| {
-                    mapping(pattern, &key).map(|cap| (pattern, value, cap))
-                })
-                .collect();
+            let mut options = Vec::new();
+            for (pattern, value) in m {
+                p.check_deadline()?;
+                if let Some(cap) = mapping(pattern, &key) {
+                    options.push((pattern, value, cap));
+                }
+            }
             options.sort_by(|a, b| b.0.len().cmp(&a.0.len()).then_with(|| a.0.cmp(b.0)));
+            p.check_deadline()?;
             options
                 .first()
                 .map(|(_, v, cap)| ((*v).clone(), cap.clone()))
@@ -306,17 +322,17 @@ fn resolve(
         if let Some((value, capture)) = value {
             if let Some(target) = value.as_str() {
                 if !target.starts_with("./") || target.split('/').any(|part| part == "..") {
-                    return (None, "invalid_package_export".into(), proof);
+                    return Ok((None, "invalid_package_export".into(), proof));
                 }
-                return (
+                return Ok((
                     join(&c.dir, &target.replace('*', &capture)).and_then(|b| candidate(&b, paths)),
                     "workspace_package_export".into(),
                     proof,
-                );
+                ));
             }
-            return (None, "conditional_package_export_unsupported".into(), proof);
+            return Ok((None, "conditional_package_export_unsupported".into(), proof));
         }
-        return (
+        return Ok((
             None,
             if exports.is_object()
                 && exports
@@ -331,9 +347,10 @@ fn resolve(
             }
             .into(),
             proof,
-        );
+        ));
     }
-    (None, "external_or_unmapped_package".into(), proof)
+    p.check_deadline()?;
+    Ok((None, "external_or_unmapped_package".into(), proof))
 }
 fn graph(p: &Project) -> Result<Graph> {
     let (generation, _cached) = storage::snapshot(p)?;
@@ -344,21 +361,25 @@ fn graph(p: &Project) -> Result<Graph> {
     let mut configs = Vec::new();
     let mut config_hashes = BTreeMap::new();
     let paths: BTreeSet<_> = inventory.paths.iter().cloned().collect();
-    let start = Instant::now();
     for path in &paths {
+        p.check_deadline()?;
         if source_language(path).is_none()
             && !path.ends_with("package.json")
             && !path.ends_with("tsconfig.json")
         {
             continue;
         }
-        if texts.len() >= 10000 || start.elapsed() > Duration::from_secs(10) {
+        if texts.len() >= 10000 {
             warnings.push(json!({"reason":"graph_scan_limit"}));
             break;
         }
         let f = match reader::read(p, path) {
             Ok(v) => v,
             Err(e) => {
+                if e.code == "TIMEOUT" {
+                    return Err(e);
+                }
+                p.check_deadline()?;
                 warnings.push(json!({"path":path,"reason":e.code}));
                 continue;
             }
@@ -382,6 +403,7 @@ fn graph(p: &Project) -> Result<Graph> {
                 }
             }
         }
+        p.check_deadline()?;
         if source_language(path).is_some() {
             texts.insert(path.clone(), f.text);
         }
@@ -389,8 +411,10 @@ fn graph(p: &Project) -> Result<Graph> {
     let manifest_hash = hash(serde_json::to_vec(
         &json!({"workspace":p.workspace_id,"sources":sources,"config_hashes":config_hashes,"policy":p.policy_hash(),"resolver":VERSION}),
     )?);
+    p.check_deadline()?;
     let mut edges = Vec::new();
     for (path, text) in texts {
+        p.check_deadline()?;
         let mut parser = Parser::new();
         let grammar = match source_language(&path).unwrap() {
             "typescript" => tree_sitter_typescript::LANGUAGE_TYPESCRIPT.into(),
@@ -400,7 +424,15 @@ fn graph(p: &Project) -> Result<Graph> {
         parser
             .set_language(&grammar)
             .map_err(|_| invalid("Grammar unavailable"))?;
-        let Some(tree) = parser.parse(&text, None) else {
+        let mut progress = |_: &tree_sitter::ParseState| p.check_deadline().is_err();
+        let mut input = |offset, _| &text.as_bytes()[offset..];
+        let tree = parser.parse_with_options(
+            &mut input,
+            None,
+            Some(ParseOptions::new().progress_callback(&mut progress)),
+        );
+        p.check_deadline()?;
+        let Some(tree) = tree else {
             warnings.push(json!({"path":path,"reason":"parse_failed"}));
             continue;
         };
@@ -408,8 +440,9 @@ fn graph(p: &Project) -> Result<Graph> {
             warnings.push(json!({"path":path,"reason":"parse_partial"}));
         }
         let mut found = Vec::new();
-        extract(tree.root_node(), &text, &mut found);
+        extract(p, tree.root_node(), &text, &mut found)?;
         for (raw, begin, end, first, last, unsupported) in found {
+            p.check_deadline()?;
             let (specifier, redacted) = reader::redact(&raw);
             let (mut target, resolution, proof) = if redacted {
                 (None, "sensitive_specifier_redacted".into(), BTreeSet::new())
@@ -422,8 +455,9 @@ fn graph(p: &Project) -> Result<Graph> {
             } else if let Some(reason) = unsupported {
                 (None, reason, BTreeSet::new())
             } else {
-                resolve(&path, &specifier, &paths, &configs)
+                resolve(p, &path, &specifier, &paths, &configs)?
             };
+            p.check_deadline()?;
             // A resolved file is accepted only after the same reader verifies its policy and hash.
             let target_hash = if let Some(t) = &target {
                 match reader::read(p, t) {
@@ -442,6 +476,10 @@ fn graph(p: &Project) -> Result<Graph> {
                         Some(file.hash)
                     }
                     Err(e) => {
+                        if e.code == "TIMEOUT" {
+                            return Err(e);
+                        }
+                        p.check_deadline()?;
                         warnings.push(json!({"path":t,"reason":e.code}));
                         None
                     }
@@ -505,15 +543,8 @@ fn graph(p: &Project) -> Result<Graph> {
             .then_with(|| a.start_byte.cmp(&b.start_byte))
             .then_with(|| a.specifier.cmp(&b.specifier))
     });
-    for (path, expected) in &sources {
-        if reader::read(p, path)?.hash != *expected {
-            return Err(Error::new(
-                "CONCURRENT_MODIFICATION",
-                "Graph source/config changed while resolving",
-                4,
-            ));
-        }
-    }
+    p.check_deadline()?;
+    validate_sources(p, &sources)?;
     Ok(Graph {
         edges,
         sources,
@@ -523,6 +554,21 @@ fn graph(p: &Project) -> Result<Graph> {
         manifest_hash,
     })
 }
+fn validate_sources(p: &Project, sources: &BTreeMap<String, String>) -> Result<()> {
+    p.check_deadline()?;
+    for (path, expected) in sources {
+        if reader::read(p, path)?.hash != *expected {
+            return Err(Error::new(
+                "CONCURRENT_MODIFICATION",
+                "Graph source/config changed while resolving",
+                4,
+            ));
+        }
+    }
+    p.check_deadline()?;
+    reader::validate_root(p)
+}
+
 fn traverse(
     p: &Project,
     path: &str,
@@ -545,16 +591,20 @@ fn traverse(
     let mut selected = Vec::new();
     let mut truncated = false;
     while let Some((current, d)) = queue.pop_front() {
+        p.check_deadline()?;
         if d >= depth {
             continue;
         }
-        for edge in g.edges.iter().filter(|e| {
-            if direction == "outgoing" {
-                e.source == current
+        for edge in &g.edges {
+            p.check_deadline()?;
+            let matches = if direction == "outgoing" {
+                edge.source == current
             } else {
-                e.target.as_deref() == Some(current.as_str())
+                edge.target.as_deref() == Some(current.as_str())
+            };
+            if !matches {
+                continue;
             }
-        }) {
             if edge_ids.insert(edge.id.clone()) {
                 selected.push(edge.clone());
             }
@@ -588,17 +638,29 @@ fn traverse(
             .cmp(&b.source)
             .then_with(|| a.start_byte.cmp(&b.start_byte))
     });
+    p.check_deadline()?;
     let unresolved = selected.iter().filter(|e| e.target.is_none()).count();
     let partial = truncated || !g.warnings.is_empty() || unresolved > 0;
-    Ok(
-        json!({"root":path,"direction":direction,"depth":depth,"max_nodes":max_nodes,"nodes":nodes,"edges":selected,"visited_count":visited.len(),"unresolved_count":unresolved,"truncated":truncated,"workspace_id":p.workspace_id,"generation_id":g.generation,"resolver_version":VERSION,"resolver_fingerprint":g.manifest_hash,"config_hashes":g.config_hashes,"freshness":"current","workspace_atomic":false,"coverage":{"status":if partial{"partial"}else{"complete"},"warnings":g.warnings,"capability":"static_imports_only","gaps":["runtime_injection","reflection","conditional_exports","python_resolver","symbol_reference_resolution"]},"test_exclusion_safe":false}),
-    )
+    let data = json!({"root":path,"direction":direction,"depth":depth,"max_nodes":max_nodes,"nodes":nodes,"edges":selected,"visited_count":visited.len(),"unresolved_count":unresolved,"truncated":truncated,"workspace_id":p.workspace_id,"generation_id":g.generation,"resolver_version":VERSION,"resolver_fingerprint":g.manifest_hash,"config_hashes":g.config_hashes,"freshness":"current","workspace_atomic":false,"coverage":{"status":if partial{"partial"}else{"complete"},"warnings":g.warnings,"capability":"static_imports_only","gaps":["runtime_injection","reflection","conditional_exports","python_resolver","symbol_reference_resolution"]},"test_exclusion_safe":false});
+    validate_sources(p, &g.sources)?;
+    Ok(data)
+}
+fn query_project(p: &Project) -> Result<Project> {
+    let mut p = p.clone();
+    if p.deadline.is_none() {
+        p.deadline = Some(Deadline::from_millis(10_000)?);
+    }
+    p.check_deadline()?;
+    Ok(p)
 }
 pub fn dependencies(p: &Project, path: &str, depth: usize, max_nodes: usize) -> Result<Value> {
-    traverse(p, path, "outgoing", depth, max_nodes)
+    let p = query_project(p)?;
+    traverse(&p, path, "outgoing", depth, max_nodes)
 }
 pub fn execute(p: &Project, c: &GraphCommand) -> Result<Value> {
-    match c {
+    let scoped = query_project(p)?;
+    let p = &scoped;
+    let result = match c {
         GraphCommand::Trace {
             path,
             direction,
@@ -608,14 +670,19 @@ pub fn execute(p: &Project, c: &GraphCommand) -> Result<Value> {
         GraphCommand::Refs { path } => {
             reader::authorize(p, path)?;
             let g = graph(p)?;
-            let refs: Vec<_> = g
-                .edges
-                .iter()
-                .filter(|e| e.source == *path || e.target.as_deref() == Some(path.as_str()))
-                .collect();
-            Ok(
-                json!({"path":path,"edges":refs,"workspace_id":p.workspace_id,"resolver_fingerprint":g.manifest_hash,"freshness":"current","coverage":{"status":if g.warnings.is_empty()&&!refs.iter().any(|e|e.target.is_none()){"complete"}else{"partial"},"warnings":g.warnings},"capability":"observed_import_edges","symbol_references_supported":false,"test_exclusion_safe":false}),
-            )
+            let mut refs = Vec::new();
+            for edge in &g.edges {
+                p.check_deadline()?;
+                if edge.source == *path || edge.target.as_deref() == Some(path.as_str()) {
+                    refs.push(edge);
+                }
+            }
+            let data = json!({"path":path,"edges":refs,"workspace_id":p.workspace_id,"resolver_fingerprint":g.manifest_hash,"freshness":"current","coverage":{"status":if g.warnings.is_empty()&&!refs.iter().any(|e|e.target.is_none()){"complete"}else{"partial"},"warnings":g.warnings},"capability":"observed_import_edges","symbol_references_supported":false,"test_exclusion_safe":false});
+            validate_sources(p, &g.sources)?;
+            Ok(data)
         }
-    }
+    }?;
+    p.check_deadline()?;
+    reader::validate_root(p)?;
+    Ok(result)
 }

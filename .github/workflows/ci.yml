@@ -23,6 +23,9 @@ jobs:
       - name: Native Windows containment primitives
         if: runner.os == 'Windows'
         run: cargo test --locked --test windows_process
+      - name: Native Windows finite query supervision
+        if: runner.os == 'Windows'
+        run: cargo test --locked --lib query_process
       - name: Native Windows keeper ownership
         if: runner.os == 'Windows'
         run: cargo test --locked --test windows_guardian

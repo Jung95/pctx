@@ -16,7 +16,7 @@ use std::{
     ffi::OsString,
     fs::{File, OpenOptions},
     path::{Path, PathBuf},
-    process::{Command, Stdio},
+    process::{Child, Command, Stdio},
     time::{Duration, Instant},
 };
 fn environment(mode: &str, directory: &Path) -> BTreeMap<OsString, OsString> {
@@ -133,6 +133,17 @@ fn fixture_guardian_entry() {
     if std::env::var("PCTX_GUARDIAN_FIXTURE").as_deref() != Ok("guardian") {
         return;
     }
+    let directory = PathBuf::from(std::env::var_os("PCTX_GUARDIAN_FIXTURE_DIR").unwrap());
+    let identity = OwnedProcess::open(std::process::id())
+        .unwrap()
+        .identity()
+        .unwrap();
+    publish_fixture_json(
+        &directory.join("keeper-identity.json"),
+        &serde_json::json!({
+            "pid": identity.pid, "creation_filetime": identity.creation_filetime
+        }),
+    );
     pctx::windows_guardian::run_from_stdio().unwrap();
 }
 #[test]
@@ -244,6 +255,169 @@ fn stale_parent_creation_identity_cannot_admit_a_keeper() {
     assert!(GuardianClient::start(config, &launch(&directory)).is_err());
     canonical(&directory).try_lock_exclusive().unwrap();
 }
+// Immutable phase files are independent of the atomic replacement API under test.
+// No nonce, argv, environment, or capability is serialized into diagnostics.
+fn publish_fixture_json(path: &Path, value: &serde_json::Value) {
+    use std::io::Write;
+    let mut file = OpenOptions::new()
+        .create_new(true)
+        .write(true)
+        .open(path)
+        .unwrap();
+    file.write_all(&serde_json::to_vec(value).unwrap()).unwrap();
+    file.sync_all().unwrap();
+}
+fn publish_parent_phase(
+    directory: &Path,
+    phase: &str,
+    started: Instant,
+    value: &mut serde_json::Value,
+) {
+    value["phase"] = serde_json::json!(phase);
+    value["elapsed_ms"] = serde_json::json!(started.elapsed().as_millis() as u64);
+    publish_fixture_json(&directory.join(format!("parent-{phase}.json")), value);
+}
+const PARENT_PHASES: &[&str] = &[
+    "configured",
+    "keeper-ready",
+    "child-suspended",
+    "admission-ack",
+    "resumed",
+    "target-started",
+    "final-published",
+];
+fn bounded_json(path: &Path) -> Option<serde_json::Value> {
+    use std::io::Read;
+    let file = File::open(path).ok()?;
+    let mut bytes = Vec::new();
+    file.take(64 * 1024 + 1).read_to_end(&mut bytes).ok()?;
+    if bytes.len() > 64 * 1024 {
+        return None;
+    }
+    serde_json::from_slice(&bytes).ok()
+}
+fn diagnostic_tail(path: &Path) -> String {
+    use std::io::{Read, Seek, SeekFrom};
+    let Ok(mut file) = File::open(path) else {
+        return "unavailable".into();
+    };
+    let length = file.metadata().map(|m| m.len()).unwrap_or(0);
+    if file
+        .seek(SeekFrom::Start(length.saturating_sub(8192)))
+        .is_err()
+    {
+        return "unavailable".into();
+    }
+    let mut bytes = Vec::new();
+    if file.take(8192).read_to_end(&mut bytes).is_err() {
+        return "unavailable".into();
+    }
+    pctx::reader::redact(&String::from_utf8_lossy(&bytes)).0
+}
+struct ParentFixtureCleanup {
+    child: Option<Child>,
+    directory: PathBuf,
+    native: FixtureCleanup,
+    job_known: bool,
+    latest: serde_json::Value,
+}
+impl ParentFixtureCleanup {
+    fn new(child: Child, directory: &Path) -> Self {
+        Self {
+            child: Some(child),
+            directory: directory.into(),
+            native: FixtureCleanup::pending(),
+            job_known: false,
+            latest: serde_json::Value::Null,
+        }
+    }
+    fn refresh(&mut self) {
+        for phase in PARENT_PHASES {
+            if let Some(value) = bounded_json(&self.directory.join(format!("parent-{phase}.json")))
+            {
+                self.latest = value;
+            }
+        }
+        if !self.job_known
+            && let (Some(name), Some(sid)) = (
+                self.latest["job_name"].as_str(),
+                self.latest["job_owner_sid"].as_str(),
+            )
+        {
+            let job = JobIdentity {
+                name: name.into(),
+                owner_sid: sid.into(),
+            };
+            self.job_known = self.native.try_add_job(&job);
+        }
+        if self.native.keeper.is_none()
+            && let Some(value) = bounded_json(&self.directory.join("keeper-identity.json"))
+            && let Ok(identity) = serde_json::from_value(value)
+        {
+            self.native.keeper = Some(identity);
+        }
+    }
+    fn kill_and_reap(&mut self) -> std::io::Result<()> {
+        if let Some(child) = self.child.as_mut() {
+            if child.try_wait()?.is_none()
+                && let Err(error) = child.kill()
+                && child.try_wait()?.is_none()
+            {
+                return Err(error);
+            }
+            child.wait()?;
+        }
+        self.child = None;
+        Ok(())
+    }
+    fn cleanup(&mut self) {
+        // Pin the actual isolated job before removing its last parent-owned handle.
+        let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| self.refresh()));
+        if self.kill_and_reap().is_err() {
+            return;
+        }
+        // Recover an identity published while the helper was being stopped.
+        let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| self.refresh()));
+        // A keeper must never be terminated without a known pinned job and EmptyProven.
+        if self.native.keeper.is_some() && !self.job_known {
+            return;
+        }
+        self.native.cleanup();
+    }
+}
+impl Drop for ParentFixtureCleanup {
+    fn drop(&mut self) {
+        self.cleanup();
+    }
+}
+fn wait_parent_stage(
+    parent: &mut ParentFixtureCleanup,
+    timeout: Duration,
+) -> Result<serde_json::Value, String> {
+    let started = Instant::now();
+    loop {
+        parent.refresh();
+        if let Some(value) = bounded_json(&parent.directory.join("parent-stage.json")) {
+            return Ok(value);
+        }
+        let status = parent
+            .child
+            .as_mut()
+            .unwrap()
+            .try_wait()
+            .map_err(|e| format!("helper try_wait failed: {e}"))?;
+        if status.is_some() || started.elapsed() >= timeout {
+            return Err(format!(
+                "parent-stage unavailable after {}ms; helper_status={status:?}; latest_phase={}; stdout_tail={:?}; stderr_tail={:?}",
+                started.elapsed().as_millis(),
+                parent.latest,
+                diagnostic_tail(&parent.directory.join("parent-stdout.log")),
+                diagnostic_tail(&parent.directory.join("parent-stderr.log"))
+            ));
+        }
+        std::thread::sleep(Duration::from_millis(10));
+    }
+}
 #[test]
 fn fixture_parent_entry() {
     if std::env::var("PCTX_GUARDIAN_FIXTURE").as_deref() != Ok("parent") {
@@ -252,14 +426,28 @@ fn fixture_parent_entry() {
     let directory = PathBuf::from(std::env::var_os("PCTX_GUARDIAN_FIXTURE_DIR").unwrap());
     let (mut job, config) = setup(&directory);
     let protocol = config.protocol_dir.clone();
+    let started = Instant::now();
+    let mut phase = serde_json::json!({"job_name":job.identity().name,
+        "job_owner_sid":job.identity().owner_sid,"protocol_dir":protocol});
+    publish_parent_phase(&directory, "configured", started, &mut phase);
     let mut keeper = GuardianClient::start(config, &launch(&directory)).unwrap();
+    phase["guardian"] = serde_json::to_value(keeper.ready().guardian).unwrap();
+    publish_parent_phase(&directory, "keeper-ready", started, &mut phase);
     let mut target = job.spawn_suspended(&request(&directory, "hold")).unwrap();
+    let child = target.identity().unwrap();
+    phase["child"] =
+        serde_json::json!({"pid":child.pid,"creation_filetime":child.creation_filetime});
+    publish_parent_phase(&directory, "child-suspended", started, &mut phase);
     let ack = keeper.attach(&target).unwrap();
+    phase["admission_sealed"] = serde_json::json!(ack.admission_sealed);
+    publish_parent_phase(&directory, "admission-ack", started, &mut phase);
     // SAFETY: the actual keeper's durable ACK binds this suspended child and slot.
     unsafe {
         target.resume_after_guardian_ack().unwrap();
     }
+    publish_parent_phase(&directory, "resumed", started, &mut phase);
     wait_for(&directory.join("target-started"), 15);
+    publish_parent_phase(&directory, "target-started", started, &mut phase);
     let data = serde_json::json!({"job_name":job.identity().name,"job_owner_sid":job.identity().owner_sid,"guardian":ack.guardian,"protocol_dir":protocol,"admission_sealed":ack.admission_sealed});
     pctx::project::atomic_write(
         &directory.join("parent-stage.json"),
@@ -267,6 +455,7 @@ fn fixture_parent_entry() {
         false,
     )
     .unwrap();
+    publish_parent_phase(&directory, "final-published", started, &mut phase);
     std::thread::sleep(Duration::from_secs(60));
 }
 #[test]
@@ -281,18 +470,43 @@ fn native_parent_death_keeps_live_target_slot_until_job_empty() {
     };
     let temp = tempfile::tempdir().unwrap();
     let directory = temp.path().canonicalize().unwrap();
-    let mut parent = Command::new(std::env::current_exe().unwrap())
+    // Regular files cannot deadlock a helper on a full unread anonymous pipe.
+    let stdout = OpenOptions::new()
+        .create_new(true)
+        .write(true)
+        .open(directory.join("parent-stdout.log"))
+        .unwrap();
+    let stderr = OpenOptions::new()
+        .create_new(true)
+        .write(true)
+        .open(directory.join("parent-stderr.log"))
+        .unwrap();
+    let parent = Command::new(std::env::current_exe().unwrap())
         .args(["--exact", "fixture_parent_entry", "--nocapture"])
         .envs(environment("parent", &directory))
         .stdin(Stdio::null())
-        .stdout(Stdio::null())
-        .stderr(Stdio::null())
+        .stdout(Stdio::from(stdout.try_clone().unwrap()))
+        .stderr(Stdio::from(stderr.try_clone().unwrap()))
         .spawn()
         .unwrap();
-    wait_for(&directory.join("parent-stage.json"), 40);
-    let data: serde_json::Value =
-        serde_json::from_slice(&std::fs::read(directory.join("parent-stage.json")).unwrap())
-            .unwrap();
+    let mut parent = ParentFixtureCleanup::new(parent, &directory);
+    let data = match wait_parent_stage(&mut parent, Duration::from_secs(40)) {
+        Ok(data) => data,
+        Err(reason) => {
+            // Keep on-disk diagnostics for the failing CI fixture, after safe cleanup.
+            parent.cleanup();
+            stdout.sync_all().unwrap();
+            stderr.sync_all().unwrap();
+            let retained = temp.keep();
+            panic!(
+                "{reason}; cleanup_job_pinned={}; cleanup_keeper_identity_known={}; cleanup_completed={}; fixture diagnostics retained at {}",
+                parent.job_known,
+                parent.native.keeper.is_some(),
+                parent.native.complete,
+                retained.display()
+            );
+        }
+    };
     assert_eq!(data["admission_sealed"], true);
     let job = JobIdentity {
         name: data["job_name"].as_str().unwrap().into(),
@@ -314,8 +528,7 @@ fn native_parent_death_keeps_live_target_slot_until_job_empty() {
     };
     assert!(!raw.is_null());
     let guardian_handle = unsafe { OwnedHandle::from_raw_handle(raw) };
-    parent.kill().unwrap();
-    parent.wait().unwrap();
+    parent.kill_and_reap().unwrap();
     assert_eq!(
         unsafe { WaitForSingleObject(guardian_handle.as_raw_handle(), 0) },
         WAIT_TIMEOUT
@@ -355,6 +568,7 @@ fn native_parent_death_keeps_live_target_slot_until_job_empty() {
         );
         std::thread::sleep(Duration::from_millis(10));
     }
+    parent.native.complete = true;
 }
 
 fn stop_empty_fixture_keeper(expected: pctx::windows_guardian::IdentityReceipt) {
@@ -395,6 +609,9 @@ fn stop_empty_fixture_keeper(expected: pctx::windows_guardian::IdentityReceipt) 
         (u64::from(creation.dwHighDateTime) << 32) | u64::from(creation.dwLowDateTime),
         expected.creation_filetime
     );
+    if unsafe { WaitForSingleObject(handle.as_raw_handle(), 0) } == WAIT_OBJECT_0 {
+        return;
+    }
     // Explicit isolated fixture cleanup only, after both fixture jobs are proven
     // empty and no production resource or admission capability exists.
     assert_ne!(unsafe { TerminateProcess(handle.as_raw_handle(), 1) }, 0);
@@ -442,39 +659,52 @@ fn wrong_job_attach_retains_unsealed_slot_even_when_observed_job_is_empty() {
 // Explicit test-only cleanup: never infer job emptiness from a timeout or a dead
 // parent. Handles pin the actual fixture jobs while cancellation is observed.
 struct FixtureCleanup {
-    keeper: pctx::windows_guardian::IdentityReceipt,
+    keeper: Option<pctx::windows_guardian::IdentityReceipt>,
     jobs: Vec<(JobObserver, std::os::windows::io::OwnedHandle)>,
     complete: bool,
 }
 impl FixtureCleanup {
-    fn new(keeper: pctx::windows_guardian::IdentityReceipt, jobs: &[&JobIdentity]) -> Self {
-        let mut cleanup = Self {
-            keeper,
+    fn pending() -> Self {
+        Self {
+            keeper: None,
             jobs: Vec::new(),
             complete: false,
-        };
+        }
+    }
+    fn new(keeper: pctx::windows_guardian::IdentityReceipt, jobs: &[&JobIdentity]) -> Self {
+        let mut cleanup = Self::pending();
+        cleanup.keeper = Some(keeper);
         for identity in jobs {
             cleanup.add_job(identity);
         }
         cleanup
     }
     fn add_job(&mut self, identity: &JobIdentity) {
+        assert!(
+            self.try_add_job(identity),
+            "isolated fixture job could not be pinned"
+        );
+    }
+    fn try_add_job(&mut self, identity: &JobIdentity) -> bool {
         use std::os::windows::io::{FromRawHandle, OwnedHandle};
         use windows_sys::Win32::System::JobObjects::OpenJobObjectW;
-        let item = {
-            let observer = JobObserver::reopen(identity).unwrap();
-            let name: Vec<u16> = identity.name.encode_utf16().chain(Some(0)).collect();
-            // The validated observer owns and pins the same named native object.
-            let raw = unsafe { OpenJobObjectW(8 | 4, 0, name.as_ptr()) };
-            assert!(!raw.is_null());
-            (observer, unsafe { OwnedHandle::from_raw_handle(raw) })
+        let Ok(observer) = JobObserver::reopen(identity) else {
+            return false;
         };
-        self.jobs.push(item);
+        let name: Vec<u16> = identity.name.encode_utf16().chain(Some(0)).collect();
+        // The validated observer owns and pins the same named native object.
+        let raw = unsafe { OpenJobObjectW(8 | 4, 0, name.as_ptr()) };
+        if raw.is_null() {
+            return false;
+        }
+        self.jobs
+            .push((observer, unsafe { OwnedHandle::from_raw_handle(raw) }));
+        true
     }
     fn cleanup(&mut self) {
         use std::os::windows::io::AsRawHandle;
         use windows_sys::Win32::System::JobObjects::TerminateJobObject;
-        if self.complete {
+        if self.complete || (self.keeper.is_some() && self.jobs.is_empty()) {
             return;
         }
         for (_, handle) in &self.jobs {
@@ -495,7 +725,11 @@ impl FixtureCleanup {
             std::thread::sleep(Duration::from_millis(10));
         }
         // Catch fixture assertions so cleanup during unwinding cannot double panic.
-        self.complete = std::panic::catch_unwind(|| stop_empty_fixture_keeper(self.keeper)).is_ok();
+        if let Some(keeper) = self.keeper {
+            self.complete = std::panic::catch_unwind(|| stop_empty_fixture_keeper(keeper)).is_ok();
+        } else {
+            self.complete = true;
+        }
     }
 }
 impl Drop for FixtureCleanup {

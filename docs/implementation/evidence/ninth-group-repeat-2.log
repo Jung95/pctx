@@ -1,0 +1,20 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.04s
+     Running tests/project_deadline.rs (target/debug/deps/project_deadline-f7e8b9d913251d84)
+
+running 13 tests
+test deadline_project_loading_child_entry ... ok
+test query_supervisor_rejects_mutation_before_spawn ... ok
+test expired_loading_and_detection_do_not_touch_nonexistent_project ... ok
+test expired_connection_does_not_even_create_initialization_lock ... ok
+test actual_registered_project_loading_and_ancestor_discovery_keep_same_deadline ... ok
+test connection_initialization_wait_respects_remaining_request_not_five_seconds ... ok
+test busy_sqlite_read_is_bounded_by_remaining_request ... ok
+test query_program_resolution_uses_captured_command_path ... ok
+test successive_database_connections_share_the_original_request_budget ... ok
+test relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry ... ok
+test simultaneous_streams_are_collected_and_overflow_never_infers_success ... ok
+test query_cannot_succeed_with_live_descendant_that_closed_both_streams ... ok
+test query_deadline_includes_inherited_pipe_eof_after_root_exit ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.01s
+

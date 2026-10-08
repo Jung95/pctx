@@ -1,0 +1,58 @@
+   Compiling rusqlite v0.40.2
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 6.30s
+     Running tests/broker.rs (target/debug/deps/broker-9f124a6ad706c742)
+
+running 9 tests
+test non_git_is_unsupported_and_corrupt_git_is_never_empty_or_clean ... ok
+test field_selection_and_nul_filenames_do_not_emit_paths_or_source ... ok
+test repo_fsmonitor_script_is_never_executed ... ok
+test proven_dead_refresh_owner_can_be_reclaimed_without_ttl_guessing ... ok
+test concurrent_refresh_is_shared_but_workspace_and_policy_keys_are_isolated ... ok
+test live_refresh_owner_is_not_stolen_by_age_and_returns_pending ... ok
+test bounded_wait_without_snapshot_is_unavailable_and_never_reclaims_live_owner ... ok
+test five_actual_cli_processes_share_one_refresh ... ok
+test default_waiter_receives_shared_publication_after_old_half_second_cutoff ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.87s
+
+     Running tests/derived_query_deadline.rs (target/debug/deps/derived_query_deadline-b322265965e4a570)
+
+running 4 tests
+test expired_derived_entries_reject_before_index_or_source_changes ... ok
+test extract_default_and_supplied_budget_preserve_source_span ... ok
+test graph_default_and_supplied_budget_preserve_edges_and_inferred_impact ... ok
+test nested_extract_refresh_cannot_restart_budget_while_writer_is_busy ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+
+     Running tests/project_deadline.rs (target/debug/deps/project_deadline-f7e8b9d913251d84)
+
+running 11 tests
+test deadline_project_loading_child_entry ... ok
+test query_supervisor_rejects_mutation_before_spawn ... ok
+test expired_loading_and_detection_do_not_touch_nonexistent_project ... ok
+test expired_connection_does_not_even_create_initialization_lock ... ok
+test actual_registered_project_loading_and_ancestor_discovery_keep_same_deadline ... ok
+test connection_initialization_wait_respects_remaining_request_not_five_seconds ... ok
+test busy_sqlite_read_is_bounded_by_remaining_request ... ok
+test query_deadline_includes_inherited_pipe_eof_after_root_exit ... FAILED
+test successive_database_connections_share_the_original_request_budget ... ok
+test query_program_resolution_uses_captured_command_path ... ok
+test simultaneous_streams_are_collected_and_overflow_never_infers_success ... ok
+
+failures:
+
+---- query_deadline_includes_inherited_pipe_eof_after_root_exit stdout ----
+
+thread 'query_deadline_includes_inherited_pipe_eof_after_root_exit' (7314198) panicked at tests/project_deadline.rs:166:10:
+called `Result::unwrap()` on an `Err` value: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    query_deadline_includes_inherited_pipe_eof_after_root_exit
+
+test result: FAILED. 10 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.91s
+
+error: test failed, to rerun pass `--test project_deadline`

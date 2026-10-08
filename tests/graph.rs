@@ -9,6 +9,7 @@ fn fixture() -> (tempfile::TempDir, Project) {
     let root = t.path().join("project");
     std::fs::create_dir_all(&root).unwrap();
     let p = Project {
+        deadline: None,
         root_anchor: pctx::project::RootAnchor::capture(&root).unwrap(),
         root,
         data_dir: t.path().join("data"),

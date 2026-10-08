@@ -1,0 +1,39 @@
+    Checking rusqlite v0.40.2
+    Checking pctx v0.1.0-dev (/Users/dev/PCTX)
+error: this expression creates a reference which is immediately dereferenced by the compiler
+  --> src/storage.rs:68:22
+   |
+68 |     sqlite_budget(p, &db)?;
+   |                      ^^^ help: change this to: `db`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#needless_borrow
+   = note: `-D clippy::needless-borrow` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::needless_borrow)]`
+
+error: this `if` statement can be collapsed
+   --> src/storage.rs:454:13
+    |
+454 | /             if let Err(e) = &access {
+455 | |                 if matches!(
+456 | |                     e.code.as_str(),
+457 | |                     "TIMEOUT" | "INVALID_CONFIG" | "POLICY_UNAVAILABLE"
+...   |
+461 | |             }
+    | |_____________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#collapsible_if
+    = note: `-D clippy::collapsible-if` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::collapsible_if)]`
+help: collapse nested if block
+    |
+454 ~             if let Err(e) = &access
+455 ~                 && matches!(
+456 |                     e.code.as_str(),
+...
+459 |                     return Err(e.clone());
+460 ~                 }
+    |
+
+error: could not compile `pctx` (lib) due to 2 previous errors
+warning: build failed, waiting for other jobs to finish...
+error: could not compile `pctx` (lib test) due to 2 previous errors

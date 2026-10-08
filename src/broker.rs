@@ -8,7 +8,6 @@ use rusqlite::{Connection, OptionalExtension, params};
 use serde_json::{Value, json};
 use std::{
     fs,
-    io::Read,
     process::{Command, Stdio},
     thread,
     time::{Duration, Instant},
@@ -73,14 +72,21 @@ fn valid(s: &Snapshot) -> bool {
     ) && millis() >= s.observed
         && millis() - s.observed < 2000
 }
-fn identity(pid: u32) -> Option<String> {
+fn identity(pid: u32, deadline: Instant) -> Option<String> {
     #[cfg(unix)]
     {
-        let output = Command::new("ps")
+        let mut command = Command::new("ps");
+        command
             .args(["-p", &pid.to_string(), "-o", "lstart="])
-            .env("LC_ALL", "C")
-            .output()
-            .ok()?;
+            .env_clear()
+            .env("PATH", std::env::var_os("PATH").unwrap_or_default())
+            .env("LC_ALL", "C");
+        let output = crate::query_process::output(
+            command,
+            crate::deadline::Deadline::from_instant(deadline),
+            65536,
+        )
+        .ok()?;
         if !output.status.success() {
             return None;
         }
@@ -89,11 +95,11 @@ fn identity(pid: u32) -> Option<String> {
     }
     #[cfg(not(unix))]
     {
-        let _ = pid;
+        let _ = (pid, deadline);
         None
     }
 }
-fn proven_dead(pid: u32, started: &str) -> bool {
+fn proven_dead(pid: u32, started: &str, deadline: Instant) -> bool {
     #[cfg(unix)]
     {
         // SAFETY: signal zero checks existence without delivering a signal.
@@ -105,28 +111,29 @@ fn proven_dead(pid: u32, started: &str) -> bool {
         if started.is_empty() {
             return false;
         }
-        identity(pid).is_some_and(|current| current != started)
+        identity(pid, deadline).is_some_and(|current| current != started)
     }
     #[cfg(not(unix))]
     {
-        let _ = (pid, started);
+        let _ = (pid, started, deadline);
         false
     }
 }
-fn claim(db: &mut Connection, key: &str) -> Result<Option<i64>> {
+fn claim(db: &mut Connection, key: &str, deadline: Instant) -> Result<Option<i64>> {
     let transaction = db.transaction_with_behavior(rusqlite::TransactionBehavior::Immediate)?;
     if snapshot(&transaction, key)?.as_ref().is_some_and(valid) {
         return Ok(None);
     }
     let existing:Option<(i64,u32,String,bool)>=transaction.query_row("SELECT generation,pid,start_identity,owner_active FROM broker_refresh_jobs WHERE key=?1",[key],|r|Ok((r.get(0)?,r.get(1)?,r.get(2)?,r.get(3)?))).optional()?;
     if let Some((_, pid, ref started, true)) = existing
-        && !proven_dead(pid, started)
+        && !proven_dead(pid, started, deadline)
     {
         return Ok(None);
     }
     let generation = existing.as_ref().map(|j| j.0 + 1).unwrap_or(1);
     let pid = std::process::id();
-    let started = identity(pid).unwrap_or_default();
+    let started = identity(pid, deadline).unwrap_or_default();
+    crate::deadline::Deadline::from_instant(deadline).check()?;
     transaction.execute("INSERT INTO broker_refresh_jobs(key,generation,pid,start_identity,claimed_ms,owner_active,refresh_count) VALUES(?1,?2,?3,?4,?5,1,1) ON CONFLICT(key) DO UPDATE SET generation=excluded.generation,pid=excluded.pid,start_identity=excluded.start_identity,claimed_ms=excluded.claimed_ms,owner_active=1,refresh_count=refresh_count+1",params![key,generation,pid,started,millis()])?;
     transaction.commit()?;
     Ok(Some(generation))
@@ -162,75 +169,19 @@ fn git(p: &Project, args: &[&str], deadline: Instant) -> Result<Vec<u8>> {
         .stdin(Stdio::null())
         .stdout(Stdio::piped())
         .stderr(Stdio::piped());
-    let mut child = command
-        .spawn()
-        .map_err(|_| error("SOURCE_UNAVAILABLE", "Local Git executable unavailable", 6))?;
-    fn drain<R: Read + Send + 'static>(mut r: R) -> thread::JoinHandle<(Vec<u8>, bool)> {
-        thread::spawn(move || {
-            let mut out = Vec::new();
-            let mut chunk = [0u8; 8192];
-            let mut complete = true;
-            loop {
-                match r.read(&mut chunk) {
-                    Ok(0) => break,
-                    Ok(n) => {
-                        if out.len() + n <= 8 * 1024 * 1024 {
-                            out.extend_from_slice(&chunk[..n]);
-                        } else {
-                            complete = false;
-                        }
-                    }
-                    Err(_) => {
-                        complete = false;
-                        break;
-                    }
-                }
-            }
-            (out, complete)
-        })
-    }
-    let out = drain(
-        child
-            .stdout
-            .take()
-            .ok_or_else(|| error("SOURCE_UNAVAILABLE", "Missing Git output pipe", 7))?,
-    );
-    let stderr = drain(
-        child
-            .stderr
-            .take()
-            .ok_or_else(|| error("SOURCE_UNAVAILABLE", "Missing Git error pipe", 7))?,
-    );
-    let status = loop {
-        if let Some(status) = child.try_wait()? {
-            break status;
-        }
-        if Instant::now() >= deadline {
-            let _ = child.kill();
-            let _ = child.wait();
-            return Err(error("TIMEOUT", "Local Git query timed out", 7));
-        }
-        thread::sleep(Duration::from_millis(5));
-    };
-    let (bytes, complete) = out
-        .join()
-        .map_err(|_| error("SOURCE_UNAVAILABLE", "Git output collection failed", 7))?;
-    let _ = stderr.join();
-    if !status.success() {
+    let output = crate::query_process::output(
+        command,
+        crate::deadline::Deadline::from_instant(deadline),
+        8 * 1024 * 1024,
+    )?;
+    if !output.status.success() {
         return Err(error(
             "SOURCE_UNAVAILABLE",
             "Local Git query failed; no empty result inferred",
             7,
         ));
     }
-    if !complete {
-        return Err(error(
-            "PARTIAL_RESULT",
-            "Git output exceeded collection limits",
-            3,
-        ));
-    }
-    Ok(bytes)
+    Ok(output.stdout)
 }
 fn marker_exists(p: &Project) -> bool {
     p.root
@@ -371,6 +322,7 @@ fn publish(
         "UPDATE broker_refresh_jobs SET owner_active=0 WHERE key=?1 AND generation=?2",
         params![key, generation],
     )?;
+    p.check_deadline()?;
     tx.commit()?;
     Ok(true)
 }
@@ -411,6 +363,13 @@ pub fn repo_with_timeout(p: &Project, command: &RepoCommand, timeout: Duration) 
                 2,
             )
         })?;
+    let deadline = p
+        .deadline
+        .map(|shared| shared.instant().min(deadline))
+        .unwrap_or(deadline);
+    let mut scoped = p.clone();
+    scoped.deadline = Some(crate::deadline::Deadline::from_instant(deadline));
+    let p = &scoped;
     let RepoCommand::Status { fields, workspace } = command;
     if workspace != "current" {
         return Err(error(
@@ -442,7 +401,7 @@ pub fn repo_with_timeout(p: &Project, command: &RepoCommand, timeout: Duration) 
         }
         // Do not let repeated SQLite contention reset the caller's remaining wait.
         db.busy_timeout(deadline.saturating_duration_since(Instant::now()))?;
-        if let Some(generation) = claim(&mut db, &key)? {
+        if let Some(generation) = claim(&mut db, &key, deadline)? {
             // No SQLite transaction is held over the Git process.
             match refresh(p, deadline) {
                 Ok((data, status)) => {

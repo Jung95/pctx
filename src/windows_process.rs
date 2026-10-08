@@ -843,6 +843,14 @@ impl SuspendedChild {
     /// retaining owning job/process handles and ensuring observed cancellation;
     /// such tests do not certify durable guardian attachment.
     pub unsafe fn resume_after_guardian_ack(&mut self) -> io::Result<()> {
+        self.resume_owned_primary_thread()
+    }
+    /// Finite whitelisted queries have no shared-resource lease or guardian claim.
+    /// The synchronous query supervisor owns this contained job through EOF/deadline cleanup.
+    pub(crate) fn resume_finite_query(&mut self) -> io::Result<()> {
+        self.resume_owned_primary_thread()
+    }
+    fn resume_owned_primary_thread(&mut self) -> io::Result<()> {
         if self.resume_attempted || self.cleanup_confirmed {
             return Err(io::Error::other("child admission already resolved"));
         }

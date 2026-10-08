@@ -14,7 +14,7 @@ cargo test --locked
 cargo run -- --help
 ```
 
-SQLite is bundled; no database server or model service is required. Only macOS arm64 has been available for local execution. Linux and Windows execution remains unverified.
+SQLite is bundled; no database server or model service is required. Local execution uses macOS arm64. Linux and macOS CI have passed on the eighth integration; Windows has component evidence and unresolved native failures. See [platform evidence](docs/implementation/handoff.md) for exact revisions and limits.
 
 ## Explore a project
 
@@ -32,6 +32,8 @@ pctx --root /path/to/project changes --since before-fix
 `PCTX_DATA_DIR` selects an isolated local data directory. Project configuration resides in `.pctx/config.toml`. Workspace indexes and coordination records reside outside the source directory by default. An explicit output file is created without overwriting an existing file.
 
 `find QUERY` is literal. `find --query '(login OR auth) AND NOT legacy'` enables the bounded Boolean grammar. Outlines use Tree-sitter for Python, JavaScript, JSX, TypeScript and TSX. Unsupported UTF-8 files remain searchable but have no claimed language structure. Symbol reads validate source hashes and reject stale IDs.
+
+Supported finite queries share one request deadline, including project loading and nested index refresh. Use `--timeout-ms 3000` to set a positive budget in milliseconds. See [query deadlines](docs/cli/query-deadlines.md) for covered commands, partial results and platform limits.
 
 ## Coordinate local work
 

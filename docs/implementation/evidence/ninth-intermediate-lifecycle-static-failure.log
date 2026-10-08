@@ -1,0 +1,14 @@
+    Checking pctx v0.1.0-dev (/Users/dev/PCTX)
+error: manual implementation of `.is_multiple_of()`
+  --> src/query_process.rs:51:16
+   |
+51 |             || bytes as usize % std::mem::size_of::<i32>() != 0
+   |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: replace with: `!(bytes as usize).is_multiple_of(std::mem::size_of::<i32>())`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#manual_is_multiple_of
+   = note: `-D clippy::manual-is-multiple-of` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::manual_is_multiple_of)]`
+
+error: could not compile `pctx` (lib test) due to 1 previous error
+warning: build failed, waiting for other jobs to finish...
+error: could not compile `pctx` (lib) due to 1 previous error

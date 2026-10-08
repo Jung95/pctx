@@ -1,4 +1,7 @@
-use crate::domain::{Error, Result, hash, id};
+use crate::{
+    deadline::Deadline,
+    domain::{Error, Result, hash, id},
+};
 use rusqlite::Connection;
 use serde::{Deserialize, Serialize};
 use std::{
@@ -127,6 +130,8 @@ impl RootAnchor {
 }
 #[derive(Clone, Debug)]
 pub struct Project {
+    /// Finite request budget; absent for long-running child supervision.
+    pub deadline: Option<crate::deadline::Deadline>,
     pub root: PathBuf,
     pub root_anchor: RootAnchor,
     pub data_dir: PathBuf,
@@ -351,27 +356,98 @@ pub fn data_dir() -> Result<PathBuf> {
         .join("pctx");
     Ok(d)
 }
+fn lock_contended(error: &std::io::Error) -> bool {
+    error.kind() == std::io::ErrorKind::WouldBlock
+        || error.raw_os_error() == fs2::lock_contended_error().raw_os_error()
+}
+fn check_request(deadline: Option<Deadline>) -> Result<()> {
+    deadline.map(Deadline::check).unwrap_or(Ok(()))
+}
+fn git_query(
+    root: &Path,
+    args: &[&str],
+    deadline: Option<Deadline>,
+) -> Result<std::process::Output> {
+    check_request(deadline)?;
+    let deadline = match deadline {
+        Some(d) => d,
+        None => Deadline::from_millis(10000)?,
+    };
+    let mut command = std::process::Command::new("git");
+    command
+        .args([
+            "-c",
+            "core.fsmonitor=false",
+            "-c",
+            "core.hooksPath=/dev/null",
+            "-c",
+            "core.pager=cat",
+        ])
+        .args(args)
+        .current_dir(root)
+        .env_clear()
+        .env("PATH", std::env::var_os("PATH").unwrap_or_default())
+        .env("GIT_CONFIG_NOSYSTEM", "1")
+        .env(
+            "GIT_CONFIG_GLOBAL",
+            if cfg!(windows) { "NUL" } else { "/dev/null" },
+        )
+        .env("GIT_OPTIONAL_LOCKS", "0")
+        .env("GIT_PAGER", "cat");
+    crate::query_process::output(command, deadline, 1024 * 1024)
+}
 pub fn detect_root(explicit: Option<&Path>) -> Result<PathBuf> {
+    detect_root_with_deadline(explicit, None)
+}
+pub fn detect_root_with_deadline(
+    explicit: Option<&Path>,
+    deadline: Option<Deadline>,
+) -> Result<PathBuf> {
+    check_request(deadline)?;
     if let Some(p) = explicit {
-        return fs::canonicalize(p).map_err(Into::into);
+        let root = fs::canonicalize(p)?;
+        check_request(deadline)?;
+        return Ok(root);
     }
     let cwd = std::env::current_dir()?;
     for p in cwd.ancestors() {
+        check_request(deadline)?;
         if p.join(".pctx/config.toml").is_file() {
+            check_request(deadline)?;
             return Ok(p.to_owned());
         }
     }
-    if let Ok(o) = std::process::Command::new("git")
-        .args(["rev-parse", "--show-toplevel"])
-        .current_dir(&cwd)
-        .output()
-        && o.status.success()
-    {
-        return fs::canonicalize(String::from_utf8_lossy(&o.stdout).trim()).map_err(Into::into);
+    match git_query(&cwd, &["rev-parse", "--show-toplevel"], deadline) {
+        Ok(o) if o.status.success() => {
+            let root = fs::canonicalize(String::from_utf8_lossy(&o.stdout).trim())?;
+            check_request(deadline)?;
+            Ok(root)
+        }
+        Err(e)
+            if matches!(
+                e.code.as_str(),
+                "TIMEOUT" | "PARTIAL_RESULT" | "CAPABILITY_UNAVAILABLE"
+            ) =>
+        {
+            Err(e)
+        }
+        _ => {
+            check_request(deadline)?;
+            Ok(cwd)
+        }
     }
-    Ok(cwd)
 }
 impl Project {
+    pub fn check_deadline(&self) -> Result<()> {
+        self.deadline
+            .map(|deadline| deadline.check())
+            .unwrap_or(Ok(()))
+    }
+    pub fn remaining(&self, maximum: Duration) -> Result<Duration> {
+        self.deadline
+            .map(|deadline| deadline.remaining().map(|left| left.min(maximum)))
+            .unwrap_or(Ok(maximum))
+    }
     pub fn init(root: &Path) -> Result<Self> {
         let root = fs::canonicalize(root)?;
         let dir = root.join(".pctx");
@@ -408,15 +484,21 @@ impl Project {
                 false,
             )?;
         }
-        Self::load_binding(&root, true)
+        Self::load_binding(&root, true, None)
     }
     pub fn open(root: &Path) -> Result<Self> {
-        Self::load_binding(root, false)
+        Self::open_with_deadline(root, None)
     }
-    fn load_binding(root: &Path, register: bool) -> Result<Self> {
+    pub fn open_with_deadline(root: &Path, deadline: Option<Deadline>) -> Result<Self> {
+        Self::load_binding(root, false, deadline)
+    }
+    fn load_binding(root: &Path, register: bool, deadline: Option<Deadline>) -> Result<Self> {
+        check_request(deadline)?;
         let root = fs::canonicalize(root)?;
+        check_request(deadline)?;
         // Capture before loading policy, then read through that same authority.
         let root_anchor = RootAnchor::capture(&root)?;
+        check_request(deadline)?;
         let mut config_file =
             crate::reader::anchored_open(&root, &root_anchor, ".pctx/config.toml").map_err(
                 |e| {
@@ -427,6 +509,7 @@ impl Project {
                     }
                 },
             )?;
+        check_request(deadline)?;
         let config_metadata = config_file.metadata()?;
         if !config_metadata.is_file() || config_metadata.len() > 1024 * 1024 {
             return Err(Error::new(
@@ -439,6 +522,7 @@ impl Project {
         std::io::Read::by_ref(&mut config_file)
             .take(1024 * 1024 + 1)
             .read_to_string(&mut source)?;
+        check_request(deadline)?;
         if source.len() > 1024 * 1024 {
             return Err(Error::new(
                 "INVALID_CONFIG",
@@ -461,7 +545,9 @@ impl Project {
         let config: Config = toml::from_str(&source).map_err(|_| {
             Error::new("INVALID_CONFIG", "Invalid project TOML or unknown field", 2)
         })?;
-        let config = effective_config(config)?;
+        check_request(deadline)?;
+        let config = effective_config(config, deadline)?;
+        check_request(deadline)?;
         if config.schema_version != 1
             || config.policy.persist_source
             || config.index.follow_symlinks
@@ -474,6 +560,7 @@ impl Project {
                 2,
             ));
         }
+        check_request(deadline)?;
         let data_dir = data_dir()?;
         if register {
             private_dir(&data_dir)?;
@@ -493,17 +580,39 @@ impl Project {
                 .create(true)
                 .truncate(false)
                 .open(data_dir.join("registry.lock"))?;
-            lock.lock_exclusive()?;
+            if let Some(deadline) = deadline {
+                let started = std::time::Instant::now();
+                loop {
+                    deadline.check()?;
+                    match lock.try_lock_exclusive() {
+                        Ok(()) => break,
+                        Err(e) if lock_contended(&e) => {}
+                        Err(e) => return Err(e.into()),
+                    }
+                    if started.elapsed() >= Duration::from_secs(5) {
+                        return Err(Error::new(
+                            "INDEX_BUSY",
+                            "Registry initialization is busy",
+                            7,
+                        ));
+                    }
+                    std::thread::sleep(deadline.remaining()?.min(Duration::from_millis(5)));
+                }
+            } else {
+                lock.lock_exclusive()?;
+            }
             Some(lock)
         } else {
             None
         };
+        check_request(deadline)?;
         let registry_path = data_dir.join("registry.json");
         let mut registry: Registry = match fs::read(&registry_path) {
             Ok(b) => serde_json::from_slice(&b)?,
             Err(e) if e.kind() == std::io::ErrorKind::NotFound => Registry::default(),
             Err(e) => return Err(e.into()),
         };
+        check_request(deadline)?;
         let root_key = root.to_string_lossy().to_string();
         let binding = match registry
             .roots
@@ -512,14 +621,25 @@ impl Project {
         {
             Some(b) => b.clone(),
             None if register => {
-                let common = std::process::Command::new("git")
-                    .args(["rev-parse", "--path-format=absolute", "--git-common-dir"])
-                    .current_dir(&root)
-                    .output()
-                    .ok()
-                    .filter(|o| o.status.success())
-                    .and_then(|o| String::from_utf8(o.stdout).ok())
-                    .map(|s| format!("{}:{}", config.project.id, s.trim()));
+                let common = match git_query(
+                    &root,
+                    &["rev-parse", "--path-format=absolute", "--git-common-dir"],
+                    deadline,
+                ) {
+                    Ok(o) if o.status.success() => String::from_utf8(o.stdout)
+                        .ok()
+                        .map(|s| format!("{}:{}", config.project.id, s.trim())),
+                    Err(e)
+                        if matches!(
+                            e.code.as_str(),
+                            "TIMEOUT" | "PARTIAL_RESULT" | "CAPABILITY_UNAVAILABLE"
+                        ) =>
+                    {
+                        return Err(e);
+                    }
+                    _ => None,
+                };
+                check_request(deadline)?;
                 let coordination_id = common
                     .as_ref()
                     .and_then(|key| registry.common_dirs.get(key))
@@ -535,7 +655,9 @@ impl Project {
                 };
                 registry.roots.insert(root_key, b.clone());
                 crate::reader::validate_anchor(&root, &root_anchor)?;
+                check_request(deadline)?;
                 atomic_write(&registry_path, &serde_json::to_vec(&registry)?, true)?;
+                check_request(deadline)?;
                 b
             }
             None => {
@@ -548,12 +670,15 @@ impl Project {
         };
         let workspace_dir = data_dir.join("workspaces").join(&binding.workspace_id);
         let control_dir = data_dir.join("controls").join(&binding.coordination_id);
+        check_request(deadline)?;
         if register {
             private_dir(&workspace_dir)?;
             private_dir(&control_dir)?;
         }
         crate::reader::validate_anchor(&root, &root_anchor)?;
+        check_request(deadline)?;
         Ok(Self {
+            deadline,
             root,
             root_anchor,
             data_dir,
@@ -574,7 +699,18 @@ impl Project {
     pub fn control_db(&self) -> PathBuf {
         self.control_dir.join("control.sqlite3")
     }
+    fn database_phase<T>(
+        &self,
+        db: &Connection,
+        call: impl FnOnce() -> rusqlite::Result<T>,
+    ) -> Result<T> {
+        db.busy_timeout(self.remaining(Duration::from_secs(5))?)?;
+        let result = call();
+        self.check_deadline()?;
+        result.map_err(Into::into)
+    }
     pub fn connect(&self, control: bool) -> Result<Connection> {
+        self.check_deadline()?;
         use fs2::FileExt;
         let path = if control {
             self.control_db()
@@ -592,8 +728,11 @@ impl Project {
             .open(parent.join("connection-init.lock"))?;
         let begin = std::time::Instant::now();
         loop {
-            if lock.try_lock_exclusive().is_ok() {
-                break;
+            self.check_deadline()?;
+            match lock.try_lock_exclusive() {
+                Ok(()) => break,
+                Err(e) if lock_contended(&e) => {}
+                Err(e) => return Err(e.into()),
             }
             if begin.elapsed() > Duration::from_secs(5) {
                 return Err(Error::new(
@@ -602,12 +741,18 @@ impl Project {
                     7,
                 ));
             }
-            std::thread::sleep(Duration::from_millis(5));
+            std::thread::sleep(self.remaining(Duration::from_millis(5))?);
         }
+        self.check_deadline()?;
         let db = Connection::open(path)?;
-        db.busy_timeout(Duration::from_secs(5))?;
-        db.pragma_update(None, "foreign_keys", "ON")?;
-        let version: i64 = db.pragma_query_value(None, "user_version", |r| r.get(0))?;
+        if let Some(deadline) = self.deadline {
+            db.progress_handler(1000, Some(move || deadline.check().is_err()))?;
+        }
+        self.check_deadline()?;
+        self.database_phase(&db, || db.pragma_update(None, "foreign_keys", "ON"))?;
+        let version: i64 = self.database_phase(&db, || {
+            db.pragma_query_value(None, "user_version", |r| r.get(0))
+        })?;
         if version > 1 {
             return Err(Error::new(
                 "DB_SCHEMA_TOO_NEW",
@@ -622,10 +767,13 @@ impl Project {
                 6,
             ));
         }
-        let mode: String = db.pragma_query_value(None, "journal_mode", |r| r.get(0))?;
+        let mode: String = self.database_phase(&db, || {
+            db.pragma_query_value(None, "journal_mode", |r| r.get(0))
+        })?;
         if !mode.eq_ignore_ascii_case("wal") {
-            db.pragma_update(None, "journal_mode", "WAL")?;
+            self.database_phase(&db, || db.pragma_update(None, "journal_mode", "WAL"))?;
         }
+        self.check_deadline()?;
         Ok(db)
     }
 }
@@ -728,14 +876,17 @@ pub fn write_handoff(p: &Project, name: &str, bytes: &[u8], overwrite: bool) -> 
     }
 }
 
-fn effective_config(mut project: Config) -> Result<Config> {
+fn effective_config(mut project: Config, deadline: Option<Deadline>) -> Result<Config> {
+    check_request(deadline)?;
     let user_path = std::env::var_os("PCTX_USER_CONFIG")
         .map(PathBuf::from)
         .or_else(|| {
             std::env::var_os("HOME").map(|h| PathBuf::from(h).join(".config/pctx/config.toml"))
         });
     if let Some(path) = user_path.filter(|p| p.exists()) {
+        check_request(deadline)?;
         let source = fs::read_to_string(path)?;
+        check_request(deadline)?;
         let table: toml::Table = toml::from_str(&source)
             .map_err(|_| Error::new("INVALID_CONFIG", "Invalid user TOML", 2))?;
         if table.keys().any(|k| {
@@ -817,5 +968,6 @@ fn effective_config(mut project: Config) -> Result<Config> {
         }
     }
     crate::reader::validate_exclusions(&project.policy.exclude)?;
+    check_request(deadline)?;
     Ok(project)
 }

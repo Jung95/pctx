@@ -1,5 +1,5 @@
 use crate::{
-    domain::{Error, Result, hash},
+    domain::{Error, Result},
     project::Project,
 };
 use globset::{Glob, GlobSetBuilder};
@@ -77,9 +77,21 @@ pub(crate) fn validate_exclusions(exclusions: &[String]) -> Result<()> {
     Ok(())
 }
 pub(crate) fn validate_policy(p: &Project) -> Result<()> {
-    validate_exclusions(&p.config.policy.exclude)
+    p.check_deadline()?;
+    let result = validate_exclusions(&p.config.policy.exclude);
+    p.check_deadline()?;
+    result
+}
+// Cooperative checks surround native filesystem operations. A syscall itself
+// can still block: no detached worker or hard filesystem latency claim.
+fn checked_fs<T>(p: &Project, operation: impl FnOnce() -> std::io::Result<T>) -> Result<T> {
+    p.check_deadline()?;
+    let result = operation();
+    p.check_deadline()?;
+    Ok(result?)
 }
 pub fn policy_allows(p: &Project, path: &str) -> Result<()> {
+    p.check_deadline()?;
     let rel = Path::new(path);
     if path.is_empty()
         || path.contains('\\')
@@ -93,10 +105,21 @@ pub fn policy_allows(p: &Project, path: &str) -> Result<()> {
     {
         return Err(Error::new("POLICY_DENIED", "Excluded by current policy", 5));
     }
+    p.check_deadline()?;
     Ok(())
 }
 pub(crate) fn validate_root(p: &Project) -> Result<()> {
-    validate_anchor(&p.root, &p.root_anchor)
+    p.check_deadline()?;
+    let opened = anchored_root(&p.root, &p.root_anchor, p.deadline);
+    p.check_deadline()?;
+    opened?;
+    Ok(())
+}
+/// Final identity gate for already collected timeout partials. This does not
+/// reopen source content, renew the budget or permit further query work.
+pub(crate) fn validate_partial_root(p: &Project) -> Result<()> {
+    anchored_root(&p.root, &p.root_anchor, None)?;
+    Ok(())
 }
 pub fn authorize(p: &Project, path: &str) -> Result<PathBuf> {
     policy_allows(p, path)?;
@@ -125,24 +148,31 @@ pub fn authorize(p: &Project, path: &str) -> Result<PathBuf> {
     let mut resolved = p.root.clone();
     for c in rel.components() {
         resolved.push(c);
-        if fs::symlink_metadata(&resolved)?.file_type().is_symlink() {
+        if checked_fs(p, || fs::symlink_metadata(&resolved))?
+            .file_type()
+            .is_symlink()
+        {
             return Err(Error::new("POLICY_DENIED", "Symlink traversal denied", 5));
         }
     }
-    if !fs::canonicalize(&resolved)?.starts_with(fs::canonicalize(&p.root)?) {
+    if !checked_fs(p, || fs::canonicalize(&resolved))?
+        .starts_with(checked_fs(p, || fs::canonicalize(&p.root))?)
+    {
         return Err(Error::new("PATH_OUTSIDE_ROOT", "Path outside project", 5));
     }
     validate_root(p)?;
     Ok(resolved)
 }
 pub fn read(p: &Project, path: &str) -> Result<VerifiedFile> {
+    p.check_deadline()?;
     for _ in 0..3 {
+        p.check_deadline()?;
         #[cfg(unix)]
         policy_allows(p, path)?;
         #[cfg(not(unix))]
         authorize(p, path)?;
         let mut f = secure_open(p, path)?;
-        let before = f.metadata()?;
+        let before = checked_fs(p, || f.metadata())?;
         if !before.is_file() {
             return Err(Error::new("INVALID_ARGUMENT", "Expected a regular file", 2));
         }
@@ -153,11 +183,21 @@ pub fn read(p: &Project, path: &str) -> Result<VerifiedFile> {
                 3,
             ));
         }
+        use sha2::{Digest, Sha256};
         let mut bytes = Vec::new();
-        Read::by_ref(&mut f)
-            .take(p.config.index.max_file_bytes + 1)
-            .read_to_end(&mut bytes)?;
-        let after = f.metadata()?;
+        let mut digest = Sha256::new();
+        let mut source = Read::by_ref(&mut f).take(p.config.index.max_file_bytes.saturating_add(1));
+        let mut chunk = [0u8; 65536];
+        loop {
+            let count = checked_fs(p, || source.read(&mut chunk))?;
+            if count == 0 {
+                break;
+            }
+            digest.update(&chunk[..count]);
+            p.check_deadline()?;
+            bytes.extend_from_slice(&chunk[..count]);
+        }
+        let after = checked_fs(p, || f.metadata())?;
         // Reopen through the anchored no-follow traversal, not an unchecked
         // pathname stat after authorization.
         #[cfg(unix)]
@@ -165,9 +205,10 @@ pub fn read(p: &Project, path: &str) -> Result<VerifiedFile> {
         #[cfg(not(unix))]
         authorize(p, path)?;
         let reopened_file = secure_open(p, path)?;
-        let reopened = reopened_file.metadata()?;
-        let same_instance = same_file::Handle::from_file(f.try_clone()?)?
+        let reopened = checked_fs(p, || reopened_file.metadata())?;
+        let same_instance = same_file::Handle::from_file(checked_fs(p, || f.try_clone())?)?
             == same_file::Handle::from_file(reopened_file)?;
+        p.check_deadline()?;
         let stable = same_instance
             && before.len() == after.len()
             && after.len() == reopened.len()
@@ -195,15 +236,21 @@ pub fn read(p: &Project, path: &str) -> Result<VerifiedFile> {
                 3,
             ));
         }
-        if bytes.contains(&0) {
+        p.check_deadline()?;
+        let binary = bytes.contains(&0);
+        p.check_deadline()?;
+        if binary {
             return Err(Error::new(
                 "UNSUPPORTED_ENCODING",
                 "Binary input is unsupported",
                 3,
             ));
         }
-        let file_hash = hash(&bytes);
-        let text = String::from_utf8(bytes)
+        let file_hash = format!("{:x}", digest.finalize());
+        p.check_deadline()?;
+        let text = String::from_utf8(bytes);
+        p.check_deadline()?;
+        let text = text
             .map_err(|_| Error::new("UNSUPPORTED_ENCODING", "Only UTF-8 text is supported", 3))?;
         return Ok(VerifiedFile {
             path: path.into(),
@@ -281,6 +328,7 @@ pub fn inventory(p: &Project, include_ignored: bool) -> Result<Inventory> {
     let mut paths = Vec::new();
     let mut skipped = Vec::new();
     for entry in walker.build() {
+        p.check_deadline()?;
         let entry = match entry {
             Ok(e) => e,
             Err(_) => {
@@ -309,38 +357,60 @@ pub fn inventory(p: &Project, include_ignored: bool) -> Result<Inventory> {
         }
         match authorize(p, &path) {
             Ok(_) => paths.push(path),
+            Err(e) if e.code == "TIMEOUT" => return Err(e),
             Err(e) if e.exit == 5 => {}
             Err(e) => skipped.push(serde_json::json!({"path":path,"reason":e.code})),
         }
     }
     for area in ["rules", "decisions", "handoffs"] {
+        p.check_deadline()?;
         let dir = p.root.join(".pctx").join(area);
-        if !dir.exists() {
+        let exists = dir.exists();
+        p.check_deadline()?;
+        if !exists {
             continue;
         }
         for entry in ignore::WalkBuilder::new(dir)
             .follow_links(false)
             .hidden(false)
             .build()
-            .flatten()
         {
+            p.check_deadline()?;
+            let entry = match entry {
+                Ok(entry) => entry,
+                Err(_) => {
+                    skipped.push(serde_json::json!({"reason":"walk_error"}));
+                    continue;
+                }
+            };
             if entry.file_type().is_some_and(|t| t.is_file())
                 && let Some(path) = entry
                     .path()
                     .strip_prefix(&p.root)
                     .ok()
                     .and_then(|s| s.to_str())
-                && authorize(p, path).is_ok()
             {
-                paths.push(path.into());
+                match authorize(p, path) {
+                    Ok(_) => paths.push(path.into()),
+                    Err(e) if e.code == "TIMEOUT" => return Err(e),
+                    Err(_) => {}
+                }
             }
         }
     }
     for path in [".pctx/config.toml", ".pctx/glossary.toml"] {
-        if p.root.join(path).is_file() && authorize(p, path).is_ok() {
-            paths.push(path.into());
+        p.check_deadline()?;
+        let is_file = p.root.join(path).is_file();
+        p.check_deadline()?;
+        if is_file {
+            match authorize(p, path) {
+                Ok(_) => paths.push(path.into()),
+                Err(e) if e.code == "TIMEOUT" => return Err(e),
+                Err(_) => {}
+            }
         }
     }
+    p.check_deadline()?;
     paths.sort();
     paths.dedup();
     validate_root(p)?;
@@ -357,7 +427,10 @@ pub fn manifest(p: &Project) -> Result<std::collections::BTreeMap<String, String
     }
     let mut map = std::collections::BTreeMap::new();
     for path in inventory.paths {
-        if redact(&path).1 {
+        p.check_deadline()?;
+        let sensitive = redact(&path).1;
+        p.check_deadline()?;
+        if sensitive {
             return Err(Error::new(
                 "PARTIAL_RESULT",
                 "Sensitive manifest identity excluded",
@@ -367,6 +440,7 @@ pub fn manifest(p: &Project) -> Result<std::collections::BTreeMap<String, String
         let f = read(p, &path)?;
         map.insert(path, f.hash);
     }
+    p.check_deadline()?;
     Ok(map)
 }
 
@@ -476,11 +550,21 @@ pub(crate) fn capture_root(root: &Path) -> Result<Vec<same_file::Handle>> {
     Ok(handles)
 }
 
-fn anchored_root(root: &Path, anchor: &crate::project::RootAnchor) -> Result<fs::File> {
+fn anchored_root(
+    root: &Path,
+    anchor: &crate::project::RootAnchor,
+    deadline: Option<crate::deadline::Deadline>,
+) -> Result<fs::File> {
     let mut count = 0;
     let file = walk_root(root, |index, file| {
+        if let Some(deadline) = deadline {
+            deadline.check()?;
+        }
         anchor.verify(index, file)?;
         count += 1;
+        if let Some(deadline) = deadline {
+            deadline.check()?;
+        }
         Ok(())
     })?;
     if count != anchor.len() {
@@ -490,7 +574,7 @@ fn anchored_root(root: &Path, anchor: &crate::project::RootAnchor) -> Result<fs:
 }
 
 pub(crate) fn validate_anchor(root: &Path, anchor: &crate::project::RootAnchor) -> Result<()> {
-    anchored_root(root, anchor)?;
+    anchored_root(root, anchor, None)?;
     Ok(())
 }
 
@@ -538,6 +622,16 @@ pub(crate) fn anchored_open(
     anchor: &crate::project::RootAnchor,
     path: &str,
 ) -> Result<fs::File> {
+    anchored_open_deadline(root, anchor, path, None)
+}
+fn anchored_open_deadline(
+    root: &Path,
+    anchor: &crate::project::RootAnchor,
+    path: &str,
+    deadline: Option<crate::deadline::Deadline>,
+) -> Result<fs::File> {
+    let check = || deadline.map(|d| d.check()).unwrap_or(Ok(()));
+    check()?;
     let relative = Path::new(path);
     if path.is_empty()
         || path.contains('\\')
@@ -552,7 +646,8 @@ pub(crate) fn anchored_open(
             5,
         ));
     }
-    let mut dir = anchored_root(root, anchor)?;
+    let mut dir = anchored_root(root, anchor, deadline)?;
+    check()?;
     #[cfg(unix)]
     {
         use std::{
@@ -562,6 +657,7 @@ pub(crate) fn anchored_open(
         };
         let components = relative.components().collect::<Vec<_>>();
         for (i, c) in components.iter().enumerate() {
+            check()?;
             let name = CString::new(c.as_os_str().as_bytes())
                 .map_err(|_| Error::new("INVALID_ARGUMENT", "NUL in path", 2))?;
             // Regular files ignore O_NONBLOCK; a FIFO must never block admission
@@ -575,8 +671,12 @@ pub(crate) fn anchored_open(
                     libc::O_NONBLOCK
                 };
             let fd = unsafe { libc::openat(dir.as_raw_fd(), name.as_ptr(), flags) };
-            if fd < 0 {
-                let error = std::io::Error::last_os_error();
+            let native_error = (fd < 0).then(std::io::Error::last_os_error);
+            if fd >= 0 {
+                dir = unsafe { fs::File::from_raw_fd(fd) };
+            }
+            check()?;
+            if let Some(error) = native_error {
                 if error.kind() == std::io::ErrorKind::NotFound {
                     return Err(error.into());
                 }
@@ -586,10 +686,10 @@ pub(crate) fn anchored_open(
                     5,
                 ));
             }
-            dir = unsafe { fs::File::from_raw_fd(fd) };
         }
         // The opened chain is pinned; reject a replaced named root before return.
-        validate_anchor(root, anchor)?;
+        anchored_root(root, anchor, deadline)?;
+        check()?;
         Ok(dir)
     }
     #[cfg(not(unix))]
@@ -597,14 +697,21 @@ pub(crate) fn anchored_open(
         let mut current = root.to_owned();
         let components: Vec<_> = relative.components().collect();
         for (i, component) in components.iter().enumerate() {
+            check()?;
             current.push(component);
-            dir = non_unix_open(&current, i + 1 < components.len())?;
+            let opened = non_unix_open(&current, i + 1 < components.len());
+            check()?;
+            dir = opened?;
         }
-        validate_anchor(root, anchor)?;
+        anchored_root(root, anchor, deadline)?;
+        check()?;
         Ok(dir)
     }
 }
 
 pub(crate) fn secure_open(p: &Project, path: &str) -> Result<fs::File> {
-    anchored_open(&p.root, &p.root_anchor, path)
+    p.check_deadline()?;
+    let opened = anchored_open_deadline(&p.root, &p.root_anchor, path, p.deadline);
+    p.check_deadline()?;
+    opened
 }

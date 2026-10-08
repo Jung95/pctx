@@ -1,0 +1,41 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.27s
+     Running tests/context_input_deadline.rs (target/debug/deps/context_input_deadline-0de6c57f731310c2)
+
+running 5 tests
+test unix_stdin_flags_probe ... ok
+test task_file_reader_preserves_utf8_and_rejects_oversize_invalid_and_expired_inputs ... ok
+test stdin_flag_restoration_is_observed_in_a_separate_process ... ok
+test fifo_task_path_is_rejected_without_waiting_for_a_writer_or_publishing ... ok
+test held_open_task_stdin_times_out_without_index_publication ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.20s
+
+     Running tests/search.rs (target/debug/deps/search-751f23ebc1208c2d)
+
+running 22 tests
+test expired_queries_fail_even_when_the_candidate_universe_is_empty ... ok
+test cached_policy_change_hides_metadata_and_boolean_remains_explicit ... ok
+test boolean_complements_validate_candidates_without_positive_hits ... ok
+test markdown_sections_ignore_fenced_examples_and_link_parents ... ok
+test invalid_policy_fails_even_without_metadata_candidates ... ok
+test alias_and_aggregate_regex_candidates_use_current_validation ... ok
+test oversized_non_candidate_is_skipped_but_matching_candidate_fails ... ok
+test matched_metadata_validates_stale_candidates_without_discovering_new_names ... ok
+test indexed_metadata_empty_generation_rejects_replaced_root_before_search ... ok
+test metadata_non_candidates_are_not_opened_as_source ... ok
+test structural_variants_use_real_grammar ... ok
+test unsupported_is_distinct_from_empty_supported ... ok
+test utf8_crlf_locations_and_version_ids ... ok
+test stale_symbol_and_ambiguous_names_never_select_code ... ok
+test indexed_metadata_invalid_policy_and_foreign_workspace_fail_closed ... ok
+test text_and_all_still_read_sources_without_metadata_hits_and_policy_hides_candidates ... ok
+test indexed_metadata_matches_including_complements_authorize_before_limit_even_off ... ok
+test indexed_metadata_search_hides_unopened_historical_counts_and_propagates_generation ... ok
+test indexed_metadata_staleness_and_body_only_discovery_keep_their_boundaries ... ok
+test parsing_cancellation_is_timeout_instead_of_empty_or_partial_ast_success ... ok
+test candidate_scan_cap_remains_distinct_from_request_timeout ... ok
+test deadline_partial_keeps_only_verified_matches_and_never_claims_complete_coverage ... ok
+
+test result: ok. 22 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.53s
+

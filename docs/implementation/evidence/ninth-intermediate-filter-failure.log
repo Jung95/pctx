@@ -1,0 +1,86 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.76s
+     Running tests/broker.rs (target/debug/deps/broker-9f124a6ad706c742)
+
+running 9 tests
+test non_git_is_unsupported_and_corrupt_git_is_never_empty_or_clean ... ok
+test field_selection_and_nul_filenames_do_not_emit_paths_or_source ... ok
+test repo_fsmonitor_script_is_never_executed ... ok
+test proven_dead_refresh_owner_can_be_reclaimed_without_ttl_guessing ... ok
+test concurrent_refresh_is_shared_but_workspace_and_policy_keys_are_isolated ... ok
+test live_refresh_owner_is_not_stolen_by_age_and_returns_pending ... ok
+test bounded_wait_without_snapshot_is_unavailable_and_never_reclaims_live_owner ... ok
+test default_waiter_receives_shared_publication_after_old_half_second_cutoff ... ok
+test five_actual_cli_processes_share_one_refresh ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.91s
+
+     Running tests/context_input_deadline.rs (target/debug/deps/context_input_deadline-0de6c57f731310c2)
+
+running 5 tests
+test unix_stdin_flags_probe ... ok
+test task_file_reader_preserves_utf8_and_rejects_oversize_invalid_and_expired_inputs ... ok
+test fifo_task_path_is_rejected_without_waiting_for_a_writer_or_publishing ... ok
+test stdin_flag_restoration_is_observed_in_a_separate_process ... ok
+test held_open_task_stdin_times_out_without_index_publication ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.49s
+
+     Running tests/derived_query_deadline.rs (target/debug/deps/derived_query_deadline-b322265965e4a570)
+
+running 4 tests
+test expired_derived_entries_reject_before_index_or_source_changes ... ok
+test extract_default_and_supplied_budget_preserve_source_span ... ok
+test graph_default_and_supplied_budget_preserve_edges_and_inferred_impact ... ok
+test nested_extract_refresh_cannot_restart_budget_while_writer_is_busy ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s
+
+     Running tests/project_deadline.rs (target/debug/deps/project_deadline-f7e8b9d913251d84)
+
+running 12 tests
+test deadline_project_loading_child_entry ... ok
+test query_supervisor_rejects_mutation_before_spawn ... ok
+test expired_loading_and_detection_do_not_touch_nonexistent_project ... ok
+test expired_connection_does_not_even_create_initialization_lock ... ok
+test actual_registered_project_loading_and_ancestor_discovery_keep_same_deadline ... ok
+test connection_initialization_wait_respects_remaining_request_not_five_seconds ... ok
+test busy_sqlite_read_is_bounded_by_remaining_request ... ok
+test successive_database_connections_share_the_original_request_budget ... ok
+test query_program_resolution_uses_captured_command_path ... ok
+test relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry ... ok
+test simultaneous_streams_are_collected_and_overflow_never_infers_success ... ok
+test query_deadline_includes_inherited_pipe_eof_after_root_exit ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.01s
+
+     Running tests/query_deadline_cli.rs (target/debug/deps/query_deadline_cli-91fccc6ca25b7a4f)
+
+running 2 tests
+test invalid_or_inapplicable_timeout_has_no_project_effects ... ok
+test strict_find_waits_only_remaining_budget_and_preserves_active_generation ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.21s
+
+     Running tests/query_filter_guard.rs (target/debug/deps/query_filter_guard-227c495d0a8a5b95)
+
+running 3 tests
+test filter_configuration_query_is_narrow_and_not_general_configuration_access ... ok
+test effective_clean_or_process_filter_declines_status_without_running_driver ... FAILED
+test no_filter_match_is_normal_and_invalid_configuration_is_not_an_empty_observation ... ok
+
+failures:
+
+---- effective_clean_or_process_filter_declines_status_without_running_driver stdout ----
+
+thread 'effective_clean_or_process_filter_declines_status_without_running_driver' (7329397) panicked at tests/query_filter_guard.rs:78:13:
+Native Git did not exercise the fixture filter
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    effective_clean_or_process_filter_declines_status_without_running_driver
+
+test result: FAILED. 2 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+
+error: test failed, to rerun pass `--test query_filter_guard`

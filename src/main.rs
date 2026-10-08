@@ -34,6 +34,9 @@ struct Cli {
     output: Option<PathBuf>,
     #[arg(long, global = true)]
     no_color: bool,
+    /// One cooperative budget for a finite query, including refresh and output preparation.
+    #[arg(long, global = true)]
+    timeout_ms: Option<u64>,
     #[command(subcommand)]
     command: Command,
 }
@@ -344,7 +347,40 @@ fn encoded(value: &mut Value, format: &Format, exit: &mut i32) -> Vec<u8> {
         }
     }
 }
-fn execute(cli: &Cli) -> Result<(String, Project, Value)> {
+fn query_deadline(cli: &Cli) -> Result<Option<pctx::deadline::Deadline>> {
+    let default = match &cli.command {
+        Command::Index { .. } | Command::Build(_) | Command::Checkpoint { .. } => Some(120_000),
+        Command::Find(_)
+        | Command::Query(_)
+        | Command::Extract(_)
+        | Command::Graph(_)
+        | Command::Outline { .. }
+        | Command::Read { .. }
+        | Command::Changes { .. }
+        | Command::Status { .. }
+        | Command::Doctor
+        | Command::Repo { .. }
+        | Command::Cache { .. }
+        | Command::Board { watch: false }
+        | Command::Activity { follow: false, .. } => Some(10_000),
+        _ => None,
+    };
+    match (cli.timeout_ms, default) {
+        (Some(_), None) => Err(Error::new(
+            "INVALID_ARGUMENT",
+            "--timeout-ms requires a supported finite query; child execution uses its execution timeout",
+            2,
+        )),
+        (specified, Some(default)) => {
+            pctx::deadline::Deadline::from_millis(specified.unwrap_or(default)).map(Some)
+        }
+        (None, None) => Ok(None),
+    }
+}
+fn execute(
+    cli: &Cli,
+    deadline: Option<pctx::deadline::Deadline>,
+) -> Result<(String, Project, Value)> {
     if matches!(cli.format, Format::Markdown) && !pctx::render::supports(cli.command.name()) {
         return Err(Error::new(
             "INVALID_ARGUMENT",
@@ -352,7 +388,7 @@ fn execute(cli: &Cli) -> Result<(String, Project, Value)> {
             2,
         ));
     }
-    let root = project::detect_root(cli.root.as_deref())?;
+    let root = project::detect_root_with_deadline(cli.root.as_deref(), deadline)?;
     if matches!(cli.command, Command::Init) {
         let p = Project::init(&root)?;
         return Ok((
@@ -361,7 +397,7 @@ fn execute(cli: &Cli) -> Result<(String, Project, Value)> {
             json!({"initialized":true,"project_id":p.project_id,"workspace_id":p.workspace_id,"coordination_id":p.coordination_id}),
         ));
     }
-    let p = Project::open(&root)?;
+    let p = Project::open_with_deadline(&root, deadline)?;
     let (name, data) = match &cli.command {
         Command::Init => unreachable!(),
         Command::Operations(c) => ("operations", operations::execute(&p, c)?),
@@ -396,7 +432,11 @@ fn execute(cli: &Cli) -> Result<(String, Project, Value)> {
         Command::Board { .. } => ("board", work::board(&p)?),
         Command::Activity { since_seq, .. } => ("activity", work::activity(&p, *since_seq)?),
         Command::Status { capabilities } => {
-            let snapshot = storage::snapshot(&p).ok();
+            let snapshot = match storage::snapshot(&p) {
+                Ok(snapshot) => Some(snapshot),
+                Err(e) if e.code == "TIMEOUT" => return Err(e),
+                Err(_) => None,
+            };
             (
                 "status",
                 json!({"generation_id":snapshot.as_ref().and_then(|s|s.0.clone()),"indexed_files":snapshot.map(|s|s.1.len()),"capabilities":if *capabilities {json!({"file_read":"implemented","syntax_outline":"implemented","lexical_search":"implemented","byte_context":"partial","work_control":"partial","graph":"static_imports","pack":"source_plans_and_integrity","tokenizer":"not_registered","claude_adapter":"planned","session_receipts":"partial","masked_output":"partial"})}else{Value::Null},"local_storage":{"index":p.index_db(),"control":p.control_db()},"sqlite_version":rusqlite::version()}),
@@ -410,6 +450,9 @@ fn execute(cli: &Cli) -> Result<(String, Project, Value)> {
                         path,
                         rusqlite::OpenFlags::SQLITE_OPEN_READ_ONLY,
                     )?;
+                    if let Some(deadline) = p.deadline {
+                        d.progress_handler(1000, Some(move || deadline.check().is_err()))?;
+                    }
                     let check: String = d.query_row("PRAGMA integrity_check", [], |r| r.get(0))?;
                     let version: i64 = d.pragma_query_value(None, "user_version", |r| r.get(0))?;
                     databases.push(json!({"kind":kind,"integrity":check,"schema":version}));
@@ -529,7 +572,7 @@ fn execute(cli: &Cli) -> Result<(String, Project, Value)> {
     };
     Ok((name.into(), p, data))
 }
-fn stream(cli: &Cli) -> Result<()> {
+fn stream(cli: &Cli, deadline: Option<pctx::deadline::Deadline>) -> Result<()> {
     if cli.output.is_some() {
         return Err(Error::new(
             "INVALID_ARGUMENT",
@@ -537,7 +580,8 @@ fn stream(cli: &Cli) -> Result<()> {
             2,
         ));
     }
-    let p = Project::open(&project::detect_root(cli.root.as_deref())?)?;
+    let root = project::detect_root_with_deadline(cli.root.as_deref(), deadline)?;
+    let p = Project::open_with_deadline(&root, deadline)?;
     let ndjson = matches!(cli.format, Format::Ndjson);
     match &cli.command {
         Command::Board { watch } => pctx::watch::run(&p, true, 0, *watch, ndjson),
@@ -676,8 +720,18 @@ fn main() {
         println!("{}", response);
         std::process::exit(2);
     }
+    let deadline = match query_deadline(&cli) {
+        Ok(deadline) => deadline,
+        Err(e) => {
+            let mut response = domain::envelope("arguments", None, Value::Null);
+            response["status"] = json!("error");
+            response["errors"] = json!([e]);
+            println!("{}", response);
+            std::process::exit(2);
+        }
+    };
     if follows || matches!(cli.format, Format::Ndjson) {
-        if let Err(e) = stream(&cli) {
+        if let Err(e) = stream(&cli, deadline) {
             let response = json!({"schema_version":"1.0","event_namespace":"work","event_seq":null,"type":"error","data":e});
             use std::io::Write;
             let _ = writeln!(std::io::stderr(), "{}", response);
@@ -685,7 +739,7 @@ fn main() {
         }
         return;
     }
-    let (mut response, mut exit) = match execute(&cli) {
+    let (mut response, mut exit) = match execute(&cli, deadline) {
         Ok((name, p, data)) => {
             let mut out = domain::envelope(&name, Some(&p), data);
             let freshness = match &cli.command {
@@ -766,10 +820,19 @@ fn main() {
     } else {
         cli.format.clone()
     };
-    let bytes = encoded(&mut response, &render_format, &mut exit);
+    let mut bytes = encoded(&mut response, &render_format, &mut exit);
+    if exit == 0
+        && let Some(deadline) = deadline
+        && let Err(e) = deadline.check()
+    {
+        response = domain::envelope(cli.command.name(), None, Value::Null);
+        response["status"] = json!("error");
+        response["errors"] = json!([e]);
+        exit = 7;
+        bytes = encoded(&mut response, &Format::Json, &mut exit);
+    }
     // Budget always applies to the format actually emitted, including the newline.
     let limit = output_budget(&cli.command);
-    let mut bytes = bytes;
     let mut execution_pointer = if response["data"]["execution"].is_object() {
         "/data/execution"
     } else {

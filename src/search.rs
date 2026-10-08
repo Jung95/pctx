@@ -1,15 +1,13 @@
 //! Versioned structural metadata and bounded lexical search; source is never persisted.
 use crate::{
+    deadline::Deadline,
     domain::{Error, FileEntry, Result, Symbol, hash},
     project::Project,
     reader,
 };
 use serde_json::{Value, json};
-use std::{
-    collections::BTreeMap,
-    time::{Duration, Instant},
-};
-use tree_sitter::{Node, Parser};
+use std::collections::BTreeMap;
+use tree_sitter::{Node, ParseOptions, Parser, Tree};
 
 fn invalid(message: &str) -> Error {
     Error::new("INVALID_ARGUMENT", message, 2)
@@ -64,7 +62,9 @@ fn walk(
     file_hash: &str,
     parent: Option<&Symbol>,
     out: &mut Vec<Symbol>,
-) {
+    deadline: Option<Deadline>,
+) -> Result<()> {
+    check_parse_deadline(deadline)?;
     let kind = match node.kind() {
         "function_definition"
         | "function_declaration"
@@ -128,10 +128,51 @@ fn walk(
             file_hash,
             symbol.as_ref().or(parent),
             out,
-        );
+            deadline,
+        )?;
     }
+    Ok(())
+}
+fn check_parse_deadline(deadline: Option<Deadline>) -> Result<()> {
+    deadline.map(|d| d.check()).unwrap_or(Ok(()))
+}
+fn parse_tree(parser: &mut Parser, text: &str, deadline: Option<Deadline>) -> Result<Tree> {
+    check_parse_deadline(deadline)?;
+    let mut progress = |_: &tree_sitter::ParseState| deadline.is_some_and(|d| d.check().is_err());
+    let mut input =
+        |offset: usize, _: tree_sitter::Point| text.as_bytes().get(offset..).unwrap_or(&[]);
+    let tree = if deadline.is_some() {
+        parser.parse_with_options(
+            &mut input,
+            None,
+            Some(ParseOptions::new().progress_callback(&mut progress)),
+        )
+    } else {
+        parser.parse(text, None)
+    };
+    check_parse_deadline(deadline)?;
+    tree.ok_or_else(|| Error::new("PARSE_FAILED", "Parser did not produce a tree", 3))
+}
+/// Library search entry points share a ten-second default, never a fresh budget
+/// for nested phases. Application-supplied deadlines remain authoritative.
+fn query_project(p: &Project) -> Result<Project> {
+    let mut p = p.clone();
+    if p.deadline.is_none() {
+        p.deadline = Some(Deadline::from_millis(10_000)?);
+    }
+    p.check_deadline()?;
+    Ok(p)
 }
 pub fn analyze(path: &str, file_hash: &str, text: &str) -> Result<FileEntry> {
+    analyze_with_deadline(path, file_hash, text, None)
+}
+pub fn analyze_with_deadline(
+    path: &str,
+    file_hash: &str,
+    text: &str,
+    deadline: Option<Deadline>,
+) -> Result<FileEntry> {
+    check_parse_deadline(deadline)?;
     let lang = language(path);
     let mut symbols = Vec::new();
     let mut status = "complete";
@@ -140,6 +181,7 @@ pub fn analyze(path: &str, file_hash: &str, text: &str) -> Result<FileEntry> {
         let mut headings: Vec<(usize, Symbol)> = Vec::new();
         let mut fence: Option<char> = None;
         for (line, part) in text.split_inclusive('\n').enumerate() {
+            check_parse_deadline(deadline)?;
             let trimmed = part.trim_end_matches(['\r', '\n']);
             let leading = trimmed.trim_start();
             if leading.starts_with("```") || leading.starts_with("~~~") {
@@ -220,17 +262,24 @@ pub fn analyze(path: &str, file_hash: &str, text: &str) -> Result<FileEntry> {
         parser
             .set_language(&grammar)
             .map_err(|_| invalid("Grammar initialization failed"))?;
-        let tree = parser
-            .parse(text, None)
-            .ok_or_else(|| Error::new("PARSE_FAILED", "Parser did not produce a tree", 3))?;
+        let tree = parse_tree(&mut parser, text, deadline)?;
         if tree.root_node().has_error() || text.contains("<<<<<<<") {
             status = "partial";
         }
-        walk(tree.root_node(), text, path, file_hash, None, &mut symbols);
+        walk(
+            tree.root_node(),
+            text,
+            path,
+            file_hash,
+            None,
+            &mut symbols,
+            deadline,
+        )?;
     } else {
         status = "unsupported";
     }
     symbols.sort_by_key(|s| (s.start_byte, s.end_byte));
+    check_parse_deadline(deadline)?;
     Ok(FileEntry {
         path: path.into(),
         file_hash: file_hash.into(),
@@ -487,6 +536,8 @@ fn aliases(p: &Project, terms: &[String]) -> Result<AliasExpansion> {
 /// Metadata-only kinds defer physical access checks until the exact expression
 /// selects a candidate; text/all preserve the fully authorized snapshot path.
 pub fn find_indexed(p: &Project, req: &FindRequest) -> Result<Value> {
+    let bounded = query_project(p)?;
+    let p = &bounded;
     let metadata_only = matches!(req.kind.as_str(), "path" | "symbol" | "document");
     let (generation, files) = if metadata_only {
         crate::storage::metadata_search_snapshot(p)?
@@ -494,7 +545,14 @@ pub fn find_indexed(p: &Project, req: &FindRequest) -> Result<Value> {
         crate::storage::snapshot(p)?
     };
     let mut value = find(p, &files, req)?;
-    reader::validate_root(p)?;
+    if value["coverage"]["reasons"]
+        .as_array()
+        .is_some_and(|reasons| reasons.iter().any(|r| r == "timeout"))
+    {
+        reader::validate_partial_root(p)?;
+    } else {
+        reader::validate_root(p)?;
+    }
     value["generation_id"] = json!(generation);
     if metadata_only {
         // Unopened noncandidates can be deleted, inaccessible or links. Their
@@ -508,6 +566,8 @@ pub fn find_indexed(p: &Project, req: &FindRequest) -> Result<Value> {
 }
 
 pub fn find(p: &Project, files: &[FileEntry], req: &FindRequest) -> Result<Value> {
+    let bounded = query_project(p)?;
+    let p = &bounded;
     reader::validate_policy(p)?;
     reader::validate_root(p)?;
     if req.regex && req.boolean_query.is_some() {
@@ -567,19 +627,32 @@ pub fn find(p: &Project, files: &[FileEntry], req: &FindRequest) -> Result<Value
             0
         }
     };
-    let start = Instant::now();
     let mut results = Vec::new();
     let mut reasons = Vec::new();
     let mut scanned = 0;
-    for f in files {
-        if !scope(&f.path, &req.scopes)
-            || req.language.as_ref().is_some_and(|l| l != &f.language)
-            || reader::policy_allows(p, &f.path).is_err()
-        {
+    'scan: for f in files {
+        if let Err(e) = p.check_deadline() {
+            if results.is_empty() {
+                return Err(e);
+            }
+            reasons.push("timeout");
+            break;
+        }
+        if !scope(&f.path, &req.scopes) || req.language.as_ref().is_some_and(|l| l != &f.language) {
             continue;
         }
-        if start.elapsed() > Duration::from_secs(2) || scanned >= 100000 {
-            reasons.push("scan_limit");
+        if let Err(e) = reader::policy_allows(p, &f.path) {
+            if matches!(e.code.as_str(), "POLICY_DENIED" | "PATH_OUTSIDE_ROOT") {
+                continue;
+            }
+            if e.code == "TIMEOUT" && !results.is_empty() {
+                reasons.push("timeout");
+                break;
+            }
+            return Err(e);
+        }
+        if scanned >= 100000 {
+            reasons.push("scan_cap");
             break;
         }
         scanned += 1;
@@ -605,11 +678,28 @@ pub fn find(p: &Project, files: &[FileEntry], req: &FindRequest) -> Result<Value
         }
         // Policy filters index metadata first; physical path checks happen before
         // any candidate is emitted, including freshness=off and negative matches.
-        if reader::authorize(p, &f.path).is_err() {
+        if let Err(e) = reader::authorize(p, &f.path) {
+            if matches!(
+                e.code.as_str(),
+                "TIMEOUT" | "INVALID_CONFIG" | "POLICY_UNAVAILABLE"
+            ) {
+                if e.code != "TIMEOUT" || results.is_empty() {
+                    return Err(e);
+                }
+                reasons.push("timeout");
+                break;
+            }
             continue;
         }
         let body = if matches!(req.kind.as_str(), "text" | "all") || req.freshness != "off" {
-            Some(reader::read(p, &f.path)?)
+            match reader::read(p, &f.path) {
+                Ok(body) => Some(body),
+                Err(e) if e.code == "TIMEOUT" && !results.is_empty() => {
+                    reasons.push("timeout");
+                    break;
+                }
+                Err(e) => return Err(e),
+            }
         } else {
             None
         };
@@ -646,6 +736,13 @@ pub fn find(p: &Project, files: &[FileEntry], req: &FindRequest) -> Result<Value
             }
         }
         for term in &positive {
+            if let Err(e) = p.check_deadline() {
+                if results.is_empty() {
+                    return Err(e);
+                }
+                reasons.push("timeout");
+                break 'scan;
+            }
             if matches!(req.kind.as_str(), "path" | "all") && matches(&f.path, term) {
                 score = score.max(weighted(
                     &f.path,
@@ -693,6 +790,13 @@ pub fn find(p: &Project, files: &[FileEntry], req: &FindRequest) -> Result<Value
             && matches!(req.kind.as_str(), "text" | "all")
         {
             for (i, line) in b.text.lines().enumerate() {
+                if let Err(e) = p.check_deadline() {
+                    if results.is_empty() {
+                        return Err(e);
+                    }
+                    reasons.push("timeout");
+                    break 'scan;
+                }
                 if positive.iter().any(|t| matches(line, t)) {
                     count += 1;
                     lines.push(i + 1);
@@ -722,6 +826,13 @@ pub fn find(p: &Project, files: &[FileEntry], req: &FindRequest) -> Result<Value
             let ls: Vec<_> = b.text.lines().collect();
             let mut ranges = Vec::new();
             for line in &lines {
+                if let Err(e) = p.check_deadline() {
+                    if results.is_empty() {
+                        return Err(e);
+                    }
+                    reasons.push("timeout");
+                    break 'scan;
+                }
                 let first = line.saturating_sub(n + 1);
                 let last = (*line + n).min(ls.len());
                 let start = b
@@ -746,7 +857,20 @@ pub fn find(p: &Project, files: &[FileEntry], req: &FindRequest) -> Result<Value
             }
             item["snippets"] = json!(ranges);
         }
+        if let Err(e) = p.check_deadline() {
+            if results.is_empty() {
+                return Err(e);
+            }
+            reasons.push("timeout");
+            break;
+        }
         results.push(item);
+    }
+    if p.check_deadline().is_err() && !reasons.contains(&"timeout") {
+        if results.is_empty() {
+            p.check_deadline()?;
+        }
+        reasons.push("timeout");
     }
     results.sort_by(|a, b| {
         b["score"]
@@ -756,6 +880,22 @@ pub fn find(p: &Project, files: &[FileEntry], req: &FindRequest) -> Result<Value
     });
     let omitted = results.len().saturating_sub(req.limit);
     results.truncate(req.limit);
+    if let Err(e) = p.check_deadline() {
+        if results.is_empty() {
+            return Err(e);
+        }
+        if !reasons.contains(&"timeout") {
+            reasons.push("timeout");
+        }
+    }
+    // Already verified candidates may survive expiry, but the root authority
+    // must still match. This narrow identity gate opens no new source and does
+    // not restart or clear the shared request deadline.
+    if reasons.contains(&"timeout") {
+        reader::validate_partial_root(p)?;
+    } else {
+        reader::validate_root(p)?;
+    }
     let source_validation =
         if req.freshness == "off" && !matches!(req.kind.as_str(), "text" | "all") {
             "none"
@@ -786,11 +926,23 @@ pub fn outline(
     depth: Option<usize>,
     freshness: &str,
 ) -> Result<Value> {
+    let bounded = query_project(p)?;
+    let p = &bounded;
     reader::validate_policy(p)?;
     reader::validate_root(p)?;
     let mut results = Vec::new();
     for f in files {
-        if !scope(&f.path, &[path.into()]) || reader::authorize(p, &f.path).is_err() {
+        p.check_deadline()?;
+        if !scope(&f.path, &[path.into()]) {
+            continue;
+        }
+        if let Err(e) = reader::authorize(p, &f.path) {
+            if matches!(
+                e.code.as_str(),
+                "TIMEOUT" | "INVALID_CONFIG" | "POLICY_UNAVAILABLE"
+            ) {
+                return Err(e);
+            }
             continue;
         }
         let current = if freshness == "off" {
@@ -825,6 +977,7 @@ pub fn outline(
             .collect();
         results.push(json!({"path":f.path,"file_hash":f.file_hash,"language":f.language,"parse_status":f.parse_status,"freshness":current,"evidence_status":"observed","symbols":symbols,"coverage":{"status":if f.parse_status=="unsupported"{"unsupported"}else if f.parse_status=="partial"{"partial"}else{"complete"}}}));
     }
+    p.check_deadline()?;
     Ok(json!({"files":results}))
 }
 pub fn read_selection(
@@ -835,21 +988,40 @@ pub fn read_selection(
     symbol: Option<&str>,
     symbol_name: Option<&str>,
 ) -> Result<Value> {
+    let bounded = query_project(p)?;
+    let p = &bounded;
+    reader::validate_policy(p)?;
+    reader::validate_root(p)?;
     if symbol.is_some() && symbol_name.is_some()
         || lines.is_some() && (symbol.is_some() || symbol_name.is_some())
     {
         return Err(invalid("Choose lines, symbol ID, or symbol name"));
     }
     let selected = if symbol.is_some() || symbol_name.is_some() {
-        let candidates: Vec<_> = files
-            .iter()
-            .filter(|f| path.is_none_or(|p| f.path == p) && reader::authorize(p, &f.path).is_ok())
-            .flat_map(|f| &f.symbols)
-            .filter(|s| {
-                symbol.is_some_and(|id| s.id == id)
+        let mut candidates = Vec::new();
+        for f in files {
+            p.check_deadline()?;
+            if path.is_some_and(|path| f.path != path) {
+                continue;
+            }
+            if let Err(e) = reader::authorize(p, &f.path) {
+                if matches!(
+                    e.code.as_str(),
+                    "TIMEOUT" | "INVALID_CONFIG" | "POLICY_UNAVAILABLE"
+                ) {
+                    return Err(e);
+                }
+                continue;
+            }
+            for s in &f.symbols {
+                p.check_deadline()?;
+                if symbol.is_some_and(|id| s.id == id)
                     || symbol_name.is_some_and(|n| s.name == n || s.qualified_name == n)
-            })
-            .collect();
+                {
+                    candidates.push(s);
+                }
+            }
+        }
         if symbol_name.is_some() && path.is_none() {
             return Err(invalid("Symbol name lookup requires --path"));
         }
@@ -934,6 +1106,7 @@ pub fn read_selection(
     let truncated = limited.len() < source.len() || (selected.is_none() && end < total);
     let actual_end = start_byte + limited.len();
     let (text, masked) = reader::redact_span(&f.text, start_byte, actual_end);
+    p.check_deadline()?;
     Ok(
         json!({"path":path,"file_hash":f.hash,"symbol_id":selected.map(|s|&s.id),"range":{"start_byte":start_byte,"end_byte":actual_end,"start_line":start,"end_line":end.min(start+limited.lines().count().saturating_sub(1))},"text":text,"redacted":masked,"freshness":"current","evidence_status":"observed","completeness":if truncated{"partial"}else{"complete"},"truncated":truncated,"extractor":"tree-sitter/line-reader","extractor_version":"1"}),
     )
@@ -956,6 +1129,8 @@ pub struct StructureRequest {
 }
 /// Limited structural predicates use grammar tokens, never guessed source patterns.
 pub fn query_structure(p: &Project, files: &[FileEntry], req: &StructureRequest) -> Result<Value> {
+    let bounded = query_project(p)?;
+    let p = &bounded;
     reader::validate_policy(p)?;
     reader::validate_root(p)?;
     if req.limit > 1000 {
@@ -977,10 +1152,17 @@ pub fn query_structure(p: &Project, files: &[FileEntry], req: &StructureRequest)
     }
     let mut results = Vec::new();
     for f in files {
-        if f.language != req.language
-            || !scope(&f.path, &req.scopes)
-            || reader::authorize(p, &f.path).is_err()
-        {
+        p.check_deadline()?;
+        if f.language != req.language || !scope(&f.path, &req.scopes) {
+            continue;
+        }
+        if let Err(e) = reader::authorize(p, &f.path) {
+            if matches!(
+                e.code.as_str(),
+                "TIMEOUT" | "INVALID_CONFIG" | "POLICY_UNAVAILABLE"
+            ) {
+                return Err(e);
+            }
             continue;
         }
         let current = reader::read(p, &f.path)?;
@@ -1002,10 +1184,9 @@ pub fn query_structure(p: &Project, files: &[FileEntry], req: &StructureRequest)
         parser
             .set_language(&grammar)
             .map_err(|_| invalid("Grammar initialization failed"))?;
-        let tree = parser
-            .parse(&current.text, None)
-            .ok_or_else(|| Error::new("PARSE_FAILED", "Parser did not produce a tree", 3))?;
+        let tree = parse_tree(&mut parser, &current.text, p.deadline)?;
         for s in &f.symbols {
+            p.check_deadline()?;
             if s.kind != req.kind {
                 continue;
             }
@@ -1039,6 +1220,7 @@ pub fn query_structure(p: &Project, files: &[FileEntry], req: &StructureRequest)
                     .cmp(&b["symbol"]["start_byte"].as_u64())
             })
     });
+    p.check_deadline()?;
     let omitted = results.len().saturating_sub(req.limit);
     results.truncate(req.limit);
     Ok(

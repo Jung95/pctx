@@ -37,6 +37,15 @@ pub struct BuildRequest {
     pub require_complete: bool,
 }
 pub fn build(p: &Project, r: &BuildRequest) -> Result<Value> {
+    let mut scoped;
+    let p = if p.deadline.is_none() {
+        scoped = p.clone();
+        scoped.deadline = Some(crate::deadline::Deadline::from_millis(120_000)?);
+        &scoped
+    } else {
+        p
+    };
+    p.check_deadline()?;
     if r.budget_tokens.is_some() || r.tokenizer.is_some() {
         return Err(Error::new(
             "CAPABILITY_UNAVAILABLE",
@@ -70,30 +79,14 @@ pub fn build(p: &Project, r: &BuildRequest) -> Result<Value> {
     let task = if let Some(task) = &r.task {
         reader::redact(task).0
     } else if let Some(path) = &r.task_file {
-        let text = if path == "-" {
-            use std::io::Read;
-            let mut text = String::new();
-            std::io::stdin().take(1048577).read_to_string(&mut text)?;
-            text
-        } else {
-            let b = std::fs::read(path)?;
-            if b.len() > 1048576 {
-                return Err(Error::new(
-                    "FILE_TOO_LARGE",
-                    "Task document exceeds limit",
-                    2,
-                ));
-            }
-            String::from_utf8(b)
-                .map_err(|_| Error::new("UNSUPPORTED_ENCODING", "Task document must be UTF-8", 2))?
-        };
-        if text.len() > 1048576 {
-            return Err(Error::new(
-                "FILE_TOO_LARGE",
-                "Task document exceeds limit",
+        let deadline = p.deadline.ok_or_else(|| {
+            Error::new(
+                "INVALID_CONFIG",
+                "Task input requires the context request deadline",
                 2,
-            ));
-        }
+            )
+        })?;
+        let text = crate::input::task_document(path, deadline)?;
         reader::redact(&text).0
     } else if let Some(id) = &r.task_id {
         let view = crate::work::execute(
@@ -119,6 +112,7 @@ pub fn build(p: &Project, r: &BuildRequest) -> Result<Value> {
         ));
     };
     let indexed = storage::update(p)?;
+    p.check_deadline()?;
     if indexed["coverage"] == "partial" {
         return Err(Error::new(
             "PARTIAL_RESULT",
@@ -193,6 +187,7 @@ pub fn build(p: &Project, r: &BuildRequest) -> Result<Value> {
         .take(16)
         .collect::<Vec<_>>();
     for f in &files {
+        p.check_deadline()?;
         if terms.iter().any(|t| {
             f.path.to_lowercase().contains(t)
                 || f.symbols.iter().any(|s| s.name.to_lowercase().contains(t))
@@ -216,6 +211,7 @@ pub fn build(p: &Project, r: &BuildRequest) -> Result<Value> {
     }
     candidates.truncate(200);
     for (path, reason) in candidates {
+        p.check_deadline()?;
         if !seen.insert(path.clone()) {
             continue;
         }
@@ -267,6 +263,7 @@ pub fn build(p: &Project, r: &BuildRequest) -> Result<Value> {
         ));
     }
     for (path, expected) in selected_hashes {
+        p.check_deadline()?;
         if reader::read(p, &path)?.hash != expected {
             return Err(Error::new(
                 "CONCURRENT_MODIFICATION",
@@ -290,8 +287,13 @@ pub fn build(p: &Project, r: &BuildRequest) -> Result<Value> {
         }
         data["budget"]["used"] = json!(used);
     }
+    p.check_deadline()?;
     Ok(data)
 }
 fn measured(p: &Project, data: &Value) -> Result<usize> {
-    Ok(serde_json::to_vec(&crate::domain::envelope("build", Some(p), data.clone()))?.len() + 1)
+    p.check_deadline()?;
+    let size =
+        serde_json::to_vec(&crate::domain::envelope("build", Some(p), data.clone()))?.len() + 1;
+    p.check_deadline()?;
+    Ok(size)
 }

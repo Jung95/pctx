@@ -16,6 +16,7 @@ fn fixture() -> (tempfile::TempDir, Project) {
     fs::create_dir_all(root.join(".pctx/filters")).unwrap();
     fs::create_dir_all(&data).unwrap();
     let p = Project {
+        deadline: None,
         root_anchor: pctx::project::RootAnchor::capture(&root).unwrap(),
         root,
         data_dir: data.clone(),

@@ -1,4 +1,5 @@
 use crate::{
+    deadline::Deadline,
     domain::{Error, Result},
     project::Project,
     reader, storage,
@@ -25,6 +26,12 @@ pub struct ExtractRequest {
     pub budget_bytes: usize,
 }
 pub fn extract(p: &Project, r: &ExtractRequest) -> Result<Value> {
+    let mut scoped = p.clone();
+    if scoped.deadline.is_none() {
+        scoped.deadline = Some(Deadline::from_millis(10_000)?);
+    }
+    let p = &scoped;
+    p.check_deadline()?;
     if r.budget_bytes < 512 {
         return Err(Error::new(
             "BUDGET_TOO_SMALL",
@@ -38,6 +45,7 @@ pub fn extract(p: &Project, r: &ExtractRequest) -> Result<Value> {
     let diagnostics = if let Some(id) = &r.from_output {
         let result = crate::output::diagnostic_locations(p, id)?;
         for location in result["locations"].as_array().into_iter().flatten() {
+            p.check_deadline()?;
             locations.push((
                 location["path"].as_str().unwrap().to_string(),
                 location["line"].as_u64().unwrap() as usize,
@@ -48,6 +56,7 @@ pub fn extract(p: &Project, r: &ExtractRequest) -> Result<Value> {
         None
     };
     for value in &r.location {
+        p.check_deadline()?;
         let (path, line) = value
             .rsplit_once(':')
             .ok_or_else(|| Error::new("INVALID_ARGUMENT", "Location requires path:line", 2))?;
@@ -66,10 +75,22 @@ pub fn extract(p: &Project, r: &ExtractRequest) -> Result<Value> {
         ));
     }
     for key in &r.symbol_id {
-        let sym = files
-            .iter()
-            .flat_map(|f| &f.symbols)
-            .find(|s| &s.id == key)
+        p.check_deadline()?;
+        let mut selected = None;
+        for file in &files {
+            p.check_deadline()?;
+            for symbol in &file.symbols {
+                p.check_deadline()?;
+                if &symbol.id == key {
+                    selected = Some(symbol);
+                    break;
+                }
+            }
+            if selected.is_some() {
+                break;
+            }
+        }
+        let sym = selected
             .ok_or_else(|| Error::new("STALE_INDEX", "Exact symbol version is unavailable", 4))?;
         locations.push((sym.path.clone(), sym.start_line));
     }
@@ -82,30 +103,48 @@ pub fn extract(p: &Project, r: &ExtractRequest) -> Result<Value> {
     }
     let mut ranges: BTreeMap<String, Vec<(usize, usize, Option<String>)>> = BTreeMap::new();
     for (path, line) in locations {
+        p.check_deadline()?;
         let file = reader::read(p, &path)?;
-        if line == 0 || line > file.text.lines().count() {
+        let mut line_count = 0;
+        for _ in file.text.lines() {
+            p.check_deadline()?;
+            line_count += 1;
+        }
+        if line == 0 || line > line_count {
             return Err(Error::new(
                 "INVALID_ARGUMENT",
                 "Location is outside source lines",
                 2,
             ));
         }
-        let symbol = if r.unit == "enclosing" {
-            files.iter().find(|f| f.path == path).and_then(|f| {
-                f.symbols
-                    .iter()
-                    .filter(|s| s.start_line <= line && s.end_line >= line)
-                    .min_by_key(|s| s.end_byte - s.start_byte)
-            })
-        } else {
-            None
-        };
+        let mut symbol: Option<&crate::domain::Symbol> = None;
+        if r.unit == "enclosing" {
+            for indexed in &files {
+                p.check_deadline()?;
+                if indexed.path != path {
+                    continue;
+                }
+                for candidate in &indexed.symbols {
+                    p.check_deadline()?;
+                    if candidate.start_line <= line
+                        && candidate.end_line >= line
+                        && symbol.is_none_or(|old: &crate::domain::Symbol| {
+                            candidate.end_byte - candidate.start_byte
+                                < old.end_byte - old.start_byte
+                        })
+                    {
+                        symbol = Some(candidate);
+                    }
+                }
+                break;
+            }
+        }
         let range = if let Some(s) = symbol {
             (s.start_line, s.end_line, Some(s.id.clone()))
         } else {
             (
                 line.saturating_sub(3).max(1),
-                (line + 3).min(file.text.lines().count()),
+                (line + 3).min(line_count),
                 None,
             )
         };
@@ -114,9 +153,12 @@ pub fn extract(p: &Project, r: &ExtractRequest) -> Result<Value> {
     let mut items = Vec::new();
     let mut manifests = Vec::new();
     for (path, mut spans) in ranges {
+        p.check_deadline()?;
         spans.sort_by_key(|s| (s.0, s.1));
+        p.check_deadline()?;
         let mut merged: Vec<(usize, usize, Option<String>)> = Vec::new();
         for span in spans {
+            p.check_deadline()?;
             if let Some(last) = merged.last_mut()
                 && last.1 >= span.0
             {
@@ -129,16 +171,18 @@ pub fn extract(p: &Project, r: &ExtractRequest) -> Result<Value> {
             merged.push(span);
         }
         let file = reader::read(p, &path)?;
-        let mut offsets = file
-            .text
-            .match_indices('\n')
-            .map(|(i, _)| i + 1)
-            .collect::<Vec<_>>();
+        let mut offsets = Vec::new();
+        for (i, _) in file.text.match_indices('\n') {
+            p.check_deadline()?;
+            offsets.push(i + 1);
+        }
         offsets.insert(0, 0);
         for (start, end, sym) in merged {
+            p.check_deadline()?;
             let a = offsets[start - 1];
             let b = offsets.get(end).copied().unwrap_or(file.text.len());
             let (text, redacted) = reader::redact_span(&file.text, a, b);
+            p.check_deadline()?;
             let mut content = Some(text);
             let representation = r.view.as_str();
             if representation == "reference" {
@@ -150,12 +194,15 @@ pub fn extract(p: &Project, r: &ExtractRequest) -> Result<Value> {
         }
         manifests.push((path, file.hash));
     }
+    p.check_deadline()?;
     let mut data =
         json!({"items":items,"omissions":[],"budget":{"limit":r.budget_bytes,"unit":"bytes"}});
-    if serde_json::to_vec(&crate::domain::envelope("extract", Some(p), data.clone()))?.len() + 1
-        > r.budget_bytes
-    {
+    let measured =
+        serde_json::to_vec(&crate::domain::envelope("extract", Some(p), data.clone()))?.len() + 1;
+    p.check_deadline()?;
+    if measured > r.budget_bytes {
         for item in data["items"].as_array_mut().unwrap() {
+            p.check_deadline()?;
             if item["representation"] == "full_span" {
                 item["content"] = json!(
                     item["content"]
@@ -171,9 +218,10 @@ pub fn extract(p: &Project, r: &ExtractRequest) -> Result<Value> {
             }
         }
     }
-    if serde_json::to_vec(&crate::domain::envelope("extract", Some(p), data.clone()))?.len() + 1
-        > r.budget_bytes
-    {
+    let measured =
+        serde_json::to_vec(&crate::domain::envelope("extract", Some(p), data.clone()))?.len() + 1;
+    p.check_deadline()?;
+    if measured > r.budget_bytes {
         return Err(Error::new(
             "BUDGET_TOO_SMALL",
             "Requested extract metadata exceeds budget",
@@ -181,6 +229,7 @@ pub fn extract(p: &Project, r: &ExtractRequest) -> Result<Value> {
         ));
     }
     for (path, expected) in manifests {
+        p.check_deadline()?;
         if reader::read(p, &path)?.hash != expected {
             return Err(Error::new(
                 "CONCURRENT_MODIFICATION",
@@ -190,14 +239,17 @@ pub fn extract(p: &Project, r: &ExtractRequest) -> Result<Value> {
         }
     }
     data["diagnostic_sources"] = json!(diagnostics);
-    if serde_json::to_vec(&crate::domain::envelope("extract", Some(p), data.clone()))?.len() + 1
-        > r.budget_bytes
-    {
+    let measured =
+        serde_json::to_vec(&crate::domain::envelope("extract", Some(p), data.clone()))?.len() + 1;
+    p.check_deadline()?;
+    if measured > r.budget_bytes {
         return Err(Error::new(
             "BUDGET_TOO_SMALL",
             "Diagnostic provenance exceeds requested budget",
             8,
         ));
     }
+    p.check_deadline()?;
+    reader::validate_root(p)?;
     Ok(data)
 }

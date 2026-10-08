@@ -12,6 +12,7 @@ fn setup() -> (tempfile::TempDir, Project) {
     std::fs::create_dir_all(data.join("workspace")).unwrap();
     std::fs::create_dir_all(data.join("control")).unwrap();
     let p = Project {
+        deadline: None,
         root_anchor: pctx::project::RootAnchor::capture(&root).unwrap(),
         root,
         data_dir: data.clone(),

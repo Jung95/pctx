@@ -13,6 +13,7 @@ fn fixture() -> (tempfile::TempDir, Project) {
     std::fs::write(root.join("src/api/service.py"), "def service(): pass\n").unwrap();
     std::fs::write(root.join("src/ui/view.py"), "def view(): pass\n").unwrap();
     let p = Project {
+        deadline: None,
         root_anchor: pctx::project::RootAnchor::capture(&root).unwrap(),
         root,
         data_dir: data.clone(),

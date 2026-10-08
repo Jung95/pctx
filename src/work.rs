@@ -2009,6 +2009,7 @@ fn record_check_report(
     )?;
     Ok(json!({"check_id":check,"result":result,"event":e}))
 }
+#[cfg(unix)]
 pub(crate) fn record_runner_report(
     project: &Project,
     check: &str,
@@ -2028,6 +2029,7 @@ pub(crate) fn record_runner_report(
     Ok(result)
 }
 
+#[cfg(unix)]
 pub(crate) fn record_runner_unverified(
     project: &Project,
     check: &str,
@@ -2058,6 +2060,7 @@ pub(crate) fn authenticated_actor(project: &Project, db: &Connection) -> Result<
     Ok(Some(agent))
 }
 
+#[cfg(unix)]
 pub(crate) fn record_runner_not_started(
     project: &Project,
     check: &str,
@@ -2092,6 +2095,7 @@ pub(crate) fn record_runner_not_started(
     )
 }
 
+#[cfg(unix)]
 pub(crate) fn record_runner_execution_error(
     project: &Project,
     check: &str,

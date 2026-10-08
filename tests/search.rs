@@ -84,6 +84,7 @@ fn markdown_sections_ignore_fenced_examples_and_link_parents() {
 fn project(root: &std::path::Path) -> pctx::project::Project {
     use pctx::project::{Config, Project, ProjectConfig};
     Project {
+        deadline: None,
         root_anchor: pctx::project::RootAnchor::capture(root).unwrap(),
         root: root.to_owned(),
         data_dir: root.join("data"),
@@ -105,6 +106,128 @@ fn project(root: &std::path::Path) -> pctx::project::Project {
             roles: Default::default(),
         },
     }
+}
+
+#[test]
+fn expired_queries_fail_even_when_the_candidate_universe_is_empty() {
+    use pctx::{
+        deadline::Deadline,
+        search::{StructureRequest, find, find_indexed, outline, query_structure, read_selection},
+    };
+    let temp = tempfile::tempdir().unwrap();
+    let mut p = project(temp.path());
+    let deadline = Deadline::from_millis(1).unwrap();
+    while deadline.check().is_ok() {
+        std::hint::spin_loop();
+    }
+    p.deadline = Some(deadline);
+    let req = metadata_request("path", "absent");
+    for result in [
+        find(&p, &[], &req),
+        find_indexed(&p, &req),
+        outline(&p, &[], ".", None, "matched"),
+        read_selection(&p, &[], Some("absent.py"), None, None, None),
+        query_structure(
+            &p,
+            &[],
+            &StructureRequest {
+                language: "python".into(),
+                kind: "function".into(),
+                modifier: None,
+                scopes: vec![],
+                limit: 20,
+                freshness: "matched".into(),
+            },
+        ),
+    ] {
+        let error = result.unwrap_err();
+        assert_eq!(error.code, "TIMEOUT");
+        assert_eq!(error.exit, 7);
+    }
+}
+
+#[test]
+fn deadline_partial_keeps_only_verified_matches_and_never_claims_complete_coverage() {
+    use pctx::{deadline::Deadline, search::find};
+    let temp = tempfile::tempdir().unwrap();
+    let mut p = project(temp.path());
+    let source = "verified needle\n";
+    std::fs::write(p.root.join("current.txt"), source).unwrap();
+    let entry = analyze("current.txt", &hash(source), source).unwrap();
+    // Every candidate must undergo real current-source validation. Repetition
+    // supplies bounded work to the public provided-index API without a hook,
+    // sleeping reader, or assuming that any unobserved candidate is safe.
+    let files = vec![entry; 100_001];
+    let req = metadata_request("text", "needle");
+    p.deadline = Some(Deadline::from_millis(250).unwrap());
+    let value = find(&p, &files, &req).unwrap();
+    assert_eq!(value["coverage"]["status"], "partial");
+    assert!(
+        value["coverage"]["reasons"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .any(|r| r == "timeout")
+    );
+    assert!(value["omitted_count"].is_null());
+    let items = value["items"].as_array().unwrap();
+    assert!(!items.is_empty());
+    for item in items {
+        assert_eq!(item["path"], "current.txt");
+        assert_eq!(item["file_hash"], hash(source));
+        assert_eq!(item["freshness"], "current");
+        assert_eq!(item["line_numbers"], serde_json::json!([1]));
+    }
+    assert_eq!(
+        p.check_deadline().unwrap_err().code,
+        "TIMEOUT",
+        "Nested search renewed the supplied budget"
+    );
+    // A zero result limit retains no usable match, even if matches were found
+    // before expiry. It must not turn an expired request into an empty partial.
+    let mut no_items = req;
+    no_items.limit = 0;
+    p.deadline = Some(Deadline::from_millis(250).unwrap());
+    let error = find(&p, &files, &no_items).unwrap_err();
+    assert_eq!(error.code, "TIMEOUT");
+    assert_eq!(error.exit, 7);
+}
+
+#[test]
+fn parsing_cancellation_is_timeout_instead_of_empty_or_partial_ast_success() {
+    use pctx::{deadline::Deadline, search::analyze_with_deadline};
+    let source = "def expanded():\n    return 1\n".repeat(30_000);
+    let digest = hash(&source);
+    let error = analyze_with_deadline(
+        "expanded.py",
+        &digest,
+        &source,
+        Some(Deadline::from_millis(1).unwrap()),
+    )
+    .unwrap_err();
+    assert_eq!(error.code, "TIMEOUT");
+    assert_eq!(error.exit, 7);
+}
+
+#[test]
+fn candidate_scan_cap_remains_distinct_from_request_timeout() {
+    use pctx::{deadline::Deadline, search::find};
+    let temp = tempfile::tempdir().unwrap();
+    let mut p = project(temp.path());
+    let source = "ordinary source\n";
+    std::fs::write(p.root.join("current.txt"), source).unwrap();
+    let entry = analyze("current.txt", &hash(source), source).unwrap();
+    let files = vec![entry; 100_001];
+    p.deadline = Some(Deadline::from_millis(60_000).unwrap());
+    let value = find(&p, &files, &metadata_request("path", "unmatched")).unwrap();
+    assert_eq!(value["coverage"]["status"], "partial");
+    assert_eq!(
+        value["coverage"]["reasons"],
+        serde_json::json!(["scan_cap"])
+    );
+    assert_eq!(value["scanned_files"], 100_000);
+    assert!(value["items"].as_array().unwrap().is_empty());
+    assert!(p.check_deadline().is_ok());
 }
 #[test]
 fn stale_symbol_and_ambiguous_names_never_select_code() {

@@ -869,6 +869,7 @@ pub(crate) fn run_registered_monitored(
 }
 // Parser selection is presentation-only and bound by the registered profile.
 #[allow(clippy::too_many_arguments)]
+#[cfg(unix)]
 pub(crate) fn run_registered_parsed(
     p: &Project,
     r: &RunRequest,
@@ -1458,6 +1459,7 @@ pub(crate) fn observed_check_binding(p: &Project, output_id: &str) -> Result<Opt
     Ok(load(p, output_id)?.check_binding)
 }
 
+#[cfg(unix)]
 pub(crate) fn observed_report(
     p: &Project,
     output_id: &str,
@@ -1532,6 +1534,7 @@ pub fn diagnostic_locations(p: &Project, output_id: &str) -> Result<Value> {
     )
 }
 
+#[cfg(unix)]
 pub(crate) fn unverified_report(p: &Project, output_id: &str) -> Result<crate::work::CheckReport> {
     let artifact = load(p, output_id)?;
     let result = if artifact.termination == "timed_out" {

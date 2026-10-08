@@ -30,6 +30,7 @@ fn fixture(git: bool) -> (tempfile::TempDir, Project) {
         );
     }
     let p = Project {
+        deadline: None,
         root_anchor: pctx::project::RootAnchor::capture(&root).unwrap(),
         root,
         data_dir: data.clone(),
