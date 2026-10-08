@@ -372,3 +372,12 @@ errors, child codes/signals and partial capture separately. Actual CLI proof and
 retained initial failures: [manifest](evidence/pctx01-run-exit-verification.json).
 PCTX01 stays implementing; remaining argument/budget/phase/platform qualification
 and original startup failures prevent whole-task completion.
+
+
+## PCTX01 Run refusal and capacity truth
+
+Run pre-effect refusals and minimum capacity now include attested no-child facts.
+Valid small budgets preserve original errors/final byte bound without requiring
+an artifact ID. [Evidence](evidence/pctx01-run-budget-verification.json) records
+both-mode minimum−1/minimum/minimum+1, missing-project6 and no-effects proofs.
+Full oversized-error/post-spawn/platform gates remain; PCTX01 is incomplete.

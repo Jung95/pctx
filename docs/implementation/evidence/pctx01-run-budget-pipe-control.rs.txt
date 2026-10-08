@@ -1,0 +1,36 @@
+use std::{fs::File, io::Read, os::fd::FromRawFd, process::{Child,Command,Stdio}, time::{Duration,Instant}};
+unsafe extern "C" {fn pipe(p:*mut i32)->i32; fn fcntl(fd:i32,cmd:i32,...)->i32;}
+struct Guard(Child);
+impl Drop for Guard {fn drop(&mut self){let _=self.0.kill();let _=self.0.wait();}}
+fn main(){
+    let binary=std::env::args().nth(1).unwrap();
+    for cloexec in [false,true] {
+        let mut fd=[-1;2];
+        assert_eq!(unsafe{pipe(fd.as_mut_ptr())},0);
+        let reader=unsafe{File::from_raw_fd(fd[0])};
+        let writer=unsafe{File::from_raw_fd(fd[1])};
+        for descriptor in fd {
+            let flags=unsafe{fcntl(descriptor,1)};
+            assert!(flags>=0);
+            if cloexec {assert_eq!(unsafe{fcntl(descriptor,2,flags|1)},0);}
+            assert_eq!(unsafe{fcntl(descriptor,1)}&1,if cloexec{1}else{0});
+        }
+        let mut holder=Guard(Command::new("/bin/sleep").arg("5").stdin(Stdio::null()).stdout(Stdio::null()).stderr(Stdio::null()).spawn().unwrap());
+        assert!(holder.0.try_wait().unwrap().is_none());
+        drop(reader);
+        let mut cli=Guard(Command::new(&binary).args(["--format","json","--unknown"])
+            .env("PCTX_DATA_DIR","absent-data").env("PCTX_USER_CONFIG","absent-config")
+            .stdout(Stdio::from(writer)).stderr(Stdio::piped()).spawn().unwrap());
+        let start=Instant::now();
+        let status=loop{
+            if let Some(status)=cli.0.try_wait().unwrap(){break status;}
+            assert!(start.elapsed()<Duration::from_secs(3),"parent CLI bound");
+            std::thread::sleep(Duration::from_millis(5));
+        };
+        let mut stderr=String::new();cli.0.stderr.take().unwrap().read_to_string(&mut stderr).unwrap();
+        assert!(stderr.is_empty());
+        let expected=if cloexec {7}else{2};
+        assert_eq!(status.code(),Some(expected));
+        println!("{{\"cloexec\":{cloexec},\"holder_pid\":{},\"cli_pid\":{},\"exit\":{expected},\"reader_dropped_in_parent\":true,\"stdout_capture\":\"pipe\",\"parser_write_checked\":true}}",holder.0.id(),cli.0.id());
+    }
+}

@@ -1,0 +1,76 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.32s
+     Running tests/cli_frontend.rs (target/debug/deps/cli_frontend-4948844b4d514170)
+
+running 20 tests
+test non_utf8_argument_returns_structured_error_without_panic_or_effect ... ok
+test help_and_version_are_successful_without_project_access ... ok
+test parser_diagnostics_mask_secrets_and_escape_control_characters ... ok
+test parsed_run_preflight_refusals_attest_no_child_before_any_access ... FAILED
+test no_color_suppresses_help_on_a_real_terminal_including_nested_help ... ok
+test root_version_is_exact_and_ignores_project_output_and_query_options ... ok
+test parser_errors_respect_actual_json_option_and_do_not_load_project ... ok
+test native_hook_invalid_transports_refuse_before_project_or_output_access ... ok
+test plain_parser_diagnostics_escape_bidi_c1_and_line_controls ... ok
+test semantic_refusals_are_one_safe_json_document_for_every_requested_format ... ok
+test undeliverable_plain_parser_diagnostic_returns_io_exit_without_panic ... ok
+test undeliverable_parser_capacity_semantic_and_timeout_refusals_return_io_exit ... ok
+test unsupported_ndjson_is_rejected_before_project_discovery_or_init ... ok
+test singular_global_duplicates_are_rejected_before_project_and_output_effects ... ok
+test nested_global_positions_select_the_same_root_format_and_timeout ... ok
+test invalid_strict_queries_preserve_generation_database_sources_and_output_path ... ok
+test valid_minimum_capacity_bounds_semantic_and_timeout_refusals_without_writes ... ok
+test unsupported_markdown_refuses_before_response_files_and_stream_dispatch ... ok
+test pack_artifact_output_is_required_once_and_works_at_every_command_depth ... ok
+test every_visible_help_path_describes_schema_and_effects_without_project_access ... ok
+
+failures:
+
+---- parsed_run_preflight_refusals_attest_no_child_before_any_access stdout ----
+
+thread 'parsed_run_preflight_refusals_attest_no_child_before_any_access' (8342739) panicked at tests/cli_frontend.rs:909:13:
+assertion `left == right` failed
+  left: Null
+ right: false
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    parsed_run_preflight_refusals_attest_no_child_before_any_access
+
+test result: FAILED. 19 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.68s
+
+error: test failed, to rerun pass `--test cli_frontend`
+     Running tests/cli_run_exit.rs (target/debug/deps/cli_run_exit-6950b2b7b4cecebc)
+
+running 9 tests
+test missing_project_is_prelaunch_failure_in_both_modes_without_files ... ok
+test project_refusals_preserve_typed_exit_and_message_before_spawn ... ok
+test admitted_small_run_budgets_preserve_prelaunch_truth_without_artifact ... FAILED
+test actual_prelaunch_refusal_has_no_child_outcome_or_invocation ... ok
+test actual_spawn_failure_never_becomes_success_or_child_exit ... ok
+test publication_failure_preserves_child_outcome_and_never_retries ... ok
+test incomplete_capture_is_partial_without_replacing_child_success ... ok
+test actual_execution_timeout_preserves_observation_but_returns_wrapper_error ... ok
+test actual_child_codes_and_signal_are_distinct_from_wrapper_status ... ok
+
+failures:
+
+---- admitted_small_run_budgets_preserve_prelaunch_truth_without_artifact stdout ----
+
+thread 'admitted_small_run_budgets_preserve_prelaunch_truth_without_artifact' (8343076) panicked at tests/cli_run_exit.rs:339:9:
+assertion `left == right` failed: {"command":"run","coverage":{"reasons":[],"status":"complete"},"data":{},"errors":[{"code":"BUDGET_TOO_SMALL","message":"Output exceeds byte budget","retryable":false}],"generation_id":null,"project_id":null,"schema_version":"1.0","status":"error","truncation":{"reasons":[],"truncated":false},"validation":{"checked_at":"2026-10-08T16:14:14.112Z","mode":"matched","scope":[],"workspace_atomic":false},"warnings":[],"workspace_id":null}
+  left: Null
+ right: false
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    admitted_small_run_budgets_preserve_prelaunch_truth_without_artifact
+
+test result: FAILED. 8 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.49s
+
+error: test failed, to rerun pass `--test cli_run_exit`
+error: 2 targets failed:
+    `--test cli_frontend`
+    `--test cli_run_exit`

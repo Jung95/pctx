@@ -7,19 +7,22 @@
 ## Latest verified integration boundary
 
 PCTX01 remains the only active official task (implementing). Base
-d28bf15a208b5082b7f67bcb52b3d2326866d2ce; latest integration repairs manual-run
-frontend processing errors and preserves native child outcome. Related45 PASS;
-final reviewed format/all-target locked Clippy PASS. Final full97588 terminal101:
-473 PASS/4 original startup FAIL. All jobs terminal; no live heavy job.
-Initial4FAIL, reread signal/fixture diagnostic/message failures, interrupted
-full130 and controlled classification loss6->7 are retained. Source/log hashes
-and resolved independent review: evidence/pctx01-run-exit-verification.json.
-Next local action: PCTX01 remaining pure parser/preflight refusal and exact
-budget/representation execution-outcome matrix, post-spawn observer-error proof,
-phase races and original startup cause. Required native Linux/Windows remain
-unqualified; do not select another official task or dispatch Actions.
-The observer records spawn, not body entry or verified cleanup. A child can
-time out before its first script instruction. Whole task/goal remain incomplete.
+50a5307c96f466a8d485b0a9e51f4a1fe4cf8dba; current delta retains parsed Run
+prelaunch truth through minimum-capacity/preflight/presentation errors.
+Both-policy minimum−1/minimum/minimum+1 and original project6 fit proofs pass.
+Related62 PASS; final format/locked all-target Clippy PASS.
+Final full58827 terminal101: 477 PASS/3 original startup FAIL.
+Initial full475PASS5FAIL (pipe ownership ambiguity plus4 startup failures),
+native held-reader/CLOEXEC2-versus7 control and isolated worker repair retained.
+This is fixture ownership evidence, not original-failure causal binding.
+All jobs terminal; no live heavy job. Manifest:
+evidence/pctx01-run-budget-verification.json (source/log hashes and review).
+Next local action: complete owned group/nested CLI cleanup for the isolated
+delivery worker's timeout and audit other raw-pipe fixtures, then actual
+post-spawn presentation/observer-error and remaining oversized-error/argument/
+phase/startup/platform gates. Outer worker timeout currently kills/reaps only
+worker; do not claim nested CLI cleanup. Native Linux/Windows unqualified.
+No next official task, Actions or external calls; whole task/goal incomplete.
 
 ## Source, evidence and environment
 

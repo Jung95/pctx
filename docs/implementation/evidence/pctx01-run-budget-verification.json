@@ -1,0 +1,166 @@
+{
+  "official_task": "PCTX01",
+  "status": "implementing_not_complete",
+  "base_commit": "50a5307c96f466a8d485b0a9e51f4a1fe4cf8dba",
+  "platform": "native macOS arm64",
+  "source_sha256": {
+    "src/main.rs": "a3c4abe399254125041800ec6d1df4086a470a3f77eba5d8bccadca4e139533c",
+    "tests/cli_frontend.rs": "ac4fe7e714944307d251bb084964ffc601b1fc42c27746cae6f023b434cb3919",
+    "tests/cli_run_exit.rs": "ed8ffa7f869049aa2a45528d4759e49e065b63b0e1969c4e37d81ccc61943dd5"
+  },
+  "verification": {
+    "initial": {
+      "log": "pctx01-run-budget-initial.log",
+      "exit": 1,
+      "handle": null,
+      "passed": 0,
+      "failed": 0,
+      "failed_tests": [],
+      "qualification": "Cargo argument selection error before tests; no runtime qualification."
+    },
+    "initial-selected": {
+      "log": "pctx01-run-budget-initial-selected.log",
+      "exit": 101,
+      "handle": 45525,
+      "passed": 27,
+      "failed": 2,
+      "failed_tests": [
+        "parsed_run_preflight_refusals_attest_no_child_before_any_access",
+        "admitted_small_run_budgets_preserve_prelaunch_truth_without_artifact"
+      ]
+    },
+    "targeted": {
+      "log": "pctx01-run-budget-targeted.log",
+      "exit": 101,
+      "handle": 59563,
+      "passed": 51,
+      "failed": 1,
+      "failed_tests": [
+        "parsed_run_preflight_refusals_attest_no_child_before_any_access"
+      ]
+    },
+    "targeted-repaired": {
+      "log": "pctx01-run-budget-targeted-repaired.log",
+      "exit": 0,
+      "handle": 14777,
+      "passed": 62,
+      "failed": 0,
+      "failed_tests": []
+    },
+    "format": {
+      "log": "pctx01-run-budget-format.log",
+      "exit": 0,
+      "handle": null,
+      "passed": 0,
+      "failed": 0,
+      "failed_tests": []
+    },
+    "clippy": {
+      "log": "pctx01-run-budget-clippy.log",
+      "exit": 0,
+      "handle": 72175,
+      "passed": 0,
+      "failed": 0,
+      "failed_tests": []
+    },
+    "initial_full": {
+      "log": "pctx01-run-budget-full-initial.log",
+      "exit": 101,
+      "handle": 15239,
+      "passed": 475,
+      "failed": 5,
+      "failed_tests": [
+        "undeliverable_parser_capacity_semantic_and_timeout_refusals_return_io_exit",
+        "query_program_resolution_uses_captured_command_path",
+        "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+        "simultaneous_streams_are_collected_and_overflow_never_infers_success",
+        "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget"
+      ]
+    },
+    "isolated_pipe_related": {
+      "log": "pctx01-run-budget-pipe-repaired.log",
+      "exit": 0,
+      "handle": 47710,
+      "passed": 62,
+      "failed": 0,
+      "failed_tests": []
+    },
+    "format_final": {
+      "log": "pctx01-run-budget-format-final.log",
+      "exit": 0,
+      "handle": null,
+      "passed": 0,
+      "failed": 0,
+      "failed_tests": []
+    },
+    "clippy_final": {
+      "log": "pctx01-run-budget-clippy-final.log",
+      "exit": 0,
+      "handle": 47664,
+      "passed": 0,
+      "failed": 0,
+      "failed_tests": []
+    },
+    "native_pipe_control": {
+      "source": "pctx01-run-budget-pipe-control.rs.txt",
+      "log": "pctx01-run-budget-pipe-control.log",
+      "handle": 77255,
+      "exit": 0,
+      "cases": 2,
+      "actual_cli_exits": [
+        2,
+        7
+      ],
+      "qualification": "Sequential owned inherited-reader versus verified close-on-exec control; original full-failure descriptor ownership not captured."
+    },
+    "final_full": {
+      "log": "pctx01-run-budget-full-final.log",
+      "handle": 58827,
+      "exit": 101,
+      "passed": 477,
+      "failed": 3,
+      "failed_tests": [
+        "query_program_resolution_uses_captured_command_path",
+        "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget",
+        "simultaneous_streams_are_collected_and_overflow_never_infers_success"
+      ]
+    }
+  },
+  "proofs": [
+    "Initial selected actual27PASS2FAIL retains absent Run preflight spawn fields and valid-small-budget fallback data{}; initial Cargo selection error ran no tests.",
+    "Shared prelaunch data applies only to parsed Run refusals; parser failures before a valid command do not fabricate execution intent. Run minimum capacity includes complete no-child facts and minimum budget bytes.",
+    "Six actual pure refusals across compact/json requests and unsupported Markdown attest spawnedfalse/not_started/null child/signal/INVALID_ARGUMENT, with missing root/data/output unchanged.",
+    "Both exit modes at minimum\u22121 refuse2; minimum/minimum+1/2000 (<3000 execution metadata requirement) refuse8 with original BUDGET_TOO_SMALL and no child/job/output. At valid capacity final newline-inclusive JSON stays in limit. Below invalid capacity complete necessary rejection may exceed the limit.",
+    "Existing uninitialized project at minimum and minimum+1 keeps original NOT_INITIALIZED6 and prelaunch facts while final JSON fits, no files/data created.",
+    "Fallback copies producer-attested execution state independently of output_id, and does not invent an artifact. Existing failure classification/exit remains when shortening presentation; admitted oversized results use BUDGET_TOO_SMALL8. Original executions are not rerun.",
+    "First repair51PASS1FAIL retains timeout refusal still using generic arguments command; parsed Run deadline refusal now namesrun. Final related62PASS; format/locked all-target Clippy PASS.",
+    "Initial full475PASS5FAIL retains unexpected parser closed-pipe failure plus4 originalstartupfail. Native control shows holder inherits raw reader: parserwrite succeeds/exit2; checked CLOEXEC: writefails/exit7. This establishes fixture ambiguity, not exact original cause.",
+    "Failed testcase now uses isolated same-test worker with verified FD_CLOEXEC, reader drop before soleCLIspawn; outer suite remains parallel and original startup/concurrency/budgets unchanged. Related62PASS."
+  ],
+  "independent_review": {
+    "agent": "requirements",
+    "result": "No concrete blocker; minimum measures prelaunch shape, artifact-independent preservation and both-mode boundary proofs. Actual post-spawn presentation fallback and all oversized-error variants remain unqualified. Pipe isolation reviewed: closes creation-window inheritance race. Outer timeout only kills/reaps worker; nested CLI cleanup remains unqualified."
+  },
+  "remaining": [
+    "Actual post-spawn presentation fallback, post-spawn observer-error branch and full oversized-error/argument/representation/phase matrix.",
+    "Original native startup failures with original one-second budgets.",
+    "Native Linux/Windows required qualification and broader containment/recovery remain open.",
+    "PCTX01 alone active; no next official task, Actions or external calls.",
+    "Other raw-pipe fixtures require ownership audit; worker timeout needs owned group/child cleanup before claiming complete failure-path cleanup."
+  ],
+  "artifact_sha256": {
+    "pctx01-run-budget-pipe-control.log": "4fa652013a34690b37117b8ac135b1bae5c61c5587d9fd66604553d221feb5fb",
+    "pctx01-run-budget-full-initial.log": "2c7c37bc197fb8e6a0930d2540fa15a95e3f17067d3e8b18309cda6ba91c546e",
+    "pctx01-run-budget-format.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "pctx01-run-budget-pipe-repaired.log": "e4e3db3393883522d88ca569300c650bb41ca7aca258c7c6af33cc89a91466bf",
+    "pctx01-run-budget-clippy.log": "5909f309dcec53776792a5cab7e73424fba740a9e1dac8cdb3ddc37ba488cb48",
+    "pctx01-run-budget-pipe-control.rs.txt": "937116c03623cd40e0a5a4d85c7810fe32e790fcc7615fa22d2b28b9453678c2",
+    "pctx01-run-budget-initial-selected.log": "9ecc5ee2a2773ab4d23a6c6ecfd0fa5036fe6502a95af5765b366ca125db8745",
+    "pctx01-run-budget-targeted-repaired.log": "6a1e5350dd2b3d952f5ea3c3660b1da709f1c027670fa8b2eae53f2a3e95044a",
+    "pctx01-run-budget-full-final.log": "9ee01f27a2f8fe9a24e6074204266ac3841fd412a988253ca14fbe2d9bcf41ba",
+    "pctx01-run-budget-targeted.log": "a3bfeb5d035fcff4f835ed030c6b7265243434851452fc2f09532215313c4402",
+    "pctx01-run-budget-clippy-final.log": "809df66fafd1cbded25bbc52de60d6f01edb181dfb9bd24c348c88e57af880fe",
+    "pctx01-run-budget-format-final.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "pctx01-run-budget-initial.log": "bd3dd677b3d6f5432c3acb8614feaa6804d906eb5dbe55b3b6e8e77a54720d90"
+  }
+}

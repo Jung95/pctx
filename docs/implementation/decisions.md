@@ -411,3 +411,13 @@ partial capture preserve separate PCTX status/exit while retaining child truth.
 Already classified outer project errors keep their exact typed exit/message.
 Publication failure does not establish readable retained output or trigger retry.
 Basis: §40/AC63 common frontend contract; [proof](evidence/pctx01-run-exit-verification.json).
+
+
+## PCTX01 Run refusal and capacity truth
+
+Run minimum error capacity must measure its known prelaunch fields; an artifact
+ID is not the authority for execution-state truth. Existing failure classification
+takes precedence over a presentation-size issue when shortening an error.
+Admitted oversized results retain the presentation BUDGET_TOO_SMALL contract.
+Only parsed Run intent receives Run prelaunch metadata.
+Basis: §8/40/AC63; [boundary proof](evidence/pctx01-run-budget-verification.json).

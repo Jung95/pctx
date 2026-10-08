@@ -135,3 +135,17 @@ Failed artifact publication sets `raw_available:false`; the output identifier
 alone is not proof that a readable artifact exists. Accounting warnings remain
 separate from the completed response. These execution proofs are native Unix;
 Windows status and containment qualification remain required.
+
+A parsed `run` request refused before launch carries `spawned:false`,
+`termination:not_started`, null child code/signal and its PCTX error even when
+capacity, representation or query-timeout admission fails. The measured minimum
+Run error capacity includes those fields. This does not invent a Run request for
+a parser failure that never produced one.
+
+At a valid but insufficient presentation budget, a compact error retains existing
+error classification and attested execution facts even when no output artifact
+exists. An oversized admitted result uses presentation `BUDGET_TOO_SMALL`/8.
+An output identifier is copied only when present; its absence cannot erase a
+known prelaunch refusal. Exact minimum and minimum+1 boundaries include the
+final newline. Below the measured minimum, the necessary complete rejection may
+exceed the invalid requested limit.

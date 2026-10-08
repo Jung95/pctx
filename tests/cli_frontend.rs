@@ -486,6 +486,35 @@ fn valid_minimum_capacity_bounds_semantic_and_timeout_refusals_without_writes() 
 #[cfg(unix)]
 #[test]
 fn undeliverable_parser_capacity_semantic_and_timeout_refusals_return_io_exit() {
+    // Raw descriptor creation must not race other tests' native spawns.
+    // The worker owns its newly created pipe and runs exactly this test.
+    const CASE: &str = "undeliverable_parser_capacity_semantic_and_timeout_refusals_return_io_exit";
+    if std::env::var("PCTX_TEST_DELIVERY_CASE").as_deref() != Ok(CASE) {
+        use std::process::Stdio;
+        use std::time::{Duration, Instant};
+        let mut worker = Command::new(std::env::current_exe().unwrap())
+            .args(["--exact", CASE, "--test-threads=1"])
+            .env("PCTX_TEST_DELIVERY_CASE", CASE)
+            .stdout(Stdio::piped())
+            .stderr(Stdio::piped())
+            .spawn()
+            .unwrap();
+        let start = Instant::now();
+        loop {
+            if worker.try_wait().unwrap().is_some() {
+                break;
+            }
+            if start.elapsed() > Duration::from_secs(10) {
+                let _ = worker.kill();
+                let result = worker.wait_with_output().unwrap();
+                panic!("Delivery worker exceeded parent bound: {result:?}");
+            }
+            std::thread::sleep(Duration::from_millis(5));
+        }
+        let result = worker.wait_with_output().unwrap();
+        assert!(result.status.success(), "{result:?}");
+        return;
+    }
     use std::os::fd::FromRawFd;
     use std::process::Stdio;
     let f = Fixture::new();
@@ -507,7 +536,19 @@ fn undeliverable_parser_capacity_semantic_and_timeout_refusals_return_io_exit() 
         assert_eq!(unsafe { libc::pipe(descriptors.as_mut_ptr()) }, 0);
         let reader = unsafe { fs::File::from_raw_fd(descriptors[0]) };
         let writer = unsafe { fs::File::from_raw_fd(descriptors[1]) };
-        drop(reader); // No reader exists when the actual CLI starts writing.
+        for descriptor in descriptors {
+            let flags = unsafe { libc::fcntl(descriptor, libc::F_GETFD) };
+            assert!(flags >= 0);
+            assert_eq!(
+                unsafe { libc::fcntl(descriptor, libc::F_SETFD, flags | libc::FD_CLOEXEC) },
+                0
+            );
+            assert_ne!(
+                unsafe { libc::fcntl(descriptor, libc::F_GETFD) } & libc::FD_CLOEXEC,
+                0
+            );
+        }
+        drop(reader); // Worker isolation rules out concurrent reader inheritance.
         let output = Command::new(env!("CARGO_BIN_EXE_pctx"))
             .current_dir(f.temp.path())
             .args(&values)
@@ -881,6 +922,43 @@ fn native_hook_invalid_transports_refuse_before_project_or_output_access() {
                 argument_error(&result);
                 f.unchanged();
             }
+        }
+    }
+}
+
+#[test]
+fn parsed_run_preflight_refusals_attest_no_child_before_any_access() {
+    for format in ["compact", "json"] {
+        for refusal in ["capacity", "timeout", "representation"] {
+            let f = Fixture::new();
+            let mut argv = args(&[
+                "--root",
+                "missing",
+                "--format",
+                if refusal == "representation" {
+                    "markdown"
+                } else {
+                    format
+                },
+                "--output",
+            ]);
+            argv.push(f.temp.path().join("refused.json").into_os_string());
+            argv.push("run".into());
+            if refusal == "capacity" {
+                argv.extend(args(&["--budget-bytes", "1"]));
+            } else if refusal == "timeout" {
+                argv.extend(args(&["--timeout-ms", "0"]));
+            }
+            argv.extend(args(&["--", "fixture"]));
+            let out = f.run(&argv);
+            argument_error(&out);
+            let v: Value = serde_json::from_slice(&out.stdout).unwrap();
+            assert_eq!(v["data"]["spawned"], false);
+            assert_eq!(v["data"]["termination"], "not_started");
+            assert!(v["data"]["child_exit_code"].is_null());
+            assert!(v["data"]["signal"].is_null());
+            assert_eq!(v["data"]["pctx_error"], "INVALID_ARGUMENT");
+            f.unchanged();
         }
     }
 }

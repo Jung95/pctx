@@ -719,15 +719,30 @@ fn output_budget(command: &Command) -> Option<usize> {
         _ => None,
     }
 }
+fn prelaunch_data(command: &str, error: &Error) -> Value {
+    if command == "run" {
+        json!({"spawned":false,"termination":"not_started",
+            "child_exit_code":null,"signal":null,"pctx_error":error.code,
+            "task_completion":"not_evaluated","test_result":"not_evaluated"})
+    } else {
+        Value::Null
+    }
+}
 fn minimum_budget_error(command: &str, minimum: usize) -> Value {
-    let mut response = domain::envelope(command, None, json!({"minimum_budget_bytes":minimum}));
-    response["status"] = json!("error");
-    response["coverage"] = json!({"status":"partial","reasons":["INVALID_ARGUMENT"]});
-    response["errors"] = json!([Error::new(
+    let error = Error::new(
         "INVALID_ARGUMENT",
         "Byte budget is below minimum JSON error envelope",
-        2
-    )]);
+        2,
+    );
+    let mut data = prelaunch_data(command, &error);
+    if data.is_null() {
+        data = json!({});
+    }
+    data["minimum_budget_bytes"] = json!(minimum);
+    let mut response = domain::envelope(command, None, data);
+    response["status"] = json!("error");
+    response["coverage"] = json!({"status":"partial","reasons":["INVALID_ARGUMENT"]});
+    response["errors"] = json!([error]);
     response
 }
 fn minimum_error_budget(command: &str) -> Result<usize> {
@@ -779,7 +794,7 @@ fn validate_representation(cli: &Cli) -> Result<()> {
 // through the same terminal-safe serializer as ordinary command responses.
 fn refuse_arguments(command: &str, error: Error, limit: Option<usize>) -> ! {
     let mut exit = error.exit;
-    let mut response = domain::envelope(command, None, Value::Null);
+    let mut response = domain::envelope(command, None, prelaunch_data(command, &error));
     response["status"] = json!("error");
     response["errors"] = json!([error]);
     let mut bytes = encoded(&mut response, &Format::Json, &mut exit, None);
@@ -951,7 +966,12 @@ fn main() {
     let deadline = match query_deadline(&cli) {
         Ok(deadline) => deadline,
         Err(e) => {
-            refuse_arguments("arguments", e, output_budget(&cli.command));
+            let command = if matches!(&cli.command, Command::Run(_)) {
+                "run"
+            } else {
+                "arguments"
+            };
+            refuse_arguments(command, e, output_budget(&cli.command));
         }
     };
     if follows || matches!(cli.format, Format::Ndjson) {
@@ -1007,13 +1027,7 @@ fn main() {
             let exit = e.exit;
             // Run's producer facade retains every post-spawn failure as data.
             // An outer execute error therefore attests failure before dispatch.
-            let data = if matches!(&cli.command, Command::Run(_)) {
-                json!({"spawned":false,"termination":"not_started",
-                    "child_exit_code":null,"signal":null,"pctx_error":e.code,
-                    "task_completion":"not_evaluated","test_result":"not_evaluated"})
-            } else {
-                Value::Null
-            };
+            let data = prelaunch_data(cli.command.name(), &e);
             let mut out = domain::envelope(cli.command.name(), None, data);
             out["status"] = json!("error");
             out["coverage"] = json!({"status":"partial","reasons":[e.code.clone()]});
@@ -1140,7 +1154,7 @@ fn main() {
         // presentation cannot fit. The wrapper failure never replaces child truth.
         let mut proof = serde_json::Map::new();
         if let Some(execution) = response.pointer(execution_pointer)
-            && execution["output_id"].is_string()
+            && (execution["spawned"].is_boolean() || execution["output_id"].is_string())
         {
             for key in [
                 "output_id",
@@ -1151,6 +1165,9 @@ fn main() {
                 "termination",
                 "pctx_error",
                 "capture_complete",
+                "raw_available",
+                "task_completion",
+                "test_result",
                 "execution_status",
                 "delivery_kind",
             ] {
@@ -1159,14 +1176,25 @@ fn main() {
                 }
             }
         }
+        let previous_errors = response["errors"].clone();
+        let preserve_refusal = response["status"] == "error"
+            && previous_errors
+                .as_array()
+                .is_some_and(|errors| !errors.is_empty());
         response = domain::envelope(cli.command.name(), None, Value::Object(proof));
         execution_pointer = "/data";
         response["status"] = json!("error");
-        response["errors"] = json!([e]);
+        response["coverage"] = json!({"status":"partial","reasons":["presentation_budget"]});
+        if preserve_refusal {
+            response["errors"] = previous_errors;
+            response["errors"][0]["message"] = json!("Request refused");
+        } else {
+            response["errors"] = json!([e]);
+            exit = 8;
+        }
         // The complete JSON error is the smallest reversible fallback. Budgets
         // smaller than that envelope cannot hold a valid error document.
         bytes = encoded(&mut response, &Format::Json, &mut exit, deadline);
-        exit = 8;
     }
     if let Command::Run(r) = &cli.command
         && response["status"] == "ok"

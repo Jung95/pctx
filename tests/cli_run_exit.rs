@@ -324,3 +324,105 @@ fn project_refusals_preserve_typed_exit_and_message_before_spawn() {
         }
     }
 }
+
+#[test]
+fn admitted_small_run_budgets_preserve_prelaunch_truth_without_artifact() {
+    let f = Fixture::new(SCRIPT);
+    let probe = f.invoke(&[
+        "run",
+        "--budget-bytes",
+        "1",
+        "--",
+        f.program.to_str().unwrap(),
+        "0",
+    ]);
+    assert_eq!(probe.status.code(), Some(2));
+    let minimum = document(&probe)["data"]["minimum_budget_bytes"]
+        .as_u64()
+        .unwrap() as usize;
+    for policy in ["child", "pctx"] {
+        for limit in [minimum - 1, minimum, minimum + 1, 2000] {
+            let out = f.invoke(&[
+                "run",
+                "--exit-policy",
+                policy,
+                "--budget-bytes",
+                &limit.to_string(),
+                "--",
+                f.program.to_str().unwrap(),
+                "0",
+            ]);
+            let v = document(&out);
+            let (exit, code) = if limit < minimum {
+                (2, "INVALID_ARGUMENT")
+            } else {
+                (8, "BUDGET_TOO_SMALL")
+            };
+            assert_eq!(out.status.code(), Some(exit), "{v}");
+            assert_eq!(v["errors"][0]["code"], code);
+            assert_eq!(v["data"]["spawned"], false, "{v}");
+            assert_eq!(v["data"]["termination"], "not_started");
+            assert!(v["data"]["child_exit_code"].is_null());
+            assert!(v["data"]["signal"].is_null());
+            assert_eq!(v["data"]["pctx_error"], code);
+            assert!(v["data"]["output_id"].is_null());
+            if limit >= minimum {
+                assert!(
+                    out.stdout.len() <= limit,
+                    "{} > {limit}: {v}",
+                    out.stdout.len()
+                );
+            }
+        }
+    }
+    assert!(!f.count().exists());
+    assert!(!f.temp.path().join("data/output-jobs").exists());
+    assert!(!f.temp.path().join("data/outputs").exists());
+}
+
+#[test]
+fn project_refusal_near_minimum_keeps_original_exit_and_fits() {
+    let temp = tempfile::tempdir().unwrap();
+    let invoke = |policy: &str, budget: &str| {
+        Command::new(env!("CARGO_BIN_EXE_pctx"))
+            .current_dir(temp.path())
+            .args([
+                "--root",
+                temp.path().to_str().unwrap(),
+                "--format",
+                "json",
+                "run",
+                "--exit-policy",
+                policy,
+                "--budget-bytes",
+                budget,
+                "--",
+                "fixture",
+            ])
+            .env("PCTX_DATA_DIR", temp.path().join("data"))
+            .env("PCTX_USER_CONFIG", temp.path().join("absent-config"))
+            .output()
+            .unwrap()
+    };
+    let probe = invoke("child", "1");
+    let minimum = document(&probe)["data"]["minimum_budget_bytes"]
+        .as_u64()
+        .unwrap() as usize;
+    for policy in ["child", "pctx"] {
+        for limit in [minimum, minimum + 1] {
+            let out = invoke(policy, &limit.to_string());
+            let v = document(&out);
+            assert_eq!(out.status.code(), Some(6), "{v}");
+            assert_eq!(v["errors"][0]["code"], "NOT_INITIALIZED");
+            assert_eq!(v["data"]["pctx_error"], "NOT_INITIALIZED");
+            assert_eq!(v["data"]["spawned"], false);
+            assert_eq!(v["data"]["termination"], "not_started");
+            assert!(
+                out.stdout.len() <= limit,
+                "{} > {limit}: {v}",
+                out.stdout.len()
+            );
+        }
+    }
+    assert_eq!(fs::read_dir(temp.path()).unwrap().count(), 0);
+}

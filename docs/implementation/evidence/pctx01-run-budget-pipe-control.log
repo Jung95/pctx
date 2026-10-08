@@ -1,0 +1,2 @@
+{"cloexec":false,"holder_pid":70149,"cli_pid":70150,"exit":2,"reader_dropped_in_parent":true,"stdout_capture":"pipe","parser_write_checked":true}
+{"cloexec":true,"holder_pid":70151,"cli_pid":70152,"exit":7,"reader_dropped_in_parent":true,"stdout_capture":"pipe","parser_write_checked":true}

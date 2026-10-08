@@ -152,3 +152,12 @@ remaining pure parser/preflight and budget/representation matrix, post-spawn err
 observation, phase races and original startup cause; required native Linux/Windows
 gates remain. See [manifest](evidence/pctx01-run-exit-verification.json). Do not
 select another official task or dispatch Actions.
+
+
+## PCTX01 Run refusal and capacity truth
+
+Continue only PCTX01 after the current integration boundary. Next evidence:
+actual post-spawn presentation fallback and observer-error outcome, then remaining
+oversized-error/argument/representation/phase and original native startup gates.
+Native Linux/Windows qualification remains mandatory.
+[Current boundary](evidence/pctx01-run-budget-verification.json); no next task or Actions.

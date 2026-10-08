@@ -272,3 +272,19 @@ qualification is claimed. See [manifest](evidence/pctx01-run-exit-verification.j
 PCTX01 remains the only active official task; final full result is recorded below.
 
 Final native full97588 terminal101: 473 PASS/4 retained original startup FAIL. Related45 PASS; final format/locked all-target Clippy PASS. All jobs terminal; PCTX01 remains incomplete.
+
+
+## PCTX01 Run refusal and capacity truth
+
+Current Run preflight/budget delta: related62 PASS, format/locked all-target
+Clippy PASS; initial selection error and actual27PASS2FAIL plus timeout-route
+repair failure retained. [Evidence](evidence/pctx01-run-budget-verification.json).
+PCTX01 remains the only active official task; final full result is recorded below.
+
+Initial full475PASS5FAIL retained (closed-pipe fixture ambiguity plus4 original
+startup failures). Owned native reader control establishes exit2 versus7 when
+inheritance changes; it does not bind the original failure cause. The isolated
+single-case worker retains criterion7 and outer suite concurrency. Other raw
+pipe fixtures and nested-CLI cleanup on worker timeout remain unqualified.
+
+Final full58827 terminal101: 477 PASS/3 original startup FAIL; related62 PASS and final format/locked all-target Clippy PASS. All jobs terminal; PCTX01 remains incomplete.

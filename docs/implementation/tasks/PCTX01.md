@@ -68,3 +68,21 @@ proof; pure argument/budget/phase/native platform gates remain mandatory.
 PCTX01 remains implementing, with no next official task.
 
 Final native full97588 terminal101: 473 PASS/4 retained original startup FAIL. Related45 PASS; final format/locked all-target Clippy PASS. All jobs terminal; PCTX01 remains incomplete.
+
+
+## PCTX01 Run refusal and capacity truth
+
+Actual both-policy minimum−1/minimum/minimum+1, valid sub3000 producer refusal,
+missing-project6 near minimum and pure capacity/format/timeout admission now retain
+no-child facts and correct exit with final-byte checks/no jobs/output files.
+[Evidence](../evidence/pctx01-run-budget-verification.json) retains initial failures.
+Actual post-spawn presentation fallback, oversized-error variants and required
+native platforms/startup gates remain unverified. Task remains implementing.
+
+Initial full475PASS5FAIL retained (closed-pipe fixture ambiguity plus4 original
+startup failures). Owned native reader control establishes exit2 versus7 when
+inheritance changes; it does not bind the original failure cause. The isolated
+single-case worker retains criterion7 and outer suite concurrency. Other raw
+pipe fixtures and nested-CLI cleanup on worker timeout remain unqualified.
+
+Final full58827 terminal101: 477 PASS/3 original startup FAIL; related62 PASS and final format/locked all-target Clippy PASS. All jobs terminal; PCTX01 remains incomplete.
