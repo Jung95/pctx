@@ -17,6 +17,7 @@ fn fixture() -> (tempfile::TempDir, Project) {
     std::fs::create_dir_all(data.join("control")).unwrap();
     std::fs::write(root.join("code.py"), "def value():\n    return 1\n").unwrap();
     let p = Project {
+        root_anchor: pctx::project::RootAnchor::capture(&root).unwrap(),
         root,
         data_dir: data.clone(),
         workspace_dir: data.join("workspace"),

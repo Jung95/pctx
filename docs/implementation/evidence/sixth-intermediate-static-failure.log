@@ -1,0 +1,13 @@
+    Checking pctx v0.1.0-dev (/Users/dev/PCTX)
+error: unnecessary use of `to_owned`
+  --> tests/search.rs:87:57
+   |
+87 |         root_anchor: pctx::project::RootAnchor::capture(&root.to_owned()).unwrap(),
+   |                                                         ^^^^^^^^^^^^^^^^ help: use: `root`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#unnecessary_to_owned
+   = note: `-D clippy::unnecessary-to-owned` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::unnecessary_to_owned)]`
+
+error: could not compile `pctx` (test "search") due to 1 previous error
+warning: build failed, waiting for other jobs to finish...

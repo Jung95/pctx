@@ -96,26 +96,11 @@ pub fn policy_allows(p: &Project, path: &str) -> Result<()> {
     Ok(())
 }
 pub(crate) fn validate_root(p: &Project) -> Result<()> {
-    #[cfg(unix)]
-    let _root = secure_root(p)?;
-    #[cfg(not(unix))]
-    if fs::symlink_metadata(&p.root)?.file_type().is_symlink() || !p.root.is_dir() {
-        return Err(Error::new(
-            "POLICY_DENIED",
-            "Project root is a link or unavailable",
-            5,
-        ));
-    }
-    Ok(())
+    validate_anchor(&p.root, &p.root_anchor)
 }
 pub fn authorize(p: &Project, path: &str) -> Result<PathBuf> {
     policy_allows(p, path)?;
-    #[cfg(unix)]
-    let _root = secure_root(p)?;
-    #[cfg(not(unix))]
-    if fs::symlink_metadata(&p.root)?.file_type().is_symlink() {
-        return Err(Error::new("POLICY_DENIED", "Project root is a link", 5));
-    }
+    validate_root(p)?;
     let rel = Path::new(path);
     if path.is_empty()
         || path.contains('\\')
@@ -147,15 +132,16 @@ pub fn authorize(p: &Project, path: &str) -> Result<PathBuf> {
     if !fs::canonicalize(&resolved)?.starts_with(fs::canonicalize(&p.root)?) {
         return Err(Error::new("PATH_OUTSIDE_ROOT", "Path outside project", 5));
     }
+    validate_root(p)?;
     Ok(resolved)
 }
 pub fn read(p: &Project, path: &str) -> Result<VerifiedFile> {
     for _ in 0..3 {
-        let _resolved = authorize(p, path)?;
         #[cfg(unix)]
-        let mut f = secure_open(p, path)?;
+        policy_allows(p, path)?;
         #[cfg(not(unix))]
-        let mut f = fs::File::open(&_resolved)?;
+        authorize(p, path)?;
+        let mut f = secure_open(p, path)?;
         let before = f.metadata()?;
         if !before.is_file() {
             return Err(Error::new("INVALID_ARGUMENT", "Expected a regular file", 2));
@@ -172,8 +158,18 @@ pub fn read(p: &Project, path: &str) -> Result<VerifiedFile> {
             .take(p.config.index.max_file_bytes + 1)
             .read_to_end(&mut bytes)?;
         let after = f.metadata()?;
-        let reopened = fs::metadata(authorize(p, path)?)?;
-        let mut stable = before.len() == after.len()
+        // Reopen through the anchored no-follow traversal, not an unchecked
+        // pathname stat after authorization.
+        #[cfg(unix)]
+        policy_allows(p, path)?;
+        #[cfg(not(unix))]
+        authorize(p, path)?;
+        let reopened_file = secure_open(p, path)?;
+        let reopened = reopened_file.metadata()?;
+        let same_instance = same_file::Handle::from_file(f.try_clone()?)?
+            == same_file::Handle::from_file(reopened_file)?;
+        let mut stable = same_instance
+            && before.len() == after.len()
             && after.len() == reopened.len()
             && before.modified().ok() == after.modified().ok()
             && after.modified().ok() == reopened.modified().ok();
@@ -267,12 +263,7 @@ pub fn redact_span(text: &str, start: usize, end: usize) -> (String, bool) {
 }
 pub fn inventory(p: &Project, include_ignored: bool) -> Result<Inventory> {
     validate_policy(p)?;
-    #[cfg(unix)]
-    let _root = secure_root(p)?;
-    #[cfg(not(unix))]
-    if fs::symlink_metadata(&p.root)?.file_type().is_symlink() {
-        return Err(Error::new("POLICY_DENIED", "Project root is a link", 5));
-    }
+    validate_root(p)?;
     let mut walker = ignore::WalkBuilder::new(&p.root);
     walker
         .follow_links(false)
@@ -348,6 +339,7 @@ pub fn inventory(p: &Project, include_ignored: bool) -> Result<Inventory> {
     }
     paths.sort();
     paths.dedup();
+    validate_root(p)?;
     Ok(Inventory { paths, skipped })
 }
 pub fn manifest(p: &Project) -> Result<std::collections::BTreeMap<String, String>> {
@@ -374,104 +366,241 @@ pub fn manifest(p: &Project) -> Result<std::collections::BTreeMap<String, String
     Ok(map)
 }
 
-#[cfg(unix)]
-fn secure_root(p: &Project) -> Result<fs::File> {
-    use std::{
-        ffi::CString,
-        os::{
-            fd::{AsRawFd, FromRawFd},
-            unix::ffi::OsStrExt,
-        },
-    };
-    let root = p.root.clone();
-    // macOS exposes these fixed system aliases to tempfile. Do not resolve arbitrary
-    // project aliases: every project-owned ancestor is opened without following links.
+fn physical_root(root: &Path) -> PathBuf {
+    let root = root.to_owned();
+    // Only fixed system aliases used by macOS tempfile are recognized.
     #[cfg(target_os = "macos")]
-    let root = {
-        let mut root = root;
+    {
         for (alias, physical) in [("/var", "/private/var"), ("/tmp", "/private/tmp")] {
             if let Ok(tail) = root.strip_prefix(alias)
                 && fs::read_link(alias)
                     .is_ok_and(|target| Path::new("/").join(target) == Path::new(physical))
             {
-                root = Path::new(physical).join(tail);
-                break;
+                return Path::new(physical).join(tail);
             }
         }
-        root
-    };
-    if !root.is_absolute() {
+    }
+    root
+}
+
+fn root_changed() -> Error {
+    Error::new(
+        "POLICY_DENIED",
+        "Project root or ancestor instance changed",
+        5,
+    )
+}
+
+// A bounded traversal opens each directory once and verifies the actual handle.
+// Capture and validation share traversal rules but production always validates
+// against an immutable RootAnchor, never a path-based authorization cache.
+fn walk_root(
+    root: &Path,
+    mut inspect: impl FnMut(usize, &fs::File) -> Result<()>,
+) -> Result<fs::File> {
+    let root = physical_root(root);
+    if !root.is_absolute() || root.components().count() > 256 {
         return Err(Error::new(
             "PATH_OUTSIDE_ROOT",
-            "Project root must be absolute",
+            "Invalid or excessively deep project root",
             5,
         ));
     }
-    let mut dir = fs::File::open("/")?;
-    for component in root.components() {
-        match component {
-            Component::RootDir => continue,
-            Component::Normal(name) => {
-                let name = CString::new(name.as_bytes())
-                    .map_err(|_| Error::new("INVALID_ARGUMENT", "NUL in root path", 2))?;
-                let fd = unsafe {
-                    libc::openat(
-                        dir.as_raw_fd(),
-                        name.as_ptr(),
-                        libc::O_RDONLY | libc::O_DIRECTORY | libc::O_NOFOLLOW | libc::O_CLOEXEC,
-                    )
-                };
-                if fd < 0 {
+    #[cfg(unix)]
+    {
+        use std::{
+            ffi::CString,
+            os::{
+                fd::{AsRawFd, FromRawFd},
+                unix::ffi::OsStrExt,
+            },
+        };
+        let mut dir = fs::File::open("/")?;
+        inspect(0, &dir)?;
+        let mut index = 1;
+        for component in root.components() {
+            match component {
+                Component::RootDir => continue,
+                Component::Normal(name) => {
+                    let name = CString::new(name.as_bytes())
+                        .map_err(|_| Error::new("INVALID_ARGUMENT", "NUL in root path", 2))?;
+                    let fd = unsafe {
+                        libc::openat(
+                            dir.as_raw_fd(),
+                            name.as_ptr(),
+                            libc::O_RDONLY | libc::O_DIRECTORY | libc::O_NOFOLLOW | libc::O_CLOEXEC,
+                        )
+                    };
+                    if fd < 0 {
+                        return Err(root_changed());
+                    }
+                    dir = unsafe { fs::File::from_raw_fd(fd) };
+                    inspect(index, &dir)?;
+                    index += 1;
+                }
+                _ => {
                     return Err(Error::new(
-                        "POLICY_DENIED",
-                        "Project root changed or contains a link",
+                        "PATH_OUTSIDE_ROOT",
+                        "Invalid project root component",
                         5,
                     ));
                 }
-                dir = unsafe { fs::File::from_raw_fd(fd) };
             }
-            _ => {
+        }
+        Ok(dir)
+    }
+    #[cfg(not(unix))]
+    {
+        let mut paths: Vec<_> = root.ancestors().map(Path::to_owned).collect();
+        paths.reverse();
+        let mut last = None;
+        for (index, path) in paths.iter().enumerate() {
+            let dir = non_unix_open(path, true)?;
+            inspect(index, &dir)?;
+            last = Some(dir);
+        }
+        last.ok_or_else(root_changed)
+    }
+}
+
+pub(crate) fn capture_root(root: &Path) -> Result<Vec<same_file::Handle>> {
+    let mut handles = Vec::new();
+    walk_root(root, |_, file| {
+        handles.push(same_file::Handle::from_file(file.try_clone()?)?);
+        Ok(())
+    })?;
+    Ok(handles)
+}
+
+fn anchored_root(root: &Path, anchor: &crate::project::RootAnchor) -> Result<fs::File> {
+    let mut count = 0;
+    let file = walk_root(root, |index, file| {
+        anchor.verify(index, file)?;
+        count += 1;
+        Ok(())
+    })?;
+    if count != anchor.len() {
+        return Err(root_changed());
+    }
+    Ok(file)
+}
+
+pub(crate) fn validate_anchor(root: &Path, anchor: &crate::project::RootAnchor) -> Result<()> {
+    anchored_root(root, anchor)?;
+    Ok(())
+}
+
+#[cfg(not(unix))]
+fn non_unix_open(path: &Path, directory: bool) -> Result<fs::File> {
+    let before = fs::symlink_metadata(path)?;
+    if before.file_type().is_symlink() {
+        return Err(root_changed());
+    }
+    #[cfg(windows)]
+    {
+        use std::os::windows::fs::{MetadataExt, OpenOptionsExt};
+        // Reject all reparse points, including junctions; do not claim NT-relative
+        // handle traversal. Parent-component replacement is checked before/after.
+        const FILE_ATTRIBUTE_REPARSE_POINT: u32 = 0x400;
+        const FILE_FLAG_BACKUP_SEMANTICS: u32 = 0x0200_0000;
+        const FILE_FLAG_OPEN_REPARSE_POINT: u32 = 0x0020_0000;
+        if before.file_attributes() & FILE_ATTRIBUTE_REPARSE_POINT != 0 {
+            return Err(root_changed());
+        }
+        let file = fs::OpenOptions::new()
+            .read(true)
+            .custom_flags(FILE_FLAG_BACKUP_SEMANTICS | FILE_FLAG_OPEN_REPARSE_POINT)
+            .open(path)?;
+        let actual = file.metadata()?;
+        if actual.file_attributes() & FILE_ATTRIBUTE_REPARSE_POINT != 0
+            || (directory && !actual.is_dir())
+        {
+            return Err(root_changed());
+        }
+        Ok(file)
+    }
+    #[cfg(not(windows))]
+    {
+        let file = fs::File::open(path)?;
+        if directory && !file.metadata()?.is_dir() {
+            return Err(root_changed());
+        }
+        Ok(file)
+    }
+}
+
+pub(crate) fn anchored_open(
+    root: &Path,
+    anchor: &crate::project::RootAnchor,
+    path: &str,
+) -> Result<fs::File> {
+    let relative = Path::new(path);
+    if path.is_empty()
+        || path.contains('\\')
+        || relative.is_absolute()
+        || relative
+            .components()
+            .any(|c| !matches!(c, Component::Normal(_)))
+    {
+        return Err(Error::new(
+            "PATH_OUTSIDE_ROOT",
+            "Invalid anchored relative path",
+            5,
+        ));
+    }
+    let mut dir = anchored_root(root, anchor)?;
+    #[cfg(unix)]
+    {
+        use std::{
+            ffi::CString,
+            os::fd::{AsRawFd, FromRawFd},
+            os::unix::ffi::OsStrExt,
+        };
+        let components = relative.components().collect::<Vec<_>>();
+        for (i, c) in components.iter().enumerate() {
+            let name = CString::new(c.as_os_str().as_bytes())
+                .map_err(|_| Error::new("INVALID_ARGUMENT", "NUL in path", 2))?;
+            // Regular files ignore O_NONBLOCK; a FIFO must never block admission
+            // before the caller can reject its non-regular file type.
+            let flags = libc::O_RDONLY
+                | libc::O_NOFOLLOW
+                | libc::O_CLOEXEC
+                | if i + 1 < components.len() {
+                    libc::O_DIRECTORY
+                } else {
+                    libc::O_NONBLOCK
+                };
+            let fd = unsafe { libc::openat(dir.as_raw_fd(), name.as_ptr(), flags) };
+            if fd < 0 {
+                let error = std::io::Error::last_os_error();
+                if error.kind() == std::io::ErrorKind::NotFound {
+                    return Err(error.into());
+                }
                 return Err(Error::new(
-                    "PATH_OUTSIDE_ROOT",
-                    "Invalid project root component",
+                    "POLICY_DENIED",
+                    "Path changed or cannot be opened safely",
                     5,
                 ));
             }
+            dir = unsafe { fs::File::from_raw_fd(fd) };
         }
+        // The opened chain is pinned; reject a replaced named root before return.
+        validate_anchor(root, anchor)?;
+        Ok(dir)
     }
-    Ok(dir)
+    #[cfg(not(unix))]
+    {
+        let mut current = root.to_owned();
+        let components: Vec<_> = relative.components().collect();
+        for (i, component) in components.iter().enumerate() {
+            current.push(component);
+            dir = non_unix_open(&current, i + 1 < components.len())?;
+        }
+        validate_anchor(root, anchor)?;
+        Ok(dir)
+    }
 }
 
-#[cfg(unix)]
 pub(crate) fn secure_open(p: &Project, path: &str) -> Result<fs::File> {
-    use std::{
-        ffi::CString,
-        os::fd::{AsRawFd, FromRawFd},
-    };
-    let mut dir = secure_root(p)?;
-    let components = Path::new(path).components().collect::<Vec<_>>();
-    for (i, c) in components.iter().enumerate() {
-        use std::os::unix::ffi::OsStrExt;
-        let name = CString::new(c.as_os_str().as_bytes())
-            .map_err(|_| Error::new("INVALID_ARGUMENT", "NUL in path", 2))?;
-        let flags = libc::O_RDONLY
-            | libc::O_NOFOLLOW
-            | libc::O_CLOEXEC
-            | if i + 1 < components.len() {
-                libc::O_DIRECTORY
-            } else {
-                0
-            };
-        // Directory descriptors pin each verified component against symlink replacement.
-        let fd = unsafe { libc::openat(dir.as_raw_fd(), name.as_ptr(), flags) };
-        if fd < 0 {
-            return Err(Error::new(
-                "POLICY_DENIED",
-                "Path changed or cannot be opened safely",
-                5,
-            ));
-        }
-        dir = unsafe { fs::File::from_raw_fd(fd) };
-    }
-    Ok(dir)
+    anchored_open(&p.root, &p.root_anchor, path)
 }

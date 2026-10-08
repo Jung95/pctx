@@ -7,7 +7,9 @@ use serde_json::{Value, json};
 fn fixture() -> (tempfile::TempDir, Project, String) {
     let t = tempfile::tempdir().unwrap();
     let base = t.path().canonicalize().unwrap();
+    std::fs::create_dir_all(base.join("project")).unwrap();
     let p = Project {
+        root_anchor: pctx::project::RootAnchor::capture(&base.join("project")).unwrap(),
         root: base.join("project"),
         data_dir: base.join("data"),
         workspace_dir: base.join("data/ws"),

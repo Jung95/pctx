@@ -29,6 +29,7 @@ fn fixture(git: bool) -> (tempfile::TempDir, Project) {
         );
     }
     let p = Project {
+        root_anchor: pctx::project::RootAnchor::capture(&root).unwrap(),
         root,
         data_dir: data.clone(),
         workspace_dir: data.join("workspace"),
@@ -227,7 +228,14 @@ fn five_actual_cli_processes_share_one_refresh() {
             .output()
             .unwrap()
     };
-    assert!(invoke(&["init"]).status.success());
+    let init = invoke(&["init"]);
+    assert!(
+        init.status.success(),
+        "init status={} stdout={} stderr={}",
+        init.status,
+        String::from_utf8_lossy(&init.stdout),
+        String::from_utf8_lossy(&init.stderr)
+    );
     let mut children = Vec::new();
     for _ in 0..5 {
         children.push(
@@ -238,6 +246,7 @@ fn five_actual_cli_processes_share_one_refresh() {
                 .arg(&p.root)
                 .args(["--format", "json", "repo", "status"])
                 .stdout(std::process::Stdio::piped())
+                .stderr(std::process::Stdio::piped())
                 .spawn()
                 .unwrap(),
         );
@@ -246,7 +255,13 @@ fn five_actual_cli_processes_share_one_refresh() {
         .into_iter()
         .map(|child| {
             let result = child.wait_with_output().unwrap();
-            assert!(result.status.success());
+            assert!(
+                result.status.success(),
+                "repo status={} stdout={} stderr={}",
+                result.status,
+                String::from_utf8_lossy(&result.stdout),
+                String::from_utf8_lossy(&result.stderr)
+            );
             serde_json::from_slice::<Value>(&result.stdout).unwrap()
         })
         .collect::<Vec<_>>();
@@ -258,7 +273,13 @@ fn five_actual_cli_processes_share_one_refresh() {
         );
     }
     let stats = invoke(&["cache", "stats"]);
-    assert!(stats.status.success());
+    assert!(
+        stats.status.success(),
+        "cache stats status={} stdout={} stderr={}",
+        stats.status,
+        String::from_utf8_lossy(&stats.stdout),
+        String::from_utf8_lossy(&stats.stderr)
+    );
     let value: Value = serde_json::from_slice(&stats.stdout).unwrap();
     assert_eq!(value["data"]["upstream_refreshes"], 1);
 }

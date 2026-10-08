@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 use std::{
     collections::BTreeMap,
     fs,
-    io::Write,
+    io::{Read, Write},
     path::{Path, PathBuf},
     time::Duration,
 };
@@ -69,9 +69,66 @@ impl Default for PolicyConfig {
         }
     }
 }
+/// Immutable identity of the root and every ancestor opened for this project.
+/// Handles remain alive across clones so a deleted directory identity cannot be
+/// recycled while an application still holds authority for it.
+#[derive(Clone, Debug)]
+pub struct RootAnchor {
+    handles: std::sync::Arc<[same_file::Handle]>,
+    #[cfg(unix)]
+    identities: std::sync::Arc<[(u64, u64)]>,
+}
+impl RootAnchor {
+    /// Bind an existing directory for project loading or explicit fixture construction.
+    /// Capturing a replacement is not a way to refresh a loaded Project's authority.
+    pub fn capture(root: &Path) -> Result<Self> {
+        let handles = crate::reader::capture_root(root)?;
+        #[cfg(unix)]
+        let identities = {
+            use std::os::unix::fs::MetadataExt;
+            handles
+                .iter()
+                .map(|handle| {
+                    let metadata = handle.as_file().metadata()?;
+                    Ok((metadata.dev(), metadata.ino()))
+                })
+                .collect::<Result<Vec<_>>>()?
+        };
+        Ok(Self {
+            handles: handles.into(),
+            #[cfg(unix)]
+            identities: identities.into(),
+        })
+    }
+    pub(crate) fn verify(&self, index: usize, file: &fs::File) -> Result<()> {
+        #[cfg(unix)]
+        let matches = {
+            use std::os::unix::fs::MetadataExt;
+            let metadata = file.metadata()?;
+            self.identities.get(index) == Some(&(metadata.dev(), metadata.ino()))
+        };
+        #[cfg(not(unix))]
+        let matches = {
+            let actual = same_file::Handle::from_file(file.try_clone()?)?;
+            self.handles.get(index) == Some(&actual)
+        };
+        if !matches {
+            return Err(Error::new(
+                "POLICY_DENIED",
+                "Project root or ancestor instance changed",
+                5,
+            ));
+        }
+        Ok(())
+    }
+    pub(crate) fn len(&self) -> usize {
+        self.handles.len()
+    }
+}
 #[derive(Clone, Debug)]
 pub struct Project {
     pub root: PathBuf,
+    pub root_anchor: RootAnchor,
     pub data_dir: PathBuf,
     pub workspace_dir: PathBuf,
     pub control_dir: PathBuf,
@@ -233,17 +290,49 @@ impl Project {
     }
     fn load_binding(root: &Path, register: bool) -> Result<Self> {
         let root = fs::canonicalize(root)?;
-        for p in [root.join(".pctx"), root.join(".pctx/config.toml")] {
-            if fs::symlink_metadata(p).is_ok_and(|m| m.file_type().is_symlink()) {
-                return Err(Error::new(
-                    "POLICY_DENIED",
-                    "Linked configuration denied",
-                    5,
-                ));
-            }
+        // Capture before loading policy, then read through that same authority.
+        let root_anchor = RootAnchor::capture(&root)?;
+        let mut config_file =
+            crate::reader::anchored_open(&root, &root_anchor, ".pctx/config.toml").map_err(
+                |e| {
+                    if e.code == "IO_ERROR" {
+                        Error::new("NOT_INITIALIZED", "Run pctx init first", 6)
+                    } else {
+                        e
+                    }
+                },
+            )?;
+        let config_metadata = config_file.metadata()?;
+        if !config_metadata.is_file() || config_metadata.len() > 1024 * 1024 {
+            return Err(Error::new(
+                "INVALID_CONFIG",
+                "Project configuration must be a bounded regular file",
+                2,
+            ));
         }
-        let source = fs::read_to_string(root.join(".pctx/config.toml"))
-            .map_err(|_| Error::new("NOT_INITIALIZED", "Run pctx init first", 6))?;
+        let mut source = String::new();
+        std::io::Read::by_ref(&mut config_file)
+            .take(1024 * 1024 + 1)
+            .read_to_string(&mut source)?;
+        if source.len() > 1024 * 1024 {
+            return Err(Error::new(
+                "INVALID_CONFIG",
+                "Project configuration exceeds size limit",
+                2,
+            ));
+        }
+        crate::reader::validate_anchor(&root, &root_anchor)?;
+        let config_reopened =
+            crate::reader::anchored_open(&root, &root_anchor, ".pctx/config.toml")?;
+        if same_file::Handle::from_file(config_file.try_clone()?)?
+            != same_file::Handle::from_file(config_reopened)?
+        {
+            return Err(Error::new(
+                "CONCURRENT_MODIFICATION",
+                "Project configuration changed while loading",
+                4,
+            ));
+        }
         let config: Config = toml::from_str(&source).map_err(|_| {
             Error::new("INVALID_CONFIG", "Invalid project TOML or unknown field", 2)
         })?;
@@ -320,6 +409,7 @@ impl Project {
                     coordination_id,
                 };
                 registry.roots.insert(root_key, b.clone());
+                crate::reader::validate_anchor(&root, &root_anchor)?;
                 atomic_write(&registry_path, &serde_json::to_vec(&registry)?, true)?;
                 b
             }
@@ -337,8 +427,10 @@ impl Project {
             private_dir(&workspace_dir)?;
             private_dir(&control_dir)?;
         }
+        crate::reader::validate_anchor(&root, &root_anchor)?;
         Ok(Self {
             root,
+            root_anchor,
             data_dir,
             workspace_dir,
             control_dir,

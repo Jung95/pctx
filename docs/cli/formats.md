@@ -23,3 +23,27 @@ Source and handoff bodies are literal fenced content. The fence delimiter is lon
 A complete escaped JSON envelope appendix preserves every supplied field and exact source string, including fields that have no prose presentation. Parsing the appendix reconstructs the original envelope. Reported failed checks, partial content, truncation and errors remain visible; rendering never establishes test success, task completion or source freshness.
 
 The CLI checks the byte budget **after** rendering the final document, including its newline. Markdown source display plus the full JSON appendix can be larger than JSON output. If the document exceeds the budget, the CLI emits a complete JSON `BUDGET_TOO_SMALL` error (exit 8). Execution artifacts retain their reread handle and child outcome in this fallback, and delivered bytes are recorded. A budget smaller than the complete error envelope cannot contain a valid error document; this failure is not represented as successful bounded content. Source strings and JSON documents are never cut silently to fit.
+
+
+## Minimum valid output budgets
+
+A byte budget smaller than one complete newline-terminated JSON error envelope is an invalid argument (`INVALID_ARGUMENT`, exit 2). It is rejected before project loading, index refresh, check/lease mutation, context emission or child execution. The rejection is one JSON document on stdout, including when Markdown or `--output` was requested; invalid arguments never create the requested output file. This necessary rejection document can exceed the invalid requested limit.
+
+The guard derives a command-specific conservative bound from the real serializer, envelope keys, fixed error message and `data.minimum_budget_bytes`. It reserves a full nanosecond RFC3339 timestamp and includes the final newline. The returned `minimum_budget_bytes` is authoritative if a future schema changes these sizes; this is not an arbitrary global execution threshold.
+
+| Command | Current minimum valid stdout capacity | Separate execution/selection limit |
+| --- | --- | --- |
+| `build` | 515 bytes | Required task/rules must fit the actual selected document. |
+| `context get` | 517 bytes | Required full task/rules/references must fit before recording an emission. |
+| `extract` | 517 bytes | Actual selected source and provenance must fit. |
+| `run` | 513 bytes | Existing supervision metadata admission requires at least 3,000 bytes. |
+| `runner check-run` | 516 bytes | Existing registered evidence admission requires at least 8,192 bytes. |
+| `check run` (positional key or `--key`) | 515 bytes | Same registered check backend and 8,192-byte admission. |
+| `runner helper-request` | 516 bytes | Helper evidence uses its registered execution backend and configured admission. |
+| `read` | 514 bytes for the error envelope | Uses a fixed 65,536-byte output bound; there is no `--budget-bytes` argument. |
+
+A budget equal to the minimum passes this argument guard. It can still produce `BUDGET_TOO_SMALL` (exit 8) when required context or execution metadata cannot fit. For example, a mandatory rule exceeding a valid 2,000-byte build budget fails with exit 8; no partial required-rule success is fabricated. These are different errors from an invalid document capacity.
+
+`output show`, `output find`, and `output render` do not declare a caller-selected stdout byte-budget flag. `pack plan --budget-bytes` governs the produced pack artifact capacity, including its own archive minimum and part limits; it is not this stdout document budget. No new flag is silently invented for these commands.
+
+If an already executed command's presentation exceeds its valid budget, the JSON fallback preserves its durable output reread handle and observed child outcome. A wrapper budget failure does not establish child success or discard a saved failure artifact. Final document size always includes its newline.

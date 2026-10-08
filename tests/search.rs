@@ -84,6 +84,7 @@ fn markdown_sections_ignore_fenced_examples_and_link_parents() {
 fn project(root: &std::path::Path) -> pctx::project::Project {
     use pctx::project::{Config, Project, ProjectConfig};
     Project {
+        root_anchor: pctx::project::RootAnchor::capture(root).unwrap(),
         root: root.to_owned(),
         data_dir: root.join("data"),
         workspace_dir: root.join("workspace"),

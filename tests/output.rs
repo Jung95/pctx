@@ -15,6 +15,7 @@ fn fixture() -> (tempfile::TempDir, Project) {
     fs::create_dir_all(&data).unwrap();
     fs::write(root.join("input.txt"), "ordinary source\n").unwrap();
     let p = Project {
+        root_anchor: pctx::project::RootAnchor::capture(&root).unwrap(),
         root,
         data_dir: data.clone(),
         workspace_dir: data.join("workspaces/WS-test"),

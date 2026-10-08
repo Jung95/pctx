@@ -553,6 +553,58 @@ fn stream(cli: &Cli) -> Result<()> {
     }
 }
 
+// A capacity guard is argument validation, not a context selection failure.
+// The bound is derived from a real reversible JSON error document and reserves the
+// longest current RFC3339 nanosecond timestamp. Never open a project to compute it.
+fn output_budget(command: &Command) -> Option<usize> {
+    match command {
+        Command::Build(r) => Some(r.budget_bytes),
+        Command::Context {
+            command: session::ContextCommand::Get { budget_bytes, .. },
+        } => Some(*budget_bytes),
+        Command::Run(r) => Some(r.budget_bytes),
+        Command::Runner {
+            command:
+                runner::RunnerCommand::CheckRun { budget_bytes, .. }
+                | runner::RunnerCommand::HelperRequest { budget_bytes, .. },
+        } => Some(*budget_bytes),
+        Command::Work(work::WorkCommand::Check {
+            command: work::CheckCommand::Run { budget_bytes, .. },
+        }) => Some(*budget_bytes),
+        Command::Extract(r) => Some(r.budget_bytes),
+        Command::Read { .. } => Some(65536),
+        _ => None,
+    }
+}
+fn minimum_budget_error(command: &str, minimum: usize) -> Value {
+    let mut response = domain::envelope(command, None, json!({"minimum_budget_bytes":minimum}));
+    response["status"] = json!("error");
+    response["coverage"] = json!({"status":"partial","reasons":["INVALID_ARGUMENT"]});
+    response["errors"] = json!([Error::new(
+        "INVALID_ARGUMENT",
+        "Byte budget is below minimum JSON error envelope",
+        2
+    )]);
+    response
+}
+fn minimum_error_budget(command: &str) -> Result<usize> {
+    let mut minimum = 0;
+    for _ in 0..3 {
+        let mut response = minimum_budget_error(command, minimum);
+        response["validation"]["checked_at"] = json!("2000-01-01T00:00:00.123456789+00:00");
+        let measured = pctx::render::render(&response, pctx::render::Format::Json)?.len();
+        if measured == minimum {
+            return Ok(minimum);
+        }
+        minimum = measured;
+    }
+    Err(Error::new(
+        "INVALID_ARGUMENT",
+        "Cannot establish minimum JSON error budget",
+        2,
+    ))
+}
+
 fn main() {
     let raw = std::env::args().collect::<Vec<_>>();
     let cli = match Cli::try_parse() {
@@ -573,6 +625,28 @@ fn main() {
             e.exit()
         }
     };
+    if let Some(limit) = output_budget(&cli.command) {
+        match minimum_error_budget(cli.command.name()) {
+            Ok(minimum) if limit < minimum => {
+                let response = minimum_budget_error(cli.command.name(), minimum);
+                // Invalid capacity is always one JSON error on stdout. --output
+                // must not turn rejected arguments into a filesystem write.
+                if let Ok(bytes) = pctx::render::render(&response, pctx::render::Format::Json) {
+                    use std::io::Write;
+                    let _ = std::io::stdout().write_all(&bytes);
+                }
+                std::process::exit(2);
+            }
+            Err(e) => {
+                let mut response = domain::envelope(cli.command.name(), None, Value::Null);
+                response["status"] = json!("error");
+                response["errors"] = json!([e]);
+                println!("{}", response);
+                std::process::exit(2);
+            }
+            _ => {}
+        }
+    }
     let follows = matches!(
         &cli.command,
         Command::Board { watch: true } | Command::Activity { follow: true, .. }
@@ -681,24 +755,7 @@ fn main() {
     };
     let bytes = encoded(&mut response, &render_format, &mut exit);
     // Budget always applies to the format actually emitted, including the newline.
-    let limit = match &cli.command {
-        Command::Build(r) => Some(r.budget_bytes),
-        Command::Context {
-            command: session::ContextCommand::Get { budget_bytes, .. },
-        } => Some(*budget_bytes),
-        Command::Run(r) => Some(r.budget_bytes),
-        Command::Runner {
-            command:
-                runner::RunnerCommand::CheckRun { budget_bytes, .. }
-                | runner::RunnerCommand::HelperRequest { budget_bytes, .. },
-        } => Some(*budget_bytes),
-        Command::Work(work::WorkCommand::Check {
-            command: work::CheckCommand::Run { budget_bytes, .. },
-        }) => Some(*budget_bytes),
-        Command::Extract(r) => Some(r.budget_bytes),
-        Command::Read { .. } => Some(65536),
-        _ => None,
-    };
+    let limit = output_budget(&cli.command);
     let mut bytes = bytes;
     let mut execution_pointer = if response["data"]["execution"].is_object() {
         "/data/execution"
@@ -729,11 +786,7 @@ fn main() {
     if let Some(limit) = limit
         && bytes.len() > limit
     {
-        let e = Error::new(
-            "BUDGET_TOO_SMALL",
-            "Rendered context exceeds requested budget; use JSON or increase budget",
-            8,
-        );
+        let e = Error::new("BUDGET_TOO_SMALL", "Output exceeds byte budget", 8);
         // Keep the durable reread handle and original execution outcome even when
         // presentation cannot fit. The wrapper failure never replaces child truth.
         let mut proof = serde_json::Map::new();
