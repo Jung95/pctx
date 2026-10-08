@@ -459,13 +459,7 @@ fn execute(
     cli: &Cli,
     deadline: Option<pctx::deadline::Deadline>,
 ) -> Result<(String, Project, Value)> {
-    if matches!(cli.format, Format::Markdown) && !pctx::render::supports(cli.command.name()) {
-        return Err(Error::new(
-            "INVALID_ARGUMENT",
-            "Markdown supports build, outline, read and handoff",
-            2,
-        ));
-    }
+    validate_representation(cli)?;
     let root = project::detect_root_with_deadline(cli.root.as_deref(), deadline)?;
     if matches!(cli.command, Command::Init) {
         let p = Project::init(&root)?;
@@ -753,6 +747,17 @@ fn minimum_error_budget(command: &str) -> Result<usize> {
     ))
 }
 
+fn validate_representation(cli: &Cli) -> Result<()> {
+    if matches!(cli.format, Format::Markdown) && !pctx::render::supports(cli.command.name()) {
+        return Err(Error::new(
+            "INVALID_ARGUMENT",
+            "Markdown supports build, outline, read and handoff",
+            2,
+        ));
+    }
+    Ok(())
+}
+
 // Argument refusal never grants response-file or project authority. Render it
 // through the same terminal-safe serializer as ordinary command responses.
 fn refuse_arguments(command: &str, error: Error, limit: Option<usize>) -> ! {
@@ -828,8 +833,13 @@ fn main() {
                 // Parser diagnostics also cross the shared secret/control boundary.
                 let (message, _) = pctx::reader::redact(&e.to_string());
                 let message = pctx::render::diagnostic_text(&message);
-                eprintln!("{message}");
-                std::process::exit(e.exit_code());
+                use std::io::Write;
+                let exit = if writeln!(std::io::stderr(), "{message}").is_err() {
+                    7
+                } else {
+                    e.exit_code()
+                };
+                std::process::exit(exit);
             }
             e.exit()
         }
@@ -854,6 +864,9 @@ fn main() {
             }
             _ => {}
         }
+    }
+    if let Err(error) = validate_representation(&cli) {
+        refuse_arguments(cli.command.name(), error, output_budget(&cli.command));
     }
     // Pure argument checks precede project discovery, refresh and output paths.
     let preflight = match &cli.command {

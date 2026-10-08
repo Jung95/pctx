@@ -1,0 +1,24 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.48s
+     Running tests/cli_frontend.rs (target/debug/deps/cli_frontend-4948844b4d514170)
+
+running 1 test
+test unsupported_markdown_refuses_before_response_files_and_stream_dispatch ... FAILED
+
+failures:
+
+---- unsupported_markdown_refuses_before_response_files_and_stream_dispatch stdout ----
+
+thread 'unsupported_markdown_refuses_before_response_files_and_stream_dispatch' (8239857) panicked at tests/cli_frontend.rs:34:5:
+assertion `left == right` failed
+  left: Some(7)
+ right: Some(2)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    unsupported_markdown_refuses_before_response_files_and_stream_dispatch
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 12 filtered out; finished in 0.74s
+
+error: test failed, to rerun pass `--test cli_frontend`

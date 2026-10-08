@@ -539,3 +539,70 @@ fn plain_parser_diagnostics_escape_bidi_c1_and_line_controls() {
         f.unchanged();
     }
 }
+
+#[test]
+fn unsupported_markdown_refuses_before_response_files_and_stream_dispatch() {
+    for command in [
+        vec!["init"],
+        vec!["status"],
+        vec!["index", "update"],
+        vec!["find", "needle"],
+        vec!["task", "list"],
+        vec!["context", "get", "--task-id", "T001", "--session", "S001"],
+        vec!["board"],
+        vec!["board", "--watch"],
+        vec!["activity"],
+        vec!["activity", "--follow"],
+        vec!["run", "--", "must-not-execute"],
+    ] {
+        for output_file in [false, true] {
+            let f = Fixture::new();
+            let mut values = args(&["--root", "absent-project", "--format", "markdown"]);
+            if output_file {
+                values.push("--output".into());
+                values.push(f.temp.path().join("rejected.json").into_os_string());
+            }
+            values.extend(args(&command));
+            let output = f.run(&values);
+            assert!(
+                !f.temp.path().join("rejected.json").exists(),
+                "Rejected Markdown request wrote a response file: {command:?}"
+            );
+            argument_error(&output);
+            let v: Value = serde_json::from_slice(&output.stdout).unwrap();
+            assert_eq!(
+                v["errors"][0]["message"], "Markdown supports build, outline, read and handoff",
+                "{command:?}"
+            );
+            f.unchanged();
+        }
+    }
+}
+
+#[cfg(unix)]
+#[test]
+fn undeliverable_plain_parser_diagnostic_returns_io_exit_without_panic() {
+    use std::os::fd::FromRawFd;
+    use std::process::Stdio;
+    let f = Fixture::new();
+    let normal = f.run(&args(&["--no-color", "--unknown"]));
+    assert_eq!(normal.status.code(), Some(2));
+    assert!(normal.stdout.is_empty());
+    assert!(!normal.stderr.is_empty());
+    let mut descriptors = [-1; 2];
+    assert_eq!(unsafe { libc::pipe(descriptors.as_mut_ptr()) }, 0);
+    let reader = unsafe { fs::File::from_raw_fd(descriptors[0]) };
+    let writer = unsafe { fs::File::from_raw_fd(descriptors[1]) };
+    drop(reader);
+    let output = Command::new(env!("CARGO_BIN_EXE_pctx"))
+        .current_dir(f.temp.path())
+        .args(["--no-color", "--unknown"])
+        .env("PCTX_DATA_DIR", f.temp.path().join("data"))
+        .env("PCTX_USER_CONFIG", f.temp.path().join("absent-config"))
+        .stderr(Stdio::from(writer))
+        .output()
+        .unwrap();
+    assert_eq!(output.status.code(), Some(7), "{output:?}");
+    assert!(output.stdout.is_empty());
+    f.unchanged();
+}

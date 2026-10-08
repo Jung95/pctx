@@ -1,0 +1,20 @@
+from pathlib import Path
+import subprocess,hashlib,os,json
+root=Path('/Users/dev/PCTX'); p=root/'src/main.rs'; saved=p.read_bytes()
+old=b'''    if let Err(error) = validate_representation(&cli) {
+        refuse_arguments(cli.command.name(), error, output_budget(&cli.command));
+    }
+'''
+assert saved.count(old)==1
+env=os.environ.copy(); env.update(RUSTUP_HOME='/Users/dev/PCTX/.toolchain/rustup',CARGO_HOME='/Users/dev/PCTX/.toolchain/cargo',SDKROOT='/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk',PATH='/Users/dev/PCTX/.toolchain/cargo/bin:/Library/Developer/CommandLineTools/usr/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin')
+try:
+ p.write_bytes(saved.replace(old,b'',1))
+ with (root/'docs/implementation/evidence/pctx01-markdown-loss.log').open('wb') as out:
+  result=subprocess.run(['cargo','test','--locked','--test','cli_frontend','unsupported_markdown_refuses_before_response_files_and_stream_dispatch','--','--exact'],cwd=root,env=env,stdout=out,stderr=subprocess.STDOUT)
+ assert result.returncode==101
+ log=(root/'docs/implementation/evidence/pctx01-markdown-loss.log').read_text()
+ assert 'test result: FAILED. 0 passed; 1 failed' in log and 'Rejected Markdown request wrote a response file' in log
+ print(json.dumps({'exit':result.returncode,'actual_test_failure':True,'restored_sha256':hashlib.sha256(saved).hexdigest()}))
+finally:
+ p.write_bytes(saved)
+ assert p.read_bytes()==saved

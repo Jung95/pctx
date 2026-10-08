@@ -1,0 +1,136 @@
+{
+  "official_task": "PCTX01",
+  "status": "implementing_not_complete",
+  "base_commit": "b517fd433c918c36a461a032c7893baedfcd7731",
+  "platform": "native macOS arm64",
+  "source_sha256": {
+    "src/main.rs": "bd7cbc8973fe6ca5f8e26f2cb6be2ec66c83ed092756c9e642c544b1f9140dc1",
+    "tests/cli_frontend.rs": "39f452c77328d90bbfba4f551bf7abdd1538f4cb31d2ecfbf9a44722eddf4705"
+  },
+  "changes": [
+    "Reuse existing Markdown support registry in common pure representation admission after capacity and before semantic/project/stream/output dispatch; execute retains defense. Allowed registry and early help/version remain unchanged.",
+    "Plain parser stderr writes are checked: successful diagnostics preserve parser exit2, failed delivery returnsIO7 instead of panic101. Secret/control masking unchanged."
+  ],
+  "verification": {
+    "initial_relative_output": {
+      "log": "pctx01-markdown-initial.log",
+      "handle": 99607,
+      "exit": 101,
+      "passed": 0,
+      "failed": 1,
+      "failed_tests": [
+        "unsupported_markdown_refuses_before_response_files_and_stream_dispatch"
+      ]
+    },
+    "initial_absolute_output": {
+      "log": "pctx01-markdown-initial-absolute.log",
+      "handle": 75801,
+      "exit": 101,
+      "passed": 0,
+      "failed": 1,
+      "failed_tests": [
+        "unsupported_markdown_refuses_before_response_files_and_stream_dispatch"
+      ]
+    },
+    "markdown_targeted": {
+      "log": "pctx01-markdown-targeted.log",
+      "handle": 74637,
+      "exit": 0,
+      "passed": 36,
+      "failed": 0,
+      "failed_tests": []
+    },
+    "markdown_preflight_loss": {
+      "log": "pctx01-markdown-loss.log",
+      "handle": 42610,
+      "exit": 101,
+      "passed": 0,
+      "failed": 1,
+      "failed_tests": [
+        "unsupported_markdown_refuses_before_response_files_and_stream_dispatch"
+      ]
+    },
+    "plain_stderr_initial": {
+      "log": "pctx01-plain-stderr-initial.log",
+      "handle": 48505,
+      "exit": 101,
+      "passed": 0,
+      "failed": 1,
+      "failed_tests": [
+        "undeliverable_plain_parser_diagnostic_returns_io_exit_without_panic"
+      ]
+    },
+    "final_targeted": {
+      "log": "pctx01-representation-targeted-final.log",
+      "handle": 99038,
+      "exit": 0,
+      "passed": 37,
+      "failed": 0,
+      "failed_tests": []
+    },
+    "first_full_stopped_at_failure": {
+      "log": "pctx01-representation-full.log",
+      "handle": 71673,
+      "exit": 101,
+      "passed": 261,
+      "failed": 3,
+      "failed_tests": [
+        "query_program_resolution_uses_captured_command_path",
+        "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget",
+        "simultaneous_streams_are_collected_and_overflow_never_infers_success"
+      ]
+    },
+    "all_targets_full": {
+      "log": "pctx01-representation-full-all-targets.log",
+      "handle": 38079,
+      "exit": 101,
+      "passed": 453,
+      "failed": 2,
+      "failed_tests": [
+        "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget",
+        "simultaneous_streams_are_collected_and_overflow_never_infers_success"
+      ]
+    },
+    "format": {
+      "exit": 0,
+      "log": "pctx01-representation-format.log"
+    },
+    "locked_all_target_clippy": {
+      "handle": 28558,
+      "exit": 0,
+      "log": "pctx01-representation-clippy.log"
+    }
+  },
+  "evidence_scope": [
+    "Eleven syntactically valid unsupported Markdown commands, with and without an absolute response path, require one JSON INVALID_ARGUMENT2/no project-data-output effects. Includes board watch/activity follow and run argv, but no child is intentionally launched.",
+    "Initial relative response-path attempt returned7; absolute-path repair of the diagnostic fixture proves actual rejected.json creation on init. Both failure logs retained.",
+    "Removing only common preflight produces actual0PASS1FAIL; driver restores src/main.rs byte-exactly.",
+    "Actual Unix closed-stderr plain parser returns101 before repair,7 after; normal delivered diagnostic stays2/emptystdout/no effects.",
+    "Existing allowed Markdown read/build and render/control/budget tests remain in related37PASS. This is not a complete frontend or platform matrix.",
+    "First full command stopped at project_deadline with261PASS3FAIL; a separate no-fail-fast full gate executes later targets. Neither result supersedes historical failures as a retry success."
+  ],
+  "independent_review": {
+    "agent": "requirements",
+    "result": "No scoped blocker; capacity/early-help/version/allowed formats and execute defense preserved. Native Unix pipe proof does not qualify Windows."
+  },
+  "remaining": [
+    "Retained original native startup failures with unchanged1s budgets.",
+    "Singular global-option duplicate/placement/version matrix and remaining representation/envelope/error/exit/phase-race gates.",
+    "Native Linux/Windows execution; no Actions dispatched."
+  ],
+  "artifact_sha256": {
+    "pctx01-markdown-initial.log": "48d61b28b5d0a29538e5eab92a72bd97bbcd1d732ab98d8dc2b3707ed875122a",
+    "pctx01-representation-full.log": "6fa9bb80322f0cd5f120d2a35374cb2bb4617af2e1621efae15027f9d050518f",
+    "pctx01-markdown-targeted.log": "2fe7ed247bd0e54e8bb006ea23e0ec6da1e6e074a1a2988c608c49c5b2c26929",
+    "pctx01-representation-admission-verification.json": "5b3d1d303a369e1e90c510ff2892d916ddcfe31fb55266e9859ebe46b7da9804",
+    "pctx01-representation-format.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "pctx01-representation-full-all-targets.log": "80f3a514258d65165701391aa78d7463e9d2a7751f85aa658211bf86c1be440d",
+    "pctx01-markdown-loss-driver.log": "0d78a47980b2e974713b796d0584daa68b620935f5975c1f4d7c5609bb543d01",
+    "pctx01-markdown-loss-driver.py.txt": "32fbbe5d118343398f4da38178a6dd1820f7979ff7810621cee8efb4c75db3bf",
+    "pctx01-markdown-loss.log": "09fe839317aa4d9990bc18c0efd0997a11729f7f20cda861193ad261a551c973",
+    "pctx01-representation-targeted-final.log": "39a94e8ca8dae151f81629e3a942c742a9bd573e92e561f9c1ac8ce0984cc663",
+    "pctx01-representation-clippy.log": "6934b2786c6fc47ed726fc6809727da143d55a85054d3cbb6eb23c39762be711",
+    "pctx01-plain-stderr-initial.log": "d65bbfd7913c5f4d7fb5f9b8682325c1c2a9c5ff321a9610732aba6fa092a336",
+    "pctx01-markdown-initial-absolute.log": "fd49e0689b002db06ad5069b402a11f3eea9e85a217b2c1f70a58b1f37e79be1"
+  }
+}
