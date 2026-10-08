@@ -1,0 +1,19 @@
+from pathlib import Path
+import os, subprocess, json, hashlib
+root=Path('/Users/dev/PCTX'); files={root/'src/main.rs':(root/'src/main.rs').read_bytes(),root/'src/extract.rs':(root/'src/extract.rs').read_bytes()}
+main=files[root/'src/main.rs'].decode();a=main.index('    let preflight = match &cli.command {');b=main.index('    if let Err(error) = preflight {',a)
+extract=files[root/'src/extract.rs'].decode();a2=extract.index('pub fn extract(');old='    validate_request(r)?;';assert old in extract[a2:];mutatedextract=extract[:a2]+extract[a2:].replace(old,'',1)
+probes=[('cli-preflight-loss',root/'src/main.rs',main[:a]+'    let preflight = Ok::<(), Error>(());\n'+main[b:],'argument_preflight_cli','malformed_read_build_extract_and_graph_inputs_refuse_before_discovery'),('producer-preflight-loss',root/'src/extract.rs',mutatedextract,'argument_preflight','extract_static_location_errors_leave_dirty_index_and_sources_untouched')]
+env=os.environ.copy();env.update(RUSTUP_HOME='/Users/dev/PCTX/.toolchain/rustup',CARGO_HOME='/Users/dev/PCTX/.toolchain/cargo',SDKROOT='/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk',PATH='/Users/dev/PCTX/.toolchain/cargo/bin:/Library/Developer/CommandLineTools/usr/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin')
+results=[]
+try:
+ for name,path,source,target,test in probes:
+  path.write_text(source)
+  with open('/tmp/pctx-argument-mutation-final-'+name+'.log','w') as log:
+   r=subprocess.run(['cargo','test','--locked','--test',target,test,'--','--exact','--test-threads=1'],cwd=root,env=env,stdout=log,stderr=subprocess.STDOUT,timeout=120)
+  output=Path('/tmp/pctx-argument-mutation-final-'+name+'.log').read_text();results.append(dict(probe=name,exit=r.returncode,expected_failure=r.returncode==101 and '0 passed; 1 failed' in output))
+  path.write_bytes(files[path])
+finally:
+ for path,source in files.items():path.write_bytes(source)
+ Path('/tmp/pctx-argument-mutation-final-results.json').write_text(json.dumps({'probes':results,'restored_sha256':{str(p.relative_to(root)):hashlib.sha256(p.read_bytes()).hexdigest() for p in files}},indent=2))
+print(json.dumps(results));assert len(results)==2 and all(r['expected_failure'] for r in results)

@@ -1,0 +1,129 @@
+{
+  "official_task": "PCTX01",
+  "status": "implementing_not_complete",
+  "base_commit": "5809590fad96fc4176b7573fe5bc5aafa11e579e",
+  "platform": "native macOS arm64",
+  "spec_sha256": "8914faad57432f524aec0a06aa90c43c18c23f8c19e9f54fe69d9ad185db6523",
+  "source_sha256": {
+    "src/main.rs": "44ff89425b843fb71f4b2c862fce40fb070e730ee65f71bdca4bfefd691b5a8d",
+    "src/reader.rs": "8770ea1bf18a7439d0869d0d366cb3833b37ef1c8fb72c3ced6dba58cffe2281",
+    "src/search.rs": "15483186930d9c818e56ea96b15585e7912af4cb759850b7d1c766d86a1588a8",
+    "src/extract.rs": "76e36421efa026822cd551a3c5cd51d8c58c1263c966b92dcc5a15ec269b4f4b",
+    "src/context.rs": "faa1b3c76ffc53e7240a809ae226d229252ec056d0b985b4adecd62df6a4dcb9",
+    "src/graph.rs": "54da586daa91a3c7f2e97534fa68824ff0e0d796dd69054be27960799d94e2c7",
+    "src/cli_help.rs": "095b0bf2db760862006aed008f94b53c1893295f33d01a99cdd5b560d71821e7",
+    "tests/argument_preflight.rs": "70105d20a00fbeeeff366361fc4f40366c6169163ebf6e2fc9bf439ed8089dae",
+    "tests/argument_preflight_cli.rs": "47df98f4c08a79cc00577d09684bd00de72d683d85a3ba1a09e2f6de28120927"
+  },
+  "verification": {
+    "initial_targeted": {
+      "handle": 48631,
+      "exit": 0,
+      "passed": 58,
+      "failed": 0,
+      "failed_tests": [],
+      "log": "pctx-argument-targeted.log"
+    },
+    "initial_full": {
+      "handle": 65959,
+      "exit": 101,
+      "passed": 438,
+      "failed": 6,
+      "failed_tests": [
+        "every_stdout_budget_route_rejects_tiny_capacity_without_child_or_local_files",
+        "invalid_capacity_is_json_even_for_markdown_and_never_writes_output",
+        "minimum_error_budget_boundary_is_argument_validation_before_project_access",
+        "tiny_budgets_preserve_index_lease_checks_and_context_receipt_ledgers",
+        "valid_minimum_capacity_with_oversize_mandatory_rule_keeps_budget_exit_eight",
+        "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget"
+      ],
+      "log": "pctx-argument-full.log"
+    },
+    "final_targeted": {
+      "handle": 30496,
+      "exit": 0,
+      "passed": 72,
+      "failed": 0,
+      "failed_tests": [],
+      "log": "pctx-argument-targeted-final.log"
+    },
+    "format": {
+      "exit": 0,
+      "log": "pctx-argument-format-final.log"
+    },
+    "clippy": {
+      "handle": 83988,
+      "exit": 0,
+      "log": "pctx-argument-clippy-final.log"
+    },
+    "initial_mutations": {
+      "handle": 43523,
+      "exit": 0,
+      "probes": [
+        {
+          "probe": "cli-preflight-loss",
+          "exit": 101,
+          "expected_failure": true
+        },
+        {
+          "probe": "producer-preflight-loss",
+          "exit": 101,
+          "expected_failure": true
+        }
+      ],
+      "restored_sha256": {
+        "src/main.rs": "371b73dd8a2c6cc88d68c00bcb9398c81a138ef46e4ee60eed7560c936d9089d",
+        "src/extract.rs": "76e36421efa026822cd551a3c5cd51d8c58c1263c966b92dcc5a15ec269b4f4b"
+      }
+    },
+    "final_mutations": {
+      "handle": 71358,
+      "exit": 0,
+      "probes": [
+        {
+          "probe": "cli-preflight-loss",
+          "exit": 101,
+          "expected_failure": true
+        },
+        {
+          "probe": "producer-preflight-loss",
+          "exit": 101,
+          "expected_failure": true
+        }
+      ],
+      "restored_sha256": {
+        "src/main.rs": "44ff89425b843fb71f4b2c862fce40fb070e730ee65f71bdca4bfefd691b5a8d",
+        "src/extract.rs": "76e36421efa026822cd551a3c5cd51d8c58c1263c966b92dcc5a15ec269b4f4b"
+      }
+    },
+    "full": {
+      "handle": 5705,
+      "exit": 101,
+      "passed": 443,
+      "failed": 1,
+      "failed_tests": [
+        "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget"
+      ],
+      "log": "pctx-argument-full-final.log",
+      "original_one_second_budgets_unchanged": true
+    },
+    "independent_review": "requirements agent read-only review of shared preflight, producer compatibility and finite-route routing; no blocker, no tests/builds/edits"
+  },
+  "contracts": [
+    "Pure shared producer grammar before discovery, input, refresh or response-file writes for Read/Outline/Extract/Build/Graph.",
+    "Twenty-three actual CLI invalid cases on absent and dirty indexed projects preserve every file byte and directory, return exact errors and null project/workspace/data without response output.",
+    "Direct Extract malformed locations on a genuinely dirty index do not refresh it. Build malformed depth with stdin task refuses without reading. Graph bounds refuse before snapshot authority.",
+    "Preserve rightmost-colon mixed Extract locations and from-output-only requests, handoff-only Build, graph existing bounds, Outline depth semantics and Read positive aliases/symbol names/end clamping.",
+    "Existing capacity guard precedes semantic preflight: CLI below minimal error envelope returns INVALID_ARGUMENT2; direct producer and oversize mandatory content retains BUDGET_TOO_SMALL8.",
+    "Initial full exposed five new budget precedence regressions and one original startup failure; source ordering repaired, original tests and request budgets unchanged.",
+    "Both final controlled guard losses run actual tests and fail0PASS1FAIL/test101; exact original source hashes restored before static/full validation."
+  ],
+  "limits": [
+    "PCTX01 incomplete; no next official task.",
+    "Full argument/representation/error/exit matrix remains open; preflight always emits JSON even for requested Markdown and does not yet use the normal renderer.",
+    "Missing symbols/artifact-derived locations/actual source upper lines/exclusions/permissions remain dynamic producer checks; pure grammar does not establish source authority.",
+    "Finite-leaf routing audit found no clear omission; it is not downstream phase-race or complete default-budget proof.",
+    "Original native process startup failure unresolved; retain all failures and one-second budgets without retry promotion.",
+    "Native Linux/Windows execution still required; no new Actions/OS registration/scripts/provider operations."
+  ]
+}

@@ -943,6 +943,54 @@ pub fn find(p: &Project, files: &[FileEntry], req: &FindRequest) -> Result<Value
     }))
 }
 
+/// Pure input grammar; freshness/source bounds still belong to their producers.
+pub fn validate_outline_request(path: &str, freshness: &str) -> Result<()> {
+    validate_query_scopes(&[path.to_owned()])?;
+    if !["off", "matched", "strict"].contains(&freshness) {
+        return Err(invalid("Unknown outline freshness mode"));
+    }
+    Ok(())
+}
+fn line_range(range: &str) -> Result<(usize, usize)> {
+    let (a, b) = range
+        .split_once(':')
+        .ok_or_else(|| invalid("Lines must be A:B"))?;
+    let a = a
+        .parse::<usize>()
+        .map_err(|_| invalid("Invalid first line"))?;
+    let b = b
+        .parse::<usize>()
+        .map_err(|_| invalid("Invalid last line"))?;
+    if a == 0 || b < a {
+        return Err(invalid("Invalid line range"));
+    }
+    Ok((a, b))
+}
+pub fn validate_read_request(
+    path: Option<&str>,
+    lines: Option<&str>,
+    symbol: Option<&str>,
+    symbol_name: Option<&str>,
+) -> Result<()> {
+    if symbol.is_some() && symbol_name.is_some()
+        || lines.is_some() && (symbol.is_some() || symbol_name.is_some())
+    {
+        return Err(invalid("Choose lines, symbol ID, or symbol name"));
+    }
+    if symbol_name.is_some() && path.is_none() {
+        return Err(invalid("Symbol name lookup requires --path"));
+    }
+    if path.is_none() && symbol.is_none() {
+        return Err(invalid("Provide a path or symbol ID"));
+    }
+    if let Some(path) = path {
+        reader::validate_relative_path(path)?;
+    }
+    if let Some(lines) = lines {
+        line_range(lines)?;
+    }
+    Ok(())
+}
 pub fn outline(
     p: &Project,
     files: &[FileEntry],
@@ -950,6 +998,7 @@ pub fn outline(
     depth: Option<usize>,
     freshness: &str,
 ) -> Result<Value> {
+    validate_outline_request(path, freshness)?;
     let bounded = query_project(p)?;
     let p = &bounded;
     reader::validate_policy(p)?;
@@ -1012,15 +1061,11 @@ pub fn read_selection(
     symbol: Option<&str>,
     symbol_name: Option<&str>,
 ) -> Result<Value> {
+    validate_read_request(path, lines, symbol, symbol_name)?;
     let bounded = query_project(p)?;
     let p = &bounded;
     reader::validate_policy(p)?;
     reader::validate_root(p)?;
-    if symbol.is_some() && symbol_name.is_some()
-        || lines.is_some() && (symbol.is_some() || symbol_name.is_some())
-    {
-        return Err(invalid("Choose lines, symbol ID, or symbol name"));
-    }
     let selected = if symbol.is_some() || symbol_name.is_some() {
         let mut candidates = Vec::new();
         for f in files {
@@ -1045,9 +1090,6 @@ pub fn read_selection(
                     candidates.push(s);
                 }
             }
-        }
-        if symbol_name.is_some() && path.is_none() {
-            return Err(invalid("Symbol name lookup requires --path"));
         }
         if candidates.len() > 1 {
             return Err(Error::new(
@@ -1090,19 +1132,11 @@ pub fn read_selection(
         (s.start_line, s.end_line, s.start_byte, s.end_byte)
     } else {
         let (a, b) = if let Some(range) = lines {
-            let (a, b) = range
-                .split_once(':')
-                .ok_or_else(|| invalid("Lines must be A:B"))?;
-            (
-                a.parse::<usize>()
-                    .map_err(|_| invalid("Invalid first line"))?,
-                b.parse::<usize>()
-                    .map_err(|_| invalid("Invalid last line"))?,
-            )
+            line_range(range)?
         } else {
             (1, 80.min(total.max(1)))
         };
-        if a == 0 || b < a || a > total.max(1) {
+        if a > total.max(1) {
             return Err(invalid("Invalid line range"));
         }
         let mut offsets: Vec<_> = f.text.match_indices('\n').map(|(i, _)| i + 1).collect();

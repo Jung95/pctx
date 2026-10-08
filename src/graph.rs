@@ -66,6 +66,35 @@ struct Config {
 fn invalid(s: &str) -> Error {
     Error::new("INVALID_ARGUMENT", s, 2)
 }
+fn validate_bounds(direction: &str, depth: usize, max_nodes: usize) -> Result<()> {
+    if !["incoming", "outgoing"].contains(&direction) {
+        return Err(invalid("Direction must be incoming or outgoing"));
+    }
+    if depth > 32 || max_nodes == 0 || max_nodes > 1000 {
+        return Err(invalid("Graph bounds: depth <=32, max_nodes 1..1000"));
+    }
+    Ok(())
+}
+/// Pure existing graph grammar, before filesystem authorization or index access.
+pub fn validate_request(command: &GraphCommand) -> Result<()> {
+    let path = match command {
+        GraphCommand::Trace {
+            path,
+            direction,
+            depth,
+        } => {
+            validate_bounds(direction, *depth, 1000)?;
+            path
+        }
+        GraphCommand::Impact { path, depth } => {
+            validate_bounds("incoming", *depth, 1000)?;
+            path
+        }
+        GraphCommand::Refs { path } => path,
+    };
+    reader::validate_relative_path(path)
+}
+
 fn directory(path: &str) -> String {
     path.rsplit_once('/')
         .map(|(d, _)| d.into())
@@ -576,13 +605,8 @@ fn traverse(
     depth: usize,
     max_nodes: usize,
 ) -> Result<Value> {
+    validate_bounds(direction, depth, max_nodes)?;
     reader::authorize(p, path)?;
-    if !["incoming", "outgoing"].contains(&direction) {
-        return Err(invalid("Direction must be incoming or outgoing"));
-    }
-    if depth > 32 || max_nodes == 0 || max_nodes > 1000 {
-        return Err(invalid("Graph bounds: depth <=32, max_nodes 1..1000"));
-    }
     let g = graph(p)?;
     let mut visited = BTreeSet::from([path.to_owned()]);
     let mut queue = VecDeque::from([(path.to_owned(), 0usize)]);
@@ -654,10 +678,13 @@ fn query_project(p: &Project) -> Result<Project> {
     Ok(p)
 }
 pub fn dependencies(p: &Project, path: &str, depth: usize, max_nodes: usize) -> Result<Value> {
+    validate_bounds("outgoing", depth, max_nodes)?;
+    reader::validate_relative_path(path)?;
     let p = query_project(p)?;
     traverse(&p, path, "outgoing", depth, max_nodes)
 }
 pub fn execute(p: &Project, c: &GraphCommand) -> Result<Value> {
+    validate_request(c)?;
     let scoped = query_project(p)?;
     let p = &scoped;
     let result = match c {

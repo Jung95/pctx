@@ -142,7 +142,7 @@ fn effect(path: &str) -> Option<&'static str> {
         }
         "schedule plan" => "read: proposal/fingerprints; no saved plan or native registration",
         "schedule inspect" => {
-            "read: managed state; --observe-native executes native status query and writes capture"
+            "read: managed state; --observe-native executes a finite native status query"
         }
         "schedule install" | "schedule uninstall" => {
             "write: managed state; --apply-native executes OS registration/removal"

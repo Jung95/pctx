@@ -25,13 +25,26 @@ pub struct ExtractRequest {
     #[arg(long, default_value_t = 10000)]
     pub budget_bytes: usize,
 }
-pub fn extract(p: &Project, r: &ExtractRequest) -> Result<Value> {
-    let mut scoped = p.clone();
-    if scoped.deadline.is_none() {
-        scoped.deadline = Some(Deadline::from_millis(10_000)?);
+fn location(value: &str) -> Result<(String, usize)> {
+    let (path, line) = value
+        .rsplit_once(':')
+        .ok_or_else(|| Error::new("INVALID_ARGUMENT", "Location requires path:line", 2))?;
+    let line = line
+        .parse::<usize>()
+        .map_err(|_| Error::new("INVALID_ARGUMENT", "Invalid location line", 2))?;
+    if line == 0 {
+        return Err(Error::new(
+            "INVALID_ARGUMENT",
+            "Location is outside source lines",
+            2,
+        ));
     }
-    let p = &scoped;
-    p.check_deadline()?;
+    reader::validate_relative_path(path)?;
+    Ok((path.to_owned(), line))
+}
+/// Pure argument checks shared by CLI preflight and the source producer.
+/// Artifact-derived locations and source-relative upper line bounds remain dynamic.
+pub fn validate_request(r: &ExtractRequest) -> Result<()> {
     if r.budget_bytes < 512 {
         return Err(Error::new(
             "BUDGET_TOO_SMALL",
@@ -39,6 +52,56 @@ pub fn extract(p: &Project, r: &ExtractRequest) -> Result<Value> {
             8,
         ));
     }
+    if !["enclosing", "lines"].contains(&r.unit.as_str()) {
+        return Err(Error::new("INVALID_ARGUMENT", "Unknown extract unit", 2));
+    }
+    if !["full_span", "signature", "reference"].contains(&r.view.as_str()) {
+        return Err(Error::new("INVALID_ARGUMENT", "Unknown extract view", 2));
+    }
+    for value in &r.location {
+        location(value)?;
+    }
+    match (&r.path, r.line) {
+        (Some(path), Some(line)) => {
+            reader::validate_relative_path(path)?;
+            if line == 0 {
+                return Err(Error::new(
+                    "INVALID_ARGUMENT",
+                    "Location is outside source lines",
+                    2,
+                ));
+            }
+        }
+        (None, None) => {}
+        _ => {
+            return Err(Error::new(
+                "INVALID_ARGUMENT",
+                "--path and --line must be used together",
+                2,
+            ));
+        }
+    }
+    if r.from_output.is_none()
+        && r.location.is_empty()
+        && r.path.is_none()
+        && r.symbol_id.is_empty()
+    {
+        return Err(Error::new(
+            "INVALID_ARGUMENT",
+            "Provide a location or symbol ID",
+            2,
+        ));
+    }
+    Ok(())
+}
+pub fn extract(p: &Project, r: &ExtractRequest) -> Result<Value> {
+    validate_request(r)?;
+    let mut scoped = p.clone();
+    if scoped.deadline.is_none() {
+        scoped.deadline = Some(Deadline::from_millis(10_000)?);
+    }
+    let p = &scoped;
+    p.check_deadline()?;
     storage::update(p)?;
     let (_, files) = storage::snapshot(p)?;
     let mut locations = Vec::new();
@@ -57,22 +120,10 @@ pub fn extract(p: &Project, r: &ExtractRequest) -> Result<Value> {
     };
     for value in &r.location {
         p.check_deadline()?;
-        let (path, line) = value
-            .rsplit_once(':')
-            .ok_or_else(|| Error::new("INVALID_ARGUMENT", "Location requires path:line", 2))?;
-        let line = line
-            .parse::<usize>()
-            .map_err(|_| Error::new("INVALID_ARGUMENT", "Invalid location line", 2))?;
-        locations.push((path.to_owned(), line));
+        locations.push(location(value)?);
     }
     if let (Some(path), Some(line)) = (&r.path, r.line) {
         locations.push((path.clone(), line));
-    } else if r.path.is_some() || r.line.is_some() {
-        return Err(Error::new(
-            "INVALID_ARGUMENT",
-            "--path and --line must be used together",
-            2,
-        ));
     }
     for key in &r.symbol_id {
         p.check_deadline()?;

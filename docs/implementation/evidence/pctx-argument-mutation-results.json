@@ -1,0 +1,18 @@
+{
+  "probes": [
+    {
+      "probe": "cli-preflight-loss",
+      "exit": 101,
+      "expected_failure": true
+    },
+    {
+      "probe": "producer-preflight-loss",
+      "exit": 101,
+      "expected_failure": true
+    }
+  ],
+  "restored_sha256": {
+    "src/main.rs": "371b73dd8a2c6cc88d68c00bcb9398c81a138ef46e4ee60eed7560c936d9089d",
+    "src/extract.rs": "76e36421efa026822cd551a3c5cd51d8c58c1263c966b92dcc5a15ec269b4f4b"
+  }
+}

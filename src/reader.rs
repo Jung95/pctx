@@ -90,8 +90,8 @@ fn checked_fs<T>(p: &Project, operation: impl FnOnce() -> std::io::Result<T>) ->
     p.check_deadline()?;
     Ok(result?)
 }
-pub fn policy_allows(p: &Project, path: &str) -> Result<()> {
-    p.check_deadline()?;
+/// Pure lexical admission shared by CLI preflight and the policy reader.
+pub fn validate_relative_path(path: &str) -> Result<()> {
     let rel = Path::new(path);
     if path.is_empty()
         || path.contains('\\')
@@ -100,6 +100,12 @@ pub fn policy_allows(p: &Project, path: &str) -> Result<()> {
     {
         return Err(Error::new("PATH_OUTSIDE_ROOT", "Invalid relative path", 5));
     }
+    Ok(())
+}
+pub fn policy_allows(p: &Project, path: &str) -> Result<()> {
+    p.check_deadline()?;
+    validate_relative_path(path)?;
+    let rel = Path::new(path);
     if rel.components().any(|c| c.as_os_str() == ".git")
         || security_globs(&p.config.policy.exclude)?.is_match(path)
     {

@@ -153,6 +153,7 @@ enum Command {
     },
     /// Read current lines or a hash-verified symbol (read).
     Read {
+        #[arg(conflicts_with = "named_path")]
         path: Option<String>,
         #[arg(long)]
         lines: Option<String>,
@@ -160,7 +161,7 @@ enum Command {
         symbol: Option<String>,
         #[arg(long)]
         symbol_name: Option<String>,
-        #[arg(long = "path")]
+        #[arg(long = "path", conflicts_with = "path")]
         named_path: Option<String>,
         #[arg(long)]
         require_complete: bool,
@@ -815,28 +816,6 @@ fn main() {
             e.exit()
         }
     };
-    // Pure argument checks precede project discovery, refresh and output paths.
-    let preflight = match &cli.command {
-        Command::Find(request) => search::validate_find_request(request),
-        Command::Query(request) => search::validate_structure_request(request),
-        Command::Inventory {
-            command:
-                inventory::InventoryCommand::Scan {
-                    max_files,
-                    max_bytes,
-                    ..
-                },
-        } => inventory::validate_limits(*max_files, *max_bytes),
-        _ => Ok(()),
-    };
-    if let Err(error) = preflight {
-        let exit = error.exit;
-        let mut response = domain::envelope(cli.command.name(), None, Value::Null);
-        response["status"] = json!("error");
-        response["errors"] = json!([error]);
-        println!("{}", response);
-        std::process::exit(exit);
-    }
     if let Some(limit) = output_budget(&cli.command) {
         match minimum_error_budget(cli.command.name()) {
             Ok(minimum) if limit < minimum => {
@@ -858,6 +837,47 @@ fn main() {
             }
             _ => {}
         }
+    }
+    // Pure argument checks precede project discovery, refresh and output paths.
+    let preflight = match &cli.command {
+        Command::Find(request) => search::validate_find_request(request),
+        Command::Query(request) => search::validate_structure_request(request),
+        Command::Read {
+            path,
+            named_path,
+            lines,
+            symbol,
+            symbol_name,
+            ..
+        } => search::validate_read_request(
+            path.as_deref().or(named_path.as_deref()),
+            lines.as_deref(),
+            symbol.as_deref(),
+            symbol_name.as_deref(),
+        ),
+        Command::Outline {
+            path, freshness, ..
+        } => search::validate_outline_request(path, freshness),
+        Command::Extract(request) => extract::validate_request(request),
+        Command::Build(request) => context::validate_build_request(request),
+        Command::Graph(request) => graph::validate_request(request),
+        Command::Inventory {
+            command:
+                inventory::InventoryCommand::Scan {
+                    max_files,
+                    max_bytes,
+                    ..
+                },
+        } => inventory::validate_limits(*max_files, *max_bytes),
+        _ => Ok(()),
+    };
+    if let Err(error) = preflight {
+        let exit = error.exit;
+        let mut response = domain::envelope(cli.command.name(), None, Value::Null);
+        response["status"] = json!("error");
+        response["errors"] = json!([error]);
+        println!("{}", response);
+        std::process::exit(exit);
     }
     let follows = matches!(
         &cli.command,

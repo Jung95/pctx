@@ -40,6 +40,58 @@ pub struct BuildRequest {
     #[arg(long)]
     pub require_complete: bool,
 }
+/// Source-independent build contract; no input reads, project discovery or receipts.
+pub fn validate_build_request(r: &BuildRequest) -> Result<()> {
+    if r.budget_tokens.is_some() || r.tokenizer.is_some() {
+        return Err(Error::new(
+            "CAPABILITY_UNAVAILABLE",
+            "No tokenizer is registered; use an explicit byte budget",
+            6,
+        ));
+    }
+    if r.budget_bytes < 512 {
+        return Err(Error::new(
+            "BUDGET_TOO_SMALL",
+            "Budget cannot hold the minimum envelope",
+            8,
+        ));
+    }
+    if r.dependency_depth > 2 {
+        return Err(Error::new(
+            "INVALID_ARGUMENT",
+            "Dependency depth is limited to 2",
+            2,
+        ));
+    }
+    if !["adaptive", "full_span", "signature", "outline", "reference"].contains(&r.detail.as_str())
+    {
+        return Err(Error::new(
+            "INVALID_ARGUMENT",
+            "Unknown detail representation",
+            2,
+        ));
+    }
+    if [r.task.is_some(), r.task_file.is_some(), r.task_id.is_some()]
+        .into_iter()
+        .filter(|selected| *selected)
+        .count()
+        > 1
+    {
+        return Err(Error::new(
+            "INVALID_ARGUMENT",
+            "--task, --task-file and --task-id are mutually exclusive",
+            2,
+        ));
+    }
+    if r.task.is_none() && r.task_file.is_none() && r.task_id.is_none() && r.handoff.is_none() {
+        return Err(Error::new(
+            "INVALID_ARGUMENT",
+            "Provide --task, --task-file, --task-id or --handoff",
+            2,
+        ));
+    }
+    Ok(())
+}
 pub fn build(p: &Project, r: &BuildRequest) -> Result<Value> {
     build_with_format(p, r, crate::render::Format::Json)
 }
@@ -48,6 +100,7 @@ pub fn build_with_format(
     r: &BuildRequest,
     format: crate::render::Format,
 ) -> Result<Value> {
+    validate_build_request(r)?;
     let mut envelope = crate::domain::envelope("build", Some(p), Value::Null);
     envelope["validation"]["checked_at"] = json!("2000-01-01T00:00:00.000Z");
     envelope["validation"]["mode"] = json!("strict");
@@ -78,6 +131,7 @@ pub(crate) fn select_scoped_with_measurement(
     scope: Option<&[String]>,
     mut measure: impl FnMut(&Value) -> Result<usize>,
 ) -> Result<Value> {
+    validate_build_request(r)?;
     let mut scoped;
     let p = if p.deadline.is_none() {
         scoped = p.clone();
@@ -87,35 +141,6 @@ pub(crate) fn select_scoped_with_measurement(
         p
     };
     p.check_deadline()?;
-    if r.budget_tokens.is_some() || r.tokenizer.is_some() {
-        return Err(Error::new(
-            "CAPABILITY_UNAVAILABLE",
-            "No tokenizer is registered; use an explicit byte budget",
-            6,
-        ));
-    }
-    if r.budget_bytes < 512 {
-        return Err(Error::new(
-            "BUDGET_TOO_SMALL",
-            "Budget cannot hold the minimum envelope",
-            8,
-        ));
-    }
-    if r.dependency_depth > 2 {
-        return Err(Error::new(
-            "INVALID_ARGUMENT",
-            "Dependency depth is limited to 2",
-            2,
-        ));
-    }
-    if !["adaptive", "full_span", "signature", "outline", "reference"].contains(&r.detail.as_str())
-    {
-        return Err(Error::new(
-            "INVALID_ARGUMENT",
-            "Unknown detail representation",
-            2,
-        ));
-    }
     let (delivery_role, delivery_barrier) =
         crate::session::delivery_binding(p, r.session.as_deref(), r.topic.as_deref(), &r.role)?;
     let source_policy = crate::source_delivery::SourcePolicy::new(
