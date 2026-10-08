@@ -1,0 +1,41 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.05s
+     Running tests/context_adaptive.rs (target/debug/deps/context_adaptive-70b876c348e77459)
+
+running 7 tests
+test adaptive_budget_uses_intermediate_tiers_and_accounts_final_overhead_deterministically ... ok
+test excerpts_preserve_exact_original_ranges_and_unsupported_signature_is_explicit ... ok
+test explicit_seed_survives_lower_priority_imports_under_tight_budget ... ok
+test final_escaped_document_budget_and_unsupported_tokenizer_remain_truthful ... ok
+test final_omissions_fit_without_cutting_mandatory_task_rules_or_decisions ... ok
+test markdown_final_document_uses_the_same_exact_accounting ... ok
+test multiline_signatures_have_verified_utf8_crlf_ranges_and_distinct_outlines ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.47s
+
+     Running tests/context_delivery_selection.rs (target/debug/deps/context_delivery_selection-2d942bfc32429490)
+
+running 3 tests
+test consumer_envelope_and_escaped_overhead_drive_tiers_and_exact_capacity ... FAILED
+test consumer_failure_and_original_deadline_cannot_publish_a_selection ... ok
+test consumer_overhead_cannot_remove_mandatory_rules_or_fake_a_fitting_packet ... ok
+
+failures:
+
+---- consumer_envelope_and_escaped_overhead_drive_tiers_and_exact_capacity stdout ----
+
+thread 'consumer_envelope_and_escaped_overhead_drive_tiers_and_exact_capacity' (7475066) panicked at tests/context_delivery_selection.rs:107:5:
+assertion failed: first["items"].as_array().unwrap().iter().any(|v|
+        {
+            v["required"] == true &&
+                v["content"].as_str().unwrap().contains("Never infer approval")
+        })
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    consumer_envelope_and_escaped_overhead_drive_tiers_and_exact_capacity
+
+test result: FAILED. 2 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.11s
+
+error: test failed, to rerun pass `--test context_delivery_selection`

@@ -1,0 +1,26 @@
+{
+  "base_revision": "98518770337db539faa9dc7fed921f9302947dbc",
+  "platform": "native macOS arm64",
+  "source_sha256": {
+    "src/context.rs": "97fe3030b0b7a192a07994eef948e5b34dda731accb46bfc775f23342fc60ba9",
+    "tests/context_delivery_selection.rs": "ce5cf52504f4ee86f05d3fd828d433300605a92dfb7243bc9dc1770fbd415a5c"
+  },
+  "gates": {
+    "69770": {
+      "exit": 0,
+      "targeted_passed": 20,
+      "clippy": "all-targets locked warnings denied"
+    },
+    "85265": {
+      "exit": 0,
+      "full_passed": 305
+    }
+  },
+  "initial_failure": "required-rule fixture lacked explicit frontmatter; fixture corrected, production behavior preserved",
+  "ci_dispatched": false,
+  "remaining": [
+    "ContextGet not connected to shared selector",
+    "full/delta baseline-aware capacity and scope integration",
+    "full Windows and Linux qualification"
+  ]
+}

@@ -44,6 +44,26 @@ pub fn build_with_format(
     r: &BuildRequest,
     format: crate::render::Format,
 ) -> Result<Value> {
+    let mut envelope = crate::domain::envelope("build", Some(p), Value::Null);
+    envelope["validation"]["checked_at"] = json!("2000-01-01T00:00:00.000Z");
+    envelope["validation"]["mode"] = json!("strict");
+    select_with_measurement(p, r, format, |data| {
+        envelope["data"] = data.clone();
+        Ok(crate::render::render(&envelope, format)?.len())
+    })
+}
+
+/// Shared adaptive selection for an application delivery envelope. The consumer
+/// measures its complete escaped output, including its envelope and newline.
+/// The measurement may run repeatedly as optional representations are lowered;
+/// it must not publish receipts, acknowledge content or execute external work.
+/// Selection still owns policy, source validation and the original deadline.
+pub fn select_with_measurement(
+    p: &Project,
+    r: &BuildRequest,
+    format: crate::render::Format,
+    mut measure: impl FnMut(&Value) -> Result<usize>,
+) -> Result<Value> {
     let mut scoped;
     let p = if p.deadline.is_none() {
         scoped = p.clone();
@@ -298,7 +318,7 @@ pub fn build_with_format(
         &mut alternatives,
         &mut omitted,
         r.budget_bytes,
-        format,
+        &mut measure,
     )?;
     if r.require_complete && !omitted.is_empty() {
         return Err(Error::new(
@@ -460,13 +480,8 @@ fn finalize(
     alternatives: &mut Vec<Vec<Value>>,
     omitted: &mut Vec<Value>,
     limit: usize,
-    format: crate::render::Format,
+    measure: &mut impl FnMut(&Value) -> Result<usize>,
 ) -> Result<()> {
-    // Freeze volatile envelope fields for all passes; parent final rendering owns
-    // final envelope emission. Parent uses the same fixed-width timestamp format.
-    let mut envelope = crate::domain::envelope("build", Some(p), Value::Null);
-    envelope["validation"]["checked_at"] = json!("2000-01-01T00:00:00.000Z");
-    envelope["validation"]["mode"] = json!("strict");
     let mut omission_details = true;
     loop {
         p.check_deadline()?;
@@ -498,8 +513,9 @@ fn finalize(
         let mut stable = false;
         for _ in 0..3 {
             p.check_deadline()?;
-            envelope["data"] = data.clone();
-            let used = crate::render::render(&envelope, format)?.len();
+            let measured = measure(data);
+            p.check_deadline()?;
+            let used = measured?;
             if data["budget"]["used"].as_u64() == Some(used as u64) {
                 stable = used <= limit;
                 break;
