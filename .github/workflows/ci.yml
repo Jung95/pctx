@@ -23,9 +23,12 @@ jobs:
       - name: Native Windows containment primitives
         if: runner.os == 'Windows'
         run: cargo test --locked --test windows_process
+      - name: Native Windows keeper ownership
+        if: runner.os == 'Windows'
+        run: cargo test --locked --test windows_guardian
       - name: Native Windows reader and CLI boundaries
         if: runner.os == 'Windows'
-        run: cargo test --locked --test reader_policy_cache --test cli_contract
+        run: cargo test --locked --test atomic_publication --test reader_policy_cache --test cli_contract
       - name: Static checks
         run: cargo clippy --all-targets --locked -- -D warnings
       - name: Unit and integration tests

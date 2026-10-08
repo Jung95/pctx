@@ -434,3 +434,155 @@ fn invalid_policy_fails_even_without_metadata_candidates() {
         "INVALID_CONFIG"
     );
 }
+
+fn indexed_project() -> (tempfile::TempDir, pctx::project::Project) {
+    let temp = tempfile::tempdir().unwrap();
+    let root = temp.path().join("project");
+    std::fs::create_dir(&root).unwrap();
+    let mut p = project(&root);
+    p.data_dir = temp.path().join("data");
+    p.workspace_dir = p.data_dir.join("workspace");
+    p.control_dir = p.data_dir.join("control");
+    std::fs::create_dir_all(&p.workspace_dir).unwrap();
+    std::fs::create_dir_all(&p.control_dir).unwrap();
+    (temp, p)
+}
+
+#[test]
+fn indexed_metadata_search_hides_unopened_historical_counts_and_propagates_generation() {
+    use pctx::{search::find_indexed, storage};
+    let (_temp, mut p) = indexed_project();
+    for (path, text) in [
+        ("auth.py", "def auth():\n    pass\n"),
+        ("deleted.py", "def legacy():\n    pass\n"),
+        ("excluded.py", "def auth():\n    pass\n"),
+    ] {
+        std::fs::write(p.root.join(path), text).unwrap();
+    }
+    let update = storage::update(&p).unwrap();
+    std::fs::remove_file(p.root.join("deleted.py")).unwrap();
+    p.config.policy.exclude.push("excluded.py".into());
+    let value = find_indexed(&p, &metadata_request("symbol", "auth")).unwrap();
+    assert_eq!(value["items"].as_array().unwrap().len(), 1);
+    assert_eq!(value["items"][0]["path"], "auth.py");
+    assert_eq!(value["generation_id"], update["generation_id"]);
+    assert!(value["scanned_files"].is_null());
+    assert_eq!(value["coverage"]["physical_non_candidates_checked"], false);
+    assert_eq!(value["omitted_count"], 0);
+    let output = value.to_string();
+    assert!(!output.contains("deleted.py"));
+    assert!(!output.contains("excluded.py"));
+    for kind in ["text", "all"] {
+        let result = find_indexed(&p, &metadata_request(kind, "auth")).unwrap();
+        assert_eq!(result["items"].as_array().unwrap().len(), 1);
+        assert_eq!(result["coverage"]["physical_non_candidates_checked"], true);
+    }
+}
+
+#[cfg(unix)]
+#[test]
+fn indexed_metadata_matches_including_complements_authorize_before_limit_even_off() {
+    use pctx::{search::find_indexed, storage};
+    let (temp, p) = indexed_project();
+    for (path, text) in [
+        ("a.py", "def other():\n    pass\n"),
+        ("b.py", "def auth_helper():\n    pass\n"),
+        ("z.py", "def auth():\n    pass\n"),
+    ] {
+        std::fs::write(p.root.join(path), text).unwrap();
+    }
+    storage::update(&p).unwrap();
+    let outside = temp.path().join("outside.py");
+    std::fs::write(&outside, "def other():\n    pass\n").unwrap();
+    std::fs::remove_file(p.root.join("a.py")).unwrap();
+    std::os::unix::fs::symlink(&outside, p.root.join("a.py")).unwrap();
+    let mut req = metadata_request("symbol", "auth");
+    req.limit = 1;
+    req.freshness = "off".into();
+    req.query = None;
+    req.boolean_query = Some("auth OR NOT legacy".into());
+    let result = find_indexed(&p, &req).unwrap();
+    assert_eq!(result["items"][0]["path"], "z.py");
+    assert_eq!(result["items"][0]["freshness"], "unchecked");
+    assert_eq!(result["omitted_count"], 1);
+    assert!(!result.to_string().contains("a.py"));
+    // The second ranked candidate must still be read before limit truncation.
+    std::fs::write(p.root.join("b.py"), [0xff]).unwrap();
+    req.freshness = "matched".into();
+    assert_eq!(
+        find_indexed(&p, &req).unwrap_err().code,
+        "UNSUPPORTED_ENCODING"
+    );
+}
+
+#[test]
+fn indexed_metadata_staleness_and_body_only_discovery_keep_their_boundaries() {
+    use pctx::{domain::hash, search::find_indexed, storage};
+    let (_temp, p) = indexed_project();
+    std::fs::write(p.root.join("match.py"), "def auth():\n    pass\n").unwrap();
+    std::fs::write(p.root.join("other.py"), "def other():\n    pass\n").unwrap();
+    storage::update(&p).unwrap();
+    let new_match = "def renamed():\n    pass\n";
+    std::fs::write(p.root.join("match.py"), new_match).unwrap();
+    std::fs::write(p.root.join("other.py"), "def other():\n    return 'auth'\n").unwrap();
+    let result = find_indexed(&p, &metadata_request("symbol", "auth")).unwrap();
+    assert_eq!(result["items"].as_array().unwrap().len(), 1);
+    assert_eq!(result["items"][0]["path"], "match.py");
+    assert_eq!(result["items"][0]["freshness"], "stale");
+    assert_eq!(result["items"][0]["file_hash"], hash(new_match));
+    assert!(
+        result["items"][0]["line_numbers"]
+            .as_array()
+            .unwrap()
+            .is_empty()
+    );
+    for kind in ["text", "all"] {
+        let result = find_indexed(&p, &metadata_request(kind, "auth")).unwrap();
+        assert!(
+            result["items"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .any(|v| v["path"] == "other.py")
+        );
+    }
+}
+
+#[test]
+fn indexed_metadata_invalid_policy_and_foreign_workspace_fail_closed() {
+    use pctx::{search::find_indexed, storage};
+    let (_temp, mut p) = indexed_project();
+    std::fs::write(p.root.join("auth.py"), "def auth():\n    pass\n").unwrap();
+    storage::update(&p).unwrap();
+    p.config.policy.exclude.push("[".into());
+    assert_eq!(
+        find_indexed(&p, &metadata_request("symbol", "missing"))
+            .unwrap_err()
+            .code,
+        "INVALID_CONFIG"
+    );
+    p.config.policy.exclude.clear();
+    p.workspace_id = "foreign-workspace".into();
+    assert_eq!(
+        find_indexed(&p, &metadata_request("symbol", "auth"))
+            .unwrap_err()
+            .code,
+        "NOT_INITIALIZED"
+    );
+}
+
+#[cfg(unix)]
+#[test]
+fn indexed_metadata_empty_generation_rejects_replaced_root_before_search() {
+    use pctx::{search::find_indexed, storage};
+    let (temp, p) = indexed_project();
+    storage::update(&p).unwrap();
+    std::fs::rename(&p.root, temp.path().join("original")).unwrap();
+    std::fs::create_dir(&p.root).unwrap();
+    assert_eq!(
+        find_indexed(&p, &metadata_request("symbol", "missing"))
+            .unwrap_err()
+            .code,
+        "POLICY_DENIED"
+    );
+}

@@ -2006,6 +2006,8 @@ fn recover(
     let mut db = connect(p)?;
     let tx = db.transaction_with_behavior(TransactionBehavior::Immediate)?;
     let s = get(&tx, namespace, id)?;
+    #[cfg(not(unix))]
+    let _ = &s;
     let (state,result):(String,String)=tx.query_row("SELECT state,result FROM schedule_runs WHERE namespace=?1 AND schedule=?2 AND revision=?3 AND occurrence=?4 AND attempt=?5",params![namespace,id,revision,occurrence,attempt],|r|Ok((r.get(0)?,r.get(1)?)))?;
     let metadata: Value = serde_json::from_str(&result)?;
     if !["running", "interrupted_unknown"].contains(&state.as_str())
@@ -2036,11 +2038,11 @@ fn recover(
     #[cfg(not(unix))]
     {
         let _ = pid;
-        return Err(Error::new(
+        Err(Error::new(
             "CAPABILITY_UNVERIFIED",
             "Process absence observation is not supported on this platform",
             6,
-        ));
+        ))
     }
     #[cfg(unix)]
     {

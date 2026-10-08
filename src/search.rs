@@ -482,6 +482,31 @@ fn aliases(p: &Project, terms: &[String]) -> Result<AliasExpansion> {
     }
     Ok((map, expanded))
 }
+/// Search one pinned index generation. Strict refresh and its partial-coverage
+/// propagation remain the calling application's responsibility, as for `find`.
+/// Metadata-only kinds defer physical access checks until the exact expression
+/// selects a candidate; text/all preserve the fully authorized snapshot path.
+pub fn find_indexed(p: &Project, req: &FindRequest) -> Result<Value> {
+    let metadata_only = matches!(req.kind.as_str(), "path" | "symbol" | "document");
+    let (generation, files) = if metadata_only {
+        crate::storage::metadata_search_snapshot(p)?
+    } else {
+        crate::storage::snapshot(p)?
+    };
+    let mut value = find(p, &files, req)?;
+    reader::validate_root(p)?;
+    value["generation_id"] = json!(generation);
+    if metadata_only {
+        // Unopened noncandidates can be deleted, inaccessible or links. Their
+        // historical indexed count is not a count of authorized current files.
+        value["scanned_files"] = Value::Null;
+        value["coverage"]["physical_non_candidates_checked"] = json!(false);
+    } else {
+        value["coverage"]["physical_non_candidates_checked"] = json!(true);
+    }
+    Ok(value)
+}
+
 pub fn find(p: &Project, files: &[FileEntry], req: &FindRequest) -> Result<Value> {
     reader::validate_policy(p)?;
     reader::validate_root(p)?;

@@ -143,6 +143,16 @@ pub fn update(p: &Project) -> Result<Value> {
     )
 }
 pub fn snapshot(p: &Project) -> Result<(Option<String>, Vec<FileEntry>)> {
+    snapshot_rows(p, true)
+}
+
+/// Internal search input only: rows are current-policy eligible metadata, not
+/// physically authorized sources. Search must authorize every actual match.
+pub(crate) fn metadata_search_snapshot(p: &Project) -> Result<(Option<String>, Vec<FileEntry>)> {
+    snapshot_rows(p, false)
+}
+
+fn snapshot_rows(p: &Project, physical: bool) -> Result<(Option<String>, Vec<FileEntry>)> {
     reader::validate_policy(p)?;
     reader::validate_root(p)?;
     let _lock = reader_lock(p)?;
@@ -162,10 +172,23 @@ pub fn snapshot(p: &Project) -> Result<(Option<String>, Vec<FileEntry>)> {
     let mut entries = Vec::new();
     for row in rows {
         let f: FileEntry = serde_json::from_str(&row?)?;
-        if reader::authorize(p, &f.path).is_ok() {
-            entries.push(f);
+        let access = if physical {
+            reader::authorize(p, &f.path).map(|_| ())
+        } else {
+            reader::policy_allows(p, &f.path)
+        };
+        match access {
+            Ok(()) => entries.push(f),
+            Err(e) if matches!(e.code.as_str(), "INVALID_CONFIG" | "POLICY_UNAVAILABLE") => {
+                return Err(e);
+            }
+            Err(e)
+                if physical || matches!(e.code.as_str(), "POLICY_DENIED" | "PATH_OUTSIDE_ROOT") => {
+            }
+            Err(e) => return Err(e),
         }
     }
+    reader::validate_root(p)?;
     Ok((Some(g), entries))
 }
 pub fn gc(p: &Project, apply: bool) -> Result<Value> {

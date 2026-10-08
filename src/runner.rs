@@ -226,10 +226,12 @@ struct Job {
     created_at: i64,
     updated_at: i64,
 }
+#[cfg(unix)]
 struct AdmissionDiagnostics {
     start: std::time::Instant,
     enabled: bool,
 }
+#[cfg(unix)]
 impl AdmissionDiagnostics {
     fn new() -> Self {
         Self {
@@ -809,10 +811,10 @@ fn acknowledged_guardian(dir: &Path, job: &mut Job) -> Result<()> {
     }
     Ok(())
 }
-fn group_gone(job: &Job) -> bool {
+fn group_gone(_job: &Job) -> bool {
     #[cfg(unix)]
     {
-        if let Some(group) = job.process_group {
+        if let Some(group) = _job.process_group {
             let rc = unsafe { libc::kill(-(group as i32), 0) };
             return rc == -1 && std::io::Error::last_os_error().raw_os_error() == Some(libc::ESRCH);
         }
@@ -967,20 +969,13 @@ pub fn execute(p: &Project, command: &RunnerCommand) -> Result<Value> {
                 json!({"key":key,"fingerprint":b.fingerprint,"trusted":true,"execution_started":false,"host_permission":"separate_required"}),
             )
         }
+        #[cfg(unix)]
         RunnerCommand::CheckRun {
             task_id,
             key,
             run,
             budget_bytes,
         } => {
-            #[cfg(not(unix))]
-            {
-                return Err(error(
-                    "CAPABILITY_UNAVAILABLE",
-                    "Registered process supervision is supported only on verified Unix backend",
-                    6,
-                ));
-            }
             if *budget_bytes < 8192 {
                 return Err(error(
                     "BUDGET_TOO_SMALL",
@@ -1164,6 +1159,12 @@ pub fn execute(p: &Project, command: &RunnerCommand) -> Result<Value> {
                 json!({"job_id":job.job_id,"check_id":check_id,"execution":execution,"evidence":evidence,"memory_admission":memory,"memory_unknown_override":memory.available_bytes.is_none()&&b.profile.memory.unknown=="owner_override","resources_released":released,"resource_state":job.state,"host_permission":"separate_required"}),
             )
         }
+        #[cfg(not(unix))]
+        RunnerCommand::CheckRun { .. } => Err(error(
+            "CAPABILITY_UNAVAILABLE",
+            "Registered process supervision is supported only on verified Unix backend",
+            6,
+        )),
         RunnerCommand::ResourceStatus => {
             let dir = host_dir(p)?;
             let mut jobs = vec![];
@@ -1548,11 +1549,11 @@ fn start_guardian(p: &Project, b: &Binding, dir: &Path, job: &mut Job) -> Result
     #[cfg(not(unix))]
     {
         let _ = (p, dir, job, bridge);
-        return Err(error(
+        Err(error(
             "CAPABILITY_UNAVAILABLE",
             "Canonical bridge requires verified Unix process identity",
             6,
-        ));
+        ))
     }
     #[cfg(unix)]
     {
@@ -1661,11 +1662,11 @@ fn guardian_main(fd: i32, path: &Path) -> Result<Value> {
     #[cfg(not(unix))]
     {
         let _ = (fd, path);
-        return Err(error(
+        Err(error(
             "CAPABILITY_UNAVAILABLE",
             "No verified guardian backend",
             6,
-        ));
+        ))
     }
     #[cfg(unix)]
     {

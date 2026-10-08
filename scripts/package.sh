@@ -19,7 +19,8 @@ mkdir "$stage/$name/docs"
 cp docs/PCTX-implementation-spec-v0.6-en.md docs/translation-coverage.md docs/evaluation.md "$stage/$name/docs/"
 cp -R docs/cli docs/implementation "$stage/$name/docs/"
 "$stage/$name/pctx" --version
-tar -czf "dist/$name.tar.gz" -C "$stage" "$name"
+# macOS tar must not add AppleDouble resource-fork sidecars to portable archives.
+COPYFILE_DISABLE=1 tar -czf "dist/$name.tar.gz" -C "$stage" "$name"
 python3 - "$name" <<'PY'
 import hashlib,pathlib,sys
 p=pathlib.Path('dist')/(sys.argv[1]+'.tar.gz')

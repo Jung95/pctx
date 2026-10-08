@@ -47,3 +47,7 @@ A budget equal to the minimum passes this argument guard. It can still produce `
 `output show`, `output find`, and `output render` do not declare a caller-selected stdout byte-budget flag. `pack plan --budget-bytes` governs the produced pack artifact capacity, including its own archive minimum and part limits; it is not this stdout document budget. No new flag is silently invented for these commands.
 
 If an already executed command's presentation exceeds its valid budget, the JSON fallback preserves its durable output reread handle and observed child outcome. A wrapper budget failure does not establish child success or discard a saved failure artifact. Final document size always includes its newline.
+
+## Indexed metadata search coverage
+
+Path, symbol and document search return the pinned index generation used for the query. Every matching candidate receives current physical authorization and the selected freshness validation before ranking and LIMIT. Nonmatching metadata is not opened; scanned_files is therefore null and coverage.physical_non_candidates_checked is false. These fields avoid disclosing historical counts of deleted or inaccessible indexed files. Text/all lookup keeps the physically filtered snapshot and reports that check separately. Candidate-universe freshness and strict refresh incompleteness retain their existing coverage meanings.

@@ -82,3 +82,13 @@ Unix file admission uses O_NONBLOCK for the final opened component so a FIFO can
 ## D025 — Invalid capacity precedes application side effects
 
 The CLI derives a command-specific conservative minimum from a complete newline JSON INVALID_ARGUMENT error envelope, including a maximum fractional timestamp and its own measured minimum field. Smaller stdout capacities fail argument validation (exit2) before loading a Project, writing an output file, publishing an index, recording a receipt, or admitting a child/check. Budgets above that minimum can still fail required-context/evidence admission with BUDGET_TOO_SMALL(exit8). Pack capacity is a separate artifact budget. Detailed executable boundaries are in docs/cli/formats.md and tests/cli_contract.rs; underlying API metadata minima remain separate from this CLI guard.
+
+## D026 — Native publication and shared refresh deadlines
+
+Windows atomic_write flushes and closes a complete same-directory temporary file, then uses [MoveFileExW](https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-movefileexw) with WRITE_THROUGH and optional REPLACE_EXISTING. No cross-volume copy fallback or volume/admin flush is used. The Unix directory-fsync path remains unchanged. This corrects a path whose Unix directory-open/fsync behavior cannot be assumed on Windows; native power-loss qualification remains unverified. Both platforms classify a lost create-only publication race as REVISION_CONFLICT, preserve the winner and clean temporary files.
+
+The broker separates freshness TTL from waiting: default query waiting is10s (§11), with one monotonic budget across waiting and Git probes; bounded callers can obtain truthful refresh_pending without taking a live claim. Existing DB initialization and identity subprocess limits are separate and remain part of the whole-command deadline audit.
+
+## D027 — Candidate-first DB metadata search
+
+Only path/symbol/document lookup uses a private current-policy metadata snapshot from one pinned workspace generation. Every actual expression match receives physical authorization and required hash validation before ranking/LIMIT. Generic snapshots and text/all retain physical filtering. Unopened historical noncandidate cardinalities are suppressed with scanned_files=null and physical_non_candidates_checked=false; no claim of a complete current filesystem snapshot follows. Strict refresh coverage is preserved by the CLI. Performance improvement requires a new equivalent measurement.

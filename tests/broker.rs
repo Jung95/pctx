@@ -8,6 +8,7 @@ use std::{
     process::Command,
     sync::{Arc, Barrier},
     thread,
+    time::{Duration, Instant},
 };
 
 fn fixture(git: bool) -> (tempfile::TempDir, Project) {
@@ -158,7 +159,21 @@ fn live_refresh_owner_is_not_stolen_by_age_and_returns_pending() {
         [],
     )
     .unwrap();
-    let next = status(&p);
+    let started = Instant::now();
+    let next = broker::repo_with_timeout(
+        &p,
+        &RepoCommand::Status {
+            fields: "branch,dirty,head,counts".into(),
+            workspace: "current".into(),
+        },
+        Duration::from_millis(150),
+    )
+    .unwrap();
+    assert!(started.elapsed() >= Duration::from_millis(150));
+    assert!(
+        started.elapsed() < Duration::from_secs(2),
+        "Bounded waiter did not return"
+    );
     assert_eq!(next["refresh_status"], "refresh_pending");
     assert_eq!(next["freshness"], "stale");
     assert_eq!(next["source_revision"], first["source_revision"]);
@@ -282,4 +297,100 @@ fn five_actual_cli_processes_share_one_refresh() {
     );
     let value: Value = serde_json::from_slice(&stats.stdout).unwrap();
     assert_eq!(value["data"]["upstream_refreshes"], 1);
+}
+
+#[test]
+fn default_waiter_receives_shared_publication_after_old_half_second_cutoff() {
+    let (_t, p) = fixture(true);
+    let first = status(&p);
+    let db = p.connect(true).unwrap();
+    db.execute("UPDATE broker_snapshots SET observed_ms=0", [])
+        .unwrap();
+    db.execute(
+        "UPDATE broker_refresh_jobs SET owner_active=1,claimed_ms=0",
+        [],
+    )
+    .unwrap();
+    // A controlled live owner publishes the existing fixture observation after 750ms.
+    // This tests the waiter protocol independently of machine-specific Git speed.
+    let barrier = Arc::new(Barrier::new(2));
+    let publisher_barrier = barrier.clone();
+    let publisher_project = p.clone();
+    let publisher = thread::spawn(move || {
+        publisher_barrier.wait();
+        thread::sleep(Duration::from_millis(750));
+        let mut db = publisher_project.connect(true).unwrap();
+        let tx = db
+            .transaction_with_behavior(rusqlite::TransactionBehavior::Immediate)
+            .unwrap();
+        assert_eq!(
+            tx.execute(
+                "UPDATE broker_snapshots SET observed_ms=?1 WHERE generation=1",
+                [chrono::Utc::now().timestamp_millis()]
+            )
+            .unwrap(),
+            1
+        );
+        assert_eq!(tx.execute("UPDATE broker_refresh_jobs SET owner_active=0 WHERE generation=1 AND owner_active=1", []).unwrap(), 1);
+        tx.commit().unwrap();
+    });
+    barrier.wait();
+    let started = Instant::now();
+    let next = status(&p);
+    publisher.join().unwrap();
+    assert!(started.elapsed() >= Duration::from_millis(500));
+    assert!(started.elapsed() < Duration::from_secs(3));
+    assert_eq!(next["refresh_status"], "idle");
+    assert_eq!(next["freshness"], "current");
+    assert_eq!(next["source_status"], "ok_nonempty");
+    assert_eq!(next["source_revision"], first["source_revision"]);
+    assert_eq!(next["source_generation"], 1);
+    assert_eq!(broker::stats(&p).unwrap()["upstream_refreshes"], 1);
+}
+
+#[test]
+fn bounded_wait_without_snapshot_is_unavailable_and_never_reclaims_live_owner() {
+    let (_t, p) = fixture(true);
+    let _ = status(&p);
+    let db = p.connect(true).unwrap();
+    db.execute("DELETE FROM broker_snapshots", []).unwrap();
+    db.execute(
+        "UPDATE broker_refresh_jobs SET owner_active=1,claimed_ms=0",
+        [],
+    )
+    .unwrap();
+    let started = Instant::now();
+    let next = broker::repo_with_timeout(
+        &p,
+        &RepoCommand::Status {
+            fields: "dirty,head".into(),
+            workspace: "current".into(),
+        },
+        Duration::from_millis(150),
+    )
+    .unwrap();
+    assert!(started.elapsed() >= Duration::from_millis(150));
+    assert!(started.elapsed() < Duration::from_secs(2));
+    assert_eq!(next["refresh_status"], "refresh_pending");
+    assert_eq!(next["source_status"], "unavailable");
+    assert_eq!(next["coverage"]["status"], "partial");
+    assert_eq!(next["freshness"], "stale");
+    assert!(next["source_revision"].is_null());
+    assert_eq!(next["items"], serde_json::json!({}));
+    let stats = broker::stats(&p).unwrap();
+    assert_eq!(stats["upstream_refreshes"], 1);
+    assert_eq!(stats["refresh_jobs_active_or_unknown"], 1);
+    assert_eq!(
+        broker::repo_with_timeout(
+            &p,
+            &RepoCommand::Status {
+                fields: "dirty".into(),
+                workspace: "current".into(),
+            },
+            Duration::ZERO
+        )
+        .unwrap_err()
+        .code,
+        "INVALID_ARGUMENT"
+    );
 }

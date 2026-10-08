@@ -1,7 +1,7 @@
 //! Explicit noninteractive execution and masked, expiring output artifacts.
 //! Presentation is never completion evidence; registered runner owns host admission.
 use crate::{
-    domain::{Error, Result, hash, id, now},
+    domain::{Error, Result, hash, now},
     project::{Project, atomic_write, private_dir},
     reader,
 };
@@ -10,11 +10,19 @@ use fs2::FileExt;
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
 use std::{
-    collections::{BTreeMap, VecDeque},
+    collections::BTreeMap,
     fs,
-    io::Read,
     path::{Path, PathBuf},
-    process::{Command, Stdio},
+};
+
+#[cfg(unix)]
+use crate::domain::id;
+#[cfg(unix)]
+use std::process::{Command, Stdio};
+#[cfg(any(unix, test))]
+use std::{
+    collections::VecDeque,
+    io::Read,
     sync::{
         Arc,
         atomic::{AtomicBool, Ordering},
@@ -23,10 +31,14 @@ use std::{
     time::{Duration, Instant},
 };
 
+#[cfg(any(unix, test))]
 const RECORD_LIMIT: usize = 256 * 1024;
 const STREAM_LIMIT: usize = 8 * 1024 * 1024;
+#[cfg(any(unix, test))]
 const CAPTURE_RECORD_LIMIT: usize = 65_536;
+#[cfg(any(unix, test))]
 const TAIL_RECORD_LIMIT: usize = 64;
+#[cfg(any(unix, test))]
 const TAIL_BYTE_LIMIT: usize = 512 * 1024;
 const PROJECT_LIMIT: u64 = 256 * 1024 * 1024;
 const HOST_LIMIT: u64 = 1024 * 1024 * 1024;
@@ -106,6 +118,7 @@ struct Record {
     text: String,
     redacted: bool,
 }
+#[cfg(any(unix, test))]
 #[derive(Clone, Default, Serialize, Deserialize)]
 struct Capture {
     records: Vec<Record>,
@@ -371,6 +384,7 @@ pub fn trust(p: &Project, command: &TrustCommand) -> Result<Value> {
         json!({"fingerprint":b.fingerprint,"executable_hash":b.executable_hash,"script_hashes":b.scripts,"argv_hash":b.argv_hash,"workspace_id":b.workspace_id,"policy_hash":b.policy_hash,"trusted":matches!(command,TrustCommand::Add{..}),"execution_started":false,"classification":"explicit_non_heavy","host_permission":"separate"}),
     )
 }
+#[cfg(unix)]
 fn validate_trust(p: &Project, b: &Binding) -> Result<()> {
     let path = p
         .data_dir
@@ -400,6 +414,7 @@ fn validate_trust(p: &Project, b: &Binding) -> Result<()> {
     }
     Ok(())
 }
+#[cfg(any(unix, test))]
 fn normalize(bytes: &[u8]) -> Option<String> {
     if bytes.contains(&0) {
         return None;
@@ -419,6 +434,7 @@ fn normalize(bytes: &[u8]) -> Option<String> {
             .collect(),
     )
 }
+#[cfg(any(unix, test))]
 fn push_record(c: &mut Capture, bytes: &[u8], stream: &str, nul_framed: bool) {
     let sequence = c.next_sequence;
     c.next_sequence = c.next_sequence.saturating_add(1);
@@ -483,6 +499,7 @@ fn capture<R: Read + Send + 'static>(
 ) -> thread::JoinHandle<Capture> {
     capture_framed(pipe, stream, stop, false)
 }
+#[cfg(any(unix, test))]
 fn capture_framed<R: Read + Send + 'static>(
     mut pipe: R,
     stream: &'static str,
@@ -853,8 +870,8 @@ fn run_inner(
     cwd: &str,
     environment: &BTreeMap<String, String>,
     expected_binding: Option<&str>,
-    mut on_spawn: Option<&mut dyn FnMut(u32) -> Result<()>>,
-    mut on_poll: Option<&mut dyn FnMut() -> Result<()>>,
+    on_spawn: Option<&mut dyn FnMut(u32) -> Result<()>>,
+    on_poll: Option<&mut dyn FnMut() -> Result<()>>,
     parser_identity: Option<&str>,
 ) -> Result<Value> {
     if r.budget_bytes < 3000 {
@@ -872,271 +889,285 @@ fn run_inner(
     }
     #[cfg(not(unix))]
     {
-        return Err(err(
+        let _ = (
+            p,
+            cwd,
+            environment,
+            expected_binding,
+            on_spawn,
+            on_poll,
+            parser_identity,
+        );
+        Err(err(
             "CAPABILITY_UNAVAILABLE",
             "Supervised manual capture is currently verified only on Unix",
             6,
-        ));
-    }
-    let registered = expected_binding.is_some();
-    let b = binding_inner(p, &r.argv, registered, cwd)?;
-    if let Some(expected) = expected_binding {
-        if b.fingerprint != expected {
-            return Err(err(
-                "CONFIG_CHANGED",
-                "Registered binding changed before spawn",
-                9,
-            ));
-        }
-    } else {
-        validate_trust(p, &b)?;
-    }
-    let input_manifest = reader::manifest(p)?;
-    let input_fingerprint = hash(serde_json::to_vec(&input_manifest)?);
-    let execution_id = id("EXEC");
-    let output_id = id("OUT");
-    let job_dir = p.data_dir.join("output-jobs");
-    checked_private(&job_dir)?;
-    private_dir(&job_dir)?;
-    let job_path = job_dir.join(format!("{execution_id}.json"));
-    atomic_write(
-        &job_path,
-        &serde_json::to_vec(
-            &json!({"execution_id":execution_id,"state":"starting","workspace_id":p.workspace_id,"input_fingerprint":input_fingerprint,"resource_admission":if registered{"registered_profile_external_resource_ledger"}else{"non_heavy_manual"}}),
-        )?,
-        false,
-    )?;
-    let mut cmd = Command::new(&b.executable);
-    cmd.args(&r.argv[1..])
-        .current_dir(&p.root)
-        .stdin(Stdio::null())
-        .stdout(Stdio::piped())
-        .stderr(Stdio::piped())
-        .env_clear();
-    // Git metadata reads must not invoke external pagers, diff helpers or textconv.
-    cmd.env("PATH", std::env::var_os("PATH").unwrap_or_default())
-        .env("LANG", "C.UTF-8")
-        .env("GIT_PAGER", "cat")
-        .env("PAGER", "cat")
-        .env("GIT_EXTERNAL_DIFF", "")
-        .env("GIT_CONFIG_COUNT", "0");
-    for (key, value) in environment {
-        cmd.env(key, value);
+        ))
     }
     #[cfg(unix)]
-    let cwd_handle = if cwd == "." {
-        fs::File::open(&p.root)?
-    } else {
-        reader::secure_open(p, cwd)?
-    };
-    #[cfg(unix)]
     {
-        use std::{os::fd::AsRawFd, os::unix::process::CommandExt};
-        let fd = cwd_handle.as_raw_fd();
-        cmd.process_group(0);
-        unsafe {
-            cmd.pre_exec(move || {
-                if libc::fchdir(fd) != 0 {
-                    return Err(std::io::Error::last_os_error());
-                }
-                Ok(())
-            });
+        let mut on_spawn = on_spawn;
+        let mut on_poll = on_poll;
+        let registered = expected_binding.is_some();
+        let b = binding_inner(p, &r.argv, registered, cwd)?;
+        if let Some(expected) = expected_binding {
+            if b.fingerprint != expected {
+                return Err(err(
+                    "CONFIG_CHANGED",
+                    "Registered binding changed before spawn",
+                    9,
+                ));
+            }
+        } else {
+            validate_trust(p, &b)?;
         }
-    }
-    let mut child = match cmd.spawn() {
-        Ok(c) => c,
-        Err(_) => {
-            let data = json!({"execution_id":execution_id,"spawned":false,"termination":"not_started","child_exit_code":null,"pctx_error":"SPAWN_FAILED","task_completion":"not_evaluated"});
-            let _ = atomic_write(&job_path, &serde_json::to_vec(&data)?, true);
-            return Ok(data);
+        let input_manifest = reader::manifest(p)?;
+        let input_fingerprint = hash(serde_json::to_vec(&input_manifest)?);
+        let execution_id = id("EXEC");
+        let output_id = id("OUT");
+        let job_dir = p.data_dir.join("output-jobs");
+        checked_private(&job_dir)?;
+        private_dir(&job_dir)?;
+        let job_path = job_dir.join(format!("{execution_id}.json"));
+        atomic_write(
+            &job_path,
+            &serde_json::to_vec(
+                &json!({"execution_id":execution_id,"state":"starting","workspace_id":p.workspace_id,"input_fingerprint":input_fingerprint,"resource_admission":if registered{"registered_profile_external_resource_ledger"}else{"non_heavy_manual"}}),
+            )?,
+            false,
+        )?;
+        let mut cmd = Command::new(&b.executable);
+        cmd.args(&r.argv[1..])
+            .current_dir(&p.root)
+            .stdin(Stdio::null())
+            .stdout(Stdio::piped())
+            .stderr(Stdio::piped())
+            .env_clear();
+        // Git metadata reads must not invoke external pagers, diff helpers or textconv.
+        cmd.env("PATH", std::env::var_os("PATH").unwrap_or_default())
+            .env("LANG", "C.UTF-8")
+            .env("GIT_PAGER", "cat")
+            .env("PAGER", "cat")
+            .env("GIT_EXTERNAL_DIFF", "")
+            .env("GIT_CONFIG_COUNT", "0");
+        for (key, value) in environment {
+            cmd.env(key, value);
         }
-    };
-    let pid = child.id();
-    if let Some(callback) = on_spawn.as_mut()
-        && let Err(e) = callback(pid)
-    {
         #[cfg(unix)]
-        unsafe {
-            libc::kill(-(pid as i32), libc::SIGKILL);
-        }
-        let _ = child.kill();
-        let _ = child.wait();
-        return Err(e);
-    }
-    // If this parent dies, this durable receipt remains active_or_unknown; TTL never frees resources.
-    let _ = atomic_write(
-        &job_path,
-        &serde_json::to_vec(
-            &json!({"execution_id":execution_id,"pid":pid,"process_group":pid,"state":"active_or_unknown","started_at":now(),"resource_admission":if registered{"registered_profile_external_resource_ledger"}else{"non_heavy_manual"}}),
-        )?,
-        true,
-    );
-    let stdout = child
-        .stdout
-        .take()
-        .ok_or_else(|| err("IO_ERROR", "Missing child stdout pipe", 7))?;
-    let stderr = child
-        .stderr
-        .take()
-        .ok_or_else(|| err("IO_ERROR", "Missing child stderr pipe", 7))?;
-    #[cfg(unix)]
-    if nonblocking(&stdout)
-        .and_then(|_| nonblocking(&stderr))
-        .is_err()
-    {
-        let _ = child.kill();
-        let _ = child.wait();
-        return Err(err("IO_ERROR", "Pipe capture setup failed after spawn", 7));
-    }
-    let stop = Arc::new(AtomicBool::new(false));
-    let nul_framed = matches!(
-        parser_identity,
-        Some("git-status-porcelain-v1-z" | "git-log-nul-v1")
-    );
-    let out_thread = capture_framed(stdout, "stdout", stop.clone(), nul_framed);
-    let err_thread = capture_framed(stderr, "stderr", stop.clone(), false);
-    let start = Instant::now();
-    let mut timed_out = false;
-    let mut monitor_error = None;
-    let status = loop {
-        if let Some(status) = child.try_wait()? {
-            break status;
-        }
-        if let Some(callback) = on_poll.as_mut()
-            && let Err(e) = callback()
+        let cwd_handle = if cwd == "." {
+            fs::File::open(&p.root)?
+        } else {
+            reader::secure_open(p, cwd)?
+        };
+        #[cfg(unix)]
         {
-            monitor_error = Some(e.code);
+            use std::{os::fd::AsRawFd, os::unix::process::CommandExt};
+            let fd = cwd_handle.as_raw_fd();
+            cmd.process_group(0);
+            unsafe {
+                cmd.pre_exec(move || {
+                    if libc::fchdir(fd) != 0 {
+                        return Err(std::io::Error::last_os_error());
+                    }
+                    Ok(())
+                });
+            }
+        }
+        let mut child = match cmd.spawn() {
+            Ok(c) => c,
+            Err(_) => {
+                let data = json!({"execution_id":execution_id,"spawned":false,"termination":"not_started","child_exit_code":null,"pctx_error":"SPAWN_FAILED","task_completion":"not_evaluated"});
+                let _ = atomic_write(&job_path, &serde_json::to_vec(&data)?, true);
+                return Ok(data);
+            }
+        };
+        let pid = child.id();
+        if let Some(callback) = on_spawn.as_mut()
+            && let Err(e) = callback(pid)
+        {
             #[cfg(unix)]
             unsafe {
                 libc::kill(-(pid as i32), libc::SIGKILL);
             }
             let _ = child.kill();
-            break child.wait()?;
+            let _ = child.wait();
+            return Err(e);
         }
-        if r.execution_timeout_ms
-            .is_some_and(|ms| start.elapsed() >= Duration::from_millis(ms))
+        // If this parent dies, this durable receipt remains active_or_unknown; TTL never frees resources.
+        let _ = atomic_write(
+            &job_path,
+            &serde_json::to_vec(
+                &json!({"execution_id":execution_id,"pid":pid,"process_group":pid,"state":"active_or_unknown","started_at":now(),"resource_admission":if registered{"registered_profile_external_resource_ledger"}else{"non_heavy_manual"}}),
+            )?,
+            true,
+        );
+        let stdout = child
+            .stdout
+            .take()
+            .ok_or_else(|| err("IO_ERROR", "Missing child stdout pipe", 7))?;
+        let stderr = child
+            .stderr
+            .take()
+            .ok_or_else(|| err("IO_ERROR", "Missing child stderr pipe", 7))?;
+        #[cfg(unix)]
+        if nonblocking(&stdout)
+            .and_then(|_| nonblocking(&stderr))
+            .is_err()
         {
-            timed_out = true;
-            #[cfg(unix)]
+            let _ = child.kill();
+            let _ = child.wait();
+            return Err(err("IO_ERROR", "Pipe capture setup failed after spawn", 7));
+        }
+        let stop = Arc::new(AtomicBool::new(false));
+        let nul_framed = matches!(
+            parser_identity,
+            Some("git-status-porcelain-v1-z" | "git-log-nul-v1")
+        );
+        let out_thread = capture_framed(stdout, "stdout", stop.clone(), nul_framed);
+        let err_thread = capture_framed(stderr, "stderr", stop.clone(), false);
+        let start = Instant::now();
+        let mut timed_out = false;
+        let mut monitor_error = None;
+        let status = loop {
+            if let Some(status) = child.try_wait()? {
+                break status;
+            }
+            if let Some(callback) = on_poll.as_mut()
+                && let Err(e) = callback()
             {
-                // SAFETY: signal targets the new child process group, never this parent group.
+                monitor_error = Some(e.code);
+                #[cfg(unix)]
                 unsafe {
-                    libc::kill(-(pid as i32), libc::SIGTERM);
+                    libc::kill(-(pid as i32), libc::SIGKILL);
                 }
+                let _ = child.kill();
+                break child.wait()?;
             }
-            thread::sleep(Duration::from_millis(100));
-            #[cfg(unix)]
-            unsafe {
-                libc::kill(-(pid as i32), libc::SIGKILL);
+            if r.execution_timeout_ms
+                .is_some_and(|ms| start.elapsed() >= Duration::from_millis(ms))
+            {
+                timed_out = true;
+                #[cfg(unix)]
+                {
+                    // SAFETY: signal targets the new child process group, never this parent group.
+                    unsafe {
+                        libc::kill(-(pid as i32), libc::SIGTERM);
+                    }
+                }
+                thread::sleep(Duration::from_millis(100));
+                #[cfg(unix)]
+                unsafe {
+                    libc::kill(-(pid as i32), libc::SIGKILL);
+                }
+                let _ = child.kill();
+                break child.wait()?;
             }
-            let _ = child.kill();
-            break child.wait()?;
-        }
-        thread::sleep(Duration::from_millis(5));
-    };
-    stop.store(true, Ordering::Relaxed);
-    let out = out_thread
-        .join()
-        .map_err(|_| err("IO_ERROR", "Stdout capture panicked", 7))?;
-    let stderr = err_thread
-        .join()
-        .map_err(|_| err("IO_ERROR", "Stderr capture panicked", 7))?;
-    let mut records = out.records;
-    records.extend(stderr.records);
-    // Bound serialized record storage too: JSON escaping must not expand a 16MiB
-    // logical capture into an unbounded artifact.
-    let mut serialized_size = records
-        .iter()
-        .map(|r| {
-            serde_json::to_vec(r)
-                .map(|v| v.len() + 1)
-                .unwrap_or(RECORD_LIMIT)
-        })
-        .sum::<usize>();
-    let mut store_omitted = 0u64;
-    while serialized_size + 4096 > 16 * 1024 * 1024 {
-        if let Some(record) = records.pop() {
-            serialized_size = serialized_size.saturating_sub(
-                serde_json::to_vec(&record)
+            thread::sleep(Duration::from_millis(5));
+        };
+        stop.store(true, Ordering::Relaxed);
+        let out = out_thread
+            .join()
+            .map_err(|_| err("IO_ERROR", "Stdout capture panicked", 7))?;
+        let stderr = err_thread
+            .join()
+            .map_err(|_| err("IO_ERROR", "Stderr capture panicked", 7))?;
+        let mut records = out.records;
+        records.extend(stderr.records);
+        // Bound serialized record storage too: JSON escaping must not expand a 16MiB
+        // logical capture into an unbounded artifact.
+        let mut serialized_size = records
+            .iter()
+            .map(|r| {
+                serde_json::to_vec(r)
                     .map(|v| v.len() + 1)
-                    .unwrap_or(0),
-            );
-            store_omitted += record.text.len() as u64;
-        } else {
-            break;
+                    .unwrap_or(RECORD_LIMIT)
+            })
+            .sum::<usize>();
+        let mut store_omitted = 0u64;
+        while serialized_size + 4096 > 16 * 1024 * 1024 {
+            if let Some(record) = records.pop() {
+                serialized_size = serialized_size.saturating_sub(
+                    serde_json::to_vec(&record)
+                        .map(|v| v.len() + 1)
+                        .unwrap_or(0),
+                );
+                store_omitted += record.text.len() as u64;
+            } else {
+                break;
+            }
         }
-    }
-    let retained = r.retain != "none";
-    #[cfg(unix)]
-    let signal = {
-        use std::os::unix::process::ExitStatusExt;
-        status.signal()
-    };
-    #[cfg(not(unix))]
-    let signal: Option<i32> = None;
-    let termination = if timed_out {
-        "timed_out"
-    } else if signal.is_some() {
-        "signaled"
-    } else {
-        "exited"
-    }
-    .to_string();
-    let mut a = Artifact {
-        schema_version: 1,
-        output_id: output_id.clone(),
-        execution_id: execution_id.clone(),
-        workspace_id: p.workspace_id.clone(),
-        policy_hash: p.policy_hash(),
-        input_fingerprint,
-        parser_identity: parser_identity.unwrap_or("unsupported").into(),
-        input_manifest,
-        created_at: now(),
-        expires_at: now() + 86400,
-        records_hash: hash(serde_json::to_vec(&records)?),
-        records,
-        captured_bytes: out.captured_bytes + stderr.captured_bytes,
-        normalized_bytes: out.normalized_bytes + stderr.normalized_bytes,
-        redacted_bytes: out.redacted_bytes + stderr.redacted_bytes,
-        omitted_bytes: out.omitted_bytes + stderr.omitted_bytes + store_omitted,
-        capture_complete: out.complete && stderr.complete && store_omitted == 0,
-        retained,
-        spawned: true,
-        termination,
-        child_exit_code: status.code(),
-        signal,
-        pctx_error: if monitor_error.is_some() {
-            monitor_error
-        } else if timed_out {
-            Some("TIMEOUT".into())
-        } else if out.io_error || stderr.io_error {
-            Some("CAPTURE_FAILED".into())
+        let retained = r.retain != "none";
+        #[cfg(unix)]
+        let signal = {
+            use std::os::unix::process::ExitStatusExt;
+            status.signal()
+        };
+        #[cfg(not(unix))]
+        let signal: Option<i32> = None;
+        let termination = if timed_out {
+            "timed_out"
+        } else if signal.is_some() {
+            "signaled"
         } else {
-            None
-        },
-        input_stage: "captured".into(),
-        emitted_bytes: 0,
-        retrieval_bytes: 0,
-        delivery_attempts: 0,
-    };
-    let mut data = compact(&a, r.budget_bytes);
-    data["exit_policy"] = json!(r.exit_policy);
-    if !retained {
-        a.records.clear();
-        a.records_hash = hash(serde_json::to_vec(&a.records)?);
+            "exited"
+        }
+        .to_string();
+        let mut a = Artifact {
+            schema_version: 1,
+            output_id: output_id.clone(),
+            execution_id: execution_id.clone(),
+            workspace_id: p.workspace_id.clone(),
+            policy_hash: p.policy_hash(),
+            input_fingerprint,
+            parser_identity: parser_identity.unwrap_or("unsupported").into(),
+            input_manifest,
+            created_at: now(),
+            expires_at: now() + 86400,
+            records_hash: hash(serde_json::to_vec(&records)?),
+            records,
+            captured_bytes: out.captured_bytes + stderr.captured_bytes,
+            normalized_bytes: out.normalized_bytes + stderr.normalized_bytes,
+            redacted_bytes: out.redacted_bytes + stderr.redacted_bytes,
+            omitted_bytes: out.omitted_bytes + stderr.omitted_bytes + store_omitted,
+            capture_complete: out.complete && stderr.complete && store_omitted == 0,
+            retained,
+            spawned: true,
+            termination,
+            child_exit_code: status.code(),
+            signal,
+            pctx_error: if monitor_error.is_some() {
+                monitor_error
+            } else if timed_out {
+                Some("TIMEOUT".into())
+            } else if out.io_error || stderr.io_error {
+                Some("CAPTURE_FAILED".into())
+            } else {
+                None
+            },
+            input_stage: "captured".into(),
+            emitted_bytes: 0,
+            retrieval_bytes: 0,
+            delivery_attempts: 0,
+        };
+        let mut data = compact(&a, r.budget_bytes);
+        data["exit_policy"] = json!(r.exit_policy);
+        if !retained {
+            a.records.clear();
+            a.records_hash = hash(serde_json::to_vec(&a.records)?);
+        }
+        if let Err(e) = save(p, &a) {
+            data["pctx_error"] = json!(e.code);
+            data["raw_available"] = json!(false);
+        }
+        let _ = atomic_write(
+            &job_path,
+            &serde_json::to_vec(
+                &json!({"execution_id":execution_id,"pid":pid,"state":if a.capture_complete{"child_exited"}else{"child_exited_descendants_unknown"},"termination":a.termination,"child_exit_code":a.child_exit_code,"signal":a.signal}),
+            )?,
+            true,
+        );
+        Ok(data)
     }
-    if let Err(e) = save(p, &a) {
-        data["pctx_error"] = json!(e.code);
-        data["raw_available"] = json!(false);
-    }
-    let _ = atomic_write(
-        &job_path,
-        &serde_json::to_vec(
-            &json!({"execution_id":execution_id,"pid":pid,"state":if a.capture_complete{"child_exited"}else{"child_exited_descendants_unknown"},"termination":a.termination,"child_exit_code":a.child_exit_code,"signal":a.signal}),
-        )?,
-        true,
-    );
-    Ok(data)
 }
 
 /// Called by the frontend with the exact bytes actually emitted (including its envelope).

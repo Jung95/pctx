@@ -1,0 +1,25 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.32s
+     Running tests/atomic_publication.rs (target/debug/deps/atomic_publication-64663f147e00f63e)
+
+running 2 tests
+test create_only_race_publishes_one_complete_record_and_preserves_it ... FAILED
+test replacement_keeps_old_open_reader_and_publishes_complete_new_record ... ok
+
+failures:
+
+---- create_only_race_publishes_one_complete_record_and_preserves_it stdout ----
+
+thread 'create_only_race_publishes_one_complete_record_and_preserves_it' (7251393) panicked at tests/atomic_publication.rs:26:23:
+assertion `left == right` failed
+  left: "IO_ERROR"
+ right: "REVISION_CONFLICT"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    create_only_race_publishes_one_complete_record_and_preserves_it
+
+test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+
+error: test failed, to rerun pass `--test atomic_publication`

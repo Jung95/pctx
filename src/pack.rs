@@ -1057,6 +1057,7 @@ fn artifact_json(bytes: &[u8]) -> Result<Value> {
     }
     serde_json::from_slice(bytes).map_err(Into::into)
 }
+#[cfg(unix)]
 fn artifact_policy(p: &Project, manifest: &Value) -> Result<()> {
     for item in manifest["files"]
         .as_array()
@@ -1119,6 +1120,7 @@ fn declared_parts(manifest: &Value) -> Result<Vec<String>> {
     }
     Ok(names.into_iter().collect())
 }
+#[cfg(unix)]
 fn read_bytes(mut file: fs::File, remaining: usize) -> Result<Vec<u8>> {
     use std::io::Read;
     let meta = file.metadata()?;
@@ -1299,6 +1301,7 @@ fn read_directory(p: &Project, path: &Path, parent: fs::File) -> Result<Artifact
         actual_bytes: total,
     })
 }
+#[cfg(unix)]
 fn read_single(p: &Project, bytes: Vec<u8>) -> Result<Artifact> {
     let wrapper = artifact_json(&bytes)?;
     let manifest = wrapper

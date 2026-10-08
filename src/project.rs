@@ -185,13 +185,53 @@ pub fn atomic_write(path: &Path, bytes: &[u8], overwrite: bool) -> Result<()> {
         let mut f = options.open(&temp)?;
         f.write_all(bytes)?;
         f.sync_all()?;
-        if overwrite {
-            fs::rename(&temp, path)?;
-        } else {
-            fs::hard_link(&temp, path)?;
-            fs::remove_file(&temp)?;
+        drop(f);
+        #[cfg(windows)]
+        {
+            use std::os::windows::ffi::OsStrExt;
+            use windows_sys::Win32::Storage::FileSystem::{
+                MOVEFILE_REPLACE_EXISTING, MOVEFILE_WRITE_THROUGH, MoveFileExW,
+            };
+            let wide = |p: &Path| -> Result<Vec<u16>> {
+                let mut value: Vec<_> = p.as_os_str().encode_wide().collect();
+                if value.contains(&0) {
+                    return Err(Error::new("INVALID_ARGUMENT", "NUL in output path", 2));
+                }
+                value.push(0);
+                Ok(value)
+            };
+            // Same-directory move only; no cross-volume copy fallback. Windows
+            // directories cannot use the Unix read-only-directory fsync below.
+            let flags = MOVEFILE_WRITE_THROUGH
+                | if overwrite {
+                    MOVEFILE_REPLACE_EXISTING
+                } else {
+                    0
+                };
+            if unsafe { MoveFileExW(wide(&temp)?.as_ptr(), wide(path)?.as_ptr(), flags) } == 0 {
+                let e = std::io::Error::last_os_error();
+                if !overwrite && e.kind() == std::io::ErrorKind::AlreadyExists {
+                    return Err(Error::new("REVISION_CONFLICT", "Output already exists", 9));
+                }
+                return Err(e.into());
+            }
         }
-        fs::File::open(parent)?.sync_all()?;
+        #[cfg(not(windows))]
+        {
+            if overwrite {
+                fs::rename(&temp, path)?;
+            } else {
+                fs::hard_link(&temp, path).map_err(|e| {
+                    if e.kind() == std::io::ErrorKind::AlreadyExists {
+                        Error::new("REVISION_CONFLICT", "Output already exists", 9)
+                    } else {
+                        e.into()
+                    }
+                })?;
+                fs::remove_file(&temp)?;
+            }
+            fs::File::open(parent)?.sync_all()?;
+        }
         Ok(())
     })();
     if result.is_err() {

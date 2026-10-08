@@ -433,10 +433,9 @@ fn execute(cli: &Cli) -> Result<(String, Project, Value)> {
             } else {
                 None
             };
-            let (_, files) = storage::snapshot(&p)?;
             (
                 "find",
-                with_refresh_coverage(search::find(&p, &files, r)?, refresh),
+                with_refresh_coverage(search::find_indexed(&p, r)?, refresh),
             )
         }
         Command::Extract(r) => ("extract", extract::extract(&p, r)?),
@@ -606,6 +605,20 @@ fn minimum_error_budget(command: &str) -> Result<usize> {
 }
 
 fn main() {
+    #[cfg(windows)]
+    {
+        // Fixed private entry precedes project loading and JSON rendering: the
+        // registered keeper uses only its bounded owned-pipe protocol.
+        let args: Vec<_> = std::env::args_os().collect();
+        if args.len() == 2 && args[1] == "__pctx-windows-guardian-v1" {
+            let status = if pctx::windows_guardian::run_from_stdio().is_ok() {
+                0
+            } else {
+                7
+            };
+            std::process::exit(status);
+        }
+    }
     let raw = std::env::args().collect::<Vec<_>>();
     let cli = match Cli::try_parse() {
         Ok(c) => c,

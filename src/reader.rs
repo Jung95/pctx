@@ -168,7 +168,7 @@ pub fn read(p: &Project, path: &str) -> Result<VerifiedFile> {
         let reopened = reopened_file.metadata()?;
         let same_instance = same_file::Handle::from_file(f.try_clone()?)?
             == same_file::Handle::from_file(reopened_file)?;
-        let mut stable = same_instance
+        let stable = same_instance
             && before.len() == after.len()
             && after.len() == reopened.len()
             && before.modified().ok() == after.modified().ok()
@@ -176,10 +176,14 @@ pub fn read(p: &Project, path: &str) -> Result<VerifiedFile> {
         #[cfg(unix)]
         {
             use std::os::unix::fs::MetadataExt;
-            stable &= before.ino() == after.ino()
+            let stable = stable
+                && before.ino() == after.ino()
                 && after.ino() == reopened.ino()
                 && before.dev() == reopened.dev()
                 && before.mtime_nsec() == after.mtime_nsec();
+            if !stable {
+                continue;
+            }
         }
         if !stable {
             continue;

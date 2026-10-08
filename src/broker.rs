@@ -131,7 +131,10 @@ fn claim(db: &mut Connection, key: &str) -> Result<Option<i64>> {
     transaction.commit()?;
     Ok(Some(generation))
 }
-fn git(p: &Project, args: &[&str]) -> Result<Vec<u8>> {
+fn git(p: &Project, args: &[&str], deadline: Instant) -> Result<Vec<u8>> {
+    if Instant::now() >= deadline {
+        return Err(error("TIMEOUT", "Local Git query timed out", 7));
+    }
     let mut command = Command::new("git");
     command
         .args([
@@ -198,12 +201,11 @@ fn git(p: &Project, args: &[&str]) -> Result<Vec<u8>> {
             .take()
             .ok_or_else(|| error("SOURCE_UNAVAILABLE", "Missing Git error pipe", 7))?,
     );
-    let started = Instant::now();
     let status = loop {
         if let Some(status) = child.try_wait()? {
             break status;
         }
-        if started.elapsed() > Duration::from_secs(10) {
+        if Instant::now() >= deadline {
             let _ = child.kill();
             let _ = child.wait();
             return Err(error("TIMEOUT", "Local Git query timed out", 7));
@@ -311,14 +313,14 @@ fn parse_status(bytes: &[u8]) -> Result<Value> {
         json!({"branch":branch,"head":head,"dirty":tracked+untracked>0,"counts":{"tracked":tracked,"untracked":untracked,"conflicts":conflicts,"renamed":renamed}}),
     )
 }
-fn refresh(p: &Project) -> Result<(Value, String)> {
+fn refresh(p: &Project, deadline: Instant) -> Result<(Value, String)> {
     if !marker_exists(p) {
         return Ok((
             json!({"capability":"unsupported","reason":"no_git_repository"}),
             "unsupported".into(),
         ));
     }
-    match git(p, &["rev-parse", "--is-inside-work-tree"]) {
+    match git(p, &["rev-parse", "--is-inside-work-tree"], deadline) {
         Ok(bytes) if bytes == b"true\n" => {}
         Ok(_) => {
             return Ok((
@@ -338,6 +340,7 @@ fn refresh(p: &Project) -> Result<(Value, String)> {
             "--untracked-files=all",
             "--ignore-submodules=all",
         ],
+        deadline,
     )?;
     let data = parse_status(&bytes)?;
     Ok((data, "ok_nonempty".into()))
@@ -390,7 +393,24 @@ fn response(s: Option<Snapshot>, fields: &[&str], cache: &str, pending: bool) ->
         .unwrap_or("unavailable");
     json!({"items":selected,"source_status":status,"source_revision":s.as_ref().map(|s|&s.revision),"source_generation":s.as_ref().map(|s|s.generation),"observed_at":s.as_ref().and_then(|s|chrono::DateTime::from_timestamp_millis(s.observed)).map(|t|t.to_rfc3339()),"age_ms":s.as_ref().map(|s|millis().saturating_sub(s.observed).max(0)),"cache_status":cache,"refresh_status":if pending{"refresh_pending"}else{"idle"},"coverage":{"status":if matches!(status,"ok_nonempty"|"ok_empty"){"complete"}else if status=="unsupported"{"unsupported"}else{"partial"},"reasons":if status=="unsupported"{vec!["git_unavailable_for_workspace"]}else{vec![]}},"authority":"git_local_observation","freshness":if s.as_ref().is_some_and(valid){"current"}else{"stale"},"permission_scope":permission_scope(),"workspace_atomic":false,"network":"not_used"})
 }
+/// Ordinary local query deadline from §11; TTL is a freshness bound, not a wait bound.
 pub fn repo(p: &Project, command: &RepoCommand) -> Result<Value> {
+    repo_with_timeout(p, command, Duration::from_secs(10))
+}
+
+/// Wait for the current shared refresh without stealing a live owner's claim.
+/// Expiry returns an explicitly pending last-known snapshot, including when unavailable.
+pub fn repo_with_timeout(p: &Project, command: &RepoCommand, timeout: Duration) -> Result<Value> {
+    let deadline = Instant::now()
+        .checked_add(timeout)
+        .filter(|_| !timeout.is_zero())
+        .ok_or_else(|| {
+            error(
+                "INVALID_ARGUMENT",
+                "Repository query timeout must be positive and bounded",
+                2,
+            )
+        })?;
     let RepoCommand::Status { fields, workspace } = command;
     if workspace != "current" {
         return Err(error(
@@ -413,14 +433,18 @@ pub fn repo(p: &Project, command: &RepoCommand) -> Result<Value> {
     }
     let key = key(p);
     let mut db = connect(p)?;
-    let started = Instant::now();
     loop {
         if let Some(s) = snapshot(&db, &key)?.filter(valid) {
             return Ok(response(Some(s), &fields, "hit", false));
         }
+        if Instant::now() >= deadline {
+            return Ok(response(snapshot(&db, &key)?, &fields, "last_known", true));
+        }
+        // Do not let repeated SQLite contention reset the caller's remaining wait.
+        db.busy_timeout(deadline.saturating_duration_since(Instant::now()))?;
         if let Some(generation) = claim(&mut db, &key)? {
             // No SQLite transaction is held over the Git process.
-            match refresh(p) {
+            match refresh(p, deadline) {
                 Ok((data, status)) => {
                     if publish(&mut db, p, &key, generation, data, &status)? {
                         return Ok(response(snapshot(&db, &key)?, &fields, "refreshed", false));
@@ -432,10 +456,9 @@ pub fn repo(p: &Project, command: &RepoCommand) -> Result<Value> {
                 }
             }
         }
-        if started.elapsed() >= Duration::from_millis(500) {
-            return Ok(response(snapshot(&db, &key)?, &fields, "last_known", true));
-        }
-        thread::sleep(Duration::from_millis(10));
+        thread::sleep(
+            Duration::from_millis(10).min(deadline.saturating_duration_since(Instant::now())),
+        );
     }
 }
 pub fn stats(p: &Project) -> Result<Value> {
