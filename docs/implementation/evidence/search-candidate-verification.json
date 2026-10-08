@@ -93,5 +93,6 @@
     "Whole mandatory goal, performance/task-quality/provider cost/quota and platform/recovery/installation qualification remain incomplete."
   ],
   "actions_dispatched": 0,
-  "original_spec_sha256": "8914faad57432f524aec0a06aa90c43c18c23f8c19e9f54fe69d9ad185db6523"
+  "original_spec_sha256": "8914faad57432f524aec0a06aa90c43c18c23f8c19e9f54fe69d9ad185db6523",
+  "runtime_commit": "22d0f8b4db76d298ce6996197690259e66eed0f0"
 }
