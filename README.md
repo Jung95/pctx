@@ -14,7 +14,7 @@ cargo test --locked
 cargo run -- --help
 ```
 
-SQLite is bundled; no database server or model service is required. Local execution uses macOS arm64. Linux and macOS CI have passed on the eighth integration; Windows has component evidence and unresolved native failures. See [platform evidence](docs/implementation/handoff.md) for exact revisions and limits.
+SQLite is bundled; no database server or model service is required. Local execution uses macOS arm64. Linux and macOS full CI passed on the tenth integration. The twelfth scoped Windows diagnostic passes six atomic-publication and eleven keeper fixtures; the full Windows suite remains unverified. See [platform evidence](docs/implementation/handoff.md) for exact revisions and limits.
 
 ## Explore a project
 
