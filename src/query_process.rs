@@ -190,7 +190,6 @@ fn group_has_other_members(root: u32, deadline: Deadline) -> Result<bool> {
                 continue;
             };
             let path = entry.path().join("stat");
-            let mut bytes = Vec::new();
             let file = match std::fs::File::open(path) {
                 Ok(file) => file,
                 Err(e) if e.kind() == std::io::ErrorKind::NotFound => continue,
@@ -201,15 +200,10 @@ fn group_has_other_members(root: u32, deadline: Deadline) -> Result<bool> {
                     ));
                 }
             };
-            if let Err(e) = file.take(8193).read_to_end(&mut bytes) {
-                if e.kind() == std::io::ErrorKind::NotFound {
-                    continue;
-                }
-                return Err(error(
-                    "SOURCE_UNAVAILABLE",
-                    "Query process-group membership could not be read",
-                ));
-            }
+            let Some(observed) = linux_read_stat(file)? else {
+                continue;
+            };
+            let bytes = observed;
             deadline.check()?;
             let group = linux_stat_group(&bytes)
                 .ok_or_else(|| error("SOURCE_UNAVAILABLE", "Invalid process-group observation"))?;
@@ -239,6 +233,25 @@ fn group_has_other_members(root: u32, deadline: Deadline) -> Result<bool> {
             "Native query group observation is unavailable",
         ))
     }
+}
+
+#[cfg(target_os = "linux")]
+fn linux_read_stat(reader: impl Read) -> Result<Option<Vec<u8>>> {
+    let mut bytes = Vec::new();
+    if let Err(e) = reader.take(8193).read_to_end(&mut bytes) {
+        // An opened proc descriptor stays bound to its original process. If
+        // that process is reaped during enumeration, Linux reports ESRCH.
+        // The pinned root must still be observed by the caller; other errors
+        // remain failures rather than evidence of an empty group.
+        if e.kind() == std::io::ErrorKind::NotFound || e.raw_os_error() == Some(libc::ESRCH) {
+            return Ok(None);
+        }
+        return Err(error(
+            "SOURCE_UNAVAILABLE",
+            "Query process-group membership could not be read",
+        ));
+    }
+    Ok(Some(bytes))
 }
 
 #[cfg(target_os = "linux")]
@@ -905,6 +918,41 @@ mod linux_group_tests {
         );
         assert_eq!(linux_stat_group(b"42 (fixture) S 1 12x 0"), None);
         assert_eq!(linux_stat_group(b"42 (fixture) S 1"), None);
+    }
+
+    #[test]
+    fn opened_stat_of_reaped_process_is_absent_but_pinned_root_is_required() {
+        let mut child = Command::new("/bin/sleep").arg("60").spawn().unwrap();
+        let pid = child.id();
+        let path = format!("/proc/{pid}/stat");
+        let mut raw = std::fs::File::open(&path).unwrap();
+        let observed = std::fs::File::open(&path).unwrap();
+        child.kill().unwrap();
+        child.wait().unwrap();
+        let error = raw.read_to_end(&mut Vec::new()).unwrap_err();
+        assert_eq!(error.raw_os_error(), Some(libc::ESRCH));
+        assert!(linux_read_stat(observed).unwrap().is_none());
+        let error = group_has_other_members(pid, Deadline::from_millis(3000).unwrap()).unwrap_err();
+        assert_eq!(error.code, "SOURCE_UNAVAILABLE");
+        assert_eq!(
+            error.message,
+            "Pinned query root missing from group observation"
+        );
+    }
+
+    #[test]
+    fn inaccessible_stat_remains_unknown_and_live_stat_bytes_are_preserved() {
+        struct Denied;
+        impl Read for Denied {
+            fn read(&mut self, _: &mut [u8]) -> std::io::Result<usize> {
+                Err(std::io::Error::from_raw_os_error(libc::EACCES))
+            }
+        }
+        let error = linux_read_stat(Denied).unwrap_err();
+        assert_eq!(error.code, "SOURCE_UNAVAILABLE");
+        assert_eq!(error.exit, 6);
+        let bytes = std::fs::read("/proc/self/stat").unwrap();
+        assert_eq!(linux_read_stat(bytes.as_slice()).unwrap().unwrap(), bytes);
     }
 
     #[test]
