@@ -1,6 +1,23 @@
 # Implementation requirements
 
-## Exact-child script-policy wait — current, 2026-10-09
+## Supported correction review and minimal vendor payload — current, 2026-10-09
+
+Only PCTX01-G05-D05 active/product_failure; PCTX01 stays33/40 details,0/10 gates.
+AppleScript main-thread workaround is a different mechanism and priming is excluded.
+Reviewed Apple guidance does not identify a matching child-script policy latency fix.
+Installed XProtect data5366/remediator163 recorded,latest/causal status unknown.
+Read-only bounded macOS update listing returns27.0.1/26A5434,requires restart;
+availability is not correction applicability. No installer/update requested.
+No new test/trace/log/service observation/security change. Update helper reaped/absent.
+Four-file4882byte minimized vendor ZIP independently checked; exact report,owned
+numeric evidence,original reproduction and synthetic fixture source only. Raw/other-app
+frames/paths/sysdiagnose/credentials excluded. Local/unsubmitted,send approval pending.
+Next same D05: explicit authorization for Apple Feedback Assistant web exact payload,
+then supported guidance/correction and all original acceptance. No task closure/switch.
+[Applicability and scope](evidence/pctx01-startup-platform-correction-review.md),
+[payload manifest](evidence/pctx01-startup-platform-report-manifest.json).
+
+## Exact-child script-policy wait — historical, 2026-10-09
 
 Only PCTX01-G05-D05 active/product_failure; PCTX01 stays33/40 details,0/10 gates.
 Approved once-only7s all-process trace recorder0/originaltest101,3TIMEOUT49083/49084/49086.

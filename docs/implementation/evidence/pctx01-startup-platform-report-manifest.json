@@ -1,0 +1,41 @@
+{
+  "task": "PCTX01-G05-D05",
+  "submission_status": "not_submitted; explicit external-send authorization pending",
+  "proposed_recipient": "Apple Feedback Assistant web",
+  "proposed_url": "https://feedbackassistant.apple.com/",
+  "payload": "pctx01-startup-platform-report.zip",
+  "bytes": 4882,
+  "sha256": "1364292145d8efaeb0db77f9dee23095ea0897fe8509536844640a866779c333",
+  "files": [
+    {
+      "name": "fixture-source.rs.txt",
+      "bytes": 1803,
+      "sha256": "293c332f4f305c1d5477a36230f610024a46402c7ca29b4d77f4c29c5d5426e3"
+    },
+    {
+      "name": "observations.json",
+      "bytes": 9173,
+      "sha256": "8991eebc9449ac378bd88b83a187b3f1b10908eb8c995eb5973e6ad38b3a511e"
+    },
+    {
+      "name": "report.md",
+      "bytes": 2875,
+      "sha256": "63519dc0603c3d297923f82fe73ee72c62863806862f16ce37677a1c37c854a1"
+    },
+    {
+      "name": "reproduction.md",
+      "bytes": 1007,
+      "sha256": "8b28210de6743129820874f8429beb9c65cd145f96f76c5f6fa2aa2a95b60eaa"
+    }
+  ],
+  "excluded": [
+    "raw trace",
+    "raw system logs",
+    "sysdiagnose",
+    "other-app frames",
+    "user paths",
+    "serial numbers",
+    "credentials"
+  ],
+  "qualification": false
+}

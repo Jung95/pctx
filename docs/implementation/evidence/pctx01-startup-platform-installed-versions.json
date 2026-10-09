@@ -1,0 +1,44 @@
+{
+  "task": "PCTX01-G05-D05",
+  "fixed_installed_component_version_read_only": true,
+  "results": [
+    {
+      "component": "XProtectData",
+      "status": "read",
+      "CFBundleIdentifier": "com.apple.XProtect",
+      "CFBundleVersion": "1",
+      "CFBundleShortVersionString": "5366"
+    },
+    {
+      "component": "XProtectRemediator",
+      "status": "read",
+      "CFBundleIdentifier": "com.apple.XProtectFramework.XProtect",
+      "CFBundleVersion": "1",
+      "CFBundleShortVersionString": "163"
+    },
+    {
+      "component": "XprotectFramework",
+      "status": "read",
+      "CFBundleIdentifier": "com.apple.private.XprotectFrameWork.XprotectFramework",
+      "CFBundleVersion": "1",
+      "CFBundleShortVersionString": "1.0"
+    },
+    {
+      "component": "XprotectService",
+      "status": "read",
+      "CFBundleIdentifier": "com.apple.XprotectFramework.AnalysisService",
+      "CFBundleVersion": "1",
+      "CFBundleShortVersionString": "1.0"
+    },
+    {
+      "component": "AppleSystemPolicy",
+      "status": "read",
+      "CFBundleIdentifier": "com.apple.AppleSystemPolicy",
+      "CFBundleVersion": "2.0.0",
+      "CFBundleShortVersionString": "2.0.0"
+    }
+  ],
+  "no_process_or_log_observation": true,
+  "no_settings_or_update_change": true,
+  "qualification": false
+}

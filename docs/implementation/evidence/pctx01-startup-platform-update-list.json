@@ -1,0 +1,20 @@
+{
+  "task": "PCTX01-G05-D05",
+  "operation": "softwareupdate list macOS products only",
+  "tool_pid": 49751,
+  "exit": 0,
+  "reaped": true,
+  "failure": null,
+  "labels": [
+    "macOS 27.0.1-26A5434"
+  ],
+  "title_version_lines": [
+    "macOS 27.0.1, Version: 27.0.1, Size: 17929043KiB, Recommended: YES, Action: restart, "
+  ],
+  "reported_no_updates": false,
+  "query_error_reported": false,
+  "download_or_install_requested": false,
+  "raw_retained": false,
+  "qualification": false,
+  "post_query_owned_pid_state": "absent"
+}

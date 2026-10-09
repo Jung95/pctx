@@ -2,6 +2,21 @@
 
 Status: local draft only; no report submitted; approved broad trace collected privately and deleted after numeric reduction.
 
+## Current send preparation
+
+A minimized four-file ZIP and report are prepared in `pctx01-startup-platform-report.zip`
+and `pctx01-startup-platform-report.md`; contents/hashes are in the payload manifest.
+This longer historical draft is not the proposed attachment. Independent review
+confirmed numeric/source consistency and data exclusions. Proposed recipient is
+Apple Feedback Assistant web, exact payload only; external-send authorization remains
+pending. No native app launch or automatic sysdiagnose.
+
+Installed XProtect data5366/remediator163 read from fixed component Info.plists.
+A bounded read-only macOS catalog lists27.0.1 build26A5434; no install/download
+requested. Reviewed AppleScript workaround and public update notes establish no
+matching fix for the owned kernel script-evaluation wait. See
+`pctx01-startup-platform-correction-review.md` for source-specific limits.
+
 ## Reproduction and expected behavior
 
 Project: PCTX, https://github.com/Jung95/pctx, original source baseline`37e8d0e`.
