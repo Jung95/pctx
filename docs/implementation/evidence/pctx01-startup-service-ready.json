@@ -1,0 +1,25 @@
+{
+  "task": "PCTX01",
+  "revision": "7181e657042c75553bacb6eeb77b5ec2c07e81bc",
+  "session": "/private/tmp/pctx01-service-batch-nqr225it",
+  "inode": 274107082,
+  "binary": "/private/tmp/pctx01-service-batch-nqr225it/project-deadline",
+  "collector": "/Users/dev/PCTX/docs/implementation/evidence/pctx01-startup-service-collector.py.txt",
+  "tests": [
+    "query_program_resolution_uses_captured_command_path",
+    "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+    "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget",
+    "simultaneous_streams_are_collected_and_overflow_never_infers_success"
+  ],
+  "hashes": {
+    "/private/tmp/pctx01-service-batch-nqr225it/project-deadline": "be88abcceb7133d8b4f531b82aa640d148052efe2ea118cc0f4319f09f633fb7",
+    "/Users/dev/PCTX/docs/implementation/evidence/pctx01-startup-service-collector.py.txt": "de408564089da08e8b71894a99835d629303baa2b0e9199994073bc009a7ff35",
+    "/Users/dev/PCTX/docs/implementation/evidence/pctx01-startup-service-run.py.txt": "4e05b1892f258cf10a0a3a9cb9e395723c5d5adfaf25083f4a09d2541c123b97",
+    "/Users/dev/PCTX/src/query_process.rs": "bf661f4b8d0ed472585244ada4ac0e946221de364c100039cd20aee56fd8d0d2",
+    "/Users/dev/PCTX/tests/project_deadline.rs": "8b9fbc97fbd5acaf612b2d75b94cf810faa2b61614b654495082462b1941a8dc",
+    "/Users/dev/PCTX/Cargo.lock": "f96362897990caba560793601bc9fca08cef5c977907bb06889d5595d2acd7b0",
+    "/Users/dev/PCTX/docs/implementation/evidence/pctx01-startup-service-scope-plan.json": "345b5efc70cf9119f6d7e70c68e93bd730f8b32af84931d0d638fe2831d011d1"
+  },
+  "approval": "human approved syspolicyd-only scope 2026-10-09",
+  "state": "prepared; no authentication or test yet"
+}

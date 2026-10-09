@@ -1,5 +1,33 @@
 # Implementation progress
 
+## Single authentication pending — live, 2026-10-09
+
+The human approved the exact syspolicyd-only scope. The finite collector passed
+independent execution review after FIFO,cleanup,exclusive consumption and per-stage
+hash controls were corrected. Parser/IPC/AST and home-cwd plan-only controls pass.
+[Live snapshot](evidence/pctx01-startup-service-live-status.json): ordinary driver
+26112,authentication helper26113,exec session62331;one OS authentication requested,
+collector-ready absent and no original test log at the snapshot. Root collection
+and tests have not started at that observation. Session is CONSUMED;do not rerun.
+Resume existing session62331 after authentication,interpret collector_error/complete,
+then audit cleanup and record all failures. No source change;PCTX01-G05-D05 remains
+product_failure,33/40details,0/10gates. Only PCTX01 active.
+
+## Pending service-side diagnostic scope — 2026-10-09
+
+[Reviewable scope plan](evidence/pctx01-startup-service-scope-plan.json) proposes
+first bounded syspolicyd-only observation alongside the four unchanged startup
+tests: one authentication,four2s function-only samples,ordinary UID502 tests,
+identity admission,private raw-data removal,no service restart or policy change.
+Sampling briefly suspends/resumes service threads and can affect timing;diagnostic
+passes cannot qualify the product. The existing owned-test consent explicitly
+excludes OS-service observation,so separate approval was requested. The human approved this exact scope.
+The finite collector/ordinary runner and frozen binary are now prepared;synthetic
+parser/IPC,AST and home-cwd plan-only controls pass. Final independent execution
+review remains before the single authentication;no service observation yet. Current local diagnosis remains child prepayload policy waiting,
+not a demonstrated PCTX cause;G05-D05 product_failure,33/40details,0/10gates.
+No product code change or original test rerun this turn;only PCTX01 active.
+
 ## Query final-return defect — current, 2026-10-09
 
 [Bounded correction](evidence/pctx01-query-final-deadline-verification.json)

@@ -1,0 +1,101 @@
+{
+  "task": "PCTX01",
+  "condition": "PCTX01-G05-D05",
+  "date": "2026-10-09",
+  "revision": "7181e657042c75553bacb6eeb77b5ec2c07e81bc",
+  "status": "human approved exact scope; finite harness prepared; final independent review pending; not executed",
+  "hypothesis": "Policy evaluation service may have a busy verification queue or stalled dispatch while original owned script children wait; closing the UI does not reset persisted service state. Prior child-only traces cannot distinguish this. No causal local claim.",
+  "why_new": "First service-side observation; not a repeat of known child kernel wait or consumed UI-state comparison.",
+  "existing_consent_limit": "Only owned PCTX test process read-only diagnostics. User explicitly excluded operating-process observation. syspolicyd is a root OS service and is outside that consent.",
+  "requested_scope": {
+    "process": "only /usr/libexec/syspolicyd, no trustd or Codex/helper/other-user process sampling",
+    "identity_admission": "After explicit scope approval only: resolve one exact matching service PID; require UID0, exact executable path, native BSD start sec/usec. Recheck before and after each sample; any PID/start/path/UID mismatch aborts and invalidates capture. Do not select by a partial process-name match.",
+    "readouts": "fixed BSD identity and task CPU/running-thread counters plus function-only call tree; no heap, environment, argv, message/log content or other-process inventory",
+    "sampler": "/usr/bin/sample <admitted_exact_PID> 2 10 -file <root_private_raw_file>",
+    "duration": "four stages, one2s sample per stage at10ms interval; at most8s requested sampling total. Watchdogs terminate only generated sampler/coordinator tools on expiry; never signal service. Syscall cancellation/reaping is cooperative, not a hard wall guarantee.",
+    "authentication": "one macOS authentication for one ephemeral finite collector; ordinary UID502 test runner remains unprivileged",
+    "transient_effect": "sample briefly suspends/resumes sampled service threads while reading stacks. This can affect other callers and test timing; resulting test passes are diagnostic only, not qualification. No intentional service restart/signal or policy mutation."
+  },
+  "stages": [
+    {
+      "test": "query_program_resolution_uses_captured_command_path",
+      "test_argv": [
+        "/Users/dev/PCTX/target/debug/deps/project_deadline-f7e8b9d913251d84",
+        "--exact",
+        "query_program_resolution_uses_captured_command_path",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "sampling": "service sampler begins concurrently with this single original test invocation; record monotonic begin/end and coverage uncertainty. No retries or warmup."
+    },
+    {
+      "test": "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+      "test_argv": [
+        "/Users/dev/PCTX/target/debug/deps/project_deadline-f7e8b9d913251d84",
+        "--exact",
+        "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "sampling": "service sampler begins concurrently with this single original test invocation; record monotonic begin/end and coverage uncertainty. No retries or warmup."
+    },
+    {
+      "test": "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget",
+      "test_argv": [
+        "/Users/dev/PCTX/target/debug/deps/project_deadline-f7e8b9d913251d84",
+        "--exact",
+        "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "sampling": "service sampler begins concurrently with this single original test invocation; record monotonic begin/end and coverage uncertainty. No retries or warmup."
+    },
+    {
+      "test": "simultaneous_streams_are_collected_and_overflow_never_infers_success",
+      "test_argv": [
+        "/Users/dev/PCTX/target/debug/deps/project_deadline-f7e8b9d913251d84",
+        "--exact",
+        "simultaneous_streams_are_collected_and_overflow_never_infers_success",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "sampling": "service sampler begins concurrently with this single original test invocation; record monotonic begin/end and coverage uncertainty. No retries or warmup."
+    }
+  ],
+  "frozen_inputs": {
+    "target/debug/deps/project_deadline-f7e8b9d913251d84": "be88abcceb7133d8b4f531b82aa640d148052efe2ea118cc0f4319f09f633fb7",
+    "src/query_process.rs": "bf661f4b8d0ed472585244ada4ac0e946221de364c100039cd20aee56fd8d0d2",
+    "tests/project_deadline.rs": "8b9fbc97fbd5acaf612b2d75b94cf810faa2b61614b654495082462b1941a8dc",
+    "Cargo.lock": "f96362897990caba560793601bc9fca08cef5c977907bb06889d5595d2acd7b0"
+  },
+  "test_invariants": "Original1000ms; concurrency8workers x16; argv/executable/cwd/env/group/stdout/stderr/overflow/assertions untouched. No instrumented source changes, no deadline extension, no interpreter substitution.",
+  "data_handling": "Root-private0700 temporary directory,0600 raw sample; ordinary output only allowlisted function call tree, coarse CPU/thread counters, admitted service identity and owned-test receipts. Strip image/source paths, addresses, thread names, user strings, headers, raw logs. Delete raw data and temporary privileged tools on every normal/error path; report unexpected-death cleanup uncertainty.",
+  "refusals": [
+    "missing or ambiguous service identity",
+    "source/binary hash drift",
+    "ordinary test UID differs from502",
+    "unreviewed collector",
+    "parser cannot safely reduce raw sample",
+    "collector reused or approval absent"
+  ],
+  "prohibited": [
+    "security/TCC/Gatekeeper/SIP changes",
+    "service restart/kill or cache deletion",
+    "permanent privileged service",
+    "password storage",
+    "Codex/helper/trustd/other-process stack reads",
+    "logs/heap/environment/secrets"
+  ],
+  "interpretation": "Busy/idle call trees alone cannot assign target-specific cause. Record alternatives and capture effects. Implement only a source-supported corrective mechanism or applicable supported platform correction; qualification requires unchanged tests without sampler.",
+  "public_lead": {
+    "url": "https://github.com/openai/codex/issues/34768",
+    "meaning": "First-hand report says closing app may not clear persistent service state. Different macOS/app versions, no confirmed fix; hypothesis only."
+  },
+  "official_check": {
+    "url": "https://learn.chatgpt.com/docs/reference/troubleshooting",
+    "meaning": "Generic restart guidance and version paths; no matching syspolicyd/startup correction established. Referenced Codex.app compatibility path is absent on this host; PlistBuddy lookup could not read version, so no installed version inference."
+  },
+  "completion": "G05-D05 remains product_failure;33/40details,0/10gates; no task switch or release-platform exemption.",
+  "approval": "Human answer: \uc774 \ubc94\uc704\uc758 \uc9c4\ub2e8 \uc2b9\uc778 (2026-10-09)",
+  "target_binding_limit": "sample accepts PID rather than unique process capability. Native pre/post checks and header validation detect changes but cannot eliminate a narrow admission-to-attach PID reuse race; any detected mismatch aborts/discards capture. No stronger guarantee is claimed."
+}

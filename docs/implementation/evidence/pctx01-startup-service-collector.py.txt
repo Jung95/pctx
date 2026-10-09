@@ -1,0 +1,183 @@
+"""Finite approved syspolicyd-only collector. Tests never run in this process."""
+import argparse, collections, ctypes, json, os, re, stat, subprocess, tempfile, time
+
+TARGET = '/usr/libexec/syspolicyd'
+class BSD(ctypes.Structure):
+    _fields_ = [(n, ctypes.c_uint32) for n in ['flags','status','xstatus','pid','ppid','uid','gid','ruid','rgid','svuid','svgid','rfu']] + [('comm',ctypes.c_char*16),('name',ctypes.c_char*32)] + [(n,ctypes.c_uint32) for n in ['nfiles','pgid','jobc','tdev','tpgid','nice']] + [('sec',ctypes.c_uint64),('usec',ctypes.c_uint64)]
+class Task(ctypes.Structure):
+    _fields_ = [(n,ctypes.c_uint64) for n in ['virtual','resident','user','system','threads_user','threads_system']] + [(n,ctypes.c_int32) for n in ['policy','faults','pageins','cow','sent','received','mach','unix','csw','threads','running','priority']]
+
+# Only literal names in this allowlist can leave the private raw file.
+FUNCTIONS = ['SecCertificateIsSignedBy','SecKeyVerifySignature','SecKeyRunAlgorithmAndCopyResult','SecECPublicKeyCopyOperationResult','ccec_verify','ccec_verify_digest_ws','evaluateScript','waitForEvaluation','waitOnEvaluation','mach_msg','mach_msg2_trap','mach_msg_overwrite','mach_msg2_internal','__psynch_cvwait','__psynch_mutexwait','__ulock_wait','__ulock_wait2','pthread_cond_wait','_pthread_cond_wait','_dispatch_semaphore_wait_slow','_dispatch_sync_f_slow','_dispatch_worker_thread','_dispatch_event_loop_wait_for_ownership','CFRunLoopRun','CFRunLoopRunSpecific','__CFRunLoopRun','__CFRunLoopServiceMachPort','kevent','kevent_id','start','main']
+
+def sanitize(raw, pid):
+    # Refuse identity/header ambiguity; unknown symbols/strings never get exported.
+    if len(raw.encode('utf-8')) > 8*1024*1024:
+        raise ValueError('oversized raw sample')
+    if not re.search(r'^Process:\s+syspolicyd \['+str(pid)+r'\]\s*$',raw,re.M):
+        raise ValueError('sample process identity mismatch')
+    if not re.search(r'^Path:\s+'+re.escape(TARGET)+r'\s*$',raw,re.M):
+        raise ValueError('sample executable identity mismatch')
+    if 'Call graph:' not in raw:
+        raise ValueError('missing call graph')
+    graph=raw.split('Call graph:',1)[1]
+    ending=re.search(r'^Total number in stack|^Sort by top of stack|^Binary Images:',graph,re.M)
+    if not ending:
+        raise ValueError('unrecognized call graph boundary')
+    graph=graph[:ending.start()]
+    counts=collections.Counter(); service=collections.Counter(); frames=0; unknown=0
+    for line in graph.splitlines():
+        match=re.match(r'^\s*[+|:! ]*\s*(\d+)\s+(.+)$',line)
+        if not match:
+            continue
+        frames+=1; weight=int(match.group(1)); symbol=match.group(2)
+        found=None
+        for name in FUNCTIONS:
+            if re.match(re.escape(name)+r'(?:\s|\(|$)',symbol):
+                found=name; break
+        if found:
+            counts[found]+=weight
+        else:
+            target_symbol=re.fullmatch(r'([A-Za-z_][A-Za-z0-9_.$]*|[+-]\[[A-Za-z_][A-Za-z0-9_]* [A-Za-z_][A-Za-z0-9_:]*\])\s+\(in syspolicyd\)(?:\s+\+\s+[0-9]+)?\s+\[0x[0-9A-Fa-f]+\]',symbol)
+            if target_symbol:
+                service[target_symbol.group(1)]+=weight
+            else:
+                unknown+=1
+    if not frames:
+        raise ValueError('no recognized frame structure')
+    return {'allowlisted_function_counts':dict(counts),'validated_service_function_counts':dict(service),'frame_rows':frames,'unpublished_unknown_frame_rows':unknown,'limit':'Inclusive sampled-stack counts, not CPU percentages or per-child attribution. Unknown strings, image paths, headers and addresses omitted.'}
+
+def atomic_marker(fd,name,obj):
+    temporary=name+'-staging'
+    handle=os.open(temporary,os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW,0o644,dir_fd=fd)
+    try:
+        os.fchmod(handle,0o644)
+        with os.fdopen(handle,'w') as stream:
+            json.dump(obj,stream); stream.flush(); os.fsync(stream.fileno())
+        os.link(temporary,name,src_dir_fd=fd,dst_dir_fd=fd,follow_symlinks=False)
+    finally:
+        os.unlink(temporary,dir_fd=fd)
+
+def request_exists(fd,name):
+    try:
+        handle=os.open(name,os.O_RDONLY|os.O_NOFOLLOW|os.O_NONBLOCK,dir_fd=fd)
+    except FileNotFoundError:
+        return False
+    with os.fdopen(handle,'rb') as stream:
+        info=os.fstat(stream.fileno())
+        if not stat.S_ISREG(info.st_mode) or info.st_uid!=502 or info.st_size!=1 or stream.read(2)!=b'1':
+            raise ValueError('invalid stage request')
+    return True
+
+def collector(session,inode,uid):
+    if os.getuid()!=0 or os.geteuid()!=0 or uid!=502:
+        raise ValueError('root collector and ordinary UID502 required')
+    os.umask(0o077)
+    lib=ctypes.CDLL('/usr/lib/libproc.dylib',use_errno=True)
+    lib.proc_pidinfo.argtypes=[ctypes.c_int,ctypes.c_int,ctypes.c_uint64,ctypes.c_void_p,ctypes.c_int]
+    lib.proc_pidinfo.restype=ctypes.c_int
+    lib.proc_pidpath.argtypes=[ctypes.c_int,ctypes.c_void_p,ctypes.c_uint32]
+    lib.proc_pidpath.restype=ctypes.c_int
+    def identity(pid):
+        record=BSD(); size=ctypes.sizeof(record)
+        if lib.proc_pidinfo(pid,3,0,ctypes.byref(record),size)!=size:
+            raise ValueError('identity unavailable')
+        path=ctypes.create_string_buffer(4096)
+        if lib.proc_pidpath(pid,path,4096)<=0 or path.value.decode()!=TARGET or record.uid!=0 or record.pid!=pid:
+            raise ValueError('target identity refused')
+        return {'pid':pid,'uid':0,'start_sec':record.sec,'start_usec':record.usec,'executable':TARGET}
+    def counters(pid):
+        t=Task(); size=ctypes.sizeof(t)
+        if lib.proc_pidinfo(pid,4,0,ctypes.byref(t),size)!=size:
+            raise ValueError('task counters unavailable')
+        return {'cpu_user':t.user,'cpu_system':t.system,'threads':t.threads,'running':t.running}
+    fd=os.open(session,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW)
+    try:
+        info=os.fstat(fd)
+        if info.st_ino!=inode or info.st_uid!=uid or stat.S_IMODE(info.st_mode)!=0o700:
+            raise ValueError('session identity refused')
+        raw_pids=subprocess.run(['/usr/bin/pgrep','-x','syspolicyd'],capture_output=True,timeout=3,check=True).stdout.split()
+        if len(raw_pids)!=1 or not raw_pids[0].isdigit():
+            raise ValueError('ambiguous service')
+        pid=int(raw_pids[0]); admitted=identity(pid)
+        atomic_marker(fd,'collector-ready',{'identity':admitted})
+        result={'identity':admitted,'stages':[],'pid_binding_limit':'Native identity checked before/after attachment and sample header checked. sample takes PID, not a unique-id capability: a narrow admission-to-attach PID-reuse race cannot be eliminated. Any detected mismatch discards raw data and aborts; no attribution across identity change.'}
+        end=time.monotonic()+90
+        with tempfile.TemporaryDirectory(prefix='pctx01-service-raw-',dir='/private/tmp') as private:
+            os.chmod(private,0o700)
+            for index in range(4):
+                while not request_exists(fd,'request-'+str(index)):
+                    if time.monotonic()>=end:
+                        raise ValueError('finite request wait expired')
+                    time.sleep(.01)
+                if identity(pid)!=admitted:
+                    raise ValueError('service identity changed')
+                before=counters(pid); start=time.monotonic_ns(); path=os.path.join(private,'raw-'+str(index))
+                tool=subprocess.Popen(['/usr/bin/sample',str(pid),'2','10','-file',path],stdin=subprocess.DEVNULL,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,env={'PATH':'/usr/bin:/bin:/usr/sbin:/sbin','LC_ALL':'C'})
+                try:
+                    atomic_marker(fd,'sampling-'+str(index),{'sampler_pid':tool.pid,'begin_ns':start})
+                    try:
+                        code=tool.wait(timeout=6)
+                    except subprocess.TimeoutExpired:
+                        raise ValueError('sampler watchdog expired; no retry')
+                finally:
+                    if tool.poll() is None:
+                        tool.send_signal(2)
+                        try:tool.wait(timeout=2)
+                        except subprocess.TimeoutExpired:tool.kill();tool.wait()
+                finish=time.monotonic_ns()
+                if identity(pid)!=admitted or code!=0:
+                    raise ValueError('sample invalid; no retry')
+                after=counters(pid)
+                with open(path,'r',encoding='utf-8',errors='strict') as stream:
+                    raw=stream.read(8*1024*1024+1)
+                reduced=sanitize(raw,pid); raw=None; os.unlink(path)
+                row={'stage':index,'begin_ns':start,'end_ns':finish,'sampler_exit':code,'before':before,'after':after,'sample':reduced}
+                result['stages'].append(row)
+                atomic_marker(fd,'terminal-'+str(index),{'stage':index,'collector_stage_exit':0})
+        result['raw_cleanup']='all raw files and private directory removed on normal return'
+        print(json.dumps(result),flush=True)
+    finally:
+        os.close(fd)
+
+def selftest():
+    raw='Process: syspolicyd [123]\nPath: /usr/libexec/syspolicyd\nCall graph:\n  + 20 mach_msg2_trap (in libsystem_kernel.dylib) [0x123]\n  + 10 SECRET_TOKEN=/Users/private/key (in syspolicyd) [0x456]\n  + 5 -[Policy checkScript:] (in syspolicyd) + 8 [0x789]\nBinary Images:\n/private/secret\n'
+    output=sanitize(raw,123)
+    assert output['allowlisted_function_counts']=={'mach_msg2_trap':20}
+    assert output['unpublished_unknown_frame_rows']==1
+    assert output['validated_service_function_counts']=={'-[Policy checkScript:]':5}
+    encoded=json.dumps(output)
+    for secret in ['SECRET','/Users','0x123','/private','UNKNOWN']:assert secret not in encoded
+    for invalid in [raw.replace('[123]','[124]'),raw.replace(TARGET,'/usr/bin/other'),raw.replace('Call graph:','invalid'),raw.replace('Binary Images:','invalid')]:
+        try:sanitize(invalid,123)
+        except ValueError:pass
+        else:raise AssertionError('invalid sample admitted')
+    with tempfile.TemporaryDirectory() as folder:
+        fd=os.open(folder,os.O_RDONLY|os.O_DIRECTORY)
+        try:
+            atomic_marker(fd,'ready',{'ok':True})
+            try:atomic_marker(fd,'ready',{'ok':False})
+            except FileExistsError:pass
+            else:raise AssertionError('marker overwrite admitted')
+            os.mkfifo(os.path.join(folder,'fifo'))
+            try:request_exists(fd,'fifo')
+            except ValueError:pass
+            else:raise AssertionError('FIFO request admitted')
+            os.symlink('/etc/passwd',os.path.join(folder,'request'))
+            try:request_exists(fd,'request')
+            except OSError:pass
+            else:raise AssertionError('symlink request admitted')
+        finally:os.close(fd)
+    print(json.dumps({'parser':'PASS; identity/boundary refusal,unknown-string suppression','ipc':'PASS; no overwrite, no symlink following','observation':'none; synthetic and generated-file controls only'}))
+
+if __name__=='__main__':
+    parser=argparse.ArgumentParser(); parser.add_argument('--self-test',action='store_true'); parser.add_argument('--collect',nargs=3,metavar=('SESSION','INODE','UID'))
+    args=parser.parse_args()
+    if args.self_test:selftest()
+    elif args.collect:
+        try:collector(args.collect[0],int(args.collect[1]),int(args.collect[2]))
+        except BaseException as failure:
+            safe={'identity unavailable','target identity refused','task counters unavailable','session identity refused','ambiguous service','finite request wait expired','service identity changed','sampler watchdog expired; no retry','sample invalid; no retry','sample process identity mismatch','sample executable identity mismatch','missing call graph','unrecognized call graph boundary','no recognized frame structure','invalid stage request','oversized raw sample'}
+            reason=str(failure) if type(failure) is ValueError and str(failure) in safe else type(failure).__name__
+            print(json.dumps({'collector_error':'capture invalid; no retry','reason':reason}),flush=True)
+    else:parser.error('choose explicit mode')

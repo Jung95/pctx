@@ -1,0 +1,34 @@
+{
+  "task": "PCTX01",
+  "scope": "synthetic parser/IPC and home-cwd plan-only; no service observation,authentication,test",
+  "collector_selftest": {
+    "parser": "PASS; identity/boundary refusal,unknown-string suppression",
+    "ipc": "PASS; no overwrite, no symlink following",
+    "observation": "none; synthetic and generated-file controls only"
+  },
+  "driver_plan": {
+    "tests": [
+      "query_program_resolution_uses_captured_command_path",
+      "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+      "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget",
+      "simultaneous_streams_are_collected_and_overflow_never_infers_success"
+    ],
+    "uid": 502,
+    "authentications": 1,
+    "retry": false,
+    "service_samples": "4 x 2s,10ms interval",
+    "original_source_unchanged": true,
+    "qualification": false
+  },
+  "AST": "PASS",
+  "hashes": {
+    "/private/tmp/pctx01-service-batch-nqr225it/project-deadline": "be88abcceb7133d8b4f531b82aa640d148052efe2ea118cc0f4319f09f633fb7",
+    "/Users/dev/PCTX/docs/implementation/evidence/pctx01-startup-service-collector.py.txt": "de408564089da08e8b71894a99835d629303baa2b0e9199994073bc009a7ff35",
+    "/Users/dev/PCTX/docs/implementation/evidence/pctx01-startup-service-run.py.txt": "4e05b1892f258cf10a0a3a9cb9e395723c5d5adfaf25083f4a09d2541c123b97",
+    "/Users/dev/PCTX/src/query_process.rs": "bf661f4b8d0ed472585244ada4ac0e946221de364c100039cd20aee56fd8d0d2",
+    "/Users/dev/PCTX/tests/project_deadline.rs": "8b9fbc97fbd5acaf612b2d75b94cf810faa2b61614b654495082462b1941a8dc",
+    "/Users/dev/PCTX/Cargo.lock": "f96362897990caba560793601bc9fca08cef5c977907bb06889d5595d2acd7b0",
+    "/Users/dev/PCTX/docs/implementation/evidence/pctx01-startup-service-scope-plan.json": "345b5efc70cf9119f6d7e70c68e93bd730f8b32af84931d0d638fe2831d011d1"
+  },
+  "original_test_source_hash": "8b9fbc97fbd5acaf612b2d75b94cf810faa2b61614b654495082462b1941a8dc"
+}
