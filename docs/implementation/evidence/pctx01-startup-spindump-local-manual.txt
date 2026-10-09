@@ -1,0 +1,11 @@
+Installed local spindump(8) capability evidence
+
+Read with /usr/bin/man spindump on2026-10-09. Full local read SHA256:
+3c5bbd8b17c6c69de82e3b16a6f276a8beadbdd1de5dbddb39ee48e087a4effe
+
+Relevant excerpt:
+"-proc proc If -onlyTarget is provided, sample proc as well. This option may be specified multiple times"
+
+The manual describes target-restricted collection with explicitly listed extra
+processes. This documents the intended CLI route; group runtime capture remains
+unexecuted and unverified. No default system-wide sampling is authorized.

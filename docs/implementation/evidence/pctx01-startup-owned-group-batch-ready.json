@@ -1,0 +1,56 @@
+{
+  "task": "PCTX01",
+  "condition": "PCTX01-G05-D05",
+  "status": "prepared only; no new test, root collector or authentication executed",
+  "source_revision": "cf10b1fad105b16c814dba55b99b1d917101ddcd",
+  "rationale": "Installed primary manual supports repeated -proc with -onlyTarget; one tool can observe the owned initial child cohort rather than selecting one eventual successful target. New method is tied to existing missing expired-child wait proof, not a new closure item.",
+  "scope": {
+    "primary": "ordinary-user original test parent",
+    "extra_targets_max": 8,
+    "extra_target_constraint": "same UID, parent PID, native start identity, own WNOWAIT ACK/unreaped retention, live task, original age<1000ms",
+    "tools": 1,
+    "authentication_requests": 1,
+    "test": "one exact original concurrent8x16 test; unchanged1s/group/stream assertions",
+    "automatic_retries": 0
+  },
+  "validation": [
+    "strict native -Wall -Wextra -Werror compile PASS",
+    "Python AST PASS",
+    "isolated locked/offline project_deadline --no-run -j2 PASS",
+    "original test bytes unchanged",
+    "independent read-only review no material blocker"
+  ],
+  "source_and_binary": {
+    "/private/tmp/pctx01-original-observation-o1sldfsr/source/src/query_process.rs": "1818d5d5a2db628bdea7e14a6249c9279b524dc90facb40160af414c99323dbe",
+    "/private/tmp/pctx01-original-observation-o1sldfsr/source/tests/project_deadline.rs": "8b9fbc97fbd5acaf612b2d75b94cf810faa2b61614b654495082462b1941a8dc",
+    "/private/tmp/pctx01-original-observation-o1sldfsr/source/Cargo.lock": "f96362897990caba560793601bc9fca08cef5c977907bb06889d5595d2acd7b0",
+    "/private/tmp/pctx01-original-observation-o1sldfsr/target/debug/deps/project_deadline-f7e8b9d913251d84": "b03faa92b8763cf01b21e89682e16c74fb479bc403628f8df08726eed6bf4257",
+    "/private/tmp/pctx01-startup-owned-group-collector": "9836596d2b215a68c58b31c3cb926a47d6465a3be78405eedce14e0522a51557",
+    "docs/implementation/evidence/pctx01-startup-owned-group-collector.c.txt": "91b19533c1d6efc6259d72aab6732f28188634dff8c2fc8e5c5f3f047cde20f0",
+    "docs/implementation/evidence/pctx01-startup-owned-group-hook.rs.txt": "bc1ce908b9111496dbbc7c3e55e9c625a1644aab492a9a707debeb20607ec869",
+    "docs/implementation/evidence/pctx01-startup-owned-group-observer.py.txt": "70a723f02af6effb055ca1215115022caf7cca9871eea28bfe244bf3166aa9dd",
+    "docs/implementation/evidence/pctx01-startup-owned-group-prepare.py.txt": "ee2ced87e8c33ebd1329dae901e4ecbe88786a02a97a03d16e96e5c53c80ce79",
+    "docs/implementation/evidence/pctx01-startup-spindump-local-manual.txt": "88510765297be91b746a69d6f6e9dcc2f134d2c5ba57d77f49e6bb7d636f2b75"
+  },
+  "run_arguments": [
+    "python3",
+    "docs/implementation/evidence/pctx01-startup-owned-group-observer.py.txt",
+    "--prepared",
+    "/Users/dev/PCTX/docs/implementation/evidence/pctx01-startup-owned-group-batch-prepared.json",
+    "--output-prefix",
+    "pctx01-startup-owned-group-capture"
+  ],
+  "execution_boundary": "Fresh explicit user request required for this parent-plus-owned-children batch before another OS dialog. Previous single-target request exhausted.",
+  "proof_required": "actual admitted native identities -> individual trace samples -> eventual original TIMEOUT, pre-cancel timing, cancellation/retention/cleanup; ACK/request membership alone is not capture proof",
+  "limits": [
+    "Diagnostic IO/group retention perturbs scheduling, not unchanged-original qualification.",
+    "Primary local manual route is not live group capability proof until executed.",
+    "Cooperative parent/observer failure invalidates ownership/lifetime assumptions; no universal cleanup guarantee.",
+    "Fixed first cohort within20ms of earliest origin/max8 may be incomplete; record actual targets and exclusions.",
+    "Outcome time is pre-publication/pre-signal; native/wall mapping and<1us rounding require honest qualification."
+  ],
+  "details_closed": 33,
+  "detail_denominator": 40,
+  "whole_gates_closed": 0,
+  "whole_gate_denominator": 10
+}

@@ -1,0 +1,58 @@
+// Isolated diagnostic-copy hook only; never added to published product sources.
+struct StartupDiagnostic {
+    pid: u32,
+    root: std::path::PathBuf,
+}
+impl StartupDiagnostic {
+    fn native_us() -> u64 {
+        let mut t: libc::timespec = unsafe { std::mem::zeroed() };
+        if unsafe { libc::clock_gettime(libc::CLOCK_MONOTONIC, &mut t) } != 0 { return 0; }
+        (t.tv_sec as u64) * 1_000_000 + (t.tv_nsec as u64) / 1000
+    }
+    fn clock_bounds(deadline: Deadline) -> (u64, u64) {
+        let low = Self::native_us();
+        let remaining = deadline.instant().checked_duration_since(std::time::Instant::now()).unwrap_or_default().as_micros() as u64;
+        let high = Self::native_us();
+        (low.saturating_add(remaining), high.saturating_add(remaining))
+    }
+    fn publish(&self, suffix: &str, row: serde_json::Value) {
+        let path = self.root.join(format!("{}-{suffix}.json", self.pid));
+        let staging = self.root.join(format!("{}-{suffix}.staging", self.pid));
+        if let Ok(bytes) = serde_json::to_vec(&row) {
+            if std::fs::write(&staging, bytes).is_ok() { let _ = std::fs::rename(staging, path); }
+        }
+    }
+    fn new(pid: u32, bounds: (u64, u64)) -> Option<Self> {
+        let root = std::path::PathBuf::from(option_env!("PCTX_ORIGINAL_DIAGNOSTIC_ROOT")?);
+        let mut b: libc::proc_bsdinfo = unsafe { std::mem::zeroed() };
+        if unsafe { libc::proc_pidinfo(pid as i32, libc::PROC_PIDTBSDINFO, 0, (&mut b as *mut libc::proc_bsdinfo).cast(), std::mem::size_of_val(&b) as i32) } != std::mem::size_of_val(&b) as i32
+            || b.pbi_pid != pid || b.pbi_ppid != std::process::id() || b.pbi_uid != unsafe { libc::getuid() } { return None; }
+        let mut parent: libc::proc_bsdinfo = unsafe { std::mem::zeroed() };
+        if unsafe { libc::proc_pidinfo(std::process::id() as i32, libc::PROC_PIDTBSDINFO, 0, (&mut parent as *mut libc::proc_bsdinfo).cast(), std::mem::size_of_val(&parent) as i32) } != std::mem::size_of_val(&parent) as i32
+            || parent.pbi_pid != std::process::id() || parent.pbi_uid != b.pbi_uid { return None; }
+        let d = Self { pid, root };
+        d.publish("spawn", serde_json::json!({"pid":pid,"ppid":b.pbi_ppid,"uid":b.pbi_uid,"parent_ppid":parent.pbi_ppid,"parent_start_sec":parent.pbi_start_tvsec,"parent_start_usec":parent.pbi_start_tvusec,"start_sec":b.pbi_start_tvsec,"start_usec":b.pbi_start_tvusec,"origin_us":bounds.0.saturating_sub(1_000_000),"deadline_lower_us":bounds.0,"deadline_upper_us":bounds.1,"record_us":Self::native_us()}));
+        Some(d)
+    }
+    fn selected(&self) -> bool {
+        std::fs::read_to_string(self.root.join("capture-target")).ok().is_some_and(|s|s.split_whitespace().filter_map(|p|p.parse::<u32>().ok()).any(|pid|pid==self.pid))
+    }
+    fn ack(&self) {
+        if !self.selected() { return; }
+        let mut info: libc::siginfo_t = unsafe { std::mem::zeroed() };
+        if unsafe { libc::waitid(libc::P_PID, self.pid, &mut info, libc::WEXITED | libc::WNOHANG | libc::WNOWAIT) } != 0 || info.si_signo != 0 { return; }
+        let staging = self.root.join(format!("capture-ack-{}-staging",self.pid));
+        if std::fs::write(&staging, format!("{}\n", self.pid)).is_ok() { let _ = std::fs::rename(staging, self.root.join(format!("capture-ack-{}",self.pid))); }
+    }
+    fn outcome(&self, code: &str, out: usize, err: usize) {
+        self.publish("outcome", serde_json::json!({"pid":self.pid,"code":code,"at_us":Self::native_us(),"stdout_bytes":out,"stderr_bytes":err}));
+    }
+    fn retain(&self) {
+        if !self.selected() { return; }
+        let begin = Self::native_us();
+        // Caller cancels on the original clock BEFORE entering this retention.
+        // No waitpid/try_wait occurs until collector terminal prevents PID reuse.
+        while !self.root.join("capture-done").exists() { std::thread::sleep(Duration::from_millis(1)); }
+        self.publish("retention", serde_json::json!({"pid":self.pid,"begin_us":begin,"end_us":Self::native_us()}));
+    }
+}

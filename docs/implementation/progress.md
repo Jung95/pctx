@@ -1,5 +1,30 @@
 # Implementation progress
 
+## Owned-group observation — prepared only, not authorized for execution
+
+Installed [local manual](evidence/pctx01-startup-spindump-local-manual.txt) documents
+`-onlyTarget` with repeated `-proc`: one tool can sample the named original test
+parent plus at most8 own query children. This new bounded route addresses the
+successful-single-target selection problem; it does not repeat that probe or add
+an official task/closure condition. [Readiness](evidence/pctx01-startup-owned-group-batch-ready.json)
+binds isolated sourcecf10b1f, unchanged original test, native collector/hook/wrapper
+and new build. Native strict compile/Python AST/locked offline no-run build PASS;
+independent read-only safety review found no material blocker. No authentication,
+original test execution or live group capture occurred. There is no live job.
+
+Parent and extra targets are identity/UID/ancestry bound; children must have own
+nonterminal WNOWAIT ACK and remain unreaped until collector terminal. Query
+cancellation keeps original1s clock and precedes post-cancel retention. Root
+collector includes only currently validated live/unexpired children, never unknown
+or other-user processes; final age check before one fixed target-only group tool.
+The method remains diagnostically perturbing/cooperative, not product qualification.
+
+Next is fresh explicit authorization for THIS finite parent-plus-owned-children
+batch, one auth/tool/test invocation, no automatic retry. Actual admitted IDs and
+individual trace intervals must join eventual TIMEOUT outcomes; requested/ACK
+membership alone is not proof. No capture of an eventual-expired child means no
+cause/repair/exemption. Keep PCTX01/G05-D05 product_failure;33/40 and0/10 unchanged.
+
 ## Corrected diagnostic — terminal80102
 
 One authentication completed; native-clock collector/tool terminal0 and trace

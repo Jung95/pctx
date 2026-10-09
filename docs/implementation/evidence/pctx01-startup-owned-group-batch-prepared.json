@@ -1,0 +1,8 @@
+{
+  "revision": "cf10b1fad105b16c814dba55b99b1d917101ddcd",
+  "root": "/private/tmp/pctx01-original-observation-o1sldfsr",
+  "source": "/private/tmp/pctx01-original-observation-o1sldfsr/source",
+  "session": "/private/tmp/pctx01-original-observation-o1sldfsr/session",
+  "target": "/private/tmp/pctx01-original-observation-o1sldfsr/target",
+  "test": "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget"
+}
