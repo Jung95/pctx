@@ -40,7 +40,7 @@ fn bounded_file_bytes_observed(
 ) -> Result<Vec<u8>> {
     let check = || deadline.map_or(Ok(()), Deadline::check);
     check()?;
-    let bound = limit
+    limit
         .checked_add(1)
         .ok_or_else(|| Error::new("INVALID_ARGUMENT", "Input limit exceeds supported range", 2))?;
     let mut options = fs::OpenOptions::new();
@@ -66,19 +66,42 @@ fn bounded_file_bytes_observed(
         return Err(overflow());
     }
     observe()?;
+    bounded_reader_bytes(&mut file, limit, deadline, |_| Ok(()))
+}
+
+/// Shared chunk loop for already-admitted regular files. Callers retain their
+/// own authority and metadata gates; no request budget is created here.
+pub(crate) fn bounded_reader_bytes(
+    file: &mut impl Read,
+    limit: usize,
+    deadline: Option<Deadline>,
+    mut observe: impl FnMut(usize) -> Result<()>,
+) -> Result<Vec<u8>> {
+    let check = || deadline.map_or(Ok(()), Deadline::check);
+    check()?;
+    let bound = limit
+        .checked_add(1)
+        .ok_or_else(|| Error::new("INVALID_ARGUMENT", "Input limit exceeds supported range", 2))?;
     let mut bytes = Vec::new();
     let mut chunk = [0; 8192];
     loop {
         check()?;
         let capacity = chunk.len().min(bound - bytes.len());
         let read = file.read(&mut chunk[..capacity]);
+        if let Ok(count) = read {
+            observe(count)?;
+        }
         check()?;
         match read {
             Ok(0) => return Ok(bytes),
             Ok(count) => {
                 bytes.extend_from_slice(&chunk[..count]);
                 if bytes.len() > limit {
-                    return Err(overflow());
+                    return Err(Error::new(
+                        "FILE_TOO_LARGE",
+                        "Explicit input exceeds byte limit",
+                        2,
+                    ));
                 }
             }
             Err(e) if e.kind() == std::io::ErrorKind::Interrupted => {}
@@ -760,6 +783,28 @@ mod identity_tests {
     use super::*;
     use crate::project::{Config, ProjectConfig};
 
+    #[test]
+    fn phase_explicit_file_expiry_after_actual_chunk_prevents_further_reads() {
+        let temp = tempfile::tempdir().unwrap();
+        let path = temp.path().join("input");
+        let body = vec![b'x'; 65536];
+        fs::write(&path, &body).unwrap();
+        let mut file = fs::File::open(&path).unwrap();
+        let deadline = Deadline::from_millis(200).unwrap();
+        let mut reads = 0;
+        let error = bounded_reader_bytes(&mut file, body.len(), Some(deadline), |count| {
+            assert_eq!(count, 8192);
+            reads += 1;
+            while let Ok(left) = deadline.remaining() {
+                std::thread::sleep(left.min(Duration::from_millis(5)));
+            }
+            Ok(())
+        })
+        .unwrap_err();
+        assert_eq!((error.code.as_str(), error.exit), ("TIMEOUT", 7));
+        assert_eq!(reads, 1);
+        assert_eq!(fs::read(&path).unwrap(), body);
+    }
     #[test]
     fn explicit_file_cap_detects_growth_after_metadata_at_each_caller_limit() {
         for limit in [65536, 256 * 1024, 1024 * 1024] {

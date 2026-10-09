@@ -1,0 +1,24 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 5.15s
+     Running unittests src/lib.rs (target/debug/deps/pctx-ae897bec01e143c7)
+
+running 3 tests
+test input::identity_tests::phase_explicit_file_expiry_after_actual_chunk_prevents_further_reads ... ok
+test reader::search_candidate_tests::phase_mid_read_source_expiry_and_in_place_metadata_changes_are_not_success ... ok
+test project::phase_tests::phase_registry_config_chunk_expiry_mutation_and_fifo_proofs ... FAILED
+
+failures:
+
+---- project::phase_tests::phase_registry_config_chunk_expiry_mutation_and_fifo_proofs stdout ----
+
+thread 'project::phase_tests::phase_registry_config_chunk_expiry_mutation_and_fifo_proofs' (9386188) panicked at src/project.rs:1370:13:
+Output { status: ExitStatus(unix_wait_status(25856)), stdout: "\nrunning 1 test\ntest project::phase_tests::phase_registry_config_chunk_expiry_mutation_and_fifo_proofs ... FAILED\n\nfailures:\n\nfailures:\n    project::phase_tests::phase_registry_config_chunk_expiry_mutation_and_fifo_proofs\n\ntest result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 52 filtered out; finished in 0.53s\n\n", stderr: "\nthread 'project::phase_tests::phase_registry_config_chunk_expiry_mutation_and_fifo_proofs' (9386191) panicked at src/project.rs:1459:13:\nassertion `left == right` failed: registry-growth\n  left: (2, 0)\n right: (1, 0)\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    project::phase_tests::phase_registry_config_chunk_expiry_mutation_and_fifo_proofs
+
+test result: FAILED. 2 passed; 1 failed; 0 ignored; 0 measured; 50 filtered out; finished in 0.54s
+
+error: test failed, to rerun pass `--lib`

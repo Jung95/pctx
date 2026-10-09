@@ -734,8 +734,8 @@
     {
       "id": "PCTX01-G08-D04",
       "gate": "G08",
-      "status": "open",
-      "local_implementation": "remaining",
+      "status": "closed",
+      "local_implementation": "qualified_bounded_contract",
       "completion_condition": "Complete one frozen route-by-phase matrix: discovery/config, lock/SQL, input/read/hash, CPU/assembly, serialization/delivery/accounting; prove remaining actual metadata/input races and phase expiry, preserve partial usable result and cooperative syscall limits",
       "spec_sections": [
         "8",
@@ -751,15 +751,17 @@
         "pctx01-filter-deadline-verification.json",
         "pctx01-runner-read-verification.json",
         "pctx01-adapter-deadline-verification.json",
-        "pctx01-schedule-deadline-verification.json"
+        "pctx01-schedule-deadline-verification.json",
+        "pctx01-phase-matrix-verification.json",
+        "pctx01-phase-matrix-crosswalk.json"
       ],
       "verification_environment": "Native macOS arm64 local common proof; all release platforms separately required by G09",
-      "macOS_arm64": "remaining",
+      "macOS_arm64": "bounded_verified",
       "macOS_x86_64": "unverified; G09-D02",
       "Linux_x86_64": "unverified; G09-D03",
       "Linux_aarch64": "prior fixed-source full only; inspect linked manifest per contract",
       "Windows_x86_64": "unverified; G09-D04",
-      "documentation_evidence": "closure plan recorded; execution gaps retained"
+      "documentation_evidence": "pctx01-phase-matrix-verification.json"
     },
     {
       "id": "PCTX01-G08-D05",
@@ -999,9 +1001,8 @@
       "documentation_evidence": "closure plan recorded; execution gaps retained"
     }
   ],
-  "closed_details": 32,
+  "closed_details": 33,
   "execution_order": [
-    "G08-D04 (remaining frozen route-by-phase, metadata/input races and expiry)",
     "G05-D05 (four original startup failures, original budgets)",
     "G10-D04 (candidate checks)",
     "G09-D01..D04 (required real platform matrix; no Actions without existing authorization)",
@@ -1018,13 +1019,13 @@
     "PCTX01-G10-D03"
   ],
   "latest_condition_closure": {
-    "id": "PCTX01-G07-D03",
-    "detail_before": 31,
-    "detail_after": 32,
+    "id": "PCTX01-G08-D04",
+    "detail_before": 32,
+    "detail_after": 33,
     "denominator_before": 40,
     "denominator_after": 40,
-    "scope": "bounded local existing transport/control-character matrix; required platform/domain qualification remains separate",
-    "independent_review": "/root/work_control; pctx01-transport-controls-verification.json"
+    "scope": "bounded local five-phase common matrix; original startup failures/required native platforms independent",
+    "independent_review": "/root/work_control; pctx01-phase-matrix-verification.json"
   },
   "summary_reconciliation": {
     "previous_summary": 25,

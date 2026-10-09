@@ -332,6 +332,30 @@ fn with_refresh_coverage(mut value: Value, refresh: Option<Value>) -> Value {
     }
     value
 }
+fn apply_request_expiry(
+    response: &mut Value,
+    exit: &mut i32,
+    deadline: Option<pctx::deadline::Deadline>,
+) -> bool {
+    let usable_timeout_partial = response["command"] == "find"
+        && response["data"]["coverage"]["reasons"]
+            .as_array()
+            .is_some_and(|reasons| reasons.iter().any(|reason| reason == "timeout"))
+        && response["data"]["items"]
+            .as_array()
+            .is_some_and(|items| !items.is_empty());
+    if response["status"] != "error"
+        && !usable_timeout_partial
+        && let Some(deadline) = deadline
+        && let Err(error) = deadline.check()
+    {
+        *exit = error.exit;
+        domain::set_error(response, error);
+        return true;
+    }
+    false
+}
+
 fn encoded(
     value: &mut Value,
     format: &Format,
@@ -344,7 +368,13 @@ fn encoded(
         Format::Markdown => pctx::render::Format::Markdown,
     };
     match pctx::render::render(value, format) {
-        Ok(bytes) => bytes,
+        Ok(bytes) => {
+            if apply_request_expiry(value, exit, deadline) {
+                pctx::render::json_document(value)
+            } else {
+                bytes
+            }
+        }
         Err(error) => {
             let error = request_error(deadline, error);
             *exit = error.exit;
@@ -1259,21 +1289,8 @@ fn main() {
             bytes = encoded(&mut response, &render_format, &mut exit, deadline);
         }
     }
-    let usable_timeout_partial = matches!(&cli.command, Command::Find(_))
-        && response["data"]["coverage"]["reasons"]
-            .as_array()
-            .is_some_and(|reasons| reasons.iter().any(|reason| reason == "timeout"))
-        && response["data"]["items"]
-            .as_array()
-            .is_some_and(|items| !items.is_empty());
-    if response["status"] != "error"
-        && !usable_timeout_partial
-        && let Some(deadline) = deadline
-        && let Err(e) = deadline.check()
-    {
-        domain::set_error(&mut response, e);
-        exit = 7;
-        bytes = encoded(&mut response, &Format::Json, &mut exit, Some(deadline));
+    if apply_request_expiry(&mut response, &mut exit, deadline) {
+        bytes = encoded(&mut response, &Format::Json, &mut exit, deadline);
     }
     // Budget always applies to the format actually emitted, including the newline.
     let limit = output_budget(&cli.command);
@@ -1314,6 +1331,26 @@ fn main() {
         bytes = encoded(&mut response, &Format::Json, &mut exit, deadline);
         if bytes.len() > limit {
             bytes = pctx::render::fit_fallback_metadata(&mut response, limit, &mut exit);
+        }
+    }
+    // Final fitting/serialization uses the same request clock. Refuse normal
+    // delivery if that phase expired; completed unavoidable writes remain true.
+    if apply_request_expiry(&mut response, &mut exit, deadline) {
+        bytes = encoded(&mut response, &Format::Json, &mut exit, deadline);
+        if let Some(limit) = limit
+            && bytes.len() > limit
+        {
+            (response, exit) = pctx::render::budget_fallback(
+                cli.command.name(),
+                &response,
+                execution_pointer,
+                exit,
+            );
+            execution_pointer = "/data";
+            bytes = encoded(&mut response, &Format::Json, &mut exit, deadline);
+            if bytes.len() > limit {
+                bytes = pctx::render::fit_fallback_metadata(&mut response, limit, &mut exit);
+            }
         }
     }
     if let Command::Run(r) = &cli.command
@@ -1397,6 +1434,81 @@ mod parser_contract_tests;
 #[cfg(test)]
 mod finite_route_tests {
     use super::*;
+    #[test]
+    fn phase_final_encoding_and_delivery_admission_keep_original_clock_and_partial_truth() {
+        for format in [Format::Json, Format::Compact, Format::Markdown] {
+            let deadline = pctx::deadline::Deadline::from_millis(200).unwrap();
+            let mut value = domain::envelope("read", None, json!({"text":"서울 ".repeat(10000)}));
+            let mut exit = 0;
+            let bytes = encoded(&mut value, &format, &mut exit, Some(deadline));
+            assert_eq!(exit, 0);
+            assert!(!bytes.is_empty());
+            while let Ok(left) = deadline.remaining() {
+                std::thread::sleep(left.min(std::time::Duration::from_millis(5)));
+            }
+            // The final gate runs after the real renderer, before either response
+            // destination. Expiry changes the document, not a completed write.
+            assert!(apply_request_expiry(&mut value, &mut exit, Some(deadline)));
+            let bytes = encoded(&mut value, &Format::Json, &mut exit, Some(deadline));
+            let decoded: Value = serde_json::from_slice(&bytes).unwrap();
+            assert_eq!(exit, 7);
+            assert_eq!(decoded["errors"][0]["code"], "TIMEOUT");
+            assert_eq!(decoded["data"]["text"], "서울 ".repeat(10000));
+            let temp = tempfile::tempdir().unwrap();
+            let destination = temp.path().join("response");
+            project::atomic_write(&destination, &bytes, false).unwrap();
+            assert_eq!(
+                serde_json::from_slice::<Value>(&std::fs::read(destination).unwrap()).unwrap(),
+                decoded
+            );
+            let partial_data = json!({"items":[{"path":"observed"}],"coverage":{"status":"partial","reasons":["timeout"]}});
+            let mut partial = domain::envelope("find", None, partial_data.clone());
+            partial["status"] = json!("partial");
+            let established = partial.clone();
+            let mut partial_exit = 3;
+            assert!(!apply_request_expiry(
+                &mut partial,
+                &mut partial_exit,
+                Some(deadline)
+            ));
+            let bytes = encoded(
+                &mut partial,
+                &Format::Json,
+                &mut partial_exit,
+                Some(deadline),
+            );
+            assert_eq!(
+                serde_json::from_slice::<Value>(&bytes).unwrap(),
+                established
+            );
+            assert_eq!(partial_exit, 3);
+            let mut empty = domain::envelope(
+                "find",
+                None,
+                json!({"items":[],"coverage":{"reasons":["timeout"]}}),
+            );
+            assert!(apply_request_expiry(
+                &mut empty,
+                &mut partial_exit,
+                Some(deadline)
+            ));
+            assert_eq!(partial_exit, 7);
+            let mut failure = domain::envelope("read", None, Value::Null);
+            domain::set_error(
+                &mut failure,
+                Error::new("POLICY_DENIED", "Observed refusal", 5),
+            );
+            let established = failure.clone();
+            let mut failure_exit = 5;
+            assert!(!apply_request_expiry(
+                &mut failure,
+                &mut failure_exit,
+                Some(deadline)
+            ));
+            assert_eq!(failure, established);
+            assert_eq!(failure_exit, 5);
+        }
+    }
     #[test]
     fn renderer_refusal_keeps_typed_error_and_incomplete_coverage() {
         let original = std::time::Instant::now() - std::time::Duration::from_secs(1);

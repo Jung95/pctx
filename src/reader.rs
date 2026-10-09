@@ -90,6 +90,24 @@ fn checked_fs<T>(p: &Project, operation: impl FnOnce() -> std::io::Result<T>) ->
     p.check_deadline()?;
     Ok(result?)
 }
+/// Compare observable file versions around a pinned read. Native calls remain
+/// cooperative; this is not a workspace-wide snapshot or adversarial ABA proof.
+pub(crate) fn metadata_unchanged(before: &fs::Metadata, after: &fs::Metadata) -> bool {
+    let stable = before.len() == after.len() && before.modified().ok() == after.modified().ok();
+    #[cfg(unix)]
+    {
+        use std::os::unix::fs::MetadataExt;
+        stable
+            && before.dev() == after.dev()
+            && before.ino() == after.ino()
+            && before.ctime() == after.ctime()
+            && before.ctime_nsec() == after.ctime_nsec()
+    }
+    #[cfg(not(unix))]
+    {
+        stable
+    }
+}
 /// Required descendant lookup retains the native absence distinction. Root
 /// validation and optional search-candidate admission use their own contracts.
 fn checked_required_source<T>(
@@ -239,7 +257,15 @@ pub(crate) fn read_with_identity(
 fn read_from_initial(
     p: &Project,
     path: &str,
+    initial: Option<fs::File>,
+) -> Result<(VerifiedFile, same_file::Handle)> {
+    read_from_initial_observed(p, path, initial, |_| Ok(()))
+}
+fn read_from_initial_observed(
+    p: &Project,
+    path: &str,
     mut initial: Option<fs::File>,
+    mut observe: impl FnMut(usize) -> Result<()>,
 ) -> Result<(VerifiedFile, same_file::Handle)> {
     let strict_admission = initial.is_some();
     p.check_deadline()?;
@@ -286,6 +312,8 @@ fn read_from_initial(
             if count == 0 {
                 break;
             }
+            observe(count)?;
+            p.check_deadline()?;
             digest.update(&chunk[..count]);
             p.check_deadline()?;
             bytes.extend_from_slice(&chunk[..count]);
@@ -302,21 +330,9 @@ fn read_from_initial(
         let identity = same_file::Handle::from_file(checked_fs(p, || f.try_clone())?)?;
         let same_instance = identity == same_file::Handle::from_file(reopened_file)?;
         p.check_deadline()?;
-        #[allow(unused_mut)]
-        let mut stable = same_instance
-            && before.len() == after.len()
-            && after.len() == reopened.len()
-            && before.modified().ok() == after.modified().ok()
-            && after.modified().ok() == reopened.modified().ok();
-        #[cfg(unix)]
-        {
-            use std::os::unix::fs::MetadataExt;
-            stable = stable
-                && before.ino() == after.ino()
-                && after.ino() == reopened.ino()
-                && before.dev() == reopened.dev()
-                && before.mtime_nsec() == after.mtime_nsec();
-        }
+        let stable = same_instance
+            && metadata_unchanged(&before, &after)
+            && metadata_unchanged(&after, &reopened);
         if !stable {
             if strict_admission {
                 return Err(Error::new(
@@ -1028,6 +1044,64 @@ mod search_candidate_tests {
         })
         .unwrap_err();
         assert_eq!(error.code, "CONCURRENT_MODIFICATION");
+    }
+    #[test]
+    fn phase_mid_read_source_expiry_and_in_place_metadata_changes_are_not_success() {
+        let (_temp, mut p) = fixture();
+        let path = p.root.join("source");
+        fs::write(&path, vec![b'a'; 131072]).unwrap();
+        p.deadline = Some(crate::deadline::Deadline::from_millis(200).unwrap());
+        let deadline = p.deadline.unwrap();
+        let file = secure_open(&p, "source").unwrap();
+        let mut reads = 0;
+        let error = read_from_initial_observed(&p, "source", Some(file), |count| {
+            assert_eq!(count, 65536);
+            reads += 1;
+            while let Ok(left) = deadline.remaining() {
+                std::thread::sleep(left.min(std::time::Duration::from_millis(5)));
+            }
+            Ok(())
+        })
+        .unwrap_err();
+        assert_eq!((error.code.as_str(), error.exit), ("TIMEOUT", 7));
+        assert_eq!(reads, 1);
+        assert_eq!(p.deadline.unwrap().instant(), deadline.instant());
+        p.deadline = None;
+        for mutation in ["growth", "rewrite"] {
+            if !cfg!(unix) && mutation == "rewrite" {
+                continue;
+            }
+            fs::write(&path, vec![b'a'; 131072]).unwrap();
+            let stamp = fs::metadata(&path).unwrap();
+            let file = secure_open(&p, "source").unwrap();
+            let mut changed = false;
+            let error = read_from_initial_observed(&p, "source", Some(file), |_| {
+                if !changed {
+                    changed = true;
+                    std::thread::sleep(std::time::Duration::from_millis(2));
+                    if mutation == "growth" {
+                        use std::io::Write;
+                        fs::OpenOptions::new()
+                            .append(true)
+                            .open(&path)?
+                            .write_all(b"changed")?;
+                    } else {
+                        fs::write(&path, vec![b'b'; 131072])?;
+                        fs::File::options()
+                            .write(true)
+                            .open(&path)?
+                            .set_times(fs::FileTimes::new().set_modified(stamp.modified()?))?;
+                    }
+                }
+                Ok(())
+            })
+            .unwrap_err();
+            assert!(changed);
+            assert_eq!(
+                (error.code.as_str(), error.exit),
+                ("CONCURRENT_MODIFICATION", 4)
+            );
+        }
     }
     #[test]
     fn normal_body_hash_and_original_expired_deadline_are_preserved() {

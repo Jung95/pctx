@@ -1,0 +1,18 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.64s
+     Running unittests src/lib.rs (target/debug/deps/pctx-ae897bec01e143c7)
+
+running 3 tests
+test input::identity_tests::phase_explicit_file_expiry_after_actual_chunk_prevents_further_reads ... ok
+test reader::search_candidate_tests::phase_mid_read_source_expiry_and_in_place_metadata_changes_are_not_success ... ok
+test project::phase_tests::phase_registry_config_chunk_expiry_mutation_and_fifo_proofs ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 50 filtered out; finished in 0.55s
+
+     Running unittests src/main.rs (target/debug/deps/pctx-5861ab217462b7f0)
+
+running 1 test
+test finite_route_tests::phase_final_encoding_and_delivery_admission_keep_original_clock_and_partial_truth ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 7 filtered out; finished in 0.68s
+

@@ -2730,6 +2730,8 @@ mod auxiliary_deadline_tests {
                             std::thread::sleep(remaining.min(Duration::from_millis(10)));
                         }
                     }
+                    crate::project::LoadPhase::ConfigChunkRead
+                    | crate::project::LoadPhase::RegistryChunkRead => {}
                     crate::project::LoadPhase::RegistryRead => trace.1 += 1,
                     crate::project::LoadPhase::ResultReady => trace.2 += 1,
                 }

@@ -1,0 +1,121 @@
+{
+  "task": "PCTX01",
+  "condition": "PCTX01-G08-D04",
+  "status": "bounded local five-phase common contract verified",
+  "base_revision": "77abd0b",
+  "spec_sections": [
+    "8",
+    "9",
+    "14",
+    "38"
+  ],
+  "frozen_phases": [
+    {
+      "phase": "discovery/config",
+      "route_classes": "All finite CLI routes; auxiliary CheckPlan inherits same Project clock",
+      "current_source": [
+        "main.rs::query_deadline",
+        "project.rs::load_binding",
+        "reader.rs::anchored_open_deadline",
+        "input.rs::bounded_reader_bytes"
+      ],
+      "existing_actual_proof": [
+        "tests/project_deadline.rs::actual_registered_project_loading_and_ancestor_discovery_keep_same_deadline",
+        "runner::auxiliary_deadline_tests::auxiliary_loading_expires_after_actual_config_admission"
+      ],
+      "new_actual_proof": [
+        "project::phase_tests::phase_registry_config_chunk_expiry_mutation_and_fifo_proofs"
+      ],
+      "qualification": "Config1MiB preserved; registry growth bounded by admitted size, no arbitrary new registered-project cap. Original200ms after a real chunk; pinned config/registry mutation/replacement/growth/deletion; Unix FIFO refusal. Missing initial registry is default then NOT_INITIALIZED6; admitted deletion IO7."
+    },
+    {
+      "phase": "lock/SQL",
+      "route_classes": "Work/Quota/Schedule finite reads, index refresh, saved accounting",
+      "current_source": [
+        "project.rs::configure_sqlite/sqlite_call",
+        "work.rs guarded queries",
+        "storage.rs writer lock",
+        "output.rs::record_delivery"
+      ],
+      "existing_actual_proof": [
+        "tests/work_quota_deadline.rs",
+        "tests/storage_deadline.rs",
+        "tests/query_deadline_cli.rs",
+        "pctx01-aggregation-deadline-verification.json"
+      ],
+      "new_actual_proof": [],
+      "qualification": "Busy waits clamp same deadline; SQLite VM interrupt and reused connection isolation qualified. Native open/pathname operations cooperative, not atomic snapshot proof."
+    },
+    {
+      "phase": "input/read/hash",
+      "route_classes": "Shared reader/task ingress/explicit caller files; Filter input; executable/manifest fingerprint reads; adapter metadata",
+      "current_source": [
+        "input.rs::bounded_reader_bytes",
+        "reader.rs::read_from_initial",
+        "reader.rs::metadata_unchanged",
+        "adapter.rs::bounded_read",
+        "runner.rs registered fingerprint reads"
+      ],
+      "existing_actual_proof": [
+        "pctx01-auxiliary-phase-verification.json",
+        "pctx01-filter-deadline-verification.json",
+        "pctx01-runner-read-verification.json",
+        "pctx01-caller-bound-verification.json",
+        "tests/task_input_source.rs",
+        "tests/context_input_deadline.rs"
+      ],
+      "new_actual_proof": [
+        "input::identity_tests::phase_explicit_file_expiry_after_actual_chunk_prevents_further_reads",
+        "reader::search_candidate_tests::phase_mid_read_source_expiry_and_in_place_metadata_changes_are_not_success",
+        "project::phase_tests::phase_registry_config_chunk_expiry_mutation_and_fifo_proofs"
+      ],
+      "qualification": "Real8KiB caller/registry/config and64KiB source reads; same200ms instant, exactly1 positive chunk and no later reads after expiry. Source growth and same-size rewrite/restoredmtime rejected on Unix observable stamp; strict admitted identity/missing priorities preserved. Universal ABA and Windowsctime not claimed."
+    },
+    {
+      "phase": "CPU/assembly",
+      "route_classes": "Quota aggregation; Inventory parsing/claim validation; Filter records; Schedule rows/native observation; ResourceStatus",
+      "current_source": [
+        "quota.rs aggregation loop",
+        "inventory.rs processing loops",
+        "filters.rs record admission",
+        "schedule.rs guarded assembly",
+        "runner.rs resource observation"
+      ],
+      "existing_actual_proof": [
+        "pctx01-aggregation-deadline-verification.json",
+        "pctx01-inventory-deadline-verification.json",
+        "pctx01-filter-deadline-verification.json",
+        "pctx01-schedule-deadline-verification.json",
+        "pctx01-runner-read-verification.json"
+      ],
+      "new_actual_proof": [],
+      "qualification": "Existing actual quota10000/Inventory128packages256claims/Filter/Schedule/native Resource controls and guard-loss evidence reused. Cooperative parser/sort calls not preempted; no per-producer fixture expansion."
+    },
+    {
+      "phase": "serialization/delivery/accounting",
+      "route_classes": "Standard JSON/compact/Markdown documents and budget fallback; stdout/response files; saved output measurement",
+      "current_source": [
+        "main.rs::encoded/apply_request_expiry",
+        "main.rs final post-fitting gate",
+        "project.rs::atomic_write",
+        "output.rs::record_delivery"
+      ],
+      "existing_actual_proof": [
+        "pctx01-final-capacity-verification.json",
+        "pctx01-delivery-verification.json",
+        "pctx01-cancellation-verification.json",
+        "tests/query_deadline_cli.rs::saved_cli_reread_never_reruns_and_failed_metering_preserves_delivery_truth"
+      ],
+      "new_actual_proof": [
+        "finite_route_tests::phase_final_encoding_and_delivery_admission_keep_original_clock_and_partial_truth"
+      ],
+      "qualification": "Real rendering followed by controlled expiry proves post-render admission; not expiry inside serializer or blocked native write. Complete TIMEOUT7 keeps data and goes through existing budget guard. Nonempty Find timeout partial3 and established typed errors preserved. Completed unavoidable write remains true; accounting uncertainty never reverses delivery."
+    }
+  ],
+  "scope": "One existing finite five-phase matrix; source coverage versus actual phase evidence distinguished. No new IDs or producer algorithm qualification.",
+  "remaining_separate": [
+    "G05-D05 original four startup product failures at unchanged1s/8x16 conditions",
+    "G09 real platform execution including Windows console",
+    "G10 candidate whole integration and publication"
+  ]
+}

@@ -513,7 +513,9 @@ pub fn detect_root_with_deadline(
 #[derive(Clone, Copy)]
 pub(crate) enum LoadPhase {
     ConfigAdmitted,
+    ConfigChunkRead,
     RegistryRead,
+    RegistryChunkRead,
     ResultReady,
 }
 #[cfg(test)]
@@ -633,18 +635,26 @@ impl Project {
                 2,
             ));
         }
-        let mut source = String::new();
-        std::io::Read::by_ref(&mut config_file)
-            .take(1024 * 1024 + 1)
-            .read_to_string(&mut source)?;
+        let source =
+            crate::input::bounded_reader_bytes(&mut config_file, 1024 * 1024, deadline, |_count| {
+                #[cfg(test)]
+                if _count > 0 {
+                    load_observation(&root, deadline, LoadPhase::ConfigChunkRead);
+                }
+                Ok(())
+            })
+            .map_err(|e| {
+                if e.code == "FILE_TOO_LARGE" {
+                    Error::new(
+                        "INVALID_CONFIG",
+                        "Project configuration exceeds size limit",
+                        2,
+                    )
+                } else {
+                    e
+                }
+            })?;
         check_request(deadline)?;
-        if source.len() > 1024 * 1024 {
-            return Err(Error::new(
-                "INVALID_CONFIG",
-                "Project configuration exceeds size limit",
-                2,
-            ));
-        }
         crate::reader::validate_anchor(&root, &root_anchor)?;
         let config_reopened = crate::reader::anchored_open_deadline(
             &root,
@@ -652,8 +662,13 @@ impl Project {
             ".pctx/config.toml",
             deadline,
         )?;
+        let after = config_file.metadata()?;
+        let reopened = config_reopened.metadata()?;
+        check_request(deadline)?;
         if same_file::Handle::from_file(config_file.try_clone()?)?
             != same_file::Handle::from_file(config_reopened)?
+            || !crate::reader::metadata_unchanged(&config_metadata, &after)
+            || !crate::reader::metadata_unchanged(&after, &reopened)
         {
             return Err(Error::new(
                 "CONCURRENT_MODIFICATION",
@@ -661,7 +676,9 @@ impl Project {
                 4,
             ));
         }
-        let config: Config = toml::from_str(&source).map_err(|_| {
+        let source = std::str::from_utf8(&source)
+            .map_err(|_| Error::new("INVALID_CONFIG", "Project configuration must be UTF-8", 2))?;
+        let config: Config = toml::from_str(source).map_err(|_| {
             Error::new("INVALID_CONFIG", "Invalid project TOML or unknown field", 2)
         })?;
         check_request(deadline)?;
@@ -731,12 +748,87 @@ impl Project {
         #[cfg(test)]
         load_observation(&root, deadline, LoadPhase::RegistryRead);
         check_request(deadline)?;
-        let mut registry: Registry = match fs::read(&registry_path) {
-            Ok(b) => {
-                crate::domain::stored_json_bytes(&b, "Stored project registry JSON is invalid")?
+        let data_anchor = RootAnchor::capture(&data_dir)?;
+        check_request(deadline)?;
+        let mut registry: Registry = match crate::reader::anchored_open_deadline(
+            &data_dir,
+            &data_anchor,
+            "registry.json",
+            deadline,
+        ) {
+            Ok(mut file) => {
+                let before = file.metadata()?;
+                check_request(deadline)?;
+                if !before.is_file() {
+                    return Err(Error::new(
+                        "IO_ERROR",
+                        "Stored project registry must be a regular file",
+                        7,
+                    ));
+                }
+                // Bound growth by the admitted length, without imposing an
+                // arbitrary new maximum on the number of registered projects.
+                let limit = usize::try_from(before.len()).map_err(|_| {
+                    Error::new(
+                        "IO_ERROR",
+                        "Stored project registry exceeds addressable size",
+                        7,
+                    )
+                })?;
+                let bytes =
+                    crate::input::bounded_reader_bytes(&mut file, limit, deadline, |_count| {
+                        #[cfg(test)]
+                        if _count > 0 {
+                            load_observation(&root, deadline, LoadPhase::RegistryChunkRead);
+                        }
+                        Ok(())
+                    })
+                    .map_err(|e| {
+                        if e.code == "FILE_TOO_LARGE" {
+                            Error::new(
+                                "CONCURRENT_MODIFICATION",
+                                "Stored project registry grew while loading",
+                                4,
+                            )
+                        } else {
+                            e
+                        }
+                    })?;
+                let after = file.metadata()?;
+                let reopened = crate::reader::anchored_open_deadline(
+                    &data_dir,
+                    &data_anchor,
+                    "registry.json",
+                    deadline,
+                )
+                .map_err(|e| {
+                    if e.code == "RESOURCE_NOT_FOUND" {
+                        Error::new(
+                            "IO_ERROR",
+                            "Admitted project registry became unavailable",
+                            7,
+                        )
+                    } else {
+                        e
+                    }
+                })?;
+                let current = reopened.metadata()?;
+                check_request(deadline)?;
+                if same_file::Handle::from_file(file.try_clone()?)?
+                    != same_file::Handle::from_file(reopened)?
+                    || !crate::reader::metadata_unchanged(&before, &after)
+                    || !crate::reader::metadata_unchanged(&after, &current)
+                {
+                    return Err(Error::new(
+                        "CONCURRENT_MODIFICATION",
+                        "Stored project registry changed while loading",
+                        4,
+                    ));
+                }
+                crate::domain::stored_json_bytes(&bytes, "Stored project registry JSON is invalid")?
             }
-            Err(e) if e.kind() == std::io::ErrorKind::NotFound => Registry::default(),
-            Err(e) => return Err(e.into()),
+            Err(e) if e.code == "RESOURCE_NOT_FOUND" => Registry::default(),
+            Err(e) => return Err(e),
         };
         check_request(deadline)?;
         let root_key = root.to_string_lossy().to_string();
@@ -1240,4 +1332,156 @@ fn effective_config(mut project: Config, deadline: Option<Deadline>) -> Result<C
     crate::source_delivery::validate_assignments(&project.policy.source_topics)?;
     check_request(deadline)?;
     Ok(project)
+}
+
+#[cfg(test)]
+mod phase_tests {
+    use super::*;
+    #[test]
+    fn phase_registry_config_chunk_expiry_mutation_and_fifo_proofs() {
+        const CASE: &str =
+            "project::phase_tests::phase_registry_config_chunk_expiry_mutation_and_fifo_proofs";
+        if std::env::var_os("PCTX_PHASE_FIXTURE").is_none() {
+            let temp = tempfile::tempdir().unwrap();
+            let root = temp.path().canonicalize().unwrap().join("project");
+            fs::create_dir(&root).unwrap();
+            let mut child = std::process::Command::new(std::env::current_exe().unwrap())
+                .args(["--exact", CASE, "--nocapture"])
+                .env("PCTX_PHASE_FIXTURE", &root)
+                .env("PCTX_DATA_DIR", temp.path().join("data"))
+                .env("PCTX_USER_CONFIG", temp.path().join("absent-config"))
+                .stdout(std::process::Stdio::piped())
+                .stderr(std::process::Stdio::piped())
+                .spawn()
+                .unwrap();
+            let end = std::time::Instant::now() + Duration::from_secs(10);
+            loop {
+                if child.try_wait().unwrap().is_some() {
+                    break;
+                }
+                if std::time::Instant::now() >= end {
+                    child.kill().unwrap();
+                    let out = child.wait_with_output().unwrap();
+                    panic!("Isolated phase proof exceeded cleanup bound: {out:?}");
+                }
+                std::thread::sleep(Duration::from_millis(5));
+            }
+            let out = child.wait_with_output().unwrap();
+            assert!(out.status.success(), "{out:?}");
+            return;
+        }
+        let root = PathBuf::from(std::env::var_os("PCTX_PHASE_FIXTURE").unwrap());
+        let p = Project::init(&root).unwrap();
+        let config = root.join(".pctx/config.toml");
+        let registry = p.data_dir.join("registry.json");
+        let config_bytes = fs::read(&config).unwrap();
+        let registry_bytes = fs::read(&registry).unwrap();
+        for kind in [
+            "config-expiry",
+            "registry-expiry",
+            "config-rewrite",
+            "registry-rewrite",
+            "registry-replace",
+            "registry-growth",
+            "registry-delete",
+        ] {
+            if !cfg!(unix) && kind.ends_with("rewrite") {
+                continue;
+            }
+            fs::write(&config, &config_bytes).unwrap();
+            fs::write(&registry, &registry_bytes).unwrap();
+            let deadline = Deadline::from_millis(200).unwrap();
+            let counts = std::rc::Rc::new(std::cell::RefCell::new((0usize, 0usize)));
+            let observed = counts.clone();
+            let path = if kind.starts_with("config") {
+                config.clone()
+            } else {
+                registry.clone()
+            };
+            let stamp = fs::metadata(&path).unwrap();
+            let guard = observe_load(move |_, scope, phase| {
+                let target = matches!(phase, LoadPhase::ConfigChunkRead)
+                    && kind.starts_with("config")
+                    || matches!(phase, LoadPhase::RegistryChunkRead)
+                        && kind.starts_with("registry");
+                if matches!(phase, LoadPhase::ResultReady) {
+                    observed.borrow_mut().1 += 1;
+                }
+                if !target {
+                    return;
+                }
+                let mut counts = observed.borrow_mut();
+                counts.0 += 1;
+                assert_eq!(scope.unwrap().instant(), deadline.instant());
+                if counts.0 != 1 {
+                    return;
+                }
+                if kind.ends_with("expiry") {
+                    while let Ok(left) = deadline.remaining() {
+                        std::thread::sleep(left.min(Duration::from_millis(5)));
+                    }
+                } else if kind.ends_with("delete") {
+                    fs::remove_file(&path).unwrap();
+                } else if kind.ends_with("replace") {
+                    let bytes = fs::read(&path).unwrap();
+                    fs::rename(&path, path.with_extension("old")).unwrap();
+                    fs::write(&path, bytes).unwrap();
+                } else if kind.ends_with("growth") {
+                    fs::OpenOptions::new()
+                        .append(true)
+                        .open(&path)
+                        .unwrap()
+                        .write_all(b" ")
+                        .unwrap();
+                } else {
+                    // Rewrite identical bytes and restore mtime. The observable
+                    // Unix change time must still prevent an ABA-like success.
+                    std::thread::sleep(Duration::from_millis(2));
+                    let bytes = fs::read(&path).unwrap();
+                    fs::write(&path, bytes).unwrap();
+                    fs::File::options()
+                        .write(true)
+                        .open(&path)
+                        .unwrap()
+                        .set_times(fs::FileTimes::new().set_modified(stamp.modified().unwrap()))
+                        .unwrap();
+                }
+            });
+            let error = Project::open_with_deadline(&root, Some(deadline)).unwrap_err();
+            let expected = if kind.ends_with("expiry") {
+                ("TIMEOUT", 7)
+            } else if kind.ends_with("delete") {
+                ("IO_ERROR", 7)
+            } else {
+                ("CONCURRENT_MODIFICATION", 4)
+            };
+            assert_eq!((error.code.as_str(), error.exit), expected, "{kind}");
+            // Growth is detected by the single allowed extra byte: it needs
+            // one additional body read, unlike expiry before the next chunk.
+            let expected_reads = if kind.ends_with("growth") { 2 } else { 1 };
+            assert_eq!(*counts.borrow(), (expected_reads, 0), "{kind}");
+            drop(guard);
+        }
+        fs::write(&config, &config_bytes).unwrap();
+        fs::write(&registry, &registry_bytes).unwrap();
+        assert_eq!(Project::open(&root).unwrap().workspace_id, p.workspace_id);
+        #[cfg(unix)]
+        {
+            fs::remove_file(&registry).unwrap();
+            let name = std::ffi::CString::new(registry.as_os_str().as_encoded_bytes()).unwrap();
+            assert_eq!(unsafe { libc::mkfifo(name.as_ptr(), 0o600) }, 0);
+            let started = std::time::Instant::now();
+            let error =
+                Project::open_with_deadline(&root, Some(Deadline::from_millis(1000).unwrap()))
+                    .unwrap_err();
+            assert_eq!((error.code.as_str(), error.exit), ("IO_ERROR", 7));
+            assert!(started.elapsed() < Duration::from_secs(2));
+            fs::remove_file(&registry).unwrap();
+        }
+        assert_eq!(Project::open(&root).unwrap_err().code, "NOT_INITIALIZED");
+        fs::write(&registry, &registry_bytes).unwrap();
+        assert_eq!(fs::read(&config).unwrap(), config_bytes);
+        assert_eq!(fs::read(&registry).unwrap(), registry_bytes);
+        assert!(!p.index_db().exists() && !p.control_db().exists());
+    }
 }
