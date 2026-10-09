@@ -1,0 +1,28 @@
+from pathlib import Path
+import subprocess,tempfile,os,hashlib,json
+REPO=Path('/Users/dev/PCTX');BASE=REPO/'docs/implementation/evidence'
+root=Path(tempfile.mkdtemp(prefix='pctx01-policy-forward-',dir='/private/tmp'));os.chmod(root,0o700);source=root/'source';source.mkdir();records=root/'records';records.mkdir(mode=0o700)
+archive=subprocess.check_output(['git','archive','HEAD','Cargo.toml','Cargo.lock','src','tests'],cwd=REPO);subprocess.run(['tar','-x','-C',str(source)],input=archive,check=True)
+p=source/'src/query_process.rs';s=p.read_text()
+def replace(a,b):
+ global s
+ assert s.count(a)==1,(a,s.count(a));s=s.replace(a,b,1)
+replace('pub fn output(command: Command, deadline: Deadline, max_bytes: usize) -> Result<Output> {','pub fn output(command: Command, deadline: Deadline, max_bytes: usize) -> Result<Output> {\n    let mut timing = NativePhaseTrace::new(deadline);\n    timing.mark("output_entry",0);\n    timing.raw_program=Some(std::path::PathBuf::from(command.get_program()));')
+replace('let executable = validate(&command, &cwd, deadline)?;','timing.mark("validation_begin",0);\n    let executable = validate(&command, &cwd, deadline)?;\n    timing.mark("validation_end",0);\n    timing.executable=Some(executable.clone());')
+replace('let mut child = command.spawn()?;','timing.mark("spawn_begin",0);\n        let mut child = command.spawn()?;\n        timing.mark("spawn_returned",0);\n        timing.bind(child.id());')
+replace('observation.iterations = observation.iterations.saturating_add(1);','timing.mark("loop_begin",0);\n                observation.iterations = observation.iterations.saturating_add(1);')
+replace('observation.native_child = Some(mac_child_observation(child.id()));','timing.mark("native_observation_begin",0);\n                    observation.native_child = Some(mac_child_observation(child.id()));\n                    timing.mark("native_observation_end",0);')
+replace('observation.phase = "stdout_drain";','timing.mark("stdout_drain_begin",0);\n                    observation.phase = "stdout_drain";')
+replace('observation.stdout_eof = out_eof;','timing.mark("stdout_drain_end",out.len() as u64);\n                observation.stdout_eof = out_eof;')
+replace('observation.phase = "stderr_drain";','timing.mark("stderr_drain_begin",0);\n                    observation.phase = "stderr_drain";')
+replace('observation.stderr_eof = err_eof;','timing.mark("stderr_drain_end",err.len() as u64);\n                observation.stderr_eof = err_eof;')
+replace('let rc = unsafe {\n                    libc::waitid(','timing.mark("waitid_begin",0);\n                let rc = unsafe {\n                    libc::waitid(')
+replace('observation.waitid_signo = info.si_signo;','timing.mark("waitid_end",info.si_signo as u64);\n                observation.waitid_signo = info.si_signo;')
+replace('observation.phase = "wait_next_observation";\n                std::thread::sleep(deadline.remaining()?.min(Duration::from_millis(5)));','observation.phase = "wait_next_observation";\n                let requested_sleep=deadline.remaining()?.min(Duration::from_millis(5));\n                timing.mark("sleep_begin",requested_sleep.as_nanos() as u64);\n                std::thread::sleep(requested_sleep);\n                timing.mark("sleep_end",0);')
+replace('let result = result.map_err(|e| {','timing.mark("collection_terminal",0);\n        let result = result.map_err(|e| {')
+replace('libc::kill(-(child.id() as i32), libc::SIGKILL);','timing.mark("group_kill_begin",0);\n                libc::kill(-(child.id() as i32), libc::SIGKILL);\n                timing.mark("group_kill_end",0);')
+replace('let _ = child.kill();','timing.mark("root_kill_begin",0);\n            let _ = child.kill();\n            timing.mark("root_kill_end",0);')
+replace('        result\n    }\n    #[cfg(windows)]','        timing.mark("cleanup_block_end",0);\n        timing.persist(&result);\n        result\n    }\n    #[cfg(windows)]')
+s+='\n'+(BASE/'pctx01-startup-policy-forward-hook.rs.txt').read_text();p.write_text(s)
+meta={'task':'PCTX01-G05-D05','priority':3,'root':str(root),'source':str(source),'records':str(records),'revision':subprocess.check_output(['git','rev-parse','HEAD'],cwd=REPO,text=True).strip(),'hashes':{str(q.relative_to(REPO)):hashlib.sha256(q.read_bytes()).hexdigest() for q in [REPO/'src/query_process.rs',REPO/'tests/project_deadline.rs',REPO/'Cargo.lock']},'instrumented_query_sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'clock':'shared nativeCLOCK_MONOTONICns; originalInstant deadline retained;remaining bracket recorded','new_question':'Join owned original-supervisor paths to exact redacted PST hash and policy scan time after original cleanup; causal queue hypothesis, not repeatedwaiting sample.','test':'concurrent_query_startup_preserves_group_streams_and_original_one_second_budget','contract':'Originaltestbyteidentical,1000ms8x16,nativeexec/cwd/env/group/streams/overflow;no retry,retention,warmup or auth','qualification':False,'limits':['Observerclockreads/bufferallocation/extra ownedBSDadmission perturbtiming.','Filesystemrecording occursafteroriginalcleanup;mayaffectlaterqueries.','4096pointcap;dropped/missingrecordsunknown.','Reapnotindependentlyprovenbycleanup_end;originaltry_waitblockmayendatgrace.']}
+(root/'prepared.json').write_text(json.dumps(meta,indent=2)+'\n');(BASE/'pctx01-startup-policy-forward-prepared.json').write_text(json.dumps(meta,indent=2)+'\n');print(json.dumps(meta))

@@ -494,7 +494,11 @@
         "pctx01-startup-phase-verification.json",
         "pctx01-startup-timeline-next-plan.json",
         "pctx01-startup-late-state-verification.json",
-        "pctx01-startup-system-trace-capability.json"
+        "pctx01-startup-system-trace-capability.json",
+        "pctx01-startup-policy-queue-map.json",
+        "pctx01-startup-policy-hash-joined.json",
+        "pctx01-startup-policy-forward-verification.json",
+        "pctx01-startup-policy-forward-scope-plan.json"
       ],
       "verification_environment": "Native macOS arm64 local common proof; all release platforms separately required by G09",
       "macOS_arm64": "failure",
@@ -502,7 +506,7 @@
       "Linux_x86_64": "unverified; G09-D03",
       "Linux_aarch64": "prior fixed-source full only; inspect linked manifest per contract",
       "Windows_x86_64": "unverified; G09-D04",
-      "documentation_evidence": "Corrected original-supervisor diagnostic retained:68 outcomes/4 original1s expiries, policy wait only in successful selected13700. Expired-child cause and original4 failures unresolved; no closure or further automatic privileged probe. Latest unchanged startup integration11PASS/3FAIL; separate final-return correction does not resolve zero-output pre-exit waits; approved service diagnostic3PASS/1FAIL,no causal correction;counter/clock/unknown-frame limits retained; approved exact target-log query0matches,inconclusive,no correction; latest originalsupervisor diagnostic98recorded/2TIMEOUT,each24latevalidwaiting3samples until3.6ms beforedeadline,no causalrepair;SystemTraceoptionmetadataonly,no target-onlyscopeproof"
+      "documentation_evidence": "Corrected original-supervisor diagnostic retained:68 outcomes/4 original1s expiries, policy wait only in successful selected13700. Expired-child cause and original4 failures unresolved; no closure or further automatic privileged probe. Latest unchanged startup integration11PASS/3FAIL; separate final-return correction does not resolve zero-output pre-exit waits; approved service diagnostic3PASS/1FAIL,no causal correction;counter/clock/unknown-frame limits retained; approved exact target-log query0matches,inconclusive,no correction; latest originalsupervisor diagnostic98recorded/2TIMEOUT,each24latevalidwaiting3samples until3.6ms beforedeadline,no causalrepair;SystemTraceoptionmetadataonly,no target-onlyscopeproof; installed serial scan queue+historical16path hash join supports accumulated policy scan delay, current original diagnostic113outcomes/1TIMEOUT35071 with owned hashes/native-UTC anchors; fresh finite service read pending; no causal repair/closure"
     },
     {
       "id": "PCTX01-G05-D06",

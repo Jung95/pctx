@@ -1,0 +1,40 @@
+from pathlib import Path
+import struct,re,json,hashlib,subprocess
+base=Path('/Users/dev/PCTX/docs/implementation/evidence');tool='/Library/Developer/CommandLineTools/usr/bin/otool';binary=Path('/usr/libexec/syspolicyd');allbytes=binary.read_bytes();f=allbytes
+if struct.unpack_from('>I',f)[0]==0xcafebabe:
+ for j in range(struct.unpack_from('>I',allbytes,4)[0]):
+  cpu,sub,off,sz,align=struct.unpack_from('>IIIII',allbytes,8+j*20)
+  if cpu==0x100000c:f=allbytes[off:off+sz];break
+assert struct.unpack_from('<I',f)[0]==0xfeedfacf
+n=struct.unpack_from('<I',f,16)[0];o=32;segments=[]
+for _ in range(n):
+ cmd,size=struct.unpack_from('<II',f,o)
+ if cmd==0x19:
+  vm,vs,fo,fs=struct.unpack_from('<QQQQ',f,o+24);segments.append((vm,vm+vs,fo,fs))
+ o+=size
+def at(addr):
+ for lo,hi,fo,fs in segments:
+  if lo<=addr<hi and addr-lo<fs:return fo+addr-lo
+ raise ValueError(hex(addr))
+def cstring(addr):
+ pos=at(addr);return f[pos:f.index(b'\0',pos)].decode(errors='strict')
+seltext=subprocess.check_output([tool,'-v','-s','__DATA','__objc_selrefs',str(binary)],text=True);objtext=subprocess.check_output([tool,'-ov',str(binary)],text=True)
+refs={}
+for line in seltext.splitlines():
+ m=re.match(r'([0-9a-f]+)  0x([0-9a-f]+)',line)
+ if m:refs[int(m[1],16)]=cstring(0x100000000+(int(m[2],16)&0xffffffff))
+methods=[];name=None;cls=''
+for line in objtext.splitlines():
+ if re.match(r'        name           0x',line):cls=line.split()[-1]
+ m=re.search(r'name    0x[0-9a-f]+ \(0x([0-9a-f]+)\)',line)
+ if m:name=refs.get(int(m[1],16))
+ m=re.search(r'imp     .*\(0x([0-9a-f]+)\)',line)
+ if m and name:methods.append({'class':cls,'selector':name,'imp':hex(int(m[1],16))})
+def stub_selector(address):
+ first,second=struct.unpack_from('<II',f,at(address));assert first&0x9f00001f==0x90000001 and second&0xffc003ff==0xf9400021
+ imm=((first>>5)&0x7ffff)<<2|((first>>29)&3);imm=imm-(1<<21) if imm&(1<<20) else imm
+ page=(address&~4095)+imm*4096;slot=page+((second>>10)&4095)*8
+ return {'stub':hex(address),'selector_slot':hex(slot),'selector':refs[slot]}
+selected=[x for x in methods if x['class'] in ['EvaluationManager','ExecManagerService','PolicyScanTarget'] and (x['selector'] in ['description','init','scanTarget:onCompletion:','performScanWithArguments:withCodeEvaluation:','initWithDatabase:withTicketService:andSamplingService:'] or x['selector'].startswith('gatekeeperEvaluation'))]
+result={'task':'PCTX01-G05-D05','binary_sha256':hashlib.sha256(allbytes).hexdigest(),'static_only':True,'selected_methods':selected,'scan_call':stub_selector(0x1000c2800),'no_live_service_observation':True,'qualification':False}
+(base/'pctx01-startup-policy-queue-map.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result,indent=2))

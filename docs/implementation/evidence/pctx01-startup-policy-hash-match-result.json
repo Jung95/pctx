@@ -1,0 +1,157 @@
+{
+  "task": "PCTX01-G05-D05",
+  "kind": "offline matching of existing own synthetic diagnostic paths,not reading any live PID/file",
+  "existing_log_file": "pctx-startup-policy-window-selected.json",
+  "existing_log_sha256": "556b14510518c5cc234ce6da661c3c4950ad8192a81c9dda709e6a9e87e621b1",
+  "hashes": [
+    "6a20155dde37bbde",
+    "6a20155de643c3e0",
+    "6a20155dee4fcbe2",
+    "6a20155df65bd3e4",
+    "6a20155dfe67dbe6",
+    "6a20155e0673e3e8",
+    "6a20155e0e7febea",
+    "6a20155e168bf3ec",
+    "6e64f05c6515c366",
+    "6e64f05c894be76f",
+    "6e64f05cad820b78",
+    "6e64f05cd1b82f81",
+    "6e64f05cf5ee538a",
+    "6e64f05d1a247793",
+    "6e64f05d3e5a9b9c",
+    "6e64f05d6290bfa5"
+  ],
+  "candidate_parent_pid_range": [
+    1,
+    100000
+  ],
+  "range_basis": "Expanded offline candidate collision check independent of PID allocation-order assumption; no process inventory queried.",
+  "prefix_candidates": "Current inherited TMPDIR and its /private alias only; historical TMPDIR not independently saved",
+  "modes": [
+    "script-group",
+    "script-no-group"
+  ],
+  "workers": 8,
+  "runtime_seconds": 1.3212699890136719,
+  "results": [
+    {
+      "prefix_alias_index": 0,
+      "prefix_sha256": "57ef974e77a7cccd484aee5ed4e0a0563b36ae61ca75d27b2bd385fe28c3fc51",
+      "matches": [
+        {
+          "parent_candidate": 44072,
+          "mode": "script-group",
+          "worker": 0,
+          "path_hash": "6a20155dde37bbde"
+        },
+        {
+          "parent_candidate": 44072,
+          "mode": "script-group",
+          "worker": 1,
+          "path_hash": "6a20155de643c3e0"
+        },
+        {
+          "parent_candidate": 44072,
+          "mode": "script-group",
+          "worker": 2,
+          "path_hash": "6a20155dee4fcbe2"
+        },
+        {
+          "parent_candidate": 44072,
+          "mode": "script-group",
+          "worker": 3,
+          "path_hash": "6a20155df65bd3e4"
+        },
+        {
+          "parent_candidate": 44072,
+          "mode": "script-group",
+          "worker": 4,
+          "path_hash": "6a20155dfe67dbe6"
+        },
+        {
+          "parent_candidate": 44072,
+          "mode": "script-group",
+          "worker": 5,
+          "path_hash": "6a20155e0673e3e8"
+        },
+        {
+          "parent_candidate": 44072,
+          "mode": "script-group",
+          "worker": 6,
+          "path_hash": "6a20155e0e7febea"
+        },
+        {
+          "parent_candidate": 44072,
+          "mode": "script-group",
+          "worker": 7,
+          "path_hash": "6a20155e168bf3ec"
+        },
+        {
+          "parent_candidate": 44072,
+          "mode": "script-no-group",
+          "worker": 0,
+          "path_hash": "6e64f05c6515c366"
+        },
+        {
+          "parent_candidate": 44072,
+          "mode": "script-no-group",
+          "worker": 1,
+          "path_hash": "6e64f05c894be76f"
+        },
+        {
+          "parent_candidate": 44072,
+          "mode": "script-no-group",
+          "worker": 2,
+          "path_hash": "6e64f05cad820b78"
+        },
+        {
+          "parent_candidate": 44072,
+          "mode": "script-no-group",
+          "worker": 3,
+          "path_hash": "6e64f05cd1b82f81"
+        },
+        {
+          "parent_candidate": 44072,
+          "mode": "script-no-group",
+          "worker": 4,
+          "path_hash": "6e64f05cf5ee538a"
+        },
+        {
+          "parent_candidate": 44072,
+          "mode": "script-no-group",
+          "worker": 5,
+          "path_hash": "6e64f05d1a247793"
+        },
+        {
+          "parent_candidate": 44072,
+          "mode": "script-no-group",
+          "worker": 6,
+          "path_hash": "6e64f05d3e5a9b9c"
+        },
+        {
+          "parent_candidate": 44072,
+          "mode": "script-no-group",
+          "worker": 7,
+          "path_hash": "6e64f05d6290bfa5"
+        }
+      ]
+    },
+    {
+      "prefix_alias_index": 1,
+      "prefix_sha256": "813fbb50296e3b1d8918e1a2b02316dcf5cb3ec2b0e20adeeadd1bbad541ae48",
+      "matches": []
+    }
+  ],
+  "qualification": false,
+  "limits": [
+    "NSString hash is noncryptographic; retain all candidate collisions.",
+    "Reconstructed paths,not preserved historical manifest; require joint multiworker/multimode match and times; no exactcurrent child cause inferred.",
+    "PST branch may hashpath or volume/object fallback; selectedmatches onlycandidate pathbranch."
+  ],
+  "initial_candidate_range": [
+    1,
+    44072
+  ],
+  "expanded_collision_check_seconds": 2.0056309700012207,
+  "expanded_matches_identical": true
+}

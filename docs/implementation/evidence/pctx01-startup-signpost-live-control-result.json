@@ -1,0 +1,92 @@
+{
+  "task": "PCTX01-G05-D05",
+  "kind": "owned synthetic live signpost observer control only",
+  "helper_pid": 33673,
+  "listener_pid": 33674,
+  "listener_exit": 0,
+  "helper_exit": 0,
+  "phases": [
+    {
+      "phase": "before_listener",
+      "stdout": "enabled 0 1"
+    },
+    {
+      "phase": "listener_active_probe_0",
+      "stdout": "enabled 1 1"
+    },
+    {
+      "phase": "listener_active_probe_1",
+      "stdout": "enabled 2 1"
+    },
+    {
+      "phase": "listener_active_probe_2",
+      "stdout": "enabled 3 1"
+    },
+    {
+      "phase": "listener_active_probe_3",
+      "stdout": "enabled 4 1"
+    },
+    {
+      "phase": "listener_active_probe_4",
+      "stdout": "enabled 5 1"
+    },
+    {
+      "phase": "listener_active_probe_5",
+      "stdout": "enabled 6 1"
+    },
+    {
+      "phase": "listener_active_probe_6",
+      "stdout": "enabled 7 1"
+    },
+    {
+      "phase": "listener_active_probe_7",
+      "stdout": "enabled 8 1"
+    },
+    {
+      "phase": "listener_active_probe_8",
+      "stdout": "enabled 9 1"
+    },
+    {
+      "phase": "listener_active_probe_9",
+      "stdout": "enabled 10 1"
+    }
+  ],
+  "events": [
+    {
+      "processID": 33673,
+      "eventMessage": "PCTXControl 7",
+      "eventType": "logEvent",
+      "timestamp": "2026-10-09 14:23:57.688075+0200"
+    },
+    {
+      "processID": 33673,
+      "eventMessage": "PCTXControl 8",
+      "eventType": "logEvent",
+      "timestamp": "2026-10-09 14:23:57.846299+0200"
+    },
+    {
+      "processID": 33673,
+      "eventMessage": "PCTXControl 9",
+      "eventType": "logEvent",
+      "timestamp": "2026-10-09 14:23:58.004125+0200"
+    },
+    {
+      "processID": 33673,
+      "eventMessage": "PCTXControl 10",
+      "eventType": "logEvent",
+      "timestamp": "2026-10-09 14:23:58.158970+0200"
+    }
+  ],
+  "unparsed_lines": 1,
+  "raw_sha256": "a6c19c0072462363fb1f5607ce56726a9496239b86a124ef830dca23aab0eed0",
+  "binary_sha256": "c1eacf81e76fe2da25ea2d2f7dfb63f6ce5b42f1cbdfcbae714e82bc89824f53",
+  "no_original_test_run": true,
+  "no_policy_service_observation": true,
+  "no_config_change": true,
+  "no_administrator_authentication": true,
+  "qualification": false,
+  "limits": [
+    "Live logging may transiently enable this owned subsystem; does not prove service emission,privacy,retention or evaluation mapping.",
+    "Only numeric/literal synthetic payloads retained; filtered exact unreaped owned PID/subsystem."
+  ]
+}

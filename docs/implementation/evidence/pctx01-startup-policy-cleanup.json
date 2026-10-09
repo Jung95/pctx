@@ -1,0 +1,18 @@
+{
+  "task": "PCTX01-G05-D05",
+  "known_114_pids_absent": true,
+  "private_forward_root_removed": true,
+  "temporary_files_removed": [
+    "pctx01-policy-hash-match",
+    "pctx01-policy-hash-api-control",
+    "pctx01-syspolicy-static-objc.txt",
+    "pctx01-syspolicy-selectors.txt",
+    "pctx01-syspolicy-code.txt",
+    "pctx01-syspolicy-strings.txt",
+    "pctx01-syspolicy-method-map.json",
+    "pctx01-forward-plan-prepare.py",
+    "pctx01-policy-document.py"
+  ],
+  "administrator_processes_started": false,
+  "qualification": false
+}

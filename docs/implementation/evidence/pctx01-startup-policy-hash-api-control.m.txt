@@ -1,0 +1,14 @@
+#import <Foundation/Foundation.h>
+#include <stdio.h>
+int main(void) {
+ @autoreleasepool {
+  NSArray *strings=@[@"PCTX_SYNTHETIC_ONLY",@"/var/folders/PCTX_TEST/T/.tmpA/git",@"/private/var/folders/PCTX_TEST/T/.tmpA/git",@"/tmp/PCTX_TEST/비교/git"];
+  for(NSString *s in strings) {
+   const char *utf8=[s UTF8String];
+   CFStringRef ref=CFStringCreateWithCString(NULL,utf8,kCFStringEncodingUTF8);
+   unsigned long long a=[s hash],b=CFHash(ref);
+   printf("%llx %llx\n",a,b);CFRelease(ref);if(a!=b)return 1;
+  }
+ }
+ return 0;
+}

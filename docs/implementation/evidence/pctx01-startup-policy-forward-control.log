@@ -1,0 +1,9 @@
+   Compiling pctx v0.1.0-dev (/private/tmp/pctx01-policy-forward-qk1a4dc9/source)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 7.19s
+     Running unittests src/lib.rs (/Users/dev/PCTX/target/debug/deps/pctx-ae897bec01e143c7)
+
+running 1 test
+test query_process::pctx01_policy_hash_api_control ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 55 filtered out; finished in 0.00s
+

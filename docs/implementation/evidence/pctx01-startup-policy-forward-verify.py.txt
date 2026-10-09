@@ -1,0 +1,10 @@
+from pathlib import Path
+import json,hashlib,os,re
+b=Path('/Users/dev/PCTX/docs/implementation/evidence');p=b/'pctx01-startup-policy-forward-result.json';r=json.loads(p.read_text());rows=r['records'];log=(b/'pctx01-startup-policy-forward-test.log').read_text();failed=[x for x in rows if x['outcome']['code']=='TIMEOUT'];known=[r['parent_pid']]+[x['pid'] for x in rows];alive=[]
+for pid in known:
+    try:os.kill(pid,0);alive.append(pid)
+    except ProcessLookupError:pass
+checks={'test_failed':r['test_exit']==101,'one_timeout':len(failed)==1,'known_pid_absence':not alive,'no_dropped':all(x['dropped']==0 for x in rows),'native_clock_ok':all(x['clock_ok'] for x in rows),'all_owned_identity':all(x['identity'][:3]==[x['pid'],r['parent_pid'],502] for x in rows),'exact_fixture_hashes_present':all(len(x['path_hashes'])==2 for x in rows),'113_observed_15_censored':len(rows)==113,'clock_endpoint_bounds_overlap':max(r[k]['offset_low_ns'] for k in ['clock_before','clock_after'])<=min(r[k]['offset_high_ns'] for k in ['clock_before','clock_after']),'failed_pid_in_test_log':all(str(x['pid']) in log for x in failed),'product_tests_unchanged':all(hashlib.sha256((Path('/Users/dev/PCTX')/f).read_bytes()).hexdigest()==s for f,s in r['meta']['hashes'].items())}
+assert all(checks.values()),checks
+out={'task':'PCTX01-G05-D05','checks':checks,'known_pids':len(known),'present_or_reused':alive,'failed_pids':[x['pid'] for x in failed],'result_sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'qualification':False,'limits':'113 observed outcomes;15 unattempted or unobserved are censored. Post-reap instrumentation may affect later iterations. Two endpoint clock anchors do not exclude an intermediate wall-clock step. Fresh service scope pending; no causal closure.'}
+(b/'pctx01-startup-policy-forward-verification.json').write_text(json.dumps(out,indent=2)+'\n');print(json.dumps(checks))

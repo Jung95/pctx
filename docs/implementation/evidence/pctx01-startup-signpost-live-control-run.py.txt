@@ -1,0 +1,32 @@
+from pathlib import Path
+import subprocess,json,time,os,select,hashlib
+assert os.getuid()==502 and os.geteuid()==502
+base=Path('/Users/dev/PCTX/docs/implementation/evidence'); binary=Path('/private/tmp/pctx01-signpost-live-control')
+raw=Path('/private/tmp/pctx01-signpost-live-control-events.jsonl'); phases=[]; child=None; listener=None
+try:
+ child=subprocess.Popen([str(binary)],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True)
+ if not select.select([child.stdout],[],[],5)[0]:raise RuntimeError('control startup unavailable')
+ ready=child.stdout.readline().strip();assert ready==f'ready {child.pid}'
+ def emit(label):
+  child.stdin.write('e\n');child.stdin.flush()
+  if not select.select([child.stdout],[],[],1)[0]:raise RuntimeError('control response unavailable')
+  phases.append({'phase':label,'stdout':child.stdout.readline().strip()})
+ emit('before_listener')
+ with raw.open('xb') as out:
+  listener=subprocess.Popen(['/usr/bin/log','stream','--process',str(child.pid),'--predicate',f'processID == {child.pid} AND subsystem == "org.pctx.diagnostic.live-control"','--style','ndjson','--level','debug','--timeout','3','--no-backtrace'],stdout=out,stderr=subprocess.STDOUT)
+  for i in range(10):
+   time.sleep(.15);emit(f'listener_active_probe_{i}')
+  code=listener.wait(timeout=5)
+ child.stdin.write('q\n');child.stdin.flush();child.stdin.close();childcode=child.wait(timeout=2)
+ parsed=[];unparsed=0
+ for line in raw.read_text().splitlines():
+  try:row=json.loads(line)
+  except ValueError:unparsed+=1;continue
+  if isinstance(row,dict) and row.get('processID')==child.pid and row.get('subsystem')=='org.pctx.diagnostic.live-control':parsed.append({k:row[k] for k in ['processID','eventMessage','eventType','signpostID','signpostName','signpostType','timestamp'] if k in row})
+ result={'task':'PCTX01-G05-D05','kind':'owned synthetic live signpost observer control only','helper_pid':child.pid,'listener_pid':listener.pid,'listener_exit':code,'helper_exit':childcode,'phases':phases,'events':parsed,'unparsed_lines':unparsed,'raw_sha256':hashlib.sha256(raw.read_bytes()).hexdigest(),'binary_sha256':hashlib.sha256(binary.read_bytes()).hexdigest(),'no_original_test_run':True,'no_policy_service_observation':True,'no_config_change':True,'no_administrator_authentication':True,'qualification':False,'limits':['Live logging may transiently enable this owned subsystem; does not prove service emission,privacy,retention or evaluation mapping.','Only numeric/literal synthetic payloads retained; filtered exact unreaped owned PID/subsystem.']}
+ (base/'pctx01-startup-signpost-live-control-result.json').write_text(json.dumps(result,indent=2)+'\n')
+ print(json.dumps({'listener_exit':code,'helper_exit':childcode,'phases':phases,'matched_events':len(parsed),'event_types':sorted({str(r.get('eventType')) for r in parsed})}))
+finally:
+ for p in [listener,child]:
+  if p is not None and p.poll() is None:p.kill();p.wait()
+ raw.unlink(missing_ok=True);binary.unlink(missing_ok=True)

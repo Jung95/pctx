@@ -1,6 +1,55 @@
 # PCTX01 startup failure: consolidated triage
 
-## Late child chronology — current, 2026-10-09
+## Policy queue attribution — current, 2026-10-09
+
+PCTX01-G05-D05 alone remains active and `product_failure`; fixed33/40 details,
+0/10 whole gates. Completion still requires a causal repair and all original
+startup/platform acceptance conditions. Source review found no explanatory
+fixture-write/lifetime, child-pipe, pre-exec suspension or deadline defect.
+
+Installed syspolicyd static analysis shows `scanTarget:` dispatching synchronous
+`performScanWithArguments:withCodeEvaluation:` on serial `_workQueue` (offset
+0x48). Its redacted PST path is `NSString.hash` of the path in the normal
+volume/object-ID branch. Execution evaluation and completion queues are
+concurrent; do not infer a single evaluation worker or an eight-worker cap.
+Independent review confirms the selectors, queue type and call path.
+[Static map](evidence/pctx01-startup-policy-queue-map.json).
+
+An offline reconstruction joins all16 historical synthetic first-attempt paths
+in two modes to stored policy events. Parent44072 is the only match within
+candidate1..100000, both path aliases and the recorded generation rules.
+The eight script-group scans are non-overlapping, separated by241–291us;
+first scan to final result spans1.154068s. Expired child44203 is last, with
+193.916ms of its own scan. This strongly supports accumulated serial policy
+scan delay in that historical reproduction. It does not yet prove the current
+original-supervisor cause: historical TMPDIR was reconstructed, hashes are
+noncryptographic, and that harness has no exact UTC/deadline correlation.
+[Joined evidence](evidence/pctx01-startup-policy-hash-joined.json).
+
+A once-only isolated copy of the byte-identical original Rust concurrency test
+retains1000ms,8×16,native exec/cwd/env,groups,streams/overflow and cancellation.
+Exact-owned-fixture hashing occurs only after original cancel/reap; raw paths
+are not exported. NSString/CFHash pure controls pass, including Unicode;
+one Rust API unit passes. Original test fails101:113 observed outcomes,
+112 OUTPUT and one TIMEOUT35071, zero streams/no observed exit. Remaining15
+planned attempts are censored. No dropped timing points; all known114 parent/
+child PIDs absent; product and original test hashes unchanged. Two native/wall
+clock endpoint bounds overlap with a2us total envelope; an intermediate clock
+step is not excluded. Post-reap diagnostics can affect later iterations and
+are not qualification. [Verification](evidence/pctx01-startup-policy-forward-verification.json).
+
+The next discriminating step is one fresh finite stored-service-log read:
+12:43:38–12:43:41 UTC, only16 exact hashes of the eight first owned fixtures,
+GK scan/result stages,64KiB cap/12s watchdog, ordinary UID, no admin prompt,
+no service sampling/configuration change or fallback. It is prepared with
+reducer refusal controls, but **pending separate human scope approval**;
+previous finite service/log scopes were consumed and are not reusable.
+[Concrete scope](evidence/pctx01-startup-policy-forward-scope-plan.json).
+No applicable product/platform repair is established; no unchanged rerun,
+policy bypass, warmup, fixture replacement or acceptance reduction is justified.
+Shared target has diagnostic artifacts: rebuild original before acceptance.
+
+## Late child chronology — earlier, 2026-10-09
 
 Priority 3 used an ordinary-user native numeric alternative to privileged stack
 sampling. One byte-identical original Rust concurrency test retains 1000ms,

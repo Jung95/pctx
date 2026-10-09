@@ -1,0 +1,471 @@
+{
+  "task": "PCTX01-G05-D05",
+  "source": "existing historical owned-path reconstruction,unique joint16match in enumeratedscope",
+  "rows": [
+    {
+      "parent_candidate": 44072,
+      "mode": "script-group",
+      "worker": 0,
+      "path_hash": "6a20155dde37bbde",
+      "first_attempt": {
+        "worker": 0,
+        "iteration": 0,
+        "pid": 44202,
+        "spawn_us": 136,
+        "expired": false,
+        "ok": true,
+        "stdout_bytes": 6,
+        "stderr_bytes": 6,
+        "elapsed_ms": 967
+      },
+      "policy_events": [
+        {
+          "timestamp": "2026-10-08 16:50:58.426456+0200",
+          "process": "syspolicyd",
+          "message": "GK performScan: PST: (path: 6a20155dde37bbde), (team: (null)), (id: (null)), (bundle_id: (null))"
+        },
+        {
+          "timestamp": "2026-10-08 16:50:58.529031+0200",
+          "process": "syspolicyd",
+          "message": "GK evaluateScanResult: 2, PST: (path: 6a20155dde37bbde), (team: (null)), (id: (null)), (bundle_id: NOT_A_BUNDLE), 0, 0, 1, 0, 7, 7, 0"
+        }
+      ]
+    },
+    {
+      "parent_candidate": 44072,
+      "mode": "script-group",
+      "worker": 1,
+      "path_hash": "6a20155de643c3e0",
+      "first_attempt": {
+        "worker": 1,
+        "iteration": 0,
+        "pid": 44203,
+        "spawn_us": 127,
+        "expired": true,
+        "ok": false,
+        "stdout_bytes": 0,
+        "stderr_bytes": 0,
+        "elapsed_ms": 1001
+      },
+      "policy_events": [
+        {
+          "timestamp": "2026-10-08 16:50:58.529287+0200",
+          "process": "syspolicyd",
+          "message": "GK performScan: PST: (path: 6a20155de643c3e0), (team: (null)), (id: (null)), (bundle_id: (null))"
+        },
+        {
+          "timestamp": "2026-10-08 16:50:58.723203+0200",
+          "process": "syspolicyd",
+          "message": "GK evaluateScanResult: 2, PST: (path: 6a20155de643c3e0), (team: (null)), (id: (null)), (bundle_id: NOT_A_BUNDLE), 0, 0, 1, 0, 7, 7, 0"
+        }
+      ]
+    },
+    {
+      "parent_candidate": 44072,
+      "mode": "script-group",
+      "worker": 2,
+      "path_hash": "6a20155dee4fcbe2",
+      "first_attempt": {
+        "worker": 2,
+        "iteration": 0,
+        "pid": 44204,
+        "spawn_us": 157,
+        "expired": false,
+        "ok": true,
+        "stdout_bytes": 6,
+        "stderr_bytes": 6,
+        "elapsed_ms": 277
+      },
+      "policy_events": [
+        {
+          "timestamp": "2026-10-08 16:50:57.569135+0200",
+          "process": "syspolicyd",
+          "message": "GK performScan: PST: (path: 6a20155dee4fcbe2), (team: (null)), (id: (null)), (bundle_id: (null))"
+        },
+        {
+          "timestamp": "2026-10-08 16:50:57.831781+0200",
+          "process": "syspolicyd",
+          "message": "GK evaluateScanResult: 2, PST: (path: 6a20155dee4fcbe2), (team: (null)), (id: (null)), (bundle_id: NOT_A_BUNDLE), 0, 0, 1, 0, 7, 7, 0"
+        }
+      ]
+    },
+    {
+      "parent_candidate": 44072,
+      "mode": "script-group",
+      "worker": 3,
+      "path_hash": "6a20155df65bd3e4",
+      "first_attempt": {
+        "worker": 3,
+        "iteration": 0,
+        "pid": 44208,
+        "spawn_us": 353,
+        "expired": false,
+        "ok": true,
+        "stdout_bytes": 6,
+        "stderr_bytes": 6,
+        "elapsed_ms": 475
+      },
+      "policy_events": [
+        {
+          "timestamp": "2026-10-08 16:50:57.934540+0200",
+          "process": "syspolicyd",
+          "message": "GK performScan: PST: (path: 6a20155df65bd3e4), (team: (null)), (id: (null)), (bundle_id: (null))"
+        },
+        {
+          "timestamp": "2026-10-08 16:50:58.038145+0200",
+          "process": "syspolicyd",
+          "message": "GK evaluateScanResult: 2, PST: (path: 6a20155df65bd3e4), (team: (null)), (id: (null)), (bundle_id: NOT_A_BUNDLE), 0, 0, 1, 0, 7, 7, 0"
+        }
+      ]
+    },
+    {
+      "parent_candidate": 44072,
+      "mode": "script-group",
+      "worker": 4,
+      "path_hash": "6a20155dfe67dbe6",
+      "first_attempt": {
+        "worker": 4,
+        "iteration": 0,
+        "pid": 44205,
+        "spawn_us": 352,
+        "expired": false,
+        "ok": true,
+        "stdout_bytes": 6,
+        "stderr_bytes": 6,
+        "elapsed_ms": 758
+      },
+      "policy_events": [
+        {
+          "timestamp": "2026-10-08 16:50:58.219584+0200",
+          "process": "syspolicyd",
+          "message": "GK performScan: PST: (path: 6a20155dfe67dbe6), (team: (null)), (id: (null)), (bundle_id: (null))"
+        },
+        {
+          "timestamp": "2026-10-08 16:50:58.320362+0200",
+          "process": "syspolicyd",
+          "message": "GK evaluateScanResult: 2, PST: (path: 6a20155dfe67dbe6), (team: (null)), (id: (null)), (bundle_id: NOT_A_BUNDLE), 0, 0, 1, 0, 7, 7, 0"
+        }
+      ]
+    },
+    {
+      "parent_candidate": 44072,
+      "mode": "script-group",
+      "worker": 5,
+      "path_hash": "6a20155e0673e3e8",
+      "first_attempt": {
+        "worker": 5,
+        "iteration": 0,
+        "pid": 44206,
+        "spawn_us": 336,
+        "expired": false,
+        "ok": true,
+        "stdout_bytes": 6,
+        "stderr_bytes": 6,
+        "elapsed_ms": 658
+      },
+      "policy_events": [
+        {
+          "timestamp": "2026-10-08 16:50:58.038393+0200",
+          "process": "syspolicyd",
+          "message": "GK performScan: PST: (path: 6a20155e0673e3e8), (team: (null)), (id: (null)), (bundle_id: (null))"
+        },
+        {
+          "timestamp": "2026-10-08 16:50:58.219333+0200",
+          "process": "syspolicyd",
+          "message": "GK evaluateScanResult: 2, PST: (path: 6a20155e0673e3e8), (team: (null)), (id: (null)), (bundle_id: NOT_A_BUNDLE), 0, 0, 1, 0, 7, 7, 0"
+        }
+      ]
+    },
+    {
+      "parent_candidate": 44072,
+      "mode": "script-group",
+      "worker": 6,
+      "path_hash": "6a20155e0e7febea",
+      "first_attempt": {
+        "worker": 6,
+        "iteration": 0,
+        "pid": 44207,
+        "spawn_us": 341,
+        "expired": false,
+        "ok": true,
+        "stdout_bytes": 6,
+        "stderr_bytes": 6,
+        "elapsed_ms": 864
+      },
+      "policy_events": [
+        {
+          "timestamp": "2026-10-08 16:50:58.320653+0200",
+          "process": "syspolicyd",
+          "message": "GK performScan: PST: (path: 6a20155e0e7febea), (team: (null)), (id: (null)), (bundle_id: (null))"
+        },
+        {
+          "timestamp": "2026-10-08 16:50:58.426206+0200",
+          "process": "syspolicyd",
+          "message": "GK evaluateScanResult: 2, PST: (path: 6a20155e0e7febea), (team: (null)), (id: (null)), (bundle_id: NOT_A_BUNDLE), 0, 0, 1, 0, 7, 7, 0"
+        }
+      ]
+    },
+    {
+      "parent_candidate": 44072,
+      "mode": "script-group",
+      "worker": 7,
+      "path_hash": "6a20155e168bf3ec",
+      "first_attempt": {
+        "worker": 7,
+        "iteration": 0,
+        "pid": 44201,
+        "spawn_us": 138,
+        "expired": false,
+        "ok": true,
+        "stdout_bytes": 6,
+        "stderr_bytes": 6,
+        "elapsed_ms": 371
+      },
+      "policy_events": [
+        {
+          "timestamp": "2026-10-08 16:50:57.832039+0200",
+          "process": "syspolicyd",
+          "message": "GK performScan: PST: (path: 6a20155e168bf3ec), (team: (null)), (id: (null)), (bundle_id: (null))"
+        },
+        {
+          "timestamp": "2026-10-08 16:50:57.934299+0200",
+          "process": "syspolicyd",
+          "message": "GK evaluateScanResult: 2, PST: (path: 6a20155e168bf3ec), (team: (null)), (id: (null)), (bundle_id: NOT_A_BUNDLE), 0, 0, 1, 0, 7, 7, 0"
+        }
+      ]
+    },
+    {
+      "parent_candidate": 44072,
+      "mode": "script-no-group",
+      "worker": 0,
+      "path_hash": "6e64f05c6515c366",
+      "first_attempt": {
+        "worker": 0,
+        "iteration": 0,
+        "pid": 44315,
+        "spawn_us": 179,
+        "expired": false,
+        "ok": true,
+        "stdout_bytes": 6,
+        "stderr_bytes": 6,
+        "elapsed_ms": 246
+      },
+      "policy_events": [
+        {
+          "timestamp": "2026-10-08 16:50:58.723458+0200",
+          "process": "syspolicyd",
+          "message": "GK performScan: PST: (path: 6e64f05c6515c366), (team: (null)), (id: (null)), (bundle_id: (null))"
+        },
+        {
+          "timestamp": "2026-10-08 16:50:58.824019+0200",
+          "process": "syspolicyd",
+          "message": "GK evaluateScanResult: 2, PST: (path: 6e64f05c6515c366), (team: (null)), (id: (null)), (bundle_id: NOT_A_BUNDLE), 0, 0, 1, 0, 7, 7, 0"
+        }
+      ]
+    },
+    {
+      "parent_candidate": 44072,
+      "mode": "script-no-group",
+      "worker": 1,
+      "path_hash": "6e64f05c894be76f",
+      "first_attempt": {
+        "worker": 1,
+        "iteration": 0,
+        "pid": 44319,
+        "spawn_us": 423,
+        "expired": false,
+        "ok": true,
+        "stdout_bytes": 6,
+        "stderr_bytes": 6,
+        "elapsed_ms": 528
+      },
+      "policy_events": [
+        {
+          "timestamp": "2026-10-08 16:50:59.016744+0200",
+          "process": "syspolicyd",
+          "message": "GK performScan: PST: (path: 6e64f05c894be76f), (team: (null)), (id: (null)), (bundle_id: (null))"
+        },
+        {
+          "timestamp": "2026-10-08 16:50:59.115836+0200",
+          "process": "syspolicyd",
+          "message": "GK evaluateScanResult: 2, PST: (path: 6e64f05c894be76f), (team: (null)), (id: (null)), (bundle_id: NOT_A_BUNDLE), 0, 0, 1, 0, 7, 7, 0"
+        }
+      ]
+    },
+    {
+      "parent_candidate": 44072,
+      "mode": "script-no-group",
+      "worker": 2,
+      "path_hash": "6e64f05cad820b78",
+      "first_attempt": {
+        "worker": 2,
+        "iteration": 0,
+        "pid": 44320,
+        "spawn_us": 415,
+        "expired": false,
+        "ok": true,
+        "stdout_bytes": 6,
+        "stderr_bytes": 6,
+        "elapsed_ms": 428
+      },
+      "policy_events": [
+        {
+          "timestamp": "2026-10-08 16:50:58.919998+0200",
+          "process": "syspolicyd",
+          "message": "GK performScan: PST: (path: 6e64f05cad820b78), (team: (null)), (id: (null)), (bundle_id: (null))"
+        },
+        {
+          "timestamp": "2026-10-08 16:50:59.016494+0200",
+          "process": "syspolicyd",
+          "message": "GK evaluateScanResult: 2, PST: (path: 6e64f05cad820b78), (team: (null)), (id: (null)), (bundle_id: NOT_A_BUNDLE), 0, 0, 1, 0, 7, 7, 0"
+        }
+      ]
+    },
+    {
+      "parent_candidate": 44072,
+      "mode": "script-no-group",
+      "worker": 3,
+      "path_hash": "6e64f05cd1b82f81",
+      "first_attempt": {
+        "worker": 3,
+        "iteration": 0,
+        "pid": 44318,
+        "spawn_us": 449,
+        "expired": false,
+        "ok": true,
+        "stdout_bytes": 6,
+        "stderr_bytes": 6,
+        "elapsed_ms": 985
+      },
+      "policy_events": [
+        {
+          "timestamp": "2026-10-08 16:50:59.473366+0200",
+          "process": "syspolicyd",
+          "message": "GK performScan: PST: (path: 6e64f05cd1b82f81), (team: (null)), (id: (null)), (bundle_id: (null))"
+        },
+        {
+          "timestamp": "2026-10-08 16:50:59.572475+0200",
+          "process": "syspolicyd",
+          "message": "GK evaluateScanResult: 2, PST: (path: 6e64f05cd1b82f81), (team: (null)), (id: (null)), (bundle_id: NOT_A_BUNDLE), 0, 0, 1, 0, 7, 7, 0"
+        }
+      ]
+    },
+    {
+      "parent_candidate": 44072,
+      "mode": "script-no-group",
+      "worker": 4,
+      "path_hash": "6e64f05cf5ee538a",
+      "first_attempt": {
+        "worker": 4,
+        "iteration": 0,
+        "pid": 44321,
+        "spawn_us": 409,
+        "expired": false,
+        "ok": true,
+        "stdout_bytes": 6,
+        "stderr_bytes": 6,
+        "elapsed_ms": 785
+      },
+      "policy_events": [
+        {
+          "timestamp": "2026-10-08 16:50:59.263677+0200",
+          "process": "syspolicyd",
+          "message": "GK performScan: PST: (path: 6e64f05cf5ee538a), (team: (null)), (id: (null)), (bundle_id: (null))"
+        },
+        {
+          "timestamp": "2026-10-08 16:50:59.372755+0200",
+          "process": "syspolicyd",
+          "message": "GK evaluateScanResult: 2, PST: (path: 6e64f05cf5ee538a), (team: (null)), (id: (null)), (bundle_id: NOT_A_BUNDLE), 0, 0, 1, 0, 7, 7, 0"
+        }
+      ]
+    },
+    {
+      "parent_candidate": 44072,
+      "mode": "script-no-group",
+      "worker": 5,
+      "path_hash": "6e64f05d1a247793",
+      "first_attempt": {
+        "worker": 5,
+        "iteration": 0,
+        "pid": 44316,
+        "spawn_us": 152,
+        "expired": false,
+        "ok": true,
+        "stdout_bytes": 6,
+        "stderr_bytes": 6,
+        "elapsed_ms": 886
+      },
+      "policy_events": [
+        {
+          "timestamp": "2026-10-08 16:50:59.373020+0200",
+          "process": "syspolicyd",
+          "message": "GK performScan: PST: (path: 6e64f05d1a247793), (team: (null)), (id: (null)), (bundle_id: (null))"
+        },
+        {
+          "timestamp": "2026-10-08 16:50:59.473108+0200",
+          "process": "syspolicyd",
+          "message": "GK evaluateScanResult: 2, PST: (path: 6e64f05d1a247793), (team: (null)), (id: (null)), (bundle_id: NOT_A_BUNDLE), 0, 0, 1, 0, 7, 7, 0"
+        }
+      ]
+    },
+    {
+      "parent_candidate": 44072,
+      "mode": "script-no-group",
+      "worker": 6,
+      "path_hash": "6e64f05d3e5a9b9c",
+      "first_attempt": {
+        "worker": 6,
+        "iteration": 0,
+        "pid": 44317,
+        "spawn_us": 174,
+        "expired": false,
+        "ok": true,
+        "stdout_bytes": 6,
+        "stderr_bytes": 6,
+        "elapsed_ms": 333
+      },
+      "policy_events": [
+        {
+          "timestamp": "2026-10-08 16:50:58.824272+0200",
+          "process": "syspolicyd",
+          "message": "GK performScan: PST: (path: 6e64f05d3e5a9b9c), (team: (null)), (id: (null)), (bundle_id: (null))"
+        },
+        {
+          "timestamp": "2026-10-08 16:50:58.919752+0200",
+          "process": "syspolicyd",
+          "message": "GK evaluateScanResult: 2, PST: (path: 6e64f05d3e5a9b9c), (team: (null)), (id: (null)), (bundle_id: NOT_A_BUNDLE), 0, 0, 1, 0, 7, 7, 0"
+        }
+      ]
+    },
+    {
+      "parent_candidate": 44072,
+      "mode": "script-no-group",
+      "worker": 7,
+      "path_hash": "6e64f05d6290bfa5",
+      "first_attempt": {
+        "worker": 7,
+        "iteration": 0,
+        "pid": 44314,
+        "spawn_us": 150,
+        "expired": false,
+        "ok": true,
+        "stdout_bytes": 6,
+        "stderr_bytes": 6,
+        "elapsed_ms": 675
+      },
+      "policy_events": [
+        {
+          "timestamp": "2026-10-08 16:50:59.116092+0200",
+          "process": "syspolicyd",
+          "message": "GK performScan: PST: (path: 6e64f05d6290bfa5), (team: (null)), (id: (null)), (bundle_id: (null))"
+        },
+        {
+          "timestamp": "2026-10-08 16:50:59.263418+0200",
+          "process": "syspolicyd",
+          "message": "GK evaluateScanResult: 2, PST: (path: 6e64f05d6290bfa5), (team: (null)), (id: (null)), (bundle_id: NOT_A_BUNDLE), 0, 0, 1, 0, 7, 7, 0"
+        }
+      ]
+    }
+  ],
+  "qualification": false
+}

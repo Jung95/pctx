@@ -1,6 +1,19 @@
 # Implementation plan
 
-## Late child chronology — current, 2026-10-09
+## Policy queue attribution — current, 2026-10-09
+
+PCTX01-G05-D05 remains `product_failure`, fixed33/40 details,0/10 whole gates.
+Static analysis confirms a serial policy scan queue; the16-path historical
+join shows1.154068s accumulated scans, expired child last. Current original
+concurrency diagnostic fails101:113 outcomes/112OUTPUT/1TIMEOUT35071;
+15 attempts censored, no drops, all known114 PIDs absent, source unchanged.
+Owned hashes and native/UTC deadline bounds are captured. A fresh3-second,
+16-hash stored-log read is prepared but pending separate human scope approval.
+No causal repair or task closure; next action is scoped attribution, then an
+applicable repair at unchanged acceptance criteria. No unchanged rerun.
+[Evidence and limits](pctx01-startup-triage.md).
+
+## Late child chronology — earlier, 2026-10-09
 
 Priority 3 used an ordinary-user native numeric alternative to privileged stack
 sampling. One byte-identical original Rust concurrency test retains 1000ms,

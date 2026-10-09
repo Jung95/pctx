@@ -1,62 +1,17 @@
 # PCTX01 one-time closure plan
 
-This is the first and only whole-G01–G10 reorganization requested on 2026-10-09.
-Runtime baseline: `00df0e2f3254f6697148e64a677a712d4c63ddd9`. Only PCTX01 is active.
-The machine-readable [fixed register](PCTX01-closure-plan.json) owns item states,
-source paths, specification references, completion conditions, environment and
-separate implementation/platform/documentation fields. This document summarizes it.
+## Policy queue attribution — current, 2026-10-09
 
-The previous/current gate denominator is10/10. The initial whole-detail denominator
-is40 (no previous whole-detail denominator); this decomposes existing obligations,
-not new scope. Help172/visible leaves140 and historical R01–R12 remain unchanged.
-R01–R12 local12/12 qualifies only that pure-admission subset. Closed rows below
-are deliberately bounded subconditions; G09 independently retains every required
-release-platform condition. A closed local row does not qualify an untested OS.
-
-Current bounded detail closure: **33/40**; whole gates **0/10**.
-
-| Fixed ID | State | Completion condition | Source | Spec | Evidence prefix |
-| --- | --- | --- | --- | --- | --- |
-| PCTX01-G01-D01 | closed | All 172 visible help paths and 140 leaves describe schema/effects without project access | main.rs,cli_help.rs | §14 | pctx01-help-color-verification.json |
-| PCTX01-G01-D02 | closed | Exact root version and option-order behavior precede project/output/timeout effects | main.rs,cli_args.rs | §14 | pctx01-global-argument-verification.json |
-| PCTX01-G02-D01 | closed | Singular global duplicates, depth positions, defaults and literal child argv preserve one binding | cli_args.rs,main.rs | §14 | pctx01-global-argument-verification.json |
-| PCTX01-G02-D02 | closed | Unknown-option refusal on every visible leaf uses the admitted refusal transport with no effects | main.rs,domain.rs | §14 | pctx01-refusal-envelope-verification.json |
-| PCTX01-G02-D03 | closed | Unix opaque argv and masked parser diagnostics produce checked output without panic | main.rs,cli_args.rs | §14 | pctx01-frontend-verification.json |
-| PCTX01-G02-D04 | closed | Complete remaining typed/missing/value/conflict parser cases for the frozen 140-leaf schema; record accepted/refused options and effect snapshots | main.rs,cli_args.rs; parser_contract_tests.rs; tests/parser_schema_cli.rs | §14 | pctx01-parser-verification.json |
-| PCTX01-G03-D01 | closed | Historical A01-A11 and R01-R12 pure admission contracts are locally qualified, with exact exceptions and producer state boundaries | main.rs and shared producer validators | §14/27/38 | pctx01-report-admission-verification.json |
-| PCTX01-G03-D02 | closed | Activity nonnegative cursor and Install explicit hash grammar precede discovery/lock/output effects | main.rs,work.rs,adapter.rs | §14/38 | pctx01-activity-admission-verification.json, pctx01-install-admission-verification.json |
-| PCTX01-G03-D03 | closed | Freeze and execute remaining source-independent grammar/no-effect cases for all 140 leaves; reuse closed A/R/C cases, do not invent lookup grammar | main.rs and shared producer validators | §14/27/38 | pctx01-admission-registry.json |
-| PCTX01-G03-D04 | closed | Group explicit input/stdin schema and size failures with producer-dependent checks; prove common refusal precedence and effects for admitted inputs, preserving policy5/state9 | main.rs,input.rs,work.rs,quota.rs,operations.rs,pack.rs,filters.rs | §14/27/33/38 | pctx01-handoff-input-verification.json, pctx01-argument-preflight-verification.json |
-| PCTX01-G04-D01 | closed | One complete safe JSON refusal document for semantic/parser/timeout errors across admitted refusal representations | domain.rs,main.rs | §8/14 | pctx01-refusal-envelope-verification.json, pctx01-refusal-rendering-verification.json |
-| PCTX01-G04-D02 | closed | Shared final-byte minimum/error budget and execution fallback preserve child truth and durable reread handles; bounded tested fallback cases only, universal serialization/destination bounds remain G04-D03 | main.rs,render.rs | §8/14/38 | pctx01-budget-fallback-verification.json |
-| PCTX01-G04-D03 | closed | Complete success/partial/error envelope required fields and exact final bytes for all supported representation/destination classes; no interrupted JSON or fabricated omitted count | main.rs,domain.rs,render.rs | §8/14/38 | pctx01-run-final-bytes-verification.json, pctx01-representation-admission-verification.json |
-| PCTX01-G04-D04 | closed | Existing NDJSON and native-hook exceptions use their own framing and pre-effect unsupported-format refusal | main.rs,watch.rs,adapter.rs | §14/38 | pctx01-delivery-verification.json, pctx01-nested-execution-verification.json |
-| PCTX01-G05-D01 | closed | Actual child0/1/2/signal and prelaunch/not-spawned truth stay distinct from PCTX status on native Unix | main.rs,output.rs,query_process.rs | §14/38 | pctx01-run-exit-verification.json |
-| PCTX01-G05-D02 | closed | Complete native callback/post-spawn fault injection while retaining already observed capture/publication child outcome, artifact and no-rerun truth | main.rs,output.rs,runner.rs | §14/38 | pctx01-nested-execution-verification.json, pctx01-run-exit-verification.json, pctx01-postspawn-callback-verification.json, pctx01-postspawn-capture-verification.json, pctx01-postspawn-receipt-verification.json, pctx01-postspawn-runner-verification.json |
-| PCTX01-G05-D03 | closed | Checked help/parser/stream/hook/response writes return IO7 on actual Unix closed delivery; failed metering preserves delivered outcome | main.rs,watch.rs,adapter.rs | §14/38 | pctx01-delivery-verification.json |
-| PCTX01-G05-D04 | closed | One grouped persisted-data error matrix: known repaired Work/Adapter plus all frozen DB/artifact/credential decoders; caller/config2 versus storage7, original expiry, conflict9 and replay precedence; safe fixed errors/no corrupt bytes | domain.rs,work.rs,adapter.rs,quota.rs,session.rs,operations.rs,storage.rs,broker.rs,schedule.rs,output.rs,pack.rs,filters.rs,project.rs,runner.rs,windows_guardian.rs | §14/27/38 | pctx01-adapter-errors-verification.json, pctx01-persisted-errors-verification.json, pctx01-task-storage-verification.json, pctx01-grouped-storage-verification.json, pctx01-storage-schedule-verification.json |
-| PCTX01-G05-D05 | product_failure | Resolve four original macOS query startup failures at original1s/8x16/stream/group conditions; direct reproduction is evidence, not exemption or root-cause proof | query_process.rs,project.rs; tests/project_deadline.rs | §14/38 | pctx01-startup-isolation-verification.json, pctx01-task-storage-verification.json |
-| PCTX01-G05-D06 | closed | Finish one existing error-to-exit matrix (0,2,3,4,5,6,7,8,9,10,130 and child exception) across shared/frontend facades, including cancelled and source-dependent refusals | main.rs,domain.rs and producer facades | §14/27/38 | pctx01-adapter-errors-verification.json, pctx01-run-exit-verification.json |
-| PCTX01-G06-D01 | closed | Outline valid-empty0, wholly unsupported6, mixed/parse partial3 and refresh uncertainty preserve coverage in admitted representations | main.rs,search.rs | §8/14 | pctx01-outline-coverage-verification.json |
-| PCTX01-G06-D02 | closed | Supported search with zero matches returns successful empty items and truthful coverage | main.rs,search.rs; tests/cli_contract.rs | §8/14 | pctx01-frontend-verification.json |
-| PCTX01-G06-D03 | closed | For frozen producer families, verify successful-empty versus missing-capability/resource6 and incomplete3, including repo/cache/output/status/coordination/pack/filter/schedule/inventory; no new producer features | main.rs and existing producers | §8/14 | pctx01-outline-coverage-verification.json, pctx01-repo-admission-verification.json |
-| PCTX01-G07-D01 | closed | Native Unix PTY positive color control and root/nested no-color obey request before help | cli_help.rs,main.rs | §14 | pctx01-help-color-verification.json |
-| PCTX01-G07-D02 | closed | Parser bidi/C1/newline/tab/secrets and compact columns/hook/stream strings escape unsafe controls while preserving values | main.rs,render.rs,watch.rs,adapter.rs | §8/14 | pctx01-refusal-rendering-verification.json, pctx01-delivery-verification.json |
-| PCTX01-G07-D03 | closed | Complete remaining success/error representation control-character cases against frozen transport classes; Windows console is separately G09-D04 | render.rs,main.rs | §8/14 | pctx01-representation-admission-verification.json |
-| PCTX01-G08-D01 | closed | Existing finite-route/default/supplied budget classifier and unsupported timeout/child/watch exceptions are audited against visible command registry | main.rs::query_deadline; tests in main.rs | §14/38 | pctx01-work-quota-verification.json, pctx01-admission-registry.json |
-| PCTX01-G08-D02 | closed | SQLite busy/VM interruption/row phases use original remaining budget and reused connections do not inherit stale callbacks | project.rs,work.rs,quota.rs | §9/14 | pctx01-cpu-sql-verification.json, pctx01-work-quota-verification.json |
-| PCTX01-G08-D03 | closed | Nested index/auxiliary source and aggregation propagation preserves supplied Instant and no renewed default; retained bounded phase proofs | project.rs,query_process.rs,storage.rs,quota.rs | §14/38 | pctx01-auxiliary-deadline-verification.json, pctx01-auxiliary-phase-verification.json, pctx01-aggregation-deadline-verification.json |
-| PCTX01-G08-D04 | closed | Complete one frozen route-by-phase matrix: discovery/config, lock/SQL, input/read/hash, CPU/assembly, serialization/delivery/accounting; prove remaining actual metadata/input races and phase expiry, preserve partial usable result and cooperative syscall limits | main.rs,deadline.rs,project.rs,reader.rs and finite producers | §8/9/14/38 | pctx01-inventory-deadline-verification.json, pctx01-pack-admission-verification.json, pctx01-filter-deadline-verification.json, pctx01-runner-read-verification.json, pctx01-adapter-deadline-verification.json, pctx01-schedule-deadline-verification.json |
-| PCTX01-G08-D05 | closed | Continuous watch/follow and child execution retain separate lifetimes; finite timeout cannot silently renew execution or infer dead group from root exit | main.rs,query_process.rs,watch.rs | §14/38 | pctx01-run-exit-verification.json, pctx01-linux-verification.json |
-| PCTX01-G09-D01 | product_failure | Required native macOS arm64 common matrix and original startup contracts pass on integration candidate; retained full576PASS4FAIL is not a passing gate | all current common routes/tests | §23/38/45 | pctx01-task-storage-verification.json |
-| PCTX01-G09-D02 | external_wait | Required native macOS x86_64 common matrix with exact compiler/OS/filesystem/binary/source identity; need authorized real host/runner | common routes/tests/platform branches | §23/38/45 | pctx01-linux-verification.json |
-| PCTX01-G09-D03 | external_wait | Required native Linux x86_64 common matrix with exact identity; existing aarch64 VM proof is supporting follow-up only, not first-release qualification | common routes/tests/platform branches | §23/38/45 | pctx01-linux-verification.json, pctx01-persisted-errors-verification.json |
-| PCTX01-G09-D04 | external_wait | Required native Windows x86_64 argv/console/stdin/child-status/error/budget matrix with real execution; scoped historic Windows tests do not qualify this gate | common routes/tests/windows branches | §23/38/45 | pctx01-frontend-verification.json, pctx01-run-exit-verification.json |
-| PCTX01-G10-D01 | closed | Evidence ties bounded claims to source hashes/revisions, logs and environment; mutation artifacts isolated, failed/inconclusive/redacted evidence retained | docs/implementation/evidence; validate-linux-container.py | §45 | pctx01-linux-verification.json, pctx01-task-storage-verification.json |
-| PCTX01-G10-D02 | closed | Independent review accepts the one-time whole closure plan and explicit task ownership/finite denominators; no incremental next-path queue | tasks/PCTX01-closure-plan.md,json; plan.md | §21/45 | pctx01-task-storage-verification.json |
-| PCTX01-G10-D03 | closed | Public requirements/plan/progress/handoff/CLI support claims agree with actual code and evidence; historical observations clearly bounded, current next action from fixed list | docs/implementation; README.md; docs/cli | §14/23/45 | pctx01-task-storage-verification.json |
-| PCTX01-G10-D04 | open | Integration candidate: necessary focused regression/static checks plus justified whole validation once grouped changes settle; diagnose/own each failure without weakening acceptance | Cargo targets and common contract matrix | §45 | pctx01-task-storage-verification.json |
-| PCTX01-G10-D05 | open | All mandatory PCTX01 closure items and required platforms reconciled, independently reviewed and committed/pushed; final handoff no hidden live job/unintegrated changes | docs/implementation and main publication | §21/45 | pctx01-task-storage-verification.json |
+PCTX01-G05-D05 remains `product_failure`, fixed33/40 details,0/10 whole gates.
+Static analysis confirms a serial policy scan queue; the16-path historical
+join shows1.154068s accumulated scans, expired child last. Current original
+concurrency diagnostic fails101:113 outcomes/112OUTPUT/1TIMEOUT35071;
+15 attempts censored, no drops, all known114 PIDs absent, source unchanged.
+Owned hashes and native/UTC deadline bounds are captured. A fresh3-second,
+16-hash stored-log read is prepared but pending separate human scope approval.
+No causal repair or task closure; next action is scoped attribution, then an
+applicable repair at unchanged acceptance criteria. No unchanged rerun.
+[Evidence and limits](../pctx01-startup-triage.md).
 
 ## Required platform and failure ownership
 

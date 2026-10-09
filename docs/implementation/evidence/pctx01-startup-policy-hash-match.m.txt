@@ -1,0 +1,23 @@
+#import <Foundation/Foundation.h>
+#include <stdio.h>
+#include <stdlib.h>
+int main(int argc,char **argv) {
+ if(argc<4)return 2;
+ const char *modes[]={"script-group","script-no-group"};
+ unsigned long long targets[64]={0};int count=argc-3;if(count>64)return 3;
+ for(int i=0;i<count;i++)targets[i]=strtoull(argv[i+3],NULL,16);
+ unsigned max=(unsigned)strtoul(argv[2],NULL,10);if(max>100000)return 4;
+ @autoreleasepool {
+  NSString *prefix=[NSString stringWithUTF8String:argv[1]];
+  for(unsigned pid=1;pid<=max;pid++) {
+   @autoreleasepool {
+    for(int mode=0;mode<2;mode++)for(unsigned worker=0;worker<8;worker++) {
+     NSString *path=[NSString stringWithFormat:@"%@/pctx-startup-isolation-%u/%s-%u/git",prefix,pid,modes[mode],worker];
+     unsigned long long hash=[path hash];
+     for(int t=0;t<count;t++)if(hash==targets[t])printf("{\"parent_candidate\":%u,\"mode\":\"%s\",\"worker\":%u,\"path_hash\":\"%llx\"}\n",pid,modes[mode],worker,hash);
+    }
+   }
+  }
+ }
+ return 0;
+}

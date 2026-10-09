@@ -1,0 +1,24 @@
+{
+  "task": "PCTX01-G05-D05",
+  "checks": {
+    "test_failed": true,
+    "one_timeout": true,
+    "known_pid_absence": true,
+    "no_dropped": true,
+    "native_clock_ok": true,
+    "all_owned_identity": true,
+    "exact_fixture_hashes_present": true,
+    "113_observed_15_censored": true,
+    "clock_endpoint_bounds_overlap": true,
+    "failed_pid_in_test_log": true,
+    "product_tests_unchanged": true
+  },
+  "known_pids": 114,
+  "present_or_reused": [],
+  "failed_pids": [
+    35071
+  ],
+  "result_sha256": "d1ded28bed6f6d0c6ae8b51b13d0afba930bc1a411ebcb11cf17e99f430cc7d4",
+  "qualification": false,
+  "limits": "113 observed outcomes;15 unattempted or unobserved are censored. Post-reap instrumentation may affect later iterations. Two endpoint clock anchors do not exclude an intermediate wall-clock step. Fresh service scope pending; no causal closure."
+}

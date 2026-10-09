@@ -1,0 +1,74 @@
+{
+  "task": "PCTX01-G05-D05",
+  "binary_sha256": "f515a5958a5172c28bc19c787878e192b0c2a8f60ffad3975bf8ef1098baa84f",
+  "static_only": true,
+  "selected_methods": [
+    {
+      "class": "ExecManagerService",
+      "selector": "init",
+      "imp": "0x100031254"
+    },
+    {
+      "class": "ExecManagerService",
+      "selector": "gatekeeperEvaluationForUser:withPID:withProcessPath:withParentProcessPath:withResponsibleProcess:withLibraryPath:processIsScript:forEvaluationID:withValidationCategory:",
+      "imp": "0x10003322c"
+    },
+    {
+      "class": "EvaluationManager",
+      "selector": "init",
+      "imp": "0x100057cf8"
+    },
+    {
+      "class": "EvaluationManager",
+      "selector": "initWithDatabase:withTicketService:andSamplingService:",
+      "imp": "0x100057d5c"
+    },
+    {
+      "class": "EvaluationManager",
+      "selector": "scanTarget:onCompletion:",
+      "imp": "0x1000598bc"
+    },
+    {
+      "class": "EvaluationManager",
+      "selector": "performScanWithArguments:withCodeEvaluation:",
+      "imp": "0x10005ab1c"
+    },
+    {
+      "class": "PolicyScanTarget",
+      "selector": "init",
+      "imp": "0x100069c70"
+    },
+    {
+      "class": "PolicyScanTarget",
+      "selector": "description",
+      "imp": "0x10006ae94"
+    }
+  ],
+  "scan_call": {
+    "stub": "0x1000c2800",
+    "selector_slot": "0x10011b240",
+    "selector": "performScanWithArguments:withCodeEvaluation:"
+  },
+  "no_live_service_observation": true,
+  "qualification": false,
+  "facts": [
+    "ExecManagerService evaluations queue initialized via concurrent builder0x1000152b0; not a demonstrated one-worker evaluation queue.",
+    "EvaluationManager _workQueue offset0x48 initialized from syspolicyd.evaluations.scans via serial builder0x100015344.",
+    "scanTarget dispatches block onto workQueue at0x10005a4b4; block calls performScanWithArguments:withCodeEvaluation: at0x10005a6d4 before scanfinishedlog.",
+    "Completion queue builtconcurrent, separatefromserial scans.",
+    "PolicyScanTarget redactedDescription hashes path in normalvolumeUUID/objectIDbranch,otherwiseformattedvolume/objectfallback; NSString.hash, not a secret privacy-key claim."
+  ],
+  "queue_hypothesis": "Fresh script scan work serialized can accumulate beyond1000ms. Staticpathplusownhistoricalmappingsupportmechanism; currentoriginaltest target+UTCjoinstillneeded; no specificXProtect/network/filesysteminnercostidentified.",
+  "hash_description": {
+    "method": "0x10006ada0",
+    "path_branch": [
+      "0x10006adbc volumeUUID",
+      "0x10006add8 objectID",
+      "0x10006adf4 path",
+      "0x10006ae30 hash"
+    ],
+    "fallback_format": "%@/%@",
+    "redacted_format": "PST: (path: %lx), (team: %@), (id: %@), (bundle_id: %@)",
+    "no_source_or_semantic_equivalence_claim": "installedbinaryevidenceonly"
+  }
+}
