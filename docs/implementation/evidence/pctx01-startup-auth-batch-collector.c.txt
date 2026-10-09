@@ -1,0 +1,152 @@
+/* Fixed owned-process group collector only. One ordinary-user test parent
+ * plus at most8 identity-bound, acknowledged and unreaped query children.
+ * No whole-system sampling, alternate workload, policy change or retry. */
+#include <errno.h>
+#include <fcntl.h>
+#include <libproc.h>
+#include <limits.h>
+#ifndef PCTX_EXPECTED_TEST_BINARY
+#error PCTX_EXPECTED_TEST_BINARY must bind the prepared isolated original test binary
+#endif
+#include <mach/mach.h>
+#include <spawn.h>
+#include <signal.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/stat.h>
+#include <sys/wait.h>
+#include <time.h>
+#include <unistd.h>
+static int executable_is(int pid,const char *expected) {char path[PROC_PIDPATHINFO_MAXSIZE]={0};int n=proc_pidpath(pid,path,sizeof(path));return n>0&&n<(int)sizeof(path)&&strcmp(path,expected)==0;}
+static unsigned long long us(void) { struct timespec t={0}; if(clock_gettime(CLOCK_MONOTONIC,&t))return 0; return (unsigned long long)t.tv_sec*1000000+t.tv_nsec/1000; }
+static int collect_group(const char *root,unsigned uid,int logfd) {
+ int dirfd=open(root,O_RDONLY|O_DIRECTORY|O_NOFOLLOW|O_CLOEXEC);struct stat dir;
+ if(geteuid()!=0||dirfd<0||fstat(dirfd,&dir)||!S_ISDIR(dir.st_mode)||dir.st_uid!=uid||(dir.st_mode&077))return 20;
+ int fd=openat(dirfd,"collector-ready",O_WRONLY|O_CREAT|O_EXCL|O_NOFOLLOW|O_CLOEXEC,0600);if(fd<0)return 21;close(fd);
+ unsigned long long begun=us();if(!begun){close(dirfd);return 22;}
+ unsigned long long until=begun+60000000;
+ do{fd=openat(dirfd,"collector-request",O_RDONLY|O_NONBLOCK|O_NOFOLLOW|O_CLOEXEC);if(fd>=0)break;if(errno!=ENOENT)return 22;if(!us())return 22;usleep(1000);}while(us()<until);
+ struct stat st;if(fd<0)return 22;
+ if(fstat(fd,&st)||!S_ISREG(st.st_mode)||st.st_uid!=uid||st.st_size<=0||st.st_size>2048){close(fd);return 23;}
+ char bytes[2049]={0};ssize_t n=read(fd,bytes,2048);close(fd);if(n!=st.st_size)return 24;
+ int pid,ppid;unsigned long long sec,usec;char extra;char *save=NULL;
+ char *line=strtok_r(bytes,"\n",&save);
+ if(!line||sscanf(line,"parent %d %d %llu %llu %c",&pid,&ppid,&sec,&usec,&extra)!=4||pid<=1||ppid<=1)return 25;
+ struct proc_bsdinfo info={0};n=proc_pidinfo(pid,PROC_PIDTBSDINFO,0,&info,sizeof(info));
+ if(n!=(int)sizeof(info)||info.pbi_pid!=(unsigned)pid||info.pbi_ppid!=(unsigned)ppid||info.pbi_uid!=uid||info.pbi_start_tvsec!=sec||info.pbi_start_tvusec!=usec)return 26;
+ struct entry {int pid;unsigned long long sec,usec,start;};struct entry entries[8];int count=0;
+ while((line=strtok_r(NULL,"\n",&save))!=NULL){
+  int cp,pp;unsigned long long cs,cu,origin;
+  if(count>=8||sscanf(line,"child %d %d %llu %llu %llu %c",&cp,&pp,&cs,&cu,&origin,&extra)!=5||cp<=1||pp!=pid)return 25;
+  for(int i=0;i<count;i++)if(entries[i].pid==cp)return 25;
+  entries[count++]=(struct entry){cp,cs,cu,origin};
+ }
+ if(count==0)return 25;
+ unsigned long long before=us();
+ /* Privileged tool output never targets a user-writable directory. */
+ char privileged[]="/private/tmp/pctx01-root-kernel-XXXXXX";if(!mkdtemp(privileged))return 30;
+ char trace[4096];snprintf(trace,sizeof(trace),"%s/kernel.txt",privileged);
+ int result_code=0, destination=-1;
+ if(!executable_is(pid,PCTX_EXPECTED_TEST_BINARY)){result_code=26;goto cleanup;}
+ struct proc_taskinfo task={0};if(proc_pidinfo(pid,PROC_PIDTASKINFO,0,&task,sizeof(task))!=(int)sizeof(task)||task.pti_threadnum<=0){result_code=36;goto cleanup;}
+ char pid_text[32],child_text[8][32];snprintf(pid_text,sizeof(pid_text),"%d",pid);
+ char *args[40]={"/usr/sbin/spindump",pid_text,"1","5","-onlyTarget","-noBinary","-noIPC","-timelimit","2","-o",trace};int ac=11,included=0;unsigned long long included_start[8];
+ /* Parent is a direct ordinary-user child retained by its wrapper. Every
+  * requested query child is retained unreaped by its own parent until collector
+  * terminal. Unknown/exited/expired children are excluded, never guessed live. */
+ n=proc_pidinfo(pid,PROC_PIDTBSDINFO,0,&info,sizeof(info));
+ if(n!=(int)sizeof(info)||info.pbi_pid!=(unsigned)pid||info.pbi_ppid!=(unsigned)ppid||info.pbi_uid!=uid||info.pbi_start_tvsec!=sec||info.pbi_start_tvusec!=usec){result_code=26;goto cleanup;}
+ for(int i=0;i<count;i++){
+  struct entry e=entries[i];struct proc_bsdinfo cb={0};struct proc_taskinfo ct={0};
+  unsigned long long at=us();int valid=at>=e.start&&at-e.start<1000000;
+  valid=valid&&proc_pidinfo(e.pid,PROC_PIDTBSDINFO,0,&cb,sizeof(cb))==(int)sizeof(cb)&&cb.pbi_pid==(unsigned)e.pid&&cb.pbi_ppid==(unsigned)pid&&cb.pbi_uid==uid&&cb.pbi_start_tvsec==e.sec&&cb.pbi_start_tvusec==e.usec;
+  valid=valid&&executable_is(e.pid,"/bin/sh");
+  valid=valid&&proc_pidinfo(e.pid,PROC_PIDTASKINFO,0,&ct,sizeof(ct))==(int)sizeof(ct)&&ct.pti_threadnum>0;
+  dprintf(logfd,"{\"kind\":\"group_admission\",\"pid\":%d,\"included\":%s,\"age_us\":%llu}\n",e.pid,valid?"true":"false",at>=e.start?at-e.start:0);
+  if(!valid)continue;
+  snprintf(child_text[included],sizeof(child_text[included]),"%d",e.pid);args[ac++]="-proc";args[ac++]=child_text[included];included_start[included++]=e.start;
+ }
+ args[ac]=NULL;if(!included){result_code=36;goto cleanup;}
+ char *env[]={"PATH=/usr/bin:/bin:/usr/sbin:/sbin","LC_ALL=C",NULL};pid_t tool;
+ before=us();for(int i=0;i<included;i++)if(before<included_start[i]||before-included_start[i]>=1000000){result_code=26;goto cleanup;}
+ posix_spawnattr_t attributes;int rc=posix_spawnattr_init(&attributes);
+ if(rc){result_code=27;goto cleanup;}
+ rc=posix_spawnattr_setflags(&attributes,POSIX_SPAWN_SETPGROUP);
+ if(!rc)rc=posix_spawnattr_setpgroup(&attributes,0);
+ if(!rc)rc=posix_spawn(&tool,args[0],NULL,&attributes,args,env);
+ posix_spawnattr_destroy(&attributes);if(rc){result_code=27;goto cleanup;}
+ int status;pid_t got;unsigned long long tool_until=us()+5000000;
+ do{
+  got=waitpid(tool,&status,WNOHANG);
+  if(got==tool)break;
+  if(got<0&&errno!=EINTR)break;
+  unsigned long long now=us();
+  if(!now||now>=tool_until){
+   /* Our unreaped tool owns its group; never signal an already reaped PID. */
+   kill(-tool,SIGKILL);
+   do{got=waitpid(tool,&status,0);}while(got<0&&errno==EINTR);
+   break;
+  }
+  usleep(1000);
+ }while(1);
+ if(got!=tool){result_code=28;goto cleanup;}
+ int copied=0;fd=open(trace,O_RDONLY|O_NOFOLLOW|O_NONBLOCK|O_CLOEXEC);
+ if(fd>=0){
+  struct stat result;if(fstat(fd,&result)||!S_ISREG(result.st_mode)||result.st_uid!=0||result.st_size<0||result.st_size>16*1024*1024){result_code=31;goto cleanup;}
+  destination=openat(dirfd,"kernel.txt",O_WRONLY|O_CREAT|O_EXCL|O_NOFOLLOW|O_CLOEXEC,0600);if(destination<0){result_code=32;goto cleanup;}
+  if(fchown(destination,uid,(gid_t)-1)||fchmod(destination,0600)){result_code=33;goto cleanup;}
+  char chunk[8192];off_t total=0;
+  while(total<result.st_size){ssize_t amount=read(fd,chunk,sizeof(chunk));if(amount<0&&errno==EINTR)continue;if(amount<=0||total+amount>result.st_size){result_code=34;goto cleanup;}ssize_t offset=0;
+   while(offset<amount){ssize_t w=write(destination,chunk+offset,(size_t)(amount-offset));if(w<0&&errno==EINTR)continue;if(w<=0){result_code=35;goto cleanup;}offset+=w;}total+=amount;
+  }
+  close(destination);destination=-1;close(fd);fd=-1;copied=1;unlink(trace);
+ }
+ rmdir(privileged);close(dirfd);
+ dprintf(logfd,"{\"kind\":\"collector\",\"pid\":%d,\"ppid\":%d,\"identity\":true,\"pre_launch_native_us\":%llu,\"tool_exit\":%d,\"tool_signal\":%d,\"trace_copied\":%s,\"observation_us\":%llu}\n",pid,ppid,before,WIFEXITED(status)?WEXITSTATUS(status):-1,WIFSIGNALED(status)?WTERMSIG(status):0,copied?"true":"false",us()-before);fflush(stdout);
+ return WIFEXITED(status)?WEXITSTATUS(status):29;
+cleanup:
+ if(destination>=0)close(destination);
+ if(fd>=0)close(fd);
+ unlink(trace);rmdir(privileged);close(dirfd);
+ return result_code;
+}
+
+/* Publish only complete receipts, with exclusive atomic destination creation. */
+static int terminal_receipt(int dir,const char *name,unsigned uid,int code) {
+ char staging[64];if(snprintf(staging,sizeof(staging),"%s-staging",name)>=(int)sizeof(staging))return -1;
+ int fd=openat(dir,staging,O_WRONLY|O_CREAT|O_EXCL|O_NOFOLLOW|O_CLOEXEC,0600);
+ if(fd<0)return -1;
+ int failed=fchown(fd,uid,(gid_t)-1)||dprintf(fd,"%d\n",code)<0;
+ if(close(fd))failed=1;
+ if(!failed&&linkat(dir,staging,dir,name,0))failed=1;
+ unlinkat(dir,staging,0);return failed?-1:0;
+}
+
+/* One finite root process, four stages, ONE authentication entry point.
+ * Test drivers remain ordinary-user children of the Python wrapper. */
+int main(int argc,char **argv) {
+ if(argc!=4||strcmp(argv[1],"--collect-batch")||geteuid()!=0)return 20;
+ char *end=NULL;unsigned long uid=strtoul(argv[3],&end,10);
+ if(!end||*end||uid==0||uid>UINT_MAX)return 20;
+ int base=open(argv[2],O_RDONLY|O_DIRECTORY|O_NOFOLLOW|O_CLOEXEC);
+ struct stat st;if(base<0||fstat(base,&st)||st.st_uid!=uid||(st.st_mode&077))return 20;
+ int overall=0;
+ for(int i=0;i<4;i++){
+  char name[8],path[4096];snprintf(name,sizeof(name),"%d",i);
+  int stage=openat(base,name,O_RDONLY|O_DIRECTORY|O_NOFOLLOW|O_CLOEXEC);
+  if(stage<0||fstat(stage,&st)||st.st_uid!=uid||(st.st_mode&077)){if(stage>=0)close(stage);overall=40;break;}
+  if(snprintf(path,sizeof(path),"%s/%s",argv[2],name)>=(int)sizeof(path)){close(stage);overall=40;break;}
+  printf("{\"kind\":\"batch_stage_begin\",\"stage\":%d}\n",i);fflush(stdout);
+  int logfd=openat(stage,"collector.log",O_WRONLY|O_CREAT|O_EXCL|O_NOFOLLOW|O_CLOEXEC,0600);
+  if(logfd<0||fchown(logfd,(uid_t)uid,(gid_t)-1)){if(logfd>=0)close(logfd);close(stage);overall=41;break;}
+  int result=collect_group(path,(unsigned)uid,logfd);close(logfd);
+  /* Terminal publication follows the tool wait; normal-user hook can now reap. */
+  if(terminal_receipt(stage,"collector-terminal",(unsigned)uid,result)){close(stage);overall=41;break;}
+  close(stage);
+  printf("{\"kind\":\"batch_stage_terminal\",\"stage\":%d,\"collector_exit\":%d}\n",i,result);fflush(stdout);
+  if(result&&!overall)overall=result;
+ }
+ if(terminal_receipt(base,"batch-terminal",(unsigned)uid,overall)){close(base);return 41;}
+ close(base);return overall;
+}

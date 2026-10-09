@@ -1,0 +1,13 @@
+{
+  "revision": "f195d14db4ba976f4e72cb19699cb268895af970",
+  "root": "/private/tmp/pctx01-original-observation-x24p0cyy",
+  "source": "/private/tmp/pctx01-original-observation-x24p0cyy/source",
+  "session": "/private/tmp/pctx01-original-observation-x24p0cyy/session",
+  "target": "/private/tmp/pctx01-original-observation-x24p0cyy/target",
+  "tests": [
+    "query_program_resolution_uses_captured_command_path",
+    "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+    "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget",
+    "simultaneous_streams_are_collected_and_overflow_never_infers_success"
+  ]
+}

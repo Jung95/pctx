@@ -1,0 +1,10 @@
+{
+  "uid": 502,
+  "root": false,
+  "publish_exit": 0,
+  "reader_exit": 0,
+  "collision_rejected": true,
+  "existing_contents_preserved": true,
+  "directory_removed": true,
+  "source_scope": "actual terminal_receipt helper;concurrent reader+exclusive collision;ordinary UID,not originaltest/collector/auth"
+}

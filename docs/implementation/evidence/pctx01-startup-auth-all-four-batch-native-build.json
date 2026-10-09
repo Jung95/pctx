@@ -1,0 +1,18 @@
+{
+  "command": [
+    "/Library/Developer/CommandLineTools/usr/bin/clang",
+    "-isysroot",
+    "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+    "-x",
+    "c",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-DPCTX_EXPECTED_TEST_BINARY=\"/private/tmp/pctx01-original-observation-x24p0cyy/target/debug/deps/project_deadline-f7e8b9d913251d84\"",
+    "docs/implementation/evidence/pctx01-startup-auth-batch-collector.c.txt",
+    "-o",
+    "/private/tmp/pctx01-startup-auth-batch-collector"
+  ],
+  "exit": 0,
+  "initial_compile_issue": "native executable checker initially placed before string.h include; compile rejected implicit strcmp declaration; moved after includes before any runtime"
+}

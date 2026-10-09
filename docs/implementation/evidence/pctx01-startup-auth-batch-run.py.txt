@@ -1,0 +1,116 @@
+"""One finite authentication, four ordinary-user original-test stages. No retry."""
+from pathlib import Path
+import argparse, ctypes, hashlib, json, os, re, shlex, subprocess, time
+
+class Timespec(ctypes.Structure):
+    _fields_ = [('sec', ctypes.c_long), ('nsec', ctypes.c_long)]
+libsystem = ctypes.CDLL('/usr/lib/libSystem.B.dylib', use_errno=True)
+libsystem.clock_gettime.argtypes = [ctypes.c_int, ctypes.POINTER(Timespec)]
+libsystem.clock_gettime.restype = ctypes.c_int
+def native_us():
+    stamp = Timespec()
+    if libsystem.clock_gettime(6, ctypes.byref(stamp)):
+        raise OSError(ctypes.get_errno(), 'CLOCK_MONOTONIC')
+    return stamp.sec * 1000000 + stamp.nsec // 1000
+
+base = Path('/Users/dev/PCTX/docs/implementation/evidence')
+parser = argparse.ArgumentParser()
+parser.add_argument('--prepared', required=True)
+parser.add_argument('--ready', required=True)
+parser.add_argument('--output-prefix', required=True)
+parser.add_argument('--plan-only', action='store_true')
+args = parser.parse_args()
+if os.getuid() == 0 or os.getuid() != os.geteuid():
+    raise SystemExit('ordinary same-user driver required')
+if not re.fullmatch(r'pctx01-startup-[a-z0-9-]+', args.output_prefix):
+    raise SystemExit('invalid evidence prefix')
+meta = json.loads(Path(args.prepared).read_text())
+ready = json.loads(Path(args.ready).read_text())
+for path, digest in ready['files'].items():
+    if hashlib.sha256(Path(path).read_bytes()).hexdigest() != digest:
+        raise SystemExit('prepared input changed; stop before authentication')
+root = Path(meta['session'])
+if len(meta['tests']) != 4 or any(any((root / str(i)).iterdir()) for i in range(4)):
+    raise SystemExit('expected four unused stage directories')
+binary = Path(ready['test_binary'])
+helper = Path(ready['collector_binary'])
+plan = {'revision': meta['revision'], 'tests': meta['tests'], 'authentication_entries': 1, 'uid': os.getuid(), 'root': str(root), 'ordinary_user_tests': True, 'retry': False}
+if args.plan_only:
+    print(json.dumps(plan)); raise SystemExit(0)
+if list(base.glob(args.output_prefix + '-*')):
+    raise SystemExit('capture prefix consumed; preserve history')
+with (root / 'batch-started').open('x') as stream:
+    stream.write(f'{os.getpid()}\n')
+command = shlex.join([str(helper), '--collect-batch', str(root), str(os.getuid())])
+auth = subprocess.Popen(['/usr/bin/osascript', '-e', 'do shell script ' + json.dumps(command) + ' with administrator privileges'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+print(json.dumps({'kind': 'one_batch_authentication', 'pid': auth.pid, 'driver_pid': os.getpid(), 'tests_started': False, 'plan': plan}), flush=True)
+results = []
+for index, name in enumerate(meta['tests']):
+    stage = root / str(index)
+    # Authentication itself can wait for the human; no test clock starts here.
+    while not (stage / 'collector-ready').exists() and auth.poll() is None:
+        time.sleep(.05)
+    if auth.poll() is not None and not (stage / 'collector-ready').exists():
+        break
+    with (stage / 'test.log').open('xb') as stream:
+        environment = dict(os.environ, PCTX_DIAGNOSTIC_CASE=str(index))
+        process = subprocess.Popen([str(binary), '--exact', name, '--nocapture'], env=environment, stdout=stream, stderr=subprocess.STDOUT)
+        print(json.dumps({'kind': 'ordinary_test', 'stage': index, 'test': name, 'parent_pid': process.pid, 'uid': os.getuid()}), flush=True)
+        cohort = []
+        until = time.monotonic() + 30
+        while process.poll() is None and auth.poll() is None and time.monotonic() < until:
+            rows = [json.loads(f.read_text()) for f in stage.glob('*-spawn.json')]
+            rows = [r for r in rows if r['ppid'] == process.pid and r['uid'] == os.getuid() and r['parent_ppid'] == os.getpid()]
+            if rows:
+                first = min(r['origin_us'] for r in rows)
+                now = native_us()
+                if now - first >= 250000:
+                    cohort = sorted([r for r in rows if first <= r['origin_us'] <= first + 20000 and 0 <= now - r['origin_us'] < 1000000], key=lambda r: (r['origin_us'], r['pid']))[:8]
+                    break
+            time.sleep(.001)
+        acked = []
+        if cohort:
+            marker = stage / 'target-staging'
+            marker.write_text(' '.join(str(r['pid']) for r in cohort) + '\n')
+            marker.rename(stage / 'capture-target')
+            until = time.monotonic() + .02
+            while time.monotonic() < until and process.poll() is None:
+                time.sleep(.001)
+            for r in cohort:
+                ack = stage / f"capture-ack-{r['pid']}"
+                if ack.exists() and ack.read_text().strip() == str(r['pid']) and 0 <= native_us() - r['origin_us'] < 1000000:
+                    acked.append(r)
+        request = stage / 'request-staging'
+        if acked:
+            first = acked[0]
+            assert all((r['parent_ppid'], r['parent_start_sec'], r['parent_start_usec']) == (first['parent_ppid'], first['parent_start_sec'], first['parent_start_usec']) for r in acked)
+            request.write_text(f"parent {process.pid} {first['parent_ppid']} {first['parent_start_sec']} {first['parent_start_usec']}\n" + ''.join(f"child {r['pid']} {process.pid} {r['start_sec']} {r['start_usec']} {r['origin_us']}\n" for r in acked))
+        else:
+            request.write_text('no acknowledged eligible child\n')
+        request.rename(stage / 'collector-request')
+        while not (stage / 'collector-terminal').exists() and auth.poll() is None:
+            time.sleep(.005)
+        terminal = (stage / 'collector-terminal').exists()
+        # Normal route only releases after the collector has waited/reaped its tool.
+        # Unexpected coordinator death is inconclusive, not proof of tool cleanup.
+        (stage / 'capture-done').write_text('stage terminal\n' if terminal else 'coordinator stopped unexpectedly; diagnostic invalid\n')
+        code = process.wait()
+    stem = args.output_prefix + f'-stage-{index}'
+    events = {f.name: json.loads(f.read_text()) for f in stage.glob('*.json')}
+    (base / (stem + '-events.json')).write_text(json.dumps(events, indent=2) + '\n')
+    (base / (stem + '-test.log')).write_bytes((stage / 'test.log').read_bytes())
+    collector_log = stage / 'collector.log'
+    if collector_log.exists():
+        (base / (stem + '-collector.log')).write_bytes(collector_log.read_bytes())
+    trace = stage / 'kernel.txt'
+    if trace.exists():
+        (base / (stem + '-trace.txt')).write_bytes(trace.read_bytes())
+    row = {'stage': index, 'test': name, 'parent_pid': process.pid, 'test_exit': code, 'collector_terminal': terminal, 'collector_exit': int((stage / 'collector-terminal').read_text()) if terminal else None, 'cohort': cohort, 'acknowledged': acked, 'trace_exists': trace.exists()}
+    results.append(row)
+    print(json.dumps(row), flush=True)
+    if not terminal:
+        break
+stdout, stderr = auth.communicate()
+result = {'plan': plan, 'osascript_exit': auth.returncode, 'batch_collector_exit': int((root / 'batch-terminal').read_text()) if (root / 'batch-terminal').exists() else None, 'authentication_stdout': stdout, 'authentication_stderr': stderr, 'runs': results, 'tests_started': bool(results), 'limits': ['Instrumented IO and post-outcome identity retention alter scheduling; not unchanged-product qualification.', 'Original1s/8x16/group/streams remain; cancellation precedes diagnostic retention.', 'One first-cohort observation per test, at most8 children; no automatic retry.', 'Actual admitted/traced identity plus timing and eventual outcome are required for a narrow cause claim.', 'Authentication can await the human before tests; collection/tool limits are cooperative with OS kill/reap latency.', 'Unexpected coordinator death invalidates cleanup assumptions; inspect exact owned tools before another batch.']}
+(base / (args.output_prefix + '-result.json')).write_text(json.dumps(result, indent=2) + '\n')
+print(json.dumps(result), flush=True)

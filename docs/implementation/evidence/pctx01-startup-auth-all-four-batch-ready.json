@@ -1,0 +1,41 @@
+{
+  "task": "PCTX01",
+  "condition": "PCTX01-G05-D05",
+  "revision": "f195d14db4ba976f4e72cb19699cb268895af970",
+  "status": "prepared;no authentication or original-test execution",
+  "test_binary": "/private/tmp/pctx01-original-observation-x24p0cyy/target/debug/deps/project_deadline-f7e8b9d913251d84",
+  "collector_binary": "/private/tmp/pctx01-startup-auth-batch-collector",
+  "files": {
+    "docs/implementation/evidence/pctx01-startup-auth-all-four-batch-prepared.json": "03da2ead71d8cbd388bb43b50d289da325e6fdf09e8ab2aa1d6e9d1a42a415cc",
+    "/private/tmp/pctx01-original-observation-x24p0cyy/source/src/query_process.rs": "854a357cd163e7b49ac34b836a2e3e6f249a2e49070d0f828652a31ce820c4c8",
+    "/private/tmp/pctx01-original-observation-x24p0cyy/source/tests/project_deadline.rs": "8b9fbc97fbd5acaf612b2d75b94cf810faa2b61614b654495082462b1941a8dc",
+    "/private/tmp/pctx01-original-observation-x24p0cyy/source/Cargo.lock": "f96362897990caba560793601bc9fca08cef5c977907bb06889d5595d2acd7b0",
+    "/private/tmp/pctx01-original-observation-x24p0cyy/target/debug/deps/project_deadline-f7e8b9d913251d84": "42ebada2ddbda4458547bc6615d7e446ececce92d0caf127b00f3519c9bea8be",
+    "/private/tmp/pctx01-startup-auth-batch-collector": "79ba956f4c04d81ea0f663625333ea61203a91f0b48b840682274177504a394d",
+    "docs/implementation/evidence/pctx01-startup-auth-batch-hook.rs.txt": "9e575a689800bf8f51fd67b2b1cda940a86992b2e53b09e3dc5a31598c0aa3c6",
+    "docs/implementation/evidence/pctx01-startup-auth-batch-run.py.txt": "e2007431946b25f527b6f936f7678307edc04a9ae9bba0f42c6fad15afee0282",
+    "docs/implementation/evidence/pctx01-startup-auth-batch-prepare.py.txt": "ff20df70c57c7b50967a4cb8e5980b93767eaf6ed98644c6678993b390416f11",
+    "docs/implementation/evidence/pctx01-startup-auth-batch-collector.c.txt": "3b521459bfd7951aaeff2e8356579a60f6381e65a42070d01cabe258b7cf5076",
+    "docs/implementation/evidence/pctx01-startup-auth-batch-receipt-control.c.txt": "7c21da4f0b3cc3614c5c05e1120e274bde9598fa4b2d78d75ee3cdf4938ed8fd",
+    "docs/implementation/evidence/pctx01-startup-auth-all-four-batch-receipt-control.json": "c8ba01861064a131ab51dda7d7ef3444888968cfdbb7f7bf8cb7ec629d07b588"
+  },
+  "original_test_source_unchanged": true,
+  "session_unused": true,
+  "ordinary_uid": 502,
+  "root_rejection_control": {
+    "exit": 20,
+    "output_empty": true,
+    "stage_dirs_unchanged": true
+  },
+  "build": "locked/offline isolated project_deadline no-run PASS;strictnative -Wall -Wextra -Werror PASS;PythonASTPASS",
+  "collection_change": "one root coordinator,all4 original tests,owned parent+at most8 acknowledged initial-cohort roots perstage;one auth;no retry",
+  "limits": [
+    "Instrumented scheduling and post-cancel identity retention,not product qualification.",
+    "C tool five-second kill trigger plus blocking reap is cooperative,not hard overall bound.",
+    "Root-private exacttrace cleanup attempted on every post-creation failure path.",
+    "Unexpected wrapper/coordinator death invalidates lifecycle assumptions.",
+    "Path equality binds observed pathname,not a content hash;testbinary content hash verified by ordinary wrapper before launch."
+  ],
+  "independent_review": "work_control: atomic complete stage/batch receipts;fixed4stages;oneauth;PID/UID/start/ancestry/executable checks;no remaining material normal-path blocker. Atomic visibility is not crash durability;OS kill/reap and unexpected-death limits remain.",
+  "receipt_control": "real helper concurrent reader and exclusive destination collision PASS at UID502;generated dir removed;no root/auth/original test execution"
+}

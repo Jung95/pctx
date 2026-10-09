@@ -50,6 +50,41 @@ not all-local completion. Other official tasks remain inactive. Do not repeat
 this initial reorganization; execute fixed conditions to closure. PCTX01 done
 then next official task's finite list within the same Goal.
 
+## One-authentication four-test kernel batch — prepared, not executed
+
+[Readiness](evidence/pctx01-startup-auth-all-four-batch-ready.json) binds isolated
+sourcef195d14, exact unchanged original four-test file, test/collector binary hashes,
+wrapper/hook/native sources. Normal-user locked/offline no-run build PASS; native
+strict compiler/Python AST PASS. Ordinary coordinator rejection20 leaves all4 stage
+directories empty. Plan-only shows four exact tests, ordinary UID502, ONE auth entry
+and no retry. Real receipt-helper concurrent-reader/exclusive-collision control PASS
+without root/test/auth execution; generated control directory removed. Read-only
+review accepted after correcting partially published terminal receipts. Root-private
+failure cleanup and separate tool group/5s kill trigger are implemented; subsequent
+OS reap latency remains cooperative, not a hard overall5s promise.
+
+The ordinary-user batch45335 now proves the eventual-expired child16508 waiting
+before deadline, but no causal wait function. This new method addresses that exact
+missing observation: one root coordinator loops all4 original tests; every product
+test remains ordinary-user, original1s/8x16/group/stream/overflow assertions. One
+initial-cohort capture per stage, at most8 acknowledged own child identities, plus
+its own original test parent. PID/UID/ancestry/native start and native executable
+path match are required. Selected failures are canceled before post-outcome PID
+retention; collector-terminal follows actual tool wait/reap, then retention release.
+No whole-host sampling, persistent root service, OS policy change or pass retries.
+Stored collector logs preserve admissions/tool status even if the outer AppleScript
+returns nonzero. Individual test/collector/OS-script results remain separate.
+
+Next: execute this prepared finite batch using the current persistent owned-target
+consent and ONE normal macOS authentication. No second conversational approval
+needed within that exact scope. Do not reopen old canceled3921 or repeat successful-
+single-target80102. If OS authentication is canceled, preserve it; no prompt loop.
+A live auth handle is a verified wait; no original test starts before readiness.
+Only actually included/traced eventual-expired identities with a pre-cancel trace
+interval can support a narrow wait claim. Kernel capture is not a product repair.
+G05-D05 product_failure,33/40 details and0/10 whole gates unchanged; no other official
+task active. Four-test sessions and output prefix are unused until actual launch.
+
 ## Ordinary-user four-test diagnostic — terminal45335
 
 [Result](evidence/pctx01-startup-user-state-capture-result.json),
@@ -85,9 +120,8 @@ Next: use expired-child state evidence for a concrete nonprivileged implementati
 hypothesis; do not repeat the same diagnostic or switch tasks. If the missing exact
 kernel wait is indispensable after ordinary analysis, prepare all necessary owned-
 process observations as one finite authenticated batch under the policy above.
-One auth must cover the prepared list; no per-test auth wrappers. That exceptional
-multi-test root batch is a preparation contract, not implemented/runtime-verified
-by this ordinary-user runner. No new administrator prompt has been opened.
+One auth must cover the prepared list; no per-test auth wrappers. That earlier ordinary runner does not implement root batching; the new prepared
+four-stage collector above now implements the routing, still not runtime verified. No new administrator prompt has been opened.
 
 ## Prior persistent diagnostic consent — scope retained, batching policy above governs
 

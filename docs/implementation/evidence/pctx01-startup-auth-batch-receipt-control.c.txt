@@ -1,0 +1,37 @@
+/* Ordinary-user control of the real receipt publication function only.
+ * Never calls the collector or starts an original test/root tool. */
+#define main prepared_root_main
+#include "/Users/dev/PCTX/docs/implementation/evidence/pctx01-startup-auth-batch-collector.c.txt"
+#undef main
+#include <pthread.h>
+#include <stdatomic.h>
+static int control_dir, reader_result;
+static atomic_int reader_ready;
+static void *reader(void *unused) {
+ (void)unused;atomic_store(&reader_ready,1);
+ unsigned long long end=us()+2000000;
+ do {
+  int fd=openat(control_dir,"terminal",O_RDONLY|O_NOFOLLOW|O_CLOEXEC);
+  if(fd>=0){char value[16]={0};ssize_t n=read(fd,value,sizeof(value));close(fd);reader_result=!(n==3&&!memcmp(value,"25\n",3));return NULL;}
+  if(errno!=ENOENT){reader_result=2;return NULL;}
+  usleep(100);
+ }while(us()<end);
+ reader_result=3;return NULL;
+}
+int main(void) {
+ if(getuid()==0||getuid()!=geteuid())return 10;
+ char directory[]="/private/tmp/pctx01-receipt-control-XXXXXX";
+ if(!mkdtemp(directory))return 11;
+ control_dir=open(directory,O_RDONLY|O_DIRECTORY|O_NOFOLLOW|O_CLOEXEC);
+ pthread_t thread;if(pthread_create(&thread,NULL,reader,NULL))return 12;
+ while(!atomic_load(&reader_ready))usleep(100);
+ int publish=terminal_receipt(control_dir,"terminal",getuid(),25);
+ pthread_join(thread,NULL);
+ int collision=terminal_receipt(control_dir,"terminal",getuid(),42);
+ int fd=openat(control_dir,"terminal",O_RDONLY|O_NOFOLLOW|O_CLOEXEC);
+ char value[16]={0};ssize_t n=fd>=0?read(fd,value,sizeof(value)):-1;if(fd>=0)close(fd);
+ int preserved=n==3&&!memcmp(value,"25\n",3);
+ unlinkat(control_dir,"terminal",0);close(control_dir);rmdir(directory);
+ printf("{\"uid\":%u,\"root\":false,\"publish_exit\":%d,\"reader_exit\":%d,\"collision_rejected\":%s,\"existing_contents_preserved\":%s,\"directory_removed\":%s}\n",getuid(),publish,reader_result,collision!=0?"true":"false",preserved?"true":"false",access(directory,F_OK)!=0?"true":"false");
+ return publish||reader_result||!collision||!preserved;
+}
