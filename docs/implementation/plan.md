@@ -1,5 +1,19 @@
 # Implementation plan
 
+## Public identifier call-site review — current, 2026-10-09
+
+Only PCTX01-G05-D05 remains active/product_failure; whole PCTX01 totals33/40
+details,0/10 gates unchanged. All four original startup failures still require
+original1s/8×16/native/group/stream verification. Installed-file review shows
+samplingUUID is a rule property; process SHA fields feed behavioral reporting;
+GK hashes feed internal analytics; scan-error SHA is skipped on scanner success.
+No demonstrated public successful-request/compiler interval binding. Independent
+review confirmed these limits. No test/service read/admin/security change.
+Next same D05: verified public observable or vendor-supported correction needed;
+local minimal vendor draft prepared,unsubmitted. No private logging or repeat query.
+[Call-site evidence](evidence/pctx01-startup-xpc-public-binding-review.md),
+[vendor draft](evidence/pctx01-startup-platform-feedback-draft.md).
+
 ## Historical URL association and own privacy control — current, 2026-10-09
 
 PCTX01-G05-D05 remains product_failure. Whole PCTX01 totals:33/40 details,0/10 gates.

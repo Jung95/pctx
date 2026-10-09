@@ -1,0 +1,162 @@
+{
+  "task": "PCTX01-G05-D05",
+  "binary_sha256": "d8cf6a1ac365a6c81ab695a6ec62ed914df54926497e8ea1b43315265ac7ba8c",
+  "uuid": "57DD6284-09FD-351F-A87A-F60ECFB75F70",
+  "static_only": true,
+  "selector_count": 320,
+  "method_count": 211,
+  "hits": [
+    {
+      "address": "0x1000021f4",
+      "note": "CFString '_sampling_uuid'",
+      "preceding_known_method": {
+        "class": "YARARule",
+        "selector": "initWithCoder:",
+        "imp": 4294975672
+      },
+      "limit": "Nearest preceding known IMP and linear ADRP/ADD decode; not complete function/dataflow proof."
+    },
+    {
+      "address": "0x1000022e0",
+      "note": "CFString '_sampling_uuid'",
+      "preceding_known_method": {
+        "class": "YARARule",
+        "selector": "encodeWithCoder:",
+        "imp": 4294976056
+      },
+      "limit": "Nearest preceding known IMP and linear ADRP/ADD decode; not complete function/dataflow proof."
+    },
+    {
+      "address": "0x100004fa0",
+      "note": "global-address XPEventKeyCdhash",
+      "preceding_known_method": {
+        "class": "XPDylibFileScan",
+        "selector": ".cxx_destruct",
+        "imp": 4294986088
+      },
+      "limit": "Nearest preceding known IMP and linear ADRP/ADD decode; not complete function/dataflow proof."
+    },
+    {
+      "address": "0x100005080",
+      "note": "global-address XPEventKeyCdhash",
+      "preceding_known_method": {
+        "class": "XPDylibFileScan",
+        "selector": ".cxx_destruct",
+        "imp": 4294986088
+      },
+      "limit": "Nearest preceding known IMP and linear ADRP/ADD decode; not complete function/dataflow proof."
+    },
+    {
+      "address": "0x10000972c",
+      "note": "CFString 'cdhash'",
+      "preceding_known_method": {
+        "class": "XProtectEventReporter",
+        "selector": "reportGKAssessmentData:",
+        "imp": 4295005824
+      },
+      "limit": "Nearest preceding known IMP and linear ADRP/ADD decode; not complete function/dataflow proof."
+    },
+    {
+      "address": "0x10000973c",
+      "note": "CFString 'sha256'",
+      "preceding_known_method": {
+        "class": "XProtectEventReporter",
+        "selector": "reportGKAssessmentData:",
+        "imp": 4295005824
+      },
+      "limit": "Nearest preceding known IMP and linear ADRP/ADD decode; not complete function/dataflow proof."
+    },
+    {
+      "address": "0x100009c64",
+      "note": "selector cdhash",
+      "preceding_known_method": {
+        "class": "XProtectEventReporter",
+        "selector": "reportBehavioralDetection:",
+        "imp": 4295007172
+      },
+      "limit": "Nearest preceding known IMP and linear ADRP/ADD decode; not complete function/dataflow proof."
+    },
+    {
+      "address": "0x100009ca0",
+      "note": "selector sha256hash",
+      "preceding_known_method": {
+        "class": "XProtectEventReporter",
+        "selector": "reportBehavioralDetection:",
+        "imp": 4295007172
+      },
+      "limit": "Nearest preceding known IMP and linear ADRP/ADD decode; not complete function/dataflow proof."
+    },
+    {
+      "address": "0x100009d0c",
+      "note": "selector cdhash",
+      "preceding_known_method": {
+        "class": "XProtectEventReporter",
+        "selector": "reportBehavioralDetection:",
+        "imp": 4295007172
+      },
+      "limit": "Nearest preceding known IMP and linear ADRP/ADD decode; not complete function/dataflow proof."
+    },
+    {
+      "address": "0x100009d48",
+      "note": "selector sha256hash",
+      "preceding_known_method": {
+        "class": "XProtectEventReporter",
+        "selector": "reportBehavioralDetection:",
+        "imp": 4295007172
+      },
+      "limit": "Nearest preceding known IMP and linear ADRP/ADD decode; not complete function/dataflow proof."
+    },
+    {
+      "address": "0x100009db8",
+      "note": "CFString 'xpProcessCdhash'",
+      "preceding_known_method": {
+        "class": "XProtectEventReporter",
+        "selector": "reportBehavioralDetection:",
+        "imp": 4295007172
+      },
+      "limit": "Nearest preceding known IMP and linear ADRP/ADD decode; not complete function/dataflow proof."
+    },
+    {
+      "address": "0x100009e1c",
+      "note": "CFString 'xpProcessSha256'",
+      "preceding_known_method": {
+        "class": "XProtectEventReporter",
+        "selector": "reportBehavioralDetection:",
+        "imp": 4295007172
+      },
+      "limit": "Nearest preceding known IMP and linear ADRP/ADD decode; not complete function/dataflow proof."
+    },
+    {
+      "address": "0x100009e64",
+      "note": "CFString 'xpResponsibleCdhash'",
+      "preceding_known_method": {
+        "class": "XProtectEventReporter",
+        "selector": "reportBehavioralDetection:",
+        "imp": 4295007172
+      },
+      "limit": "Nearest preceding known IMP and linear ADRP/ADD decode; not complete function/dataflow proof."
+    },
+    {
+      "address": "0x100009eb0",
+      "note": "CFString 'xpResponsibleSha256'",
+      "preceding_known_method": {
+        "class": "XProtectEventReporter",
+        "selector": "reportBehavioralDetection:",
+        "imp": 4295007172
+      },
+      "limit": "Nearest preceding known IMP and linear ADRP/ADD decode; not complete function/dataflow proof."
+    },
+    {
+      "address": "0x100012fa0",
+      "note": "global-address XPUserInfoYARAScanErrorFileSHA256",
+      "preceding_known_method": {
+        "class": "YARAScanner",
+        "selector": "scanURL:",
+        "imp": 4295044740
+      },
+      "limit": "Nearest preceding known IMP and linear ADRP/ADD decode; not complete function/dataflow proof."
+    }
+  ],
+  "service_observation": false,
+  "qualification": false
+}

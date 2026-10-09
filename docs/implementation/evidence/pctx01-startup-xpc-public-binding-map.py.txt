@@ -1,0 +1,90 @@
+"""Installed-file-only selector/CFString cross-references; no runtime observation."""
+from pathlib import Path
+import struct,re,json,hashlib,subprocess,uuid
+B=Path('/Users/dev/PCTX/docs/implementation/evidence');tool='/Library/Developer/CommandLineTools/usr/bin/otool';binary=Path('/System/Library/PrivateFrameworks/XprotectFramework.framework/Versions/A/XPCServices/XprotectService.xpc/Contents/MacOS/XprotectService');raw=binary.read_bytes();f=raw
+if struct.unpack_from('>I',raw)[0]==0xcafebabe:
+ slices=[]
+ for j in range(struct.unpack_from('>I',raw,4)[0]):
+  cpu,sub,off,size,align=struct.unpack_from('>IIIII',raw,8+j*20)
+  if cpu==0x100000c:slices.append((sub,off,size))
+ assert len(slices)==1
+ sub,off,size=slices[0];f=raw[off:off+size]
+assert struct.unpack_from('<I',f)[0]==0xfeedfacf
+segments=[];sections={};o=32;image_uuid=None
+for _ in range(struct.unpack_from('<I',f,16)[0]):
+ cmd,size=struct.unpack_from('<II',f,o);assert size>=8
+ if cmd==0x1b:image_uuid=str(uuid.UUID(bytes=f[o+8:o+24])).upper()
+ if cmd==0x19:
+  vm,vs,fo,fs=struct.unpack_from('<QQQQ',f,o+24);segments.append((vm,vm+vs,fo,fs))
+  for j in range(struct.unpack_from('<I',f,o+64)[0]):
+   q=o+72+j*80;name=f[q:q+16].split(b'\0')[0].decode();addr,z=struct.unpack_from('<QQ',f,q+32);sections[name]=(addr,z)
+ o+=size
+assert image_uuid=='57DD6284-09FD-351F-A87A-F60ECFB75F70'
+def at(addr):
+ for lo,hi,fo,fs in segments:
+  if lo<=addr<hi and addr-lo<fs:return fo+addr-lo
+ raise ValueError(hex(addr))
+def cstring(addr):
+ p=at(addr);return f[p:f.index(b'\0',p)].decode()
+def ptr(addr):return 0x100000000+(struct.unpack_from('<Q',f,at(addr))[0]&0xffffffff)
+refs={};a,z=sections['__objc_selrefs']
+for slot in range(a,a+z,8):refs[slot]=cstring(ptr(slot))
+obj=subprocess.check_output([tool,'-ov',str(binary)],text=True,timeout=10);methods=[];cls='';name=None
+for line in obj.splitlines():
+ if re.match(r'        name           0x',line):cls=line.split()[-1]
+ m=re.search(r'name    0x[0-9a-f]+ \(0x([0-9a-f]+)\)',line)
+ if m:name=refs.get(int(m[1],16))
+ m=re.search(r'imp     .*\(0x([0-9a-f]+)\)',line)
+ if m and name:methods.append({'class':cls,'selector':name,'imp':int(m[1],16)})
+methods.sort(key=lambda x:x['imp'])
+def preceding(addr):
+ v=[m for m in methods if m['imp']<=addr]
+ return v[-1] if v else None
+def stub(addr):
+ try:
+  first,second=struct.unpack_from('<II',f,at(addr))
+  if first&0x9f00001f!=0x90000001 or second&0xffc003ff!=0xf9400021:return None
+  imm=((first>>5)&0x7ffff)<<2|((first>>29)&3);imm-=1<<21 if imm&(1<<20) else 0
+  slot=(addr&~4095)+imm*4096+((second>>10)&4095)*8
+  return refs.get(slot)
+ except (ValueError,KeyError):return None
+cf={};a,z=sections['__cfstring']
+for addr in range(a,a+z,32):
+ try:cf[addr]=cstring(ptr(addr+16))
+ except (ValueError,UnicodeDecodeError):pass
+text=subprocess.check_output([tool,'-tvV',str(binary)],text=True,timeout=10);annotated=[];hits=[];registers={}
+globals={0x100020688:'XPUserInfoYARAScanErrorFileSHA256',0x100020918:'XPEventKeyCdhash'}
+terms=['sha256','cdhash','samplingUUID','sampling_uuid','xpProcessSha256','xpProcessCdhash','xpResponsibleSha256','XPUserInfoYARAScanErrorFileSHA256','sha256hash','FileSHA256','Cdhash']
+for line in text.splitlines():
+ match=re.match(r'([0-9a-f]{16})\s+(.*)',line);notes=[]
+ if match:
+  addr=int(match[1],16);ins=match[2]
+  m=re.match(r'adrp\s+(x\d+),.*; 0x([0-9a-f]+)',ins)
+  if m:registers[m[1]]=int(m[2],16)
+  m=re.match(r'add\s+(x\d+), (x\d+), #0x([0-9a-f]+)',ins)
+  if m and m[2] in registers:
+   value=registers[m[2]]+int(m[3],16);registers[m[1]]=value
+   if value in cf:notes.append('CFString '+repr(cf[value]))
+   if value in globals:notes.append('global-address '+globals[value])
+  load=re.match(r'ldr\s+(x\d+), \[(x\d+), #0x([0-9a-f]+)\]',ins)
+  if load and load[2] in registers:
+   slot=registers[load[2]]+int(load[3],16)
+   if slot in globals:notes.append('global '+globals[slot])
+  if not re.match(r'(adrp|add)\s',ins):
+   dest=re.match(r'(?:ldr|ldur|mov|and|orr|eor|sub|csel|ubfx|lsl|lsr)\s+(x\d+)',ins)
+   if dest:registers.pop(dest[1],None)
+  if re.match(r'(b\s|b\.|cbz|cbnz|tbz|tbnz|ret|pacibsp)',ins):registers.clear()
+  m=re.match(r'bl\s+0x([0-9a-f]+)',ins)
+  if m:
+   selector=stub(int(m[1],16))
+   if selector:notes.append('selector '+selector)
+   for reg in list(registers):
+    if int(reg[1:])<=18:registers.pop(reg,None)
+  for note in notes:
+   if any(t in note for t in terms):hits.append({'address':hex(addr),'note':note,'preceding_known_method':preceding(addr),'limit':'Nearest preceding known IMP and linear ADRP/ADD decode; not complete function/dataflow proof.'})
+ line+=' ; '+' | '.join(notes) if notes else ''
+ annotated.append(line)
+result={'task':'PCTX01-G05-D05','binary_sha256':hashlib.sha256(raw).hexdigest(),'uuid':image_uuid,'static_only':True,'selector_count':len(refs),'method_count':len(methods),'hits':hits,'service_observation':False,'qualification':False}
+(B/'pctx01-startup-xpc-public-binding-map.json').write_text(json.dumps(result,indent=2)+'\n')
+Path('/private/tmp/pctx01-xpc-public-binding-annotated.txt').write_text('\n'.join(annotated)+'\n')
+if __name__=='__main__':print(json.dumps(result,indent=2))

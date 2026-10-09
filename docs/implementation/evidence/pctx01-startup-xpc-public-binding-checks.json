@@ -1,0 +1,30 @@
+{
+  "task": "PCTX01-G05-D05",
+  "static_only": true,
+  "binary_uuid": "57DD6284-09FD-351F-A87A-F60ECFB75F70",
+  "binary_sha256": "d8cf6a1ac365a6c81ab695a6ec62ed914df54926497e8ea1b43315265ac7ba8c",
+  "map_syntax": "pass",
+  "manual_anchors": {
+    "rule_uuid_init": "0x100001fa8",
+    "rule_uuid_getter": "0x100002348",
+    "metric_caller": "0x1000106e8",
+    "metric_report": "0x100005210",
+    "GK_report_dispatch": "0x10000a374",
+    "analytics_sink": "0x100009b64",
+    "yara_scan": "0x100012ee0",
+    "zero_result_skip": "0x100012ee4",
+    "error_hash_key": "0x100012fa0",
+    "error_hash_copy": "0x100012fb0"
+  },
+  "product_test_lock_sha256": {
+    "src/query_process.rs": "bf661f4b8d0ed472585244ada4ac0e946221de364c100039cd20aee56fd8d0d2",
+    "tests/project_deadline.rs": "8b9fbc97fbd5acaf612b2d75b94cf810faa2b61614b654495082462b1941a8dc",
+    "Cargo.lock": "f96362897990caba560793601bc9fca08cef5c977907bb06889d5595d2acd7b0"
+  },
+  "original_test_runs": 0,
+  "service_log_reads": 0,
+  "administrator_authentication": false,
+  "qualification": false,
+  "independent_review": "Approved passive final review:bounded negative claims,links,register status and local draft;no public request/compiler binding demonstrated.",
+  "temporary_static_files_removed": true
+}
