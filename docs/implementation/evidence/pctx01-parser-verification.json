@@ -1,0 +1,193 @@
+{
+  "task": "PCTX01",
+  "item": "PCTX01-G02-D04",
+  "status": "closed: bounded local parser condition",
+  "fixed_detail_before": 24,
+  "fixed_detail_closed": 25,
+  "fixed_detail_denominator": 40,
+  "whole_gates_closed": 0,
+  "whole_gates_denominator": 10,
+  "baseline_revision": "5ec845cb566016633945d68961314a39ff0dac56",
+  "scope": "Actual frozen140-leaf Clap schema; accepted parser-only controls and refused native CLI cases. Producer grammar/input/exit matrix and all required release-platform integration remain separate.",
+  "runtime_sources_unchanged": true,
+  "main_delta": "cfg(test) module declaration only",
+  "files_sha256": {
+    "src/adapter.rs": "41f18fda7ee7f3852e5ad49e5d9098f21474d5a1915ba6d48db52cfbcabf9def",
+    "src/broker.rs": "252c56c96599a5b4b0795e3fc4283bb35563742ea8ba61cfea790f262feebce1",
+    "src/cli_args.rs": "2ae3676485714fc79c19ceed1f96c94347d7458286a0ae07e9096af308576d39",
+    "src/cli_help.rs": "a73dc639251b58f468527f2a5e2cee0594a052597da9fb6ff73455b630b71151",
+    "src/context.rs": "faa1b3c76ffc53e7240a809ae226d229252ec056d0b985b4adecd62df6a4dcb9",
+    "src/deadline.rs": "81d7757649acb12837c4e1cc51b7a462ecdc3b2bb341d21baf286f35bf0eaae4",
+    "src/documents.rs": "0ae1965d81a09cb5cd20c7dc33a7e5b287929d1d4424796b092ead36151ca953",
+    "src/domain.rs": "ebc5fb36aced808593a9df4606293e8900450c67f068de1574369c9c4b810c25",
+    "src/extract.rs": "76e36421efa026822cd551a3c5cd51d8c58c1263c966b92dcc5a15ec269b4f4b",
+    "src/filters.rs": "2d24ede383d1779e2d9fe8d97fa005c0bdd3ab454ea2267d5bc0d09f7415f542",
+    "src/graph.rs": "54da586daa91a3c7f2e97534fa68824ff0e0d796dd69054be27960799d94e2c7",
+    "src/input.rs": "116f3da7008abc6b04d821061c1a8f43509f06d9505729fb600ce2c9cc5e1fe8",
+    "src/inventory.rs": "b5508410b77fabe332beb3bb7b793bd94908a6f2b1249fe542cf391078b78612",
+    "src/lib.rs": "e636fe455847f82f5962d1ac8ede864f476fdb4cc80c29c58769eb7685036e9a",
+    "src/main.rs": "1cf833b3bda2c30ebc1af3e40be2a25376e3c8da39da3b3bbf4f38380f7c8faf",
+    "src/operations.rs": "37393df0108ee918b3680ab2d3c45905ea95c38fef1c384cafdc8281538a366f",
+    "src/output.rs": "d14a138e780e8ac87408c803cda30c115867f5d825ac17789bbeedc1c7696c73",
+    "src/pack.rs": "a6fa74d6ae0ab46f57b32a3bd03cd3a8e5b69da17cc091c9abb81a5596f76d4c",
+    "src/parser_contract_tests.rs": "dd3b117226b48bf3f7e76159a17767edbb6ce6aa80b96c6b00a5604e9b9fb576",
+    "src/parsers.rs": "4134e27817423a4718348da1ad15e22304caaa1b9f9ff0e6bb6c98f37cdc1455",
+    "src/policy_controls.rs": "20b5426e447360199584ad0b8e5cf82ea26339d44d7fef384bddd9b1a6c406d9",
+    "src/project.rs": "0813b7ddde8bb74ff6fc019370d7ff966e1214e2b15c94ed12496eb797a06063",
+    "src/query_process.rs": "74c4c46c6b224563c63e9e2d7a9beac7996ef69735b072a39ee22c9aa989d6cb",
+    "src/quota.rs": "e2ed05ee8eb5142763f12c7dc4e90253c02160583f6783c44521149a81132edd",
+    "src/reader.rs": "8770ea1bf18a7439d0869d0d366cb3833b37ef1c8fb72c3ced6dba58cffe2281",
+    "src/render.rs": "020c3e4303829c4ac12c2db85120e41d5b901422849d67513a78fce9608a5633",
+    "src/runner.rs": "600aaee24adb4cc7169bd17909a181bf73fabe4a19902a0387a7e507d80fd708",
+    "src/schedule.rs": "838472dc80fe6da42777aaaefda2832fc98ad8a54ccef859fd7c475f5d2f352c",
+    "src/search.rs": "15483186930d9c818e56ea96b15585e7912af4cb759850b7d1c766d86a1588a8",
+    "src/session.rs": "ca151ac9451579726d149490ab6c48a9e796143327208c9fb855ab5734ae5612",
+    "src/source_delivery.rs": "947c4ae8dafdd685449d49b4b4dcd267426374dae3bb6e29276fdde667356d47",
+    "src/storage.rs": "64d8aa5e4913cc632d66f261cc2773f9988efa78cddb3c6b72014a505afa2e64",
+    "src/watch.rs": "dc6c6f1d4bbe27fe2dccd4505a8ddfed54fbf8224f793fbe72d3751ba654c2fb",
+    "src/windows_guardian.rs": "d2d672f29e43b603482b44c195d5e702990d2d0416a2a6bb9add138139b312d7",
+    "src/windows_process.rs": "ae4ed108587e66489ade743ad25e3e6c68b3c14547eaaf6e963162af3d29030e",
+    "src/work.rs": "8a00d58cde783c6c5b9480ac680d5a0cb2052aec5976851d2fb353982d61eb9d"
+  },
+  "test_files_sha256": {
+    "tests/parser_schema_cli.rs": "d0bda9717b3b3be912b4428a911d371b2f95fb6322973918355d9f086eed3e25",
+    "Cargo.toml": "f05c2b74835e00ce3c8692882e0815280cb75f0dad4cd563f464bcc7e9d2042e",
+    "Cargo.lock": "f96362897990caba560793601bc9fca08cef5c977907bb06889d5595d2acd7b0"
+  },
+  "binary_sha256": "6f3261321339fc12be9d55f61539babcbf12161dff0fcc85ed5a4e7ee2708014",
+  "environment": {
+    "system": "macOS-26.7.1-arm64-arm-64bit-Mach-O",
+    "architecture": "arm64",
+    "rust": "1.99.0",
+    "SDKROOT": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk"
+  },
+  "counts": {
+    "visible_leaves": 140,
+    "help_paths_retained": 172,
+    "parser_cases": 1855,
+    "accepted_parser_only": 582,
+    "refused_cases": 1273,
+    "native_refusal_combinations": 10184,
+    "authored_conflict_pairs": 7,
+    "accepted_conflict_alternatives": 14
+  },
+  "dimensions": {
+    "accepted_conditional": 1,
+    "accepted_conflict_alternative": 14,
+    "accepted_enum": 59,
+    "accepted_f64_boundary": 4,
+    "accepted_float_nonfinite_parser_only": 6,
+    "accepted_i32_boundary": 2,
+    "accepted_i64_boundary": 48,
+    "accepted_opaque_raw_payload": 4,
+    "accepted_repeat": 9,
+    "accepted_u32_boundary": 4,
+    "accepted_u64_boundary": 6,
+    "accepted_u8_boundary": 2,
+    "accepted_usize_boundary": 46,
+    "conflict": 7,
+    "duplicate": 296,
+    "explicit_empty_value": 346,
+    "extra_positional": 136,
+    "invalid_enum": 22,
+    "invalid_numeric": 135,
+    "missing_artifact_output": 1,
+    "missing_conditional": 1,
+    "missing_raw_separator": 4,
+    "missing_required": 196,
+    "missing_subcommand": 32,
+    "missing_value": 283,
+    "negative_unsigned": 29,
+    "seed": 140,
+    "unexpected_flag_value": 22
+  },
+  "matrix": "pctx01-parser-cases.json",
+  "matrix_sha256": "aa13816449ea233e523e0517a1272867884e117c940c8f55326620a1e7bc38f0",
+  "results": [
+    {
+      "job": "29779",
+      "exit": 0,
+      "passed": 1,
+      "log": "pctx01-parser-generation-context.log",
+      "scope": "Final generator with explicit globals context, all conflict edges and flag arity"
+    },
+    {
+      "job": "29129",
+      "exit": 0,
+      "passed": 1,
+      "log": "pctx01-parser-native-final.log",
+      "scope": "1273 refused cases x missing/initialized project x JSON/compact x absent/existing output =10184; open stdin, exit2, refusal class and byte-exact fixture snapshots"
+    },
+    {
+      "job": "18846",
+      "exit": 0,
+      "passed": 14,
+      "log": "pctx01-parser-related-final.log",
+      "scope": "binary7 including deterministic saved matrix replay, argument preflight3 and refusal envelope4"
+    },
+    {
+      "exit": 0,
+      "log": "pctx01-parser-format-final.log",
+      "scope": "cargo fmt --all -- --check"
+    },
+    {
+      "job": "57114",
+      "exit": 0,
+      "log": "pctx01-parser-static-final.log",
+      "scope": "cargo clippy --locked --all-targets -- -D warnings"
+    }
+  ],
+  "logs_sha256": {
+    "pctx01-parser-format-final.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "pctx01-parser-generation-context.log": "bf4cebcbc79f481ace4b3a8c6c40ef24337e6a3bbeb1fe46ff276c74044e1a27",
+    "pctx01-parser-generation-final.log": "2d7c8e14b7b40b07ffef40f69b1a8ff42e2224fd8cfcc7e06ea28e0dd158c076",
+    "pctx01-parser-generation-first.log": "310b328f4ea569cf1b3d06af2fbce929f6b74f3ddc71800243c16630ba3f8523",
+    "pctx01-parser-generation-reviewed-fourth.log": "5df5a37f9ba5a4bcbbbdb92a1c1bd98ec86fe2586041bd8d0885dfa0de52befb",
+    "pctx01-parser-generation-reviewed-second.log": "a1b3180382f6506b65971703f2a52e5486f4d92c9e620aeefd48b7a7615095a5",
+    "pctx01-parser-generation-reviewed-third.log": "47c9261390b3a56c843b11ab058ace7aafc7eca30771e8d82cb399096a9c2a82",
+    "pctx01-parser-generation-reviewed.log": "af6c87cd8c55dd8b257056d4d09202a53f9f7ad6598906a264d8deb18d2db349",
+    "pctx01-parser-generation-second.log": "6d6d020edf2965f014164caa3948683a5d07c4babced33a1e1f771bf736e1a39",
+    "pctx01-parser-generation-third.log": "1c9ddcfecda03b61377c521bc1ccd835cd91f720b5b15d127cc9756ef32607f0",
+    "pctx01-parser-native-corrected.log": "1ff9fbe55e1fcf8750ca18af75f447766d71568c4086df3f993fbc124fddfc78",
+    "pctx01-parser-native-final.log": "21502a5cf2454a6cc9bbca942abab86c68d7851a5203cb01d0e871137a894bda",
+    "pctx01-parser-native-first.log": "21461b497e9ffdc8ab07a33f9efcf6c4b2c58070c2139ef0c4b53f15a5f8592f",
+    "pctx01-parser-native-reviewed.log": "885183c6a99fb0aba8ed0344c3a25a2ca07ba1eb8f161d093b2d13e306cacc38",
+    "pctx01-parser-related-final.log": "255dd4ea84bd6e17c24886b67b7d68dc660ff5fe2c47e8a2562987c10a0f8a64",
+    "pctx01-parser-static-final.log": "325f13e37b59e3ecda5b93221ff27bca439275689884d62e7d749fa47e8380a8"
+  },
+  "nonqualifying_attempts": [
+    "Generation first: test-only Result alias and ambiguous Into compile errors; corrected, no product change",
+    "Generation second: f64 seed wrongly treated as string; numeric sample/nonfinite parser controls corrected",
+    "Reviewed generation compile: double reference tuple; corrected",
+    "Reviewed generation second: empty PathBuf was incorrectly expected accepted; original parser rejection preserved",
+    "Reviewed generation third: optional Check positional mutation retained conflicting named seed; replaced alternative, no grammar restriction",
+    "Native first: harness indexed valueless Pack output; guarded index",
+    "Native reviewed: harness replaced explicit empty Pack output with a valid path, causing producer refusal; replacement restricted to sample literal",
+    "Initial generated matrix omitted two one-way conflict edges; independent review found and unordered-pair dedup repaired before closure"
+  ],
+  "earlier_positive_observations": [
+    "Initial1251 native cases x8=10008 passed on earlier bounded source; final1273 x8 proof supersedes it",
+    "Intermediate generator passes qualify their then-current fixture only"
+  ],
+  "completion_condition_evidence": {
+    "frozen_routes": "Exact ordered-set comparison to existing140 registry; hidden bridge-guardian excluded and no new route",
+    "parser_dimensions": "Missing required/subcommands/values, explicit empty values, numeric text/positive+negative overflow, Rust integer boundaries and nonfinite float parser controls, all authored enum values, duplicates versus Append, flag arity, extra positionals and all7 conflicts plus14 accepted sides",
+    "exceptions": "Check named/positional key alternatives and omission; Pack artifact output required and never injected as response; four raw last=true collections need -- and keep option-like/empty child payload opaque",
+    "false_oracle_prevention": "Every mutation starts from a parser-valid seed, conflicting seed alternative removed. Each refusal is parsed again with equivalent native globals in JSON/compact. Only declared help/MissingSubcommand contextual transition allowed; compact diagnostics checked against saved contextual class. JSON deliberately publishes common generic INVALID_ARGUMENT2.",
+    "no_effects": "Native absent and initialized project, absent/existing response or Pack artifact destination, entire isolated fixture directories/files byte-equal. Stdin kept open until child already exited; test watchdog5s only, not relaxed product timeout.",
+    "reuse": "Existing qualified global/opaque/unknown-option/help/raw binding evidence retained; focused unchanged related tests rerun, no independent producers executed for accepted controls"
+  },
+  "independent_review": {
+    "agent": "/root/work_control",
+    "no_edits_or_executions": true,
+    "scoped_blocker": false,
+    "conclusion": "Bounded local G02-D04 accepted contingent final native/format/Clippy passes; all now terminal PASS"
+  },
+  "remaining_limits": [
+    "G03-D03 source-independent producer grammar, G03-D04 explicit input/schema/size/precedence and G05-D06 stable exit matrix remain open",
+    "Accepted values prove parser acceptance only; producer policies/resources and source-dependent admission are not qualified by these controls",
+    "G05-D05/G09-D01 four original-budget macOS startup product failures retained",
+    "Required macOS arm64/x86_64, Linux x86_64 and Windows x86_64 integration gates remain open; no Actions or full/platform rerun",
+    "Inactive PCTX36 concurrency failure retained; whole suite not green"
+  ]
+}

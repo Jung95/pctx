@@ -1,0 +1,107 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+error[E0107]: type alias takes 1 generic argument but 2 generic arguments were supplied
+ --> src/parser_contract_tests.rs:8:30
+  |
+8 | fn parse(argv: &[String]) -> Result<Cli, clap::Error> {
+  |                              ^^^^^^    ------------- help: remove the unnecessary generic argument
+  |                              |
+  |                              expected 1 generic argument
+  |
+note: type alias defined here, with 1 generic parameter: `T`
+ --> src/domain.rs:5:10
+  |
+5 | pub type Result<T> = std::result::Result<T, Error>;
+  |          ^^^^^^ -
+
+error[E0277]: `?` couldn't convert the error to `pctx::domain::Error`
+  --> src/parser_contract_tests.rs:10:94
+   |
+ 8 | fn parse(argv: &[String]) -> Result<Cli, clap::Error> {
+   |                              ------------------------ expected `pctx::domain::Error` because of this
+ 9 |     let matches = cli_args::singular_globals(Cli::command())
+10 |         .try_get_matches_from(std::iter::once("pctx").chain(argv.iter().map(String::as_str)))?;
+   |          ------------------------------------------------------------------------------------^ the trait `From<clap::error::Error>` is not implemented for `pctx::domain::Error`
+   |          |
+   |          this can't be annotated with `?` because it has type `Result<_, clap::error::Error>`
+   |
+   = note: the question mark operation (`?`) implicitly performs a conversion on the error value using the `From` trait
+help: `pctx::domain::Error` implements trait `From<T>`
+  --> src/domain.rs:30:1
+   |
+30 | impl From<std::io::Error> for Error {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `From<std::io::Error>`
+...
+35 | impl From<rusqlite::Error> for Error {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `From<rusqlite::Error>`
+...
+48 | impl From<serde_json::Error> for Error {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `From<serde_json::Error>`
+
+error[E0308]: mismatched types
+  --> src/parser_contract_tests.rs:11:5
+   |
+ 8 | fn parse(argv: &[String]) -> Result<Cli, clap::Error> {
+   |                              ------------------------ expected `std::result::Result<Cli, pctx::domain::Error>` because of return type
+...
+11 |     Cli::from_arg_matches(&matches)
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `pctx::domain::Error`, found `clap::error::Error`
+   |
+   = note: `clap::error::Error` and `pctx::domain::Error` have similar names, but are actually distinct types
+note: `clap::error::Error` is defined in crate `clap_builder`
+  --> /Users/dev/PCTX/.toolchain/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/clap_builder-4.6.7/src/error/mod.rs:60:1
+   |
+60 | pub struct Error<F: ErrorFormatter = DefaultFormatter> {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+note: `pctx::domain::Error` is defined in crate `pctx`
+  --> src/domain.rs:7:1
+   |
+ 7 | pub struct Error {
+   | ^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `kind` found for struct `pctx::domain::Error` in the current scope
+  --> src/parser_contract_tests.rs:68:91
+   |
+68 |         "argv":args,"accepted":accepted,"error_kind":result.err().map(|e|format!("{:?}",e.kind()))}));
+   |                                                                                           ^^^^ method not found in `pctx::domain::Error`
+
+error[E0283]: type annotations needed
+   --> src/parser_contract_tests.rs:137:44
+    |
+137 |             for value in ["invalid-number".into(), "999999999999999999999999999999999999".into()] {
+    |                                            ^^^^
+    |
+    = note: multiple `impl`s satisfying `_: From<&str>` found in the following crates: `clap_builder`, `winnow`:
+            - impl From<&'static str> for Id;
+            - impl From<&'static str> for clap::builder::OsStr;
+            - impl From<&'static str> for clap::builder::Str;
+            - impl From<&'static str> for clap::builder::StyledStr;
+            - impl From<&'static str> for winnow::error::StrContextValue;
+    = note: required for `&str` to implement `Into<_>`
+help: try using a fully qualified path to specify the expected types
+    |
+137 -             for value in ["invalid-number".into(), "999999999999999999999999999999999999".into()] {
+137 +             for value in [<&str as Into<T>>::into("invalid-number"), "999999999999999999999999999999999999".into()] {
+    |
+
+error[E0283]: type annotations needed
+   --> src/parser_contract_tests.rs:137:44
+    |
+137 |             for value in ["invalid-number".into(), "999999999999999999999999999999999999".into()] {
+    |                                            ^^^^                                           ---- type must be known at this point
+    |
+    = note: multiple `impl`s satisfying `_: From<&str>` found in the following crates: `clap_builder`, `winnow`:
+            - impl From<&'static str> for Id;
+            - impl From<&'static str> for clap::builder::OsStr;
+            - impl From<&'static str> for clap::builder::Str;
+            - impl From<&'static str> for clap::builder::StyledStr;
+            - impl From<&'static str> for winnow::error::StrContextValue;
+    = note: required for `&str` to implement `Into<_>`
+help: try using a fully qualified path to specify the expected types
+    |
+137 -             for value in ["invalid-number".into(), "999999999999999999999999999999999999".into()] {
+137 +             for value in [<&str as Into<T>>::into("invalid-number"), "999999999999999999999999999999999999".into()] {
+    |
+
+Some errors have detailed explanations: E0107, E0277, E0283, E0308, E0599.
+For more information about an error, try `rustc --explain E0107`.
+error: could not compile `pctx` (bin "pctx" test) due to 6 previous errors

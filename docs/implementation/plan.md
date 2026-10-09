@@ -19,39 +19,36 @@ PCTX01, implementing, no next official task.
 
 ## Current fixed PCTX01 execution register — 2026-10-09
 
-Only PCTX01 is active. The user-requested one-time whole-G01–G10 reorganization
-is [PCTX01-closure-plan](tasks/PCTX01-closure-plan.md), with machine-readable
-states in tasks/PCTX01-closure-plan.json and complete static 140-leaf crosswalk
-in evidence/pctx01-closure-audit.json. Its fixed40 subconditions replace all
-historical incremental next-action lists below. Bounded detail closure24/40;
-whole gates0/10. This is the first whole-detail denominator, not a change to the
-10 gates/140 leaves/172 help paths/12 bounded R groups. R local12/12 is not
-whole-local PCTX01 completion. Implementation, evidence and platform waits are
-recorded separately; required §23 targets are macOS arm64/x86_64, Linux x86_64,
-Windows x86_64. Linux aarch64 is supporting follow-up evidence only.
+Only PCTX01 is active. The one-time whole-G01–G10 reorganization remains fixed
+in [PCTX01-closure-plan](tasks/PCTX01-closure-plan.md), its40-item register and
+the140-leaf crosswalk. Bounded detail closure **25/40** (previous24/40); whole
+gates **0/10**. No denominator change:140 leaves,172 help paths,12 historical
+bounded R groups retained. Required §23 macOS arm64/x86_64, Linux x86_64 and
+Windows x86_64 integration are separately open G09 conditions.
 
-G05-D04 is **locally closed** for the common stored-data error contract. All48
-frozen persisted sites now have bounded source/runtime proof and the other43
-caller/external/internal/test/explicit-boundary dispositions are preserved. Final
-persisted target22 PASS and private Schedule2 PASS; format/Clippy PASS; independent
-closure review accepted the scope. The last six Schedule sites retain absence6,
-identity9/ownership10, original expiry/deadline, accepted JSON Values and truthful
-state. No runtime Schedule behavior changed in this final test-only candidate.
-Evidence: [G05-D04 closure](evidence/pctx01-storage-schedule-verification.json).
-Initial failures in earlier groups remain preserved and source bound.
+G02-D04 is **locally closed**. The real parser generates1855 cases on exactly140
+leaves:582 accepted parser-only controls and1273 refusals. Actual CLI10184 refusal
+combinations pass across missing/initialized project, JSON/compact and absent/
+existing output, with stdin held open and byte-exact fixture snapshots. All7
+authored conflicts/14 accepted alternatives, missing/value/typed/enum/flag/raw
+boundaries qualify. Saved matrix replay and related14 tests pass; format/Clippy
+pass. Independent scoped review accepted closure. Initial generator/harness
+failures are retained, corrected without product grammar changes. Evidence:
+[G02-D04 closure](evidence/pctx01-parser-verification.json). Runtime sources are
+unchanged; main only declares a test module. Accepted parsing does not qualify
+producer semantics or source-dependent input. No new task/ID/denominator.
 
-Detail closure **24/40** (previous23/40, denominator40 unchanged); whole0/10.
-No full PCTX01, callback-fault, scheduling-correctness or platform completion
-claim. Required G09 macOS arm64/x86_64, Linux x86_64 and Windows x86_64 remain
-open; four original macOS startup failures remain product failures. Independent
-PCTX36 Tick concurrency failure remains visible; never report whole suite green.
+Prior G05-D04 common stored-error48-site closure remains qualified by
+[stored-error evidence](evidence/pctx01-storage-schedule-verification.json).
+Four original-budget macOS startup failures remain product failures, and inactive
+PCTX36 occurrence concurrency failure remains visible; whole suite is not green.
 No Actions, new full/platform run or active heavy job.
 
-Next within the fixed grouped candidate: **G02-D04/G03-D03/D04/G05-D06** remaining
-parser/admission/error matrix against frozen140 routes. Reuse closed A/R/C cases
-and source proof; no similar-path discovery queue, new IDs or independent
-producer features. PCTX01 remains the sole active official task until all40
-conditions and required platform evidence are complete.
+Next fixed candidate: **G03-D03/D04 + G05-D06** source-independent producer grammar,
+explicit input/stdin syntax/shape/size and policy/state precedence, stable exits.
+Reuse closed A/R/C/parser/storage evidence against frozen140 routes; no lookup
+grammar invention or independent producer expansion. PCTX01 stays active until
+all40 conditions and required platform evidence qualify; no next official task.
 
 ## Ownership and common boundaries
 

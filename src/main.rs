@@ -1297,6 +1297,9 @@ fn main() {
 }
 
 #[cfg(test)]
+mod parser_contract_tests;
+
+#[cfg(test)]
 mod finite_route_tests {
     use super::*;
     #[test]

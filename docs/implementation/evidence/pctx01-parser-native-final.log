@@ -1,0 +1,11 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.43s
+     Running tests/parser_schema_cli.rs (target/debug/deps/parser_schema_cli-5f7b4dd78b877501)
+
+running 1 test
+test generated_parser_refusals_preserve_project_output_and_open_stdin has been running for over 60 seconds
+Qualified 1273 refused cases in 10184 native CLI combinations; accepted controls remain parser-only
+test generated_parser_refusals_preserve_project_output_and_open_stdin ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 77.32s
+

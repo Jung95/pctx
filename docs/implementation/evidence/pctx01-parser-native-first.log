@@ -1,0 +1,19 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.82s
+     Running tests/parser_schema_cli.rs (target/debug/deps/parser_schema_cli-5f7b4dd78b877501)
+
+running 1 test
+
+thread 'generated_parser_refusals_preserve_project_output_and_open_stdin' (9123767) panicked at tests/parser_schema_cli.rs:90:33:
+index out of bounds: the len is 7 but the index is 7
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test generated_parser_refusals_preserve_project_output_and_open_stdin ... FAILED
+
+failures:
+
+failures:
+    generated_parser_refusals_preserve_project_output_and_open_stdin
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.23s
+
+error: test failed, to rerun pass `--test parser_schema_cli`

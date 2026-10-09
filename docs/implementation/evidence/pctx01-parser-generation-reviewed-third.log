@@ -1,0 +1,21 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.56s
+     Running unittests src/main.rs (target/debug/deps/pctx-5861ab217462b7f0)
+
+running 1 test
+
+thread 'parser_contract_tests::frozen_visible_parser_schema_and_cases' (9126057) panicked at src/parser_contract_tests.rs:102:5:
+assertion `left == right` failed: ["check", "run"]/explicit_empty_value/key: ["check", "run", "--key", "parser-fixture", "--task-id", "parser-fixture", "--run", "parser-fixture", ""]: Err(ErrorInner { kind: ArgumentConflict, context: FlatMap { keys: [InvalidArg, PriorArg, Usage], values: [String("--key <REGISTERED_KEY>"), String("[KEY]"), StyledStr(StyledStr("\u{1b}[1m\u{1b}[4mUsage:\u{1b}[0m \u{1b}[1mpctx check run\u{1b}[0m \u{1b}[1m--task-id\u{1b}[0m <TASK_ID> \u{1b}[1m--run\u{1b}[0m <RUN> \u{1b}[1m--key\u{1b}[0m <REGISTERED_KEY> [KEY]"))] }, message: None, source: None, help_flag: Some("--help"), styles: Styles { header: Style { fg: None, bg: None, underline: None, effects: Effects(BOLD | UNDERLINE) }, error: Style { fg: Some(Ansi(Red)), bg: None, underline: None, effects: Effects(BOLD) }, usage: Style { fg: None, bg: None, underline: None, effects: Effects(BOLD | UNDERLINE) }, literal: Style { fg: None, bg: None, underline: None, effects: Effects(BOLD) }, placeholder: Style { fg: None, bg: None, underline: None, effects: Effects() }, valid: Style { fg: Some(Ansi(Green)), bg: None, underline: None, effects: Effects() }, invalid: Style { fg: Some(Ansi(Yellow)), bg: None, underline: None, effects: Effects() }, context: Style { fg: None, bg: None, underline: None, effects: Effects() }, context_value: None }, color_when: Auto, color_help_when: Auto, backtrace: None })
+  left: false
+ right: true
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test parser_contract_tests::frozen_visible_parser_schema_and_cases ... FAILED
+
+failures:
+
+failures:
+    parser_contract_tests::frozen_visible_parser_schema_and_cases
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 6 filtered out; finished in 0.48s
+
+error: test failed, to rerun pass `--bin pctx`

@@ -1,0 +1,34 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.95s
+     Running unittests src/main.rs (target/debug/deps/pctx-5861ab217462b7f0)
+
+running 7 tests
+test finite_route_tests::renderer_refusal_keeps_typed_error_and_incomplete_coverage ... ok
+test cli_help::tests::every_declared_leaf_has_an_explicit_effect_contract ... ok
+test cli_args::tests::producer_repetition_and_literal_child_options_preserve_exact_values ... ok
+test cli_args::tests::pack_artifact_output_and_global_output_share_one_singular_binding ... ok
+test cli_args::tests::defaults_and_fresh_parses_do_not_count_as_duplicate_inputs ... ok
+test finite_route_tests::finite_work_quota_adapter_reads_do_not_time_execution ... ok
+test parser_contract_tests::frozen_visible_parser_schema_and_cases ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 6.53s
+
+     Running tests/argument_preflight_cli.rs (target/debug/deps/argument_preflight_cli-8d5109e5406e1ac8)
+
+running 3 tests
+test valid_read_aliases_line_clamping_and_outline_remain_available ... ok
+test malformed_read_build_extract_and_graph_inputs_refuse_before_discovery ... ok
+test rejected_requests_do_not_refresh_dirty_index_or_write_response ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.80s
+
+     Running tests/cli_refusal_envelope.rs (target/debug/deps/cli_refusal_envelope-e0fa1efd013109e3)
+
+running 4 tests
+test semantic_and_representation_refusals_do_not_claim_completed_execution ... ok
+test install_required_and_duplicate_options_keep_parser_envelope_and_no_effects ... ok
+test admitted_install_failures_keep_state_classification_and_response_destination ... ok
+test all_visible_leaf_unknown_options_refuse_before_project_and_output ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.87s
+

@@ -134,24 +134,25 @@
     {
       "id": "PCTX01-G02-D04",
       "gate": "G02",
-      "status": "open",
-      "local_implementation": "remaining",
+      "status": "closed",
+      "local_implementation": "qualified_bounded_contract",
       "completion_condition": "Complete remaining typed/missing/value/conflict parser cases for the frozen 140-leaf schema; record accepted/refused options and effect snapshots",
       "spec_sections": [
         "14"
       ],
       "owner": "PCTX01 common boundary; independent producer semantics retain requirement/task owner",
-      "paths": "main.rs,cli_args.rs",
+      "paths": "main.rs,cli_args.rs; parser_contract_tests.rs; tests/parser_schema_cli.rs",
       "evidence": [
-        "pctx01-admission-registry.json"
+        "pctx01-admission-registry.json",
+        "pctx01-parser-verification.json"
       ],
       "verification_environment": "Native macOS arm64 local common proof; all release platforms separately required by G09",
-      "macOS_arm64": "remaining",
+      "macOS_arm64": "bounded_verified",
       "macOS_x86_64": "unverified; G09-D02",
       "Linux_x86_64": "unverified; G09-D03",
       "Linux_aarch64": "prior fixed-source full only; inspect linked manifest per contract",
       "Windows_x86_64": "unverified; G09-D04",
-      "documentation_evidence": "closure plan recorded; execution gaps retained"
+      "documentation_evidence": "pctx01-parser-verification.json; accepted controls remain parser-only"
     },
     {
       "id": "PCTX01-G03-D01",
@@ -978,9 +979,9 @@
       "documentation_evidence": "closure plan recorded; execution gaps retained"
     }
   ],
-  "closed_details": 24,
+  "closed_details": 25,
   "execution_order": [
-    "G02-D04 + G03-D03/D04 + G05-D06 (remaining grouped admission/error candidate; G05-D04 locally closed)",
+    "G03-D03/D04 + G05-D06 (remaining grouped admission/error candidate; G02-D04 and G05-D04 locally closed)",
     "G04-D03 + G06-D03 + G07-D03 (existing response matrix)",
     "G08-D04 + G05-D05 (remaining phase/startup conditions, original budgets)",
     "G10-D04 (candidate checks)",
@@ -998,12 +999,12 @@
     "PCTX01-G10-D03"
   ],
   "latest_condition_closure": {
-    "id": "PCTX01-G05-D04",
-    "detail_before": 23,
-    "detail_after": 24,
+    "id": "PCTX01-G02-D04",
+    "detail_before": 24,
+    "detail_after": 25,
     "denominator_before": 40,
     "denominator_after": 40,
-    "scope": "local common decoder proof; required G09 platform gates remain open",
-    "independent_review": "/root/work_control; pctx01-storage-schedule-verification.json"
+    "scope": "local parser condition; all G09 release-platform integration remains open",
+    "independent_review": "/root/work_control; pctx01-parser-verification.json"
   }
 }

@@ -3901,6 +3901,7 @@
     "src/reader.rs": "8770ea1bf18a7439d0869d0d366cb3833b37ef1c8fb72c3ced6dba58cffe2281",
     "src/context.rs": "faa1b3c76ffc53e7240a809ae226d229252ec056d0b985b4adecd62df6a4dcb9"
   },
-  "closed_details": 23,
-  "detail_denominator": 40
+  "closed_details": 25,
+  "detail_denominator": 40,
+  "latest_parser_evidence": "pctx01-parser-verification.json"
 }

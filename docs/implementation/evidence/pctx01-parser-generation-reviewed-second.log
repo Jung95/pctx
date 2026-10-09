@@ -1,0 +1,21 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.64s
+     Running unittests src/main.rs (target/debug/deps/pctx-5861ab217462b7f0)
+
+running 1 test
+
+thread 'parser_contract_tests::frozen_visible_parser_schema_and_cases' (9125645) panicked at src/parser_contract_tests.rs:102:5:
+assertion `left == right` failed: ["task", "create"]/explicit_empty_value/from_file: ["task", "create", "--from-file", ""]: Err(ErrorInner { kind: InvalidValue, context: FlatMap { keys: [InvalidArg, InvalidValue, ValidValue], values: [String("--from-file <FROM_FILE>"), String(""), Strings([])] }, message: None, source: None, help_flag: Some("--help"), styles: Styles { header: Style { fg: None, bg: None, underline: None, effects: Effects(BOLD | UNDERLINE) }, error: Style { fg: Some(Ansi(Red)), bg: None, underline: None, effects: Effects(BOLD) }, usage: Style { fg: None, bg: None, underline: None, effects: Effects(BOLD | UNDERLINE) }, literal: Style { fg: None, bg: None, underline: None, effects: Effects(BOLD) }, placeholder: Style { fg: None, bg: None, underline: None, effects: Effects() }, valid: Style { fg: Some(Ansi(Green)), bg: None, underline: None, effects: Effects() }, invalid: Style { fg: Some(Ansi(Yellow)), bg: None, underline: None, effects: Effects() }, context: Style { fg: None, bg: None, underline: None, effects: Effects() }, context_value: None }, color_when: Auto, color_help_when: Auto, backtrace: None })
+  left: false
+ right: true
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test parser_contract_tests::frozen_visible_parser_schema_and_cases ... FAILED
+
+failures:
+
+failures:
+    parser_contract_tests::frozen_visible_parser_schema_and_cases
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 6 filtered out; finished in 0.03s
+
+error: test failed, to rerun pass `--bin pctx`

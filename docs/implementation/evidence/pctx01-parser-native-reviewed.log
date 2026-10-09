@@ -1,0 +1,21 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.42s
+     Running tests/parser_schema_cli.rs (target/debug/deps/parser_schema_cli-5f7b4dd78b877501)
+
+running 1 test
+
+thread 'generated_parser_refusals_preserve_project_output_and_open_stdin' (9127020) panicked at tests/parser_schema_cli.rs:126:25:
+assertion `left == right` failed: {"accepted":false,"argument":"output","argv":["pack","create","--plan","parser-fixture","--expect-hash","parser-fixture","--output",""],"dimension":"explicit_empty_value","error_kind":"InvalidValue","route":"pack create"}: {"command":"pack","coverage":{"reasons":["INVALID_ARGUMENT"],"status":"partial"},"data":null,"errors":[{"code":"INVALID_ARGUMENT","message":"Invalid plan ID","retryable":false}],"generation_id":null,"project_id":null,"schema_version":"1.0","status":"error","truncation":{"reasons":[],"truncated":false},"validation":{"checked_at":"2026-10-09T00:15:58.529Z","mode":"matched","scope":[],"workspace_atomic":false},"warnings":[],"workspace_id":null}
+  left: String("pack")
+ right: "arguments"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test generated_parser_refusals_preserve_project_output_and_open_stdin ... FAILED
+
+failures:
+
+failures:
+    generated_parser_refusals_preserve_project_output_and_open_stdin
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.40s
+
+error: test failed, to rerun pass `--test parser_schema_cli`

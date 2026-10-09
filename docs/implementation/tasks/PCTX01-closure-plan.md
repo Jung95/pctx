@@ -13,7 +13,7 @@ R01–R12 local12/12 qualifies only that pure-admission subset. Closed rows belo
 are deliberately bounded subconditions; G09 independently retains every required
 release-platform condition. A closed local row does not qualify an untested OS.
 
-Current bounded detail closure: **24/40**; whole gates **0/10**.
+Current bounded detail closure: **25/40**; whole gates **0/10**.
 
 | Fixed ID | State | Completion condition | Source | Spec | Evidence prefix |
 | --- | --- | --- | --- | --- | --- |
@@ -22,7 +22,7 @@ Current bounded detail closure: **24/40**; whole gates **0/10**.
 | PCTX01-G02-D01 | closed | Singular global duplicates, depth positions, defaults and literal child argv preserve one binding | cli_args.rs,main.rs | §14 | pctx01-global-argument-verification.json |
 | PCTX01-G02-D02 | closed | Unknown-option refusal on every visible leaf uses the admitted refusal transport with no effects | main.rs,domain.rs | §14 | pctx01-refusal-envelope-verification.json |
 | PCTX01-G02-D03 | closed | Unix opaque argv and masked parser diagnostics produce checked output without panic | main.rs,cli_args.rs | §14 | pctx01-frontend-verification.json |
-| PCTX01-G02-D04 | open | Complete remaining typed/missing/value/conflict parser cases for the frozen 140-leaf schema; record accepted/refused options and effect snapshots | main.rs,cli_args.rs | §14 | pctx01-admission-registry.json |
+| PCTX01-G02-D04 | closed | Complete remaining typed/missing/value/conflict parser cases for the frozen 140-leaf schema; record accepted/refused options and effect snapshots | main.rs,cli_args.rs; parser_contract_tests.rs; tests/parser_schema_cli.rs | §14 | pctx01-parser-verification.json |
 | PCTX01-G03-D01 | closed | Historical A01-A11 and R01-R12 pure admission contracts are locally qualified, with exact exceptions and producer state boundaries | main.rs and shared producer validators | §14/27/38 | pctx01-report-admission-verification.json |
 | PCTX01-G03-D02 | closed | Activity nonnegative cursor and Install explicit hash grammar precede discovery/lock/output effects | main.rs,work.rs,adapter.rs | §14/38 | pctx01-activity-admission-verification.json, pctx01-install-admission-verification.json |
 | PCTX01-G03-D03 | open | Freeze and execute remaining source-independent grammar/no-effect cases for all 140 leaves; reuse closed A/R/C cases, do not invent lookup grammar | main.rs and shared producer validators | §14/27/38 | pctx01-admission-registry.json |
@@ -99,7 +99,7 @@ change or new defect. Small changes receive focused/static checks; full platform
 reruns belong to grouped integration candidates. Controlled-loss experiments
 are optional when detection strength is unclear, not a per-change requirement.
 
-## Current G05-D04 bounded evidence
+## Prior G05-D04 bounded evidence
 
 G05-D04 local common decoder condition is closed. Frozen48 persisted sites and
 43 preserved source dispositions reconciled; no new ID/denominator. Final
@@ -108,4 +108,16 @@ closure review accepted this bounded scope. Prior42 sites and safe errors,
 replay/identity/expiry and truthful effects remain linked; no universal rollback,
 post-spawn callback, scheduling algorithm or release-platform claim. Evidence:
 pctx01-storage-schedule-verification.json and residual-reconciliation.json.
-Detail24/40, whole0/10. Next fixed candidate: G02-D04/G03-D03/D04/G05-D06.
+At that closure detail24/40, whole0/10; superseded current count below.
+
+## Current G02-D04 bounded evidence
+
+Real140-leaf parser1855 cases:582 accepted parser-only,1273 refused; native10184
+combinations PASS, saved replay/related14 PASS, format/Clippy PASS. Seven authored
+conflicts and fourteen accepted alternatives qualified; missing/value/numeric/
+enum/empty/flag/raw cases and native globals context covered. Entire isolated
+fixture/output snapshots preserved and stdin held open. Test-only changes; prior
+failed generator/harness attempts retained. Independent scoped review accepted.
+Evidence: pctx01-parser-verification.json and parser-cases.json. Detail25/40,
+whole0/10, denominator unchanged. Next fixed G03-D03/D04 + G05-D06; required
+platform and original startup failures retained. No next official task.
