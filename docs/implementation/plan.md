@@ -1,6 +1,45 @@
 # Implementation plan
 
-## Debug-method research — current, 2026-10-09
+## Prioritized investigation executed — current, 2026-10-09
+
+Human authorized proceeding in the displayed priority order. Priority 1 consumed
+its exact owned-path, 2-second UTC service-log scope once: exit 0, zero events,
+no matching signpost ID and no second interval query. Missing records remain
+inconclusive. The old private mapping directory was removed; scope cannot be reused.
+See [finite read verification](evidence/pctx01-startup-signpost-target-verification.json).
+
+Priority 2 ran one isolated diagnostic copy of the byte-identical original
+1000ms/8×16 concurrency test. It failed (exit 101): 98 persisted outcomes,
+96 OUTPUT and two TIMEOUTs, PIDs 31189/31195; the remaining 30 intended attempts
+are censored/unknown. Both failures have zero streams and no observed root exit.
+Native spawn durations are 0.979/0.819ms; largest adjacent parent timing gaps
+6.289/6.277ms; terminal-to-group-kill gaps 2/16us. Parent polling continued; these
+records do not support a long single parent spawn/drain/probe/wait stall as the
+observed explanation. They do not identify the child's wait cause or prove a
+continuous kernel state. No dropped points; both logged failure identities have
+records; all known parent/child PIDs are absent. Instrumentation overhead and
+post-cleanup recording can affect timing; this is not acceptance qualification.
+[Result](evidence/pctx01-startup-phase-result.json),
+[verification](evidence/pctx01-startup-phase-verification.json).
+
+Priority 3 is the next diagnostic within the same task: establish late pre-cancel
+child wait/runnable transitions with a target-only chronological collector.
+[Concrete design](evidence/pctx01-startup-timeline-next-plan.json) is not execution
+ready: spindump PID selection alone does not bind native start identity, and the
+old late-capture helper retains children beyond timeout. Do not reuse it. Resolve
+safe identity/lifecycle admission and fractional-duration behavior before any
+single-auth batch. No root collector, service sample, broad profiler or unchanged
+retest was started. Priorities 4/5 remain conditional alternatives, not substitutes
+for this unresolved condition. No product/test source changed. The private phase session was removed after
+PID absence verification; shared target contains a diagnostic binary and must be
+rebuilt from original source before acceptance testing.
+
+Only **PCTX01** remains active; **G05-D05 is product_failure**, fixed **33/40**
+details and **0/10** whole gates. No next official task is selected. Completion
+still requires a causal applicable repair and all original acceptance conditions,
+including required platforms; diagnostic success cannot close this failure.
+
+## Debug-method research — historical preparation, 2026-10-09
 
 [Research](evidence/pctx01-startup-debug-methods-research.json) prioritizes the
 prepared exact-owned-path signpost read,then a specifically missing owned-parent

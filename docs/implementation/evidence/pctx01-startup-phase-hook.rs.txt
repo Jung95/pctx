@@ -1,0 +1,72 @@
+// Isolated macOS diagnostic-copy hook only. No product/test changes.
+struct NativePhaseTrace {
+    points: Vec<(u64, &'static str, u64)>,
+    dropped: usize,
+    pid: u32,
+    identity: Option<(u32,u32,u32,u64,u64)>,
+    executable: Option<std::path::PathBuf>,
+    deadline_low_ns: Option<u64>,
+    deadline_high_ns: Option<u64>,
+    clock_ok: bool,
+}
+impl NativePhaseTrace {
+    fn now() -> Option<u64> {
+        let mut t:libc::timespec=unsafe{std::mem::zeroed()};
+        if unsafe{libc::clock_gettime(libc::CLOCK_MONOTONIC,&mut t)}!=0 || t.tv_sec<0 || t.tv_nsec<0 {return None;}
+        (t.tv_sec as u64).checked_mul(1_000_000_000)?.checked_add(t.tv_nsec as u64)
+    }
+    fn new(deadline:Deadline) -> Self {
+        let low=Self::now();
+        let remaining=deadline.instant().checked_duration_since(std::time::Instant::now()).filter(|d|!d.is_zero()).and_then(|d|u64::try_from(d.as_nanos()).ok());
+        let high=Self::now();
+        let bounds=match(low,high,remaining){(Some(l),Some(h),Some(r)) if h>=l => l.checked_add(r).zip(h.checked_add(r)),_=>None};
+        Self {points:Vec::with_capacity(4096),dropped:0,pid:0,identity:None,executable:None,deadline_low_ns:bounds.map(|b|b.0),deadline_high_ns:bounds.map(|b|b.1),clock_ok:matches!((low,high),(Some(l),Some(h)) if h>=l)}
+    }
+    fn mark(&mut self,phase:&'static str,arg:u64) {
+        let Some(tick)=Self::now() else{self.clock_ok=false;return;};
+        if self.points.len()<4096 {self.points.push((tick,phase,arg));} else {self.dropped+=1;}
+    }
+    fn bind(&mut self,pid:u32) {
+        self.pid=pid;
+        let mut b:libc::proc_bsdinfo=unsafe{std::mem::zeroed()};
+        let n=unsafe{libc::proc_pidinfo(pid as i32,libc::PROC_PIDTBSDINFO,0,(&mut b as *mut libc::proc_bsdinfo).cast(),std::mem::size_of_val(&b) as i32)};
+        if n==std::mem::size_of_val(&b) as i32 && b.pbi_pid==pid && b.pbi_ppid==std::process::id() && b.pbi_uid==unsafe{libc::getuid()} {
+            self.identity=Some((b.pbi_pid,b.pbi_ppid,b.pbi_uid,b.pbi_start_tvsec,b.pbi_start_tvusec));
+        }
+    }
+    fn persist(&self,result:&Result<Output>) {
+        use std::os::unix::fs::{MetadataExt,OpenOptionsExt};
+        let Some(executable)=&self.executable else{return;};
+        let expected=b"#!/bin/sh\nkill -0 -$$ || exit 47\nprintf stdout\nprintf stderr >&2\n";
+        let Ok(before)=std::fs::symlink_metadata(executable) else{return;};
+        if !before.is_file() || before.uid()!=unsafe{libc::getuid()} || before.len()!=expected.len() as u64{return;}
+        let Ok(bytes)=std::fs::read(executable) else{return;};
+        if bytes.as_slice()!=expected{return;}
+        let Ok(after)=std::fs::symlink_metadata(executable) else{return;};
+        if before.dev()!=after.dev() || before.ino()!=after.ino() || before.len()!=after.len(){return;}
+        let Some(root)=option_env!("PCTX_PHASE_TRACE_ROOT") else{return;};
+        let path=std::path::Path::new(root).join(format!("{}.json",self.pid));
+        let Ok(mut file)=std::fs::OpenOptions::new().write(true).create_new(true).mode(0o600).open(path) else{return;};
+        let outcome=match result{Ok(o)=>serde_json::json!({"code":"OUTPUT","success":o.status.success(),"stdout_bytes":o.stdout.len(),"stderr_bytes":o.stderr.len()}),Err(e)=>serde_json::json!({"code":e.code})};
+        // Serialization/filesystem work is after the original cancellation/reap block.
+        // No arbitrary paths,argv,environment,stack or output contents are exported.
+        let _=serde_json::to_writer(&mut file,&serde_json::json!({"pid":self.pid,"identity":self.identity,"clock":"native CLOCK_MONOTONIC ns","clock_ok":self.clock_ok,"deadline_low_ns":self.deadline_low_ns,"deadline_high_ns":self.deadline_high_ns,"points":self.points,"dropped":self.dropped,"outcome":outcome}));
+    }
+}
+
+#[cfg(test)]
+#[test]
+fn pctx01_phase_clock_controls() {
+    let expired=Deadline::from_instant(std::time::Instant::now()-Duration::from_millis(1));
+    let old=NativePhaseTrace::new(expired);
+    assert!(old.clock_ok);
+    assert_eq!(old.deadline_low_ns,None);
+    assert_eq!(old.deadline_high_ns,None);
+    let mut fresh=NativePhaseTrace::new(Deadline::from_millis(1000).unwrap());
+    assert!(fresh.clock_ok);
+    assert!(fresh.deadline_low_ns.unwrap()<=fresh.deadline_high_ns.unwrap());
+    for _ in 0..4097 {fresh.mark("control",0);}
+    assert_eq!(fresh.points.len(),4096);
+    assert_eq!(fresh.dropped,1);
+    assert!(fresh.points.windows(2).all(|p|p[0].0<=p[1].0));
+}

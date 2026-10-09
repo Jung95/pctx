@@ -1,0 +1,35 @@
+{
+  "task": "PCTX01-G05-D05",
+  "priority": 3,
+  "status": "design_not_execution_ready",
+  "new_question": "In an actual original-deadline failing child, does the final pre-cancellation interval still sample AppleSystemPolicy waiting, or become runnable without payload? Prior snapshots do not prove this late interval.",
+  "scope": "Only one admitted ops-owned native test child; no parent/service/other-process stacks; one original concurrency test,1000ms,8x16,original cleanup unchanged.",
+  "candidate_argv": [
+    "/usr/sbin/spindump",
+    "EXACT_ADMITTED_PID",
+    "0.2",
+    "10",
+    "-onlyTarget",
+    "-timeline",
+    "-noBinary",
+    "-noFile",
+    "-timelimit",
+    "2"
+  ],
+  "execution_preconditions": [
+    "Validate this installed tool accepts fractional duration before a product capture; do not silently round/extend.",
+    "Ready transient collector before ordinary workload; authenticate once only if OS actually requires it.",
+    "Admit PID/native start/UID/parent/executable and known original synthetic fixture; prove attachment targets admitted identity and prevent unsafe reused-PID continuation.",
+    "Use shared native clock; record collection start/end versus original deadline and cancellation,without holding target beyond original timeout.",
+    "Root output private; allowlisted owned stack/state/timing reduction; bounded cleanup; no unmatched process capture."
+  ],
+  "not_ready_reason": "spindump documented target-only sampling does not itself bind a native start identity. Existing late kernel-ready helper retains children after timeout, forbidden here. Need a safe identity/lifecycle collector rather than reuse that helper. No capture invoked.",
+  "no_administrator_authentication": true,
+  "no_original_test_run": true,
+  "qualification": false,
+  "primary_guidance": {
+    "url": "https://developer.apple.com/documentation/xcode/reducing-your-app-s-launch-time",
+    "supports": "Use thread-state tracing for active/blocked scheduling distinctions; CPU time alone does not resolve wait.",
+    "limit": "App launch guidance, not a specific macOS script-policy fix or permission-scope guarantee."
+  }
+}

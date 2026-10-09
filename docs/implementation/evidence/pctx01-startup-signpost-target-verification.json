@@ -1,0 +1,18 @@
+{
+  "task": "PCTX01-G05-D05",
+  "human_scope_approval": "proceed in priority order",
+  "completed_queries": 1,
+  "second_query_executed": false,
+  "result": "exit0,2rawbytes,0targetmatches;inconclusive",
+  "log_pid": 30634,
+  "log_pid_absent": true,
+  "reader_hash_matches": true,
+  "removed_private_files": [
+    "/private/tmp/pctx01-path-map-joxx04hy/records/27817-1791543850-999247.mapping.json",
+    "/private/tmp/pctx01-path-map-joxx04hy/records/27817-1791543850-999247.outcome.json"
+  ],
+  "removed_private_directory": "/private/tmp/pctx01-path-map-joxx04hy",
+  "administrator_authentication": false,
+  "service_signals_or_settings_changes": false,
+  "next": "Priority2:missing owned-parent lifecycle timing phases;no wider retry."
+}

@@ -161,5 +161,18 @@
     "state": "product_failure",
     "details": "33/40",
     "whole_gates": "0/10"
+  },
+  "execution_followup": {
+    "date": "2026-10-09",
+    "authorization": "Human directed proceed in priority order.",
+    "priority1": "Consumed once,exit0,zero exact-path matches; no second query; private mapping removed.",
+    "priority2": "One diagnostic original concurrency test,exit101,96OUTPUT/2TIMEOUT out of98 recorded,censored30; no dropped; no long single parent gap observed.",
+    "priority3": "Concrete late-interval target-only design, not execution-ready; native identity/lifecycle and fractional-duration validation required; old retained-child helper prohibited.",
+    "qualification": false,
+    "evidence": [
+      "pctx01-startup-signpost-target-verification.json",
+      "pctx01-startup-phase-verification.json",
+      "pctx01-startup-timeline-next-plan.json"
+    ]
   }
 }

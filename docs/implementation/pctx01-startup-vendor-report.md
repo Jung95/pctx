@@ -50,7 +50,8 @@ share the signpost ID; the prior PID-labelled query excluded this channel. This
 is not evidence that events were emitted or retained. A new owned-fixture mapping
 run preserves the original concurrency test and expires one child at the original
 deadline. Mapping is instrumented and does not qualify a repair. A target-specific
-finite signpost read is prepared,not executed,pending separate content-scope approval.
+finite signpost read was approved and executed once: zero exact-path matches,
+no evaluation mapping and no second query. The consumed scope was not widened.
 No vendor submission or security change follows this draft.
 
 A later human-requested unmodified-product recheck again yields3PASS/1concurrency
@@ -79,3 +80,42 @@ logging,observing unrelated processes or changing security policy? Is there a
 known applicable platform correction for delayed completion under this native
 launch contract? A corrective proposal must preserve the original acceptance
 conditions and be verified without the observer;diagnostic PASS alone is insufficient.
+
+## Later owned-parent timeline
+
+## Prioritized investigation executed — current, 2026-10-09
+
+Human authorized proceeding in the displayed priority order. Priority 1 consumed
+its exact owned-path, 2-second UTC service-log scope once: exit 0, zero events,
+no matching signpost ID and no second interval query. Missing records remain
+inconclusive. The old private mapping directory was removed; scope cannot be reused.
+See [finite read verification](evidence/pctx01-startup-signpost-target-verification.json).
+
+Priority 2 ran one isolated diagnostic copy of the byte-identical original
+1000ms/8×16 concurrency test. It failed (exit 101): 98 persisted outcomes,
+96 OUTPUT and two TIMEOUTs, PIDs 31189/31195; the remaining 30 intended attempts
+are censored/unknown. Both failures have zero streams and no observed root exit.
+Native spawn durations are 0.979/0.819ms; largest adjacent parent timing gaps
+6.289/6.277ms; terminal-to-group-kill gaps 2/16us. Parent polling continued; these
+records do not support a long single parent spawn/drain/probe/wait stall as the
+observed explanation. They do not identify the child's wait cause or prove a
+continuous kernel state. No dropped points; both logged failure identities have
+records; all known parent/child PIDs are absent. Instrumentation overhead and
+post-cleanup recording can affect timing; this is not acceptance qualification.
+[Result](evidence/pctx01-startup-phase-result.json),
+[verification](evidence/pctx01-startup-phase-verification.json).
+
+Priority 3 is the next diagnostic within the same task: establish late pre-cancel
+child wait/runnable transitions with a target-only chronological collector.
+[Concrete design](evidence/pctx01-startup-timeline-next-plan.json) is not execution
+ready: spindump PID selection alone does not bind native start identity, and the
+old late-capture helper retains children beyond timeout. Do not reuse it. Resolve
+safe identity/lifecycle admission and fractional-duration behavior before any
+single-auth batch. No root collector, service sample, broad profiler or unchanged
+retest was started. Priorities 4/5 remain conditional alternatives, not substitutes
+for this unresolved condition. No product/test source changed.
+
+Only **PCTX01** remains active; **G05-D05 is product_failure**, fixed **33/40**
+details and **0/10** whole gates. No next official task is selected. Completion
+still requires a causal applicable repair and all original acceptance conditions,
+including required platforms; diagnostic success cannot close this failure.

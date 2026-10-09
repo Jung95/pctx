@@ -489,7 +489,10 @@
         "pctx01-startup-policy-static-map.json",
         "pctx01-startup-path-map-result.json",
         "pctx01-startup-signpost-target-scope-plan.json",
-        "pctx01-startup-memory-recheck-verification.json"
+        "pctx01-startup-memory-recheck-verification.json",
+        "pctx01-startup-signpost-target-verification.json",
+        "pctx01-startup-phase-verification.json",
+        "pctx01-startup-timeline-next-plan.json"
       ],
       "verification_environment": "Native macOS arm64 local common proof; all release platforms separately required by G09",
       "macOS_arm64": "failure",

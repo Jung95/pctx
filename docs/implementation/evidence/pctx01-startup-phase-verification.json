@@ -1,0 +1,27 @@
+{
+  "task": "PCTX01-G05-D05",
+  "qualification": false,
+  "test_exit": 101,
+  "observed_outcomes": 98,
+  "success_outcomes": 96,
+  "failed_outcomes": 2,
+  "expected_full_attempts": 128,
+  "observed_attempts_censored": true,
+  "unknown_unobserved_attempts": 30,
+  "log_failure_pids": [
+    31189,
+    31195
+  ],
+  "failure_pids_missing_records": [],
+  "all_known_parent_and_child_pids_absent": true,
+  "dropped_points": 0,
+  "source_hashes_unchanged": {
+    "src/query_process.rs": "bf661f4b8d0ed472585244ada4ac0e946221de364c100039cd20aee56fd8d0d2",
+    "tests/project_deadline.rs": "8b9fbc97fbd5acaf612b2d75b94cf810faa2b61614b654495082462b1941a8dc",
+    "Cargo.lock": "f96362897990caba560793601bc9fca08cef5c977907bb06889d5595d2acd7b0"
+  },
+  "administrator_authentications": 0,
+  "interpretation": "Two zero-output original1s failures; parent spawn under1ms and no observed long single polling gap. Does not identify child wait cause, prove continuous kernel state, qualify repair, or independently prove every reap.",
+  "result_sha256": "8082b90d012819a5ad46011db07d7663ba1f7216a5bb94ecf0b9bdc54e986d33",
+  "independent_review": "work_control read-only: hashes/logs/timelines agree, valid deadline expiries, no material evidence blocker. 30-attempt shortfall not 30 observed failures; kill-entry not signal-delivery proof; no continuous child state/cause/repair qualification."
+}

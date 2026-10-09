@@ -1,0 +1,13 @@
+{
+  "root": "/private/tmp/pctx01-phase-trace-b0ct_gls",
+  "removed": true,
+  "known_pids_absent_before_removal": true,
+  "retained_public_numeric_records": [
+    "pctx01-startup-phase-pid-31195-events.json",
+    "pctx01-startup-phase-pid-31189-events.json",
+    "pctx01-startup-phase-pid-31250-events.json",
+    "pctx01-startup-phase-pid-31192-events.json"
+  ],
+  "target_directory": "Shared target retains an isolated instrumented diagnostic binary; rebuild original source before any acceptance run.",
+  "temporary_root_contains_no_live_collector": true
+}

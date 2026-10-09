@@ -1,7 +1,7 @@
 {
   "task": "PCTX01-G05-D05",
-  "state": "prepared; separate service log-content approval required; not executed",
-  "human_scope_approval": "pending",
+  "state": "completed; consumed; zero target path matches; no interval query",
+  "human_scope_approval": "approved",
   "hypothesis": "Existing path/evaluation-ID signposts may distinguish a policy request from its completion; prior PID-labelled non-signpost query did not cover this channel.",
   "target": {
     "owned_child_pid": 27817,
@@ -62,5 +62,6 @@
     "details": "33/40",
     "whole_gates": "0/10",
     "state": "product_failure"
-  }
+  },
+  "approval_basis": "Human instructed proceed in priority order 2026-10-09 after concrete target scope and priority1 were presented."
 }

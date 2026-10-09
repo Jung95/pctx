@@ -1,0 +1,21 @@
+{
+  "task": "PCTX01-G05-D05",
+  "target_pid": 27817,
+  "path_sha256": "ff015b12d436dc640edb7d12f835bc4b13b456bb9a95b649fff6f18589d4ae8c",
+  "path_matches": [],
+  "unique_signpost_ids": [],
+  "interval": null,
+  "queries": [
+    {
+      "pid": 30634,
+      "exit": 0,
+      "raw_bytes": 2,
+      "reaped": true
+    }
+  ],
+  "failure_class": null,
+  "complete": true,
+  "qualification": false,
+  "administrator_authentication": false,
+  "limitation": "No/multiple IDs stop correlation; end does not prove kernel acknowledgement or child execution. Path/time association is evidence,not a public supported PID binding."
+}
