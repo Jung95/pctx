@@ -1,0 +1,34 @@
+{
+  "task": "PCTX01",
+  "condition": "PCTX01-G05-D05",
+  "status": "unresolved_product_failure",
+  "method": "cross-source consolidation,no test rerun",
+  "evidence_hashes": {
+    "pctx01-startup-auth-all-four-capture-analysis.json": "51e7324c01ec4c33efc0de0983033a45a0c3028e08f20f1fa7c2e5ea6ed8e38c",
+    "pctx01-startup-auth-all-four-capture-stage-2-trace.txt": "958bebcdbe721b35d289eb3d19e16228e5a17114fd3fd79cb7b56eb5cd55f02b",
+    "pctx01-startup-policy-ownership-reconciliation.json": "797c48ee3b11b1116055ead87fdb8b84dbd7b10291d7562f3c7c77d285f607e0",
+    "pctx01-startup-host-control-comparison-verification.json": "c31f823c9a21fa82ef8daa8b45b6058692b5893966617b033c7dc9a24d3f7311",
+    "pctx01-startup-host-reverse-comparison-verification.json": "c201537054b35ada46011c16ba16323fad22b31cdd34498b10e63f2adf1608c4",
+    "pctx01-startup-host-reverse-recovery-comparison-verification.json": "de02d6b358e522c9396e0bbb7cf784b190ba12bdf662901868b3afbd6285e9d2",
+    "pctx01-startup-host-correction-docs-check.json": "730f4b8baf028315748a224909b0fc3d9912c056d6605a4bc962d4cf03e6009c"
+  },
+  "current_source_hashes": {
+    "src/query_process.rs": "74c4c46c6b224563c63e9e2d7a9beac7996ef69735b072a39ee22c9aa989d6cb",
+    "tests/project_deadline.rs": "8b9fbc97fbd5acaf612b2d75b94cf810faa2b61614b654495082462b1941a8dc"
+  },
+  "known": "Exact expired-child early kernel script-policy wait;unchanged supervisor/test failures persist across declared host states.",
+  "unknown": "Reason policy evaluation is delayed;specific causal PCTX operation;app contribution;applicable supported platform correction.",
+  "excluded_next_actions": [
+    "same host-state or kernel capture repeat",
+    "budget/concurrency relaxation",
+    "script/interpreter substitution",
+    "policy bypass",
+    "unrelated task expansion"
+  ],
+  "resumption_trigger": "new evidence tying a concrete PCTX operation to wait,or documented applicable platform correction;then unchanged acceptance verification",
+  "detail_closed": 33,
+  "detail_total": 40,
+  "whole_closed": 0,
+  "whole_total": 10,
+  "required_platforms": "macOSarm64 product_failure;macOSx64/Linuxx64/Windowsx64 unverified"
+}

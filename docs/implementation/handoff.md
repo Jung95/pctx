@@ -1,5 +1,10 @@
 # Resume handoff
 
+Current corrective boundary: [consolidated startup triage](pctx01-startup-triage.md).
+No unchanged host-control/kernel-capture retry is justified;G05-D05 remains an
+unresolved product failure. Resume with a demonstrated causal PCTX operation or
+applicable supported platform correction;33/40details and0/10whole gates unchanged.
+
 ## Completed reverse recovery — current, 2026-10-09
 
 [Verification](evidence/pctx01-startup-host-reverse-recovery-comparison-verification.json)
