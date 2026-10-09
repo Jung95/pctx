@@ -1,0 +1,2 @@
+clang: error: couldn't create cache file '/var/folders/zz/zyxvpxvq6csfxvn_n00001yr0000gp/T/xcrun_db-wB4tEh91' (errno=Operation not permitted)
+clang: error: couldn't create cache file '/var/folders/zz/zyxvpxvq6csfxvn_n00001yr0000gp/T/xcrun_db-tLfXC0DY' (errno=Operation not permitted)

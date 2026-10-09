@@ -19,7 +19,7 @@ then next official task's finite list within the same Goal.
 
 Verified Runner finalization changes are committed locally as
 `9e2e0b52fb71e2f238cc12fd8eb6e4d77829776e` with `[skip ci]`; that is a historical publication attempt. Additional local commits through
-77abd0b and current G08-D04 changes remain unpublished. Source/binary/log hashes and the fixed40-item register
+bab1bcf and current G05-D05 diagnostic evidence remain unpublished. Source/binary/log hashes and the fixed40-item register
 were checked (33 closed, whole gates0/10). Normal push to the verified configured
 origin `https://github.com/Jung95/pctx.git`, branch `main`, was rejected by automatic
 approval review: explicit authorization for the destination/default-branch side
@@ -30,7 +30,51 @@ now awaits the user's explicit approval for `main` to resolve the review boundar
 No Actions were dispatched. PCTX01 remains the only active official task and is
 incomplete; G05-D05 is next within that same task.
 
-## Current G08-D04 closure — 2026-10-09
+## Current G05-D05 diagnostic — 2026-10-09
+
+Only **PCTX01** remains active (`implementing`); **G05-D05 remains a product
+failure**, not closed. Detail33/40, whole gates0/10, fixed denominator40 unchanged.
+[Owned-child snapshot evidence](evidence/pctx01-startup-thread-snapshot-verification.json)
+adds pre-expiry task/thread observations; production and original tests unchanged.
+Prior balanced/timeline512-attempt experiments and retained dyld samples were read,
+not repeated. No startup pass is substituted for the original4 failures.
+
+Initial raw8-concurrent/16-wave workload:127 within-budget,1 original1s expiry.
+The expired child's exact PID/native start identity matches250ms/751ms observations:
+task suspend_count0, no task userCPU/syscall progress, no output; actual cancellation
+signal9 and bounded reaping retained. Initial thread bytes0 are unavailable, from
+incorrect handle/ID-flavor pairing; zero fields do not describe actual thread state.
+Corrected matching pthread-handle info yields9 valid waiting-state3 records with
+task suspend_count0. Subsequent128 within-budget observations are diagnostic only;
+no code repair or original regression qualification. Observer overhead is recorded.
+
+Independent read-only review confirms counts/hashes, with two timing/ownership
+qualifications: corrected waiting records concern later nonexpired children, not
+the expired child; result clock precedes waitid, so within-budget is the recorded
+pre-probe criterion, not exact post-probe latency proof. No promoting rerun.
+
+The raw single-threaded launch driver differs from the actual multithreaded
+supervisor. Waiting and task suspension counts do not identify blocked syscall,
+kernel wait reason, policy cause or universal startup latency. Exact cause remains
+unproved; no environment exemption. Strict native diagnostic compilation passes;
+wrapper cache warnings and initial API-fixture error remain in evidence. No Rust
+rerun, Actions, security/permission change or push retry. All jobs terminal.
+
+A target-only spindump capability check on this execution shell was refused:
+`spindump must be run as root when sampling the live system` (exit77).
+Initial fractional-duration rejection64 is retained separately; no capture occurred.
+No sudo or privilege change attempted. Exact kernel wait observation therefore
+needs an authorized administrator capability; this does not excuse product failures.
+The [target-only observation proposal](evidence/pctx01-startup-kernel-observation-plan.md)
+is prepared; the administrator authorization question is pending. Do not run the
+privileged action until the human answers. No password belongs in chat/evidence.
+
+Next action stays **G05-D05**: identify the exact owned child's pre-expiry wait
+reason with an authorized read-only capability, or establish a concrete supervisor
+defect. Do not repeat unchanged startup attempts or switch official tasks. Required
+native-platform gaps and PCTX36/PCTX47 backlog remain separate and unresolved.
+
+## Historical G08-D04 closure — 2026-10-09
 
 Only **PCTX01** remains active (`implementing`). **G08-D04 is locally closed**
 for the frozen five-phase common matrix: **33/40** details, **0/10** whole gates;
@@ -180,17 +224,15 @@ assertions are not weakened. Earlier callback/continuous-read/receipt/cancellati
 failures and original four macOS1s startup product failures remain in evidence.
 This is focused local closure, not a passing whole suite or platform integration.
 
-Next exact condition is **PCTX01-G04-D03**: complete supported success/partial/error
-envelope required fields and exact final serialized bytes across fixed
-representation/destination classes. Use the existing140-leaf crosswalk, not new
-producer features or another reorganization. Then existing G06-D03/G07-D03,
-G08-D04/G05-D05, G10/G09 obligations remain. No next official task is selected
-until every mandatory PCTX01 condition/platform is qualified.
+Current next condition is **PCTX01-G05-D05**. G04-D03, G06-D03,
+G07-D03 and G08-D04 are locally closed with the bounded evidence above.
+Original four macOS startup failures remain unresolved; no next official task
+is selected before all PCTX01 mandatory conditions and platforms are qualified.
 
 Inactive PCTX36 Tick and PCTX47 Helper metering routing remain separate backlog.
 Required macOS x86_64/Linux x86_64/Windows x86_64 native integration is unverified;
 Linux aarch64 is supporting evidence only. No Actions or whole/platform rerun.
-All jobs are terminal. Main skip-ci commit/push authorized; Node24 pins remain.
+All jobs are terminal. Local skip-ci commits are authorized; main push awaits resolution of the recorded automatic approval rejection. Node24 pins remain.
 
 ## Resume checks
 
@@ -198,7 +240,7 @@ Inspect Git and exact live handles before resuming. The integrated Runner finali
 changes PCTX01 common code only. Read the final fault evidence manifest for logs,
 source hashes, failed attempts and qualification limits; do not reopen closed
 grammar/input/storage without changed code or an actual common defect.
-Normal main [skip ci] commit/push authorized; no Actions (3000min), Node24 retained.
+Local [skip ci] commits authorized; main push remains at the recorded approval boundary. No Actions (3000min), Node24 retained.
 
 ## Environment and operating constraints
 

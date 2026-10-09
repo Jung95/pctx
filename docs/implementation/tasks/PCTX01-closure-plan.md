@@ -416,3 +416,44 @@ for the already frozen representation/transport classes. No other official task
 starts. Original four macOS1s startup failures and required-platform gaps remain
 open; inactive PCTX36/PCTX47 backlog unchanged. No Actions, whole/platform rerun
 or push retry. All jobs terminal; local integration only.
+
+## Current G05-D05 diagnostic — 2026-10-09
+
+Only **PCTX01** remains active (`implementing`); **G05-D05 remains a product
+failure**, not closed. Detail33/40, whole gates0/10, fixed denominator40 unchanged.
+[Owned-child snapshot evidence](evidence/pctx01-startup-thread-snapshot-verification.json)
+adds pre-expiry task/thread observations; production and original tests unchanged.
+Prior balanced/timeline512-attempt experiments and retained dyld samples were read,
+not repeated. No startup pass is substituted for the original4 failures.
+
+Initial raw8-concurrent/16-wave workload:127 within-budget,1 original1s expiry.
+The expired child's exact PID/native start identity matches250ms/751ms observations:
+task suspend_count0, no task userCPU/syscall progress, no output; actual cancellation
+signal9 and bounded reaping retained. Initial thread bytes0 are unavailable, from
+incorrect handle/ID-flavor pairing; zero fields do not describe actual thread state.
+Corrected matching pthread-handle info yields9 valid waiting-state3 records with
+task suspend_count0. Subsequent128 within-budget observations are diagnostic only;
+no code repair or original regression qualification. Observer overhead is recorded.
+
+Independent read-only review confirms counts/hashes, with two timing/ownership
+qualifications: corrected waiting records concern later nonexpired children, not
+the expired child; result clock precedes waitid, so within-budget is the recorded
+pre-probe criterion, not exact post-probe latency proof. No promoting rerun.
+
+The raw single-threaded launch driver differs from the actual multithreaded
+supervisor. Waiting and task suspension counts do not identify blocked syscall,
+kernel wait reason, policy cause or universal startup latency. Exact cause remains
+unproved; no environment exemption. Strict native diagnostic compilation passes;
+wrapper cache warnings and initial API-fixture error remain in evidence. No Rust
+rerun, Actions, security/permission change or push retry. All jobs terminal.
+
+A target-only spindump capability check on this execution shell was refused:
+`spindump must be run as root when sampling the live system` (exit77).
+Initial fractional-duration rejection64 is retained separately; no capture occurred.
+No sudo or privilege change attempted. Exact kernel wait observation therefore
+needs an authorized administrator capability; this does not excuse product failures.
+
+Next action stays **G05-D05**: identify the exact owned child's pre-expiry wait
+reason with an authorized read-only capability, or establish a concrete supervisor
+defect. Do not repeat unchanged startup attempts or switch official tasks. Required
+native-platform gaps and PCTX36/PCTX47 backlog remain separate and unresolved.

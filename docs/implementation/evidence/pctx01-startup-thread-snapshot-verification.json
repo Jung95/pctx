@@ -1,0 +1,254 @@
+{
+  "task": "PCTX01",
+  "condition": "PCTX01-G05-D05",
+  "status": "product_failure unresolved; diagnostic progress only",
+  "base_revision": "bab1bcf",
+  "fixed_register": {
+    "closed_details": 33,
+    "detail_denominator": 40,
+    "closed_gates": 0,
+    "gate_denominator": 10,
+    "new_ids": []
+  },
+  "environment": {
+    "os": "macOS",
+    "architecture": "arm64",
+    "sdk": "MacOSX SDK in CommandLineTools"
+  },
+  "production_and_original_tests_unchanged": true,
+  "source_sha256": {
+    "src/query_process.rs": "74c4c46c6b224563c63e9e2d7a9beac7996ef69735b072a39ee22c9aa989d6cb",
+    "src/main.rs": "7c22679377a9798df2536d97fff768086991114467e5838ac81759592ce6a8d9",
+    "src/project.rs": "dab0a6364644dfabb2221d9af6ef950d3ee16507e32d3afb35659c7ee15ded86",
+    "tests/project_deadline.rs": "8b9fbc97fbd5acaf612b2d75b94cf810faa2b61614b654495082462b1941a8dc"
+  },
+  "design": {
+    "concurrent_children": 8,
+    "waves": 16,
+    "original_budget_ms": 1000,
+    "raw_single_thread_parent": true,
+    "child_body": "Byte-identical isolated shebang fixture with owned process-group existence, stdout/stderr6 bytes; first execution cold by path, no warmup",
+    "observation": "250ms/750ms exact unreaped direct-child PID/ppid/uid/native start identity; proc task counters, read-only task name port/TASK_BASIC_INFO, list pthread handles and matching thread info",
+    "effects": "No production/original-test change, task mutation/debugger attachment, task_for_pid, security policy/entitlement changes, interpreter substitution, relaxed budgets or Actions"
+  },
+  "runs": [
+    {
+      "session": 20047,
+      "driver_exit": 0,
+      "driver_exit_is_not_test_pass": true,
+      "source": "pctx01-startup-thread-snapshot-initial.c.txt",
+      "source_sha256": "7acd0f53744416aa79d40e4571f834c03c3db699d7e0cb2ad92955c590c1c10b",
+      "binary": "/private/tmp/pctx01-startup-thread-snapshot",
+      "binary_sha256": "e72f0cf42bea3409a6815deada4a7193234577af25f64c6d931f4f6b6022b7c7",
+      "results": "pctx01-startup-thread-snapshot.jsonl",
+      "results_sha256": "04cf0ad52c34896a881b10f81a26cb7086b1e915e7c9d63f8796bd5d06f07a5c",
+      "attempts": 128,
+      "within_budget": 127,
+      "expired": 1,
+      "snapshots": 10,
+      "snapshot_identity_bound": true,
+      "snapshots_all_pre_expiry": true,
+      "snapshot_max_observer_us": 58,
+      "max_spawn_us": 1154,
+      "max_observation_us": 1000439,
+      "task_basic_successes": 10,
+      "task_suspend_counts": [
+        0
+      ],
+      "valid_thread_records": 0,
+      "valid_thread_run_states": [],
+      "expired_records": [
+        {
+          "kind": "result",
+          "worker": 7,
+          "wave": 0,
+          "pid": 98280,
+          "spawn_us": 211,
+          "observation_us": 1000439,
+          "expired": true,
+          "within_budget": false,
+          "stdout_bytes": 0,
+          "stderr_bytes": 0,
+          "actual_signal": 9,
+          "exit_code": -1,
+          "kill_rc": 0,
+          "cleanup_us": 1521,
+          "cleanup_failed": false,
+          "snapshots": 2
+        }
+      ],
+      "expired_pre_observations": [
+        {
+          "kind": "snapshot",
+          "worker": 7,
+          "wave": 0,
+          "pid": 98280,
+          "start_sec": 1791518862,
+          "start_usec": 329112,
+          "identity": true,
+          "at_us": 250082,
+          "end_us": 250096,
+          "observer_us": 14,
+          "pre_expiry": true,
+          "status": 2,
+          "flags": 20987920,
+          "task_bytes": 96,
+          "user_cpu": 0,
+          "system_cpu": 550,
+          "mach_calls": 0,
+          "unix_calls": 0,
+          "context_switches": 2,
+          "thread_list_bytes": 8,
+          "task_name_result": 0,
+          "task_basic_result": 0,
+          "task_suspend_count": 0,
+          "threads": [
+            {
+              "id": 0,
+              "bytes": 0,
+              "run_state": 0,
+              "flags": 0,
+              "sleep_time": 0,
+              "user_cpu": 0,
+              "system_cpu": 0
+            }
+          ]
+        },
+        {
+          "kind": "snapshot",
+          "worker": 7,
+          "wave": 0,
+          "pid": 98280,
+          "start_sec": 1791518862,
+          "start_usec": 329112,
+          "identity": true,
+          "at_us": 751282,
+          "end_us": 751294,
+          "observer_us": 12,
+          "pre_expiry": true,
+          "status": 2,
+          "flags": 20987920,
+          "task_bytes": 96,
+          "user_cpu": 0,
+          "system_cpu": 550,
+          "mach_calls": 0,
+          "unix_calls": 0,
+          "context_switches": 2,
+          "thread_list_bytes": 8,
+          "task_name_result": 0,
+          "task_basic_result": 0,
+          "task_suspend_count": 0,
+          "threads": [
+            {
+              "id": 0,
+              "bytes": 0,
+              "run_state": 0,
+              "flags": 0,
+              "sleep_time": 0,
+              "user_cpu": 0,
+              "system_cpu": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "session": 26511,
+      "driver_exit": 0,
+      "driver_exit_is_not_test_pass": true,
+      "source": "pctx01-startup-thread-snapshot.c.txt",
+      "source_sha256": "9b3f7e63de7a64f6d26501a8ce22d1193018e5fbed4844d87bce567a9bfd7b6f",
+      "binary": "/private/tmp/pctx01-startup-thread-snapshot-fixed",
+      "binary_sha256": "4123a5e2eea6139d9aae4363eb90dd73f3dccd17000bc3f61b0caa4c62c88eb3",
+      "results": "pctx01-startup-thread-snapshot-fixed.jsonl",
+      "results_sha256": "cf52e38527239413132e8eec470b9a88f5406476b9f7c4fcf534401b734aea95",
+      "attempts": 128,
+      "within_budget": 128,
+      "expired": 0,
+      "snapshots": 9,
+      "snapshot_identity_bound": true,
+      "snapshots_all_pre_expiry": true,
+      "snapshot_max_observer_us": 42,
+      "max_spawn_us": 499,
+      "max_observation_us": 904460,
+      "task_basic_successes": 9,
+      "task_suspend_counts": [
+        0
+      ],
+      "valid_thread_records": 9,
+      "valid_thread_run_states": [
+        3
+      ],
+      "expired_records": [],
+      "expired_pre_observations": []
+    }
+  ],
+  "builds": {
+    "initial_wrapper": "build.log cache warnings despite exit0, not final strict proof",
+    "initial_live": "build-final.log directCLT -Wall -Wextra -Werror PASS",
+    "corrected_live": "build-fixed.log same strict flags PASS"
+  },
+  "evidence_sha256": {
+    "pctx01-startup-thread-snapshot-fixed-run.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "pctx01-startup-thread-snapshot-build-fixed.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "pctx01-startup-thread-snapshot.jsonl": "04cf0ad52c34896a881b10f81a26cb7086b1e915e7c9d63f8796bd5d06f07a5c",
+    "pctx01-startup-thread-snapshot-run.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "pctx01-startup-thread-snapshot-fixed.jsonl": "cf52e38527239413132e8eec470b9a88f5406476b9f7c4fcf534401b734aea95",
+    "pctx01-startup-thread-snapshot.c.txt": "9b3f7e63de7a64f6d26501a8ce22d1193018e5fbed4844d87bce567a9bfd7b6f",
+    "pctx01-startup-thread-snapshot-build-final.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "pctx01-startup-thread-snapshot-build.log": "66aec95c131fdada6433f0c55c8b88acdc7b3daa2d6c058ff80c29111c4f4de5",
+    "pctx01-startup-thread-snapshot-initial.c.txt": "7acd0f53744416aa79d40e4571f834c03c3db699d7e0cb2ad92955c590c1c10b",
+    "pctx01-startup-spindump-capability.log": "353f0f693faf20a1aff2f5193d5c69135c0751228200979c95ec88166dc02bd5",
+    "pctx01-startup-spindump-capability-fixed.log": "b1de39563f46266e795b3f43dab5d9ad4ea2c444faddfb2d4a0c4df69173c92b",
+    "pctx01-startup-kernel-observation-plan.md": "5e9c6ea02e53cca2df2acbe11ea74984cb6a1f5345719baa2ae289ce0b852848"
+  },
+  "findings": [
+    "Initial128-attempt workload produced127 within-budget/1 actual1s expiry with0 output; exact owned child had task suspend_count0 at250/751ms, unchanged task userCPU0/syscalls0 and signal9 after cancellation.",
+    "Initial thread fields are unavailable placeholders: bytes0 due pthread-handle/unique-ID flavor mismatch. They do not prove thread state0. Initial result retained.",
+    "Corrected LISTTHREADS->PIDTHREADINFO gives9 valid112byte records, run_state3 and task suspend_count0; all raw attempts happened within1s. This is a changed diagnostic observation, not product repair or retry qualification.",
+    "Task basic zero excludes a positive task suspension count at sampled instants only. Waiting state3 does not identify kernel wait reason, admission/scheduling cause, blocked syscall or exact child entry-PC.",
+    "Earlier counterbalanced/timeline and _dyld_start samples remain independent evidence; no unchanged rerun performed."
+  ],
+  "limitations": [
+    "Raw single-threaded parent launching8 children/wave is not the product supervisor or original multithreaded8x16 startup regression.",
+    "Single observer loops are sequential; per-child elapsed includes setup/other-child observations and cleanup. Measured overhead is not a causal isolation proof.",
+    "No exact blocked syscall, kernel stack/wait-event or policy cause is available from these SDK fields; no environment exemption or original regression closure follows.",
+    "Native calls and reaping remain cooperative;1s cleanup cap and atexit fallback do not qualify arbitrary descendants, panic/crash, observer blocking or syscall cancellation.",
+    "Initial wrapper cache warnings and thread-flavor fixture error retained. No whole gate, repeated original test or Rust source/static rerun because production is unchanged.",
+    "Required other platforms, inactive PCTX36/PCTX47 backlog and rejected main-push boundary remain unchanged."
+  ],
+  "next_action": "Keep G05-D05 active. Obtain exact owned-child pre-expiry wait reason/kernel stack through an authorized read-only observation capability, or establish a concrete supervisor defect. Do not repeat unchanged startup attempts or start another official task.",
+  "primary_sources": [
+    "Local SDK sys/proc_info.h and mach/task_info.h/thread_info.h: buffer/enum definitions",
+    "https://raw.githubusercontent.com/apple-oss-distributions/xnu/main/bsd/kern/proc_info.c"
+  ],
+  "independent_review": {
+    "agent": "/root/work_control",
+    "status": "read-only review complete",
+    "finding": "Counts/hashes match; expired child has task0 but no valid thread state. Valid waiting3 samples belong to later nonexpired run. No original repair/cause conclusion.",
+    "no_edits_builds_tests": true
+  },
+  "observation_capability": {
+    "tool": "/usr/sbin/spindump",
+    "scope": "only current owned execution shell, -onlyTarget -noBinary -noIPC; capability check only, no other-process trace",
+    "initial_attempt": {
+      "exit": 64,
+      "log": "pctx01-startup-spindump-capability.log",
+      "result": "Duration0.02 rejected; no capture"
+    },
+    "supported_attempt": {
+      "exit": 77,
+      "log": "pctx01-startup-spindump-capability-fixed.log",
+      "result": "spindump must be run as root when sampling the live system"
+    },
+    "kernel_capture": "unavailable at current user privileges; no sudo or permission changes attempted",
+    "impact": "Exact blocked wait/kernel stack remains unobserved; original product_failure is not converted to an environment exemption.",
+    "proposal": "pctx01-startup-kernel-observation-plan.md",
+    "authorization": "Human question pending; no privileged observation executed"
+  },
+  "qualifications": [
+    "Driver measures elapsed before waitid and refreshes it only for snapshots. within_budget reflects recorded pre-probe criterion, not exact post-waitid root-exit-before1s proof. No rerun to promote this timing.",
+    "Initial expired PID has no valid thread record; corrected state3 observations concern other later nonexpired children.",
+    "Atexit cleanup fallback is cooperative, not error/EINTR/panic/crash or arbitrary descendant qualification."
+  ]
+}
