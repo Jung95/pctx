@@ -15,6 +15,27 @@ not all-local completion. Other official tasks remain inactive. Do not repeat
 this initial reorganization; execute fixed conditions to closure. PCTX01 done
 then next official task's finite list within the same Goal.
 
+## Late-startup target collector — terminal session99069
+
+[750ms manifest](evidence/pctx01-startup-kernel-ready-750-verification.json)
+binds changed selection/code/binary/raw128 outcomes and target7514 trace. Driver/
+collector/tool terminal0; selected identity retained through observation, all wave
+reaps and known PID/root-private cleanup confirmed. Selected target has17/17
+AppleSystemPolicy script-evaluation waiting samples, wall778–862ms after native
+fork, then exits0 with6/6bytes at recorded864086us. Three distinct7517/7519/7520
+expire at original1s and remain untraced. Raw125 recorded within/3 expire, no
+cleanup failures. No original four failure cause/repair/exemption follows.
+
+Two observation selections captured successful targets; responsibility and frozen
+completion remain unchanged: PCTX01 common admission/clock/response, original four
+macOS contracts still unqualified,33/40 and0/10. No new producer work, scope IDs,
+platform substitute, warmup or unchanged rerun. Independent read-only review verified counts and limits. Next finite selection:
+gather first-wave750ms snapshots over20ms without pausing driver/read drain;
+reverse observation order, validate current native identity/liveness and original
+age<1s, issue one request or abort. Identity-only verifier needs a live-task gate.
+No further execution yet.
+All jobs terminal. Main published through482aec5; current750 evidence local.
+
 ## Single-authentication collector — terminal session91326
 
 Human authentication completed; administrator collector ready before ordinary-user

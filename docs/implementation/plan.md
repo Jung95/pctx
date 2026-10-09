@@ -17,6 +17,17 @@ if external conditions block completion, report the exact condition and required
 action, preserve the current task, and do not select another task. Current selection:
 PCTX01, implementing, no next official task.
 
+## Latest late-startup observation and reassessment — 2026-10-09
+
+[750ms diagnostic](evidence/pctx01-startup-kernel-ready-750-verification.json)
+records17 policy-wait samples of target7514 at wall778–862ms after native fork;
+that child subsequently succeeds864086us. Three distinct children expire original
+1s and are untraced. Raw128/125 recorded within/3 expire; all driver/collector/tool
+terminal0, reaps/root-private cleanup confirmed. Both observation selections
+captured nonexpired targets; do not assign their cause to original four failures.
+Frozen scope/responsibility unchanged,33/40 and0/10; G05-D05 stays product_failure.
+Review finite target selection; no unchanged retry, warmup, new task or exemption.
+
 ## Latest successful single-auth observation — 2026-10-09
 
 [Ready collector manifest](evidence/pctx01-startup-kernel-ready-verification.json)

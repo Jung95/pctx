@@ -1,0 +1,45 @@
+import json,os,shlex,subprocess,tempfile,threading,time
+from pathlib import Path
+base=Path('/Users/dev/PCTX/docs/implementation/evidence')
+root=Path(tempfile.mkdtemp(prefix='pctx01-kernel-ready-750-',dir='/private/tmp'))
+binary='/private/tmp/pctx01-startup-kernel-ready'
+command=shlex.join([binary,'--collect',str(root),str(os.getuid())])
+script='do shell script '+json.dumps(command)+' with administrator privileges'
+auth=subprocess.Popen(['/usr/bin/osascript','-e',script],stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True)
+print(json.dumps({'kind':'authorization','pid':auth.pid,'root':str(root),'children_started':False}),flush=True)
+while not (root/'collector-ready').exists() and auth.poll() is None:time.sleep(0.05)
+if auth.poll() is not None:
+    out,err=auth.communicate()
+    result={'collector_exit':auth.returncode,'collector_stdout':out,'collector_stderr':err,'root':str(root),'driver_started':False}
+    (base/'pctx01-startup-kernel-ready-750-result.json').write_text(json.dumps(result,indent=2)+'\n')
+    print(json.dumps(result));raise SystemExit(1)
+print(json.dumps({'kind':'collector_ready','children_started':True}),flush=True)
+p=subprocess.Popen([binary,str(root)],stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True)
+selected=None;observer=None;records=[]
+def publish(row):
+    until=time.monotonic()+3;ack=root/'capture-ack'
+    while not ack.exists() and time.monotonic()<until:time.sleep(.001)
+    retained=ack.exists() and ack.read_text().strip()==str(row['pid'])
+    request=root/'request-staging'
+    if retained:
+        request.write_text(f"{row['pid']} {p.pid} {row['start_sec']} {row['start_usec']} {row['origin_us']}\n")
+    else:request.write_text('invalid retention\n')
+    request.rename(root/'collector-request')
+    out,err=auth.communicate()
+    records.append({'selected':row,'retention_ack':retained,'collector_exit':auth.returncode,'collector_stdout':out,'collector_stderr':err})
+    (root/'capture-done').write_text('collector terminal\n')
+with (base/'pctx01-startup-kernel-ready-750.jsonl').open('w') as f:
+    for line in p.stdout:
+        f.write(line);f.flush();row=json.loads(line)
+        if selected is None and row.get('kind')=='snapshot' and row.get('identity') and row.get('pre_expiry') and row.get('at_us',0)>=750000:
+            selected=row;(root/'capture-target').write_text(str(row['pid'])+'\n')
+            observer=threading.Thread(target=publish,args=(row,));observer.start()
+    code=p.wait()
+if observer:observer.join()
+else:
+    (root/'collector-request').write_text('no pre-expiry candidate\n')
+    out,err=auth.communicate();records.append({'collector_exit':auth.returncode,'collector_stdout':out,'collector_stderr':err,'reason':'no eligible snapshot'})
+result={'driver_exit':code,'driver_stderr':p.stderr.read(),'root':str(root),'parent':p.pid,'selected':selected,'observers':records,'trace_exists':(root/'kernel.txt').exists(),'scope':'one still-live750ms identity-validated original-clock child, administrator ready before ordinary-user workload'}
+(base/'pctx01-startup-kernel-ready-750-result.json').write_text(json.dumps(result,indent=2)+'\n')
+if (root/'kernel.txt').exists():(base/'pctx01-startup-kernel-ready-750-trace.txt').write_bytes((root/'kernel.txt').read_bytes())
+print(json.dumps(result),flush=True)
