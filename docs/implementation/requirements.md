@@ -18,36 +18,39 @@ in [PCTX01-closure-plan](tasks/PCTX01-closure-plan.md), its40-item register and
 140 leaves/172 help paths/12 bounded R groups remain fixed. Required macOS
 arm64/x86_64, Linux x86_64 and Windows x86_64 integration are separately open G09.
 
-Current **G03-D03 is closed as bounded local pure-grammar qualification**.
-The [140-route crosswalk](evidence/pctx01-grammar-crosswalk.json) preserves all
-C001–C140 identities and maps actual validators, unrestricted lookup/parser-only
-routes and input/state-dependent exceptions to source hashes and named proofs.
-Current focused93 PASS includes exact1855-case/140-leaf parser replay and16
-existing authored admission suites. Additional Runner capacity1 and existing Run
-capacity1 PASS qualify explicit operational metadata-budget8 exceptions without
-child/resource effects. These floors remain in producers: local Helper owner/task
-checks precede capacity, and cloud intent bypasses the local floor. They belong to
-existing G04-D03/G05-D06 response-budget/exit conditions, not invented argument2
-restrictions or reordered policy/state/capability. Exact endpoint/state combinations
-remain there. Format/locked all-target Clippy PASS; independent final mapping
-review found no missing pure-grammar boundary. No runtime behavior changed.
-[Current evidence](evidence/pctx01-grammar-crosswalk-verification.json).
-G03-D04 input closure remains qualified; independent producer semantics, G08 races,
-G09 native platforms and four original macOS startup failures remain separate.
-Detail **27/40**, whole gates **0/10**; denominator and140/172/12 counts unchanged.
+Current **G05-D06 remains open**; its shared cancellation boundary is implemented
+and has bounded native macOS arm64 proof. Ctrl-C is latched by the CLI, checked at
+cooperative request boundaries and handled by normal cleanup, not inside a signal
+callback. Owned query/manual/registered children are reaped; native signal/status
+and durable output remain distinct from wrapper CANCELLED130. Registered cancelled
+artifacts produce cancelled check evidence. Proven-unspawned slots are released
+before fallible evidence recording; living/unknown groups never gain TTL release.
 
-Prior G02-D04 parser1855 cases/10184 native refusals and G05-D04 stored48-site
-closures remain qualified by their linked evidence. Current binary7 replays the
-saved parser matrix, and persisted22 regressions pass. Four original-budget
-macOS startup product failures remain. Current focused Tick passes once but its
-occurrence algorithm is unchanged; retained inactive PCTX36 failure is not erased.
-Whole suite is not green. No Actions, full/platform run or active heavy job.
+Actual CLI cancellation4 and registered cancellation2 PASS cover held stdin,
+NDJSON watch, an owned finite query, both Run exit policies, CheckRun/check alias
+and an acquired/no-child request blocked at SQL CheckBegin. Existing Run exit11
+and non-cancellation Runner31 passed in the retained focused run, which also
+contains the then-failing new cancellation test; only changed cases were rerun
+and corrected. Earlier malformed fixture assertions, source-changing fixture
+staleness and the actual cancelled-as-failed defect remain in evidence. This is
+not a passing whole suite or complete shared exit/platform qualification.
+[Current evidence](evidence/pctx01-cancellation-verification.json).
+Final related24 PASS; format/locked all-target Clippy -D warnings PASS. Independent
+read-only review accepted this bounded candidate. All test jobs are terminal.
 
-Next fixed candidate: finish **G05-D06** one shared exit/cancellation matrix.
-Closed G03-D03/D04 do not qualify independent producer functionality or G08/G09.
-Keep operational metadata-capacity8 and owner/state priorities explicit.
-No lookup-grammar invention, independent producer expansion, new IDs or denominator.
-PCTX01 remains active until all40 conditions and required platforms qualify.
+G03-D03/D04 and previous bounded parser/storage closures remain qualified;
+no new fixed ID or denominator. Detail **27/40**, whole gates **0/10**.
+The four original macOS startup failures remain product failures, not environment
+exemptions. Inactive PCTX36 Tick failure remains unresolved. Required macOS
+x86_64/Linux x86_64/Windows x86_64 still need real hosts; Windows console handler
+source is implemented, not native-verified. No Actions or whole/platform rerun.
+
+Next exact action is still **G05-D06**: finish the frozen shared exit matrix
+0/2/3/4/5/6/7/8/9/10/130 plus child exception, including cancellation/publication
+failure combinations and local Helper/guardian cancellation. Suppression covers
+only ownership attachment and finalization; it does not renew deadlines or imply
+hard cancellation of disk I/O/SQLite busy waits. After that follow remaining
+fixed PCTX01 conditions. No other official task is selected.
 
 ## Development items
 

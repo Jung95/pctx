@@ -1,0 +1,42 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 7.69s
+     Running tests/cli_cancellation.rs (target/debug/deps/cli_cancellation-b8aaf1c4d3c7fb49)
+
+running 3 tests
+test held_stdin_cancel_is_one_complete_json_and_creates_no_context ... FAILED
+test run_cancel_preserves_native_truth_artifact_and_one_execution_for_both_policies ... FAILED
+test watch_cancel_keeps_existing_ndjson_frames_and_reports_cancelled ... FAILED
+
+failures:
+
+---- held_stdin_cancel_is_one_complete_json_and_creates_no_context stdout ----
+
+thread 'held_stdin_cancel_is_one_complete_json_and_creates_no_context' (9200661) panicked at tests/cli_cancellation.rs:74:5:
+assertion `left == right` failed
+  left: Null
+ right: 130
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- run_cancel_preserves_native_truth_artifact_and_one_execution_for_both_policies stdout ----
+
+thread 'run_cancel_preserves_native_truth_artifact_and_one_execution_for_both_policies' (9200674) panicked at tests/cli_cancellation.rs:74:5:
+assertion `left == right` failed
+  left: Null
+ right: 130
+
+---- watch_cancel_keeps_existing_ndjson_frames_and_reports_cancelled stdout ----
+
+thread 'watch_cancel_keeps_existing_ndjson_frames_and_reports_cancelled' (9200689) panicked at tests/cli_cancellation.rs:109:5:
+assertion `left == right` failed: Output { status: ExitStatus(unix_wait_status(512)), stdout: "", stderr: "" }
+  left: Some(2)
+ right: Some(130)
+
+
+failures:
+    held_stdin_cancel_is_one_complete_json_and_creates_no_context
+    run_cancel_preserves_native_truth_artifact_and_one_execution_for_both_policies
+    watch_cancel_keeps_existing_ndjson_frames_and_reports_cancelled
+
+test result: FAILED. 0 passed; 3 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.72s
+
+error: test failed, to rerun pass `--test cli_cancellation`

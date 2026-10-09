@@ -149,3 +149,25 @@ An output identifier is copied only when present; its absence cannot erase a
 known prelaunch refusal. Exact minimum and minimum+1 boundaries include the
 final newline. Below the measured minimum, the necessary complete rejection may
 exceed the invalid requested limit.
+
+## User cancellation
+
+After request admission the CLI handles Ctrl-C cooperatively. At observed request
+boundaries it returns CANCELLED with exit130; JSON mode remains one complete error
+document. A cancelled child execution retains its actual native exit/signal and,
+when publication succeeds, its durable output handle. The PCTX cancellation code
+takes precedence over the Run child-exit policy. Registered cancelled execution
+evidence cannot establish a passing check. Resource slots are released only when
+the existing owner checks prove the group ended, or when no child was spawned.
+
+Board/activity streams keep already delivered frames and report the cancellation
+error event on stderr under their existing streaming transport. Cancellation does
+not promise hard interruption of blocking filesystem calls or SQLite busy waits.
+Once normal finalization starts, ownership/artifact/response publication completes
+without re-entering cancellation; request deadlines and storage failures remain
+active. SIGTERM and Windows console closure are separate OS lifecycle events.
+
+The native proof currently covers macOS arm64 held stdin, continuous watch, owned
+finite queries, manual Run and direct registered CheckRun/check alias. Local Helper,
+canonical guardian cancellation, cancellation/publication races and native Windows
+console delivery remain unqualified. See the [current evidence](../implementation/evidence/pctx01-cancellation-verification.json).

@@ -1285,6 +1285,7 @@ fn execute_inner(p: &Project, command: &RunnerCommand) -> Result<Value> {
             let begin = match begin {
                 Ok(v) => v,
                 Err(e) => {
+                    let _finalization = crate::cancellation::finalize();
                     release_not_spawned(&dir, &mut job)?;
                     return Err(e);
                 }
@@ -1297,15 +1298,17 @@ fn execute_inner(p: &Project, command: &RunnerCommand) -> Result<Value> {
             let final_binding = match profile(p, key) {
                 Ok(v) => v,
                 Err(e) => {
-                    work::record_runner_not_started(p, &check_id, &e.code)?;
+                    let _finalization = crate::cancellation::finalize();
                     release_not_spawned(&dir, &mut job)?;
+                    work::record_runner_not_started(p, &check_id, &e.code)?;
                     return Err(e);
                 }
             };
             diagnostics.phase("final_profile_ready");
             if final_binding.fingerprint != b.fingerprint {
-                work::record_runner_not_started(p, &check_id, "CONFIG_CHANGED")?;
+                let _finalization = crate::cancellation::finalize();
                 release_not_spawned(&dir, &mut job)?;
+                work::record_runner_not_started(p, &check_id, "CONFIG_CHANGED")?;
                 return Err(error(
                     "CONFIG_CHANGED",
                     "Profile or inputs changed after check began",
@@ -1316,8 +1319,9 @@ fn execute_inner(p: &Project, command: &RunnerCommand) -> Result<Value> {
             let guardian = match start_guardian(p, &b, &dir, &mut job) {
                 Ok(v) => v,
                 Err(e) => {
-                    work::record_runner_not_started(p, &check_id, &e.code)?;
+                    let _finalization = crate::cancellation::finalize();
                     release_not_spawned(&dir, &mut job)?;
+                    work::record_runner_not_started(p, &check_id, &e.code)?;
                     return Err(e);
                 }
             }
@@ -1360,6 +1364,7 @@ fn execute_inner(p: &Project, command: &RunnerCommand) -> Result<Value> {
                 &b.profile.reporter,
                 &check_binding,
             );
+            let _finalization = crate::cancellation::finalize();
             if job.pid.is_none()
                 && let Some(g) = guardian.as_ref()
             {
@@ -2284,19 +2289,24 @@ fn helper_request(
     let (dir, mut job) = acquire(p, &b)?;
     helper.job_id = Some(job.job_id.clone());
     helper.state = "starting_or_unknown".into();
-    save_helper(p, &helper)?;
-    if profile(p, key)?.fingerprint != b.fingerprint {
-        release_not_spawned(&dir, &mut job)?;
-        return Err(error(
-            "CONFIG_CHANGED",
-            "Auxiliary binding changed before execution",
-            9,
-        ));
-    }
-    let guardian = match start_guardian(p, &b, &dir, &mut job) {
+    let admission = (|| {
+        save_helper(p, &helper)?;
+        if profile(p, key)?.fingerprint != b.fingerprint {
+            return Err(error(
+                "CONFIG_CHANGED",
+                "Auxiliary binding changed before execution",
+                9,
+            ));
+        }
+        start_guardian(p, &b, &dir, &mut job)
+    })();
+    let guardian = match admission {
         Ok(v) => v,
         Err(e) => {
+            let _finalization = crate::cancellation::finalize();
             release_not_spawned(&dir, &mut job)?;
+            helper.state = "not_started".into();
+            save_helper(p, &helper)?;
             return Err(e);
         }
     }
@@ -2335,6 +2345,7 @@ fn helper_request(
             Ok(())
         },
     );
+    let _finalization = crate::cancellation::finalize();
     if job.pid.is_none() {
         if let Some(g) = guardian.as_ref() {
             g.borrow_mut().stop_without_child()?;

@@ -193,3 +193,12 @@ review found no missing pure-grammar boundary. No runtime behavior changed.
 G03-D04 input closure remains qualified; independent producer semantics, G08 races,
 G09 native platforms and four original macOS startup failures remain separate.
 Detail **27/40**, whole gates **0/10**; denominator and140/172/12 counts unchanged.
+
+## G05-D06 bounded cancellation candidate — 2026-10-09
+
+Shared Ctrl-C handling and narrow finalization are implemented. Actual native
+CLI cancellation4/registered2 PASS; baseline and earlier failures remain retained.
+No condition closes: G05-D06 full exit matrix/cancellation-publication combinations
+and Helper/guardian paths remain open. Required native platforms remain in G09,
+original startup failures in G05-D05/G09-D01. Detail27/40 and gates0/10 unchanged.
+See [cancellation evidence](../evidence/pctx01-cancellation-verification.json).

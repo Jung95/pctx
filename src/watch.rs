@@ -100,6 +100,7 @@ pub fn run(project: &Project, board: bool, since: i64, follow: bool, ndjson: boo
     }
     let mut next_observation = Instant::now() + POLL;
     loop {
+        project.check_deadline()?;
         let page = work::activity(project, cursor)?;
         for event in page["events"].as_array().into_iter().flatten() {
             if ndjson || !board {
@@ -125,7 +126,11 @@ pub fn run(project: &Project, board: bool, since: i64, follow: bool, ndjson: boo
             return Ok(());
         }
         // No independent daemon, upstream polling, durable writes, or model wakeup.
-        thread::sleep(POLL);
+        let wake = Instant::now() + POLL;
+        while Instant::now() < wake {
+            project.check_deadline()?;
+            thread::sleep(Duration::from_millis(20));
+        }
     }
 }
 

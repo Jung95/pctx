@@ -1466,9 +1466,16 @@ fn run_inner(
             }
         };
         let pid = child.id();
-        if let Some(callback) = on_spawn.as_mut()
-            && let Err(e) = callback(pid)
-        {
+        let spawn_observation = {
+            // Attach durable ownership before processing a latched Ctrl-C.
+            // The next monitor iteration cancels and retains native truth.
+            let _finalization = crate::cancellation::finalize();
+            match on_spawn.as_mut() {
+                Some(callback) => callback(pid),
+                None => Ok(()),
+            }
+        };
+        if let Err(e) = spawn_observation {
             #[cfg(unix)]
             unsafe {
                 libc::kill(-(pid as i32), libc::SIGKILL);
@@ -1516,9 +1523,11 @@ fn run_inner(
             if let Some(status) = child.try_wait()? {
                 break status;
             }
-            if let Some(callback) = on_poll.as_mut()
-                && let Err(e) = callback()
-            {
+            let poll = crate::cancellation::check().and_then(|()| match on_poll.as_mut() {
+                Some(callback) => callback(),
+                None => Ok(()),
+            });
+            if let Err(e) = poll {
                 monitor_error = Some(e);
                 #[cfg(unix)]
                 unsafe {
@@ -1548,6 +1557,10 @@ fn run_inner(
             }
             thread::sleep(Duration::from_millis(5));
         };
+        // Cancellation has been observed and the direct child reaped. Preserve
+        // its native status and publish the artifact even though Ctrl-C remains
+        // latched. Resource owners still separately verify descendant absence.
+        let _finalization = crate::cancellation::finalize();
         stop.store(true, Ordering::Relaxed);
         let out = out_thread
             .join()
@@ -1588,7 +1601,12 @@ fn run_inner(
         };
         #[cfg(not(unix))]
         let signal: Option<i32> = None;
-        let termination = if timed_out {
+        let termination = if monitor_error
+            .as_ref()
+            .is_some_and(|e| e.code == "CANCELLED")
+        {
+            "cancelled"
+        } else if timed_out {
             "timed_out"
         } else if signal.is_some() {
             "signaled"
@@ -1940,7 +1958,9 @@ pub fn diagnostic_locations(p: &Project, output_id: &str) -> Result<Value> {
 #[cfg(unix)]
 pub(crate) fn unverified_report(p: &Project, output_id: &str) -> Result<crate::work::CheckReport> {
     let artifact = load(p, output_id)?;
-    let result = if artifact.termination == "timed_out" {
+    let result = if artifact.termination == "cancelled" {
+        "cancelled"
+    } else if artifact.termination == "timed_out" {
         "timed_out"
     } else if artifact.child_exit_code.is_some_and(|c| c != 0) || artifact.signal.is_some() {
         "failed"

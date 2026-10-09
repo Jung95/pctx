@@ -549,11 +549,13 @@ fn load_observation(root: &Path, deadline: Option<Deadline>, phase: LoadPhase) {
 
 impl Project {
     pub fn check_deadline(&self) -> Result<()> {
+        crate::cancellation::check()?;
         self.deadline
             .map(|deadline| deadline.check())
             .unwrap_or(Ok(()))
     }
     pub fn remaining(&self, maximum: Duration) -> Result<Duration> {
+        crate::cancellation::check()?;
         self.deadline
             .map(|deadline| deadline.remaining().map(|left| left.min(maximum)))
             .unwrap_or(Ok(maximum))

@@ -210,6 +210,136 @@ fn trusted_typed_check_is_real_evidence() {
     assert!(v["data"]["execution"]["spawned"].as_bool().unwrap());
 }
 #[test]
+fn ctrl_c_reaps_registered_child_preserves_truth_and_releases_only_observed_slots() {
+    for alias in [false, true] {
+        let f = Fixture::new(
+            "printf 'one\\n' >> .pctx/invocations\nprintf '%s' \"$$\" > .pctx/child.pid\nexec /bin/sleep 30\n",
+            true,
+            None,
+        );
+        f.trust();
+        let args = if alias {
+            vec![
+                "check",
+                "run",
+                "--task-id",
+                &f.task,
+                "--key",
+                "unit",
+                "--run",
+                &f.run,
+            ]
+        } else {
+            f.run_args()
+        };
+        let mut child = f
+            .command(&args)
+            .env_remove("PCTX_RUNNER_DIAGNOSTICS")
+            .stdout(Stdio::piped())
+            .stderr(Stdio::piped())
+            .spawn()
+            .unwrap();
+        let end = Instant::now() + Duration::from_secs(5);
+        while !fs::read_to_string(f.root.join(".pctx/child.pid"))
+            .is_ok_and(|p| p.parse::<i32>().is_ok())
+        {
+            if Instant::now() >= end {
+                let _ = child.kill();
+                panic!("registered fixture did not reach native child");
+            }
+            std::thread::sleep(Duration::from_millis(10));
+        }
+        let pid: i32 = fs::read_to_string(f.root.join(".pctx/child.pid"))
+            .unwrap()
+            .parse()
+            .unwrap();
+        assert!(f.slot().exists());
+        assert_eq!(unsafe { libc::kill(child.id() as i32, libc::SIGINT) }, 0);
+        let end = Instant::now() + Duration::from_secs(5);
+        while child.try_wait().unwrap().is_none() {
+            if Instant::now() >= end {
+                let _ = child.kill();
+                panic!("registered cancellation did not finalize");
+            }
+            std::thread::sleep(Duration::from_millis(10));
+        }
+        let out = child.wait_with_output().unwrap();
+        assert_eq!(out.status.code(), Some(130), "{out:?}");
+        assert!(out.stderr.is_empty(), "{out:?}");
+        let v: Value = serde_json::from_slice(&out.stdout).unwrap();
+        assert_eq!(v["status"], "error");
+        assert_eq!(v["errors"][0]["code"], "CANCELLED");
+        assert_eq!(v["data"]["execution"]["termination"], "cancelled");
+        assert_eq!(v["data"]["execution"]["signal"], libc::SIGKILL);
+        assert_eq!(v["data"]["execution"]["raw_available"], true);
+        assert_eq!(v["data"]["resources_released"], true);
+        assert_eq!(v["data"]["evidence"]["result"], "cancelled");
+        assert!(!f.slot().exists());
+        assert_eq!(unsafe { libc::kill(pid, 0) }, -1);
+        assert_eq!(
+            fs::read_to_string(f.root.join(".pctx/invocations")).unwrap(),
+            "one\n"
+        );
+    }
+}
+#[test]
+fn ctrl_c_before_check_begin_releases_proven_unspawned_capacity() {
+    let f = Fixture::new("printf 'started' > .pctx/started\n", true, None);
+    f.trust();
+    let control = fs::read_dir(f.data.join("controls"))
+        .unwrap()
+        .map(|e| e.unwrap().path().join("control.sqlite3"))
+        .find(|p| p.is_file())
+        .unwrap();
+    let lock = rusqlite::Connection::open(control).unwrap();
+    lock.execute_batch("BEGIN IMMEDIATE").unwrap();
+    let mut child = f
+        .command(&f.run_args())
+        .env_remove("PCTX_RUNNER_DIAGNOSTICS")
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped())
+        .spawn()
+        .unwrap();
+    let end = Instant::now() + Duration::from_secs(5);
+    while !f.slot().exists() {
+        if Instant::now() >= end || child.try_wait().unwrap().is_some() {
+            let _ = child.kill();
+            lock.execute_batch("ROLLBACK").unwrap();
+            let out = child.wait_with_output().unwrap();
+            panic!("fixture did not reserve before blocked check begin: {out:?}");
+        }
+        std::thread::sleep(Duration::from_millis(10));
+    }
+    let slot: Value = serde_json::from_slice(&fs::read(f.slot()).unwrap()).unwrap();
+    assert!(slot["pid"].is_null());
+    assert_eq!(unsafe { libc::kill(child.id() as i32, libc::SIGINT) }, 0);
+    // The check transaction remains blocked while the user cancellation latches.
+    std::thread::sleep(Duration::from_millis(50));
+    lock.execute_batch("ROLLBACK").unwrap();
+    let end = Instant::now() + Duration::from_secs(5);
+    while child.try_wait().unwrap().is_none() {
+        if Instant::now() >= end {
+            let _ = child.kill();
+            panic!("proven-unspawned cancellation did not finalize");
+        }
+        std::thread::sleep(Duration::from_millis(10));
+    }
+    let out = child.wait_with_output().unwrap();
+    assert_eq!(out.status.code(), Some(130), "{out:?}");
+    assert!(out.stderr.is_empty(), "{out:?}");
+    let v: Value = serde_json::from_slice(&out.stdout).unwrap();
+    assert_eq!(v["errors"][0]["code"], "CANCELLED");
+    assert!(!f.slot().exists());
+    assert!(!f.root.join(".pctx/started").exists());
+    let job = f
+        .host
+        .join("jobs")
+        .join(format!("{}.json", slot["job_id"].as_str().unwrap()));
+    let job: Value = serde_json::from_slice(&fs::read(job).unwrap()).unwrap();
+    assert_eq!(job["state"], "not_started");
+    assert!(job["pid"].is_null());
+}
+#[test]
 fn unknown_and_zero_tests_do_not_pass() {
     for script in ["printf 'all tests passed\\n'\n".to_string(), report(0)] {
         let f = Fixture::new(&script, false, None);

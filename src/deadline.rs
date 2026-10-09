@@ -24,6 +24,7 @@ impl Deadline {
         Ok(Self { end })
     }
     pub fn remaining(self) -> Result<Duration> {
+        crate::cancellation::check()?;
         self.end
             .checked_duration_since(Instant::now())
             .filter(|remaining| !remaining.is_zero())

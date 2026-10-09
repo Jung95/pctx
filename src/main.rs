@@ -450,6 +450,9 @@ fn query_deadline(cli: &Cli) -> Result<Option<pctx::deadline::Deadline>> {
     }
 }
 fn request_error(deadline: Option<pctx::deadline::Deadline>, error: Error) -> Error {
+    if let Err(cancelled) = pctx::cancellation::check() {
+        return cancelled;
+    }
     deadline
         .and_then(|deadline| deadline.check().err())
         .unwrap_or(error)
@@ -458,6 +461,7 @@ fn execute(
     cli: &Cli,
     deadline: Option<pctx::deadline::Deadline>,
 ) -> Result<(String, Project, Value)> {
+    pctx::cancellation::check()?;
     validate_representation(cli)?;
     let root = project::detect_root_with_deadline(cli.root.as_deref(), deadline)?;
     if matches!(cli.command, Command::Init) {
@@ -978,6 +982,15 @@ fn main() {
             refuse_arguments(command, e, output_budget(&cli.command));
         }
     };
+    if !matches!(
+        &cli.command,
+        Command::Runner {
+            command: runner::RunnerCommand::BridgeGuardian { .. }
+        }
+    ) && let Err(e) = pctx::cancellation::install()
+    {
+        refuse_arguments(cli.command.name(), e, output_budget(&cli.command));
+    }
     if follows || matches!(cli.format, Format::Ndjson) {
         if let Err(e) = stream(&cli, deadline) {
             let e = request_error(deadline, e);
@@ -1096,6 +1109,17 @@ fn main() {
             response["coverage"] = json!({"status":"partial","reasons":["capture_incomplete"]});
         }
     }
+    if response["status"] != "error"
+        && let Err(e) = pctx::cancellation::check()
+    {
+        exit = e.exit;
+        response["status"] = json!("error");
+        response["coverage"] = json!({"status":"partial","reasons":[e.code.clone()]});
+        response["errors"] = json!([e]);
+    }
+    // Finish delivery and measurement without discarding an already-observed
+    // cancellation or child result. Original deadline checks remain active.
+    let _finalization = pctx::cancellation::finalize();
     if matches!(&cli.command, Command::Repo { .. }) && exit == 0 {
         match response["data"]["coverage"]["status"].as_str() {
             Some("unsupported") => {
@@ -1129,12 +1153,20 @@ fn main() {
             response["data"]["completeness"] = json!("partial");
             response["data"]["truncated"] = json!(true);
             response["data"]["returned_excerpt"] = json!(true);
-            response["status"] = json!("partial");
-            exit = 3;
+            if response["status"] != "error" {
+                response["status"] = json!("partial");
+                exit = 3;
+            }
         }
         if response["data"]["truncated"] == true {
             response["truncation"] = json!({"truncated":true,"reasons":["body_limit"]});
-            response["coverage"] = json!({"status":"partial","reasons":["body_limit"]});
+            if response["status"] == "error" {
+                if let Some(reasons) = response["coverage"]["reasons"].as_array_mut() {
+                    reasons.push(json!("body_limit"));
+                }
+            } else {
+                response["coverage"] = json!({"status":"partial","reasons":["body_limit"]});
+            }
         }
     }
     if response["data"]["hook_transport"] == true

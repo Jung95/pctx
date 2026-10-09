@@ -1,0 +1,56 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.98s
+     Running tests/cli_delivery.rs (target/debug/deps/cli_delivery-d6142b38e0664ae4)
+
+running 4 tests
+test failed_response_file_and_closed_diagnostic_are_io_error_without_overwrite ... ok
+test undeliverable_help_and_version_return_io_exit_without_project_effects ... ok
+test undeliverable_native_hook_output_is_io_error_without_repeating_import ... ok
+test undeliverable_stream_refusal_returns_io_exit_without_project_effects ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.82s
+
+     Running tests/context_input_deadline.rs (target/debug/deps/context_input_deadline-0de6c57f731310c2)
+
+running 5 tests
+test fifo_task_path_is_rejected_without_waiting_for_a_writer_or_publishing ... ok
+test held_open_task_stdin_times_out_without_index_publication ... ok
+test stdin_flag_restoration_is_observed_in_a_separate_process ... ok
+test task_file_reader_preserves_utf8_and_rejects_oversize_invalid_and_expired_inputs ... ok
+test unix_stdin_flags_probe ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.67s
+
+     Running tests/output_delivery_observation.rs (target/debug/deps/output_delivery_observation-513791f406dd7de4)
+
+running 2 tests
+test observed_live_pipe_write_keeps_delivery_success_after_original_budget_expires ... ok
+test successful_full_delivery_counts_exact_stdout_including_final_newline ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.51s
+
+     Running tests/query_deadline_cli.rs (target/debug/deps/query_deadline_cli-91fccc6ca25b7a4f)
+
+running 9 tests
+test doctor_contention_reports_timeout_with_original_budget_and_unchanged_database ... ok
+test finite_ndjson_contention_preserves_error_code_without_creating_events ... ok
+test finite_saved_routes_accept_timeout_and_reject_zero_before_project_effects ... ok
+test invalid_or_inapplicable_timeout_has_no_project_effects ... ok
+test resource_and_trust_plans_return_complete_envelopes_without_launching ... ok
+test runner_and_trust_read_budgets_validate_before_discovery ... ok
+test saved_cli_reread_never_reruns_and_failed_metering_preserves_delivery_truth ... ok
+test strict_find_waits_only_remaining_budget_and_preserves_active_generation ... ok
+test work_and_quota_reads_accept_request_budget_and_preserve_state_under_contention ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.58s
+
+     Running tests/watch.rs (target/debug/deps/watch-0aa3808534cf4f9e)
+
+running 4 tests
+test closed_stdout_returns_controlled_error_without_panic ... ok
+test compact_watch_renders_essential_columns_and_refreshes ... ok
+test finite_ndjson_drains_all_pages_and_resumes_after_cursor ... ok
+test heartbeat_and_expiry_appear_as_ephemeral_observations ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 6.64s
+

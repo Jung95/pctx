@@ -485,7 +485,7 @@
       "id": "PCTX01-G05-D06",
       "gate": "G05",
       "status": "open",
-      "local_implementation": "remaining",
+      "local_implementation": "bounded_cancellation_qualified; remaining_shared_exit_matrix",
       "completion_condition": "Finish one existing error-to-exit matrix (0,2,3,4,5,6,7,8,9,10,130 and child exception) across shared/frontend facades, including cancelled and source-dependent refusals",
       "spec_sections": [
         "14",
@@ -493,18 +493,19 @@
         "38"
       ],
       "owner": "PCTX01 common boundary; independent producer semantics retain requirement/task owner",
-      "paths": "main.rs,domain.rs and producer facades",
+      "paths": "main.rs,cancellation.rs,deadline.rs,project.rs,domain.rs,output.rs,runner.rs,watch.rs and producer facades",
       "evidence": [
         "pctx01-adapter-errors-verification.json",
-        "pctx01-run-exit-verification.json"
+        "pctx01-run-exit-verification.json",
+        "pctx01-cancellation-verification.json"
       ],
       "verification_environment": "Native macOS arm64 local common proof; all release platforms separately required by G09",
-      "macOS_arm64": "remaining",
+      "macOS_arm64": "bounded_cancel_paths_verified; full_exit_matrix_remaining",
       "macOS_x86_64": "unverified; G09-D02",
       "Linux_x86_64": "unverified; G09-D03",
       "Linux_aarch64": "prior fixed-source full only; inspect linked manifest per contract",
       "Windows_x86_64": "unverified; G09-D04",
-      "documentation_evidence": "closure plan recorded; execution gaps retained"
+      "documentation_evidence": "bounded cancellation proof and explicit remaining combinations"
     },
     {
       "id": "PCTX01-G06-D01",

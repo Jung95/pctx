@@ -1130,3 +1130,29 @@ these boundaries in G04-D03/G05-D06 and prove no child/resource launch. The comm
 minimum complete error-envelope floor remains argument2. Source§14/§40 and actual
 [capacity proof](evidence/pctx01-grammar-crosswalk-verification.json) qualify this
 classification; endpoint/state combinations remain open there.
+
+## PCTX01 cooperative user cancellation (2026-10-09)
+
+Specification §14 requires CANCELLED130 while §38 requires observed native child
+truth and owned resource cleanup. Native baseline SIGINT during held stdin ended
+with signal2 and zero stdout bytes. Install a CLI-owned SIGINT/Windows CTRL_C_EVENT
+atomic callback; library use and private guardians do not install handlers. The
+callback only latches a flag. Existing immutable deadline/project boundaries and
+execution/watch loops observe it. No separate process supervisor or new task is
+introduced. Narrow thread-local finalization guards finish durable spawn ownership,
+reap/capture publication, proven no-child cleanup and response delivery. They
+suppress cancellation only, not original expiry or actual storage errors.
+
+Cancellation produces wrapper130 independently of native SIGKILL status. Artifact
+termination cancelled maps to cancelled check evidence before native-signal failed
+classification. Unknown/living groups retain slots; direct-root reaping alone is
+not resource-release proof. CheckRun no-child release precedes fallible DB recording.
+SIGTERM/CTRL_BREAK/console closure are not converted into this Ctrl-C contract.
+Windows implementation follows [Microsoft's console handler API](https://learn.microsoft.com/en-us/windows/console/setconsolectrlhandler),
+but native console delivery still belongs to required G09 Windows validation.
+Cancellation is cooperative, including disk I/O and SQLite busy waits.
+
+The fixed G05-D06 remains open for its full exit matrix, cancellation/publication
+races and Helper/guardian paths. Existing G05-D02 owns broader callback/storage
+fault truth; G08 owns phase/race/deadline completion. Counts27/40 and0/10 remain.
+Evidence: [cancellation verification](evidence/pctx01-cancellation-verification.json).

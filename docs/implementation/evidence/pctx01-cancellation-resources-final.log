@@ -1,0 +1,10 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.57s
+     Running tests/runner.rs (target/debug/deps/runner-262d46ab6960599b)
+
+running 2 tests
+test ctrl_c_before_check_begin_releases_proven_unspawned_capacity ... ok
+test ctrl_c_reaps_registered_child_preserves_truth_and_releases_only_observed_slots ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 31 filtered out; finished in 1.83s
+

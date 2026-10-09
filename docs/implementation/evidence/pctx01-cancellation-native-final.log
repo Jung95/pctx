@@ -1,0 +1,12 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.41s
+     Running tests/cli_cancellation.rs (target/debug/deps/cli_cancellation-b8aaf1c4d3c7fb49)
+
+running 4 tests
+test finite_query_cancel_reaps_owned_query_child_instead_of_waiting_for_timeout ... ok
+test held_stdin_cancel_is_one_complete_json_and_creates_no_context ... ok
+test run_cancel_preserves_native_truth_artifact_and_one_execution_for_both_policies ... ok
+test watch_cancel_keeps_existing_ndjson_frames_and_reports_cancelled ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.28s
+

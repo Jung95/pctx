@@ -1,0 +1,233 @@
+{
+  "task": "PCTX01",
+  "fixed_condition": "PCTX01-G05-D06",
+  "status": "open",
+  "base_revision": "04d7254e946c7ef49046ea29cada229ae32adca7",
+  "scope": "Bounded cooperative CLI Ctrl-C implementation and native proof; not the whole exit matrix or official task closure",
+  "detail_closure": {
+    "closed": 27,
+    "total": 40
+  },
+  "whole_gates": {
+    "closed": 0,
+    "total": 10
+  },
+  "frozen_leaves": 140,
+  "help_paths": 172,
+  "historical_R_groups": 12,
+  "environment": {
+    "os": "macOS-26.7.1-arm64-arm-64bit-Mach-O",
+    "architecture": "arm64",
+    "rust": "rustc 1.99.0 (b940084d7 2026-09-28)",
+    "execution": "native macOS arm64; isolated temp projects and host slots; no Actions"
+  },
+  "source_sha256": {
+    "Cargo.toml": "179b02f69bdd7c61adc41ed5f71f8737ee692655b46b0bfeb9c1ffe165d8e97f",
+    "Cargo.lock": "f96362897990caba560793601bc9fca08cef5c977907bb06889d5595d2acd7b0",
+    "src/cancellation.rs": "4901638803bb82894b3211d0f9a8f9537850c4bfed3ac178489ec20780114d4f",
+    "src/lib.rs": "5c6e64e886b188169ba708b43d0657a2e96a526c1bc7b533f48c5c59460d4eaf",
+    "src/deadline.rs": "acf760efe2ef92e058dbd3b16438acdee9c91fbdabe39e859cd75a835373ea17",
+    "src/main.rs": "1f8c0ec5227eb346494036e5e544e6baef250f543714eed8005f748c5d50b32a",
+    "src/project.rs": "8e12777b3c7af0c439aaecdca645011bd316723cd35ccd17f014b7a19df2a727",
+    "src/output.rs": "8b9f62ef21d25d1325f4bd53c8a5267866ac3c580eed0715b0efff8dc63bab47",
+    "src/runner.rs": "2f1eec4bdecdcd75e54dc2edd4b2818d57396467857738691852c7a35a411ff0",
+    "src/watch.rs": "caa0c72c871147551ff42dcf4c0a8876d014c33ed72f642c7fa5ede92c7e37ca",
+    "tests/cli_cancellation.rs": "4cf3c6a7f3e58aa1bca9c4c718b07a133e9ba18659969c180ec15eb40bdc3e9c",
+    "tests/runner.rs": "64b39f06b7d93a0bf76820c245ab2460bd53bf87cb6a3c3274311b576ba6be35"
+  },
+  "binary": {
+    "path": "target/debug/pctx",
+    "sha256": "c206fbfe202a32031e204af59a7e91b483d926a737455387ae0694e63cea6a21"
+  },
+  "baseline_observation": {
+    "case": "actual held-open stdin Build SIGINT before edits",
+    "process_returncode": -2,
+    "stdout_bytes": 0,
+    "stderr_bytes": 0,
+    "json_complete": false,
+    "provenance": "direct tool observation; no pre-edit binary hash captured, so no source-bound baseline qualification claimed"
+  },
+  "sessions": [
+    {
+      "id": 66598,
+      "log": "pctx01-cancellation-native.log",
+      "exit": 101,
+      "result": "0PASS3FAIL",
+      "classification": "fixture assertions asked for Error.exit which is intentionally not serialized; watch supplied duplicate global format and was refused2. Held stdin/Run already produced130/CANCELLED. Failures retained."
+    },
+    {
+      "id": 9756,
+      "log": "pctx01-cancellation-registered.log",
+      "exit": 101,
+      "result": "0PASS1FAIL; CLI tests filtered, not run",
+      "classification": "new registered fixture wrote observed PID/count into source root, producing legitimate stale evidence; fixture moved markers into existing ignored .pctx boundary"
+    },
+    {
+      "id": 52594,
+      "log": "pctx01-cancellation-focused.log",
+      "exit": 101,
+      "result": "CLI3PASS, Run11PASS, Runner31PASS1FAIL",
+      "classification": "new cancelled native artifact became failed check evidence via signal branch; actual product defect repaired in unverified_report. No full-green claim"
+    },
+    {
+      "id": 76299,
+      "log": "pctx01-cancellation-registered-final.log",
+      "exit": 0,
+      "result": "changed registered test1PASS",
+      "classification": "CANCELLED artifact now produces cancelled evidence; both registered facade routes tested"
+    },
+    {
+      "id": 54276,
+      "log": "pctx01-cancellation-native-final.log",
+      "exit": 0,
+      "result": "CLI4PASS"
+    },
+    {
+      "id": 6466,
+      "log": "pctx01-cancellation-resources-final.log",
+      "exit": 0,
+      "result": "registered2PASS"
+    },
+    {
+      "id": 74114,
+      "log": "pctx01-cancellation-clippy.log",
+      "exit": 0,
+      "result": "locked all-target Clippy -D warnings PASS"
+    },
+    {
+      "log": "pctx01-cancellation-format.log",
+      "exit": 0,
+      "result": "format check PASS"
+    },
+    {
+      "id": 36383,
+      "log": "pctx01-cancellation-related.log",
+      "exit": 0,
+      "result": "related24PASS (CLI delivery4, context input5, output delivery2, finite query9, watch4)"
+    }
+  ],
+  "current_native_tests": {
+    "cancellation": 6,
+    "related": 24,
+    "whole_suite": "not_run; retained failures unresolved"
+  },
+  "earlier_unchanged_case_reuse": {
+    "run_exit_tests": 11,
+    "non_cancel_runner_tests": 31,
+    "restriction": "Passed before final cancelled-artifact classification branch; existing non-cancel branches unchanged. These are not a current whole-suite pass or a rerun of every test."
+  },
+  "verified_contracts": [
+    "one JSON CANCELLED130 under held stdin with open pipe/original30s budget",
+    "existing NDJSON frames plus stderr cancellation event",
+    "owned finite query process reaped before original30s timeout, one execution",
+    "Run pctx/child policies return wrapper130 with actual SIGKILL and durable reread handle; no rerun",
+    "registered CheckRun and check alias retain child signal, cancelled evidence and no living direct child; release requires existing native group absence",
+    "SQL-blocked acquired/no-child cancellation releases proven-unspawned slots with durable not_started/null PID",
+    "existing original deadline, stdin flag restoration, checked stream/hook/file delivery and metering behavior remain qualified by related24"
+  ],
+  "implementation_rules": [
+    "callbacks only latch atomic flag",
+    "handler installed by admitted CLI, never library or private guardian entry",
+    "narrow thread-local guards suppress cancellation during spawn ownership and normal finalization only; original deadline retained",
+    "proven-unspawned release before fallible record; native group unknown retains capacity",
+    "cancelled artifact maps cancelled before native-signal failure; native status retained independently",
+    "Read excerpt reduction preserves cancellation status/exit and reasons"
+  ],
+  "independent_review": {
+    "agent": "/root/work_control",
+    "mode": "read-only; no edits/builds/tests",
+    "result": "no remaining blocker in bounded candidate; initial prelaunch/postspawn/Read findings fixed; release made independent of record and reasons retained"
+  },
+  "remaining_existing_conditions": [
+    "G05-D06 shared full 0/2/3/4/5/6/7/8/9/10/130 plus child exception matrix",
+    "G05-D06 cancellation/publication failure combinations and local Helper/canonical guardian cancellation",
+    "G05-D02 broader callback/postspawn fault truth",
+    "G08-D04 remaining phase/race/deadline obligations",
+    "G05-D05 four original macOS1s startup product failures",
+    "G09 required native macOS x86_64/Linux x86_64/Windows x86_64 environments; macOS arm64 full remains failed",
+    "G10 integration and final mandatory closure"
+  ],
+  "limitations": [
+    "cooperative only; no hard filesystem or SQLite busy-wait cancellation",
+    "finalization finishes already-owned artifact/response operations without re-entering cancellation; deadlines/storage errors still apply",
+    "Windows CTRL_C_EVENT handler follows official API but neither Windows-native executed nor cross-compile-qualified here",
+    "SIGTERM/CTRL_BREAK/console closure remain separate lifecycle events",
+    "no native Helper/guardian cancellation proof in this candidate",
+    "inactive PCTX36 Tick failure retained; focused passes do not erase historical failure"
+  ],
+  "official_source": {
+    "Windows_console_handler": "https://learn.microsoft.com/en-us/windows/console/setconsolectrlhandler"
+  },
+  "logs": {
+    "pctx01-cancellation-clippy.log": {
+      "sha256": "f0425234ad3ccee0fe51bfa587722797ddfac807559e3c2c664d0dd58779cf7c",
+      "bytes": 120,
+      "results": []
+    },
+    "pctx01-cancellation-focused.log": {
+      "sha256": "61828d7eeac0c29e2035a76cfff05441ee226835a0e902594c509644fbc55737",
+      "bytes": 4458,
+      "results": [
+        "test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.97s",
+        "test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 6.61s",
+        "test result: FAILED. 31 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 67.40s"
+      ]
+    },
+    "pctx01-cancellation-format.log": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "results": []
+    },
+    "pctx01-cancellation-native-final.log": {
+      "sha256": "571cae386bb7a84a3d87677de2c0e8637635acfb78aef450dac4bf5c048d0e68",
+      "bytes": 654,
+      "results": [
+        "test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.28s"
+      ]
+    },
+    "pctx01-cancellation-native.log": {
+      "sha256": "438d3db418d0affa04d2b3dce6ae63cbc09c1dd7cdb5e8490c85092c81059182",
+      "bytes": 1879,
+      "results": [
+        "test result: FAILED. 0 passed; 3 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.72s"
+      ]
+    },
+    "pctx01-cancellation-registered-final.log": {
+      "sha256": "e98b8d263da282408c096697d4336ceacba8976b4d4be9b2899b56a948845255",
+      "bytes": 397,
+      "results": [
+        "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 31 filtered out; finished in 1.55s"
+      ]
+    },
+    "pctx01-cancellation-registered.log": {
+      "sha256": "ef0075ad0ca6fd1e5c091a479ed8c097223f8118e894cb15e4f92b0f5e031df0",
+      "bytes": 1154,
+      "results": [
+        "test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 3 filtered out; finished in 0.00s",
+        "test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 31 filtered out; finished in 1.21s"
+      ]
+    },
+    "pctx01-cancellation-related.log": {
+      "sha256": "558d2d12d891f9aa2817ecf10c79fab011d37950de468f7ecb23e57ef2072bfe",
+      "bytes": 3008,
+      "results": [
+        "test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.82s",
+        "test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.67s",
+        "test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.51s",
+        "test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.58s",
+        "test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 6.64s"
+      ]
+    },
+    "pctx01-cancellation-resources-final.log": {
+      "sha256": "49070f5c317348ff78066414a146b798d64d1831461bf9890791f9d66e6bbc12",
+      "bytes": 471,
+      "results": [
+        "test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 31 filtered out; finished in 1.83s"
+      ]
+    }
+  },
+  "live_jobs": [],
+  "actions_dispatched": false,
+  "node_24_pins": "unchanged",
+  "next_official_task": null
+}
