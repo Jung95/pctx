@@ -51,6 +51,32 @@ not all-local completion. Other official tasks remain inactive. Do not repeat
 this initial reorganization; execute fixed conditions to closure. PCTX01 done
 then next official task's finite list within the same Goal.
 
+## Policy-wait ownership and next hypothesis
+
+[Read-only reconciliation](evidence/pctx01-startup-policy-ownership-reconciliation.json)
+found no currently justified PCTX correction within the frozen constraints: existing
+supervisor retains original deadline, streams, group, WNOWAIT identity and owned
+cancellation; observed prepayload policy waiting alone does not implicate it.
+G05-D05 remains product_failure, never exempted or closed. New repair direction
+needs a demonstrated causal PCTX operation or supported platform correction tested
+against unchanged original acceptance. Do not repeat capture for the known wait.
+
+First-hand upstream reports [19885](https://github.com/openai/codex/issues/19885)
+and [26795](https://github.com/openai/codex/issues/26795) describe host-associated
+policy-service/shell startup delays. These are a new hypothesis, NOT proof that
+this installed host caused PCTX failures or that any fixed version exists. No
+host/operational process observed or app state changed. Next safe preparation is
+one finite ordinary-user unchanged-test control with the host absent, retaining
+original budgets/workload and no warmup/retry. Prepare a concrete reviewed plan
+before coordinating any user-app closure; never close it silently. No new OS
+administrator authentication is needed for that preparation.
+
+[Temporary tool cleanup](evidence/pctx01-startup-auth-all-four-capture-tool-cleanup.json)
+removed generated5159 helper/control binaries and isolated source/build/session,
+without root. Raw committed traces/events and audited hashes remain. Readiness
+paths are historical consumed/removed inputs, not runnable current targets. No
+live job. Only PCTX01 active,33/40details and0/10wholegates unchanged.
+
 ## One-authentication four-test kernel batch — terminal5159
 
 [Verification](evidence/pctx01-startup-auth-all-four-capture-verification.json),

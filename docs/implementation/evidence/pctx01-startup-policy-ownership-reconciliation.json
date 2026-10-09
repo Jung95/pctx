@@ -1,0 +1,44 @@
+{
+  "task": "PCTX01",
+  "condition": "PCTX01-G05-D05",
+  "review": "work_control read-only source/acceptance reconciliation",
+  "sources": [
+    "src/query_process.rs",
+    "tests/project_deadline.rs",
+    "docs/PCTX-implementation-spec-v0.6.md \u00a7\u00a714/38",
+    "pctx01-startup-auth-all-four-capture-verification.json"
+  ],
+  "conclusion": "No currently evidenced PCTX source correction preserves all fixed constraints. Original deadline/streams/group/WNOWAIT identity/cancellation are retained; observed child prepayload AppleSystemPolicy waiting does not establish a parent supervisor defect.",
+  "acceptance": "product_failure;not exempted or closed;33/40details,0/10wholegates",
+  "disallowed_substitutions": [
+    "interpreter/workload replacement",
+    "warmup/trust-cache conditioning",
+    "security-policy bypass",
+    "renewed/extended budget",
+    "pass-retry laundering"
+  ],
+  "evidence_that_could_change_direction": [
+    "specific PCTX operation shown to cause/sustain policy wait",
+    "supported platform correction followed by unchanged original acceptance verification"
+  ],
+  "safe_new_hypothesis": "Published first-hand reports describe Codex-host-associated policy-service delays. A controlled ordinary-user unchanged-test run with that host absent could distinguish a host contribution; no local host cause, fixed version, or needed app manipulation is established. No host processes were sampled or app state changed.",
+  "public_sources": [
+    {
+      "url": "https://github.com/openai/codex/issues/19885",
+      "opened": "2026-04-27",
+      "checked_status": "closed, but fetched page provides no confirmed fix",
+      "scope": "Reporter describes repeated helper validation and delayed shell startup during Codex use;not proof for this Mac."
+    },
+    {
+      "url": "https://github.com/openai/codex/issues/26795",
+      "opened": "2026-06-06",
+      "checked_status": "open",
+      "scope": "Reporter correlates running Codex with policy-service CPU/launch slowdown;not a verified maintainer fix or local diagnosis."
+    },
+    {
+      "url": "https://developer.apple.com/forums/thread/706379",
+      "scope": "Apple DTS describes signature/notarization/trusted-execution diagnosis. No supported1s script-evaluation-latency guarantee or PCTX workaround identified from the inspected page;no recommended security/log policy mutation executed."
+    }
+  ],
+  "next": "Prepare only a finite no-authentication host-isolation control, exact original tests/source/binary/environment and no warmup/retry. Changing/closing the user app requires a concrete reviewed plan and user coordination;do not do it silently. No new kernel capture for existing wait datum."
+}

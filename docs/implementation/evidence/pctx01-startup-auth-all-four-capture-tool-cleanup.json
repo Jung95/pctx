@@ -1,0 +1,12 @@
+{
+  "scope": "only generated terminal5159 temporary helpers and isolated source/build/session root;committed raw events/traces/hash manifests preserved",
+  "removed": [
+    "/private/tmp/pctx01-startup-auth-batch-collector",
+    "/private/tmp/pctx01-startup-auth-batch-receipt-control",
+    "/private/tmp/pctx01-original-observation-x24p0cyy"
+  ],
+  "all_absent": true,
+  "root_privilege_used": false,
+  "source_recreation": "gitarchive f195d14 plus committed auth-batch-prepare/hook;historical ready paths consumed and removed,not current runnable inputs",
+  "no_automatic_retry": true
+}
