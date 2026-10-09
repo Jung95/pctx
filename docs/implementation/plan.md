@@ -200,7 +200,7 @@ is selected before all PCTX01 mandatory conditions and platforms are qualified.
 Inactive PCTX36 Tick and PCTX47 Helper metering routing remain separate backlog.
 Required macOS x86_64/Linux x86_64/Windows x86_64 native integration is unverified;
 Linux aarch64 is supporting evidence only. No Actions or whole/platform rerun.
-All jobs are terminal. Local skip-ci commits are authorized; main push awaits resolution of the recorded automatic approval rejection. Node24 pins remain.
+All jobs are terminal. Local skip-ci commits are authorized; the human-authorized main publication succeeded through5cf9db9. Node24 pins remain.
 
 ## Ownership and common boundaries
 

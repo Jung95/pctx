@@ -2,21 +2,16 @@
 
 ## Publication boundary — current
 
-Verified Runner finalization changes are committed locally as
-`9e2e0b52fb71e2f238cc12fd8eb6e4d77829776e` with `[skip ci]`; that is a historical publication attempt. Additional local commits through
-bab1bcf and current G05-D05 diagnostic evidence remain unpublished. Source/binary/log hashes and the fixed40-item register
-were checked (33 closed, whole gates0/10). Normal push to the verified configured
-origin `https://github.com/Jung95/pctx.git`, branch `main`, was rejected by automatic
-approval review: explicit authorization for the destination/default-branch side
-effect was judged insufficient. No push occurred and no retry or workaround was
-attempted. `origin/main` remains `17298fcb4eed7af5ddab2dd5da81ac2800e085ee` locally.
-The objective file explicitly requests commit/push to this repository; publication
-now awaits the user's explicit approval for `main` to resolve the review boundary.
-No Actions were dispatched. PCTX01 remains the only active official task and is
-incomplete; G05-D05 is next within that same task.
+The human explicitly authorized main push on2026-10-09. A normal fast-forward
+`git push origin main` succeeded from17298fc to5cf9db9, publishing the ten
+retained skip-ci commits. The earlier automatic approval rejection is historical
+and resolved for this requested publication; no force push or workaround occurred.
+Main now has minimal protection: force push/deletion disabled, enforce_admins true,
+no required reviews/status checks. No Actions were dispatched by this task.
 
-
-Baseline: specification 0.6, all 45 sections read; 2026-10-08. The repository began with the owner's source specification only. Original input remains unchanged locally. Full required scope, including concrete follow-ups, remains active.
+PCTX01 remains implementing, detail33/40 and whole gates0/10. Publication does not
+close G05-D05, the four original startup failures, native-platform gaps or the
+whole goal. Target-only administrator diagnostic authorization remains pending.
 
 ## Current official task
 
@@ -226,7 +221,7 @@ is selected before all PCTX01 mandatory conditions and platforms are qualified.
 Inactive PCTX36 Tick and PCTX47 Helper metering routing remain separate backlog.
 Required macOS x86_64/Linux x86_64/Windows x86_64 native integration is unverified;
 Linux aarch64 is supporting evidence only. No Actions or whole/platform rerun.
-All jobs are terminal. Local skip-ci commits are authorized; main push awaits resolution of the recorded automatic approval rejection. Node24 pins remain.
+All jobs are terminal. Local skip-ci commits are authorized; the human-authorized main publication succeeded through5cf9db9. Node24 pins remain.
 
 ## Integrated behavior
 
