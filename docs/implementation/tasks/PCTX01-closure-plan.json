@@ -481,7 +481,9 @@
         "pctx01-startup-isolation-verification.json",
         "pctx01-task-storage-verification.json",
         "pctx01-startup-thread-snapshot-verification.json",
-        "pctx01-startup-native-clock-capture-verification.json"
+        "pctx01-startup-native-clock-capture-verification.json",
+        "pctx01-startup-rust-spawn-source-check.json",
+        "pctx01-query-final-deadline-verification.json"
       ],
       "verification_environment": "Native macOS arm64 local common proof; all release platforms separately required by G09",
       "macOS_arm64": "failure",
@@ -489,7 +491,7 @@
       "Linux_x86_64": "unverified; G09-D03",
       "Linux_aarch64": "prior fixed-source full only; inspect linked manifest per contract",
       "Windows_x86_64": "unverified; G09-D04",
-      "documentation_evidence": "Corrected original-supervisor diagnostic retained:68 outcomes/4 original1s expiries, policy wait only in successful selected13700. Expired-child cause and original4 failures unresolved; no closure or further automatic privileged probe."
+      "documentation_evidence": "Corrected original-supervisor diagnostic retained:68 outcomes/4 original1s expiries, policy wait only in successful selected13700. Expired-child cause and original4 failures unresolved; no closure or further automatic privileged probe. Latest unchanged startup integration11PASS/3FAIL; separate final-return correction does not resolve zero-output pre-exit waits"
     },
     {
       "id": "PCTX01-G05-D06",
@@ -755,7 +757,8 @@
         "pctx01-adapter-deadline-verification.json",
         "pctx01-schedule-deadline-verification.json",
         "pctx01-phase-matrix-verification.json",
-        "pctx01-phase-matrix-crosswalk.json"
+        "pctx01-phase-matrix-crosswalk.json",
+        "pctx01-query-final-deadline-verification.json"
       ],
       "verification_environment": "Native macOS arm64 local common proof; all release platforms separately required by G09",
       "macOS_arm64": "bounded_verified",
@@ -763,7 +766,7 @@
       "Linux_x86_64": "unverified; G09-D03",
       "Linux_aarch64": "prior fixed-source full only; inspect linked manifest per contract",
       "Windows_x86_64": "unverified; G09-D04",
-      "documentation_evidence": "pctx01-phase-matrix-verification.json"
+      "documentation_evidence": "pctx01-phase-matrix-verification.json; concrete final-return race corrected with baseline failure/candidate native-boundary proof, macOSarm64 only; startup remains separate product failure"
     },
     {
       "id": "PCTX01-G08-D05",

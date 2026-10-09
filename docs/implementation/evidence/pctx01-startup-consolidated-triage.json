@@ -10,11 +10,8 @@
     "pctx01-startup-host-control-comparison-verification.json": "c31f823c9a21fa82ef8daa8b45b6058692b5893966617b033c7dc9a24d3f7311",
     "pctx01-startup-host-reverse-comparison-verification.json": "c201537054b35ada46011c16ba16323fad22b31cdd34498b10e63f2adf1608c4",
     "pctx01-startup-host-reverse-recovery-comparison-verification.json": "de02d6b358e522c9396e0bbb7cf784b190ba12bdf662901868b3afbd6285e9d2",
-    "pctx01-startup-host-correction-docs-check.json": "730f4b8baf028315748a224909b0fc3d9912c056d6605a4bc962d4cf03e6009c"
-  },
-  "current_source_hashes": {
-    "src/query_process.rs": "74c4c46c6b224563c63e9e2d7a9beac7996ef69735b072a39ee22c9aa989d6cb",
-    "tests/project_deadline.rs": "8b9fbc97fbd5acaf612b2d75b94cf810faa2b61614b654495082462b1941a8dc"
+    "pctx01-startup-host-correction-docs-check.json": "730f4b8baf028315748a224909b0fc3d9912c056d6605a4bc962d4cf03e6009c",
+    "pctx01-startup-rust-spawn-source-check.json": "b808df30a92041c034ff36d2df68e6897dd54dac1a45d34f200453b9160d74c9"
   },
   "known": "Exact expired-child early kernel script-policy wait;unchanged supervisor/test failures persist across declared host states.",
   "unknown": "Reason policy evaluation is delayed;specific causal PCTX operation;app contribution;applicable supported platform correction.",
@@ -30,5 +27,10 @@
   "detail_total": 40,
   "whole_closed": 0,
   "whole_total": 10,
-  "required_platforms": "macOSarm64 product_failure;macOSx64/Linuxx64/Windowsx64 unverified"
+  "required_platforms": "macOSarm64 product_failure;macOSx64/Linuxx64/Windowsx64 unverified",
+  "historical_inspected_source_hashes": {
+    "src/query_process.rs": "74c4c46c6b224563c63e9e2d7a9beac7996ef69735b072a39ee22c9aa989d6cb",
+    "tests/project_deadline.rs": "8b9fbc97fbd5acaf612b2d75b94cf810faa2b61614b654495082462b1941a8dc"
+  },
+  "later_source_correction": "pctx01-query-final-deadline-verification.json; separate final-return defect, not a startup repair; historical hashes identify consolidation inputs"
 }

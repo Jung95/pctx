@@ -1,0 +1,22 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 7.74s
+     Running unittests src/lib.rs (target/debug/deps/pctx-ae897bec01e143c7)
+
+running 1 test
+test query_process::final_deadline_tests::reaped_query_cannot_return_success_after_original_deadline ... FAILED
+
+failures:
+
+---- query_process::final_deadline_tests::reaped_query_cannot_return_success_after_original_deadline stdout ----
+
+thread 'query_process::final_deadline_tests::reaped_query_cannot_return_success_after_original_deadline' (9680762) panicked at src/query_process.rs:1061:30:
+called `Result::unwrap_err()` on an `Ok` value: Output { status: ExitStatus(unix_wait_status(0)), stdout: "observed", stderr: "" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    query_process::final_deadline_tests::reaped_query_cannot_return_success_after_original_deadline
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 53 filtered out; finished in 3.01s
+
+error: test failed, to rerun pass `--lib`

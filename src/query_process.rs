@@ -14,6 +14,14 @@ use std::{
 #[cfg(unix)]
 use std::process::Stdio;
 
+#[cfg(all(test, unix))]
+thread_local! {
+    // Delay only this test thread after real EOF/group proof and root reaping.
+    static EXPIRE_AFTER_REAP: std::cell::Cell<(bool, Option<u32>)> = const {
+        std::cell::Cell::new((false, None))
+    };
+}
+
 fn error(code: &str, message: &str) -> Error {
     Error::new(
         code,
@@ -728,6 +736,19 @@ pub fn output(command: Command, deadline: Deadline, max_bytes: usize) -> Result<
                             "Observed query root could not be reaped",
                         )
                     })?;
+                    #[cfg(test)]
+                    EXPIRE_AFTER_REAP.with(|hook| {
+                        if hook.get().0 {
+                            hook.set((false, Some(child.id())));
+                            while let Ok(remaining) = deadline.remaining() {
+                                std::thread::sleep(remaining);
+                            }
+                        }
+                    });
+                    // Reaping can cross the original deadline after group proof.
+                    // Identity is already released: expiry must not signal this PID.
+                    observation.phase = "final_deadline";
+                    deadline.check()?;
                     return Ok(Output {
                         status,
                         stdout: out,
@@ -1009,6 +1030,50 @@ mod linux_group_tests {
         let result = output(query, Deadline::from_millis(3000).unwrap(), 4096).unwrap();
         assert!(result.status.success());
         assert_eq!(result.stdout, b"observed");
+    }
+}
+
+#[cfg(all(test, unix))]
+mod final_deadline_tests {
+    use super::*;
+    use std::os::unix::fs::PermissionsExt;
+
+    #[test]
+    fn reaped_query_cannot_return_success_after_original_deadline() {
+        struct Reset;
+        impl Drop for Reset {
+            fn drop(&mut self) {
+                EXPIRE_AFTER_REAP.with(|hook| hook.set((false, None)));
+            }
+        }
+        let root = tempfile::tempdir().unwrap();
+        let executable = root.path().join("git");
+        std::fs::write(&executable, b"#!/bin/sh\nprintf observed\n").unwrap();
+        std::fs::set_permissions(&executable, std::fs::Permissions::from_mode(0o700)).unwrap();
+        let mut query = Command::new(executable);
+        query
+            .args(["rev-parse", "--is-inside-work-tree"])
+            .env_clear();
+        let deadline = Deadline::from_millis(3000).unwrap();
+        EXPIRE_AFTER_REAP.with(|hook| hook.set((true, None)));
+        let _reset = Reset;
+        let result = output(query, deadline, 4096);
+        let pid = EXPIRE_AFTER_REAP
+            .with(|hook| hook.get().1)
+            .expect("real EOF/group proof and root reaping must precede expiry");
+        assert!(deadline.check().is_err());
+        let mut status = 0;
+        assert_eq!(
+            unsafe { libc::waitpid(pid as i32, &mut status, libc::WNOHANG) },
+            -1
+        );
+        assert_eq!(
+            std::io::Error::last_os_error().raw_os_error(),
+            Some(libc::ECHILD)
+        );
+        let failure = result.unwrap_err();
+        assert_eq!(failure.code, "TIMEOUT");
+        assert_eq!(failure.exit, 7);
     }
 }
 

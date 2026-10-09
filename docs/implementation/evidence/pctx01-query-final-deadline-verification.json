@@ -1,0 +1,78 @@
+{
+  "task": "PCTX01",
+  "date": "2026-10-09",
+  "base_revision": "ac958cd",
+  "condition": "PCTX01-G08-D04; narrow final query-return boundary correction",
+  "startup_condition": "PCTX01-G05-D05 remains product_failure",
+  "defect": "Unix query output could return success after the original deadline expired between group proof and result return.",
+  "correction": "Check the same Deadline after reaping and before Output. Root identity is already released, preventing error cleanup from signaling the reaped PID.",
+  "test": "Per-thread cfg(test) hook waits for the actual original 3000ms test Deadline to expire only after real EOF/group proof and successful reap. No synthetic clock or deadline renewal. ECHILD proves reap; result must be TIMEOUT exit7. Baseline returns observed successful Output and fails. Hook is absent in production.",
+  "scope_limit": "This new final-return race test does not change original startup tests or their 1000ms,8x16,group,streams,overflow conditions. It cannot explain zero-output pre-exit startup waits.",
+  "results": {
+    "baseline_exit": 101,
+    "baseline": "0PASS/1FAIL; late successful Output",
+    "query_units_exit": 0,
+    "query_units": "3PASS/0FAIL",
+    "project_deadline_exit": 101,
+    "project_deadline": "11PASS/3FAIL",
+    "clippy_exit": 0,
+    "clippy": "all-targets -D warnings PASS",
+    "fmt": "cargo fmt applied; diff check PASS"
+  },
+  "retained_failures": [
+    "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget",
+    "query_program_resolution_uses_captured_command_path",
+    "simultaneous_streams_are_collected_and_overflow_never_infers_success"
+  ],
+  "failure_observation": "Reported expired children have zero stdout/stderr bytes,root_exit_observed=false,group_probes=0; no final_deadline phase. No new kernel observation or startup cause inference.",
+  "reported_expired_pid_liveness": {
+    "25155": "absent",
+    "25156": "absent",
+    "25157": "absent",
+    "25164": "absent",
+    "25166": "absent",
+    "25167": "absent"
+  },
+  "inventory_limit": "Only reported expired owned query PIDs checked; not a complete descendant inventory.",
+  "source_hashes": {
+    "src/query_process.rs": "bf661f4b8d0ed472585244ada4ac0e946221de364c100039cd20aee56fd8d0d2",
+    "tests/project_deadline.rs": "8b9fbc97fbd5acaf612b2d75b94cf810faa2b61614b654495082462b1941a8dc",
+    "src/deadline.rs": "acf760efe2ef92e058dbd3b16438acdee9c91fbdabe39e859cd75a835373ea17",
+    "Cargo.lock": "f96362897990caba560793601bc9fca08cef5c977907bb06889d5595d2acd7b0"
+  },
+  "evidence_hashes": {
+    "pctx01-query-final-deadline-before.log": "c1bc76b2c9c4141c263c4cd8612306a2d49f0d07c127c49ec0e15f7d4712434a",
+    "pctx01-query-final-deadline-before-sources.txt": "f616bd63b440fa1df94a01c197f7ebe053cb454e30a87909a827e3beed963827",
+    "pctx01-query-final-deadline-after.log": "c5da6de46677bd805465c667e8ee40c756df9ad568f60747f1d4cfd0577ee865",
+    "pctx01-query-final-deadline-integration.log": "07c06fc8a256b0ea9bbf7dd02268dd531b1d9841db3dc1ae6b83e10984f50916",
+    "pctx01-query-final-deadline-clippy.log": "443117ba3ad67b3110f22f1e5ed7ef82bd5efef12fca99072c5d8168a2ccb562"
+  },
+  "environment": {
+    "os": "macOS-26.7.1-arm64-arm-64bit-Mach-O",
+    "uid": 502,
+    "machine": "arm64",
+    "build_target": "repository target, Cargo rebuild after each source change; jobs serialized; no manual binary/cache substitution",
+    "execution": "ordinary user; no administrator authentication",
+    "rust": "rustc1.99.0 b940084d7eb6a299eb4bfeb8e34901bc051e7ac4; LLVM23.1.1"
+  },
+  "independent_review": "work_control: no blocker; real EOF/group/reap test, ECHILD, original clock, RAII hook reset, released identity retained. Narrow G08-D04 correction only.",
+  "required_platforms": "native macOSarm64 focused correction tested; original startup still fails. macOSx64/Linuxx64/Windowsx64 unverified; no Linuxarm replacement.",
+  "detail_closed": 33,
+  "detail_total": 40,
+  "whole_closed": 0,
+  "whole_total": 10,
+  "next": "Continue PCTX01-G05-D05 with evidence connecting a concrete operation to the prepayload wait or a documented applicable supported platform correction. No unchanged retry or task switch.",
+  "candidate_binary_hashes": {
+    "target/debug/deps/pctx-ae897bec01e143c7": "221028306551c53e0395f5129ddd87c12febc663d6fe740759dff740bea5c034",
+    "target/debug/deps/project_deadline-f7e8b9d913251d84": "be88abcceb7133d8b4f531b82aa640d148052efe2ea118cc0f4319f09f633fb7"
+  },
+  "baseline_binary_limit": "Baseline test binary was rebuilt by Cargo for candidate; its binary hash was not captured. Before-source hashes and baseline raw failure log retained; no claim of reproducible frozen baseline binary.",
+  "commands": [
+    "cargo test --locked --offline --lib reaped_query_cannot_return_success_after_original_deadline -j2 (baseline)",
+    "cargo test --locked --offline --lib query_process:: -j2 (candidate)",
+    "cargo test --locked --offline --test project_deadline -j2 (candidate)",
+    "cargo clippy --locked --offline --all-targets -j2 -- -D warnings",
+    "cargo fmt --all -- --check",
+    "git diff --check"
+  ]
+}

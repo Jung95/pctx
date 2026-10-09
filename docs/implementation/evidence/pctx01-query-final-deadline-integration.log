@@ -1,0 +1,59 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.39s
+     Running tests/project_deadline.rs (target/debug/deps/project_deadline-f7e8b9d913251d84)
+
+running 14 tests
+test deadline_project_loading_child_entry ... ok
+test query_supervisor_rejects_mutation_before_spawn ... ok
+test expired_loading_and_detection_do_not_touch_nonexistent_project ... ok
+test expired_connection_does_not_even_create_initialization_lock ... ok
+test actual_registered_project_loading_and_ancestor_discovery_keep_same_deadline ... ok
+test connection_initialization_wait_respects_remaining_request_not_five_seconds ... ok
+test busy_sqlite_read_is_bounded_by_remaining_request ... ok
+test successive_database_connections_share_the_original_request_budget ... ok
+test relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry ... ok
+test concurrent_query_startup_preserves_group_streams_and_original_one_second_budget ... FAILED
+test query_program_resolution_uses_captured_command_path ... FAILED
+test simultaneous_streams_are_collected_and_overflow_never_infers_success ... FAILED
+test query_deadline_includes_inherited_pipe_eof_after_root_exit ... ok
+test query_cannot_succeed_with_live_descendant_that_closed_both_streams ... ok
+
+failures:
+
+---- concurrent_query_startup_preserves_group_streams_and_original_one_second_budget stdout ----
+
+thread '<unnamed>' (9682326) panicked at tests/project_deadline.rs:584:26:
+called `Result::unwrap()` on an `Err` value: Error { code: "TIMEOUT", message: "Request deadline expired (phase=wait_next_observation, elapsed_ms=999, spawn_ms=3, iterations=163, stdout_eof=false, stderr_eof=false, stdout_bytes=0, stderr_bytes=0, root_exit_observed=false, waitid_signo=0, waitid_code=0, group_probes=0, group_has_others=None, root_pid=25157, native_child=Some(\"status=2,flags=20987920,pgid_matches=true,ppid_matches=true,start_sec=1791540906,start_usec=515892,threads=1,running=0,cpu_user=0,cpu_system=662,mach_calls=0,unix_calls=0,context_switches=2\"))", retryable: false, exit: 7 }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+thread '<unnamed>' (9682331) panicked at tests/project_deadline.rs:584:26:
+called `Result::unwrap()` on an `Err` value: Error { code: "TIMEOUT", message: "Request deadline expired (phase=wait_next_observation, elapsed_ms=1000, spawn_ms=2, iterations=164, stdout_eof=false, stderr_eof=false, stdout_bytes=0, stderr_bytes=0, root_exit_observed=false, waitid_signo=0, waitid_code=0, group_probes=0, group_has_others=None, root_pid=25156, native_child=Some(\"status=2,flags=20987920,pgid_matches=true,ppid_matches=true,start_sec=1791540906,start_usec=515819,threads=1,running=0,cpu_user=0,cpu_system=558,mach_calls=0,unix_calls=0,context_switches=1\"))", retryable: false, exit: 7 }
+
+thread 'concurrent_query_startup_preserves_group_streams_and_original_one_second_budget' (9682316) panicked at tests/project_deadline.rs:593:27:
+called `Result::unwrap()` on an `Err` value: Any { .. }
+
+thread '<unnamed>' (9682329) panicked at tests/project_deadline.rs:584:26:
+called `Result::unwrap()` on an `Err` value: Error { code: "TIMEOUT", message: "Request deadline expired (phase=wait_next_observation, elapsed_ms=1000, spawn_ms=2, iterations=164, stdout_eof=false, stderr_eof=false, stdout_bytes=0, stderr_bytes=0, root_exit_observed=false, waitid_signo=0, waitid_code=0, group_probes=0, group_has_others=None, root_pid=25155, native_child=Some(\"status=2,flags=20987920,pgid_matches=true,ppid_matches=true,start_sec=1791540906,start_usec=515792,threads=1,running=0,cpu_user=0,cpu_system=666,mach_calls=0,unix_calls=0,context_switches=1\"))", retryable: false, exit: 7 }
+
+thread '<unnamed>' (9682328) panicked at tests/project_deadline.rs:584:26:
+called `Result::unwrap()` on an `Err` value: Error { code: "TIMEOUT", message: "Request deadline expired (phase=wait_next_observation, elapsed_ms=1000, spawn_ms=0, iterations=163, stdout_eof=false, stderr_eof=false, stdout_bytes=0, stderr_bytes=0, root_exit_observed=false, waitid_signo=0, waitid_code=0, group_probes=0, group_has_others=None, root_pid=25166, native_child=Some(\"status=2,flags=20987920,pgid_matches=true,ppid_matches=true,start_sec=1791540906,start_usec=518983,threads=1,running=0,cpu_user=0,cpu_system=384,mach_calls=0,unix_calls=0,context_switches=1\"))", retryable: false, exit: 7 }
+
+---- query_program_resolution_uses_captured_command_path stdout ----
+
+thread 'query_program_resolution_uses_captured_command_path' (9682323) panicked at tests/project_deadline.rs:508:87:
+called `Result::unwrap()` on an `Err` value: Error { code: "TIMEOUT", message: "Request deadline expired (phase=wait_next_observation, elapsed_ms=1001, spawn_ms=0, iterations=163, stdout_eof=false, stderr_eof=false, stdout_bytes=0, stderr_bytes=0, root_exit_observed=false, waitid_signo=0, waitid_code=0, group_probes=0, group_has_others=None, root_pid=25164, native_child=Some(\"status=2,flags=20987920,pgid_matches=true,ppid_matches=true,start_sec=1791540906,start_usec=518366,threads=1,running=0,cpu_user=0,cpu_system=402,mach_calls=0,unix_calls=0,context_switches=2\"))", retryable: false, exit: 7 }
+
+---- simultaneous_streams_are_collected_and_overflow_never_infers_success stdout ----
+
+thread 'simultaneous_streams_are_collected_and_overflow_never_infers_success' (9682355) panicked at tests/project_deadline.rs:440:13:
+Simple builtin query failed; evidence at /tmp/pctx-query-eof-failure-fITIhC: {"diagnostic":"Request deadline expired (phase=wait_next_observation, elapsed_ms=1000, spawn_ms=0, iterations=162, stdout_eof=false, stderr_eof=false, stdout_bytes=0, stderr_bytes=0, root_exit_observed=false, waitid_signo=0, waitid_code=0, group_probes=0, group_has_others=None, root_pid=25167, native_child=Some(\"status=2,flags=20987920,pgid_matches=true,ppid_matches=true,start_sec=1791540906,start_usec=520909,threads=1,running=0,cpu_user=0,cpu_system=444,mach_calls=0,unix_calls=0,context_switches=2\"))","error_code":"TIMEOUT","root_exiting":false,"root_started":false}
+
+
+failures:
+    concurrent_query_startup_preserves_group_streams_and_original_one_second_budget
+    query_program_resolution_uses_captured_command_path
+    simultaneous_streams_are_collected_and_overflow_never_infers_success
+
+test result: FAILED. 11 passed; 3 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.01s
+
+error: test failed, to rerun pass `--test project_deadline`

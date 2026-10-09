@@ -12,7 +12,7 @@ independent streams and overflow assertions. Preserve native executable resoluti
 child cwd/environment,retained identity and cancellation. No warmup,budget extension,
 interpreter substitution,security-policy bypass or retry-to-pass can satisfy it.
 
-The [source reconciliation](evidence/pctx01-startup-policy-ownership-reconciliation.json)
+The historical [source reconciliation](evidence/pctx01-startup-policy-ownership-reconciliation.json)
 found no evidenced PCTX correction:the current supervisor supplies the original
 Deadline before launch and while observing streams/group/exit. Its deadline failure
 reports are truthful. This does not establish that PCTX has no defect.
@@ -48,8 +48,9 @@ no full attempt denominator or comparative failure rate is available.
 
 No applicable supported correction was found in the bounded
 [official-documentation check](evidence/pctx01-startup-host-correction-docs-check.json).
-That absence is not proof no correction exists. Existing evidence justifies neither
-a supervisor patch nor a host/security change. Do not repeat consumed commands,
+That absence is not proof no correction exists. The historical startup evidence does not justify a causal startup patch or a
+host/security change. The later final-return repair below addresses a separate
+proved deadline defect. Do not repeat consumed commands,
 known-wait kernel capture or unchanged host controls. All generated collectors and
 comparison binaries are removed;raw evidence remains. No live heavy job.
 
@@ -78,3 +79,18 @@ section is not proof about the shell-script fixtures. No matching stack explanat
 latency guarantee or applicable correction was identified. Another launch-constraint
 page was not readable enough to support a correction claim. No new test,process
 observation,authentication or policy/provenance manipulation occurred.
+
+## Exact Rust source review and separate final-return repair
+
+[Source review](evidence/pctx01-startup-rust-spawn-source-check.json) compares the
+installed Rust commit with PCTX launch configuration. Process-group0 is supported
+by the posix_spawn path; no custom pre_exec or forced suspension exists here. This
+is static evidence, not a runtime backend trace or a policy-delay explanation. No
+applicable supported platform correction was established by the bounded search.
+
+[Final-return correction](evidence/pctx01-query-final-deadline-verification.json)
+adds the missing original-deadline check after real root reap and before success.
+Its controlled native-boundary regression fails before and passes after correction.
+Released identity prevents signaling after reap. Original startup tests remain
+unchanged; integration11PASS/3FAIL still reports zero-output pre-exit timeouts,
+not this late-return defect. G05-D05 remains open;33/40details,0/10gates.

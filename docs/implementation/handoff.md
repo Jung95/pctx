@@ -1,5 +1,24 @@
 # Resume handoff
 
+## Query final-return defect — current, 2026-10-09
+
+[Bounded correction](evidence/pctx01-query-final-deadline-verification.json)
+repairs a concrete G08-D04 race: Unix query completion could return success after
+its original deadline expired following group proof/reaping. A real child, EOF,
+group proof and reap precede controlled expiry; baseline fails with late successful
+Output, candidate query units3PASS/0FAIL. Identity remains released before the final
+check, so timeout cannot signal a reaped/reused PID. Clippy all-targets passes.
+Project-deadline integration11PASS/3FAIL retains concurrency, captured-path and
+streams startup failures; original source and1s/8x16 conditions are unchanged.
+
+[Exact Rust spawn-source review](evidence/pctx01-startup-rust-spawn-source-check.json)
+found no supported correction or concrete cause for the prepayload policy wait.
+The final-return repair does not explain those failures, which never reach this
+branch. PCTX01-G05-D05 remains product_failure;33/40details,0/10whole gates.
+Only PCTX01 active; no new administrator authentication or host/security change.
+Next: obtain causal startup evidence or an applicable supported platform correction;
+no unchanged retry, no other task. No live heavy job remains.
+
 [Apple primary-source check](evidence/pctx01-startup-apple-policy-docs-check.json)
 found documented terminal process-tree protections,but no cause mapping or supported
 correction for these timeouts. No security/provenance change or new test performed.

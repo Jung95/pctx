@@ -1,0 +1,26 @@
+{
+  "task": "PCTX01",
+  "condition": "PCTX01-G05-D05",
+  "date": "2026-10-09",
+  "rust_commit": "b940084d7eb6a299eb4bfeb8e34901bc051e7ac4",
+  "sources": [
+    {
+      "url": "https://raw.githubusercontent.com/rust-lang/rust/b940084d7eb6a299eb4bfeb8e34901bc051e7ac4/library/std/src/sys/process/unix/unix.rs",
+      "reviewed": "spawn entry; posix_spawn fallback predicates; cwd handling; pgroup flags; mask/env/spawn call",
+      "finding": "Command first tries posix_spawn. pgroup is applied with POSIX_SPAWN_SETPGROUP; process_group(0) alone does not force fork. Custom pre_exec closures/uid/gid/groups/chroot or relevant relative path conditions can force fallback. PCTX supplies canonical absolute executable/cwd and no such custom callbacks/settings. This static comparison does not trace the actual runtime backend or explain policy delay."
+    },
+    {
+      "url": "https://developer.apple.com/library/archive/documentation/System/Conceptual/ManPages_iPhoneOS/man3/posix_spawnattr_setpgroup.3.html",
+      "finding": "pgroup0 with the flag assigns child PID as new group. No latency guarantee or policy-wait correction."
+    },
+    {
+      "url": "https://developer.apple.com/library/archive/documentation/System/Conceptual/ManPages_iPhoneOS/man2/posix_spawn.2.html",
+      "finding": "Spawn contract; no matching supported policy-wait correction identified."
+    }
+  ],
+  "local_review": "Native launch,env,cwd,group,nonblocking read streams,caps,waitid/group ownership and original clock reread. One final-return deadline defect found and separately corrected; no prepayload suspension/pre_exec callback found.",
+  "result": "No causal startup PCTX operation or applicable supported platform correction established by this bounded search. This is not proof that no fix exists.",
+  "excluded_inferences": "Linux pre_exec overhead reports and macOS kernel-leak reports are not matching local cause or fix evidence.",
+  "actions": "No OS/provenance/security change,daemon observation,administrator authentication,app update, or unchanged host-state experiment.",
+  "correction_evidence": "pctx01-query-final-deadline-verification.json"
+}

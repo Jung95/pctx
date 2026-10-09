@@ -1,5 +1,16 @@
 # Implementation requirements
 
+## Query final-return correction — 2026-10-09
+
+[G08-D04 evidence](evidence/pctx01-query-final-deadline-verification.json):
+real reap-to-return expiry reproduced before and corrected after;3query units PASS,
+clippy PASS,project-deadline11PASS/3FAIL. Original startup tests unchanged.
+[Exact Rust review](evidence/pctx01-startup-rust-spawn-source-check.json) establishes
+no causal startup correction. G05-D05 remains product_failure;33/40details,0/10gates.
+Only PCTX01 active; next requires causal startup evidence or supported platform fix.
+No authentication or policy change; required other platforms remain unverified.
+
+
 ## Completed reverse recovery — current, 2026-10-09
 
 [Verification](evidence/pctx01-startup-host-reverse-recovery-comparison-verification.json)

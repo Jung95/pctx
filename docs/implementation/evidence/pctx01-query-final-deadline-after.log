@@ -1,0 +1,11 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.76s
+     Running unittests src/lib.rs (target/debug/deps/pctx-ae897bec01e143c7)
+
+running 3 tests
+test query_process::adapter_version_policy_tests::version_observation_does_not_admit_inference_or_extra_arguments ... ok
+test query_process::managed_observation_policy_tests::schedule_queries_reject_mutations_wildcards_and_extra_arguments ... ok
+test query_process::final_deadline_tests::reaped_query_cannot_return_success_after_original_deadline ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 51 filtered out; finished in 3.01s
+
