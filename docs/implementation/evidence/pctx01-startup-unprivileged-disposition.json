@@ -1,0 +1,30 @@
+{
+  "task": "PCTX01",
+  "condition": "PCTX01-G05-D05",
+  "revision": "1a31f19",
+  "status": "product_failure unresolved; finite unprivileged disposition audit",
+  "reviewer": "/root/work_control",
+  "concrete_causal_supervisor_defect_evidenced": false,
+  "missing_evidence": "Exact expired original query child execution/wait state before cancellation, bound to native identity and eventual original1000ms expiry. Successful-target policy traces do not prove that cause.",
+  "next_action": "No unchanged regression or historical privileged-wrapper rerun. Root-only observation remains separately gated by current user prompt policy; no unproved repair or environment exemption.",
+  "fixed_conditions": {
+    "deadline_ms": 1000,
+    "workers": 8,
+    "attempts_per_worker": 16,
+    "group_and_stream_assertions": "unchanged",
+    "local_details_closed": 33,
+    "detail_denominator": 40,
+    "whole_gates_closed": 0,
+    "whole_gate_denominator": 10
+  },
+  "validation": "Parent code/evidence inspection plus independent read-only review; no runtime test, source modification, build or administrator prompt.",
+  "inputs": {
+    "src/query_process.rs": "74c4c46c6b224563c63e9e2d7a9beac7996ef69735b072a39ee22c9aa989d6cb",
+    "tests/project_deadline.rs": "8b9fbc97fbd5acaf612b2d75b94cf810faa2b61614b654495082462b1941a8dc",
+    "docs/implementation/evidence/query-startup-verification.json": "a95b9e3860c91e95df210a49dfdc7e57ab1830bd3be669acec89139752b86615",
+    "docs/implementation/evidence/pctx01-startup-thread-snapshot-verification.json": "964a07b6a3fd8bd01c2c7bec9ceb71be2e7e34c71b239f758df028b6ca640dcb",
+    "docs/implementation/evidence/pctx01-startup-kernel-ready-verification.json": "9afb6620406c3fe193493a26234bae5cf7f4520ba3d1f729aabf9ccfe7be2301",
+    "docs/implementation/evidence/pctx01-startup-kernel-ready-750-verification.json": "391d442fc1446670e5dbc87b5c189467d3c52a19dfb4e8e0da96acfee1a3f17d",
+    "docs/implementation/evidence/pctx01-startup-kernel-late-verification.json": "a23844cb7f1ba60ccd698097d89866f65c798516aa57c2e8488a65c799eb64ac"
+  }
+}

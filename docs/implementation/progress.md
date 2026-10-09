@@ -1,5 +1,18 @@
 # Implementation progress
 
+## G05-D05 ordinary-user disposition — 2026-10-09
+
+At published source1a31f19, parent inspection and independent read-only review
+found no evidenced supervisor defect causing the retained pre-payload expiry.
+The missing evidence is the exact expired original child's execution/wait state
+before cancellation, bound to native identity and eventual original1s expiry.
+Successful-target kernel samples do not supply it. See
+[bounded disposition](evidence/pctx01-startup-unprivileged-disposition.json).
+Do not rerun unchanged tests to obtain a passing attempt, launch historical
+privileged wrappers, or invent a source repair. The prompt policy below applies.
+No jobs remain live, production/tests unchanged, original failures retained.
+PCTX01/G05-D05 remains unresolved;33/40 details and0/10 whole gates unchanged.
+
 ## Administrator prompt policy — current, 2026-10-09
 
 The user requested an end to repeated administrator dialogs. Ordinary-user
