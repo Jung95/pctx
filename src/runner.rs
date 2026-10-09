@@ -897,6 +897,80 @@ fn release(dir: &Path, job: &mut Job) -> Result<bool> {
     publish(dir, job)?;
     Ok(true)
 }
+fn retain_execution(result: Result<Value>, job: &Job) -> Value {
+    match result {
+        Ok(execution) => execution,
+        Err(error) => json!({"spawned":job.pid.is_some(),
+            "termination":if job.pid.is_some(){"unknown"}else{"not_started"},
+            "child_exit_code":null,"signal":null,"raw_available":false,
+            "pctx_error":error.code,"processing_exit":error.exit,"processing_error":error,
+            "task_completion":"not_evaluated","test_result":"not_evaluated"}),
+    }
+}
+fn completion_error(execution: &mut Value, errors: &mut Vec<Value>, phase: &str, error: Error) {
+    // A receipt/evidence/cleanup failure never discards the observed execution.
+    // Processing failures also retain precedence over wrapper cancellation.
+    errors.push(json!({"phase":phase,"exit":error.exit,"error":error}));
+    if output::execution_error(execution).is_none_or(|current| current.code == "CANCELLED") {
+        execution["pctx_error"] = json!(error.code);
+        execution["processing_exit"] = json!(error.exit);
+        execution["processing_error"] = json!(error);
+    }
+}
+fn finish_owned_execution(
+    dir: &Path,
+    job: &mut Job,
+    guardian: Option<&std::rc::Rc<std::cell::RefCell<Guardian>>>,
+    execution: &mut Value,
+    errors: &mut Vec<Value>,
+) -> Option<bool> {
+    let unspawned = execution["spawned"] == false && job.pid.is_none();
+    if job.pid.is_none() && !unspawned {
+        job.state = "resource_owner_unknown".into();
+        completion_error(
+            execution,
+            errors,
+            "ownership",
+            error(
+                "RESOURCE_OWNER_UNKNOWN",
+                "Spawned execution has no observed owner identity",
+                7,
+            ),
+        );
+        return None;
+    }
+    if let Some(guardian) = guardian {
+        let observation = if unspawned {
+            guardian.borrow_mut().stop_without_child()
+        } else if group_gone(job) {
+            guardian.borrow_mut().wait_finished()
+        } else {
+            Ok(())
+        };
+        if let Err(error) = observation {
+            job.state = "resource_owner_unknown".into();
+            completion_error(execution, errors, "guardian", error);
+            // A keeper may still hold the canonical mutex. Do not claim or
+            // perform overall release merely because the root group is absent.
+            return None;
+        }
+    }
+    let release = if unspawned {
+        release_not_spawned(dir, job).map(|()| true)
+    } else {
+        release(dir, job)
+    };
+    match release {
+        Ok(released) => Some(released),
+        Err(error) => {
+            // Slots may have been partly removed before durable publication
+            // failed. Neither fully held nor fully released is established.
+            job.state = "release_unconfirmed".into();
+            completion_error(execution, errors, "resource_release", error);
+            None
+        }
+    }
+}
 fn task_check(
     p: &Project,
     task_name: &str,
@@ -1365,73 +1439,67 @@ fn execute_inner(p: &Project, command: &RunnerCommand) -> Result<Value> {
                 &check_binding,
             );
             let _finalization = crate::cancellation::finalize();
-            if job.pid.is_none()
-                && let Some(g) = guardian.as_ref()
-            {
-                g.borrow_mut().stop_without_child()?;
-            }
-            let execution = match observed {
-                Ok(value) => value,
-                Err(e) => {
-                    if job.pid.is_some() {
-                        work::record_runner_execution_error(p, &check_id, &e.code)?;
-                        if group_gone(&job)
-                            && let Some(g) = guardian.as_ref()
-                        {
-                            g.borrow_mut().stop_without_child()?;
-                        }
-                        let _ = release(&dir, &mut job);
-                    } else {
-                        work::record_runner_not_started(p, &check_id, &e.code)?;
-                        release_not_spawned(&dir, &mut job)?;
+            let mut execution = retain_execution(observed, &job);
+            let mut finalization_errors = Vec::new();
+            // Cleanup precedes and does not depend on fallible check recording.
+            let released = finish_owned_execution(
+                &dir,
+                &mut job,
+                guardian.as_ref(),
+                &mut execution,
+                &mut finalization_errors,
+            );
+            let evidence = (|| -> Result<Value> {
+                let output_id = execution["output_id"].as_str();
+                if execution["spawned"] == false {
+                    return work::record_runner_not_started(
+                        p,
+                        &check_id,
+                        execution["pctx_error"]
+                            .as_str()
+                            .unwrap_or("SPAWN_FAILED_NO_OUTPUT"),
+                    );
+                }
+                if execution["raw_available"] == false || output_id.is_none() {
+                    return work::record_runner_execution_error(
+                        p,
+                        &check_id,
+                        execution["pctx_error"]
+                            .as_str()
+                            .unwrap_or("OUTPUT_UNAVAILABLE"),
+                    );
+                }
+                let output_id = output_id.unwrap();
+                if !finalization_errors.is_empty() || output::execution_error(&execution).is_some()
+                {
+                    return work::record_runner_unverified(p, &check_id, output_id);
+                }
+                if output::observed_report(p, output_id)?.is_some() {
+                    work::record_runner_report(p, &check_id, output_id)
+                } else {
+                    work::record_runner_unverified(p, &check_id, output_id)
+                }
+            })();
+            let evidence = match evidence {
+                Ok(evidence) => evidence,
+                Err(error) => {
+                    if error.code == "OUTPUT_EXPIRED" {
+                        execution["raw_available"] = json!(false);
                     }
-                    return Err(e);
-                }
-            };
-            if group_gone(&job)
-                && let Some(g) = guardian.as_ref()
-                && let Err(e) = g.borrow_mut().wait_finished()
-            {
-                if let Some(output_id) = execution["output_id"].as_str() {
-                    work::record_runner_unverified(p, &check_id, output_id)?;
-                } else {
-                    work::record_runner_execution_error(p, &check_id, &e.code)?;
-                }
-                return Err(e);
-            }
-            let released = if execution["spawned"] == false {
-                release_not_spawned(&dir, &mut job)?;
-                true
-            } else {
-                release(&dir, &mut job)?
-            };
-            let output_id = execution["output_id"].as_str();
-            let evidence = if execution["spawned"] == true && execution["raw_available"] == false {
-                // Publication already failed after an observed native execution.
-                // Do not reread the absent artifact and turn that completed
-                // outcome into an outer admission error without child truth.
-                work::record_runner_execution_error(
-                    p,
-                    &check_id,
-                    execution["pctx_error"]
-                        .as_str()
-                        .unwrap_or("OUTPUT_UNAVAILABLE"),
-                )?
-            } else {
-                let report = match output_id {
-                    Some(output_id) => output::observed_report(p, output_id)?,
-                    None => None,
-                };
-                if let (Some(output_id), Some(_)) = (output_id, report) {
-                    work::record_runner_report(p, &check_id, output_id)?
-                } else if let Some(output_id) = output_id {
-                    work::record_runner_unverified(p, &check_id, output_id)?
-                } else {
-                    work::record_runner_not_started(p, &check_id, "SPAWN_FAILED_NO_OUTPUT")?
+                    completion_error(
+                        &mut execution,
+                        &mut finalization_errors,
+                        "check_evidence",
+                        error,
+                    );
+                    json!({"check_id":check_id,"result":"unverified","publication":"failed","gate_evidence":false})
                 }
             };
             Ok(
-                json!({"job_id":job.job_id,"check_id":check_id,"execution":execution,"evidence":evidence,"memory_admission":memory,"memory_unknown_override":memory.available_bytes.is_none()&&b.profile.memory.unknown=="owner_override","resources_released":released,"resource_state":job.state,"host_permission":"separate_required"}),
+                json!({"job_id":job.job_id,"check_id":check_id,"execution":execution,
+                "evidence":evidence,"finalization_errors":finalization_errors,
+                "memory_admission":memory,"memory_unknown_override":memory.available_bytes.is_none()&&b.profile.memory.unknown=="owner_override",
+                "resources_released":released,"resource_state":job.state,"host_permission":"separate_required"}),
             )
         }
         #[cfg(not(unix))]
@@ -2359,32 +2427,17 @@ fn helper_request(
         },
     );
     let _finalization = crate::cancellation::finalize();
-    if job.pid.is_none() {
-        if let Some(g) = guardian.as_ref() {
-            g.borrow_mut().stop_without_child()?;
-        }
-        release_not_spawned(&dir, &mut job)?;
-    }
-    let execution = match result {
-        Ok(v) => v,
-        Err(e) => {
-            helper.state = "resource_owner_unknown".into();
-            save_helper(p, &helper)?;
-            return Err(e);
-        }
-    };
-    if group_gone(&job)
-        && let Some(g) = guardian.as_ref()
-    {
-        g.borrow_mut().wait_finished()?;
-    }
-    let released = if job.pid.is_none() {
-        true
-    } else {
-        release(&dir, &mut job)?
-    };
+    let mut execution = retain_execution(result, &job);
+    let mut finalization_errors = Vec::new();
+    let released = finish_owned_execution(
+        &dir,
+        &mut job,
+        guardian.as_ref(),
+        &mut execution,
+        &mut finalization_errors,
+    );
     helper.output_id = execution["output_id"].as_str().map(str::to_owned);
-    helper.state = if released {
+    helper.state = if released == Some(true) {
         if helper.started {
             "finished_observed"
         } else {
@@ -2394,9 +2447,25 @@ fn helper_request(
         "resource_owner_unknown"
     }
     .into();
-    save_helper(p, &helper)?;
+    let helper_receipt = match save_helper(p, &helper) {
+        Ok(()) => "published",
+        Err(error) => {
+            completion_error(
+                &mut execution,
+                &mut finalization_errors,
+                "helper_receipt",
+                error,
+            );
+            "failed"
+        }
+    };
     Ok(
-        json!({"helper":helper,"execution":execution,"memory_admission":memory,"memory_unknown_override":memory.available_bytes.is_none()&&b.profile.memory.unknown=="owner_override","resources_released":released,"model_usage_observed":false,"model_start_status":"unknown_inside_registered_provider","provider_capability":"managed_local_process","capabilities_granted":["registered_argv_only"],"task_completion":"not_evaluated"}),
+        json!({"helper":helper,"execution":execution,"finalization_errors":finalization_errors,
+        "helper_receipt_publication":helper_receipt,"memory_admission":memory,
+        "memory_unknown_override":memory.available_bytes.is_none()&&b.profile.memory.unknown=="owner_override",
+        "resources_released":released,"resource_state":job.state,"model_usage_observed":false,
+        "model_start_status":"unknown_inside_registered_provider","provider_capability":"managed_local_process",
+        "capabilities_granted":["registered_argv_only"],"task_completion":"not_evaluated"}),
     )
 }
 fn helper_status(p: &Project, id: &str) -> Result<Value> {
@@ -2883,6 +2952,98 @@ mod auxiliary_deadline_tests {
         assert!(!project.data_dir.join("outputs").exists());
         assert!(!project.control_db().exists());
         assert!(!project.index_db().exists());
+    }
+}
+
+#[cfg(all(test, unix))]
+mod completion_contract_tests {
+    use super::*;
+    use std::{
+        os::unix::process::CommandExt,
+        process::{Command, Stdio},
+    };
+    #[test]
+    fn backend_and_guardian_faults_keep_native_truth_and_conservative_ownership() {
+        for phase in ["backend", "guardian", "ownership"] {
+            let temp = tempfile::tempdir().unwrap();
+            let dir = temp.path();
+            private_dir(&dir.join("jobs")).unwrap();
+            private_dir(&dir.join("slots")).unwrap();
+            let mut native = Command::new("/bin/sh")
+                .args(["-c", "exit 17"])
+                .process_group(0)
+                .spawn()
+                .unwrap();
+            let pid = native.id();
+            assert_eq!(native.wait().unwrap().code(), Some(17));
+            let mut job: Job = serde_json::from_value(json!({"schema_version":1,"job_id":"JOB-fixture",
+                "workspace":"fixture","profile_fingerprint":"fixture","resources":["exclusive-compute"],
+                "state":"active_or_unknown","pid":pid,"process_group":pid,"boot_id":"fixture","created_at":0,"updated_at":0})).unwrap();
+            assert!(group_gone(&job));
+            publish(dir, &job).unwrap();
+            let slot = dir.join("slots/exclusive-compute.json");
+            let raw = serde_json::to_vec(&job).unwrap();
+            fs::write(&slot, &raw).unwrap();
+            let guardian = if phase == "guardian" {
+                let mut child = Command::new("/bin/sh")
+                    .args(["-c", "exit 0"])
+                    .stdin(Stdio::piped())
+                    .stdout(Stdio::piped())
+                    .spawn()
+                    .unwrap();
+                let input = child.stdin.take().unwrap();
+                let output = child.stdout.take().unwrap();
+                let mut status = 0;
+                // Actual external reap makes Guardian::try_wait fail, without
+                // an artificial timeout or any signal to an unowned process.
+                assert_eq!(
+                    unsafe { libc::waitpid(child.id() as i32, &mut status, 0) },
+                    child.id() as i32
+                );
+                Some(std::rc::Rc::new(std::cell::RefCell::new(Guardian {
+                    child,
+                    input,
+                    output,
+                    execution_group: None,
+                })))
+            } else {
+                None
+            };
+            let mut execution = if phase == "backend" {
+                retain_execution(
+                    Err(error("IO_ERROR", "Backend completion unavailable", 7)),
+                    &job,
+                )
+            } else {
+                json!({"spawned":true,"termination":"exited","child_exit_code":17,"signal":null,"output_id":"OUT-fixture","raw_available":true})
+            };
+            if phase == "ownership" {
+                job.pid = None;
+                job.process_group = None;
+            }
+            let mut errors = Vec::new();
+            let released = finish_owned_execution(
+                dir,
+                &mut job,
+                guardian.as_ref(),
+                &mut execution,
+                &mut errors,
+            );
+            assert_eq!(execution["spawned"], true);
+            assert_eq!(output::execution_error(&execution).unwrap().exit, 7);
+            if phase == "backend" {
+                assert_eq!(released, Some(true));
+                assert!(!slot.exists());
+                assert_eq!(execution["termination"], "unknown");
+                assert!(execution["child_exit_code"].is_null());
+            } else {
+                assert_eq!(released, None);
+                assert_eq!(fs::read(&slot).unwrap(), raw);
+                assert_eq!(execution["child_exit_code"], 17);
+                assert_eq!(execution["output_id"], "OUT-fixture");
+                assert_eq!(errors[0]["phase"], phase);
+            }
+        }
     }
 }
 

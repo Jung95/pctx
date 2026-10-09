@@ -1,0 +1,23 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.48s
+     Running tests/runner.rs (target/debug/deps/runner-262d46ab6960599b)
+
+running 1 test
+test check_completion_faults_preserve_native_artifact_and_fail_closed ... FAILED
+
+failures:
+
+---- check_completion_faults_preserve_native_artifact_and_fail_closed stdout ----
+
+thread 'check_completion_faults_preserve_native_artifact_and_fail_closed' (9267971) panicked at tests/runner.rs:85:9:
+["work", "check", "show", "CHECK-820eaea2-fd9a-4851-a449-6be9002956cc"]: {"command":"arguments","coverage":{"reasons":["INVALID_ARGUMENT"],"status":"partial"},"data":null,"errors":[{"code":"INVALID_ARGUMENT","message":"Invalid command or option; see pctx --help","retryable":false}],"generation_id":null,"project_id":null,"schema_version":"1.0","status":"error","truncation":{"reasons":[],"truncated":false},"validation":{"checked_at":"2026-10-09T02:14:12.354Z","mode":"matched","scope":[],"workspace_atomic":false},"warnings":[],"workspace_id":null}
+ 
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    check_completion_faults_preserve_native_artifact_and_fail_closed
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 37 filtered out; finished in 6.72s
+
+error: test failed, to rerun pass `--test runner`

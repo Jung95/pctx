@@ -146,6 +146,14 @@ independent cancelled native termination remains. A
 final native receipt can be published even if subsequent artifact storage fails;
 that does not promise that a raw artifact exists or that resources were released.
 
+Registered CheckRun and local Helper responses also retain `execution` through
+finalization errors. `finalization_errors` identifies cleanup/evidence/receipt
+failures. `resources_released:null` means release was not fully confirmed, including
+partial slot removal followed by failed journal publication; guardian uncertainty
+cannot imply release. Failed check evidence is explicitly unverified/not-published.
+Helper `helper_receipt_publication` distinguishes returned state from durable state.
+These flags do not replace the child's actual exit, capture or artifact identity.
+
 A parsed `run` request refused before launch carries `spawned:false`,
 `termination:not_started`, null child code/signal and its PCTX error even when
 capacity, representation or query-timeout admission fails. The measured minimum
@@ -184,5 +192,6 @@ finite queries, manual Run, registered CheckRun/check alias, local Helper and ca
 guardian cancellation. Manual/registered cancellation with unavailable artifact
 publication preserves processing failure, native truth and no rerun. Helper artifact
 rereads use the explicit provider workspace; caller-workspace metering may report
-unknown without changing delivered outcome. Broader callback fault/phase races and
-native Windows console delivery remain unqualified. See the [shared exit matrix](../implementation/evidence/pctx01-exit-matrix-verification.json).
+unknown without changing delivered outcome. Bounded callback/capture/receipt/Runner faults are locally qualified in the
+[postspawn manifest](../implementation/evidence/pctx01-postspawn-runner-verification.json).
+Broader phase races and native Windows console delivery remain unqualified. See the [shared exit matrix](../implementation/evidence/pctx01-exit-matrix-verification.json).

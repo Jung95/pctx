@@ -201,6 +201,179 @@ fn report(tests: u64) -> String {
     )
 }
 #[test]
+fn check_completion_faults_preserve_native_artifact_and_fail_closed() {
+    for phase in ["evidence", "release"] {
+        let script = format!(
+            "printf x >> .pctx/invocations\nprintf x > .pctx/started\nwhile [ ! -f .pctx/allow_exit ]; do /bin/sleep 0.01; done\n{}",
+            report(1)
+        );
+        let f = Fixture::new(&script, true, None);
+        f.trust();
+        let child = f
+            .command(&f.run_args())
+            .env_remove("PCTX_RUNNER_DIAGNOSTICS")
+            .stdout(Stdio::piped())
+            .stderr(Stdio::piped())
+            .spawn()
+            .unwrap();
+        let job = f.wait_child();
+        wait_marker(&f.root.join(".pctx/started"));
+        let mut db_lock = None;
+        let mut saved_receipt = None;
+        if phase == "evidence" {
+            let control = fs::read_dir(f.data.join("controls"))
+                .unwrap()
+                .map(|entry| entry.unwrap().path().join("control.sqlite3"))
+                .find(|path| path.is_file())
+                .unwrap();
+            let db = rusqlite::Connection::open(control).unwrap();
+            db.execute_batch("BEGIN IMMEDIATE").unwrap();
+            db_lock = Some(db);
+        } else {
+            let path = f
+                .host
+                .join("jobs")
+                .join(format!("{}.json", job["job_id"].as_str().unwrap()));
+            let bytes = fs::read(&path).unwrap();
+            let saved = path.with_extension("saved");
+            fs::rename(&path, &saved).unwrap();
+            fs::create_dir(&path).unwrap();
+            saved_receipt = Some((saved, bytes));
+        }
+        fs::write(f.root.join(".pctx/allow_exit"), b"x").unwrap();
+        let out = child.wait_with_output().unwrap();
+        assert_eq!(out.status.code(), Some(7), "{phase}: {out:?}");
+        let value: Value = serde_json::from_slice(&out.stdout).unwrap();
+        assert_eq!(value["data"]["execution"]["spawned"], true);
+        assert_eq!(value["data"]["execution"]["termination"], "exited");
+        assert_eq!(value["data"]["execution"]["child_exit_code"], 0);
+        assert_eq!(value["data"]["execution"]["raw_available"], true);
+        assert_eq!(
+            value["data"]["finalization_errors"][0]["phase"],
+            if phase == "evidence" {
+                "check_evidence"
+            } else {
+                "resource_release"
+            }
+        );
+        assert_ne!(value["data"]["evidence"]["result"], "passed");
+        if phase == "evidence" {
+            assert_eq!(value["data"]["resources_released"], true);
+            assert_eq!(value["data"]["evidence"]["publication"], "failed");
+        } else {
+            assert!(value["data"]["resources_released"].is_null());
+            assert_eq!(value["data"]["resource_state"], "release_unconfirmed");
+            let (saved, bytes) = saved_receipt.unwrap();
+            assert_eq!(fs::read(saved).unwrap(), bytes);
+        }
+        assert!(!f.slot().exists()); // Physical slot removal is distinct from durable release confirmation.
+        if let Some(db) = db_lock {
+            db.execute_batch("ROLLBACK").unwrap();
+        }
+        let reread = f.ok(&[
+            "output",
+            "show",
+            value["data"]["execution"]["output_id"].as_str().unwrap(),
+            "--view",
+            "full",
+        ]);
+        assert_eq!(reread["data"]["child_exit_code"], 0);
+        let check = f.ok(&["check", "show", value["data"]["check_id"].as_str().unwrap()]);
+        assert_ne!(check["data"]["status"], "passed");
+        assert_eq!(fs::read(f.root.join(".pctx/invocations")).unwrap(), b"x");
+    }
+}
+#[test]
+fn helper_final_receipt_failure_retains_provider_execution_and_cleanup() {
+    let script = "printf x >> .pctx/invocations\nprintf x > .pctx/started\nwhile [ ! -f .pctx/allow_exit ]; do /bin/sleep 0.01; done\nprintf 'observed provider output\n'\nexit 23\n";
+    let f = Fixture::new(script, false, None);
+    let target = linked_provider(&f);
+    f.trust();
+    let child = f
+        .command(&[
+            "runner",
+            "helper-request",
+            "--task-id",
+            &f.task,
+            "--key",
+            "unit",
+            "--run",
+            &f.run,
+        ])
+        .env_remove("PCTX_RUNNER_DIAGNOSTICS")
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped())
+        .spawn()
+        .unwrap();
+    wait_marker(&target.join(".pctx/started"));
+    let limit = Instant::now() + Duration::from_secs(5);
+    let path = loop {
+        let found = fs::read_dir(f.data.join("workspaces"))
+            .unwrap()
+            .flat_map(|entry| {
+                fs::read_dir(entry.unwrap().path().join("helpers"))
+                    .into_iter()
+                    .flatten()
+            })
+            .filter_map(|entry| {
+                let path = entry.ok()?.path();
+                if !path.file_name()?.to_str()?.starts_with("HELP-") || path.extension()? != "json"
+                {
+                    return None;
+                }
+                let value: Value = serde_json::from_slice(&fs::read(&path).ok()?).ok()?;
+                (value["state"] == "active_observed").then_some(path)
+            })
+            .next();
+        if let Some(path) = found {
+            break path;
+        }
+        assert!(Instant::now() < limit, "Helper receipt never became active");
+        std::thread::sleep(Duration::from_millis(5));
+    };
+    let before = fs::read(&path).unwrap();
+    let saved = path.with_extension("saved");
+    fs::rename(&path, &saved).unwrap();
+    fs::create_dir(&path).unwrap();
+    fs::write(target.join(".pctx/allow_exit"), b"x").unwrap();
+    let out = child.wait_with_output().unwrap();
+    assert_eq!(out.status.code(), Some(7), "{out:?}");
+    let value: Value = serde_json::from_slice(&out.stdout).unwrap();
+    assert_eq!(value["data"]["execution"]["child_exit_code"], 23);
+    assert_eq!(value["data"]["execution"]["termination"], "exited");
+    assert_eq!(value["data"]["execution"]["raw_available"], true);
+    assert_eq!(value["data"]["resources_released"], true);
+    assert_eq!(value["data"]["helper_receipt_publication"], "failed");
+    assert_eq!(value["data"]["helper"]["state"], "finished_observed");
+    assert_eq!(
+        value["data"]["finalization_errors"][0]["phase"],
+        "helper_receipt"
+    );
+    assert_eq!(fs::read(saved).unwrap(), before);
+    assert!(!f.host.join("slots/aux-agent.json").exists());
+    let output_id = value["data"]["execution"]["output_id"].as_str().unwrap();
+    let read = Command::new(env!("CARGO_BIN_EXE_pctx"))
+        .args([
+            "--root",
+            target.to_str().unwrap(),
+            "--format",
+            "json",
+            "output",
+            "show",
+            output_id,
+            "--view",
+            "full",
+        ])
+        .env("PCTX_DATA_DIR", &f.data)
+        .env("PCTX_ACTOR", "owner")
+        .output()
+        .unwrap();
+    assert!(read.status.success(), "{read:?}");
+    let reread: Value = serde_json::from_slice(&read.stdout).unwrap();
+    assert_eq!(reread["data"]["child_exit_code"], 23);
+    assert_eq!(fs::read(target.join(".pctx/invocations")).unwrap(), b"x");
+}
+#[test]
 fn trusted_typed_check_is_real_evidence() {
     let f = Fixture::new(&report(1), false, None);
     f.trust();

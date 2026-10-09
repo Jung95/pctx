@@ -1249,3 +1249,22 @@ tracks observed cancellation independently from primary processing error, so
 receipt failure wins while native cancelled termination/SIGKILL remain. This is
 the existing G05-D06 processing/publication precedence applied to G05-D02, not a
 new condition or reopened exit category. Candidate failure remains in evidence.
+
+## PCTX01-G05-D02 Runner finalization and local closure — 2026-10-09
+
+Preserve an observed execution when guardian, slot-release publication, evidence
+recording or Helper receipt fails. Shared finalization precedes DB/Helper persistence,
+so recording failure cannot bypass cleanup. Guardian or ownership uncertainty keeps
+slots unconfirmed; partially removed slots plus failed final journal publication
+produce resources_released null, not false certainty. Failed check publication is
+unverified/not-published and cannot grant gate evidence. Helper in-memory state and
+receipt publication are separate. Processing failures still override cancellation.
+
+Native controls use actual SQL contention, atomic-publication obstruction, completed
+provider exit23, externally reaped guardian ECHILD and surviving artifact reread.
+Backend Result::Err is explicitly an API-boundary model with a real completed process,
+not an induced backend failure. Initial fixture CLI/selector mistakes are retained and
+corrected without relaxed assertions. All seven original phase groups represented;
+103 focused/static/review proof closes bounded local G05-D02, increasing28→29 of40.
+Platforms/general race/independent producer acceptance remain separately open; no
+whole PCTX01 completion or new ID/denominator. Next existing condition is G04-D03.

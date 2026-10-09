@@ -382,8 +382,8 @@
     {
       "id": "PCTX01-G05-D02",
       "gate": "G05",
-      "status": "open",
-      "local_implementation": "callback and four native phase groups qualified; three Runner completion groups remaining",
+      "status": "closed",
+      "local_implementation": "qualified_bounded_native_postspawn_contract",
       "completion_condition": "Complete native callback/post-spawn fault injection while retaining already observed capture/publication child outcome, artifact and no-rerun truth",
       "spec_sections": [
         "14",
@@ -396,15 +396,16 @@
         "pctx01-run-exit-verification.json",
         "pctx01-postspawn-callback-verification.json",
         "pctx01-postspawn-capture-verification.json",
-        "pctx01-postspawn-receipt-verification.json"
+        "pctx01-postspawn-receipt-verification.json",
+        "pctx01-postspawn-runner-verification.json"
       ],
       "verification_environment": "Native macOS arm64 local common proof; all release platforms separately required by G09",
-      "macOS_arm64": "partial",
+      "macOS_arm64": "bounded_verified",
       "macOS_x86_64": "unverified; G09-D02",
       "Linux_x86_64": "unverified; G09-D03",
       "Linux_aarch64": "prior fixed-source full only; inspect linked manifest per contract",
       "Windows_x86_64": "unverified; G09-D04",
-      "documentation_evidence": "Four of seven phase groups bounded locally qualified; retained receipt and PID-readiness failures; no new IDs or denominator"
+      "documentation_evidence": "All seven existing phase groups represented; final103 focusedPASS/staticPASS/read-only review; required native platforms remain G09"
     },
     {
       "id": "PCTX01-G05-D03",
@@ -991,9 +992,8 @@
       "documentation_evidence": "closure plan recorded; execution gaps retained"
     }
   ],
-  "closed_details": 28,
+  "closed_details": 29,
   "execution_order": [
-    "G05-D02 (existing actual callback/postspawn fault truth; G03-D03/D04 and G05-D06 locally closed)",
     "G04-D03 + G06-D03 + G07-D03 (existing response matrix)",
     "G08-D04 + G05-D05 (remaining phase/startup conditions, original budgets)",
     "G10-D04 (candidate checks)",
@@ -1003,7 +1003,7 @@
   "independent_review": {
     "agent": "/root/work_control",
     "no_edits_builds_tests": true,
-    "finding": "G05-D02 callback proof not established; changed closed to open, denominator40 unchanged",
+    "finding": "Original fixed-plan callback overclaim corrected; current callback/capture/receipt/Runner proof now locally qualifies G05-D02. Historical review record retained; latest condition closure points to current evidence.",
     "record": "pctx01-closure-review.json"
   },
   "closed_during_reorganization": [
@@ -1011,13 +1011,13 @@
     "PCTX01-G10-D03"
   ],
   "latest_condition_closure": {
-    "id": "PCTX01-G05-D06",
-    "detail_before": 27,
-    "detail_after": 28,
+    "id": "PCTX01-G05-D02",
+    "detail_before": 28,
+    "detail_after": 29,
     "denominator_before": 40,
     "denominator_after": 40,
-    "scope": "bounded local shared exit classification; independent producer semantics/G05-D02/G08/G09 stay separate",
-    "independent_review": "/root/work_control; pctx01-exit-matrix-verification.json"
+    "scope": "bounded native postspawn common error/response contract; all seven fixed phase groups represented. G08/G09 and independent producer acceptance remain separate.",
+    "independent_review": "/root/work_control; pctx01-postspawn-runner-verification.json"
   },
   "summary_reconciliation": {
     "previous_summary": 25,

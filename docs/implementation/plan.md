@@ -20,55 +20,46 @@ PCTX01, implementing, no next official task.
 ## Current fixed PCTX01 execution register — 2026-10-09
 
 Only **PCTX01** is active, lowest incomplete official ID/no prerequisite. The
-fixed [closure plan](tasks/PCTX01-closure-plan.md) and 40-item register remain
-**28/40** locally closed, **0/10** whole gates; 140 leaves/172 help paths/12
-historical R groups and required platforms are unchanged.
+fixed [closure plan](tasks/PCTX01-closure-plan.md) and 40-item register now have
+**29/40** locally closed, **0/10** whole gates; denominator40, 140 leaves/172 help
+paths/12 historical R groups and required platforms are unchanged.
 
-Current **PCTX01-G05-D02 remains open**. Output-job active/final receipt errors
-are now explicit processing failures rather than ignored writes. Active failure
-enters owned capture/reaping. Final native receipt publication occurs before
-compact/artifact save, so its failure is persisted in artifact pctx_error and
-cannot produce passing evidence on reread. Native outcome, available capture,
-raw artifact availability and job_receipt_publication active/final status/errors
-remain independent; no command is rerun or resource release inferred.
+**PCTX01-G05-D02 is closed as bounded local native postspawn qualification**.
+The [final fault manifest](evidence/pctx01-postspawn-runner-verification.json)
+connects all seven existing phase groups to current controls and historical
+callback/capture/receipt evidence. Final-source103 focused tests PASS
+(49lib/5cancellation/11Run/38Runner); locked all-target Clippy -D warnings and
+format PASS. Independent read-only review found no material blocker.
 
-Actual native filesystem-obstruction controls cover active and final receipt
-failure, with a successful typed passing-report control and cancellation combined
-with final receipt refusal. Receipt storage7 takes precedence over cancellation130
-while independent cancelled native termination remains. Both streams, native
-SIGKILL versus exit0, exact retained prior receipt bytes, artifact reread rejecting
-passing reports, phase errors and one invocation are checked. The initial ignored
-error reproduction remains in evidence. See the [receipt manifest](evidence/pctx01-postspawn-receipt-verification.json)
-for source-bound results and retained failures. Final-source100 focused tests
-PASS (48lib/5cancellation/11Run/36Runner), locked all-target Clippy -D warnings
-and format PASS. Independent review found no blocker in this bounded receipt
-phase; all jobs are terminal. These are not whole/platform tests.
+Shared Runner finalization now cleans up before evidence/Helper persistence,
+retains completed execution through DB/receipt errors, holds ownership unknown
+after guardian/owner failure and reports partial slot release as null/unconfirmed.
+Failed evidence publication returns unverified/not-published without passing gate
+evidence. Helper returned state is separate from its receipt publication. Actual
+SQL writer lock, journal refusal after slot removal, Helper final receipt refusal,
+and native guardian ECHILD are controlled; one invocation and available artifact
+reread/native status are preserved. The backend Result::Err control models that
+API boundary using a real completed-process fixture; it does not induce a failure
+inside the shared output backend. Actual pipe/wait/worker faults are separate controls.
 
-Focused regression found an existing cancellation fixture race: waiting for PID
-file existence allowed parsing an empty file. Both sibling PID fixtures now emit
-a newline and wait for a complete positive PID within the original5s fixture
-limit. The99PASS1FAIL is retained, distinct from the Runner result after the
-fixture repair. No original product query1s startup budget changed or failure
-reclassified as solved. This is a fixture readiness repair, not retry-only proof.
+Initial new-fixture failures are retained: unsupported work-check-show path, and
+Helper obstruction selector permitting staging files without establishing intended
+final refusal. Corrections use existing check-show CLI and published HELP-*.json;
+assertions are not weakened. Earlier callback/continuous-read/receipt/cancellation
+failures and original four macOS1s startup product failures remain in evidence.
+This is focused local closure, not a passing whole suite or platform integration.
 
-Four original phase groups now have bounded local proof (pipe setup, native wait,
-capture workers, job receipt publication). Three remain: CheckRun backend-error
-cleanup, CheckRun completion, Local Helper completion. Next exact action is that
-finite Runner finalization group: cleanup independent from failed evidence/receipt
-publication, retained execution and truthful released/unknown ownership, and no
-passing gate evidence after failed recording. No other official task starts.
+Next exact condition is **PCTX01-G04-D03**: complete supported success/partial/error
+envelope required fields and exact final serialized bytes across fixed
+representation/destination classes. Use the existing140-leaf crosswalk, not new
+producer features or another reorganization. Then existing G06-D03/G07-D03,
+G08-D04/G05-D05, G10/G09 obligations remain. No next official task is selected
+until every mandatory PCTX01 condition/platform is qualified.
 
-Responsibility/completion audit remains fixed: original §14/38 common postspawn
-response/fault boundary only, not independent producer expansion; seven phase
-groups, no new IDs or lowered completion bar. Prior callback4, pipe/wait/join and
-G05-D06 exit evidence remain historical proof. G05-D02 closes only when all seven
-phase groups are qualified, not after a partial local patch.
-
-Original four macOS startup product failures remain open. Inactive PCTX36 Tick
-and PCTX47 Helper metering routing remain separate backlog. Required macOS
-x86_64/Linux x86_64/Windows x86_64 native integration remains unverified; Linux
-aarch64 is supporting evidence only. No Actions or whole/platform rerun. Normal
-main skip-ci commit/push is authorized; Node24 pins remain.
+Inactive PCTX36 Tick and PCTX47 Helper metering routing remain separate backlog.
+Required macOS x86_64/Linux x86_64/Windows x86_64 native integration is unverified;
+Linux aarch64 is supporting evidence only. No Actions or whole/platform rerun.
+All jobs are terminal. Main skip-ci commit/push authorized; Node24 pins remain.
 
 ## Ownership and common boundaries
 

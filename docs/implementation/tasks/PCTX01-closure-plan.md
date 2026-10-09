@@ -32,7 +32,7 @@ Current bounded detail closure: **28/40**; whole gates **0/10**.
 | PCTX01-G04-D03 | open | Complete success/partial/error envelope required fields and exact final bytes for all supported representation/destination classes; no interrupted JSON or fabricated omitted count | main.rs,domain.rs,render.rs | §8/14/38 | pctx01-run-final-bytes-verification.json, pctx01-representation-admission-verification.json |
 | PCTX01-G04-D04 | closed | Existing NDJSON and native-hook exceptions use their own framing and pre-effect unsupported-format refusal | main.rs,watch.rs,adapter.rs | §14/38 | pctx01-delivery-verification.json, pctx01-nested-execution-verification.json |
 | PCTX01-G05-D01 | closed | Actual child0/1/2/signal and prelaunch/not-spawned truth stay distinct from PCTX status on native Unix | main.rs,output.rs,query_process.rs | §14/38 | pctx01-run-exit-verification.json |
-| PCTX01-G05-D02 | open | Complete native callback/post-spawn fault injection while retaining already observed capture/publication child outcome, artifact and no-rerun truth | main.rs,output.rs,runner.rs | §14/38 | pctx01-nested-execution-verification.json, pctx01-run-exit-verification.json, pctx01-postspawn-callback-verification.json, pctx01-postspawn-capture-verification.json, pctx01-postspawn-receipt-verification.json |
+| PCTX01-G05-D02 | closed | Complete native callback/post-spawn fault injection while retaining already observed capture/publication child outcome, artifact and no-rerun truth | main.rs,output.rs,runner.rs | §14/38 | pctx01-nested-execution-verification.json, pctx01-run-exit-verification.json, pctx01-postspawn-callback-verification.json, pctx01-postspawn-capture-verification.json, pctx01-postspawn-receipt-verification.json, pctx01-postspawn-runner-verification.json |
 | PCTX01-G05-D03 | closed | Checked help/parser/stream/hook/response writes return IO7 on actual Unix closed delivery; failed metering preserves delivered outcome | main.rs,watch.rs,adapter.rs | §14/38 | pctx01-delivery-verification.json |
 | PCTX01-G05-D04 | closed | One grouped persisted-data error matrix: known repaired Work/Adapter plus all frozen DB/artifact/credential decoders; caller/config2 versus storage7, original expiry, conflict9 and replay precedence; safe fixed errors/no corrupt bytes | domain.rs,work.rs,adapter.rs,quota.rs,session.rs,operations.rs,storage.rs,broker.rs,schedule.rs,output.rs,pack.rs,filters.rs,project.rs,runner.rs,windows_guardian.rs | §14/27/38 | pctx01-adapter-errors-verification.json, pctx01-persisted-errors-verification.json, pctx01-task-storage-verification.json, pctx01-grouped-storage-verification.json, pctx01-storage-schedule-verification.json |
 | PCTX01-G05-D05 | product_failure | Resolve four original macOS query startup failures at original1s/8x16/stream/group conditions; direct reproduction is evidence, not exemption or root-cause proof | query_process.rs,project.rs; tests/project_deadline.rs | §14/38 | pctx01-startup-isolation-verification.json, pctx01-task-storage-verification.json |
@@ -256,3 +256,14 @@ Initial ignored-write failure and99PASS1FAIL PID-readiness fixture failure remai
 in the manifest, alongside fixture-only repair evidence. Original1s-budget startup
 product failures are unchanged. Four phase groups locally qualified, three Runner
 completion groups remain. Fixed condition still open;28/40 and0/10 unchanged.
+
+## G05-D02 bounded local closure — current
+
+All seven fixed callback/postspawn phase groups now have bounded local controls,
+including shared Runner cleanup independent of DB/Helper publication. Final103
+focused PASS/static PASS/read-only review support closure; prior partial entries
+above remain historical evidence, not the current cursor. Backend Err is modeled
+at its API boundary with a real completed child; actual backend wait/pipe/capture
+faults have independent controls. No whole-platform or general containment claim.
+Detail29/40, whole0/10, denominator unchanged. Next is existingG04-D03 full envelope
+and exact final bytes across fixed supported representation/destination classes.

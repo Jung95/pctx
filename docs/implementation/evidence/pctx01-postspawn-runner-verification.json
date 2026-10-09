@@ -1,0 +1,138 @@
+{
+  "task": "PCTX01",
+  "condition": "PCTX01-G05-D02",
+  "status": "closed_bounded_local",
+  "base_revision": "17298fcb4eed7af5ddab2dd5da81ac2800e085ee",
+  "environment": {
+    "system": "Darwin",
+    "machine": "arm64",
+    "rust": "1.99.0"
+  },
+  "scope": "Existing finite native callback/postspawn fault response contract only. All seven groups represented. No whole-task/platform, general containment or independent producer completion claim.",
+  "groups": [
+    {
+      "phase": "callback",
+      "evidence": "pctx01-postspawn-callback-verification.json",
+      "current_control": "output::capture_tests::registered_native_callback_failures_preserve_processing_truth"
+    },
+    {
+      "phase": "pipe setup/native wait/capture workers",
+      "evidence": "pctx01-postspawn-capture-verification.json",
+      "current_controls": [
+        "output::capture_tests::native_pipe_wait_and_worker_faults_preserve_surviving_capture",
+        "output::capture_tests::continuously_readable_capture_obeys_finalization_deadline"
+      ]
+    },
+    {
+      "phase": "output-job receipt publication",
+      "evidence": "pctx01-postspawn-receipt-verification.json",
+      "current_control": "output::capture_tests::native_job_receipt_failures_preserve_artifact_and_block_pass_evidence"
+    },
+    {
+      "phase": "CheckRun backend-error cleanup",
+      "current_control": "runner::completion_contract_tests::backend_and_guardian_faults_keep_native_truth_and_conservative_ownership",
+      "qualification": "Models Result::Err boundary using real completed native-process fixture, not an induced shared output backend failure. Cleanup is independent of evidence recording. Other native capture/wait faults are induced in the linked/current output controls."
+    },
+    {
+      "phase": "CheckRun completion",
+      "current_controls": [
+        "check_completion_faults_preserve_native_artifact_and_fail_closed",
+        "runner::completion_contract_tests::backend_and_guardian_faults_keep_native_truth_and_conservative_ownership"
+      ],
+      "faults": "Actual SQL writer lock, actual journal directory-over-file refusal after physical slot removal, actual externally reaped guardian producing ECHILD, spawned/owner contradiction."
+    },
+    {
+      "phase": "Local Helper completion",
+      "current_control": "helper_final_receipt_failure_retains_provider_execution_and_cleanup",
+      "faults": "Actual final Helper receipt directory-over-file refusal with native provider exit23, available output reread in provider workspace and observed aux-slot release."
+    }
+  ],
+  "repair": "Shared finalizer cleans up before evidence/helper persistence, conservatively retains guardian/owner uncertainty, reports partial slot release as null/unconfirmed, keeps completed execution through DB/receipt errors and prevents passing gate evidence after finalization failure.",
+  "runs": [
+    {
+      "session": 63270,
+      "log": "pctx01-postspawn-runner-faults-initial.log",
+      "result": "0PASS1FAIL",
+      "qualification": "New fixture uses unsupported work check show; preceding SQL fault/native-data assertions passed but second phase not reached. Corrected to existing check show CLI."
+    },
+    {
+      "session": 81279,
+      "log": "pctx01-postspawn-runner-native.log",
+      "result": "86PASS1FAIL",
+      "counts": {
+        "lib": 49,
+        "runner_pass": 37,
+        "runner_fail": 1
+      },
+      "qualification": "Helper obstruction selector permitted staging .tmp files; final publication failure was not established. Restricted to published HELP-*.json without weakening refusal criterion. No exact selected filename captured."
+    },
+    {
+      "session": 58395,
+      "log": "pctx01-postspawn-runner-final.log",
+      "result": "103PASS",
+      "counts": {
+        "lib": 49,
+        "cli_cancellation": 5,
+        "cli_run_exit": 11,
+        "runner": 38
+      },
+      "scope": "Final source; same authored fault assertions and native/ownership/cancellation/Run budget regression."
+    },
+    {
+      "session": 45008,
+      "log": "pctx01-postspawn-runner-clippy.log",
+      "result": "PASS",
+      "command": "cargo clippy --locked --all-targets -- -D warnings"
+    },
+    {
+      "log": "pctx01-postspawn-runner-format.log",
+      "result": "PASS",
+      "command": "cargo fmt --all -- --check"
+    }
+  ],
+  "review": {
+    "agent": "/root/work_control",
+    "mode": "read-only, no edits/builds",
+    "finding": "No material blocker; all seven original groups represented. Final103PASS and locked all-target Clippy/format PASS support bounded local closure. Backend Err modeling qualification retained."
+  },
+  "remaining": "G04-D03/G06-D03/G07-D03 response/empty/control; G08-D04/G05-D05 phase/original startup; G09 required native integration; G10 final checks. Other official tasks inactive.",
+  "retained_failures": [
+    "Initial unsupported fixture CLI failure",
+    "Initial ambiguous Helper obstruction fixture failure",
+    "Prior callback/continuous-read/receipt/cancellation candidate failures retained in linked manifests",
+    "Original four macOS1s startup product failures",
+    "Inactive PCTX36 Tick failure"
+  ],
+  "required_platforms": "macOS arm64/x86_64, Linux x86_64, Windows x86_64; only focused macOS arm64 proof here",
+  "github_actions_dispatched": false,
+  "source_sha256": {
+    "src/runner.rs": "9ff632504adb29c2143c4eb3945b59c1ac2795e2e9b7a0272095d6a083a29b65",
+    "src/output.rs": "e9c86b6d90a4f3fa311f74bc59fe6c9a3eb2a801a7f98852c8105fda86cc6493",
+    "src/work.rs": "a5c89c59fb012d871a9a9ea335d698b6b4fd05e4e549236c8b1a6835d4bd8170",
+    "src/main.rs": "1f8c0ec5227eb346494036e5e544e6baef250f543714eed8005f748c5d50b32a",
+    "src/cancellation.rs": "4901638803bb82894b3211d0f9a8f9537850c4bfed3ac178489ec20780114d4f",
+    "tests/runner.rs": "f65b15d9837e6d0bbaa8f626611a881c891b280a9c99bd9787b36cb6be97fabe",
+    "Cargo.toml": "179b02f69bdd7c61adc41ed5f71f8737ee692655b46b0bfeb9c1ffe165d8e97f",
+    "Cargo.lock": "f96362897990caba560793601bc9fca08cef5c977907bb06889d5595d2acd7b0"
+  },
+  "artifacts_sha256": {
+    "target/debug/pctx": "304cea4094a34ca82cc20e1574d65cbb7bdec0cbde165f1304bd366ef555c02f",
+    "target/debug/deps/pctx-ae897bec01e143c7": "22909944269520520040ed770ac6c31ea59deee3aa5d31f2342e6644351dd044",
+    "target/debug/deps/runner-262d46ab6960599b": "280f3610f23701874e65ed56aa6969e6c681dbee7265f23b6d2aa15f9e42db40"
+  },
+  "log_sha256": {
+    "pctx01-postspawn-runner-faults-initial.log": "4de02ac1df2f3dcd986aaf137d97be87a0137c70c83ae4b4f9d6427b78baec83",
+    "pctx01-postspawn-runner-native.log": "11b0fd985ed246f44ebedfe020e4fee0be9b627c5a2829be0cdf6f10a6303a76",
+    "pctx01-postspawn-runner-final.log": "3f4d05eee41af1fce551b873ff8be82e702709460d3fcc9036674b7565c2a0e7",
+    "pctx01-postspawn-runner-clippy.log": "36f0064d34f7b1006ead55e80cba29ea1d1f85ea811b9b438fb283e5241301ca",
+    "pctx01-postspawn-runner-format.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "fixed_register": {
+    "closed_details_before": 28,
+    "closed_details_after": 29,
+    "detail_denominator": 40,
+    "closed_gates": 0,
+    "gate_denominator": 10,
+    "new_ids": []
+  }
+}
