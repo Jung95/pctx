@@ -1,5 +1,9 @@
 # PCTX01 prepared host comparison
 
+**Consumed:** both phases completed. Do not run the command below again. See
+[verified results](evidence/pctx01-startup-host-control-comparison-verification.json).
+The remaining instructions describe the historical executed protocol.
+
 This prepared diagnostic needs no macOS administrator authentication. It has not
 run yet. PCTX01-G05-D05 remains a product failure; no acceptance gate is closed.
 The purpose is to compare the same original tests while Codex is running and after

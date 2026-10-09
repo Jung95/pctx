@@ -1,0 +1,12 @@
+{
+  "phase": "B",
+  "test": "simultaneous_streams_are_collected_and_overflow_never_infers_success",
+  "parent_pid": 20237,
+  "uid": 502,
+  "test_exit": 0,
+  "runner_elapsed_seconds": 0.2688680410501547,
+  "runner_utc_start": "2026-10-09T09:39:20.363639+00:00",
+  "reported_timeout_pids": [],
+  "host_state": "human-declared-closed",
+  "host_process_absence_verified": false
+}

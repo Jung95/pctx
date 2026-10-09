@@ -1,0 +1,73 @@
+{
+  "task": "PCTX01",
+  "condition": "PCTX01-G05-D05",
+  "source_revision": "0d7560af6c99931c04afefb3ecdac0baa914af87",
+  "all_frozen_inputs_match": true,
+  "eight_per_test_receipts_and_logs_match": true,
+  "phase_A": {
+    "pass": 3,
+    "fail": 1,
+    "failure": "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget",
+    "timeout_pids": [
+      19989,
+      19991
+    ],
+    "timeout_elapsed_ms": [
+      1000,
+      1000
+    ],
+    "stdout_stderr_bytes": [
+      0,
+      0
+    ]
+  },
+  "phase_B": {
+    "pass": 4,
+    "fail": 0,
+    "concurrent_asserted_successes": 128
+  },
+  "phase_A_total_attempts": "not instrumented;do not infer128 from intended workload or PID ranges",
+  "owned_recorded_PID_existence": {
+    "19974": "absent",
+    "19975": "absent",
+    "19981": "absent",
+    "19984": "absent",
+    "19989": "absent",
+    "19991": "absent",
+    "20091": "absent",
+    "20102": "absent",
+    "20105": "absent",
+    "20108": "absent",
+    "20237": "absent"
+  },
+  "cleanup_scope": "runner,eight test parents,two reported expired children only;all spawned children were not inventoried",
+  "interpretation": "host-associated difference observed;fixed order/time/cache/contention/orphan-helper confounds and human-declared host state prevent cause or repair inference",
+  "product_repair": false,
+  "acceptance": "G05-D05 remains product_failure;33/40details,0/10whole gates",
+  "authentication": 0,
+  "evidence_sha256": {
+    "pctx01-startup-host-control-comparison-A-0-result.json": "b2ac91fbeca7ebf5b431bedac8a3c08fec812988b389a897005c49cc6b1c05a1",
+    "pctx01-startup-host-control-comparison-A-0-test.log": "2815ada75e7d7a55aa55790dd8fd938da7ca2ab26b5f9fce529be13a02857b4e",
+    "pctx01-startup-host-control-comparison-A-1-result.json": "502d4824cfd551f4110df993c90bac49fbe664f5e07dfbded5e11cd5a30f74c8",
+    "pctx01-startup-host-control-comparison-A-1-test.log": "45d2cc4a180ac1197a3200ae362f3ae2cd7e923a9e4daefcb2d5654a63d2ff83",
+    "pctx01-startup-host-control-comparison-A-2-result.json": "fd39634a8e9d036d9301e95aae05de07a2efbe7dd6fc1d8957925ad89b123694",
+    "pctx01-startup-host-control-comparison-A-2-test.log": "e5fae125b7932fb7f63a31383e1a434b00d580f3223aee9edeae9e7f8f07102a",
+    "pctx01-startup-host-control-comparison-A-3-result.json": "f5765597774570659752d0886e9a1d0a8cf183a6ff5b60634fbe2d1331e70b20",
+    "pctx01-startup-host-control-comparison-A-3-test.log": "a7fc55fcbebc562335c1d3454ed3638a31f54aa71479d5400741a77c0c1be786",
+    "pctx01-startup-host-control-comparison-B-0-result.json": "08459ec8b65352c80097f9f708dd77ed6b7c8467fa4842a1bc6d8f1b8b026c8c",
+    "pctx01-startup-host-control-comparison-B-0-test.log": "2957584c5901df7e44db34044bbc9f5aeafdf5e63d788236eee04ad1174eb445",
+    "pctx01-startup-host-control-comparison-B-1-result.json": "8ea2788b1f659c33256a4f6a78a95dee95cfe4968d6ba26ec49aae2994e2495b",
+    "pctx01-startup-host-control-comparison-B-1-test.log": "aebd90c3eaba1f4c2e68879bbb114236a69be30b7ce0f354b2c4dac3e8a83bce",
+    "pctx01-startup-host-control-comparison-B-2-result.json": "b83c03ecdfc8b9d8540ec0e10b9b0128d0b3fc0eba18e66c10587da98947fe4d",
+    "pctx01-startup-host-control-comparison-B-2-test.log": "f2cdb609dde938411ff8929f3f61bc0dd7f28afd09c8ddabb1964cea8ca82709",
+    "pctx01-startup-host-control-comparison-B-3-result.json": "db30f5416c881eddbab8e19e7f68d07d2a8f06222769063fdaa3db43e892fcbb",
+    "pctx01-startup-host-control-comparison-B-3-test.log": "a065ba5f9d494315faac5339eb14af74f48e88546facb8e349a7cce46e945e6d",
+    "pctx01-startup-host-control-comparison-phase-A-complete.json": "c83fdc220823b11e563dd5fd9c2d181681e3ee7225843a57615fa6c31fc9259c",
+    "pctx01-startup-host-control-comparison-result.json": "6da0ed41ddfc09df1f87ab7c939e9790633c6a89b1d7d54d556d7c8a3396dc44"
+  },
+  "independent_review": {
+    "reviewer": "work_control",
+    "result": "all84 readiness/frozen/current source hash checks match;logs agree;A attempt denominator unavailable;B128 asserted successes;no repair or closure justified",
+    "next": "publish precise evidence;new supported correction or materially changed predeclared human-coordinated control needed"
+  }
+}

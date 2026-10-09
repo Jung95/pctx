@@ -1,0 +1,8 @@
+{
+  "generated_root": "/private/tmp/pctx01-host-control-n48rqw_u",
+  "removed": true,
+  "administrator_authentication": false,
+  "test_execution": false,
+  "scope": "consumed generated isolated source/build/session only;shared target/user source untouched",
+  "evidence": "committed-ready hashes audited before deletion;receipts/logs retained;readiness is now historical consumed input"
+}

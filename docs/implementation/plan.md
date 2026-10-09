@@ -1,5 +1,27 @@
 # Implementation plan
 
+## Completed ordinary-user host comparison — current, 2026-10-09
+
+[Verified comparison](evidence/pctx01-startup-host-control-comparison-verification.json)
+records unchanged source0d7560a and identical binary/current source hashes. All eight
+per-test receipts match raw logs. Human-declared host-open A:3PASS/1FAIL; concurrency
+expires two zero-output children19989/19991 at original1000ms. A actual attempt count
+was not instrumented; do not infer128. Human-declared host-closed B:4PASS; the original
+concurrency assertions complete8x16=128 queries. No root authentication, test changes,
+extended deadline, interpreter substitution or automatic retry.
+
+This supports a host-associated difference, not proof of host causality or product
+repair: fixed order, time/cache/contention drift and unverified helper absence remain
+confounded. Past failures remain. G05-D05 product_failure, detail33/40, whole0/10;
+required macOS x64/Linux x64/Windows x64 still unverified. No official task switch.
+Runner,eight test parents and two recorded expired PIDs are absent; all spawned
+children were not inventoried. Session is CONSUMED; never rerun its operator command.
+Next direction requires a supported host/platform correction or a genuinely changed
+control that can distinguish the remaining confounds; no repeated kernel capture or
+unchanged pass-seeking run. Existing preparation and path-fix sections below are
+historical and superseded by this completed result.
+
+
 ## Prepared ordinary-user host control — current next action, 2026-10-09
 
 [Readiness](evidence/pctx01-startup-host-control-batch-ready.json) and

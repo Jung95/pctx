@@ -1,0 +1,12 @@
+{
+  "phase": "B",
+  "test": "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget",
+  "parent_pid": 20108,
+  "uid": 502,
+  "test_exit": 0,
+  "runner_elapsed_seconds": 1.04226141696563,
+  "runner_utc_start": "2026-10-09T09:39:19.320783+00:00",
+  "reported_timeout_pids": [],
+  "host_state": "human-declared-closed",
+  "host_process_absence_verified": false
+}
