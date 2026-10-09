@@ -1,0 +1,22 @@
+{
+  "task": "PCTX01-G05-D05",
+  "controls": [
+    {
+      "mode": "partial_wait_failure",
+      "failure": "TimeoutExpired",
+      "spawned_fake_samplers": 2,
+      "private_removed_after_reap": true,
+      "no_attribution": true
+    },
+    {
+      "mode": "stale_trigger",
+      "failure": "AssertionError",
+      "spawned_fake_samplers": 0,
+      "private_removed_after_reap": true,
+      "no_attribution": true
+    }
+  ],
+  "real_service_or_process_observation": false,
+  "administrator_authentication": false,
+  "qualification": false
+}

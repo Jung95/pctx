@@ -1,0 +1,92 @@
+"""Finite privileged observer; called only by reviewed one-shot coordinator."""
+import ctypes,os,stat,subprocess,tempfile,time,json,signal,shutil,resource
+class BSD(ctypes.Structure):
+ _fields_=[(n,ctypes.c_uint32) for n in ['flags','status','xstatus','pid','ppid','uid','gid','ruid','rgid','svuid','svgid','rfu']]+[('comm',ctypes.c_char*16),('name',ctypes.c_char*32)]+[(n,ctypes.c_uint32) for n in ['nfiles','pgid','jobc','tdev','tpgid','nice']]+[('sec',ctypes.c_uint64),('usec',ctypes.c_uint64)]
+class Task(ctypes.Structure):
+ _fields_=[(n,ctypes.c_uint64) for n in ['virtual','resident','user','system','threads_user','threads_system']]+[(n,ctypes.c_int32) for n in ['policy','faults','pageins','cow','sent','received','mach','unix','csw','threads','running','priority']]
+def collect_pair(session,inode,binary):
+ assert os.getuid()==os.geteuid()==0
+ def interrupted(signum,frame):raise KeyboardInterrupt()
+ signal.signal(signal.SIGTERM,interrupted);signal.signal(signal.SIGINT,interrupted)
+ os.umask(0o077);lib=ctypes.CDLL('/usr/lib/libproc.dylib',use_errno=True)
+ lib.proc_pidinfo.argtypes=[ctypes.c_int,ctypes.c_int,ctypes.c_uint64,ctypes.c_void_p,ctypes.c_int];lib.proc_pidinfo.restype=ctypes.c_int
+ lib.proc_pidpath.argtypes=[ctypes.c_int,ctypes.c_void_p,ctypes.c_uint32];lib.proc_pidpath.restype=ctypes.c_int
+ def bsd(pid):
+  b=BSD();assert lib.proc_pidinfo(pid,3,0,ctypes.byref(b),ctypes.sizeof(b))==ctypes.sizeof(b);return b
+ def identity(pid,path,uid):
+  b=bsd(pid);p=ctypes.create_string_buffer(4096);assert lib.proc_pidpath(pid,p,4096)>0
+  assert b.pid==pid and b.uid==uid and p.value.decode()==path
+  return {'pid':pid,'uid':uid,'start_sec':b.sec,'start_usec':b.usec,'path':path}
+ def cpu(pid):
+  t=Task();assert lib.proc_pidinfo(pid,4,0,ctypes.byref(t),ctypes.sizeof(t))==ctypes.sizeof(t)
+  return {'user':t.user,'system':t.system,'threads':t.threads,'running':t.running}
+ fd=os.open(session,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW);samplers=[];rows=[];failure=None;clean=[];private=None;private_removed=True
+ def mark(name,row):
+  temporary=name+'.pending'
+  f=os.open(temporary,os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW,0o644,dir_fd=fd)
+  try:
+   os.fchmod(f,0o644);os.write(f,(json.dumps(row)+'\n').encode())
+  finally:os.close(f)
+  os.link(temporary,name,src_dir_fd=fd,dst_dir_fd=fd,follow_symlinks=False);os.unlink(temporary,dir_fd=fd)
+ def read_request():
+  try:f=os.open('pair-trigger.json',os.O_RDONLY|os.O_NOFOLLOW|os.O_NONBLOCK,dir_fd=fd)
+  except FileNotFoundError:return None
+  try:
+   s=os.fstat(f);assert stat.S_ISREG(s.st_mode) and s.st_uid==502 and s.st_size<=4096
+   return json.loads(os.read(f,4097))
+  finally:os.close(f)
+ try:
+  s=os.fstat(fd);assert s.st_ino==inode and s.st_uid==502 and stat.S_IMODE(s.st_mode)==0o700
+  targets={}
+  for name,path in TARGETS.items():
+   r=subprocess.run(['/usr/bin/pgrep','-x',name],capture_output=True,timeout=3)
+   candidates=r.stdout.split();assert r.returncode==0 and len(candidates)==1 and candidates[0].isdigit()
+   pid=int(candidates[0]);targets[name]=identity(pid,path,0)
+  mark('pair-collector-ready.json',{'collector_pid':os.getpid(),'targets':targets,'native_ns':time.clock_gettime_ns(time.CLOCK_MONOTONIC)})
+  deadline=time.monotonic()+60;request=None
+  while time.monotonic()<deadline:
+   request=read_request()
+   if request is not None:break
+   time.sleep(.01)
+  assert request is not None
+  parent=request['parent'];child=request['child'];assert parent[2]==child[2]==502 and child[1]==parent[0]
+  assert identity(parent[0],binary,502)['start_sec']==parent[3]
+  assert identity(parent[0],binary,502)['start_usec']==parent[4]
+  c=bsd(child[0]);assert [c.pid,c.ppid,c.uid,c.sec,c.usec]==child and c.status in [1,2,3,4]
+  now=time.clock_gettime_ns(time.CLOCK_MONOTONIC);tick=request['tick_ns'];lo=request['deadline_low_ns'];hi=request['deadline_high_ns']
+  assert isinstance(tick,int) and isinstance(lo,int) and isinstance(hi,int) and tick<=now<=lo<=hi and now-tick<=100_000_000
+  mark('pair-trigger-admitted.json',{'parent_pid':parent[0],'child_pid':child[0],'trigger_ns':request['tick_ns'],'admitted_ns':time.clock_gettime_ns(time.CLOCK_MONOTONIC)})
+  private=tempfile.mkdtemp(prefix='pctx01-pair-root-raw-',dir='/private/tmp');private_removed=False
+  os.chmod(private,0o700)
+  for name,admitted in targets.items():
+   assert identity(admitted['pid'],admitted['path'],0)==admitted
+   raw=os.path.join(private,name+'.sample');before=cpu(admitted['pid']);begin=time.clock_gettime_ns(time.CLOCK_MONOTONIC)
+   tool=subprocess.Popen(['/usr/bin/sample',str(admitted['pid']),'2','10','-file',raw],stdin=subprocess.DEVNULL,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,env={'PATH':'/usr/bin:/bin:/usr/sbin:/sbin','LC_ALL':'C'},preexec_fn=lambda:resource.setrlimit(resource.RLIMIT_FSIZE,(8*1024*1024,8*1024*1024)))
+   samplers.append((name,admitted,tool,raw,before,begin))
+  mark('pair-sampling.json',{'samplers':[{'target':n,'sampler_pid':p.pid} for n,a,p,r,c,t in samplers]})
+  stop_by=time.monotonic()+6
+  for name,admitted,tool,raw,before,begin in samplers:
+   code=tool.wait(timeout=max(.001,stop_by-time.monotonic()));finish=time.clock_gettime_ns(time.CLOCK_MONOTONIC);assert code==0
+   assert identity(admitted['pid'],admitted['path'],0)==admitted
+   after=cpu(admitted['pid']);assert os.stat(raw).st_size<=8*1024*1024
+   with open(raw) as f:text=f.read(8*1024*1024+1)
+   reduced=reduce_sample(text,admitted['pid'],name);text=None;os.unlink(raw)
+   rows.append({'target':name,'identity':admitted,'begin_ns':begin,'receipt_ns':finish,'cpu_before':before,'cpu_after':after,'sample':reduced})
+ except BaseException as e:
+  failure=type(e).__name__;rows=[]
+ finally:
+  for name,a,p,r,c,t in samplers:
+   try:
+    if p.poll() is None:
+     p.terminate()
+     try:p.wait(timeout=2)
+     except subprocess.TimeoutExpired:p.kill();p.wait(timeout=1)
+    clean.append({'sampler_pid':p.pid,'reaped':True,'exit':p.returncode})
+   except BaseException:failure='SamplerCleanupUnknown';rows=[]
+  if private and len(clean)==len(samplers):
+   try:shutil.rmtree(private);private_removed=True
+   except Exception:failure='PrivateCleanupUnknown';rows=[]
+  out={'task':'PCTX01-G05-D05','collector_pid':os.getpid(),'failure_class':failure,'samples':rows,'sampler_cleanup':clean,'raw_retained':not private_removed,'private_directory':private if not private_removed else None,'private_removed':private_removed,'qualification':False,'limits':['Sampling briefly suspends service threads; timing and outcomes perturbed.','Only temporal overlap with owned child; no request-specific CPU or rule-cost attribution.','Native pre/post and header checks retain narrow PID reuse race.','Unexpected collector death needs private-directory/process cleanup audit.']}
+  try:mark('pair-collector-result.json',out)
+  finally:os.close(fd)
+ return out

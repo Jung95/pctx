@@ -1,0 +1,14 @@
+{
+  "task": "PCTX01-G05-D05",
+  "control": "Live reducer validation on one generated owned sleep process after parser implementation; not a service or original test",
+  "sample_exit": 0,
+  "owned_pid": 40241,
+  "sampler_pid": 40242,
+  "both_reaped": true,
+  "frame_count": 2,
+  "image_uuid_offset_present": true,
+  "raw_retained": false,
+  "private_directory_removed_after_context": true,
+  "administrator_authentication": false,
+  "qualification": false
+}

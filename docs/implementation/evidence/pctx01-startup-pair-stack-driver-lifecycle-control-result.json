@@ -1,0 +1,20 @@
+{
+  "task": "PCTX01-G05-D05",
+  "actual_driver_sha256": "b3b54fb04a6d6904e9f304e4a0d6bdec3fe6e213950c44753c525ad5c95a7dec",
+  "real_signal_handler_finally_exercised": true,
+  "synthetic_run_body_only": true,
+  "driver_pid": 40520,
+  "root_pid": 40521,
+  "driver_exit": -2,
+  "root_cleanup_receipt": {
+    "pid": 40521,
+    "exit": -9,
+    "root_reaped": true,
+    "descendants": "Not independently proven by root reap; inspect owned records/log and liveness before attribution."
+  },
+  "both_known_pids_absent": true,
+  "service_observed": false,
+  "original_test_executed": false,
+  "qualification": false,
+  "limit": "No descendant/workload fault coverage; this control tests signal-handler/finally root reap only."
+}

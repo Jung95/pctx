@@ -1,0 +1,27 @@
+// Only in isolated diagnostic source. One regular-file
+// notification, after admitted spawn. Filesystem latency is not bounded; the
+// original deadline keeps running and no notification success is inferred.
+fn pctx01_pair_trigger(child:&libc::proc_bsdinfo,executable:Option<&std::path::Path>,deadline_low_ns:Option<u64>,deadline_high_ns:Option<u64>) {
+    use std::os::unix::fs::{MetadataExt,OpenOptionsExt};
+    static SENT:std::sync::atomic::AtomicBool=std::sync::atomic::AtomicBool::new(false);
+    let Some(executable)=executable else{return;};
+    let expected=b"#!/bin/sh\nkill -0 -$$ || exit 47\nprintf stdout\nprintf stderr >&2\n";
+    let Ok(m)=std::fs::symlink_metadata(executable) else{return;};
+    if !m.is_file() || m.uid()!=502 || m.len()!=expected.len() as u64{return;}
+    let Ok(bytes)=std::fs::read(executable) else{return;};
+    if bytes.as_slice()!=expected{return;}
+    let Some(dir)=option_env!("PCTX_PAIR_SIGNAL_DIR") else{return;};
+    let Ok(d)=std::fs::symlink_metadata(dir) else{return;};
+    if !d.is_dir() || d.uid()!=502 || d.mode()&0o777!=0o700{return;}
+    let mut parent:libc::proc_bsdinfo=unsafe{std::mem::zeroed()};
+    let size=std::mem::size_of_val(&parent);
+    if unsafe{libc::proc_pidinfo(std::process::id() as i32,libc::PROC_PIDTBSDINFO,0,(&mut parent as *mut libc::proc_bsdinfo).cast(),size as i32)}!=size as i32 || parent.pbi_uid!=502 || child.pbi_ppid!=parent.pbi_pid{return;}
+    if SENT.compare_exchange(false,true,std::sync::atomic::Ordering::SeqCst,std::sync::atomic::Ordering::SeqCst).is_err(){return;}
+    let temporary=std::path::Path::new(dir).join("pair-trigger.pending");
+    let path=std::path::Path::new(dir).join("pair-trigger.json");
+    let Ok(mut f)=std::fs::OpenOptions::new().write(true).create_new(true).mode(0o600).open(&temporary) else{return;};
+    let result=serde_json::to_writer(&mut f,&serde_json::json!({"parent":[parent.pbi_pid,parent.pbi_ppid,parent.pbi_uid,parent.pbi_start_tvsec,parent.pbi_start_tvusec],"child":[child.pbi_pid,child.pbi_ppid,child.pbi_uid,child.pbi_start_tvsec,child.pbi_start_tvusec],"tick_ns":NativePhaseTrace::now(),"deadline_low_ns":deadline_low_ns,"deadline_high_ns":deadline_high_ns}));
+    drop(f);
+    if result.is_ok(){let _=std::fs::hard_link(&temporary,&path);}
+    let _=std::fs::remove_file(temporary);
+}

@@ -1,0 +1,52 @@
+"""Synthetic collector failure controls: no PID discovery, sampling or root use."""
+from pathlib import Path
+import types,ctypes,subprocess,os,json,time,tempfile,importlib.machinery
+B=Path('/Users/dev/PCTX/docs/implementation/evidence')
+ns={'__name__':'pair_model'}
+exec((B/'pctx01-startup-pair-stack-parser.py.txt').read_text(),ns)
+exec((B/'pctx01-startup-pair-stack-collector.py.txt').read_text(),ns)
+class Proxy:
+ def __init__(self,obj,**values):self.obj=obj;self.values=values
+ def __getattr__(self,n):return self.values[n] if n in self.values else getattr(self.obj,n)
+class Call:
+ def __init__(self,fn):self.fn=fn
+ def __call__(self,*a):return self.fn(*a)
+def info(pid,flavor,arg,p,size):
+ b=p._obj
+ if flavor==3:
+  b.pid=pid;b.ppid=42 if pid==43 else 1;b.uid=502 if pid in [42,43] else 0;b.sec=1;b.usec=0;b.status=2
+ else:b.threads=1;b.running=0
+ return size
+def path(pid,b,size):
+ paths={665:ns['TARGETS']['syspolicyd'],888:ns['TARGETS']['XprotectService'],42:'/OWNED_TEST_BINARY'};b.value=paths[pid].encode();return len(b.value)
+lib=types.SimpleNamespace(proc_pidinfo=Call(info),proc_pidpath=Call(path))
+ns['ctypes']=Proxy(ctypes,CDLL=lambda *a,**k:lib)
+ns['os']=Proxy(os,getuid=lambda:0,geteuid=lambda:0)
+ns['signal']=Proxy(ns['signal'],signal=lambda *a:None)
+created=[];removed_before_stop=[]
+class FakeProcess:
+ def __init__(self,args,**kw):
+  self.pid=900+len(created);self.returncode=None;self.raw=args[-1];self.target=int(args[1]);self.terminated=False;created.append(self)
+  # Root-fake generated data only; live module images never inspected.
+  name='syspolicyd' if self.target==665 else 'XprotectService';p=ns['TARGETS'][name]
+  Path(self.raw).write_text(f'Process: {name} [{self.target}]\nPath: {p}\nCall graph:\n  9 Thread_77\n    9 SECRET (in {name}) [0x1004]\nTotal number in stack\nBinary Images:\n 0x1000 - 0x2000 {name} (1) <11111111-1111-1111-1111-111111111111> {p}\n')
+ def wait(self,timeout=None):
+  if self.target==888 and not self.terminated:raise subprocess.TimeoutExpired('SYNTHETIC',timeout)
+  self.returncode=-15 if self.terminated else 0;return self.returncode
+ def poll(self):return self.returncode
+ def terminate(self):
+  removed_before_stop.append(not Path(self.raw).parent.exists());self.terminated=True
+ def kill(self):self.terminated=True
+ns['subprocess']=Proxy(subprocess,run=lambda args,**kw:types.SimpleNamespace(returncode=0,stdout=b'665\n' if args[-1]=='syspolicyd' else b'888\n'),Popen=FakeProcess)
+results=[]
+for mode in ['partial_wait_failure','stale_trigger']:
+ created.clear();removed_before_stop.clear()
+ with tempfile.TemporaryDirectory(prefix='pctx01-pair-model-',dir='/private/tmp') as d:
+  os.chmod(d,0o700);now=time.clock_gettime_ns(time.CLOCK_MONOTONIC);tick=now if mode=='partial_wait_failure' else now-2_000_000_000
+  r={'parent':[42,1,502,1,0],'child':[43,42,502,1,0],'tick_ns':tick,'deadline_low_ns':now+1_000_000_000,'deadline_high_ns':now+1_000_000_001}
+  (Path(d)/'pair-trigger.json').write_text(json.dumps(r));out=ns['collect_pair'](d,Path(d).stat().st_ino,'/OWNED_TEST_BINARY')
+  assert out['samples']==[] and out['failure_class'] is not None and out['private_removed']
+  if mode=='partial_wait_failure':assert len(created)==2 and removed_before_stop==[False] and all(p.returncode is not None for p in created)
+  else:assert not created
+  results.append({'mode':mode,'failure':out['failure_class'],'spawned_fake_samplers':len(created),'private_removed_after_reap':out['private_removed'],'no_attribution':out['samples']==[]})
+out={'task':'PCTX01-G05-D05','controls':results,'real_service_or_process_observation':False,'administrator_authentication':False,'qualification':False};(B/'pctx01-startup-pair-stack-lifecycle-control.json').write_text(json.dumps(out,indent=2)+'\n');print(json.dumps(out))

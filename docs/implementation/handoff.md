@@ -1,5 +1,20 @@
 # Resume handoff
 
+## Prepared paired administrator diagnosis — current, 2026-10-09
+
+PCTX01-G05-D05 remains product_failure,33/40 details,0/10 gates. User permits
+necessary admin authentication; fresh exact-target extension remains pending
+because the batch adds XprotectService to prior syspolicyd-only scope. One
+near-concurrent2s/10ms pair,one original1000ms/8×16 run after observer ready,
+relative image offsets/UUID retained,raw/body/queue strings removed. Synthetic
+failure/privacy controls,owned live reducer and driver-reap controls,isolated
+build-only and independent review pass. No operational target discovery/test/admin
+execution yet. Private prepared source remains at
+/private/tmp/pctx01-pair-stack-forward-mo8_uv0j; no live job/auth window.
+Next: obtain exact-target approval,then one system authentication for finite batch.
+No task switch or closure; unchanged original acceptance remains mandatory.
+[Prepared batch](evidence/pctx01-startup-pair-stack-preparation.md).
+
 ## Internal observable review — current, 2026-10-09
 
 PCTX01-G05-D05 remains product_failure,33/40 details,0/10 gates. Static code

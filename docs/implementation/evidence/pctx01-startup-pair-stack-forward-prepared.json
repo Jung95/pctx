@@ -1,0 +1,25 @@
+{
+  "task": "PCTX01-G05-D05",
+  "priority": 3,
+  "root": "/private/tmp/pctx01-pair-stack-forward-mo8_uv0j",
+  "source": "/private/tmp/pctx01-pair-stack-forward-mo8_uv0j/source",
+  "records": "/private/tmp/pctx01-pair-stack-forward-mo8_uv0j/records",
+  "revision": "d018c4ddce1db5a37c4653825b937d98539f5586",
+  "hashes": {
+    "src/query_process.rs": "bf661f4b8d0ed472585244ada4ac0e946221de364c100039cd20aee56fd8d0d2",
+    "tests/project_deadline.rs": "8b9fbc97fbd5acaf612b2d75b94cf810faa2b61614b654495082462b1941a8dc",
+    "Cargo.lock": "f96362897990caba560793601bc9fca08cef5c977907bb06889d5595d2acd7b0"
+  },
+  "instrumented_query_sha256": "69556f301cab2e51eeac80f19123364e3c30352e10e79076455543fa6b43b853",
+  "clock": "shared nativeCLOCK_MONOTONICns; originalInstant deadline retained;remaining bracket recorded",
+  "new_question": "One paired service stack capture after first admitted owned native child; code offsets/UUID retained for operation attribution, not unchanged waiting sample.",
+  "test": "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget",
+  "contract": "Originaltestbyteidentical,1000ms8x16,nativeexec/cwd/env/group/streams/overflow;no retry,retention,warmup or authentication during test",
+  "qualification": false,
+  "limits": [
+    "Observerclockreads/bufferallocation/extra ownedBSDadmission perturbtiming.",
+    "One numeric trigger is written after first owned spawn before collection; originaldeadline remains running and I/O perturbs it.",
+    "4096pointcap;dropped/missingrecordsunknown.",
+    "Reapnotindependentlyprovenbycleanup_end;originaltry_waitblockmayendatgrace."
+  ]
+}
