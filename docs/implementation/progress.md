@@ -1,5 +1,18 @@
 # Implementation progress
 
+## Debug-method research — current, 2026-10-09
+
+[Research](evidence/pctx01-startup-debug-methods-research.json) prioritizes the
+prepared exact-owned-path signpost read,then a specifically missing owned-parent
+native timing phase,then tightly scoped chronological kernel/scheduling analysis.
+No new test,live trace,service log query,authentication or installation was performed.
+Prepared service content-scope approval remains pending;research does not approve it.
+Only PCTX01-G05-D05 remains active/product_failure,33/40details,0/10whole gates.
+Bare spindump PID/sysdiagnose and profiler UI filters do not establish target-only
+collection. Current Xcode metadata/toolfile checks do not prove recording capability.
+Next concrete action remains the already prepared finite target-specific read after
+its separate approval;do not repeat unchanged diagnostics or start another task.
+
 ## Requested memory recheck — current, 2026-10-09
 
 Human requested a new original-test recheck and raised memory shortage as a

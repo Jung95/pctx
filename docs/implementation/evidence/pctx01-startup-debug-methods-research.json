@@ -1,0 +1,165 @@
+{
+  "task": "PCTX01-G05-D05",
+  "date": "2026-10-09",
+  "scope": "Research debugging methods only; not new collection authorization.",
+  "current_evidence": {
+    "original_recheck": "3PASS/1concurrencyFAIL;twozerooutputoriginal1sTIMEOUTs",
+    "memory": "26aggregate samplespressureflag1,unchangedswap,noobservedswap/pageoutincrements;transients unexcluded",
+    "owned_kernel_capture": "Past actualexpiredchildren sampled inAppleSystemPolicy script evaluation wait;not continuous whole1s proof",
+    "service_capture": "Aggregate samples lack targetevaluation mapping;not queue/deadlock proof"
+  },
+  "prioritized_methods": [
+    {
+      "priority": 1,
+      "method": "Existing exact-owned-path signpost correlation",
+      "question": "Can a retained target Path signpost join an evaluation ID and user-space interval?",
+      "status": "Reader/controls prepared; separate content-scope approval still pending. No new test or adminauthentication expected.",
+      "limits": [
+        "Default emission,privacy and retention unknown.",
+        "PID,evaluationID,signpostID differ.",
+        "No/ambiguous records are inconclusive.",
+        "End follows send-result path but does not prove successful driver call,kernel acknowledgement or payload."
+      ]
+    },
+    {
+      "priority": 2,
+      "method": "Owned-parent phase timeline in isolated diagnostic copy",
+      "question": "Which missing native transition separates validation/spawn,first stream data,deadline,cancel,reap?",
+      "status": "Not prepared/executed by this research. Existing owned-target scope may cover narrowly admitted numeric reads; no service scope inferred.",
+      "design": [
+        "Single shared native monotonic clock;never comparePython3.9process-local origins.",
+        "Exact PID/native start/parent/UID plus private synthetic-fixture mapping.",
+        "Bounded in-memory records;write after original cancellation/reap rather than delaying it.",
+        "Original argv/cwd/env/group/1000ms/8x16/streams/overflow remain frozen.",
+        "First stdout byte is observation,not proof no earlier payload when bytesabsent."
+      ],
+      "limits": [
+        "Instrumentation perturbs timing;diagnostic PASS cannot qualify repair.",
+        "New run only for specified previously missing transitions,not unchanged repeats."
+      ]
+    },
+    {
+      "priority": 3,
+      "method": "Target-only chronological kernel/user stack capture",
+      "question": "Does a specific late interval remain blocked or become runnable without CPU?",
+      "status": "Consider only after a new unresolved timing question; prior childpolicy-wait captures consumed. New finite privileged method/scope needs concrete review.",
+      "design": [
+        "Installed spindump man documents -onlyTarget actual target-only sampling and -timeline ordering.",
+        "Bare PID sorts reporttop but stillsampleswholemachine.",
+        "Service-inclusive capture requires new separate service-scope approval.",
+        "One bounded authbatch ifactuallyrequired,exactnative identities,rawprivate/reducednumericallowlists,cleanup."
+      ],
+      "limits": [
+        "Sample timestamps do not prove continuous state between samples.",
+        "Do not repeat existing known-wait capture without newtargetcorrelation."
+      ]
+    },
+    {
+      "priority": 4,
+      "method": "Instruments System Trace",
+      "question": "Distinguish blocked,runnable,preempted,VM/I/O delays and waking-thread relationships.",
+      "status": "Research fallback,notexecuted. Collection-scope/admission/runtimepermissions must first be validated.",
+      "limits": [
+        "PID/attach/UI filtering alone is not proof otherprocesseswere not collected.",
+        "TimeProfiler CPU hotstacks alone are a poor substitute for wait/schedulinganalysis.",
+        "No all-process capture under existing target-only authorization."
+      ]
+    },
+    {
+      "priority": 5,
+      "method": "kqueue NOTE_EXEC/NOTE_EXIT",
+      "question": "Observe owned child lifecycle transition or exit status with minimal overhead.",
+      "status": "LocalmanualsupportsPID-specific monitoring;notimplemented/run.",
+      "limits": [
+        "Registration afterspawn can miss exec;events mayaggregate.",
+        "Receipt time is not original event time.",
+        "NOTE_EXEC is not proofpolicywaitfinished or firstpayloadexecuted.",
+        "Published kernel-source placement is not exactinstalledOS ordering proof."
+      ]
+    }
+  ],
+  "deprioritized": [
+    {
+      "method": "dtruss",
+      "reason": "Root/DTrace,protectedprocessrestrictions;prepayloadkernelwait mayyield no useful userspace syscall. Not execution-prepared."
+    },
+    {
+      "method": "fs_usage",
+      "reason": "Useful only for specificI/O hypothesis;root required and PID outputfilter does not establish collection scope."
+    },
+    {
+      "method": "EndpointSecurity",
+      "reason": "Apple-issuedcliententitlement/TCC/privileges and actual lifecycle ordering must be established. New securityclient setup is not an immediate low-friction diagnostic and may alter behavior."
+    },
+    {
+      "method": "sysdiagnose",
+      "reason": "System-wide dump;PID addsheap/VM information rather than narrowingallcollection. Vendor-directed separate broadscope only."
+    },
+    {
+      "method": "Unchanged sample/retests",
+      "reason": "Already knownpolicywait;new run withoutdifferenthypothesis/method does not identifycausalcorrection."
+    }
+  ],
+  "host_static_capability": {
+    "selected_developer_directory": "/Applications/Xcode.app/Contents/Developer",
+    "Xcode_bundle_version": "27.0",
+    "selected_xctrace_file_exists": true,
+    "runtime_trace_permission_or_license_tested": false,
+    "known_lldb_toolchain_path_file_exists": false,
+    "limit": "Configured path,metadata and toolfile presence only;do not claim operational profiling capability."
+  },
+  "primary_sources": [
+    {
+      "url": "https://developer.apple.com/videos/play/wwdc2016/411/",
+      "supports": "SystemTrace scheduling/VM/lock/runnable versusblocked;CPU samplingcanmisswaits",
+      "limit": "Historicaltoolpresentation;currentinstalledtraceconfigunverified"
+    },
+    {
+      "url": "https://developer.apple.com/videos/play/wwdc2018/405/",
+      "supports": "Signpost intervalcorrelation and instrumentationoverhead"
+    },
+    {
+      "url": "https://developer.apple.com/library/archive/documentation/Performance/Conceptual/FileSystem/Articles/FileSystemCalls.html",
+      "supports": "fs_usage filesystem analysis/root requirement",
+      "limit": "Archivedguidance"
+    },
+    {
+      "url": "https://support.apple.com/guide/activity-monitor/run-system-diagnostics-actmntr2225/mac",
+      "supports": "Appleprocesssample/spindump/systemdiagnostics descriptions"
+    },
+    {
+      "url": "https://developer.apple.com/documentation/bundleresources/entitlements/com.apple.developer.endpoint-security.client",
+      "supports": "Apple-issued entitlement",
+      "limit": "Primarysearchtext accessible;webMarkdown renderer failed,localfetch unavailable"
+    },
+    {
+      "url": "https://developer.apple.com/documentation/endpointsecurity/es_new_client_result_err_not_permitted",
+      "supports": "TCC approval required"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/apple-oss-distributions/xnu/main/bsd/kern/kern_exec.c",
+      "supports": "NOTE_EXEC emitted in nativeexec/spawnpaths",
+      "limit": "Not verified exact installedkernel or AppleSystemPolicy completion ordering"
+    }
+  ],
+  "local_primary_manuals": [
+    "sample(1)",
+    "spindump(8)",
+    "fs_usage(1)",
+    "dtruss(1m)",
+    "kqueue(2)",
+    "xctrace(1)",
+    "sysdiagnose(1)"
+  ],
+  "independent_review": "work_control assessed scope/lifecycle/repetition limits read-only;no new collector execution",
+  "new_tests": 0,
+  "new_live_process_observations": 0,
+  "new_service_log_queries": 0,
+  "administrator_authentications": 0,
+  "security_changes": 0,
+  "acceptance": {
+    "state": "product_failure",
+    "details": "33/40",
+    "whole_gates": "0/10"
+  }
+}

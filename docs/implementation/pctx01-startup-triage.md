@@ -173,3 +173,37 @@ This does not support shortage/swap thrashing in the observed interval;it does
 not exclude unsampled transients or identify policy-service latency. No artificial
 pressure,service/app logs,administrator authentication or settings change. Prior
 failures remain. PCTX01-G05-D05 product_failure,33/40details,0/10whole gates.
+
+## Debug-method research — 2026-10-09
+
+[Research evidence](evidence/pctx01-startup-debug-methods-research.json) compares
+current failures,Apple primary documentation and installed tool manuals. Research
+only:no test,service log query,live stack/profile collection or authentication.
+The earlier prepared signpost content-scope approval remains pending.
+
+| Order | Method and question | Boundary |
+| --- | --- | --- |
+| 1 | Existing exact-owned-file Path→signpostID→evaluationID/interval correlation | Prepared finite read;separate approval. No/ambiguous records are unknown;end is not kernel acknowledgement. |
+| 2 | Owned-parent native timeline for a specifically missing lifecycle phase | Isolated diagnostic copy,shared native clock,bounded in-memory data,persist after original cancel/reap;no arbitrary path/argv exports. |
+| 3 | Target-only chronological kernel/user stacks for a new timing question | `spindump -onlyTarget -timeline` documented locally;exact identity,bounded authentication/cleanup. Bare PID still samples the whole machine. Previous known-wait capture is not a reason to repeat. |
+| 4 | System Trace for blocked/runnable/preempted and VM/I/O distinctions | Validate actual collection scope first;attach/UI filtering does not prove target-only collection. Broader/service-inclusive capture needs separate scope approval. |
+| Supporting | PID-specific kqueue NOTE_EXEC/NOTE_EXIT | Registration race,aggregation and receipt-time limits;exec event is not payload/policy-completion proof. |
+
+Apple's [System Trace explanation](https://developer.apple.com/videos/play/wwdc2016/411/)
+distinguishes blocked from runnable delays that ordinary CPU sampling may miss.
+[Signpost guidance](https://developer.apple.com/videos/play/wwdc2018/405/) supports
+interval correlation and warns of instrumentation overhead. These tool descriptions
+are not evidence of the actual cause on this host.
+
+`fs_usage` and `dtruss` require privileged tracing;only consider a specific missing
+I/O/syscall hypothesis after collection-scope review. EndpointSecurity requires
+Apple-issued entitlement and TCC authorization;installing a security client is not
+a routine debugger shortcut. Local sysdiagnose manual describes system-wide logs,
+profiles and dumps;passing PID adds heap/VM data rather than narrowing all capture.
+Do not use broad captures or weaken protection under target-only consent.
+
+Static checks find selected Xcode27.0 and its xctrace file. Runtime recording rights,
+license,template scope and functionality are untested. No installation or configuration
+change. A causal repair still requires an observed faulty transition,an applicable
+correction and observer-free original acceptance tests. PCTX01 remains33/40details,
+0/10whole gates;no task transition.
