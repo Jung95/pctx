@@ -1,0 +1,124 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.53s
+     Running unittests src/lib.rs (target/debug/deps/pctx-ae897bec01e143c7)
+
+running 46 tests
+test input::identity_tests::explicit_file_transport_preserves_literal_dash_and_regular_file_symlink_semantics ... ok
+test input::identity_tests::explicit_file_cap_detects_growth_after_metadata_at_each_caller_limit ... ok
+test input::identity_tests::project_read_identity_rejects_replace_and_restore_even_with_same_bytes ... ok
+test broker::tests::nul_names_rename_and_unborn_metadata_are_machine_parsed ... ok
+test input::identity_tests::explicit_file_cap_rejects_large_archive_before_read_and_keeps_original_expiry ... ok
+test inventory::deadline_tests::confirmation_and_partial_fallback_cannot_absorb_expired_or_changed_root ... ok
+test filters::deadline_tests::explain_preserves_admitted_executable_symlink_denial_and_size_limit ... ok
+test output::capture_tests::incomplete_private_key_never_reaches_records ... ok
+test filters::deadline_tests::preview_default_scope_is_one_budget_over_all_actual_records ... ok
+test output::capture_tests::oversize_binary_invalid_utf8_and_record_counts_are_bounded ... ok
+test output::capture_tests::registered_git_nul_capture_preserves_filename_controls_and_record_boundaries ... ok
+test operations::reporting_aggregation_tests::source_classification_changed_after_last_admission_is_not_emitted ... ok
+test output::capture_tests::split_secret_and_ansi_never_survive_normalization ... ok
+test filters::deadline_tests::original_budget_expires_during_actual_preview_record_admission ... ok
+test filters::deadline_tests::original_budget_expires_during_actual_loaded_input_record_admission ... ok
+test query_process::adapter_version_policy_tests::version_observation_does_not_admit_inference_or_extra_arguments ... ok
+test query_process::managed_observation_policy_tests::schedule_queries_reject_mutations_wildcards_and_extra_arguments ... ok
+test output::capture_tests::registered_native_callback_failures_preserve_processing_truth ... ok
+test reader::search_candidate_tests::admitted_size_and_encoding_failures_are_errors ... ok
+test reader::search_candidate_tests::authority_errors_never_become_absent_candidates ... ok
+test reader::search_candidate_tests::deletion_and_identical_replacement_after_admission_are_fatal ... ok
+test reader::search_candidate_tests::initial_local_missing_excluded_link_directory_fifo_and_permission_are_not_sources ... ok
+test reader::search_candidate_tests::normal_body_hash_and_original_expired_deadline_are_preserved ... ok
+test pack::validation_tests::committed_pause_during_source_validation_prevents_delivery_and_publication ... ok
+test output::capture_tests::native_pipe_wait_and_worker_faults_preserve_surviving_capture ... ok
+test pack::validation_tests::source_read_expiry_keeps_original_timeout_in_library_validation ... ok
+test inventory::deadline_tests::profile_original_budget_expires_after_actual_confirmed_claims ... ok
+test inventory::deadline_tests::audit_original_budget_expires_after_actual_claim_reads ... ok
+test runner::auxiliary_deadline_tests::trust_plan_establishes_one_default_scope_and_preserves_supplied_scope ... ok
+test runner::stored_slot_contract_tests::stored_slot_decode_failure_preserves_ownership_and_acknowledgement_intent ... ok
+test inventory::deadline_tests::scan_original_budget_expires_after_real_source_items_before_next_processing ... ok
+test schedule::deadline_tests::stored_schedule_bridge_decode_retains_absence_and_changed_binding_order ... ok
+test schedule::deadline_tests::stored_schedule_decision_decode_retains_expiry_and_original_deadline_order ... ok
+test search::tests::boolean_precedence_and_bounds ... ok
+test search::tests::literal_smart_case ... ok
+test watch::tests::frame_delivery_and_flush_failures_propagate_io_errors ... ok
+test watch::tests::frames_escape_hidden_controls_without_changing_ndjson_values ... ok
+test runner::auxiliary_deadline_tests::opened_auxiliary_keeps_budget_for_subsequent_source_reads ... ok
+test operations::reporting_aggregation_tests::inbox_batch_drops_earlier_expired_admission_and_rechecks_earlier_sources ... ok
+test operations::reporting_aggregation_tests::expiry_during_later_role_evaluation_never_accepts_earlier_admission ... ok
+test schedule::deadline_tests::list_original_budget_expires_after_actual_rows_before_assembly ... ok
+test runner::auxiliary_deadline_tests::resource_status_retains_original_budget_after_native_identity_observation ... ok
+test runner::auxiliary_deadline_tests::auxiliary_loading_expires_after_actual_config_admission ... ok
+test runner::auxiliary_deadline_tests::registered_fingerprint_expires_after_actual_executable_chunk_read ... ok
+test schedule::deadline_tests::native_observation_original_expiry_does_not_become_registration_absence ... ok
+test quota::aggregation_deadline_tests::public_report_stops_real_aggregation_at_original_deadline_after_rows_admitted ... ok
+
+test result: ok. 46 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.48s
+
+     Running tests/cli_cancellation.rs (target/debug/deps/cli_cancellation-b8aaf1c4d3c7fb49)
+
+running 5 tests
+test watch_cancel_keeps_existing_ndjson_frames_and_reports_cancelled ... ok
+test held_stdin_cancel_is_one_complete_json_and_creates_no_context ... ok
+test finite_query_cancel_reaps_owned_query_child_instead_of_waiting_for_timeout ... ok
+test cancelled_run_with_failed_publication_keeps_processing_error_and_native_truth ... ok
+test run_cancel_preserves_native_truth_artifact_and_one_execution_for_both_policies ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.94s
+
+     Running tests/cli_run_exit.rs (target/debug/deps/cli_run_exit-6950b2b7b4cecebc)
+
+running 11 tests
+test missing_project_is_prelaunch_failure_in_both_modes_without_files ... ok
+test project_refusal_near_minimum_keeps_original_exit_and_fits ... ok
+test project_refusals_preserve_typed_exit_and_message_before_spawn ... ok
+test actual_prelaunch_refusal_has_no_child_outcome_or_invocation ... ok
+test admitted_small_run_budgets_preserve_prelaunch_truth_without_artifact ... ok
+test actual_spawn_failure_never_becomes_success_or_child_exit ... ok
+test incomplete_capture_is_partial_without_replacing_child_success ... ok
+test publication_failure_preserves_child_outcome_and_never_retries ... ok
+test actual_execution_timeout_preserves_observation_but_returns_wrapper_error ... ok
+test actual_child_codes_and_signal_are_distinct_from_wrapper_status ... ok
+test final_serialized_budget_preserves_actual_child_truth_and_full_reread ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.44s
+
+     Running tests/runner.rs (target/debug/deps/runner-262d46ab6960599b)
+
+running 36 tests
+test cloud_helper_is_only_durable_intent ... ok
+test changed_script_and_agent_forged_trust_are_denied ... ok
+test ctrl_c_before_check_begin_releases_proven_unspawned_capacity ... ok
+test check_plan_with_finite_budget_inspects_registered_auxiliary_workspace_without_launch ... ok
+test check_alias_preserves_nested_timeout_processing_error ... ok
+test check_capture_partial_is_not_wrapper_success_in_either_route ... ok
+test explicit_script_input_change_requires_new_trust ... ok
+test ctrl_c_check_publication_failure_keeps_native_truth_and_released_capacity ... ok
+test ctrl_c_local_helper_preserves_child_receipt_and_releases_observed_aux_capacity ... ok
+test inherited_canonical_descriptor_retains_lock_after_invalid_proof_and_parent_close ... ok
+test legacy_lock_fixture ... ok
+test finite_auxiliary_plan_refuses_fifo_metadata_without_waiting_or_launching ... ok
+test invalid_memory_fixture_never_spawns_or_grants_heavy_resources ... ok
+test legacy_bridge_absence_prevents_execution ... ok
+test linked_slot_child_directory_cannot_redirect_state ... ok
+test ctrl_c_reaps_registered_child_preserves_truth_and_releases_only_observed_slots ... ok
+test native_pass_is_invalidated_by_external_executable_change_with_sources_unchanged ... ok
+test observed_failed_check_is_distinct_from_processing_failure ... ok
+test cross_project_heavy_capacity_is_one ... ok
+test producer_capacity_guards_preserve_budget_eight_owner_priority_and_intent_exception ... ok
+test local_helper_preserves_nested_timeout_and_partial_capture ... ok
+test native_environment_change_or_missing_profile_invalidates_existing_pass ... ok
+test profile_change_during_execution_is_stale_at_report_recording ... ok
+test parent_exit_does_not_release_living_child ... ok
+test synthetic_low_memory_defers_heavy_admission ... ok
+test local_auxiliary_provider_needs_registered_linked_workspace_and_capacity ... ok
+test timeout_is_observed_without_success_evidence ... ok
+test trusted_typed_check_is_real_evidence ... ok
+test unknown_memory_requires_disclosed_exact_owner_override ... ok
+test user_created_host_state_symlink_is_denied ... ok
+test unknown_and_zero_tests_do_not_pass ... ok
+test source_mutation_during_check_is_stale ... ok
+test canonical_mutex_survives_main_parent_death ... ok
+test ctrl_c_canonical_check_finishes_guardian_before_releasing_mutex ... ok
+test killed_guardian_causes_negative_child_observation ... ok
+test canonical_legacy_and_pctx_exclude_each_other ... ok
+
+test result: ok. 36 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 25.47s
+

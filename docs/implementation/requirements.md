@@ -17,40 +17,46 @@ fixed [closure plan](tasks/PCTX01-closure-plan.md) and 40-item register remain
 **28/40** locally closed, **0/10** whole gates; 140 leaves/172 help paths/12
 historical R groups and required platforms are unchanged.
 
-Current **PCTX01-G05-D02 remains open**. The registered spawn-observer refusal
-now flows through owned capture/reaping/publication rather than returning an
-outer error that discards native truth. The expanded native callback control
-covers spawn and monitor refusal, already-completed native exit23, and actual
-artifact-store lock contention combined with spawn refusal. It checks both
-available streams, direct-child reap, artifact/durable receipt native outcome,
-and exactly one invocation. Initial defect reproduction is retained separately.
-Evidence: [callback fault manifest](evidence/pctx01-postspawn-callback-verification.json).
-97 focused regressions PASS, plus the final reviewed four-case native control PASS;
-locked all-target Clippy -D warnings and format check PASS. The extra reviewed
-assertion is test-only; runtime source is unchanged from the 97-test run. These
-are not whole-suite or required-platform completion. All jobs are terminal.
+Current **PCTX01-G05-D02 remains open**. Its pipe/wait/capture completion group
+now preserves available streams and native outcome through postspawn failures.
+Missing/nonblocking-failed streams are closed and incomplete; both workers are
+joined even after one panics. Failed native wait observation retains output with
+unknown termination/null exit and signal, never signaling a possibly reused PID.
+Final job state is child_unknown when root observation failed. Setup/observer/poll
+errors reobserve the child before group cleanup; available child outcome remains
+independent from processing failure and no command is rerun.
 
-Independent read-only review grouped the remaining obligations within existing
-G05-D02: pipe setup, native wait observation, capture worker joins, job receipt
-publication, CheckRun backend-error cleanup, CheckRun completion, and Local Helper
-completion. No new condition IDs or denominator. Next exact action: implement
-and fault-test the pipe/wait/capture completion group, preserving known native
-status and surviving capture, explicit unknown ownership and incomplete streams;
-then qualify receipt/runner finalization before closing G05-D02. Other official
-tasks stay inactive; no next official task is selected.
+Native fault controls cover missing/setup/panic on each stream plus actual ECHILD
+from external waitpid consumption. A continuously readable finite fixture first
+reproduced the 250ms finalization-limit defect; the loop now checks that limit for
+successful reads too, marking partial capture rather than hanging on descendants.
+Evidence: [capture fault manifest](evidence/pctx01-postspawn-capture-verification.json).
+Final-source99 focused tests PASS (47lib/5cancellation/11Run/36Runner); locked
+all-target Clippy -D warnings and format PASS. Independent review found no material
+blocker in this bounded group. All jobs are terminal. Prior callback4 proof and
+its retained initial failure remain in the separate callback manifest.
 
-Prior **G05-D06 remains locally closed** with its source-bound
-[exit matrix](evidence/pctx01-exit-matrix-verification.json), 90 focused tests and
-static proof; this callback repair does not replace that historical evidence.
-Processing/publication failures retain precedence over cancellation while native
-termination remains independent. Helper caller-workspace metering routing remains
-inactive PCTX47 backlog with honest measurement-unknown diagnostics.
+The remaining G05-D02 phase groups are job receipt publication, CheckRun
+backend-error cleanup, CheckRun completion and Local Helper completion. Next exact
+action: qualify output-job active/final receipt publication failures, then the
+three Runner completion groups, preserving execution and truthful cleanup state
+without passing gate evidence on failed recording. No other official task starts.
 
-Original four macOS 1s-budget startup product failures remain open, as does the
-separately owned inactive PCTX36 Tick failure. Required macOS x86_64, Linux x86_64
-and Windows x86_64 native integration remains unverified; Linux aarch64 is supporting
-evidence only. No Actions dispatch or whole/platform rerun. Normal main skip-ci
-commit/push is authorized; Node24 pins remain.
+Two fixed-plan updates made actual repairs but did not close the whole condition.
+Responsibility/completion audit: these are the existing §14/38 common postspawn
+error/response obligations owned by PCTX01, not new producer features. The native
+fault matrix has a finite seven-group denominator; three groups now have local
+proof, four remain. No new IDs, condition denominator or lowered completion bar.
+G05-D02 closes only when every original phase group is qualified; local patches
+and passing subsets do not close the official task.
+
+Prior G05-D06 shared exit qualification remains locally closed with its source-bound
+exit matrix; it is historical proof, not a substitute for current G05-D02 closure.
+Original four macOS 1s-budget startup product failures remain open. Inactive PCTX36
+Tick and PCTX47 Helper metering routing remain separately owned backlog. Required
+macOS x86_64/Linux x86_64/Windows x86_64 native integration remains unverified;
+Linux aarch64 is supporting evidence only. No Actions or whole/platform rerun.
+Normal main skip-ci commit/push is authorized; Node24 pins remain.
 
 ## Development items
 

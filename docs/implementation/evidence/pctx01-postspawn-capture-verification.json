@@ -1,0 +1,152 @@
+{
+  "task": "PCTX01",
+  "condition": "PCTX01-G05-D02",
+  "status": "open",
+  "base_revision": "33f198247065d47942419a4ff8728e7fe189c4b4",
+  "environment": {
+    "system": "Darwin",
+    "machine": "arm64",
+    "rust": "1.99.0"
+  },
+  "fixed_register": {
+    "closed_details": 28,
+    "detail_denominator": 40,
+    "closed_gates": 0,
+    "gate_denominator": 10,
+    "new_ids": []
+  },
+  "scope": "Three of original seven postspawn phase groups locally qualified; no whole-task, slot-release, full descendant-absence, Windows or whole-suite completion claim.",
+  "fault_selector": "cfg(test,unix) thread-local only; no production environment switch. Missing/setup/panic independently exercised on stdout and stderr; real external native reap exercises ECHILD.",
+  "test": "output::capture_tests::native_pipe_wait_and_worker_faults_preserve_surviving_capture",
+  "native_scenarios": 7,
+  "assertions": [
+    "native SIGKILL for live-child setup failure",
+    "actual exit23 preserved after capture worker panic",
+    "unknown/null native truth after actual wait failure",
+    "available streams in returned compact records and actual artifact",
+    "partial capture for failed streams; no typed passing report",
+    "durable receipt native outcome and child_unknown after failed observation",
+    "exactly one invocation; direct native child no longer waitable"
+  ],
+  "continuous_control": "output::capture_tests::continuously_readable_capture_obeys_finalization_deadline; finite reader provides successful reads for1s, must finalize within750ms observation allowance under existing250ms stop cutoff. No original query1s startup budget changed.",
+  "runs": [
+    {
+      "session": 35813,
+      "log": "pctx01-postspawn-capture-native.log",
+      "result": "1PASS",
+      "scope": "Initial seven-scenario native control before later stop/ownership refinements."
+    },
+    {
+      "session": 99589,
+      "log": "pctx01-postspawn-capture-regression.log",
+      "result": "98PASS",
+      "scope": "46lib/5cancellation/11Run/36Runner; before continuous-read repair and final ownership ordering."
+    },
+    {
+      "session": 17415,
+      "log": "pctx01-postspawn-continuous-initial.log",
+      "result": "0PASS1FAIL",
+      "scope": "Finite continuously readable fixture exposes finalization deadline bypass; initial source/binary byte hashes not captured, no full baseline artifact binding claimed."
+    },
+    {
+      "session": 69686,
+      "log": "pctx01-postspawn-capture-final.log",
+      "result": "99PASS",
+      "scope": "47lib/5cancellation/11Run/36Runner; before final timeout ownership reobservation."
+    },
+    {
+      "session": 53223,
+      "log": "pctx01-postspawn-capture-reviewed.log",
+      "result": "99PASS",
+      "scope": "Final runtime source, same99 focused tests.",
+      "counts": {
+        "lib": 47,
+        "cli_cancellation": 5,
+        "cli_run_exit": 11,
+        "runner": 36
+      }
+    },
+    {
+      "session": 46574,
+      "log": "pctx01-postspawn-capture-clippy.log",
+      "result": "PASS",
+      "command": "cargo clippy --locked --all-targets -- -D warnings"
+    },
+    {
+      "log": "pctx01-postspawn-capture-format.log",
+      "result": "PASS",
+      "command": "cargo fmt --all -- --check"
+    }
+  ],
+  "phase_groups": [
+    {
+      "phase": "pipe setup",
+      "status": "bounded_verified",
+      "evidence_or_contract": "Native missing/nonblocking-setup failures independently injected on both streams; owned group cancellation and native status retained, failed stream incomplete, available response/artifact records retained."
+    },
+    {
+      "phase": "native wait",
+      "status": "bounded_verified",
+      "evidence_or_contract": "Actual callback waitpid consumes root native status; ECHILD retains capture with unknown termination/null native code/signal and child_unknown receipt, no passing typed report. Source reobserves before callback-error and timeout signaling; no resource-release claim."
+    },
+    {
+      "phase": "capture worker completion",
+      "status": "bounded_verified",
+      "evidence_or_contract": "Actual injected worker panic on each stream; both workers joined, surviving output retained and capture incomplete. Finite continuously-readable reader reproduces stop deadline failure then qualifies loop-boundary cutoff."
+    },
+    {
+      "phase": "job receipt publication",
+      "status": "remaining",
+      "evidence_or_contract": "Active/final atomic writes still ignored; distinguish output artifact publication from job receipt durability."
+    },
+    {
+      "phase": "CheckRun backend-error cleanup",
+      "status": "remaining",
+      "evidence_or_contract": "Fallible evidence recording can precede cleanup; qualify cleanup independent of DB recording."
+    },
+    {
+      "phase": "CheckRun completion",
+      "status": "remaining",
+      "evidence_or_contract": "Guardian wait/release/artifact reread/evidence recording must retain observed execution and truthful resource state."
+    },
+    {
+      "phase": "Local Helper completion",
+      "status": "remaining",
+      "evidence_or_contract": "Guardian wait/release/final helper receipt save must retain execution/provider artifact and independent cleanup state."
+    }
+  ],
+  "review": {
+    "agent": "/root/work_control",
+    "mode": "read-only; no edits/builds",
+    "finding": "No material blocker in final bounded pipe/wait/join candidate; final53223 99PASS and static checks PASS. Remaining receipt/Runner groups keep G05-D02 open."
+  },
+  "responsibility_audit": "Two fixed-plan updates without closing condition: repairs are original PCTX01 common postspawn response/fault contract (\u00a714/38), not new producer features. Seven finite groups unchanged; three bounded groups proven and four remain. Resume only receipt/Runner boundary repair, no expanded implementation scope.",
+  "retained_failures": [
+    "Continuous-read baseline above",
+    "Four original macOS1s startup product failures",
+    "Inactive PCTX36 Schedule Tick failure"
+  ],
+  "required_platforms": "macOS arm64/x86_64, Linux x86_64, Windows x86_64; only focused native macOS arm64 evidence here",
+  "github_actions_dispatched": false,
+  "source_sha256": {
+    "src/output.rs": "864e44dd36ecb1bd634e6ae9357e54bc5e4bae657ded1572a5143d483f74ed15",
+    "src/runner.rs": "c55b5cdb20f0f82f73647a7afceda41ef2737c4601206c72691efbc7c5819db3",
+    "src/main.rs": "1f8c0ec5227eb346494036e5e544e6baef250f543714eed8005f748c5d50b32a",
+    "src/cancellation.rs": "4901638803bb82894b3211d0f9a8f9537850c4bfed3ac178489ec20780114d4f",
+    "Cargo.toml": "179b02f69bdd7c61adc41ed5f71f8737ee692655b46b0bfeb9c1ffe165d8e97f",
+    "Cargo.lock": "f96362897990caba560793601bc9fca08cef5c977907bb06889d5595d2acd7b0"
+  },
+  "log_sha256": {
+    "pctx01-postspawn-capture-native.log": "4b9702deebd500a921408c5f516449dfb85fa6d1ab53c587a2041fb34fad1efa",
+    "pctx01-postspawn-capture-regression.log": "d57c4c9db0f8176ce7759fe964d3fdabf4420b2be1a6d4a1f9824ed3d1bc425e",
+    "pctx01-postspawn-continuous-initial.log": "4a2ddd720378d08977629769aef8a519f4dbaa80857536b819e890859627b211",
+    "pctx01-postspawn-capture-final.log": "a2430ab2092e1c858b2b766779bda0c5ddf6c29c65aa21dd6671a07737c350f0",
+    "pctx01-postspawn-capture-reviewed.log": "c9bef5c0af0705fd16795c28bd72375399dcc11562f6eed3cfaad86b44c64228",
+    "pctx01-postspawn-capture-clippy.log": "f06694f680c48a6787f188bbc14b796644edd07bb5aafd06e3076da876b38232",
+    "pctx01-postspawn-capture-format.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "artifacts_sha256": {
+    "target/debug/pctx": "5f1a514bceb377ee2fa95ba03b26f35481d01c91880cdfcf91207aad616e9769",
+    "target/debug/deps/pctx-ae897bec01e143c7": "845f7d2c9bce737962a15cdef977c241ad35cc4ad30fddb3660c07e202f2df26"
+  }
+}

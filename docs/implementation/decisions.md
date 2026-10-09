@@ -1202,3 +1202,23 @@ or IDs. Pipe/wait/join and receipt/runner completion faults still need implement
 and fault proof. Denominator40/local closed28/whole gates0 are unchanged. Initial
 callback failure reproduction remains in evidence; focused passes do not qualify
 Windows, full platform integration or retained startup/Schedule Tick failures.
+
+## PCTX01-G05-D02 grouped capture fault truth — 2026-10-09
+
+Native wait errors cannot certify root absence or exit0: retain available capture,
+unknown termination/null exit/signal and a child_unknown durable receipt. Failed
+observation invalidates the PID ownership assumption; do not signal it afterward.
+Observe wait state again after callback errors before cancellation. Configure each
+pipe independently; close a failed setup pipe rather than start a blocking worker.
+Join both workers and retain the surviving capture even when the other panics.
+Missing/lost streams are incomplete, not successful empty streams. Always enforce
+the existing250ms capture finalization bound, including continuously successful
+reads; an inherited pipe's continuous writer cannot extend finalization forever.
+
+The finite continuously-readable fixture reproduces the original failure before
+the repair. Native seven-scenario controls qualify the three existing pipe/wait/join
+phase groups; no slot-release or full descendant-absence claim is made. Remaining
+receipt/Runner phases stay open. After two updates without closing the entire
+condition, responsibility/completion were reconciled: §14/38 common child/error
+response boundary remains PCTX01, independent producer semantics stay inactive,
+40 fixed conditions/28closed are unchanged, and no mandatory bar is lowered.

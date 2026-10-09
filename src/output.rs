@@ -791,6 +791,12 @@ fn capture_framed<R: Read + Send + 'static>(
             if stop.load(Ordering::Relaxed) && stopped_at.is_none() {
                 stopped_at = Some(Instant::now());
             }
+            // Successful reads can be continuous too. Finalization must not
+            // wait forever for an inherited pipe to become temporarily empty.
+            if stopped_at.is_some_and(|t| t.elapsed() > Duration::from_millis(250)) {
+                c.complete = false;
+                break;
+            }
             match pipe.read(&mut chunk) {
                 Ok(0) => break,
                 Ok(n) => {
@@ -866,6 +872,79 @@ fn capture_framed<R: Read + Send + 'static>(
         c.records.extend(c.tail.drain(..));
         c
     })
+}
+// Fault selectors are private to unit tests and scoped to the invoking thread;
+// no environment switch can alter supervision in a released CLI.
+#[cfg(all(test, unix))]
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum NativeCaptureFault {
+    Missing(&'static str),
+    Setup(&'static str),
+    Panic(&'static str),
+}
+#[cfg(all(test, unix))]
+thread_local! {
+    static NATIVE_CAPTURE_FAULT: std::cell::Cell<Option<NativeCaptureFault>> = const { std::cell::Cell::new(None) };
+}
+#[cfg(unix)]
+fn prepare_capture<T: Read + Send + std::os::fd::AsRawFd + 'static>(
+    pipe: Option<T>,
+    stream: &'static str,
+    stop: Arc<AtomicBool>,
+    nul_framed: bool,
+    error: &mut Option<Error>,
+) -> Option<thread::JoinHandle<Capture>> {
+    #[cfg(test)]
+    let pipe = if NATIVE_CAPTURE_FAULT.get() == Some(NativeCaptureFault::Missing(stream)) {
+        None
+    } else {
+        pipe
+    };
+    let Some(pipe) = pipe else {
+        error.get_or_insert_with(|| err("IO_ERROR", &format!("Missing child {stream} pipe"), 7));
+        return None;
+    };
+    let setup = nonblocking(&pipe);
+    #[cfg(test)]
+    let setup = if NATIVE_CAPTURE_FAULT.get() == Some(NativeCaptureFault::Setup(stream)) {
+        Err(err("IO_ERROR", "Injected pipe setup failure", 7))
+    } else {
+        setup
+    };
+    if let Err(failure) = setup {
+        error.get_or_insert(failure);
+        return None;
+    }
+    #[cfg(test)]
+    if NATIVE_CAPTURE_FAULT.get() == Some(NativeCaptureFault::Panic(stream)) {
+        return Some(thread::spawn(move || {
+            let _pipe = pipe;
+            panic!("Injected capture worker panic");
+        }));
+    }
+    Some(capture_framed(pipe, stream, stop, nul_framed))
+}
+#[cfg(unix)]
+fn finish_capture(
+    worker: Option<thread::JoinHandle<Capture>>,
+    stream: &str,
+    error: &mut Option<Error>,
+) -> Capture {
+    if let Some(worker) = worker {
+        match worker.join() {
+            Ok(capture) => return capture,
+            Err(_) => {
+                error.get_or_insert_with(|| {
+                    err("IO_ERROR", &format!("{stream} capture panicked"), 7)
+                });
+            }
+        }
+    }
+    Capture {
+        io_error: true,
+        complete: false,
+        ..Default::default()
+    }
 }
 #[cfg(unix)]
 fn nonblocking<T: std::os::fd::AsRawFd>(pipe: &T) -> Result<()> {
@@ -1487,33 +1566,37 @@ fn run_inner(
             )?,
             true,
         );
-        let stdout = child
-            .stdout
-            .take()
-            .ok_or_else(|| err("IO_ERROR", "Missing child stdout pipe", 7))?;
-        let stderr = child
-            .stderr
-            .take()
-            .ok_or_else(|| err("IO_ERROR", "Missing child stderr pipe", 7))?;
-        #[cfg(unix)]
-        if nonblocking(&stdout)
-            .and_then(|_| nonblocking(&stderr))
-            .is_err()
-        {
-            let _ = child.kill();
-            let _ = child.wait();
-            return Err(err("IO_ERROR", "Pipe capture setup failed after spawn", 7));
-        }
         let stop = Arc::new(AtomicBool::new(false));
         let nul_framed = matches!(
             parser_identity,
             Some("git-status-porcelain-v1-z" | "git-log-nul-v1")
         );
-        let out_thread = capture_framed(stdout, "stdout", stop.clone(), nul_framed);
-        let err_thread = capture_framed(stderr, "stderr", stop.clone(), false);
+        // A setup failure on either stream does not abandon the child or the
+        // other available stream. Failed streams remain explicitly incomplete.
+        let out_thread = prepare_capture(
+            child.stdout.take(),
+            "stdout",
+            stop.clone(),
+            nul_framed,
+            &mut monitor_error,
+        );
+        let err_thread = prepare_capture(
+            child.stderr.take(),
+            "stderr",
+            stop.clone(),
+            false,
+            &mut monitor_error,
+        );
         let start = Instant::now();
         let mut timed_out = false;
         let status = loop {
+            match child.try_wait() {
+                Ok(Some(status)) => break Ok(status),
+                Ok(None) => (),
+                // Failed observation can mean ownership was lost (ECHILD).
+                // Never signal a possibly reused PID after that boundary.
+                Err(error) => break Err(error),
+            }
             if monitor_error.is_some() {
                 // Ownership attachment failed: never invoke another callback,
                 // but reap the owned process group through the capture path.
@@ -1521,10 +1604,7 @@ fn run_inner(
                     libc::kill(-(pid as i32), libc::SIGKILL);
                 }
                 let _ = child.kill();
-                break child.wait()?;
-            }
-            if let Some(status) = child.try_wait()? {
-                break status;
+                break child.wait();
             }
             let poll = crate::cancellation::check().and_then(|()| match on_poll.as_mut() {
                 Some(callback) => callback(),
@@ -1532,16 +1612,20 @@ fn run_inner(
             });
             if let Err(e) = poll {
                 monitor_error = Some(e);
-                #[cfg(unix)]
-                unsafe {
-                    libc::kill(-(pid as i32), libc::SIGKILL);
-                }
-                let _ = child.kill();
-                break child.wait()?;
+                // Reobserve ownership before signaling: a callback could have
+                // consumed the native wait status or otherwise lost identity.
+                continue;
             }
             if r.execution_timeout_ms
                 .is_some_and(|ms| start.elapsed() >= Duration::from_millis(ms))
             {
+                // Even a successful callback may invalidate native ownership.
+                // Reobserve before timeout signals, as for callback errors.
+                match child.try_wait() {
+                    Ok(Some(status)) => break Ok(status),
+                    Ok(None) => (),
+                    Err(error) => break Err(error),
+                }
                 timed_out = true;
                 #[cfg(unix)]
                 {
@@ -1556,21 +1640,23 @@ fn run_inner(
                     libc::kill(-(pid as i32), libc::SIGKILL);
                 }
                 let _ = child.kill();
-                break child.wait()?;
+                break child.wait();
             }
             thread::sleep(Duration::from_millis(5));
         };
-        // Cancellation has been observed and the direct child reaped. Preserve
-        // its native status and publish the artifact even though Ctrl-C remains
-        // latched. Resource owners still separately verify descendant absence.
+        let status = match status {
+            Ok(status) => Some(status),
+            Err(error) => {
+                monitor_error.get_or_insert_with(|| error.into());
+                None
+            }
+        };
+        // Finalize available capture even if native observation failed. Resource
+        // owners still separately verify child and descendant absence.
         let _finalization = crate::cancellation::finalize();
         stop.store(true, Ordering::Relaxed);
-        let out = out_thread
-            .join()
-            .map_err(|_| err("IO_ERROR", "Stdout capture panicked", 7))?;
-        let stderr = err_thread
-            .join()
-            .map_err(|_| err("IO_ERROR", "Stderr capture panicked", 7))?;
+        let out = finish_capture(out_thread, "stdout", &mut monitor_error);
+        let stderr = finish_capture(err_thread, "stderr", &mut monitor_error);
         let mut records = out.records;
         records.extend(stderr.records);
         // Bound serialized record storage too: JSON escaping must not expand a 16MiB
@@ -1600,11 +1686,13 @@ fn run_inner(
         #[cfg(unix)]
         let signal = {
             use std::os::unix::process::ExitStatusExt;
-            status.signal()
+            status.as_ref().and_then(|status| status.signal())
         };
         #[cfg(not(unix))]
         let signal: Option<i32> = None;
-        let termination = if monitor_error
+        let termination = if status.is_none() {
+            "unknown"
+        } else if monitor_error
             .as_ref()
             .is_some_and(|e| e.code == "CANCELLED")
         {
@@ -1639,7 +1727,7 @@ fn run_inner(
             retained,
             spawned: true,
             termination,
-            child_exit_code: status.code(),
+            child_exit_code: status.as_ref().and_then(|status| status.code()),
             signal,
             pctx_error: if let Some(error) = monitor_error.as_ref() {
                 Some(error.code.clone())
@@ -1678,7 +1766,7 @@ fn run_inner(
         let _ = atomic_write(
             &job_path,
             &serde_json::to_vec(
-                &json!({"execution_id":execution_id,"pid":pid,"state":if a.capture_complete{"child_exited"}else{"child_exited_descendants_unknown"},"termination":a.termination,"child_exit_code":a.child_exit_code,"signal":a.signal}),
+                &json!({"execution_id":execution_id,"pid":pid,"state":if status.is_none(){"child_unknown"}else if a.capture_complete{"child_exited"}else{"child_exited_descendants_unknown"},"termination":a.termination,"child_exit_code":a.child_exit_code,"signal":a.signal}),
             )?,
             true,
         );
@@ -1992,28 +2080,217 @@ pub(crate) fn unverified_report(p: &Project, output_id: &str) -> Result<crate::w
 mod capture_tests {
     use super::*;
     #[cfg(unix)]
+    struct NativeCleanup<'a>(&'a std::cell::Cell<u32>);
+    #[cfg(unix)]
+    impl Drop for NativeCleanup<'_> {
+        fn drop(&mut self) {
+            let pid = self.0.get() as i32;
+            if pid == 0 {
+                return;
+            }
+            let mut status = 0;
+            // A still-owned, unreaped direct child reserves this PID before group cancellation.
+            if unsafe { libc::waitpid(pid, &mut status, libc::WNOHANG) } == 0 {
+                unsafe {
+                    libc::kill(-pid, libc::SIGKILL);
+                    libc::kill(pid, libc::SIGKILL);
+                    libc::waitpid(pid, &mut status, 0);
+                }
+            }
+        }
+    }
+    #[cfg(unix)]
+    fn native_project(base: &Path) -> Project {
+        use crate::project::{Config, ProjectConfig, RootAnchor};
+        let root = base.join("project");
+        let data = base.join("data");
+        fs::create_dir_all(&root).unwrap();
+        let p = Project {
+            deadline: None,
+            root_anchor: RootAnchor::capture(&root).unwrap(),
+            root,
+            data_dir: data.clone(),
+            workspace_dir: data.join("workspace"),
+            control_dir: data.join("control"),
+            project_id: "fixture".into(),
+            workspace_id: "ws".into(),
+            coordination_id: "coord".into(),
+            config: Config {
+                schema_version: 1,
+                project: ProjectConfig {
+                    id: "fixture".into(),
+                    name: "fixture".into(),
+                },
+                index: Default::default(),
+                policy: Default::default(),
+                search: Default::default(),
+                context: Default::default(),
+                roles: Default::default(),
+            },
+        };
+        fs::create_dir_all(&p.workspace_dir).unwrap();
+        fs::create_dir_all(&p.control_dir).unwrap();
+        p
+    }
+    #[cfg(unix)]
+    #[test]
+    fn native_pipe_wait_and_worker_faults_preserve_surviving_capture() {
+        use std::cell::Cell;
+        struct Reset;
+        impl Drop for Reset {
+            fn drop(&mut self) {
+                NATIVE_CAPTURE_FAULT.set(None);
+            }
+        }
+        for fault in [
+            Some(NativeCaptureFault::Missing("stdout")),
+            Some(NativeCaptureFault::Missing("stderr")),
+            Some(NativeCaptureFault::Setup("stdout")),
+            Some(NativeCaptureFault::Setup("stderr")),
+            Some(NativeCaptureFault::Panic("stdout")),
+            Some(NativeCaptureFault::Panic("stderr")),
+            None,
+        ] {
+            let _reset = Reset;
+            NATIVE_CAPTURE_FAULT.set(fault);
+            let temp = tempfile::tempdir().unwrap();
+            let base = fs::canonicalize(temp.path()).unwrap();
+            let p = native_project(&base);
+            let setup_failure = matches!(
+                fault,
+                Some(NativeCaptureFault::Missing(_) | NativeCaptureFault::Setup(_))
+            );
+            let end = if setup_failure {
+                "exec /bin/sleep 30"
+            } else {
+                "exit 23"
+            };
+            fs::write(p.root.join("fixture.sh"), format!(
+                "printf 'surviving stdout\n'\nprintf 'surviving stderr\n' >&2\nprintf x >> invocation\n{end}\n"
+            )).unwrap();
+            let r = RunRequest {
+                task_id: None,
+                session: None,
+                retain: "temporary".into(),
+                execution_timeout_ms: Some(5000),
+                budget_bytes: 8192,
+                exit_policy: "pctx".into(),
+                stdin: "closed".into(),
+                argv: vec!["/bin/sh".into(), "fixture.sh".into()],
+            };
+            let binding = registered_binding_at(&p, &r.argv, ".").unwrap();
+            let pid = Cell::new(0);
+            let _cleanup = NativeCleanup(&pid);
+            let polls = Cell::new(0);
+            let data = run_registered_monitored(
+                &p,
+                &r,
+                ".",
+                &BTreeMap::new(),
+                binding["fingerprint"].as_str().unwrap(),
+                &mut |native_pid| {
+                    pid.set(native_pid);
+                    let limit = Instant::now() + Duration::from_secs(2);
+                    while fs::read(p.root.join("invocation")).ok().as_deref() != Some(b"x") {
+                        assert!(Instant::now() < limit, "Fixture body did not start");
+                        thread::sleep(Duration::from_millis(1));
+                    }
+                    if fault.is_none() {
+                        // A real external reap causes the supervisor's subsequent wait to fail.
+                        let mut status = 0;
+                        assert_eq!(
+                            unsafe { libc::waitpid(native_pid as i32, &mut status, 0) },
+                            native_pid as i32
+                        );
+                        assert_eq!(libc::WEXITSTATUS(status), 23);
+                    }
+                    Ok(())
+                },
+                &mut || {
+                    polls.set(polls.get() + 1);
+                    Ok(())
+                },
+            )
+            .unwrap();
+            assert_eq!(execution_error(&data).unwrap().exit, 7);
+            assert_eq!(data["spawned"], true);
+            assert_eq!(data["capture_complete"], fault.is_none());
+            if setup_failure {
+                assert_eq!(data["termination"], "signaled");
+                assert_eq!(data["signal"], libc::SIGKILL);
+                assert!(data["child_exit_code"].is_null());
+                assert_eq!(polls.get(), 0);
+            } else if fault.is_some() {
+                assert_eq!(data["termination"], "exited");
+                assert_eq!(data["child_exit_code"], 23);
+                assert!(data["signal"].is_null());
+            } else {
+                assert_eq!(data["termination"], "unknown");
+                assert!(data["child_exit_code"].is_null());
+                assert!(data["signal"].is_null());
+                assert_eq!(polls.get(), 0);
+            }
+            let failed_stream = match fault {
+                Some(
+                    NativeCaptureFault::Missing(stream)
+                    | NativeCaptureFault::Setup(stream)
+                    | NativeCaptureFault::Panic(stream),
+                ) => Some(stream),
+                None => None,
+            };
+            let artifact = load(&p, data["output_id"].as_str().unwrap()).unwrap();
+            assert_eq!(artifact.capture_complete, fault.is_none());
+            assert!(artifact.pctx_error.is_some());
+            assert!(typed_report(&artifact).is_none());
+            for stream in ["stdout", "stderr"] {
+                if Some(stream) != failed_stream {
+                    assert!(artifact.records.iter().any(|record| record.stream == stream
+                        && record.text == format!("surviving {stream}")));
+                    assert!(
+                        data["records"]
+                            .as_array()
+                            .unwrap()
+                            .iter()
+                            .any(|record| record["stream"] == stream
+                                && record["text"] == format!("surviving {stream}"))
+                    );
+                }
+            }
+            let receipt: Value = serde_json::from_slice(
+                &fs::read(
+                    p.data_dir
+                        .join("output-jobs")
+                        .join(format!("{}.json", artifact.execution_id)),
+                )
+                .unwrap(),
+            )
+            .unwrap();
+            assert_eq!(receipt["termination"], data["termination"]);
+            assert_eq!(
+                receipt["state"],
+                if fault.is_none() {
+                    "child_unknown"
+                } else {
+                    "child_exited_descendants_unknown"
+                }
+            );
+            assert_eq!(fs::read(p.root.join("invocation")).unwrap(), b"x");
+            let mut status = 0;
+            assert_eq!(
+                unsafe { libc::waitpid(pid.get() as i32, &mut status, libc::WNOHANG) },
+                -1
+            );
+            assert_eq!(
+                std::io::Error::last_os_error().raw_os_error(),
+                Some(libc::ECHILD)
+            );
+        }
+    }
+    #[cfg(unix)]
     #[test]
     fn registered_native_callback_failures_preserve_processing_truth() {
         use crate::project::{Config, ProjectConfig, RootAnchor};
         use std::cell::Cell;
-        struct NativeCleanup<'a>(&'a Cell<u32>);
-        impl Drop for NativeCleanup<'_> {
-            fn drop(&mut self) {
-                let pid = self.0.get() as i32;
-                if pid == 0 {
-                    return;
-                }
-                let mut status = 0;
-                // A still-owned, unreaped direct child reserves this PID before group cancellation.
-                if unsafe { libc::waitpid(pid, &mut status, libc::WNOHANG) } == 0 {
-                    unsafe {
-                        libc::kill(-pid, libc::SIGKILL);
-                        libc::kill(pid, libc::SIGKILL);
-                        libc::waitpid(pid, &mut status, 0);
-                    }
-                }
-            }
-        }
         for (spawn_failure, completed_before_refusal, publication_failure) in [
             (true, false, false),
             (false, false, false),
@@ -2237,6 +2514,40 @@ mod capture_tests {
             drop(publication_lock);
             assert_eq!(fs::read(p.root.join("invocation")).unwrap(), b"x");
         }
+    }
+    #[test]
+    fn continuously_readable_capture_obeys_finalization_deadline() {
+        struct Continuous(Instant);
+        impl Read for Continuous {
+            fn read(&mut self, bytes: &mut [u8]) -> std::io::Result<usize> {
+                // The original implementation reaches EOF after 1s instead of
+                // its 250ms finalization limit; the fixture itself is finite.
+                if self.0.elapsed() >= Duration::from_secs(1) {
+                    return Ok(0);
+                }
+                let record = b"continuous output\n";
+                bytes[..record.len()].copy_from_slice(record);
+                Ok(record.len())
+            }
+        }
+        let start = Instant::now();
+        let worker = capture(Continuous(start), "stdout", Arc::new(AtomicBool::new(true)));
+        while !worker.is_finished() && start.elapsed() < Duration::from_millis(750) {
+            thread::sleep(Duration::from_millis(1));
+        }
+        assert!(
+            worker.is_finished(),
+            "Continuous reads bypassed the finalization deadline"
+        );
+        let captured = worker.join().unwrap();
+        assert!(!captured.complete);
+        assert!(captured.captured_bytes > 0);
+        assert!(
+            captured
+                .records
+                .iter()
+                .any(|record| record.text == "continuous output")
+        );
     }
     struct Fragmented {
         data: Vec<u8>,

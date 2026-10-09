@@ -383,7 +383,7 @@
       "id": "PCTX01-G05-D02",
       "gate": "G05",
       "status": "open",
-      "local_implementation": "native callback subset qualified; pipe/wait/join/receipt and runner finalization remaining",
+      "local_implementation": "callback and pipe/wait/join subsets qualified; job receipt and Runner finalization remaining",
       "completion_condition": "Complete native callback/post-spawn fault injection while retaining already observed capture/publication child outcome, artifact and no-rerun truth",
       "spec_sections": [
         "14",
@@ -394,7 +394,8 @@
       "evidence": [
         "pctx01-nested-execution-verification.json",
         "pctx01-run-exit-verification.json",
-        "pctx01-postspawn-callback-verification.json"
+        "pctx01-postspawn-callback-verification.json",
+        "pctx01-postspawn-capture-verification.json"
       ],
       "verification_environment": "Native macOS arm64 local common proof; all release platforms separately required by G09",
       "macOS_arm64": "partial",
@@ -402,7 +403,7 @@
       "Linux_x86_64": "unverified; G09-D03",
       "Linux_aarch64": "prior fixed-source full only; inspect linked manifest per contract",
       "Windows_x86_64": "unverified; G09-D04",
-      "documentation_evidence": "Four native callback controls qualified; seven remaining phase groups recorded within this existing condition; no new ID or denominator"
+      "documentation_evidence": "Three of seven finite native postspawn phase groups locally qualified; responsibility audited after two updates without whole-condition closure; no new ID or denominator"
     },
     {
       "id": "PCTX01-G05-D03",
