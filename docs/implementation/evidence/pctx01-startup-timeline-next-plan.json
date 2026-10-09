@@ -31,5 +31,13 @@
     "url": "https://developer.apple.com/documentation/xcode/reducing-your-app-s-launch-time",
     "supports": "Use thread-state tracing for active/blocked scheduling distinctions; CPU time alone does not resolve wait.",
     "limit": "App launch guidance, not a specific macOS script-policy fix or permission-scope guarantee."
+  },
+  "followup": {
+    "status": "ordinary-user numeric chronology executed; kernel-stack design remains unexecuted",
+    "evidence": "pctx01-startup-late-state-verification.json",
+    "new_result": "Each actual expired originalsupervisor child24latevalidwaiting3samples,ending3.6ms beforelowerdeadline; no late runnable state observed.",
+    "remaining_question": "Exact target-specific wait reason/request-response delay causal correction. Do not claim same stack as earlier differentchildren or repeat knownwait samples.",
+    "privileged_capture": "Still not execution ready; no PID reuse/retention workaround accepted.",
+    "system_trace": "Options enumeration passes after ordinaryuser sandboxescape; target-only collection notproven; no recording."
   }
 }

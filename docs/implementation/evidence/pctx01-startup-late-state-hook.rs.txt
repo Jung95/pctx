@@ -1,0 +1,118 @@
+// Isolated macOS diagnostic-copy hook only. No product/test changes.
+struct NativePhaseTrace {
+    samples: Vec<serde_json::Value>,
+    next_sample_ns: u64,
+    samples_dropped: usize,
+    fixture_admitted: bool,
+    points: Vec<(u64, &'static str, u64)>,
+    dropped: usize,
+    pid: u32,
+    identity: Option<(u32,u32,u32,u64,u64)>,
+    executable: Option<std::path::PathBuf>,
+    deadline_low_ns: Option<u64>,
+    deadline_high_ns: Option<u64>,
+    clock_ok: bool,
+}
+impl NativePhaseTrace {
+    fn now() -> Option<u64> {
+        let mut t:libc::timespec=unsafe{std::mem::zeroed()};
+        if unsafe{libc::clock_gettime(libc::CLOCK_MONOTONIC,&mut t)}!=0 || t.tv_sec<0 || t.tv_nsec<0 {return None;}
+        (t.tv_sec as u64).checked_mul(1_000_000_000)?.checked_add(t.tv_nsec as u64)
+    }
+    fn new(deadline:Deadline) -> Self {
+        let low=Self::now();
+        let remaining=deadline.instant().checked_duration_since(std::time::Instant::now()).filter(|d|!d.is_zero()).and_then(|d|u64::try_from(d.as_nanos()).ok());
+        let high=Self::now();
+        let bounds=match(low,high,remaining){(Some(l),Some(h),Some(r)) if h>=l => l.checked_add(r).zip(h.checked_add(r)),_=>None};
+        Self {samples:Vec::with_capacity(40),next_sample_ns:0,samples_dropped:0,fixture_admitted:false,points:Vec::with_capacity(4096),dropped:0,pid:0,identity:None,executable:None,deadline_low_ns:bounds.map(|b|b.0),deadline_high_ns:bounds.map(|b|b.1),clock_ok:matches!((low,high),(Some(l),Some(h)) if h>=l)}
+    }
+    fn mark(&mut self,phase:&'static str,arg:u64) {
+        let Some(tick)=Self::now() else{self.clock_ok=false;return;};
+        if self.points.len()<4096 {self.points.push((tick,phase,arg));} else {self.dropped+=1;}
+    }
+    fn bind(&mut self,pid:u32) {
+        self.pid=pid;
+        use std::os::unix::fs::MetadataExt;
+        if let Some(path)=&self.executable {
+            let expected=b"#!/bin/sh\nkill -0 -$$ || exit 47\nprintf stdout\nprintf stderr >&2\n";
+            if let (Ok(before),Ok(bytes),Ok(after))=(std::fs::symlink_metadata(path),std::fs::read(path),std::fs::symlink_metadata(path)) {
+                self.fixture_admitted=before.is_file() && before.uid()==unsafe{libc::getuid()} && before.mode()&0o111!=0 && before.len()==expected.len() as u64 && bytes==expected && before.dev()==after.dev() && before.ino()==after.ino() && before.len()==after.len();
+            }
+        }
+        let mut b:libc::proc_bsdinfo=unsafe{std::mem::zeroed()};
+        let n=unsafe{libc::proc_pidinfo(pid as i32,libc::PROC_PIDTBSDINFO,0,(&mut b as *mut libc::proc_bsdinfo).cast(),std::mem::size_of_val(&b) as i32)};
+        if n==std::mem::size_of_val(&b) as i32 && b.pbi_pid==pid && b.pbi_ppid==std::process::id() && b.pbi_uid==unsafe{libc::getuid()} {
+            self.identity=Some((b.pbi_pid,b.pbi_ppid,b.pbi_uid,b.pbi_start_tvsec,b.pbi_start_tvusec));
+        }
+    }
+    // Called only in original loop while the direct child is unreaped.
+    // No child retention, thread/task control port, stack capture or privilege.
+    fn observe_late(&mut self,deadline:Deadline,retained:bool) {
+        let Some(begin)=Self::now() else{return;};
+        let Some(remaining)=deadline.instant().checked_duration_since(std::time::Instant::now()) else{return;};
+        if remaining.is_zero() || remaining>Duration::from_millis(350) || begin<self.next_sample_ns || !retained || !self.fixture_admitted || self.identity.is_none(){return;}
+        self.next_sample_ns=begin.saturating_add(10_000_000);
+        if self.samples.len()>=40 {self.samples_dropped+=1;return;}
+        let identity=self.identity.unwrap();
+        let owned=|b:&libc::proc_bsdinfo| (b.pbi_pid,b.pbi_ppid,b.pbi_uid,b.pbi_start_tvsec,b.pbi_start_tvusec)==identity && b.pbi_ppid==std::process::id() && b.pbi_uid==unsafe{libc::getuid()};
+        let mut before:libc::proc_bsdinfo=unsafe{std::mem::zeroed()};
+        let before_bytes=unsafe{libc::proc_pidinfo(self.pid as i32,libc::PROC_PIDTBSDINFO,0,(&mut before as *mut libc::proc_bsdinfo).cast(),std::mem::size_of_val(&before) as i32)};
+        if before_bytes!=std::mem::size_of_val(&before) as i32 || !owned(&before){self.samples.push(serde_json::json!({"begin_ns":begin,"admitted":false,"before_bytes":before_bytes}));return;}
+        // LISTTHREADS returns pthread handles, not unique thread IDs.
+        let mut handles=[0u64;8];
+        let list_bytes=if deadline.check().is_ok(){unsafe{libc::proc_pidinfo(self.pid as i32,6,0,handles.as_mut_ptr().cast(),std::mem::size_of_val(&handles) as i32)}}else{-1};
+        let count=if list_bytes>0 && list_bytes<(std::mem::size_of_val(&handles) as i32) && list_bytes%8==0 {list_bytes as usize/8}else{0};
+        let mut threads=Vec::with_capacity(count);
+        for handle in handles.iter().take(count) {
+            if deadline.check().is_err(){break;}
+            let mut th:libc::proc_threadinfo=unsafe{std::mem::zeroed()};
+            let bytes=unsafe{libc::proc_pidinfo(self.pid as i32,libc::PROC_PIDTHREADINFO,*handle,(&mut th as *mut libc::proc_threadinfo).cast(),std::mem::size_of_val(&th) as i32)};
+            threads.push(if bytes==std::mem::size_of_val(&th) as i32 {serde_json::json!({"handle":handle,"bytes":bytes,"run_state":th.pth_run_state,"flags":th.pth_flags,"user_cpu_raw":th.pth_user_time,"system_cpu_raw":th.pth_system_time})} else {serde_json::json!({"handle":handle,"bytes":bytes,"run_state":null})});
+        }
+        let mut task:libc::proc_taskinfo=unsafe{std::mem::zeroed()};
+        let task_bytes=if deadline.check().is_ok(){unsafe{libc::proc_pidinfo(self.pid as i32,libc::PROC_PIDTASKINFO,0,(&mut task as *mut libc::proc_taskinfo).cast(),std::mem::size_of_val(&task) as i32)}}else{-1};
+        let task_record=if task_bytes==std::mem::size_of_val(&task) as i32{Some(serde_json::json!({"threads":task.pti_threadnum,"numrunning":task.pti_numrunning,"user_cpu_raw":task.pti_total_user,"system_cpu_raw":task.pti_total_system,"mach_calls":task.pti_syscalls_mach,"unix_calls":task.pti_syscalls_unix,"context_switches":task.pti_csw}))}else{None};
+        let mut after:libc::proc_bsdinfo=unsafe{std::mem::zeroed()};
+        // Only own unreaped child; this admission recheck cannot observe a reused PID.
+        let after_bytes=unsafe{libc::proc_pidinfo(self.pid as i32,libc::PROC_PIDTBSDINFO,0,(&mut after as *mut libc::proc_bsdinfo).cast(),std::mem::size_of_val(&after) as i32)};
+        let end=Self::now();
+        self.samples.push(serde_json::json!({"begin_ns":begin,"end_ns":end,"admitted":after_bytes==std::mem::size_of_val(&after) as i32 && owned(&after),"before_bytes":before_bytes,"after_bytes":after_bytes,"status":before.pbi_status,"list_bytes":list_bytes,"list_complete":list_bytes>0 && list_bytes<(std::mem::size_of_val(&handles) as i32) && list_bytes%8==0,"threads":threads,"task_bytes":task_bytes,"task":task_record}));
+    }
+    fn persist(&self,result:&Result<Output>) {
+        use std::os::unix::fs::{MetadataExt,OpenOptionsExt};
+        let Some(executable)=&self.executable else{return;};
+        let expected=b"#!/bin/sh\nkill -0 -$$ || exit 47\nprintf stdout\nprintf stderr >&2\n";
+        let Ok(before)=std::fs::symlink_metadata(executable) else{return;};
+        if !before.is_file() || before.uid()!=unsafe{libc::getuid()} || before.len()!=expected.len() as u64{return;}
+        let Ok(bytes)=std::fs::read(executable) else{return;};
+        if bytes.as_slice()!=expected{return;}
+        let Ok(after)=std::fs::symlink_metadata(executable) else{return;};
+        if before.dev()!=after.dev() || before.ino()!=after.ino() || before.len()!=after.len(){return;}
+        let Some(root)=option_env!("PCTX_PHASE_TRACE_ROOT") else{return;};
+        let path=std::path::Path::new(root).join(format!("{}.json",self.pid));
+        let Ok(mut file)=std::fs::OpenOptions::new().write(true).create_new(true).mode(0o600).open(path) else{return;};
+        let outcome=match result{Ok(o)=>serde_json::json!({"code":"OUTPUT","success":o.status.success(),"stdout_bytes":o.stdout.len(),"stderr_bytes":o.stderr.len()}),Err(e)=>serde_json::json!({"code":e.code})};
+        // Serialization/filesystem work is after the original cancellation/reap block.
+        // No arbitrary paths,argv,environment,stack or output contents are exported.
+        let _=serde_json::to_writer(&mut file,&serde_json::json!({"pid":self.pid,"identity":self.identity,"clock":"native CLOCK_MONOTONIC ns","clock_ok":self.clock_ok,"deadline_low_ns":self.deadline_low_ns,"deadline_high_ns":self.deadline_high_ns,"samples":self.samples,"samples_dropped":self.samples_dropped,"fixture_admitted":self.fixture_admitted,"points":self.points,"dropped":self.dropped,"outcome":outcome}));
+    }
+}
+
+#[cfg(test)]
+#[test]
+fn pctx01_late_state_controls() {
+    let expired=Deadline::from_instant(std::time::Instant::now()-Duration::from_millis(1));
+    let old=NativePhaseTrace::new(expired);
+    assert_eq!(std::mem::size_of::<libc::proc_threadinfo>(),112);
+    assert_eq!(libc::TH_STATE_WAITING,3);
+    assert!(old.clock_ok);
+    assert_eq!(old.deadline_low_ns,None);
+    assert_eq!(old.deadline_high_ns,None);
+    let mut fresh=NativePhaseTrace::new(Deadline::from_millis(1000).unwrap());
+    assert!(fresh.clock_ok);
+    assert!(fresh.deadline_low_ns.unwrap()<=fresh.deadline_high_ns.unwrap());
+    for _ in 0..4097 {fresh.mark("control",0);}
+    assert_eq!(fresh.points.len(),4096);
+    assert_eq!(fresh.dropped,1);
+    assert!(fresh.points.windows(2).all(|p|p[0].0<=p[1].0));
+}

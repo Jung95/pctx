@@ -1,6 +1,47 @@
 # Implementation requirements
 
-## Prioritized investigation executed — current, 2026-10-09
+## Late child chronology — current, 2026-10-09
+
+Priority 3 used an ordinary-user native numeric alternative to privileged stack
+sampling. One byte-identical original Rust concurrency test retains 1000ms,
+8×16, argv/cwd/env, groups/streams/overflow and original cancellation/reap.
+Only matching owned unreaped direct children with the exact synthetic fixture
+are sampled in the remaining 350ms, at least 10ms apart, capped at 40 samples.
+No interpreter replacement, retention, warmup, retry, admin authentication,
+service observation, process inventory or security change.
+
+The test fails101: 98 recorded outcomes,96 OUTPUT and two TIMEOUTs (32487/32489);
+the 30 planned-but-unobserved attempts remain censored, not passes or failures.
+Each failed child has24 fully admitted complete pre-deadline samples: thread
+state3 (WAITING), one thread,numrunning0,unchanged rawCPU/syscall/context-switch
+counters. Samples span about345ms to3.6ms before the deadline lower bound;
+max observed read interval41/39us, no dropped records. Both failures have zero
+streams/no observed root exit. This shows no sampled late waiting-to-running
+transition or runnable-child CPU-starvation state. Between-sample transitions,
+service-side starvation, continuous policy wait and exact wait cause remain unknown.
+[Verification](evidence/pctx01-startup-late-state-verification.json),
+[result](evidence/pctx01-startup-late-state-result.json).
+
+One isolated control passes; independent pre-run and evidence review find no
+material blocker. Product/tests remain unchanged. All98 recorded children and
+parent are absent; private source/records/tool session removed. Shared target
+contains a diagnostic binary: rebuild and hash-check original source before any
+acceptance run. Diagnostic PASS would not qualify repair.
+
+Priority 4 reads installed Xcode System Trace settings only, with no recording.
+The first sandbox attempt aborts on cache permissions; ordinary UID sandbox
+escape succeeds without admin authentication. Options do not prove target-only
+collection; no broad trace is started. [Capability](evidence/pctx01-startup-system-trace-capability.json).
+Priority 5 lifecycle events cannot identify this late wait cause and do not justify
+an unchanged rerun. The privileged stack plan remains unexecuted; do not reuse
+old retained-child helpers or widen service scope. Next unresolved work is exact
+owned-target wait/request-response attribution and an applicable causal repair,
+not another known-wait sample or a different official task.
+
+**PCTX01-G05-D05 remains product_failure**, fixed33/40details,0/10whole gates.
+Required acceptance/platform conditions remain; no exemption or closure.
+
+## Prioritized investigation executed — earlier, 2026-10-09
 
 Human authorized proceeding in the displayed priority order. Priority 1 consumed
 its exact owned-path, 2-second UTC service-log scope once: exit 0, zero events,

@@ -1,0 +1,32 @@
+{
+  "task": "PCTX01-G05-D05",
+  "priority": 4,
+  "command": [
+    "xctrace",
+    "record",
+    "--template",
+    "System Trace",
+    "--show-recording-options"
+  ],
+  "no_recording_documented_by_installed_help": true,
+  "sandbox_attempt_exit": 134,
+  "sandbox_reason": "Instruments Analysis Core cache path permission refusal; retained0byteoutput and exceptionlog.",
+  "ordinary_user_sandbox_escape_exit": 0,
+  "administrator_authentication": false,
+  "supported_options_file": "pctx01-startup-system-trace-options-supported.json",
+  "options": [
+    "Hangs.detectPriorityInversions",
+    "Hangs.hangsThreshold",
+    "Points of Interest.excludeOSLogs",
+    "Time Profiler.contextSwitchSampling",
+    "Time Profiler.highFrequencySampling",
+    "Time Profiler.recordKernelStacks",
+    "Time Profiler.recordWaitingThreads"
+  ],
+  "target_only_collection_proven": false,
+  "no_recording_started": true,
+  "no_scope_or_security_change": true,
+  "conclusion": "Options enumeration does not establish target-only collection. No wide System Trace fallback under owned-test-target consent.",
+  "priority5": "NOTE_EXEC/EXIT does not identify late policywait/cause; existing waitid alreadyobservesrootexit. No unchanged workload rerun solely to add lifecycleevents.",
+  "qualification": false
+}

@@ -1,0 +1,30 @@
+{
+  "task": "PCTX01-G05-D05",
+  "priority": 3,
+  "root": "/private/tmp/pctx01-late-state-r70r0esv",
+  "source": "/private/tmp/pctx01-late-state-r70r0esv/source",
+  "records": "/private/tmp/pctx01-late-state-r70r0esv/records",
+  "revision": "b07785f3b1e17c5c5e7026c67a625e23a390be66",
+  "hashes": {
+    "src/query_process.rs": "bf661f4b8d0ed472585244ada4ac0e946221de364c100039cd20aee56fd8d0d2",
+    "tests/project_deadline.rs": "8b9fbc97fbd5acaf612b2d75b94cf810faa2b61614b654495082462b1941a8dc",
+    "Cargo.lock": "f96362897990caba560793601bc9fca08cef5c977907bb06889d5595d2acd7b0"
+  },
+  "instrumented_query_sha256": "0ea3234b616fff92cf3c7420e617e28d9d5fe5bda5c4ed0a0fda1b6146b37804",
+  "clock": "shared nativeCLOCK_MONOTONICns; originalInstant deadline retained;remaining bracket recorded",
+  "new_question": "Late650-1000ms thread states of actual original-supervisor expired children; native numeric reads while own child is unreaped, no external sampler or admin.",
+  "test": "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget",
+  "contract": "Originaltestbyteidentical,1000ms8x16,nativeexec/cwd/env/group/streams/overflow;no retry,retention,warmup or auth",
+  "qualification": false,
+  "limits": [
+    "Observerclockreads/bufferallocation/extra ownedBSDadmission perturbtiming.",
+    "Filesystemrecording occursafteroriginalcleanup;mayaffectlaterqueries.",
+    "4096pointcap;dropped/missingrecordsunknown.",
+    "Reapnotindependentlyprovenbycleanup_end;originaltry_waitblockmayendatgrace.",
+    "Last350ms observations at>=10ms spacing;40sample cap. State at sampled instants only,not continuouswait or exact kernel reason.",
+    "TH_STATE_RUNNING means running normally; does not distinguish currentlyonCPU from runnable.",
+    "Numeric syscall failures/null thread fields remain unknown. RawCPU counters are not converted toseconds.",
+    "No processnames/threadnames,taskports,stacks or otherprocess inventory collected. Original parent owns unreapedchild so PID cannotrecycle during reads.",
+    "Originalsleep/drain/deadline/cancel unchanged except bounded observercalls; diagnosticPASS notqualification."
+  ]
+}

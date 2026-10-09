@@ -1,0 +1,7 @@
+{
+  "removed_root": "/private/tmp/pctx01-late-state-r70r0esv",
+  "removed": true,
+  "all_recorded98children_and_parent_absent_before_removal": true,
+  "no_authentication_or_root_collector": "none started",
+  "shared_target": "Contains isolated late-state diagnostic binary; rebuild/hashcheckoriginalsource before acceptance."
+}

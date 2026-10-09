@@ -1,0 +1,126 @@
+{
+  "task": "PCTX01-G05-D05",
+  "priority": 3,
+  "method": "ordinary-user native late thread-state chronology in isolated original supervisor",
+  "qualification": false,
+  "test_exit": 101,
+  "original_contract": "1000ms/8x16 unchanged testsource,argv,cwd,env,streams/group/cancel; noretention/auth/warmup/retry",
+  "recorded_outcomes": 98,
+  "output": 96,
+  "timeouts": 2,
+  "unobserved_intended_attempts": 30,
+  "unobserved_is_not_pass_or_failure": true,
+  "failed_child_analysis": [
+    {
+      "pid": 32487,
+      "identity": [
+        32487,
+        32473,
+        502,
+        1791548066,
+        89619
+      ],
+      "samples": 24,
+      "fully_valid_pre_deadline": 24,
+      "run_states": [
+        3
+      ],
+      "first_remaining_ns": 345274458,
+      "last_remaining_ns": 3699458,
+      "max_observer_ns": 41000,
+      "task_values": {
+        "threads": [
+          1
+        ],
+        "numrunning": [
+          0
+        ],
+        "user_cpu_raw": [
+          0
+        ],
+        "system_cpu_raw": [
+          679
+        ],
+        "mach_calls": [
+          0
+        ],
+        "unix_calls": [
+          0
+        ],
+        "context_switches": [
+          2
+        ]
+      },
+      "samples_dropped": 0,
+      "phase_points_dropped": 0
+    },
+    {
+      "pid": 32489,
+      "identity": [
+        32489,
+        32473,
+        502,
+        1791548066,
+        89652
+      ],
+      "samples": 24,
+      "fully_valid_pre_deadline": 24,
+      "run_states": [
+        3
+      ],
+      "first_remaining_ns": 345190750,
+      "last_remaining_ns": 3639750,
+      "max_observer_ns": 39000,
+      "task_values": {
+        "threads": [
+          1
+        ],
+        "numrunning": [
+          0
+        ],
+        "user_cpu_raw": [
+          0
+        ],
+        "system_cpu_raw": [
+          634
+        ],
+        "mach_calls": [
+          0
+        ],
+        "unix_calls": [
+          0
+        ],
+        "context_switches": [
+          2
+        ]
+      },
+      "samples_dropped": 0,
+      "phase_points_dropped": 0
+    }
+  ],
+  "all_known_parent_children_absent": true,
+  "control": "1PASS/0FAIL; validates SDK112byte thread ABI,waiting enum3,clock brackets/cap; no test workload",
+  "independent_preexecution_review": "work_control:no material blocker; syscall can crossdeadline so end<lowerbound required; handles not durable identity; rawCPUunits; no continuousstate/waitcause inference",
+  "limits": [
+    "Observerclockreads/bufferallocation/extra ownedBSDadmission perturbtiming.",
+    "Filesystemrecording occursafteroriginalcleanup;mayaffectlaterqueries.",
+    "4096pointcap;dropped/missingrecordsunknown.",
+    "Reapnotindependentlyprovenbycleanup_end;originaltry_waitblockmayendatgrace.",
+    "Last350ms observations at>=10ms spacing;40sample cap. State at sampled instants only,not continuouswait or exact kernel reason.",
+    "TH_STATE_RUNNING means running normally; does not distinguish currentlyonCPU from runnable.",
+    "Numeric syscall failures/null thread fields remain unknown. RawCPU counters are not converted toseconds.",
+    "No processnames/threadnames,taskports,stacks or otherprocess inventory collected. Original parent owns unreapedchild so PID cannotrecycle during reads.",
+    "Originalsleep/drain/deadline/cancel unchanged except bounded observercalls; diagnosticPASS notqualification."
+  ],
+  "no_administrator_authentication": true,
+  "no_kernel_stack_capture": true,
+  "no_service_observation": true,
+  "no_product_fix": true,
+  "source_hashes": {
+    "src/query_process.rs": "bf661f4b8d0ed472585244ada4ac0e946221de364c100039cd20aee56fd8d0d2",
+    "tests/project_deadline.rs": "8b9fbc97fbd5acaf612b2d75b94cf810faa2b61614b654495082462b1941a8dc",
+    "Cargo.lock": "f96362897990caba560793601bc9fca08cef5c977907bb06889d5595d2acd7b0"
+  },
+  "result_sha256": "1c7ff31b7132279023c1f41c395cc9f1d92e2f9faddca9fb1b00074024c97249",
+  "independent_execution_review": "work_control: hashes/logs agree; 24valid predeadline samples each,state3 andnumrunning0; no observed waiting-to-running/runnable CPU-starvation state. Between-sample transitions,service-side starvation,continuous policywait andcause remain unknown. No material evidence blocker."
+}
