@@ -1,0 +1,30 @@
+{
+  "task": "PCTX01-G05-D05",
+  "status": "prepared historical exact-owned-URL method; not executed",
+  "human_scope_approval": "pending",
+  "pre_execution_review": "approved",
+  "target": "Exact XprotectService processImagePath. Query1 URL events whose composedMessage equals frozen owned synthetic fixture URL only. Query2 only admittedservicePID/signpostID pairs and XprotectAssessment/XprotectAssessment error boundaries.",
+  "purpose": "Join exact owned fixture URL and unique servicePID/signpostID to whole XP assessment interval,not compiler-only duration.",
+  "new_data_scope": "Up to2 historical reads in one test window<=7seconds,shared30second query watchdog/128KiB/256events. Exact-owned URL equality filters firstquery at logreader; secondquery contains no URL payloads. Public output only ownedPID/pathSHA256/servicePID/signpostID/begin/end/wholeassessmentns/outcome. Raw URLs/messages memory-only,discarded.",
+  "logging": "Existing stored signposts with log show --signpost --info --no-debug. No streaming/private log activation/configuration change,protection change,service restart,debugger/DTrace,admin authentication or stack sampling.",
+  "test": "One original byte-identical1000ms/8x16 test. Private exact fixture mapping written after originalcleanup. No endpointprewarm/deadline renewal. Read stored events after test; test unaffected by live subscriber.",
+  "boundedness": "At most2queries shared30s plus finite tool termination/reap; driver35s receipt allowance; historical window<=7s. Stop on noURL matches,missing/redacted/ambiguous IDs/caps/failure;no fallback/retry.",
+  "limits": [
+    "Whole XP assessment includes compiler/scan/otherwork;no compiler-only partition.",
+    "URL redacted/missing boundary/ambiguous child lifetime/multipleIDs perchild rejected.",
+    "Endpoint clock offset envelope >1ms refuses admission; this does not prove uninterrupted wall-clock stability.",
+    "SIP enabled;Apple runtime protection forbids DTrace on protected system processes;no protection bypass.",
+    "Stored event emission/retention/private URL visibility unknown;no match is unknown attribution,not zero assessmentcost."
+  ],
+  "test_binary": "/Users/dev/PCTX/target/debug/deps/project_deadline-f7e8b9d913251d84",
+  "test_binary_sha256": "f14f61544f11e724a58eca0726a269c428c8851b19d02baf936ed399a9d1aee6",
+  "file_hashes": {
+    "pctx01-startup-xpc-signpost-historical.py.txt": "afb6e179c5c0b1d5140ce38173ee5957fa7fca832444585655e56b7a743e86c0",
+    "pctx01-startup-xpc-signpost-parser.py.txt": "c0f5020d7f8c2eb4bc922a1bd1198e614b65deec9b56165524ed92e2c2c51d85",
+    "pctx01-startup-xpc-signpost-forward-run.py.txt": "096a76d535492c95d5d0f0a429823e12aef2771eff23a3922e2592a86ea9e1fe",
+    "pctx01-startup-xpc-signpost-forward-prepared.json": "ab749954cb5bfbd4af4cebc20a7d71b1ac1d3d2e97edcaf67a0adc164ca48953"
+  },
+  "qualification": false,
+  "controls": "Synthetic exclusive-URL/lifetime/missing/redacted/multipleIDs parsercontrols pass; build-only11.75s. Earlier owned historical --signpost schema control returned4events on same installedhost. New own live control returned0signposts;live service strategy rejected before execution.",
+  "review_evidence": "Independent work_control passive final review: lifecycle, deadline, owned cleanup gates, hashes, byte-identical original test and multiple-ID refusal verified; human scope approval still pending."
+}

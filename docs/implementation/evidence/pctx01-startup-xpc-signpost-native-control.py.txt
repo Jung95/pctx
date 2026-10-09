@@ -1,0 +1,32 @@
+from pathlib import Path
+import tempfile,subprocess,os,time,json,selectors,shutil
+b=Path('/Users/dev/PCTX/docs/implementation/evidence');d=Path(tempfile.mkdtemp(prefix='pctx01-xpc-signpost-control-',dir='/private/tmp'));binary=d/'emitter';p=q=None;buf=bytearray();types=set();events=0;rawbytes=0;sel=selectors.DefaultSelector();failure=None
+try:
+ subprocess.run(['/Library/Developer/CommandLineTools/usr/bin/clang','-isysroot','/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk','-x','c',str(b/'pctx01-startup-signpost-live-control.c.txt'),'-o',str(binary)],capture_output=True,check=True,timeout=15)
+ p=subprocess.Popen([str(binary)],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,text=True);sel.register(p.stdout,selectors.EVENT_READ);assert sel.select(5) and p.stdout.readline().strip()==f'ready {p.pid}';sel.unregister(p.stdout)
+ pred=f'processIdentifier == {p.pid} AND subsystem == "org.pctx.diagnostic.live-control" AND (signpostName == "PCTXControl" OR signpostName == "PCTXSequence")'
+ q=subprocess.Popen(['/usr/bin/log','stream','--predicate',pred,'--style','ndjson','--level','debug','--timeout','3','--no-backtrace'],stdout=subprocess.PIPE,stderr=subprocess.DEVNULL);os.set_blocking(q.stdout.fileno(),False);sel.register(q.stdout,selectors.EVENT_READ);start=time.monotonic();nextpulse=start
+ while time.monotonic()-start<3:
+  if time.monotonic()>=nextpulse:p.stdin.write('e\n');p.stdin.flush();nextpulse=time.monotonic()+.15
+  for key,_ in sel.select(.05):
+   data=os.read(key.fd,8192);rawbytes+=len(data);assert rawbytes<=65536
+   if not data:sel.unregister(q.stdout);continue
+   buf.extend(data)
+   while b'\n' in buf:
+    line,_,buf=buf.partition(b'\n')
+    try:r=json.loads(line)
+    except ValueError:continue
+    if isinstance(r,dict) and r.get('processID')==p.pid and r.get('eventType')=='signpostEvent' and r.get('signpostName') in ['PCTXControl','PCTXSequence']:
+     assert type(r.get('signpostID'))==int and r.get('signpostScope')=='process';types.add(r['signpostType']);events+=1
+  if q.poll() is not None:break
+ assert events>0 and {'begin','event','end'}<=types
+except BaseException as e:failure=type(e).__name__
+finally:
+ sel.close();buf.clear()
+ for tool in [q,p]:
+  if tool is not None:
+   if tool.poll() is None:tool.terminate()
+   try:tool.wait(timeout=2)
+   except subprocess.TimeoutExpired:tool.kill();tool.wait(timeout=1)
+ shutil.rmtree(d)
+out={'task':'PCTX01-G05-D05','failure':failure,'owned_helper_pid':p.pid if p else None,'listener_pid':q.pid if q else None,'events':events,'types':sorted(types),'raw_bytes':rawbytes,'schema_integer_id_process_scope':failure is None,'exact_name_predicate_without_type_verified':failure is None,'generated_tools_reaped':True,'private_removed':not d.exists(),'raw_retained':False,'service_observation':False,'administrator_authentication':False,'qualification':False};(b/'pctx01-startup-xpc-signpost-native-control.json').write_text(json.dumps(out,indent=2)+'\n');print(json.dumps(out))

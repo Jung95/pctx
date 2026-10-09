@@ -1,0 +1,47 @@
+"""Bounded XP assessment correlation; URL retained transiently, never exported."""
+import datetime,hashlib
+SOURCE='/System/Library/PrivateFrameworks/XprotectFramework.framework/Versions/A/XPCServices/XprotectService.xpc/Contents/MacOS/XprotectService'
+NAMES={'URL','XprotectAssessment','XprotectAssessment error','AssessmentClass'}
+def stamp(value):
+ t=datetime.datetime.fromisoformat(value)
+ if t.tzinfo is None:raise ValueError('naive timestamp')
+ t=t.astimezone(datetime.timezone.utc);d=t-datetime.datetime(1970,1,1,tzinfo=datetime.timezone.utc)
+ return t.isoformat(),(d.days*86400+d.seconds)*10**9+d.microseconds*1000
+def event(row):
+ if not isinstance(row,dict) or row.get('processImagePath')!=SOURCE or row.get('eventType')!='signpostEvent' or row.get('signpostScope')!='process':return None
+ pid=row.get('processID');ident=row.get('signpostID');name=row.get('signpostName');kind=row.get('signpostType')
+ if type(pid)!=int or pid<=0 or type(ident)!=int or not 0<ident<2**64-2 or name not in NAMES or kind not in {'begin','end','event'}:return None
+ try:t,n=stamp(row['timestamp'])
+ except (KeyError,ValueError,TypeError):return None
+ out={'service_pid':pid,'signpost_id':ident,'timestamp_utc':t,'wall_ns':n,'name':name,'kind':kind}
+ if name=='URL':
+  text=row.get('eventMessage')
+  if kind!='event' or not isinstance(text,str) or len(text.encode())>4096:return None
+  out['url']=text
+ return out
+def correlate(events,owned):
+ if len(events)>256 or len(owned)>128:raise ValueError('correlation cap')
+ groups={}
+ for e in events:groups.setdefault((e['service_pid'],e['signpost_id']),[]).append(e)
+ matched=[];unknown=0
+ for (pid,ident),rows in groups.items():
+  starts=[r for r in rows if r['name']=='XprotectAssessment' and r['kind']=='begin'];ends=[r for r in rows if r['name']=='XprotectAssessment' and r['kind']=='end'];urls=[r for r in rows if r['name']=='URL'];errors=[r for r in rows if r['name']=='XprotectAssessment error']
+  if len(starts)!=1 or len(ends)!=1 or len(urls)!=1 or errors:unknown+=1;continue
+  begin,end,url=starts[0],ends[0],urls[0]
+  if not begin['wall_ns']<=url['wall_ns']<=end['wall_ns']:unknown+=1;continue
+  candidates=[o for o in owned if o['url']==url['url'] and o['birth_wall_ns']<=begin['wall_ns']<=url['wall_ns']<=o['terminal_wall_upper_ns']]
+  if len(candidates)!=1:unknown+=1;continue
+  o=candidates[0];matched.append({'owned_pid':o['pid'],'owned_path_sha256':o['path_sha256'],'service_pid':pid,'signpost_id':ident,'begin_utc':begin['timestamp_utc'],'end_utc':end['timestamp_utc'],'assessment_ns':end['wall_ns']-begin['wall_ns'],'owned_outcome':o['outcome'],'compiler_duration_known':False})
+ counts={}
+ for v in matched:counts[v['owned_pid']]=counts.get(v['owned_pid'],0)+1
+ ambiguous={pid for pid,n in counts.items() if n!=1}
+ unknown+=sum(1 for v in matched if v['owned_pid'] in ambiguous)
+ matched=[v for v in matched if v['owned_pid'] not in ambiguous]
+ return {'intervals':matched,'unbound_or_incomplete_groups':unknown,'limit':'Exact URL and exclusive owned lifetime admission,not a public kernel PID binding. Whole XP assessment,not compiler-only cost.'}
+if __name__=='__main__':
+ row={'processImagePath':SOURCE,'eventType':'signpostEvent','signpostScope':'process','processID':5,'signpostID':9,'signpostName':'URL','signpostType':'event','timestamp':'2026-10-09T12:00:00.001+00:00','eventMessage':'file:///OWNED'}
+ u=event(row);a=event(dict(row,signpostName='XprotectAssessment',signpostType='begin',timestamp='2026-10-09T12:00:00+00:00'));z=event(dict(row,signpostName='XprotectAssessment',signpostType='end',timestamp='2026-10-09T12:00:00.002+00:00'));o={'pid':42,'url':'file:///OWNED','path_sha256':'FIXED_DIGEST','birth_wall_ns':a['wall_ns']-1,'terminal_wall_upper_ns':z['wall_ns'],'outcome':'TIMEOUT'}
+ result=correlate([a,u,z],[o]);assert len(result['intervals'])==1 and 'OWNED' not in str(result)
+ assert not correlate([a,u,z],[o,o])['intervals'];assert not correlate([a,u],[o])['intervals'];assert not correlate([a,dict(u,url='<private>'),z],[o])['intervals'];assert event(dict(row,processImagePath='/OTHER')) is None
+ assert not correlate([a,u,z]+[dict(v,signpost_id=10) for v in [a,u,z]],[o])['intervals']
+ print('PASS: exact URL/exclusive lifetime,missing/redacted/ambiguous/source refusals; URL not exported; no live read')

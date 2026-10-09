@@ -1,0 +1,90 @@
+"""Prepared exact-owned-URL historical assessment query; fresh approval required."""
+from pathlib import Path
+import json,os,hashlib,subprocess,selectors,time,datetime,argparse,stat
+B=Path('/Users/dev/PCTX/docs/implementation/evidence');PLAN=B/'pctx01-startup-xpc-signpost-scope-plan.json'
+ns={'__name__':'library'};exec((B/'pctx01-startup-xpc-signpost-parser.py.txt').read_text(),ns)
+def stop(p):
+ if p.poll() is None:
+  p.terminate()
+  try:p.wait(timeout=2)
+  except subprocess.TimeoutExpired:p.kill();p.wait(timeout=1)
+ return {'pid':p.pid,'exit':p.returncode,'reaped':True}
+def execute():
+ plan=json.loads(PLAN.read_text());assert plan['human_scope_approval']=='approved' and plan['pre_execution_review']=='approved' and os.getuid()==os.geteuid()==502
+ for name,sha in plan['file_hashes'].items():assert hashlib.sha256((B/name).read_bytes()).hexdigest()==sha
+ meta=json.loads((B/'pctx01-startup-xpc-signpost-forward-prepared.json').read_text());root=Path(meta['root']);assert root.stat().st_uid==502 and root.stat().st_mode&0o777==0o700
+ for name,sha in meta['hashes'].items():assert hashlib.sha256((Path('/Users/dev/PCTX')/name).read_bytes()).hexdigest()==sha
+ assert hashlib.sha256(Path(plan['test_binary']).read_bytes()).hexdigest()==plan['test_binary_sha256']
+ (B/'pctx01-startup-xpc-signpost-consumed.json').open('x').close()
+ receipts=[];failure=None;driver=None;cleanup_audit=None;events=[];owned=[];intervals=[];raw_bytes=0;event_count=0;queries=0
+ try:
+  driver=subprocess.Popen(['/opt/homebrew/bin/python3',str(B/'pctx01-startup-xpc-signpost-forward-run.py.txt')],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,cwd='/Users/dev/PCTX');assert driver.wait(timeout=35)==0
+  result=json.loads((B/'pctx01-startup-xpc-signpost-forward-result.json').read_text());assert all(v['dropped']==0 and v['clock_ok'] for v in result['records'])
+  cleanup=json.loads((root/'driver-cleanup.json').read_text());assert cleanup['root_reaped'] is True and cleanup['pid']==result['parent_pid']
+  known=sorted({result['parent_pid']}|{r['pid'] for r in result['records']})
+  for pid in known:
+   try:os.kill(pid,0)
+   except ProcessLookupError:continue
+   raise RuntimeError('OwnedProcessCleanupUnknown')
+  cleanup_audit={'root_reaped':True,'known_owned_pids_absent':known,'limits':'Known recorded PIDs only; no universal descendant proof.'}
+  low=min(result['clock_before']['offset_low_ns'],result['clock_after']['offset_low_ns']);high=max(result['clock_before']['offset_high_ns'],result['clock_after']['offset_high_ns']);assert 0<=high-low<=1_000_000
+  for record in result['records']:
+   fd=os.open(root/'records'/f"{record['pid']}.mapping.json",os.O_RDONLY|os.O_NOFOLLOW|os.O_NONBLOCK)
+   try:
+    st=os.fstat(fd);assert stat.S_ISREG(st.st_mode) and st.st_uid==502 and st.st_size<=8192 and st.st_mode&0o777==0o600;item=json.loads(os.read(fd,8193))
+   finally:os.close(fd)
+   assert item['pid']==record['pid'] and item['uid']==502 and item['fixture_exact_content'] is True and item['identity']==record['identity'] and item['identity'][:3]==[record['pid'],result['parent_pid'],502]
+   trace=json.loads((root/'records'/f"{record['pid']}.json").read_text());ends=[v[0] for v in trace['points'] if v[1]=='collection_terminal'];assert len(ends)==1;path=Path(item['executable']);assert path.is_absolute()
+   owned.append({'pid':record['pid'],'url':path.as_uri(),'path_sha256':hashlib.sha256(str(path).encode()).hexdigest(),'birth_wall_ns':item['identity'][3]*10**9+item['identity'][4]*1000,'terminal_wall_upper_ns':ends[0]+high,'outcome':record['outcome']['code']})
+  start=datetime.datetime.fromisoformat(result['start_utc']).replace(microsecond=0);end=datetime.datetime.fromisoformat(result['finish_utc']).replace(microsecond=0)+datetime.timedelta(seconds=1);assert 0<(end-start).total_seconds()<=7
+  until=time.monotonic()+30
+  def query(predicate):
+   nonlocal queries,raw_bytes,event_count
+   queries+=1;assert queries<=2
+   args=['/usr/bin/log','show','--start',start.strftime('%Y-%m-%d %H:%M:%S%z'),'--end',end.strftime('%Y-%m-%d %H:%M:%S%z'),'--timezone','UTC','--style','json','--signpost','--info','--no-debug','--no-pager','--predicate',predicate]
+   sel=selectors.DefaultSelector();p=None;buf=bytearray()
+   try:
+    assert until-time.monotonic()>0
+    p=subprocess.Popen(args,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+    for stream in [p.stdout,p.stderr]:os.set_blocking(stream.fileno(),False);sel.register(stream,selectors.EVENT_READ)
+    while sel.get_map():
+     remaining=until-time.monotonic();assert remaining>0
+     for key,_ in sel.select(min(.1,remaining)):
+      data=os.read(key.fd,8192);raw_bytes+=len(data);assert raw_bytes<=131072
+      if not data:sel.unregister(key.fileobj);continue
+      if key.fileobj is p.stdout:buf.extend(data)
+    assert p.wait(timeout=max(.001,until-time.monotonic()))==0
+    rows=json.loads(buf);assert isinstance(rows,list);event_count+=len(rows);assert event_count<=256
+    return rows
+   finally:
+    sel.close();buf.clear()
+    if p is not None:
+     receipts.append(stop(p));p.stdout.close();p.stderr.close()
+  source='processImagePath == '+json.dumps(ns['SOURCE'])
+  urls=sorted({o['url'] for o in owned});assert 0<len(urls)<=128
+  first=query(source+' AND signpostName == "URL" AND ('+' OR '.join('composedMessage == '+json.dumps(u) for u in urls)+')')
+  for row in first:
+   event=ns['event'](row)
+   if event and event['name']=='URL' and event['url'] in urls:events.append(event)
+   row.clear()
+  first.clear();pairs=sorted({(v['service_pid'],v['signpost_id']) for v in events})
+  if pairs:
+   second=query(source+' AND (signpostName == "XprotectAssessment" OR signpostName == "XprotectAssessment error") AND ('+' OR '.join(f'(processIdentifier == {pid} AND signpostIdentifier == {ident})' for pid,ident in pairs)+')')
+   for row in second:
+    event=ns['event'](row)
+    if event and (event['service_pid'],event['signpost_id']) in pairs:events.append(event)
+    row.clear()
+   second.clear()
+   intervals=ns['correlate'](events,owned)['intervals']
+ except BaseException as e:failure=type(e).__name__;intervals=[]
+ finally:
+  events.clear();owned.clear()
+  if driver:
+   try:receipts.append(stop(driver))
+   except BaseException:failure='DriverCleanupUnknown';intervals=[]
+  out={'task':'PCTX01-G05-D05','failure_class':failure,'test_started':driver is not None,'query_count':queries,'raw_bytes':raw_bytes,'event_count':event_count,'intervals':intervals,'receipts':receipts,'cleanup_audit':cleanup_audit,'raw_retained':False,'qualification':False,'limits':plan['limits']};(B/'pctx01-startup-xpc-signpost-result.json').write_text(json.dumps(out,indent=2)+'\n')
+ print(json.dumps({'failure':failure,'test_started':driver is not None,'queries':queries,'intervals':len(intervals)}))
+if __name__=='__main__':
+ ap=argparse.ArgumentParser();ap.add_argument('--execute',action='store_true');a=ap.parse_args()
+ if a.execute:execute()
+ else:print('Prepared syntax; no execution. Fresh historical exact-URL scope approval required.')

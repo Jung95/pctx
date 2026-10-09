@@ -1,0 +1,14 @@
+{
+  "task": "PCTX01-G05-D05",
+  "syntax": "pass",
+  "synthetic_parser": "pass",
+  "owned_live_control": "failed_no_signposts",
+  "owned_live_control_pids_absent": [
+    45151,
+    45152
+  ],
+  "original_test_executed": false,
+  "service_log_reads": 0,
+  "administrator_authentication": false,
+  "qualification": false
+}

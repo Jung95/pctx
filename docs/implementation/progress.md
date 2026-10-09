@@ -1,5 +1,20 @@
 # Implementation progress
 
+## Exact-owned-URL historical diagnostic preparation — current, 2026-10-09
+
+PCTX01-G05-D05 remains product_failure,33/40 details,0/10 gates. Static XP
+begin/URL/end markers share an assessment ID; they bracket whole assessment,
+not compiler-only time. New owned live control failed with0events/180bytes;
+helper/listener reaped,known PIDs absent,raw removed. Live service method rejected.
+Prepared a build-only original1000ms/8×16 test and exact-owned-URL historical
+query:<=2reads,<=7s window,shared30s/128KiB/256events. No original test or service
+read executed. Fresh changed URL scope approval pending; do not run until approved.
+Private prepared root retained unused; diagnostic shared target needs normal-source
+rebuild before qualification. No product change,Actions or task switch.
+Next within D05: approved once-only stored request association,then interpret
+whole-assessment evidence without claiming compiler duration or product repair.
+[Evidence, controls and limits](evidence/pctx01-startup-xpc-signpost-preparation-review.md).
+
 ## Bundle-label live validation — current, 2026-10-09
 
 PCTX01-G05-D05 remains product_failure,33/40 details,0/10 gates. Reducer fixed

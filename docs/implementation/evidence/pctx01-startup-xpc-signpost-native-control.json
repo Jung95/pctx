@@ -1,0 +1,17 @@
+{
+  "task": "PCTX01-G05-D05",
+  "failure": "AssertionError",
+  "owned_helper_pid": 45151,
+  "listener_pid": 45152,
+  "events": 0,
+  "types": [],
+  "raw_bytes": 180,
+  "schema_integer_id_process_scope": false,
+  "exact_name_predicate_without_type_verified": false,
+  "generated_tools_reaped": true,
+  "private_removed": true,
+  "raw_retained": false,
+  "service_observation": false,
+  "administrator_authentication": false,
+  "qualification": false
+}
