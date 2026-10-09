@@ -1,6 +1,22 @@
 # Implementation progress
 
-## Small-stage source decomposition — current, 2026-10-09
+## Three parent-code candidate experiments — current, 2026-10-09
+
+Only PCTX01-G05-D05 active/product_failure; PCTX01 remains33/40 details,0/10 gates.
+User requested multiple PCTX code candidates. Baseline and each independent candidate
+ran all four original startup tests once. Once-only pipe nonblocking setup,50→200ms
+owned-child observation cadence, and bounded pipe-readiness polling all fail concurrent
+startup with TIMEOUT; each arm passes the other3tests. Reported timeoutroots1/2/1/1
+are censored outcomes, not complete128-call counts or statistical comparison.
+No successful repair. All candidate source reverted byte-identically; test/lock pins
+unchanged and restored normal-source build0. Known21toolroots/5timeoutroots absent;
+full descendant census unproved. No admin/service trace/log/security change or Actions.
+Next same D05: new causal contract-preserving launch mechanism or exact request-bound
+policy queue/compiler/file-scan attribution and supported correction. No unchanged
+candidate retry, task switch or external vendor submission.
+[Experiments, failures and restoration](evidence/pctx01-startup-code-candidates-review.md).
+
+## Small-stage source decomposition — historical, 2026-10-09
 
 Only PCTX01-G05-D05 active/product_failure; PCTX01 remains33/40 details,0/10 gates.
 User requested smaller code-part diagnosis. Actual fixture/admission/spawn/collector/

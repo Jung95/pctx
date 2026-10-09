@@ -1,0 +1,92 @@
+"""Once-per-arm owned-test comparison; restore product source even on failure."""
+import datetime,difflib,hashlib,json,os,re,signal,subprocess,time
+from pathlib import Path
+REPO=Path('/Users/dev/PCTX'); E=REPO/'docs/implementation/evidence'
+WORK=Path('/private/tmp/pctx01-code-candidates'); SOURCE=REPO/'src/query_process.rs'
+ORIGINAL=(WORK/'original.rs').read_bytes()
+TESTS=['concurrent_query_startup_preserves_group_streams_and_original_one_second_budget',
+       'simultaneous_streams_are_collected_and_overflow_never_infers_success',
+       'query_program_resolution_uses_captured_command_path',
+       'relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry']
+ENV=dict(os.environ, RUSTUP_HOME=str(REPO/'.toolchain/rustup'), CARGO_HOME=str(REPO/'.toolchain/cargo'),
+         SDKROOT='/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk',
+         PATH=str(REPO/'.toolchain/cargo/bin')+':/Library/Developer/CommandLineTools/usr/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin',
+         CARGO_TARGET_DIR=str(REPO/'target'))
+PINS={n:hashlib.sha256((REPO/n).read_bytes()).hexdigest() for n in ['tests/project_deadline.rs','Cargo.lock']}
+RESULT={'task':'PCTX01-G05-D05','started_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),
+        'baseline_revision':subprocess.check_output(['git','rev-parse','HEAD'],cwd=REPO,text=True).strip(),
+        'original_source_sha256':hashlib.sha256(ORIGINAL).hexdigest(),'unchanged_test_lock_pins':PINS,
+        'arms':[],'qualification':False,'retry':False,'administrator_authentications':0,'service_observations':0,
+        'limits':['Serial arm order and changing host/cache state confound comparison.',
+                  'One successful invocation cannot establish repair or erase previous failures.',
+                  'Concurrent panic may censor planned128 outcomes; success implies assertions completed.']}
+receipt=E/'pctx01-startup-code-candidates-result.json'
+(E/'pctx01-startup-code-candidates-consumed.json').open('x').close()
+assert SOURCE.read_bytes()==ORIGINAL
+
+def save(): receipt.write_text(json.dumps(RESULT,indent=2)+'\n')
+def run(args,timeout):
+    p=subprocess.Popen(args,cwd=REPO,env=ENV,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,start_new_session=True)
+    began=time.monotonic(); expired=False
+    try: output=p.communicate(timeout=timeout)[0].decode('utf-8','replace')
+    except subprocess.TimeoutExpired:
+        expired=True;os.killpg(p.pid,signal.SIGKILL);output=p.communicate()[0].decode('utf-8','replace')
+    return {'pid':p.pid,'exit':p.returncode,'supervisor_timeout':expired,'wall_seconds':time.monotonic()-began},output
+
+def redact(s):
+    return re.sub(r'/(?:Users|private|var|tmp)/[^\s"\']+', '<private-path>',s)
+
+def build():
+    row,out=run([str(REPO/'.toolchain/cargo/bin/cargo'),'test','--offline','--locked','--test','project_deadline','--no-run','--message-format=json'],240)
+    binary=None;errors=[]
+    for line in out.splitlines():
+        try: d=json.loads(line)
+        except ValueError: continue
+        if d.get('reason')=='compiler-artifact' and d.get('target',{}).get('name')=='project_deadline' and d.get('executable'):binary=d['executable']
+        if d.get('reason')=='compiler-message' and d.get('message',{}).get('level')=='error':errors.append(redact(d['message'].get('rendered',''))[:4000])
+    row['errors']=errors
+    if row['exit']==0 and binary:row['binary_sha256']=hashlib.sha256(Path(binary).read_bytes()).hexdigest()
+    return row,binary
+
+try:
+    for name in ['baseline','once-nonblocking','sparse-owned-observation','pipe-readiness-wait']:
+        code=ORIGINAL if name=='baseline' else (WORK/(name+'.rs')).read_bytes()
+        SOURCE.write_bytes(code)
+        assert all(hashlib.sha256((REPO/n).read_bytes()).hexdigest()==h for n,h in PINS.items())
+        arm={'name':name,'source_sha256':hashlib.sha256(code).hexdigest(),'runs':[]}; RESULT['arms'].append(arm);save()
+        print('BUILD '+name,flush=True)
+        arm['build'],binary=build();save()
+        if arm['build']['exit']!=0 or not binary:continue
+        for test in TESTS:
+            print('TEST '+name+' '+test,flush=True)
+            row,out=run([binary,test,'--exact','--nocapture','--test-threads=1'],35)
+            row['test']=test
+            # Only owned timeout/error and test outcome lines; no arbitrary host data.
+            selected=[redact(x) for x in out.splitlines() if any(k in x for k in ['test result:','Request deadline expired','Error {','FAILED','panicked at','query failed','query failed'])]
+            # Original relative-path test preserves its own failure diagnostic in an owned fixture.
+            for match in re.finditer(r'evidence=([^\s]+)',out):
+                f=Path(match.group(1))/'failure.txt'
+                if f.is_file() and str(f).startswith(('/private/var/folders/','/var/folders/','/private/tmp/','/tmp/')):
+                    selected.extend(redact(x) for x in f.read_text().splitlines() if 'Request deadline expired' in x)
+            row['retained_output']=selected
+            row['reported_timeout_count']=sum(x.count('code: "TIMEOUT"')+x.count('"error_code":"TIMEOUT"') for x in selected)
+            pids=sorted(set(int(x) for x in re.findall(r'root_pid=(\d+)', '\n'.join(selected))))
+            absence={}
+            for pid in pids:
+                try:os.kill(pid,0);absence[str(pid)]=False
+                except ProcessLookupError:absence[str(pid)]=True
+                except PermissionError:absence[str(pid)]=None
+            row['reported_roots_absent_after_test']=absence
+            arm['runs'].append(row);save()
+            print(json.dumps({'arm':name,'test':test,'exit':row['exit'],'timeouts':row['reported_timeout_count']}),flush=True)
+            if row['supervisor_timeout']:
+                RESULT['stopped_reason']='Harness timeout: complete owned cleanup is unproved.';raise RuntimeError(RESULT['stopped_reason'])
+        arm['passed_tests']=sum(r['exit']==0 for r in arm['runs']);save()
+finally:
+    SOURCE.write_bytes(ORIGINAL)
+    RESULT['source_restored']=SOURCE.read_bytes()==ORIGINAL
+    RESULT['test_lock_unchanged']=all(hashlib.sha256((REPO/n).read_bytes()).hexdigest()==h for n,h in PINS.items())
+    print('RESTORE normal-source build only',flush=True)
+    RESULT['restored_build'],_=build()
+    RESULT['finished_utc']=datetime.datetime.now(datetime.timezone.utc).isoformat();save()
+    print(json.dumps({'arms':[(a['name'],a.get('passed_tests')) for a in RESULT['arms']],'source_restored':RESULT['source_restored']}),flush=True)

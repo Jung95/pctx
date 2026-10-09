@@ -1,0 +1,16 @@
+--- a/src/query_process.rs
++++ b/src/query_process.rs
+@@ -759 +759,12 @@
+-                std::thread::sleep(deadline.remaining()?.min(Duration::from_millis(5)));
++                use std::os::fd::AsRawFd;
++                let remaining = deadline.remaining()?.min(Duration::from_millis(5));
++                let mut pipes = [
++                    libc::pollfd { fd: if out_eof { -1 } else { stdout.as_raw_fd() }, events: libc::POLLIN, revents: 0 },
++                    libc::pollfd { fd: if err_eof { -1 } else { stderr.as_raw_fd() }, events: libc::POLLIN, revents: 0 },
++                ];
++                let milliseconds = ((remaining.as_nanos() + 999_999) / 1_000_000) as i32;
++                let rc = unsafe { libc::poll(pipes.as_mut_ptr(), pipes.len() as libc::nfds_t, milliseconds) };
++                if rc < 0 {
++                    let e = std::io::Error::last_os_error();
++                    if e.kind() != std::io::ErrorKind::Interrupted { return Err(e.into()); }
++                }

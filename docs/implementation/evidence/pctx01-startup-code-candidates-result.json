@@ -1,0 +1,311 @@
+{
+  "task": "PCTX01-G05-D05",
+  "started_utc": "2026-10-09T21:34:33.268901+00:00",
+  "baseline_revision": "d5e85f355f2da34299b27c0289401437e1c5e394",
+  "original_source_sha256": "bf661f4b8d0ed472585244ada4ac0e946221de364c100039cd20aee56fd8d0d2",
+  "unchanged_test_lock_pins": {
+    "tests/project_deadline.rs": "8b9fbc97fbd5acaf612b2d75b94cf810faa2b61614b654495082462b1941a8dc",
+    "Cargo.lock": "f96362897990caba560793601bc9fca08cef5c977907bb06889d5595d2acd7b0"
+  },
+  "arms": [
+    {
+      "name": "baseline",
+      "source_sha256": "bf661f4b8d0ed472585244ada4ac0e946221de364c100039cd20aee56fd8d0d2",
+      "runs": [
+        {
+          "pid": 51016,
+          "exit": 101,
+          "supervisor_timeout": false,
+          "wall_seconds": 2.7303477919776924,
+          "test": "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget",
+          "retained_output": [
+            "thread '<unnamed>' (10176070) panicked at tests/project_deadline.rs:584:26:",
+            "called `Result::unwrap()` on an `Err` value: Error { code: \"TIMEOUT\", message: \"Request deadline expired (phase=wait_next_observation, elapsed_ms=999, spawn_ms=1, iterations=142, stdout_eof=false, stderr_eof=false, stdout_bytes=0, stderr_bytes=0, root_exit_observed=false, waitid_signo=0, waitid_code=0, group_probes=0, group_has_others=None, root_pid=51074, native_child=Some(\\\"status=2,flags=20987920,pgid_matches=true,ppid_matches=true,start_sec=1791581681,start_usec=555088,threads=1,running=0,cpu_user=0,cpu_system=659,mach_calls=0,unix_calls=0,context_switches=2\\\"))\", retryable: false, exit: 7 }",
+            "thread 'concurrent_query_startup_preserves_group_streams_and_original_one_second_budget' (10176069) panicked at tests/project_deadline.rs:593:27:",
+            "FAILED",
+            "test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 13 filtered out; finished in 1.11s"
+          ],
+          "reported_timeout_count": 1,
+          "reported_roots_absent_after_test": {
+            "51074": true
+          }
+        },
+        {
+          "pid": 51189,
+          "exit": 0,
+          "supervisor_timeout": false,
+          "wall_seconds": 0.6248862919746898,
+          "test": "simultaneous_streams_are_collected_and_overflow_never_infers_success",
+          "retained_output": [
+            "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 13 filtered out; finished in 0.62s"
+          ],
+          "reported_timeout_count": 0,
+          "reported_roots_absent_after_test": {}
+        },
+        {
+          "pid": 51192,
+          "exit": 0,
+          "supervisor_timeout": false,
+          "wall_seconds": 0.260300958994776,
+          "test": "query_program_resolution_uses_captured_command_path",
+          "retained_output": [
+            "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 13 filtered out; finished in 0.25s"
+          ],
+          "reported_timeout_count": 0,
+          "reported_roots_absent_after_test": {}
+        },
+        {
+          "pid": 51194,
+          "exit": 0,
+          "supervisor_timeout": false,
+          "wall_seconds": 0.25739433302078396,
+          "test": "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+          "retained_output": [
+            "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 13 filtered out; finished in 0.25s"
+          ],
+          "reported_timeout_count": 0,
+          "reported_roots_absent_after_test": {}
+        }
+      ],
+      "build": {
+        "pid": 50999,
+        "exit": 0,
+        "supervisor_timeout": false,
+        "wall_seconds": 6.637614916951861,
+        "errors": [],
+        "binary_sha256": "12b03363120718e0e855525c0748f37bdf6c23d5c6227d40ea0396c8528075c6"
+      },
+      "passed_tests": 3
+    },
+    {
+      "name": "once-nonblocking",
+      "source_sha256": "2f47544d489b44f74c5519e423f042547288588c234928d10b606788216746a3",
+      "runs": [
+        {
+          "pid": 51223,
+          "exit": 101,
+          "supervisor_timeout": false,
+          "wall_seconds": 2.574026041023899,
+          "test": "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget",
+          "retained_output": [
+            "thread '<unnamed>' (10177138) panicked at tests/project_deadline.rs:584:26:",
+            "called `Result::unwrap()` on an `Err` value: Error { code: \"TIMEOUT\", message: \"Request deadline expired (phase=wait_next_observation, elapsed_ms=999, spawn_ms=1, iterations=141, stdout_eof=false, stderr_eof=false, stdout_bytes=0, stderr_bytes=0, root_exit_observed=false, waitid_signo=0, waitid_code=0, group_probes=0, group_has_others=None, root_pid=51282, native_child=Some(\\\"status=2,flags=20987920,pgid_matches=true,ppid_matches=true,start_sec=1791581687,start_usec=751146,threads=1,running=0,cpu_user=0,cpu_system=590,mach_calls=0,unix_calls=0,context_switches=1\\\"))\", retryable: false, exit: 7 }",
+            "thread 'concurrent_query_startup_preserves_group_streams_and_original_one_second_budget' (10177134) panicked at tests/project_deadline.rs:593:27:",
+            "thread '<unnamed>' (10177142) panicked at tests/project_deadline.rs:584:26:",
+            "called `Result::unwrap()` on an `Err` value: Error { code: \"TIMEOUT\", message: \"Request deadline expired (phase=wait_next_observation, elapsed_ms=1000, spawn_ms=0, iterations=140, stdout_eof=false, stderr_eof=false, stdout_bytes=0, stderr_bytes=0, root_exit_observed=false, waitid_signo=0, waitid_code=0, group_probes=0, group_has_others=None, root_pid=51279, native_child=Some(\\\"status=2,flags=20987920,pgid_matches=true,ppid_matches=true,start_sec=1791581687,start_usec=750983,threads=1,running=0,cpu_user=0,cpu_system=613,mach_calls=0,unix_calls=0,context_switches=1\\\"))\", retryable: false, exit: 7 }",
+            "FAILED",
+            "test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 13 filtered out; finished in 1.06s"
+          ],
+          "reported_timeout_count": 2,
+          "reported_roots_absent_after_test": {
+            "51279": true,
+            "51282": true
+          }
+        },
+        {
+          "pid": 51374,
+          "exit": 0,
+          "supervisor_timeout": false,
+          "wall_seconds": 0.356248207972385,
+          "test": "simultaneous_streams_are_collected_and_overflow_never_infers_success",
+          "retained_output": [
+            "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 13 filtered out; finished in 0.35s"
+          ],
+          "reported_timeout_count": 0,
+          "reported_roots_absent_after_test": {}
+        },
+        {
+          "pid": 51377,
+          "exit": 0,
+          "supervisor_timeout": false,
+          "wall_seconds": 0.13770212495001033,
+          "test": "query_program_resolution_uses_captured_command_path",
+          "retained_output": [
+            "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 13 filtered out; finished in 0.13s"
+          ],
+          "reported_timeout_count": 0,
+          "reported_roots_absent_after_test": {}
+        },
+        {
+          "pid": 51379,
+          "exit": 0,
+          "supervisor_timeout": false,
+          "wall_seconds": 0.14028737496118993,
+          "test": "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+          "retained_output": [
+            "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 13 filtered out; finished in 0.13s"
+          ],
+          "reported_timeout_count": 0,
+          "reported_roots_absent_after_test": {}
+        }
+      ],
+      "build": {
+        "pid": 51199,
+        "exit": 0,
+        "supervisor_timeout": false,
+        "wall_seconds": 2.412890540959779,
+        "errors": [],
+        "binary_sha256": "da6bdd52705910924b49f00d027a87fcd90727b9e54ad102ba8f884229fe60b5"
+      },
+      "passed_tests": 3
+    },
+    {
+      "name": "sparse-owned-observation",
+      "source_sha256": "e12b40480446953499d4d991ea0af41bf793d3647e9c1598a906df61b1b8b2a1",
+      "runs": [
+        {
+          "pid": 51401,
+          "exit": 101,
+          "supervisor_timeout": false,
+          "wall_seconds": 2.608090749999974,
+          "test": "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget",
+          "retained_output": [
+            "thread '<unnamed>' (10177982) panicked at tests/project_deadline.rs:584:26:",
+            "called `Result::unwrap()` on an `Err` value: Error { code: \"TIMEOUT\", message: \"Request deadline expired (phase=wait_next_observation, elapsed_ms=1001, spawn_ms=0, iterations=141, stdout_eof=false, stderr_eof=false, stdout_bytes=0, stderr_bytes=0, root_exit_observed=false, waitid_signo=0, waitid_code=0, group_probes=0, group_has_others=None, root_pid=51409, native_child=Some(\\\"status=2,flags=20987920,pgid_matches=true,ppid_matches=true,start_sec=1791581693,start_usec=467563,threads=1,running=0,cpu_user=0,cpu_system=809,mach_calls=0,unix_calls=0,context_switches=1\\\"))\", retryable: false, exit: 7 }",
+            "thread 'concurrent_query_startup_preserves_group_streams_and_original_one_second_budget' (10177979) panicked at tests/project_deadline.rs:593:27:",
+            "FAILED",
+            "test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 13 filtered out; finished in 1.01s"
+          ],
+          "reported_timeout_count": 1,
+          "reported_roots_absent_after_test": {
+            "51409": true
+          }
+        },
+        {
+          "pid": 51522,
+          "exit": 0,
+          "supervisor_timeout": false,
+          "wall_seconds": 0.35149137501139194,
+          "test": "simultaneous_streams_are_collected_and_overflow_never_infers_success",
+          "retained_output": [
+            "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 13 filtered out; finished in 0.35s"
+          ],
+          "reported_timeout_count": 0,
+          "reported_roots_absent_after_test": {}
+        },
+        {
+          "pid": 51525,
+          "exit": 0,
+          "supervisor_timeout": false,
+          "wall_seconds": 0.1465513749863021,
+          "test": "query_program_resolution_uses_captured_command_path",
+          "retained_output": [
+            "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 13 filtered out; finished in 0.14s"
+          ],
+          "reported_timeout_count": 0,
+          "reported_roots_absent_after_test": {}
+        },
+        {
+          "pid": 51527,
+          "exit": 0,
+          "supervisor_timeout": false,
+          "wall_seconds": 0.15137500001583248,
+          "test": "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+          "retained_output": [
+            "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 13 filtered out; finished in 0.14s"
+          ],
+          "reported_timeout_count": 0,
+          "reported_roots_absent_after_test": {}
+        }
+      ],
+      "build": {
+        "pid": 51382,
+        "exit": 0,
+        "supervisor_timeout": false,
+        "wall_seconds": 2.405172707978636,
+        "errors": [],
+        "binary_sha256": "848d20a7c8624e64800fde1b3941d3b9b6fd4e4368dd7860c294ded0485b53c3"
+      },
+      "passed_tests": 3
+    },
+    {
+      "name": "pipe-readiness-wait",
+      "source_sha256": "6c1a8327d4fb6faacf15032a73b5c5f74aaa2a27b89aa34384e81aa1cc4994c8",
+      "runs": [
+        {
+          "pid": 51546,
+          "exit": 101,
+          "supervisor_timeout": false,
+          "wall_seconds": 2.524518624995835,
+          "test": "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget",
+          "retained_output": [
+            "thread '<unnamed>' (10178865) panicked at tests/project_deadline.rs:584:26:",
+            "called `Result::unwrap()` on an `Err` value: Error { code: \"TIMEOUT\", message: \"Request deadline expired (phase=wait_next_observation, elapsed_ms=1000, spawn_ms=1, iterations=163, stdout_eof=false, stderr_eof=false, stdout_bytes=0, stderr_bytes=0, root_exit_observed=false, waitid_signo=0, waitid_code=0, group_probes=0, group_has_others=None, root_pid=51563, native_child=Some(\\\"status=2,flags=20987920,pgid_matches=true,ppid_matches=true,start_sec=1791581699,start_usec=382082,threads=1,running=0,cpu_user=0,cpu_system=316,mach_calls=0,unix_calls=0,context_switches=1\\\"))\", retryable: false, exit: 7 }",
+            "thread 'concurrent_query_startup_preserves_group_streams_and_original_one_second_budget' (10178858) panicked at tests/project_deadline.rs:593:27:",
+            "FAILED",
+            "test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 13 filtered out; finished in 1.01s"
+          ],
+          "reported_timeout_count": 1,
+          "reported_roots_absent_after_test": {
+            "51563": true
+          }
+        },
+        {
+          "pid": 51669,
+          "exit": 0,
+          "supervisor_timeout": false,
+          "wall_seconds": 0.3276693749940023,
+          "test": "simultaneous_streams_are_collected_and_overflow_never_infers_success",
+          "retained_output": [
+            "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 13 filtered out; finished in 0.32s"
+          ],
+          "reported_timeout_count": 0,
+          "reported_roots_absent_after_test": {}
+        },
+        {
+          "pid": 51672,
+          "exit": 0,
+          "supervisor_timeout": false,
+          "wall_seconds": 0.13728895800886676,
+          "test": "query_program_resolution_uses_captured_command_path",
+          "retained_output": [
+            "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 13 filtered out; finished in 0.13s"
+          ],
+          "reported_timeout_count": 0,
+          "reported_roots_absent_after_test": {}
+        },
+        {
+          "pid": 51674,
+          "exit": 0,
+          "supervisor_timeout": false,
+          "wall_seconds": 0.25082158303121105,
+          "test": "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+          "retained_output": [
+            "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 13 filtered out; finished in 0.24s"
+          ],
+          "reported_timeout_count": 0,
+          "reported_roots_absent_after_test": {}
+        }
+      ],
+      "build": {
+        "pid": 51530,
+        "exit": 0,
+        "supervisor_timeout": false,
+        "wall_seconds": 2.7144513339735568,
+        "errors": [],
+        "binary_sha256": "8f667e7bcb49ca9f1ae2d2250cd8472688aa1dae9696402dc0341172575eb79a"
+      },
+      "passed_tests": 3
+    }
+  ],
+  "qualification": false,
+  "retry": false,
+  "administrator_authentications": 0,
+  "service_observations": 0,
+  "limits": [
+    "Serial arm order and changing host/cache state confound comparison.",
+    "One successful invocation cannot establish repair or erase previous failures.",
+    "Concurrent panic may censor planned128 outcomes; success implies assertions completed."
+  ],
+  "source_restored": true,
+  "test_lock_unchanged": true,
+  "restored_build": {
+    "pid": 51677,
+    "exit": 0,
+    "supervisor_timeout": false,
+    "wall_seconds": 2.566644916019868,
+    "errors": [],
+    "binary_sha256": "f89a8968fb776fb566c1e9b2f446ee4a6fd6f15b75b540107e2f733dec8464da"
+  },
+  "finished_utc": "2026-10-09T21:35:03.689374+00:00"
+}

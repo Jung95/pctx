@@ -1,0 +1,5 @@
+--- a/src/query_process.rs
++++ b/src/query_process.rs
+@@ -671 +671 @@
+-                    next_native_observation = std::time::Instant::now() + Duration::from_millis(50);
++                    next_native_observation = std::time::Instant::now() + Duration::from_millis(200);

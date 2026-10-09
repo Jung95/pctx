@@ -1,0 +1,24 @@
+--- a/src/query_process.rs
++++ b/src/query_process.rs
+@@ -466,0 +467,10 @@
++fn nonblocking<P: std::os::fd::AsRawFd>(pipe: &P) -> Result<()> {
++    let flags = unsafe { libc::fcntl(pipe.as_raw_fd(), libc::F_GETFL) };
++    if flags < 0
++        || unsafe { libc::fcntl(pipe.as_raw_fd(), libc::F_SETFL, flags | libc::O_NONBLOCK) } < 0
++    {
++        return Err(std::io::Error::last_os_error().into());
++    }
++    Ok(())
++}
++#[cfg(unix)]
+@@ -473,6 +482,0 @@
+-    let flags = unsafe { libc::fcntl(pipe.as_raw_fd(), libc::F_GETFL) };
+-    if flags < 0
+-        || unsafe { libc::fcntl(pipe.as_raw_fd(), libc::F_SETFL, flags | libc::O_NONBLOCK) } < 0
+-    {
+-        return Err(std::io::Error::last_os_error().into());
+-    }
+@@ -659,0 +664,3 @@
++            nonblocking(&stdout)?;
++            nonblocking(&stderr)?;
++            deadline.check()?;

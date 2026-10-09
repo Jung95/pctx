@@ -1,0 +1,48 @@
+{
+  "task": "PCTX01-G05-D05",
+  "known_build_test_roots_absent": {
+    "50999": true,
+    "51016": true,
+    "51189": true,
+    "51192": true,
+    "51194": true,
+    "51199": true,
+    "51223": true,
+    "51374": true,
+    "51377": true,
+    "51379": true,
+    "51382": true,
+    "51401": true,
+    "51522": true,
+    "51525": true,
+    "51527": true,
+    "51530": true,
+    "51546": true,
+    "51669": true,
+    "51672": true,
+    "51674": true,
+    "51677": true
+  },
+  "reported_query_roots_absent": [
+    {
+      "51074": true
+    },
+    {
+      "51279": true,
+      "51282": true
+    },
+    {
+      "51409": true
+    },
+    {
+      "51563": true
+    }
+  ],
+  "private_candidate_copies_removed": true,
+  "source_restored": true,
+  "normal_source_build_exit": 0,
+  "limits": [
+    "No complete descendant identity inventory retained; known-root absence is not universal descendant cleanup proof.",
+    "No runtime service stacks/logs captured; latest timeout internal wait is not directly re-attributed."
+  ]
+}

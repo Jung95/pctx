@@ -1,0 +1,9 @@
+{
+  "task": "PCTX01-G05-D05",
+  "baseline_revision": "d5e85f355f2da34299b27c0289401437e1c5e394",
+  "arms": 4,
+  "original_test_invocations": 16,
+  "per_arm_retries": 0,
+  "scope": "Owned tests and isolated reversible source candidates only",
+  "completed": true
+}
