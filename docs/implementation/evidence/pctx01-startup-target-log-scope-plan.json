@@ -1,0 +1,40 @@
+{
+  "task": "PCTX01",
+  "condition": "PCTX01-G05-D05",
+  "status": "scope-review-ready; not approved or executed",
+  "basis": "Completed stack/counter batch did not correlate evaluation with original expired26165/26166; historical log query is a distinct collection method and runs no test.",
+  "target": "Only default-existing OS log events in this2sUTC interval from admitted syspolicydPID665 or kernel AppleSystemPolicy sender with explicit proc/process/pid26165/26166 text. No general daemon logs.",
+  "owned_target_native_starts": {
+    "26165": {
+      "sec": 1791541991,
+      "usec": 309117
+    },
+    "26166": {
+      "sec": 1791541991,
+      "usec": 309128
+    }
+  },
+  "argv": [
+    "/usr/bin/log",
+    "show",
+    "--start",
+    "2026-10-09 10:33:11+0000",
+    "--end",
+    "2026-10-09 10:33:13+0000",
+    "--timezone",
+    "UTC",
+    "--style",
+    "json",
+    "--info",
+    "--no-debug",
+    "--no-pager",
+    "--predicate",
+    "((process == \"syspolicyd\" AND processID == 665) OR (process == \"kernel\" AND sender == \"AppleSystemPolicy\")) AND (eventMessage MATCHES[c] \".*(proc|process|pid)(:|[ ])+[ ]*(26165|26166)([^0-9].*|$)\")"
+  ],
+  "limit": "One query,30s cooperative tool watchdog,maximum1MiB raw/max128events; zero matches is inconclusive. No broader fallback, no retry, no full archive.",
+  "authority": "NormalUID502 first if approved; sandbox escalation allows execution of log. If native OS access is denied, stop and report; do not request a new admin authentication automatically.",
+  "privacy": "Default masked logs only. No enable-private-data, verbose/debug/logging-policy changes. Save raw only to generated0700 private directory then delete; export timestamp,targetPID and fixed allowlisted policy categories/numeric error codes only. No arbitrary event messages,paths,URLs,vuid,hashes or credentials. Unknown formats discarded with aggregate count.",
+  "scope_reason": "Earlier owned-process consent excluded operational-service observation; the newly approved service plan explicitly excluded message/log content. This proposed historical event reading requires separate human scope approval.",
+  "effects": "Reads existing target-filtered records; no new test,service signal/reset,OS/security change or persistent tool.",
+  "next_after_approval": "Prepare/review minimal bounded reducer and execute exactly this query; retained candidate codes may guide a supported correction. No product success or root-cause claim from empty/masked logs."
+}

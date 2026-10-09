@@ -1,5 +1,24 @@
 # Implementation requirements
 
+## Completed service-side diagnostic — current, 2026-10-09
+
+[Verification](evidence/pctx01-startup-service-verification.json): approved one-auth
+syspolicyd-only batch completed,four unchanged ordinaryUID502 tests3PASS/1FAIL.
+Concurrency expired26165/26166 at original1s with zero streams,no EOF/root exit/group
+probe. All frozen hashes and logs match;all reported generated tools/parents/expired
+PIDs absent. Private raw/root-tool directories and isolated session/binary removed;
+shared target retained. No OS/service/security change or product repair.
+
+SystemPython3.9.6 clocks have process-local origins: no direct root/driver alignment
+or exact overlap claim. Unknown frames dominate reduced samples;raw CPU counters
+and conditional conversion cannot attribute evaluation to either child. No queue
+saturation/deadlock or applicable platform correction established. Do not repeat
+this consumed capture. Next requires target-specific policy request/response evidence
+or a supported vendor correction;message/log tracing or another service exceeds
+this approved stack/counter scope. PCTX01-G05-D05 product_failure;33/40details,
+0/10whole gates. Only PCTX01 active;no live job,authentication or operator action.
+Earlier authentication-pending instructions are superseded.
+
 ## Query final-return correction — 2026-10-09
 
 [G08-D04 evidence](evidence/pctx01-query-final-deadline-verification.json):

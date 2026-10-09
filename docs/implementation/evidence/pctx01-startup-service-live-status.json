@@ -1,7 +1,7 @@
 {
   "task": "PCTX01",
   "condition": "PCTX01-G05-D05",
-  "state": "one authentication requested; awaiting OS response; snapshot only",
+  "state": "superseded by completed diagnostic and cleanup; earlier pending-state label raced completion and was inaccurate",
   "driver_pid": 26112,
   "auth_pid": 26113,
   "exec_session_id": 62331,
@@ -9,7 +9,7 @@
   "collector_ready": true,
   "original_test_logs_present": 4,
   "session_consumed": true,
-  "next": "Resume the existing exec session62331; do not rerun consumed driver or create another authentication. After auth, collect four stages, audit exact generated tools/raw cleanup and update evidence.",
+  "next": "See service-verification.json. Batch and session consumed/removed; do not resume or rerun.",
   "review": "work_control final review: four execution blockers corrected; no remaining material blocker; collector_error/complete determine outcome, not auth exit alone.",
   "26112": "absent",
   "26113": "absent"

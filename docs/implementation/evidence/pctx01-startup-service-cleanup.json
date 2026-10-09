@@ -1,0 +1,40 @@
+{
+  "task": "PCTX01",
+  "known_pid_liveness": {
+    "26112": "absent",
+    "26113": "absent",
+    "26132": "absent",
+    "26151": "absent",
+    "26163": "absent",
+    "26282": "absent",
+    "26133": "absent",
+    "26152": "absent",
+    "26164": "absent",
+    "26284": "absent",
+    "26165": "absent",
+    "26166": "absent"
+  },
+  "inventory_limit": "Known generated tools,parents and two reported expired owned children only; not all descendants.",
+  "root_raw_prefixes_remaining": [],
+  "root_tool_prefixes_remaining": [],
+  "root_cleanup_receipt": "all raw files and private directory removed on normal return",
+  "ordinary_session_removed": "/private/tmp/pctx01-service-batch-nqr225it",
+  "ordinary_session_entry_hashes": {
+    "request-2": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b",
+    "terminal-3": "fe9ff88f6e6e0bdd899031c7dab7fc5e3715935eed61ecfb924c2d7a575e39b7",
+    "project-deadline": "be88abcceb7133d8b4f531b82aa640d148052efe2ea118cc0f4319f09f633fb7",
+    "request-3": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b",
+    "terminal-2": "4b1ba9897dd6e621ea97afdb5007793302bc8092f3f9e9462956c9670384f4ad",
+    "sampling-3": "e6982dbe35e3f1814dd7cec3e42580fefdcf246f674877a58051663f496c3b94",
+    "sampling-2": "6e9c36a9cdb8369f571e99d9f0b53afe910c247538f59cd4843eff087f240742",
+    "consumed": "a697bb8c63294d22fb81cb5ece156ce447d99fc0e1570b16ff539c31ede893bd",
+    "collector-ready": "a41896c5ab56233c7960d54394c226727f6b2bb8082879f75029cc2e810db89c",
+    "request-1": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b",
+    "terminal-0": "da218021e51b3131c681e5c0599462e349a92dd78c006e8330a2d8d4f35a2bd8",
+    "request-0": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b",
+    "terminal-1": "a9edb9af70176a3174d43fc97fd88480f51670768426c871adff8a78091b4ff0",
+    "sampling-0": "925047b37a4ccde0fd1e6e93f42bcc77e70c35acfaf4c47a4e7ee406eadceeed",
+    "sampling-1": "af8e6b9c0d32d684f51937fa9f15d2a558f5824c175ebb7f4e0e4ca2075a448f"
+  },
+  "shared_target_removed": false
+}

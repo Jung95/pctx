@@ -1,0 +1,277 @@
+{
+  "task": "PCTX01",
+  "condition": "PCTX01-G05-D05",
+  "plan": {
+    "tests": [
+      "query_program_resolution_uses_captured_command_path",
+      "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+      "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget",
+      "simultaneous_streams_are_collected_and_overflow_never_infers_success"
+    ],
+    "uid": 502,
+    "authentications": 1,
+    "retry": false,
+    "service_samples": "4 x 2s,10ms interval",
+    "original_source_unchanged": true,
+    "qualification": false
+  },
+  "revision": "7181e657042c75553bacb6eeb77b5ec2c07e81bc",
+  "hashes": {
+    "/private/tmp/pctx01-service-batch-nqr225it/project-deadline": "be88abcceb7133d8b4f531b82aa640d148052efe2ea118cc0f4319f09f633fb7",
+    "/Users/dev/PCTX/docs/implementation/evidence/pctx01-startup-service-collector.py.txt": "de408564089da08e8b71894a99835d629303baa2b0e9199994073bc009a7ff35",
+    "/Users/dev/PCTX/docs/implementation/evidence/pctx01-startup-service-run.py.txt": "4e05b1892f258cf10a0a3a9cb9e395723c5d5adfaf25083f4a09d2541c123b97",
+    "/Users/dev/PCTX/src/query_process.rs": "bf661f4b8d0ed472585244ada4ac0e946221de364c100039cd20aee56fd8d0d2",
+    "/Users/dev/PCTX/tests/project_deadline.rs": "8b9fbc97fbd5acaf612b2d75b94cf810faa2b61614b654495082462b1941a8dc",
+    "/Users/dev/PCTX/Cargo.lock": "f96362897990caba560793601bc9fca08cef5c977907bb06889d5595d2acd7b0",
+    "/Users/dev/PCTX/docs/implementation/evidence/pctx01-startup-service-scope-plan.json": "345b5efc70cf9119f6d7e70c68e93bd730f8b32af84931d0d638fe2831d011d1"
+  },
+  "driver_pid": 26112,
+  "auth_pid": 26113,
+  "auth_exit": 0,
+  "auth_stderr_present": false,
+  "wrapper_error": null,
+  "runs": [
+    {
+      "stage": 0,
+      "test": "query_program_resolution_uses_captured_command_path",
+      "test_parent_pid": 26133,
+      "uid": 502,
+      "test_exit": 0,
+      "test_begin_ns": 99848316791,
+      "test_end_ns": 100664855750,
+      "sampling_start_marker": {
+        "sampler_pid": 26132,
+        "begin_ns": 217291875
+      },
+      "terminal": {
+        "stage": 0,
+        "collector_stage_exit": 0
+      },
+      "log_sha256": "23edfe2e3289191e6a9de3c704c581f7eed81aa7dd1f49c07125589c8cb38ce7"
+    },
+    {
+      "stage": 1,
+      "test": "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+      "test_parent_pid": 26152,
+      "uid": 502,
+      "test_exit": 0,
+      "test_begin_ns": 102266972416,
+      "test_end_ns": 102537475958,
+      "sampling_start_marker": {
+        "sampler_pid": 26151,
+        "begin_ns": 2636306333
+      },
+      "terminal": {
+        "stage": 1,
+        "collector_stage_exit": 0
+      },
+      "log_sha256": "b06df5c4a569089aaac68072e888a37101370bd72b29dbd4e8b3e0c825b223c8"
+    },
+    {
+      "stage": 2,
+      "test": "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget",
+      "test_parent_pid": 26164,
+      "uid": 502,
+      "test_exit": 101,
+      "test_begin_ns": 104600237500,
+      "test_end_ns": 105614511916,
+      "sampling_start_marker": {
+        "sampler_pid": 26163,
+        "begin_ns": 4970801958
+      },
+      "terminal": {
+        "stage": 2,
+        "collector_stage_exit": 0
+      },
+      "log_sha256": "5ab174a56bf958c30d8cf7a9c306f7fc481ecbc2f3120175d48cbbb03d3f5d1c"
+    },
+    {
+      "stage": 3,
+      "test": "simultaneous_streams_are_collected_and_overflow_never_infers_success",
+      "test_parent_pid": 26284,
+      "uid": 502,
+      "test_exit": 0,
+      "test_begin_ns": 106948302125,
+      "test_end_ns": 107443903291,
+      "sampling_start_marker": {
+        "sampler_pid": 26282,
+        "begin_ns": 7311796333
+      },
+      "terminal": {
+        "stage": 3,
+        "collector_stage_exit": 0
+      },
+      "log_sha256": "ed8cffc9e4bf82af4ebaed0cf61f25b62988fbcd37fa8b05077cb3c6adf63ddd"
+    }
+  ],
+  "service": {
+    "identity": {
+      "pid": 665,
+      "uid": 0,
+      "start_sec": 1791224512,
+      "start_usec": 669319,
+      "executable": "/usr/libexec/syspolicyd"
+    },
+    "stages": [
+      {
+        "stage": 0,
+        "begin_ns": 217291875,
+        "end_ns": 2596098000,
+        "sampler_exit": 0,
+        "before": {
+          "cpu_user": 46375773602,
+          "cpu_system": 142663336985,
+          "threads": 5,
+          "running": 0
+        },
+        "after": {
+          "cpu_user": 46376764484,
+          "cpu_system": 142664051434,
+          "threads": 7,
+          "running": 0
+        },
+        "sample": {
+          "allowlisted_function_counts": {
+            "start": 179,
+            "__CFRunLoopRun": 358,
+            "__CFRunLoopServiceMachPort": 358,
+            "mach_msg": 359,
+            "mach_msg_overwrite": 359,
+            "mach_msg2_internal": 359,
+            "mach_msg2_trap": 359,
+            "_dispatch_semaphore_wait_slow": 54
+          },
+          "validated_service_function_counts": {},
+          "frame_rows": 207,
+          "unpublished_unknown_frame_rows": 187,
+          "limit": "Inclusive sampled-stack counts, not CPU percentages or per-child attribution. Unknown strings, image paths, headers and addresses omitted."
+        }
+      },
+      {
+        "stage": 1,
+        "begin_ns": 2636306333,
+        "end_ns": 4925893958,
+        "sampler_exit": 0,
+        "before": {
+          "cpu_user": 46376764484,
+          "cpu_system": 142664051434,
+          "threads": 7,
+          "running": 0
+        },
+        "after": {
+          "cpu_user": 46376909785,
+          "cpu_system": 142664151550,
+          "threads": 7,
+          "running": 0
+        },
+        "sample": {
+          "allowlisted_function_counts": {
+            "start": 182,
+            "__CFRunLoopRun": 364,
+            "__CFRunLoopServiceMachPort": 364,
+            "mach_msg": 364,
+            "mach_msg_overwrite": 364,
+            "mach_msg2_internal": 364,
+            "mach_msg2_trap": 364,
+            "_dispatch_semaphore_wait_slow": 16
+          },
+          "validated_service_function_counts": {},
+          "frame_rows": 117,
+          "unpublished_unknown_frame_rows": 102,
+          "limit": "Inclusive sampled-stack counts, not CPU percentages or per-child attribution. Unknown strings, image paths, headers and addresses omitted."
+        }
+      },
+      {
+        "stage": 2,
+        "begin_ns": 4970801958,
+        "end_ns": 7283267708,
+        "sampler_exit": 0,
+        "before": {
+          "cpu_user": 46376909785,
+          "cpu_system": 142664151550,
+          "threads": 7,
+          "running": 0
+        },
+        "after": {
+          "cpu_user": 46377692700,
+          "cpu_system": 142664695604,
+          "threads": 11,
+          "running": 0
+        },
+        "sample": {
+          "allowlisted_function_counts": {
+            "start": 181,
+            "__CFRunLoopRun": 362,
+            "__CFRunLoopServiceMachPort": 362,
+            "mach_msg": 362,
+            "mach_msg_overwrite": 362,
+            "mach_msg2_internal": 363,
+            "mach_msg2_trap": 363,
+            "_dispatch_semaphore_wait_slow": 85,
+            "SecKeyVerifySignature": 1,
+            "SecKeyRunAlgorithmAndCopyResult": 4
+          },
+          "validated_service_function_counts": {},
+          "frame_rows": 280,
+          "unpublished_unknown_frame_rows": 258,
+          "limit": "Inclusive sampled-stack counts, not CPU percentages or per-child attribution. Unknown strings, image paths, headers and addresses omitted."
+        }
+      },
+      {
+        "stage": 3,
+        "begin_ns": 7311796333,
+        "end_ns": 9612612166,
+        "sampler_exit": 0,
+        "before": {
+          "cpu_user": 46377692700,
+          "cpu_system": 142664695604,
+          "threads": 11,
+          "running": 0
+        },
+        "after": {
+          "cpu_user": 46377922091,
+          "cpu_system": 142664856903,
+          "threads": 11,
+          "running": 0
+        },
+        "sample": {
+          "allowlisted_function_counts": {
+            "start": 182,
+            "__CFRunLoopRun": 364,
+            "__CFRunLoopServiceMachPort": 364,
+            "mach_msg": 364,
+            "mach_msg_overwrite": 364,
+            "mach_msg2_internal": 364,
+            "mach_msg2_trap": 364,
+            "_dispatch_semaphore_wait_slow": 37
+          },
+          "validated_service_function_counts": {},
+          "frame_rows": 126,
+          "unpublished_unknown_frame_rows": 111,
+          "limit": "Inclusive sampled-stack counts, not CPU percentages or per-child attribution. Unknown strings, image paths, headers and addresses omitted."
+        }
+      }
+    ],
+    "pid_binding_limit": "Native identity checked before/after attachment and sample header checked. sample takes PID, not a unique-id capability: a narrow admission-to-attach PID-reuse race cannot be eliminated. Any detected mismatch discards raw data and aborts; no attribution across identity change.",
+    "raw_cleanup": "all raw files and private directory removed on normal return"
+  },
+  "complete": true,
+  "limitations": [
+    "Sampling perturbs service timing; diagnostic results cannot qualify repair.",
+    "Service stacks are aggregate,not associated with a particular child evaluation.",
+    "Native pre/post/header checks cannot eliminate admission-to-attach PID reuse.",
+    "Outer watchdog is harness protection,not a replacement for original1000ms query deadline.",
+    "Only known tools/parents are inventoried,not all descendants."
+  ],
+  "known_tool_pid_liveness": {
+    "26113": "absent",
+    "26132": "absent",
+    "26133": "absent",
+    "26151": "absent",
+    "26152": "absent",
+    "26163": "absent",
+    "26164": "absent",
+    "26282": "absent",
+    "26284": "absent"
+  }
+}

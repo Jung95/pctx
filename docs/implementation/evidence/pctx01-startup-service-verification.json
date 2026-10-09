@@ -1,0 +1,83 @@
+{
+  "task": "PCTX01",
+  "condition": "PCTX01-G05-D05",
+  "status": "product_failure; diagnostic batch completed,not repaired",
+  "results": "3PASS/1FAIL101; concurrent startup2zero-output TIMEOUT7 at original1000ms",
+  "original_source_hash": "8b9fbc97fbd5acaf612b2d75b94cf810faa2b61614b654495082462b1941a8dc",
+  "all_frozen_hashes": "matched before cleanup",
+  "all_log_receipts": "matched",
+  "stage_analysis": [
+    {
+      "stage": 0,
+      "service_duration_ns": 2378806125,
+      "cpu_delta_raw": 1705331,
+      "conditional_cpu_ns": 71055458,
+      "conditional_one_core_percent": 2.987021833623929,
+      "unknown_frame_rows": 187,
+      "total_frame_rows": 207
+    },
+    {
+      "stage": 1,
+      "service_duration_ns": 2289587625,
+      "cpu_delta_raw": 245417,
+      "conditional_cpu_ns": 10225708,
+      "conditional_one_core_percent": 0.446617907158427,
+      "unknown_frame_rows": 102,
+      "total_frame_rows": 117
+    },
+    {
+      "stage": 2,
+      "service_duration_ns": 2312465750,
+      "cpu_delta_raw": 1326969,
+      "conditional_cpu_ns": 55290375,
+      "conditional_one_core_percent": 2.390970547347566,
+      "unknown_frame_rows": 258,
+      "total_frame_rows": 280
+    },
+    {
+      "stage": 3,
+      "service_duration_ns": 2300815833,
+      "cpu_delta_raw": 390690,
+      "conditional_cpu_ns": 16278750,
+      "conditional_one_core_percent": 0.7075207744365344,
+      "unknown_frame_rows": 111,
+      "total_frame_rows": 126
+    }
+  ],
+  "clock_limitation": "SystemPython3.9.6 monotonic_ns subtracts process-local initial mach_absolute_time. Root and driver timestamps cannot be subtracted or directly aligned. Each process duration remains valid; IPC sequence does not prove exact sample/test overlap or any per-child causal mapping.",
+  "cpu_semantics": "Conditional125/3 conversion uses observed own-host mach_timebase and current published AppleXNU assigning recount Mach times to PROC_PIDTASKINFO. Exact source for installedOS build not verified, so retain raw counters and label conversion conditional. No per-childCPU estimate.",
+  "sample_limit": "Unknown frames dominate; retained IPC/semaphore waits plus sparse signature functions cannot prove evaluation deadlock,queue saturation,request identity or cause. Root PID665 UID0/native start and executable checks plus header admission pass; residual attach PID race unchanged.",
+  "conclusion": "No concrete PCTX operation or applicable supported platform correction established. Do not patch spawn flags,relax original conditions,reset services/security or repeat same capture.",
+  "public_sources": [
+    {
+      "url": "https://raw.githubusercontent.com/python/cpython/v3.9.6/Python/pytime.c",
+      "supports": "macOSprocess-local monotonic t0 limitation"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/apple-oss-distributions/xnu/main/osfmk/kern/bsd_kern.c",
+      "supports": "published current PROC_PIDTASKINFO derives total CPU fields from recount Mach times"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/apple-oss-distributions/xnu/main/osfmk/kern/recount.h",
+      "supports": "recount Mach timebase units; not exact installedbuild"
+    },
+    {
+      "url": "https://github.com/openai/codex/issues/34768",
+      "supports": "external persistent policy-service hypothesis only; not localcause/fix"
+    }
+  ],
+  "independent_review": "work_control verified frozen hashes,test receipts,2expired outcomes,clock/counter/unknown-frame limitations and no qualification.",
+  "evidence_hashes": {
+    "pctx01-startup-service-result.json": "9cf0d85d72d1fd1b45dd2c8d2bde58ed750513baa5bed47f404b5ae83d5cba49",
+    "pctx01-startup-service-cleanup.json": "0bbaffeeabef96e8be00a43463820394684744f145fb8b33ce330557179ef2f4",
+    "pctx01-startup-service-stage-0-test.log": "23edfe2e3289191e6a9de3c704c581f7eed81aa7dd1f49c07125589c8cb38ce7",
+    "pctx01-startup-service-stage-1-test.log": "b06df5c4a569089aaac68072e888a37101370bd72b29dbd4e8b3e0c825b223c8",
+    "pctx01-startup-service-stage-2-test.log": "5ab174a56bf958c30d8cf7a9c306f7fc481ecbc2f3120175d48cbbb03d3f5d1c",
+    "pctx01-startup-service-stage-3-test.log": "ed8cffc9e4bf82af4ebaed0cf61f25b62988fbcd37fa8b05077cb3c6adf63ddd"
+  },
+  "detail_closed": 33,
+  "detail_total": 40,
+  "whole_closed": 0,
+  "whole_total": 10,
+  "next": "Need target-specific policy request/response evidence or vendor-supported platform correction. Current8s batch consumed; no new capture prepared or justified merely to repeat current service state. Message/log tracing or another service is beyond approved stack/counter scope; prepare concrete minimal plan and obtain separate scope approval if required."
+}

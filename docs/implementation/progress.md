@@ -1,17 +1,27 @@
 # Implementation progress
 
-## Single authentication pending — live, 2026-10-09
+## Completed service-side diagnostic — current, 2026-10-09
 
-The human approved the exact syspolicyd-only scope. The finite collector passed
-independent execution review after FIFO,cleanup,exclusive consumption and per-stage
-hash controls were corrected. Parser/IPC/AST and home-cwd plan-only controls pass.
-[Live snapshot](evidence/pctx01-startup-service-live-status.json): ordinary driver
-26112,authentication helper26113,exec session62331;one OS authentication requested,
-collector-ready absent and no original test log at the snapshot. Root collection
-and tests have not started at that observation. Session is CONSUMED;do not rerun.
-Resume existing session62331 after authentication,interpret collector_error/complete,
-then audit cleanup and record all failures. No source change;PCTX01-G05-D05 remains
-product_failure,33/40details,0/10gates. Only PCTX01 active.
+[Verification](evidence/pctx01-startup-service-verification.json): approved one-auth
+syspolicyd-only batch completed,four unchanged ordinaryUID502 tests3PASS/1FAIL.
+Concurrency expired26165/26166 at original1s with zero streams,no EOF/root exit/group
+probe. All frozen hashes and logs match;all reported generated tools/parents/expired
+PIDs absent. Private raw/root-tool directories and isolated session/binary removed;
+shared target retained. No OS/service/security change or product repair.
+
+SystemPython3.9.6 clocks have process-local origins: no direct root/driver alignment
+or exact overlap claim. Unknown frames dominate reduced samples;raw CPU counters
+and conditional conversion cannot attribute evaluation to either child. No queue
+saturation/deadlock or applicable platform correction established. Do not repeat
+this consumed capture. Next requires target-specific policy request/response evidence
+or a supported vendor correction;message/log tracing or another service exceeds
+this approved stack/counter scope. PCTX01-G05-D05 product_failure;33/40details,
+0/10whole gates. Only PCTX01 active;no live job,authentication or operator action.
+Earlier authentication-pending instructions are superseded.
+[Historical target-log scope](evidence/pctx01-startup-target-log-scope-plan.json)
+is reviewable but NOT approved/executed:one2sUTC window,explicit two owned PIDs,
+existing masked events only,no new test/authentication or broad fallback.
+Await separate log-content scope approval before preparing/executing the reducer.
 
 ## Pending service-side diagnostic scope — 2026-10-09
 
