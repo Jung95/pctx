@@ -1,0 +1,16 @@
+{
+  "task": "PCTX01-G05-D05",
+  "owned_pid": 43779,
+  "sampler_pid": 43780,
+  "exact_path_image_rows": 0,
+  "bundle_identifier_used_as_image_label": false,
+  "executable_basename_used_as_image_label": false,
+  "raw_retained": false,
+  "administrator_authentication": false,
+  "service_observation": false,
+  "qualification": false,
+  "prior_control": "Initial owned launch had no Binary Images section; finally reaped tools/removed private directory. New owned-only readiness byte precedes sample, never used in product test.",
+  "current_parser_failure": "path_header",
+  "generated_tools_reaped": true,
+  "private_directory_removed": true
+}

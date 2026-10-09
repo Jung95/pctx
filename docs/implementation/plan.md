@@ -1,5 +1,23 @@
 # Implementation plan
 
+## Reason-preserving stack diagnosis — current, 2026-10-09
+
+PCTX01-G05-D05 remains product_failure,33/40 details,0/10 gates. One original
+1000ms/8×16 test exit101:83 outcomes,80OUTPUT,3TIMEOUT43653/43654/43655,
+45 planned calls censored. Exact two-target sample tools exit0/reaped; reducer
+reports target_image_absent for XprotectService,invalidates both captures.
+0 retained samples/raw; actual image-label/path mismatch still unknown.
+Owned bundle/UUID control observes bundle identifier image row,not actual service
+format. Installed XPC identifier matches fixed alias candidate; exact path,
+header/range/duplicate checks preserved; synthetic acceptance/refusals pass.
+No product repair or actual candidate live validation. Root terminal validated,
+93 known PIDs absent; private prepared source removed,product/test/lock unchanged.
+Scope consumed,no unchanged automatic retry/Actions/task switch. Shared target
+requires normal-source rebuild before qualification. Next within D05: passive
+review complete with no material blocker; changed-format live validation remains
+pending for interpretable offsets.
+[Result and limits](evidence/pctx01-startup-reason-stack-review.md).
+
 ## Lifecycle-aware stack diagnosis — current, 2026-10-09
 
 PCTX01-G05-D05 remains product_failure,33/40 details,0/10 gates. Observer ready,

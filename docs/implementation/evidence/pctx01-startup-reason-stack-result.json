@@ -1,0 +1,66 @@
+{
+  "task": "PCTX01-G05-D05",
+  "failure_class": "AssertionError",
+  "test_started": true,
+  "collector_terminal": true,
+  "service_capture": {
+    "task": "PCTX01-G05-D05",
+    "collector_pid": 43627,
+    "failure_class": "ParseFailure",
+    "failure_check": "target_image_absent",
+    "failure_stage": "sample_reduce",
+    "target": "XprotectService",
+    "last_candidate_count": 1,
+    "endpoint_poll_count": 1,
+    "samples": [],
+    "sampler_cleanup": [
+      {
+        "sampler_pid": 43659,
+        "reaped": true,
+        "exit": 0
+      },
+      {
+        "sampler_pid": 43660,
+        "reaped": true,
+        "exit": 0
+      }
+    ],
+    "raw_retained": false,
+    "private_directory": null,
+    "private_removed": true,
+    "qualification": false,
+    "limits": [
+      "Sampling briefly suspends service threads; timing and outcomes perturbed.",
+      "Endpoint polling begins only after owned trigger, at most50 exact-name queries, stops by original earliest deadline. No endpoint launch/warmup. Late/absent endpoint discards both captures.",
+      "Only temporal overlap with owned child; no request-specific CPU or rule-cost attribution.",
+      "Native pre/post and header checks retain narrow PID reuse race.",
+      "Unexpected collector death needs private-directory/process cleanup audit."
+    ]
+  },
+  "ordinary_tool_cleanup": [
+    {
+      "role": "test_driver",
+      "pid": 43630,
+      "exit": 0,
+      "reaped": true
+    },
+    {
+      "role": "authentication_wrapper",
+      "pid": 43607,
+      "exit": 0,
+      "reaped": true
+    }
+  ],
+  "cleanup_errors": [],
+  "qualification": false,
+  "limits": [
+    "Diagnostic interference; test outcomes not qualification.",
+    "Known PID absence/root reap do not prove universal descendant cleanup.",
+    "Service pre/post admission retains narrow PID reuse race.",
+    "Any timeout/identity/parser/cleanup failure invalidates attribution, no fallback/retry.",
+    "Unexpected root collector death requires minimal cleanup audit before reuse.",
+    "Late endpoint discovery can miss the relevant scan; absence after deadline gives no XProtect cost attribution.",
+    "Deadline admission is cooperative; native sampler spawn may finish after check.",
+    "Only syspolicyd must exist at readiness; transient XprotectService sought after owned trigger before original earliest deadline. No endpoint invocation."
+  ]
+}

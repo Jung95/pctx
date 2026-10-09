@@ -1,0 +1,18 @@
+{
+  "task": "PCTX01-G05-D05",
+  "owned_pid": 43813,
+  "sampler_pid": 43814,
+  "own_uuid_image_rows": 1,
+  "image_label_bundle_identifier": true,
+  "image_label_basename": true,
+  "image_path_physical": false,
+  "image_path_logical_tmp": false,
+  "raw_retained": false,
+  "administrator_authentication": false,
+  "service_observation": false,
+  "qualification": false,
+  "method": "Owned readiness byte; exact MachO UUID identifies row; only known own /tmp versus /private/tmp path alias normalized for fixture parsing. Product path/identity rules untouched.",
+  "normalized_parser_failure": "path_header",
+  "generated_tools_reaped": true,
+  "private_directory_removed": true
+}

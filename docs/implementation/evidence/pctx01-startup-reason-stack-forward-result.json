@@ -1,0 +1,3716 @@
+{
+  "task": "PCTX01-G05-D05",
+  "priority": 3,
+  "meta": {
+    "task": "PCTX01-G05-D05",
+    "priority": 3,
+    "root": "/private/tmp/pctx01-reason-stack-forward-2pd1_eg6",
+    "source": "/private/tmp/pctx01-reason-stack-forward-2pd1_eg6/source",
+    "records": "/private/tmp/pctx01-reason-stack-forward-2pd1_eg6/records",
+    "revision": "fde29074d32273be9fafb7df9bc92f30a71f2ad2",
+    "hashes": {
+      "src/query_process.rs": "bf661f4b8d0ed472585244ada4ac0e946221de364c100039cd20aee56fd8d0d2",
+      "tests/project_deadline.rs": "8b9fbc97fbd5acaf612b2d75b94cf810faa2b61614b654495082462b1941a8dc",
+      "Cargo.lock": "f96362897990caba560793601bc9fca08cef5c977907bb06889d5595d2acd7b0"
+    },
+    "instrumented_query_sha256": "69556f301cab2e51eeac80f19123364e3c30352e10e79076455543fa6b43b853",
+    "clock": "shared nativeCLOCK_MONOTONICns; originalInstant deadline retained;remaining bracket recorded",
+    "new_question": "One paired service stack capture after first admitted owned native child; code offsets/UUID retained for operation attribution, not unchanged waiting sample.",
+    "test": "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget",
+    "contract": "Originaltestbyteidentical,1000ms8x16,nativeexec/cwd/env/group/streams/overflow;no retry,retention,warmup or auth",
+    "qualification": false,
+    "limits": [
+      "Observerclockreads/bufferallocation/extra ownedBSDadmission perturbtiming.",
+      "One numeric trigger is written after first owned spawn before collection; originaldeadline remains running and I/O perturbs it.",
+      "4096pointcap;dropped/missingrecordsunknown.",
+      "Reapnotindependentlyprovenbycleanup_end;originaltry_waitblockmayendatgrace."
+    ]
+  },
+  "clock_before": {
+    "native_low_ns": 349813015397000,
+    "wall_ns": 1791574226686309000,
+    "native_high_ns": 349813015398000,
+    "offset_low_ns": 1791224413670911000,
+    "offset_high_ns": 1791224413670912000
+  },
+  "clock_after": {
+    "native_low_ns": 349815851034000,
+    "wall_ns": 1791574229521946000,
+    "native_high_ns": 349815851035000,
+    "offset_low_ns": 1791224413670911000,
+    "offset_high_ns": 1791224413670912000
+  },
+  "parent_pid": 43631,
+  "start_utc": "2026-10-09T19:30:26.686312+00:00",
+  "finish_utc": "2026-10-09T19:30:29.521951+00:00",
+  "test_exit": 101,
+  "outer_watchdog": false,
+  "binary_sha256": "a651dfcbfec6f2096af9d108f7935e5325924ffc5827fd3b67f05f77da04353d",
+  "log_sha256": "b6cad4b92478106fc272290926dfef7533565e637b10f218e4f07fbae7bf3644",
+  "observed_outcomes": 83,
+  "success_outcomes": 80,
+  "failed_outcomes": 3,
+  "observed_attempts_censored": true,
+  "retained_raw_pids": [
+    43651,
+    43653,
+    43654,
+    43655,
+    43718
+  ],
+  "records": [
+    {
+      "pid": 43650,
+      "identity": [
+        43650,
+        43631,
+        502,
+        1791574228,
+        449440
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349815777625667,
+      "deadline_high_ns": 349815777653667,
+      "path_hashes": [
+        "db4ce2b67eec3124",
+        "66e5d37d2f4fb6f2"
+      ],
+      "point_count": 568,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 317000,
+        "validation": 237000,
+        "native_probe": 7000,
+        "stdout_drain": 16000,
+        "stderr_drain": 1000,
+        "waitid": 6000,
+        "sleep": 6255000
+      },
+      "total_entry_to_terminal_ns": 328968000,
+      "max_adjacent_gap_ns": 6255000,
+      "max_sleep_overshoot_ns": 1255000,
+      "total_requested_sleep_ns": 300000000,
+      "total_observed_sleep_ns": 326701000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "6f54e7d96c8e24e4e663347916ed9834574d4d773b0d7096a17d3c13bf081d54",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43651,
+      "identity": [
+        43651,
+        43631,
+        502,
+        1791574228,
+        449448
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349815777666917,
+      "deadline_high_ns": 349815777693917,
+      "path_hashes": [
+        "c550f854ef5e046f",
+        "6925cd87a24aa4bd"
+      ],
+      "point_count": 1463,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 401000,
+        "validation": 310000,
+        "native_probe": 19000,
+        "stdout_drain": 1009000,
+        "stderr_drain": 39000,
+        "waitid": 24000,
+        "sleep": 10164000
+      },
+      "total_entry_to_terminal_ns": 910475000,
+      "max_adjacent_gap_ns": 10164000,
+      "max_sleep_overshoot_ns": 5164000,
+      "total_requested_sleep_ns": 785000000,
+      "total_observed_sleep_ns": 907462000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "0e5d94cf065f122dd033ec9d9f7e27fd1884bb33f341f21527acb19de547d4b0",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43652,
+      "identity": [
+        43652,
+        43631,
+        502,
+        1791574228,
+        449458
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349815777629417,
+      "deadline_high_ns": 349815777657417,
+      "path_hashes": [
+        "5607ae2b9468cfa3",
+        "f1dadba24e3cd5f1"
+      ],
+      "point_count": 1120,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 375000,
+        "validation": 308000,
+        "native_probe": 19000,
+        "stdout_drain": 10000,
+        "stderr_drain": 4000,
+        "waitid": 3000,
+        "sleep": 10189000
+      },
+      "total_entry_to_terminal_ns": 693975000,
+      "max_adjacent_gap_ns": 10189000,
+      "max_sleep_overshoot_ns": 5189000,
+      "total_requested_sleep_ns": 600000000,
+      "total_observed_sleep_ns": 692096000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "1e6576273e338e5b0da0cfeed161c3ecf01c713a3a95e4ef9f551af609fcff54",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43653,
+      "identity": [
+        43653,
+        43631,
+        502,
+        1791574228,
+        449470
+      ],
+      "outcome": {
+        "code": "TIMEOUT"
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349815777629125,
+      "deadline_high_ns": 349815777658125,
+      "path_hashes": [
+        "47f429c959eecab8",
+        "36f9fc533cea8686"
+      ],
+      "point_count": 1625,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 302000,
+        "validation": 308000,
+        "native_probe": 23000,
+        "stdout_drain": 8000,
+        "stderr_drain": 6000,
+        "waitid": 32000,
+        "sleep": 12064000
+      },
+      "total_entry_to_terminal_ns": 1001047000,
+      "max_adjacent_gap_ns": 12064000,
+      "max_sleep_overshoot_ns": 7064000,
+      "total_requested_sleep_ns": 874832625,
+      "total_observed_sleep_ns": 999065000,
+      "terminal_to_group_kill_ns": 6000,
+      "group_kill_end_to_root_kill_begin_ns": 1000,
+      "raw_sha256": "d4b70ce3bb1d02a3646110ae47b20fe14c0468b4d2cc6fe7b3ae487d33973785",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43654,
+      "identity": [
+        43654,
+        43631,
+        502,
+        1791574228,
+        449550
+      ],
+      "outcome": {
+        "code": "TIMEOUT"
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349815777626792,
+      "deadline_high_ns": 349815777655792,
+      "path_hashes": [
+        "5803522b77e6b555",
+        "235f47f755f462a3"
+      ],
+      "point_count": 1616,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 496000,
+        "validation": 239000,
+        "native_probe": 21000,
+        "stdout_drain": 31000,
+        "stderr_drain": 4000,
+        "waitid": 39000,
+        "sleep": 12043000
+      },
+      "total_entry_to_terminal_ns": 1001041000,
+      "max_adjacent_gap_ns": 12043000,
+      "max_sleep_overshoot_ns": 7043000,
+      "total_requested_sleep_ns": 869829750,
+      "total_observed_sleep_ns": 998761000,
+      "terminal_to_group_kill_ns": 2000,
+      "group_kill_end_to_root_kill_begin_ns": 0,
+      "raw_sha256": "8cbf12f910db21723cb2e92987f9c09b1fe49d78a8a501bbce3e614462054355",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43655,
+      "identity": [
+        43655,
+        43631,
+        502,
+        1791574228,
+        449555
+      ],
+      "outcome": {
+        "code": "TIMEOUT"
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349815777618750,
+      "deadline_high_ns": 349815777647750,
+      "path_hashes": [
+        "2d56693a731326d0",
+        "14239202d7e6d69e"
+      ],
+      "point_count": 1625,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 496000,
+        "validation": 235000,
+        "native_probe": 17000,
+        "stdout_drain": 10000,
+        "stderr_drain": 42000,
+        "waitid": 4000,
+        "sleep": 12845000
+      },
+      "total_entry_to_terminal_ns": 1000386000,
+      "max_adjacent_gap_ns": 12845000,
+      "max_sleep_overshoot_ns": 7845000,
+      "total_requested_sleep_ns": 872247291,
+      "total_observed_sleep_ns": 998142000,
+      "terminal_to_group_kill_ns": 21000,
+      "group_kill_end_to_root_kill_begin_ns": 0,
+      "raw_sha256": "47caff7e8c1300e6bf92aa2f7b6466d8f348b8c78ff1ee33a368a0ab315bc1c1",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43656,
+      "identity": [
+        43656,
+        43631,
+        502,
+        1791574228,
+        449565
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349815777621708,
+      "deadline_high_ns": 349815777649708,
+      "path_hashes": [
+        "b63c914139229028",
+        "a8d210bec59793f6"
+      ],
+      "point_count": 808,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 340000,
+        "validation": 236000,
+        "native_probe": 15000,
+        "stdout_drain": 181000,
+        "stderr_drain": 4000,
+        "waitid": 3000,
+        "sleep": 10163000
+      },
+      "total_entry_to_terminal_ns": 507792000,
+      "max_adjacent_gap_ns": 10163000,
+      "max_sleep_overshoot_ns": 5163000,
+      "total_requested_sleep_ns": 430000000,
+      "total_observed_sleep_ns": 505983000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "3df54d24ff0b6e48c68731267807b51b2b70340f0dee81bf826714e1d9c0a4d8",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43657,
+      "identity": [
+        43657,
+        43631,
+        502,
+        1791574228,
+        449621
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349815777627584,
+      "deadline_high_ns": 349815777657584,
+      "path_hashes": [
+        "66a9decd38eb8e8",
+        "5dc19f1c1f5cb6"
+      ],
+      "point_count": 1288,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 551000,
+        "validation": 312000,
+        "native_probe": 34000,
+        "stdout_drain": 20000,
+        "stderr_drain": 4000,
+        "waitid": 5000,
+        "sleep": 10163000
+      },
+      "total_entry_to_terminal_ns": 802016000,
+      "max_adjacent_gap_ns": 10163000,
+      "max_sleep_overshoot_ns": 5163000,
+      "total_requested_sleep_ns": 690000000,
+      "total_observed_sleep_ns": 798264000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "6a502a411804d6da96f29f394faa9afc5331d8dbc39854604bd10c6a74319739",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43661,
+      "identity": [
+        43661,
+        43631,
+        502,
+        1791574228,
+        787801
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816116778667,
+      "deadline_high_ns": 349816116779667,
+      "path_hashes": [
+        "db4ce2b67eec3124",
+        "66e5d37d2f4fb6f2"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 184000,
+        "validation": 32000,
+        "native_probe": 3000,
+        "stdout_drain": 11000,
+        "stderr_drain": 1000,
+        "waitid": 0,
+        "sleep": 5540000
+      },
+      "total_entry_to_terminal_ns": 5860000,
+      "max_adjacent_gap_ns": 5540000,
+      "max_sleep_overshoot_ns": 540000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 5540000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "35348525ed765bc23ee04a93a03cee7f911b03d291966d6c43a684f60c6dc01e",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43662,
+      "identity": [
+        43662,
+        43631,
+        502,
+        1791574228,
+        794738
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816123737666,
+      "deadline_high_ns": 349816123738666,
+      "path_hashes": [
+        "db4ce2b67eec3124",
+        "66e5d37d2f4fb6f2"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 172000,
+        "validation": 28000,
+        "native_probe": 3000,
+        "stdout_drain": 2000,
+        "stderr_drain": 1000,
+        "waitid": 1000,
+        "sleep": 5032000
+      },
+      "total_entry_to_terminal_ns": 5316000,
+      "max_adjacent_gap_ns": 5032000,
+      "max_sleep_overshoot_ns": 32000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 5032000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "3c6014fc133b0b1893cb146c6a2eeb1bfd40b35fdceb8e27e35f4f72f6d558da",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43663,
+      "identity": [
+        43663,
+        43631,
+        502,
+        1791574228,
+        801054
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816130074708,
+      "deadline_high_ns": 349816130074708,
+      "path_hashes": [
+        "db4ce2b67eec3124",
+        "66e5d37d2f4fb6f2"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 133000,
+        "validation": 22000,
+        "native_probe": 2000,
+        "stdout_drain": 6000,
+        "stderr_drain": 2000,
+        "waitid": 1000,
+        "sleep": 6254000
+      },
+      "total_entry_to_terminal_ns": 6537000,
+      "max_adjacent_gap_ns": 6254000,
+      "max_sleep_overshoot_ns": 1254000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 6254000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "c14ecbf4791a445f2ba6ae876c268f34225700346b585297612a1ce8968203b4",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43664,
+      "identity": [
+        43664,
+        43631,
+        502,
+        1791574228,
+        808740
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816137719458,
+      "deadline_high_ns": 349816137720458,
+      "path_hashes": [
+        "db4ce2b67eec3124",
+        "66e5d37d2f4fb6f2"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 205000,
+        "validation": 32000,
+        "native_probe": 3000,
+        "stdout_drain": 4000,
+        "stderr_drain": 1000,
+        "waitid": 1000,
+        "sleep": 5260000
+      },
+      "total_entry_to_terminal_ns": 5675000,
+      "max_adjacent_gap_ns": 5260000,
+      "max_sleep_overshoot_ns": 260000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 5260000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "0da269bc32563e6c2fe4f8dca8ccc95d76bdc217ff45685cd52144b95d3b221f",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43665,
+      "identity": [
+        43665,
+        43631,
+        502,
+        1791574228,
+        817348
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816146241125,
+      "deadline_high_ns": 349816146242125,
+      "path_hashes": [
+        "db4ce2b67eec3124",
+        "66e5d37d2f4fb6f2"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 321000,
+        "validation": 48000,
+        "native_probe": 2000,
+        "stdout_drain": 3000,
+        "stderr_drain": 1000,
+        "waitid": 1000,
+        "sleep": 9708000
+      },
+      "total_entry_to_terminal_ns": 10297000,
+      "max_adjacent_gap_ns": 9708000,
+      "max_sleep_overshoot_ns": 4708000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 9708000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "fde6658c76986f21f7768f1a19dfe1224edcae7fd21c1959493c45296ed917a2",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43666,
+      "identity": [
+        43666,
+        43631,
+        502,
+        1791574228,
+        828755
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816157570500,
+      "deadline_high_ns": 349816157571500,
+      "path_hashes": [
+        "db4ce2b67eec3124",
+        "66e5d37d2f4fb6f2"
+      ],
+      "point_count": 34,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 1389000,
+        "validation": 68000,
+        "native_probe": 8000,
+        "stdout_drain": 8000,
+        "stderr_drain": 2000,
+        "waitid": 3000,
+        "sleep": 6392000
+      },
+      "total_entry_to_terminal_ns": 14476000,
+      "max_adjacent_gap_ns": 6392000,
+      "max_sleep_overshoot_ns": 1392000,
+      "total_requested_sleep_ns": 10000000,
+      "total_observed_sleep_ns": 12709000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "fb01eb8e6960806bbade67bdc531281bd5ad01b94ca5c4e816150c8236d0fc21",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43667,
+      "identity": [
+        43667,
+        43631,
+        502,
+        1791574228,
+        845243
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816174106708,
+      "deadline_high_ns": 349816174106708,
+      "path_hashes": [
+        "db4ce2b67eec3124",
+        "66e5d37d2f4fb6f2"
+      ],
+      "point_count": 34,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 603000,
+        "validation": 62000,
+        "native_probe": 8000,
+        "stdout_drain": 19000,
+        "stderr_drain": 2000,
+        "waitid": 6000,
+        "sleep": 6330000
+      },
+      "total_entry_to_terminal_ns": 13592000,
+      "max_adjacent_gap_ns": 6330000,
+      "max_sleep_overshoot_ns": 1330000,
+      "total_requested_sleep_ns": 10000000,
+      "total_observed_sleep_ns": 12611000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "a273c8c32d38a6f473df8f1db7dba7ec98a2d31938c5a247bb560ce2bc58cbca",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43668,
+      "identity": [
+        43668,
+        43631,
+        502,
+        1791574228,
+        861090
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816189988625,
+      "deadline_high_ns": 349816189988625,
+      "path_hashes": [
+        "db4ce2b67eec3124",
+        "66e5d37d2f4fb6f2"
+      ],
+      "point_count": 43,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 974000,
+        "validation": 49000,
+        "native_probe": 7000,
+        "stdout_drain": 6000,
+        "stderr_drain": 3000,
+        "waitid": 1000,
+        "sleep": 8294000
+      },
+      "total_entry_to_terminal_ns": 22011000,
+      "max_adjacent_gap_ns": 8294000,
+      "max_sleep_overshoot_ns": 3294000,
+      "total_requested_sleep_ns": 15000000,
+      "total_observed_sleep_ns": 20732000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "e1ab28e55f567cc5e4f1cf9dfda139af10a697da219e7f5ed2169b8d8ab57c3e",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43669,
+      "identity": [
+        43669,
+        43631,
+        502,
+        1791574228,
+        884742
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816213683791,
+      "deadline_high_ns": 349816213684791,
+      "path_hashes": [
+        "db4ce2b67eec3124",
+        "66e5d37d2f4fb6f2"
+      ],
+      "point_count": 34,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 381000,
+        "validation": 42000,
+        "native_probe": 3000,
+        "stdout_drain": 7000,
+        "stderr_drain": 2000,
+        "waitid": 1000,
+        "sleep": 6433000
+      },
+      "total_entry_to_terminal_ns": 13350000,
+      "max_adjacent_gap_ns": 6433000,
+      "max_sleep_overshoot_ns": 1433000,
+      "total_requested_sleep_ns": 10000000,
+      "total_observed_sleep_ns": 12724000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "68c59d3d0346ad991bd3b5d012cc4a1b95d3507c6f5e7f99a387b092866374d2",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43670,
+      "identity": [
+        43670,
+        43631,
+        502,
+        1791574228,
+        899967
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816228601500,
+      "deadline_high_ns": 349816228601500,
+      "path_hashes": [
+        "db4ce2b67eec3124",
+        "66e5d37d2f4fb6f2"
+      ],
+      "point_count": 43,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 505000,
+        "validation": 67000,
+        "native_probe": 8000,
+        "stdout_drain": 7000,
+        "stderr_drain": 3000,
+        "waitid": 2000,
+        "sleep": 7849000
+      },
+      "total_entry_to_terminal_ns": 19310000,
+      "max_adjacent_gap_ns": 7849000,
+      "max_sleep_overshoot_ns": 2849000,
+      "total_requested_sleep_ns": 15000000,
+      "total_observed_sleep_ns": 18478000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "e4030d495508bf74b635c633a92564976794c21b8439835ac717628d3cecef35",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43671,
+      "identity": [
+        43671,
+        43631,
+        502,
+        1791574228,
+        920550
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816249525584,
+      "deadline_high_ns": 349816249525584,
+      "path_hashes": [
+        "db4ce2b67eec3124",
+        "66e5d37d2f4fb6f2"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 217000,
+        "validation": 34000,
+        "native_probe": 3000,
+        "stdout_drain": 6000,
+        "stderr_drain": 1000,
+        "waitid": 0,
+        "sleep": 5279000
+      },
+      "total_entry_to_terminal_ns": 5677000,
+      "max_adjacent_gap_ns": 5279000,
+      "max_sleep_overshoot_ns": 279000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 5279000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "210e1c63f03b62f9f775f57bb61d9306333c27da4209c38e3daa41b30357bc8c",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43672,
+      "identity": [
+        43672,
+        43631,
+        502,
+        1791574228,
+        927115
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816256078916,
+      "deadline_high_ns": 349816256078916,
+      "path_hashes": [
+        "db4ce2b67eec3124",
+        "66e5d37d2f4fb6f2"
+      ],
+      "point_count": 34,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 358000,
+        "validation": 31000,
+        "native_probe": 3000,
+        "stdout_drain": 5000,
+        "stderr_drain": 2000,
+        "waitid": 1000,
+        "sleep": 10164000
+      },
+      "total_entry_to_terminal_ns": 17002000,
+      "max_adjacent_gap_ns": 10164000,
+      "max_sleep_overshoot_ns": 5164000,
+      "total_requested_sleep_ns": 10000000,
+      "total_observed_sleep_ns": 16349000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "675af945b4a33a50b6ac74457262586b1dd70cfd29ea74befc5eaf705b0035dd",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43673,
+      "identity": [
+        43673,
+        43631,
+        502,
+        1791574228,
+        947346
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816276196791,
+      "deadline_high_ns": 349816276197791,
+      "path_hashes": [
+        "db4ce2b67eec3124",
+        "66e5d37d2f4fb6f2"
+      ],
+      "point_count": 34,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 392000,
+        "validation": 66000,
+        "native_probe": 8000,
+        "stdout_drain": 18000,
+        "stderr_drain": 4000,
+        "waitid": 1000,
+        "sleep": 6276000
+      },
+      "total_entry_to_terminal_ns": 13284000,
+      "max_adjacent_gap_ns": 6276000,
+      "max_sleep_overshoot_ns": 1276000,
+      "total_requested_sleep_ns": 10000000,
+      "total_observed_sleep_ns": 12543000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "b72a3fb2b9cb4279ed1133235813959e4e282077a6dda295bdb72e9c0805d25a",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43674,
+      "identity": [
+        43674,
+        43631,
+        502,
+        1791574228,
+        961918
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816290890250,
+      "deadline_high_ns": 349816290890250,
+      "path_hashes": [
+        "db4ce2b67eec3124",
+        "66e5d37d2f4fb6f2"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 259000,
+        "validation": 34000,
+        "native_probe": 4000,
+        "stdout_drain": 5000,
+        "stderr_drain": 2000,
+        "waitid": 1000,
+        "sleep": 5033000
+      },
+      "total_entry_to_terminal_ns": 5434000,
+      "max_adjacent_gap_ns": 5033000,
+      "max_sleep_overshoot_ns": 33000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 5033000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "eaaf0e427b2bb81d27c227a8609e8096b070f9be3bbeac47b0352dd1abdd4ddf",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43675,
+      "identity": [
+        43675,
+        43631,
+        502,
+        1791574228,
+        969940
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816298749708,
+      "deadline_high_ns": 349816298749708,
+      "path_hashes": [
+        "db4ce2b67eec3124",
+        "66e5d37d2f4fb6f2"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 812000,
+        "validation": 73000,
+        "native_probe": 8000,
+        "stdout_drain": 6000,
+        "stderr_drain": 3000,
+        "waitid": 1000,
+        "sleep": 6134000
+      },
+      "total_entry_to_terminal_ns": 7316000,
+      "max_adjacent_gap_ns": 6134000,
+      "max_sleep_overshoot_ns": 1134000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 6134000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "c3458c5572b001b8c19d992e724be191018633ea33b17d096bceb8fb2aff6a02",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43676,
+      "identity": [
+        43676,
+        43631,
+        502,
+        1791574228,
+        971125
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816300038417,
+      "deadline_high_ns": 349816300038417,
+      "path_hashes": [
+        "b63c914139229028",
+        "a8d210bec59793f6"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 529000,
+        "validation": 63000,
+        "native_probe": 7000,
+        "stdout_drain": 6000,
+        "stderr_drain": 3000,
+        "waitid": 1000,
+        "sleep": 5892000
+      },
+      "total_entry_to_terminal_ns": 6715000,
+      "max_adjacent_gap_ns": 5892000,
+      "max_sleep_overshoot_ns": 892000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 5892000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "da182f963f22bd7d709bb8b6ce9c02c0f815db599835576ef7ef3b269e879b35",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43677,
+      "identity": [
+        43677,
+        43631,
+        502,
+        1791574228,
+        979247
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816308163458,
+      "deadline_high_ns": 349816308164458,
+      "path_hashes": [
+        "b63c914139229028",
+        "a8d210bec59793f6"
+      ],
+      "point_count": 34,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 420000,
+        "validation": 34000,
+        "native_probe": 7000,
+        "stdout_drain": 6000,
+        "stderr_drain": 2000,
+        "waitid": 1000,
+        "sleep": 6258000
+      },
+      "total_entry_to_terminal_ns": 12579000,
+      "max_adjacent_gap_ns": 6258000,
+      "max_sleep_overshoot_ns": 1258000,
+      "total_requested_sleep_ns": 10000000,
+      "total_observed_sleep_ns": 11889000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "75727f976626c69b481cbcda7340ce507730d42c57ab3e0d42ad10fecb04d895",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43678,
+      "identity": [
+        43678,
+        43631,
+        502,
+        1791574228,
+        993131
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816322074541,
+      "deadline_high_ns": 349816322075541,
+      "path_hashes": [
+        "b63c914139229028",
+        "a8d210bec59793f6"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 266000,
+        "validation": 47000,
+        "native_probe": 4000,
+        "stdout_drain": 6000,
+        "stderr_drain": 1000,
+        "waitid": 1000,
+        "sleep": 5083000
+      },
+      "total_entry_to_terminal_ns": 5557000,
+      "max_adjacent_gap_ns": 5083000,
+      "max_sleep_overshoot_ns": 83000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 5083000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "511d7760cfbd39767c49e1d90ad8a6e51c563a3a7d1559a244bb1654b134d5fa",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43679,
+      "identity": [
+        43679,
+        43631,
+        502,
+        1791574228,
+        999791
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816328755417,
+      "deadline_high_ns": 349816328756417,
+      "path_hashes": [
+        "b63c914139229028",
+        "a8d210bec59793f6"
+      ],
+      "point_count": 34,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 237000,
+        "validation": 35000,
+        "native_probe": 5000,
+        "stdout_drain": 12000,
+        "stderr_drain": 2000,
+        "waitid": 2000,
+        "sleep": 6274000
+      },
+      "total_entry_to_terminal_ns": 11906000,
+      "max_adjacent_gap_ns": 6274000,
+      "max_sleep_overshoot_ns": 1274000,
+      "total_requested_sleep_ns": 10000000,
+      "total_observed_sleep_ns": 11410000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "550adaf9111191230f1ea20c52ffe28aba4cb62d515778b1dcfe1c0d39ecee8b",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43680,
+      "identity": [
+        43680,
+        43631,
+        502,
+        1791574229,
+        14129
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816342976042,
+      "deadline_high_ns": 349816342976042,
+      "path_hashes": [
+        "b63c914139229028",
+        "a8d210bec59793f6"
+      ],
+      "point_count": 34,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 423000,
+        "validation": 67000,
+        "native_probe": 9000,
+        "stdout_drain": 8000,
+        "stderr_drain": 2000,
+        "waitid": 2000,
+        "sleep": 5840000
+      },
+      "total_entry_to_terminal_ns": 12430000,
+      "max_adjacent_gap_ns": 5840000,
+      "max_sleep_overshoot_ns": 840000,
+      "total_requested_sleep_ns": 10000000,
+      "total_observed_sleep_ns": 11629000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "3b5b97e42a62f65cf5796f8544137b171fc6e6e014dc5a12345c3f338f1cdb33",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43681,
+      "identity": [
+        43681,
+        43631,
+        502,
+        1791574229,
+        29025
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816357747583,
+      "deadline_high_ns": 349816357748583,
+      "path_hashes": [
+        "b63c914139229028",
+        "a8d210bec59793f6"
+      ],
+      "point_count": 34,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 434000,
+        "validation": 98000,
+        "native_probe": 11000,
+        "stdout_drain": 8000,
+        "stderr_drain": 2000,
+        "waitid": 1000,
+        "sleep": 5374000
+      },
+      "total_entry_to_terminal_ns": 11528000,
+      "max_adjacent_gap_ns": 5374000,
+      "max_sleep_overshoot_ns": 374000,
+      "total_requested_sleep_ns": 10000000,
+      "total_observed_sleep_ns": 10648000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "0d193a05a592632159b8391aba395d503081630d34bba2babddaf95b5999c0b7",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43682,
+      "identity": [
+        43682,
+        43631,
+        502,
+        1791574229,
+        41714
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816370692542,
+      "deadline_high_ns": 349816370692542,
+      "path_hashes": [
+        "b63c914139229028",
+        "a8d210bec59793f6"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 217000,
+        "validation": 31000,
+        "native_probe": 3000,
+        "stdout_drain": 3000,
+        "stderr_drain": 1000,
+        "waitid": 1000,
+        "sleep": 5004000
+      },
+      "total_entry_to_terminal_ns": 5351000,
+      "max_adjacent_gap_ns": 5004000,
+      "max_sleep_overshoot_ns": 4000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 5004000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "797e6b79c7ac58a63ae70aabc7419947faa8af777a79623e6c64a3cac86bfa8b",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43683,
+      "identity": [
+        43683,
+        43631,
+        502,
+        1791574229,
+        48085
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816377087750,
+      "deadline_high_ns": 349816377087750,
+      "path_hashes": [
+        "b63c914139229028",
+        "a8d210bec59793f6"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 202000,
+        "validation": 29000,
+        "native_probe": 2000,
+        "stdout_drain": 2000,
+        "stderr_drain": 1000,
+        "waitid": 1000,
+        "sleep": 5663000
+      },
+      "total_entry_to_terminal_ns": 5984000,
+      "max_adjacent_gap_ns": 5663000,
+      "max_sleep_overshoot_ns": 663000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 5663000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "71231ba3303b544c27d935219f3371d4aa3fd44b35832cb027e725cb57193f04",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43684,
+      "identity": [
+        43684,
+        43631,
+        502,
+        1791574229,
+        55117
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816384100417,
+      "deadline_high_ns": 349816384100417,
+      "path_hashes": [
+        "b63c914139229028",
+        "a8d210bec59793f6"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 187000,
+        "validation": 34000,
+        "native_probe": 3000,
+        "stdout_drain": 4000,
+        "stderr_drain": 1000,
+        "waitid": 1000,
+        "sleep": 5063000
+      },
+      "total_entry_to_terminal_ns": 5378000,
+      "max_adjacent_gap_ns": 5063000,
+      "max_sleep_overshoot_ns": 63000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 5063000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "e872b3e73e898b01b606d1d39211ba60be8acf7dfaf453a551a761949f20d427",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43685,
+      "identity": [
+        43685,
+        43631,
+        502,
+        1791574229,
+        61628
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816390597500,
+      "deadline_high_ns": 349816390597500,
+      "path_hashes": [
+        "b63c914139229028",
+        "a8d210bec59793f6"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 202000,
+        "validation": 34000,
+        "native_probe": 5000,
+        "stdout_drain": 4000,
+        "stderr_drain": 1000,
+        "waitid": 1000,
+        "sleep": 6254000
+      },
+      "total_entry_to_terminal_ns": 6589000,
+      "max_adjacent_gap_ns": 6254000,
+      "max_sleep_overshoot_ns": 1254000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 6254000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "a0e52d082df9cadce01810a04431da9d622b91598301850309b57e8d576697c2",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43686,
+      "identity": [
+        43686,
+        43631,
+        502,
+        1791574229,
+        69113
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816398131792,
+      "deadline_high_ns": 349816398132792,
+      "path_hashes": [
+        "b63c914139229028",
+        "a8d210bec59793f6"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 139000,
+        "validation": 24000,
+        "native_probe": 2000,
+        "stdout_drain": 4000,
+        "stderr_drain": 1000,
+        "waitid": 1000,
+        "sleep": 6252000
+      },
+      "total_entry_to_terminal_ns": 6489000,
+      "max_adjacent_gap_ns": 6252000,
+      "max_sleep_overshoot_ns": 1252000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 6252000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "0b1b7920dfa21c845e52b9bdeb1cdbf4543d34f8c9d49c0ba9dbd49782fea621",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43687,
+      "identity": [
+        43687,
+        43631,
+        502,
+        1791574229,
+        76706
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816405709625,
+      "deadline_high_ns": 349816405710625,
+      "path_hashes": [
+        "b63c914139229028",
+        "a8d210bec59793f6"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 158000,
+        "validation": 29000,
+        "native_probe": 3000,
+        "stdout_drain": 3000,
+        "stderr_drain": 1000,
+        "waitid": 1000,
+        "sleep": 5239000
+      },
+      "total_entry_to_terminal_ns": 5503000,
+      "max_adjacent_gap_ns": 5239000,
+      "max_sleep_overshoot_ns": 239000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 5239000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "73551f182988e2935b04791e932059b8b290ecd9ca886b7f19847f48bfb0bd44",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43688,
+      "identity": [
+        43688,
+        43631,
+        502,
+        1791574229,
+        83287
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816412285584,
+      "deadline_high_ns": 349816412285584,
+      "path_hashes": [
+        "b63c914139229028",
+        "a8d210bec59793f6"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 163000,
+        "validation": 28000,
+        "native_probe": 2000,
+        "stdout_drain": 4000,
+        "stderr_drain": 1000,
+        "waitid": 1000,
+        "sleep": 5066000
+      },
+      "total_entry_to_terminal_ns": 5366000,
+      "max_adjacent_gap_ns": 5066000,
+      "max_sleep_overshoot_ns": 66000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 5066000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "a40059e3e4b0811ebc0f3f87048640693eb8f175bdcd1a7f16997a47ebe8182a",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43689,
+      "identity": [
+        43689,
+        43631,
+        502,
+        1791574229,
+        89757
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816418751541,
+      "deadline_high_ns": 349816418752541,
+      "path_hashes": [
+        "b63c914139229028",
+        "a8d210bec59793f6"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 179000,
+        "validation": 29000,
+        "native_probe": 3000,
+        "stdout_drain": 2000,
+        "stderr_drain": 1000,
+        "waitid": 1000,
+        "sleep": 5859000
+      },
+      "total_entry_to_terminal_ns": 6163000,
+      "max_adjacent_gap_ns": 5859000,
+      "max_sleep_overshoot_ns": 859000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 5859000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "7a96ea009a0933f45f539f750bdf1f34d1316015628feed9fb5e612bc45fcd16",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43690,
+      "identity": [
+        43690,
+        43631,
+        502,
+        1791574229,
+        96969
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816425975750,
+      "deadline_high_ns": 349816425975750,
+      "path_hashes": [
+        "b63c914139229028",
+        "a8d210bec59793f6"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 157000,
+        "validation": 26000,
+        "native_probe": 2000,
+        "stdout_drain": 4000,
+        "stderr_drain": 1000,
+        "waitid": 1000,
+        "sleep": 6257000
+      },
+      "total_entry_to_terminal_ns": 6525000,
+      "max_adjacent_gap_ns": 6257000,
+      "max_sleep_overshoot_ns": 1257000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 6257000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "f0666b1d0a9177ae1fe5fd399a97c987e578608c9bb17a899e376c446b5768cf",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43691,
+      "identity": [
+        43691,
+        43631,
+        502,
+        1791574229,
+        161786
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816490730375,
+      "deadline_high_ns": 349816490731375,
+      "path_hashes": [
+        "5607ae2b9468cfa3",
+        "f1dadba24e3cd5f1"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 216000,
+        "validation": 43000,
+        "native_probe": 4000,
+        "stdout_drain": 4000,
+        "stderr_drain": 1000,
+        "waitid": 1000,
+        "sleep": 6257000
+      },
+      "total_entry_to_terminal_ns": 6651000,
+      "max_adjacent_gap_ns": 6257000,
+      "max_sleep_overshoot_ns": 1257000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 6257000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "3ac4ac91ebb3cf760767ef8c00acce30f828cc324ba3d2b2771c6b395079d169",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43692,
+      "identity": [
+        43692,
+        43631,
+        502,
+        1791574229,
+        169507
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816498489667,
+      "deadline_high_ns": 349816498489667,
+      "path_hashes": [
+        "5607ae2b9468cfa3",
+        "f1dadba24e3cd5f1"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 198000,
+        "validation": 31000,
+        "native_probe": 3000,
+        "stdout_drain": 4000,
+        "stderr_drain": 1000,
+        "waitid": 1000,
+        "sleep": 6253000
+      },
+      "total_entry_to_terminal_ns": 6581000,
+      "max_adjacent_gap_ns": 6253000,
+      "max_sleep_overshoot_ns": 1253000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 6253000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "8c152f7ccfcb1da40c59605367893c44605e480aae240bd665edc540c95f9a81",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43693,
+      "identity": [
+        43693,
+        43631,
+        502,
+        1791574229,
+        177099
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816506112542,
+      "deadline_high_ns": 349816506112542,
+      "path_hashes": [
+        "5607ae2b9468cfa3",
+        "f1dadba24e3cd5f1"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 133000,
+        "validation": 25000,
+        "native_probe": 3000,
+        "stdout_drain": 4000,
+        "stderr_drain": 1000,
+        "waitid": 1000,
+        "sleep": 5156000
+      },
+      "total_entry_to_terminal_ns": 5389000,
+      "max_adjacent_gap_ns": 5156000,
+      "max_sleep_overshoot_ns": 156000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 5156000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "62c4491d96436952cad10a6857495edac45b17078ba8ecaa13cacb22e5026187",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43694,
+      "identity": [
+        43694,
+        43631,
+        502,
+        1791574229,
+        183580
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816512591541,
+      "deadline_high_ns": 349816512591541,
+      "path_hashes": [
+        "5607ae2b9468cfa3",
+        "f1dadba24e3cd5f1"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 138000,
+        "validation": 25000,
+        "native_probe": 6000,
+        "stdout_drain": 4000,
+        "stderr_drain": 1000,
+        "waitid": 1000,
+        "sleep": 5216000
+      },
+      "total_entry_to_terminal_ns": 5490000,
+      "max_adjacent_gap_ns": 5216000,
+      "max_sleep_overshoot_ns": 216000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 5216000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "e9f9e3fd006208c9ba63a95b4a2dc5d197f1cd268a06b12e38e2a98be2271282",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43695,
+      "identity": [
+        43695,
+        43631,
+        502,
+        1791574229,
+        190183
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816519171541,
+      "deadline_high_ns": 349816519171541,
+      "path_hashes": [
+        "5607ae2b9468cfa3",
+        "f1dadba24e3cd5f1"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 194000,
+        "validation": 32000,
+        "native_probe": 5000,
+        "stdout_drain": 2000,
+        "stderr_drain": 1000,
+        "waitid": 1000,
+        "sleep": 5484000
+      },
+      "total_entry_to_terminal_ns": 5801000,
+      "max_adjacent_gap_ns": 5484000,
+      "max_sleep_overshoot_ns": 484000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 5484000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "bc5dcadc3a14b8e1fc8ac2e9d6d8ae4720e68a24b321e4a145fc145a0675f209",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43696,
+      "identity": [
+        43696,
+        43631,
+        502,
+        1791574229,
+        197064
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816526060625,
+      "deadline_high_ns": 349816526060625,
+      "path_hashes": [
+        "5607ae2b9468cfa3",
+        "f1dadba24e3cd5f1"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 172000,
+        "validation": 28000,
+        "native_probe": 2000,
+        "stdout_drain": 3000,
+        "stderr_drain": 1000,
+        "waitid": 1000,
+        "sleep": 6253000
+      },
+      "total_entry_to_terminal_ns": 6547000,
+      "max_adjacent_gap_ns": 6253000,
+      "max_sleep_overshoot_ns": 1253000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 6253000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "44e8d510735fc1684f052fd4e9ba1bf811ec0756c371ed165a56c268f1c6f9aa",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43697,
+      "identity": [
+        43697,
+        43631,
+        502,
+        1791574229,
+        204682
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816533632292,
+      "deadline_high_ns": 349816533633292,
+      "path_hashes": [
+        "5607ae2b9468cfa3",
+        "f1dadba24e3cd5f1"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 222000,
+        "validation": 44000,
+        "native_probe": 4000,
+        "stdout_drain": 2000,
+        "stderr_drain": 1000,
+        "waitid": 0,
+        "sleep": 5062000
+      },
+      "total_entry_to_terminal_ns": 5433000,
+      "max_adjacent_gap_ns": 5062000,
+      "max_sleep_overshoot_ns": 62000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 5062000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "334b6d2b872d3e3effd25b8c687cb04b04bcfc5b75c41a9de96e8b59765c9563",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43698,
+      "identity": [
+        43698,
+        43631,
+        502,
+        1791574229,
+        211095
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816540109792,
+      "deadline_high_ns": 349816540109792,
+      "path_hashes": [
+        "5607ae2b9468cfa3",
+        "f1dadba24e3cd5f1"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 134000,
+        "validation": 25000,
+        "native_probe": 2000,
+        "stdout_drain": 2000,
+        "stderr_drain": 1000,
+        "waitid": 1000,
+        "sleep": 5366000
+      },
+      "total_entry_to_terminal_ns": 5590000,
+      "max_adjacent_gap_ns": 5366000,
+      "max_sleep_overshoot_ns": 366000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 5366000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "1185a23524fc48de4a3cb02e4ec0c0d342011d3279b870371fc61ecfa91f51e7",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43699,
+      "identity": [
+        43699,
+        43631,
+        502,
+        1791574229,
+        217688
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816546709708,
+      "deadline_high_ns": 349816546709708,
+      "path_hashes": [
+        "5607ae2b9468cfa3",
+        "f1dadba24e3cd5f1"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 121000,
+        "validation": 22000,
+        "native_probe": 2000,
+        "stdout_drain": 2000,
+        "stderr_drain": 1000,
+        "waitid": 0,
+        "sleep": 5048000
+      },
+      "total_entry_to_terminal_ns": 5253000,
+      "max_adjacent_gap_ns": 5048000,
+      "max_sleep_overshoot_ns": 48000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 5048000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "a9b1dafa69a4972f35e6e1b8c5e31def24d69081d75d89933cabfb7b989031bc",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43700,
+      "identity": [
+        43700,
+        43631,
+        502,
+        1791574229,
+        223970
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816552991792,
+      "deadline_high_ns": 349816552991792,
+      "path_hashes": [
+        "5607ae2b9468cfa3",
+        "f1dadba24e3cd5f1"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 127000,
+        "validation": 22000,
+        "native_probe": 7000,
+        "stdout_drain": 2000,
+        "stderr_drain": 1000,
+        "waitid": 1000,
+        "sleep": 6253000
+      },
+      "total_entry_to_terminal_ns": 6477000,
+      "max_adjacent_gap_ns": 6253000,
+      "max_sleep_overshoot_ns": 1253000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 6253000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "322cdee351d63ec2bb03b85ced2c4d6f1b4cd1e45e6bf5dccb9d35192e16a4b6",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43701,
+      "identity": [
+        43701,
+        43631,
+        502,
+        1791574229,
+        231540
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816560548709,
+      "deadline_high_ns": 349816560548709,
+      "path_hashes": [
+        "5607ae2b9468cfa3",
+        "f1dadba24e3cd5f1"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 156000,
+        "validation": 26000,
+        "native_probe": 3000,
+        "stdout_drain": 7000,
+        "stderr_drain": 1000,
+        "waitid": 1000,
+        "sleep": 6181000
+      },
+      "total_entry_to_terminal_ns": 6485000,
+      "max_adjacent_gap_ns": 6181000,
+      "max_sleep_overshoot_ns": 1181000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 6181000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "112699ee7028341bce807d917c0e9689867b4244056b56cba2d4f1cb985398a8",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43702,
+      "identity": [
+        43702,
+        43631,
+        502,
+        1791574229,
+        239095
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816568082667,
+      "deadline_high_ns": 349816568082667,
+      "path_hashes": [
+        "5607ae2b9468cfa3",
+        "f1dadba24e3cd5f1"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 200000,
+        "validation": 31000,
+        "native_probe": 2000,
+        "stdout_drain": 3000,
+        "stderr_drain": 1000,
+        "waitid": 1000,
+        "sleep": 6253000
+      },
+      "total_entry_to_terminal_ns": 6569000,
+      "max_adjacent_gap_ns": 6253000,
+      "max_sleep_overshoot_ns": 1253000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 6253000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "66b5293ff2df05349bddce22495aa042c6da346f02080a18b9b2546d69405615",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43703,
+      "identity": [
+        43703,
+        43631,
+        502,
+        1791574229,
+        246897
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816575910875,
+      "deadline_high_ns": 349816575910875,
+      "path_hashes": [
+        "5607ae2b9468cfa3",
+        "f1dadba24e3cd5f1"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 139000,
+        "validation": 25000,
+        "native_probe": 3000,
+        "stdout_drain": 6000,
+        "stderr_drain": 1000,
+        "waitid": 1000,
+        "sleep": 6252000
+      },
+      "total_entry_to_terminal_ns": 6493000,
+      "max_adjacent_gap_ns": 6252000,
+      "max_sleep_overshoot_ns": 1252000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 6252000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "2ff754eca68c3a2880e663a2c091237f130eb62b40c0874f615c003cabc4ec4c",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43704,
+      "identity": [
+        43704,
+        43631,
+        502,
+        1791574229,
+        255008
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816584029791,
+      "deadline_high_ns": 349816584029791,
+      "path_hashes": [
+        "5607ae2b9468cfa3",
+        "f1dadba24e3cd5f1"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 123000,
+        "validation": 23000,
+        "native_probe": 1000,
+        "stdout_drain": 5000,
+        "stderr_drain": 1000,
+        "waitid": 1000,
+        "sleep": 5704000
+      },
+      "total_entry_to_terminal_ns": 5918000,
+      "max_adjacent_gap_ns": 5704000,
+      "max_sleep_overshoot_ns": 704000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 5704000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "52da6bb8d12fadebd199f97c0cd5bf914a6f2e99035c7abfb6e306cfc60cdda6",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43705,
+      "identity": [
+        43705,
+        43631,
+        502,
+        1791574229,
+        262362
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816591369417,
+      "deadline_high_ns": 349816591369417,
+      "path_hashes": [
+        "5607ae2b9468cfa3",
+        "f1dadba24e3cd5f1"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 133000,
+        "validation": 27000,
+        "native_probe": 3000,
+        "stdout_drain": 2000,
+        "stderr_drain": 1000,
+        "waitid": 1000,
+        "sleep": 6253000
+      },
+      "total_entry_to_terminal_ns": 6487000,
+      "max_adjacent_gap_ns": 6253000,
+      "max_sleep_overshoot_ns": 1253000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 6253000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "fb5f55d8442705678ec8ec965d9cadb5df3e1fe11e5754c32ec4193b35ad830d",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43706,
+      "identity": [
+        43706,
+        43631,
+        502,
+        1791574229,
+        272720
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816601707667,
+      "deadline_high_ns": 349816601707667,
+      "path_hashes": [
+        "66a9decd38eb8e8",
+        "5dc19f1c1f5cb6"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 170000,
+        "validation": 29000,
+        "native_probe": 3000,
+        "stdout_drain": 4000,
+        "stderr_drain": 1000,
+        "waitid": 0,
+        "sleep": 5039000
+      },
+      "total_entry_to_terminal_ns": 5336000,
+      "max_adjacent_gap_ns": 5039000,
+      "max_sleep_overshoot_ns": 39000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 5039000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "1e7a3b1e260df131861aba8c3950862b71b752015bd58b7526a8b05488e7e77a",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43707,
+      "identity": [
+        43707,
+        43631,
+        502,
+        1791574229,
+        279078
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816608083625,
+      "deadline_high_ns": 349816608083625,
+      "path_hashes": [
+        "66a9decd38eb8e8",
+        "5dc19f1c1f5cb6"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 158000,
+        "validation": 27000,
+        "native_probe": 3000,
+        "stdout_drain": 1000,
+        "stderr_drain": 1000,
+        "waitid": 1000,
+        "sleep": 5072000
+      },
+      "total_entry_to_terminal_ns": 5331000,
+      "max_adjacent_gap_ns": 5072000,
+      "max_sleep_overshoot_ns": 72000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 5072000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "7a765838d5e05b4e965beca482947bebbb178bfdb8fdbca8e7a3e927be1d9a8b",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43708,
+      "identity": [
+        43708,
+        43631,
+        502,
+        1791574229,
+        285417
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816614445916,
+      "deadline_high_ns": 349816614445916,
+      "path_hashes": [
+        "66a9decd38eb8e8",
+        "5dc19f1c1f5cb6"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 113000,
+        "validation": 20000,
+        "native_probe": 2000,
+        "stdout_drain": 2000,
+        "stderr_drain": 2000,
+        "waitid": 0,
+        "sleep": 5172000
+      },
+      "total_entry_to_terminal_ns": 5365000,
+      "max_adjacent_gap_ns": 5172000,
+      "max_sleep_overshoot_ns": 172000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 5172000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "edc2bad853decd2f7877feda966c569020448ce77caec6dcc507e21f0f6a44a5",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43709,
+      "identity": [
+        43709,
+        43631,
+        502,
+        1791574229,
+        291956
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816620989834,
+      "deadline_high_ns": 349816620990834,
+      "path_hashes": [
+        "66a9decd38eb8e8",
+        "5dc19f1c1f5cb6"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 110000,
+        "validation": 18000,
+        "native_probe": 2000,
+        "stdout_drain": 3000,
+        "stderr_drain": 1000,
+        "waitid": 1000,
+        "sleep": 6253000
+      },
+      "total_entry_to_terminal_ns": 6449000,
+      "max_adjacent_gap_ns": 6253000,
+      "max_sleep_overshoot_ns": 1253000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 6253000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "bc2c0f85d8b79416836ad5f5d09bde7da4f1840304f9240a95ba19f3edda38f3",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43710,
+      "identity": [
+        43710,
+        43631,
+        502,
+        1791574229,
+        299626
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816628644791,
+      "deadline_high_ns": 349816628644791,
+      "path_hashes": [
+        "66a9decd38eb8e8",
+        "5dc19f1c1f5cb6"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 140000,
+        "validation": 23000,
+        "native_probe": 2000,
+        "stdout_drain": 4000,
+        "stderr_drain": 2000,
+        "waitid": 0,
+        "sleep": 6033000
+      },
+      "total_entry_to_terminal_ns": 6298000,
+      "max_adjacent_gap_ns": 6033000,
+      "max_sleep_overshoot_ns": 1033000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 6033000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "14d37901940748ffa1501edd25d6d811f62a7c8b60be390914d59544a24634f5",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43711,
+      "identity": [
+        43711,
+        43631,
+        502,
+        1791574229,
+        306959
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816635953667,
+      "deadline_high_ns": 349816635953667,
+      "path_hashes": [
+        "66a9decd38eb8e8",
+        "5dc19f1c1f5cb6"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 180000,
+        "validation": 29000,
+        "native_probe": 3000,
+        "stdout_drain": 3000,
+        "stderr_drain": 1000,
+        "waitid": 0,
+        "sleep": 6253000
+      },
+      "total_entry_to_terminal_ns": 6545000,
+      "max_adjacent_gap_ns": 6253000,
+      "max_sleep_overshoot_ns": 1253000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 6253000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "e6d98ecb225922e80cff818be502bd36d85d768276c2c1761b5be78ab302492d",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43712,
+      "identity": [
+        43712,
+        43631,
+        502,
+        1791574229,
+        314509
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816643526750,
+      "deadline_high_ns": 349816643526750,
+      "path_hashes": [
+        "66a9decd38eb8e8",
+        "5dc19f1c1f5cb6"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 131000,
+        "validation": 24000,
+        "native_probe": 2000,
+        "stdout_drain": 2000,
+        "stderr_drain": 1000,
+        "waitid": 1000,
+        "sleep": 6253000
+      },
+      "total_entry_to_terminal_ns": 6476000,
+      "max_adjacent_gap_ns": 6253000,
+      "max_sleep_overshoot_ns": 1253000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 6253000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "df383c5ad9906304ca38f1bfaeaf70d2aa0a7a700b1813f9448064bfde321a3a",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43713,
+      "identity": [
+        43713,
+        43631,
+        502,
+        1791574229,
+        321980
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816651007833,
+      "deadline_high_ns": 349816651007833,
+      "path_hashes": [
+        "66a9decd38eb8e8",
+        "5dc19f1c1f5cb6"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 118000,
+        "validation": 20000,
+        "native_probe": 2000,
+        "stdout_drain": 3000,
+        "stderr_drain": 5000,
+        "waitid": 1000,
+        "sleep": 5238000
+      },
+      "total_entry_to_terminal_ns": 5451000,
+      "max_adjacent_gap_ns": 5238000,
+      "max_sleep_overshoot_ns": 238000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 5238000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "ee731c286a71cbb614ad132adefa3d18a250b49fb00c40093936bd5e35000193",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43714,
+      "identity": [
+        43714,
+        43631,
+        502,
+        1791574229,
+        329392
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816658358333,
+      "deadline_high_ns": 349816658359333,
+      "path_hashes": [
+        "66a9decd38eb8e8",
+        "5dc19f1c1f5cb6"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 232000,
+        "validation": 38000,
+        "native_probe": 8000,
+        "stdout_drain": 4000,
+        "stderr_drain": 2000,
+        "waitid": 1000,
+        "sleep": 6258000
+      },
+      "total_entry_to_terminal_ns": 6694000,
+      "max_adjacent_gap_ns": 6258000,
+      "max_sleep_overshoot_ns": 1258000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 6258000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "66a20db86f0a55a8d4baf4ca86f8facf81bc9e96b07938caa6704514f7a191c2",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43715,
+      "identity": [
+        43715,
+        43631,
+        502,
+        1791574229,
+        337180
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816666171666,
+      "deadline_high_ns": 349816666171666,
+      "path_hashes": [
+        "66a9decd38eb8e8",
+        "5dc19f1c1f5cb6"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 194000,
+        "validation": 33000,
+        "native_probe": 3000,
+        "stdout_drain": 2000,
+        "stderr_drain": 1000,
+        "waitid": 1000,
+        "sleep": 6255000
+      },
+      "total_entry_to_terminal_ns": 6574000,
+      "max_adjacent_gap_ns": 6255000,
+      "max_sleep_overshoot_ns": 1255000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 6255000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "614ab47c08f235a05dacc37cc0a92c421c59f871cbc9dc6a49afc9b5f9493dbb",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43716,
+      "identity": [
+        43716,
+        43631,
+        502,
+        1791574229,
+        345064
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816674063500,
+      "deadline_high_ns": 349816674063500,
+      "path_hashes": [
+        "66a9decd38eb8e8",
+        "5dc19f1c1f5cb6"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 164000,
+        "validation": 29000,
+        "native_probe": 2000,
+        "stdout_drain": 3000,
+        "stderr_drain": 1000,
+        "waitid": 1000,
+        "sleep": 5083000
+      },
+      "total_entry_to_terminal_ns": 5356000,
+      "max_adjacent_gap_ns": 5083000,
+      "max_sleep_overshoot_ns": 83000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 5083000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "d4dd6f426eb90e5af4980a14f858d3a1b8e57d3bdfde45d9b003d3a9c30db6f2",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43717,
+      "identity": [
+        43717,
+        43631,
+        502,
+        1791574229,
+        351324
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816680348791,
+      "deadline_high_ns": 349816680348791,
+      "path_hashes": [
+        "66a9decd38eb8e8",
+        "5dc19f1c1f5cb6"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 126000,
+        "validation": 21000,
+        "native_probe": 2000,
+        "stdout_drain": 3000,
+        "stderr_drain": 1000,
+        "waitid": 1000,
+        "sleep": 5186000
+      },
+      "total_entry_to_terminal_ns": 5411000,
+      "max_adjacent_gap_ns": 5186000,
+      "max_sleep_overshoot_ns": 186000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 5186000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "b65df6e0f06ff1b2953c2e22880368185a32a6a28f700b0b79c0a8cfb8ea1f30",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43718,
+      "identity": [
+        43718,
+        43631,
+        502,
+        1791574229,
+        357835
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816686850667,
+      "deadline_high_ns": 349816686851667,
+      "path_hashes": [
+        "66a9decd38eb8e8",
+        "5dc19f1c1f5cb6"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 127000,
+        "validation": 25000,
+        "native_probe": 2000,
+        "stdout_drain": 2000,
+        "stderr_drain": 2000,
+        "waitid": 0,
+        "sleep": 5030000
+      },
+      "total_entry_to_terminal_ns": 5252000,
+      "max_adjacent_gap_ns": 5030000,
+      "max_sleep_overshoot_ns": 30000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 5030000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "3edeafe57e403250b067aaeb5ddcbd8e7b9df24e3153d9f2b10e31187c5baa1b",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43719,
+      "identity": [
+        43719,
+        43631,
+        502,
+        1791574229,
+        364467
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816693478708,
+      "deadline_high_ns": 349816693478708,
+      "path_hashes": [
+        "66a9decd38eb8e8",
+        "5dc19f1c1f5cb6"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 153000,
+        "validation": 25000,
+        "native_probe": 3000,
+        "stdout_drain": 3000,
+        "stderr_drain": 1000,
+        "waitid": 0,
+        "sleep": 6254000
+      },
+      "total_entry_to_terminal_ns": 6517000,
+      "max_adjacent_gap_ns": 6254000,
+      "max_sleep_overshoot_ns": 1254000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 6254000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "16f715965b7d61ab19202117e6fd31a77c67b42ddb50aeb9210d05b10fb06374",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43720,
+      "identity": [
+        43720,
+        43631,
+        502,
+        1791574229,
+        372409
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816701403708,
+      "deadline_high_ns": 349816701403708,
+      "path_hashes": [
+        "66a9decd38eb8e8",
+        "5dc19f1c1f5cb6"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 172000,
+        "validation": 29000,
+        "native_probe": 3000,
+        "stdout_drain": 3000,
+        "stderr_drain": 1000,
+        "waitid": 1000,
+        "sleep": 6253000
+      },
+      "total_entry_to_terminal_ns": 6534000,
+      "max_adjacent_gap_ns": 6253000,
+      "max_sleep_overshoot_ns": 1253000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 6253000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "f8fbecd79f8e26fbac4aae4ba5cf30b4bd8acf87e440513359fafc917427babd",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43721,
+      "identity": [
+        43721,
+        43631,
+        502,
+        1791574229,
+        383385
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816712386750,
+      "deadline_high_ns": 349816712386750,
+      "path_hashes": [
+        "c550f854ef5e046f",
+        "6925cd87a24aa4bd"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 148000,
+        "validation": 25000,
+        "native_probe": 2000,
+        "stdout_drain": 4000,
+        "stderr_drain": 1000,
+        "waitid": 1000,
+        "sleep": 5023000
+      },
+      "total_entry_to_terminal_ns": 5287000,
+      "max_adjacent_gap_ns": 5023000,
+      "max_sleep_overshoot_ns": 23000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 5023000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "7b361230afbe87064159d08f7f1f46c41d51229648cea09fef2f6bf0b2dbd858",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43722,
+      "identity": [
+        43722,
+        43631,
+        502,
+        1791574229,
+        389686
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816718692792,
+      "deadline_high_ns": 349816718692792,
+      "path_hashes": [
+        "c550f854ef5e046f",
+        "6925cd87a24aa4bd"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 144000,
+        "validation": 27000,
+        "native_probe": 3000,
+        "stdout_drain": 2000,
+        "stderr_drain": 1000,
+        "waitid": 1000,
+        "sleep": 5120000
+      },
+      "total_entry_to_terminal_ns": 5370000,
+      "max_adjacent_gap_ns": 5120000,
+      "max_sleep_overshoot_ns": 120000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 5120000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "5b27f061748bb7ebf724855216acf9ff1d31730efb25eb014de44ad651f1e99d",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43723,
+      "identity": [
+        43723,
+        43631,
+        502,
+        1791574229,
+        396057
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816725074708,
+      "deadline_high_ns": 349816725074708,
+      "path_hashes": [
+        "c550f854ef5e046f",
+        "6925cd87a24aa4bd"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 134000,
+        "validation": 24000,
+        "native_probe": 2000,
+        "stdout_drain": 2000,
+        "stderr_drain": 1000,
+        "waitid": 1000,
+        "sleep": 5154000
+      },
+      "total_entry_to_terminal_ns": 5380000,
+      "max_adjacent_gap_ns": 5154000,
+      "max_sleep_overshoot_ns": 154000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 5154000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "5a0456a3f06b0ad08cf9c25eedd3353ca27263827bc15758c3bedb29924b9c81",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43724,
+      "identity": [
+        43724,
+        43631,
+        502,
+        1791574229,
+        402460
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816731468666,
+      "deadline_high_ns": 349816731469666,
+      "path_hashes": [
+        "c550f854ef5e046f",
+        "6925cd87a24aa4bd"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 152000,
+        "validation": 25000,
+        "native_probe": 3000,
+        "stdout_drain": 3000,
+        "stderr_drain": 2000,
+        "waitid": 1000,
+        "sleep": 5246000
+      },
+      "total_entry_to_terminal_ns": 5509000,
+      "max_adjacent_gap_ns": 5246000,
+      "max_sleep_overshoot_ns": 246000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 5246000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "9a0acbff5e08f409fc2dc537a7c87078b39dcadaa51bbc60cc01cc0e0a2b93d7",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43725,
+      "identity": [
+        43725,
+        43631,
+        502,
+        1791574229,
+        408859
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816737863417,
+      "deadline_high_ns": 349816737863417,
+      "path_hashes": [
+        "c550f854ef5e046f",
+        "6925cd87a24aa4bd"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 160000,
+        "validation": 28000,
+        "native_probe": 2000,
+        "stdout_drain": 3000,
+        "stderr_drain": 1000,
+        "waitid": 1000,
+        "sleep": 5142000
+      },
+      "total_entry_to_terminal_ns": 5407000,
+      "max_adjacent_gap_ns": 5142000,
+      "max_sleep_overshoot_ns": 142000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 5142000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "c39018b7320a5ffb53c78a58d9bdd7549322b71fda2155269f536b36f404566a",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43726,
+      "identity": [
+        43726,
+        43631,
+        502,
+        1791574229,
+        415333
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816744347708,
+      "deadline_high_ns": 349816744347708,
+      "path_hashes": [
+        "c550f854ef5e046f",
+        "6925cd87a24aa4bd"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 143000,
+        "validation": 23000,
+        "native_probe": 2000,
+        "stdout_drain": 3000,
+        "stderr_drain": 1000,
+        "waitid": 1000,
+        "sleep": 5688000
+      },
+      "total_entry_to_terminal_ns": 5937000,
+      "max_adjacent_gap_ns": 5688000,
+      "max_sleep_overshoot_ns": 688000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 5688000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "64d5c1c780eb942884a0d489e382dcfcf9b67e5dccc3f7d3000c9db7ff79a12d",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43727,
+      "identity": [
+        43727,
+        43631,
+        502,
+        1791574229,
+        422347
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816751358625,
+      "deadline_high_ns": 349816751358625,
+      "path_hashes": [
+        "c550f854ef5e046f",
+        "6925cd87a24aa4bd"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 154000,
+        "validation": 26000,
+        "native_probe": 3000,
+        "stdout_drain": 4000,
+        "stderr_drain": 1000,
+        "waitid": 1000,
+        "sleep": 5064000
+      },
+      "total_entry_to_terminal_ns": 5341000,
+      "max_adjacent_gap_ns": 5064000,
+      "max_sleep_overshoot_ns": 64000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 5064000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "48380aed7b81207692f6acaecefcb2a6c9f2b677dd152c97d029a2246f766a37",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43730,
+      "identity": [
+        43730,
+        43631,
+        502,
+        1791574229,
+        428958
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816757908958,
+      "deadline_high_ns": 349816757908958,
+      "path_hashes": [
+        "c550f854ef5e046f",
+        "6925cd87a24aa4bd"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 238000,
+        "validation": 42000,
+        "native_probe": 4000,
+        "stdout_drain": 3000,
+        "stderr_drain": 1000,
+        "waitid": 1000,
+        "sleep": 5091000
+      },
+      "total_entry_to_terminal_ns": 5482000,
+      "max_adjacent_gap_ns": 5091000,
+      "max_sleep_overshoot_ns": 91000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 5091000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "f8997cbc85f3b6b588ab9483ff34dcca9b11496430049a4042efdba15631a6de",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43731,
+      "identity": [
+        43731,
+        43631,
+        502,
+        1791574229,
+        435460
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816764451625,
+      "deadline_high_ns": 349816764451625,
+      "path_hashes": [
+        "c550f854ef5e046f",
+        "6925cd87a24aa4bd"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 183000,
+        "validation": 29000,
+        "native_probe": 3000,
+        "stdout_drain": 4000,
+        "stderr_drain": 1000,
+        "waitid": 1000,
+        "sleep": 6253000
+      },
+      "total_entry_to_terminal_ns": 6555000,
+      "max_adjacent_gap_ns": 6253000,
+      "max_sleep_overshoot_ns": 1253000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 6253000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "15979bb93c887baa39ae0013ee344c1c82bcb5661387c4dcc410e58e4fd3628e",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43732,
+      "identity": [
+        43732,
+        43631,
+        502,
+        1791574229,
+        442956
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816771950584,
+      "deadline_high_ns": 349816771950584,
+      "path_hashes": [
+        "c550f854ef5e046f",
+        "6925cd87a24aa4bd"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 180000,
+        "validation": 30000,
+        "native_probe": 3000,
+        "stdout_drain": 5000,
+        "stderr_drain": 1000,
+        "waitid": 1000,
+        "sleep": 5106000
+      },
+      "total_entry_to_terminal_ns": 5409000,
+      "max_adjacent_gap_ns": 5106000,
+      "max_sleep_overshoot_ns": 106000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 5106000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "be2de76097245213ab4dc0da2b5d4bb7144b644e6784eda655fffebd100f73f3",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43733,
+      "identity": [
+        43733,
+        43631,
+        502,
+        1791574229,
+        449569
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816778566667,
+      "deadline_high_ns": 349816778566667,
+      "path_hashes": [
+        "c550f854ef5e046f",
+        "6925cd87a24aa4bd"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 197000,
+        "validation": 29000,
+        "native_probe": 8000,
+        "stdout_drain": 6000,
+        "stderr_drain": 1000,
+        "waitid": 1000,
+        "sleep": 5520000
+      },
+      "total_entry_to_terminal_ns": 5868000,
+      "max_adjacent_gap_ns": 5520000,
+      "max_sleep_overshoot_ns": 520000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 5520000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "13561216052a44e2e1b3f8f21e2828edc6468966d451179a682eb6d78678b0e8",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43734,
+      "identity": [
+        43734,
+        43631,
+        502,
+        1791574229,
+        458072
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816787007459,
+      "deadline_high_ns": 349816787008459,
+      "path_hashes": [
+        "c550f854ef5e046f",
+        "6925cd87a24aa4bd"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 384000,
+        "validation": 34000,
+        "native_probe": 7000,
+        "stdout_drain": 9000,
+        "stderr_drain": 3000,
+        "waitid": 1000,
+        "sleep": 6259000
+      },
+      "total_entry_to_terminal_ns": 6865000,
+      "max_adjacent_gap_ns": 6259000,
+      "max_sleep_overshoot_ns": 1259000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 6259000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "a7865d5d65acf92492e85fc9bb758f5973ba234d1649220f5e8f5b82c0e976ac",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43735,
+      "identity": [
+        43735,
+        43631,
+        502,
+        1791574229,
+        467840
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816796834333,
+      "deadline_high_ns": 349816796834333,
+      "path_hashes": [
+        "c550f854ef5e046f",
+        "6925cd87a24aa4bd"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 161000,
+        "validation": 30000,
+        "native_probe": 4000,
+        "stdout_drain": 5000,
+        "stderr_drain": 1000,
+        "waitid": 1000,
+        "sleep": 6255000
+      },
+      "total_entry_to_terminal_ns": 6537000,
+      "max_adjacent_gap_ns": 6255000,
+      "max_sleep_overshoot_ns": 1255000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 6255000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "461f7b8009bae300802606491913bfddc6c7db64d4a5e475deff11c43cfcf2a7",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43736,
+      "identity": [
+        43736,
+        43631,
+        502,
+        1791574229,
+        476322
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816805313583,
+      "deadline_high_ns": 349816805314583,
+      "path_hashes": [
+        "c550f854ef5e046f",
+        "6925cd87a24aa4bd"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 172000,
+        "validation": 36000,
+        "native_probe": 4000,
+        "stdout_drain": 4000,
+        "stderr_drain": 2000,
+        "waitid": 0,
+        "sleep": 5251000
+      },
+      "total_entry_to_terminal_ns": 5555000,
+      "max_adjacent_gap_ns": 5251000,
+      "max_sleep_overshoot_ns": 251000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 5251000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "57b165df21a538237d453bf9a4a28d218e8de304c2471eb832fdba231b0a180f",
+      "liveness": "absent"
+    },
+    {
+      "pid": 43737,
+      "identity": [
+        43737,
+        43631,
+        502,
+        1791574229,
+        485241
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "clock_ok": true,
+      "deadline_low_ns": 349816814257541,
+      "deadline_high_ns": 349816814257541,
+      "path_hashes": [
+        "c550f854ef5e046f",
+        "6925cd87a24aa4bd"
+      ],
+      "point_count": 25,
+      "dropped": 0,
+      "monotonic_points": true,
+      "interval_max_ns": {
+        "spawn": 127000,
+        "validation": 24000,
+        "native_probe": 7000,
+        "stdout_drain": 4000,
+        "stderr_drain": 1000,
+        "waitid": 1000,
+        "sleep": 5948000
+      },
+      "total_entry_to_terminal_ns": 6178000,
+      "max_adjacent_gap_ns": 5948000,
+      "max_sleep_overshoot_ns": 948000,
+      "total_requested_sleep_ns": 5000000,
+      "total_observed_sleep_ns": 5948000,
+      "terminal_to_group_kill_ns": null,
+      "group_kill_end_to_root_kill_begin_ns": null,
+      "raw_sha256": "7f4520747e6199af14e9bc822e48f54da8b20201b1a17d6391b5bac7e9076946",
+      "liveness": "absent"
+    }
+  ],
+  "qualification": false,
+  "interpretation_limits": [
+    "Observerclockreads/bufferallocation/extra ownedBSDadmission perturbtiming.",
+    "One numeric trigger is written after first owned spawn before collection; originaldeadline remains running and I/O perturbs it.",
+    "4096pointcap;dropped/missingrecordsunknown.",
+    "Reapnotindependentlyprovenbycleanup_end;originaltry_waitblockmayendatgrace."
+  ],
+  "no_authentication": true,
+  "no_service_observation": true,
+  "no_test_source_change": true
+}

@@ -1,0 +1,27 @@
+{
+  "task": "PCTX01-G05-D05",
+  "installed_bundle_identifier": "com.apple.XprotectFramework.AnalysisService",
+  "canonical_image": "XprotectService",
+  "exact_path_required": true,
+  "accepted_fixture_frames": 1,
+  "refusals": [
+    {
+      "mode": "wrong_image_path",
+      "code": "target_image_absent"
+    },
+    {
+      "mode": "unknown_image_label",
+      "code": "target_image_absent"
+    },
+    {
+      "mode": "duplicate_alias",
+      "code": "ambiguous_image"
+    },
+    {
+      "mode": "wrong_frame_range",
+      "code": "frame_outside_image"
+    }
+  ],
+  "actual_service_format_verified": false,
+  "qualification": false
+}

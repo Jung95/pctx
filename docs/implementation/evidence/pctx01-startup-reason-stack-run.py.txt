@@ -1,0 +1,76 @@
+"""Prepared one-shot macOS-authentication batch. Default only validates syntax."""
+from pathlib import Path
+import os,json,hashlib,subprocess,time,base64,shlex,argparse,stat,signal
+B=Path('/Users/dev/PCTX/docs/implementation/evidence');PLAN=B/'pctx01-startup-reason-stack-scope-plan.json'
+def read_root_file(path,cap):
+ fd=os.open(path,os.O_RDONLY|os.O_NOFOLLOW|os.O_NONBLOCK)
+ try:
+  s=os.fstat(fd);assert stat.S_ISREG(s.st_mode) and s.st_uid==0 and s.st_size<=cap
+  return json.loads(os.read(fd,cap+1))
+ finally:os.close(fd)
+def execute():
+ assert os.getuid()==os.geteuid()==502
+ plan=json.loads(PLAN.read_text());assert plan['human_scope_approval']=='approved' and plan['pre_execution_review']=='approved'
+ for n,h in plan['file_hashes'].items():assert hashlib.sha256((B/n).read_bytes()).hexdigest()==h
+ meta=json.loads((B/'pctx01-startup-reason-stack-forward-prepared.json').read_text());root=Path(meta['root']);session=Path(meta['records'])/'pair-control';assert root.stat().st_uid==session.stat().st_uid==502 and session.stat().st_mode&0o777==0o700
+ for n,h in meta['hashes'].items():assert hashlib.sha256((Path('/Users/dev/PCTX')/n).read_bytes()).hexdigest()==h
+ assert hashlib.sha256((Path(meta['source'])/'src/query_process.rs').read_bytes()).hexdigest()==meta['instrumented_query_sha256']
+ binary=plan['test_binary'];assert hashlib.sha256(Path(binary).read_bytes()).hexdigest()==plan['test_binary_sha256']
+ for t in plan['targets']:
+  assert hashlib.sha256(Path(t['path']).read_bytes()).hexdigest()==t['binary_sha256']
+ (B/'pctx01-startup-reason-stack-consumed.json').open('x').close()
+ parser=(B/'pctx01-startup-reason-stack-parser.py.txt').read_text();collector=(B/'pctx01-startup-reason-stack-collector.py.txt').read_text()
+ code="__name__='pair_root'\n"+parser+'\n'+collector+'\n'+"collect_pair("+repr(str(session))+','+str(session.stat().st_ino)+','+repr(binary)+')\n'
+ encoded=base64.b64encode(code.encode()).decode();bootstrap="import base64;exec(base64.b64decode("+repr(encoded)+"))";command=shlex.join(['/usr/bin/python3','-I','-c',bootstrap]);applescript='do shell script '+json.dumps(command)+' with administrator privileges'
+ osa=driver=None;result=None;failure=None;root_done=False;cleanup=[];cleanup_errors=[]
+ try:
+  osa=subprocess.Popen(['/usr/bin/osascript','-e',applescript],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+  end=time.monotonic()+300;ready_file=session/'pair-collector-ready.json'
+  while time.monotonic()<end:
+   if ready_file.exists():ready=read_root_file(ready_file,8192);break
+   if osa.poll() is not None:
+    raise RuntimeError('authentication cancelled or collector identity unavailable; no test')
+   time.sleep(.1)
+  else:raise RuntimeError('authentication readiness deadline; no test')
+  assert set(ready['targets'])=={'syspolicyd'} and ready['deferred_target']=='XprotectService'
+  driver=subprocess.Popen(['/opt/homebrew/bin/python3',str(B/'pctx01-startup-reason-stack-forward-run.py.txt')],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,cwd='/Users/dev/PCTX')
+  try:driver.wait(timeout=35)
+  except subprocess.TimeoutExpired:raise RuntimeError('owned driver watchdog; cleanup audit required')
+  assert driver.returncode==0
+  osa.wait(timeout=75)
+  result=read_root_file(session/'pair-collector-result.json',4*1024*1024)
+  root_done=True
+  assert result['failure_class'] is None and len(result['samples'])==2
+ except BaseException as e:failure=type(e).__name__
+ finally:
+  if driver:
+   try:
+    if driver.poll() is None:
+     driver.terminate()
+     try:driver.wait(timeout=5)
+     except subprocess.TimeoutExpired:driver.kill();driver.wait(timeout=2)
+    cleanup.append({'role':'test_driver','pid':driver.pid,'exit':driver.returncode,'reaped':True})
+   except BaseException as e:cleanup_errors.append('test_driver:'+type(e).__name__)
+  if osa:
+   try:
+    if osa.poll() is None:
+     try:osa.wait(timeout=75)
+     except subprocess.TimeoutExpired:
+      osa.terminate();osa.wait(timeout=3);failure='PrivilegedCleanupUnknown'
+    cleanup.append({'role':'authentication_wrapper','pid':osa.pid,'exit':osa.returncode,'reaped':True})
+   except BaseException as e:cleanup_errors.append('authentication_wrapper:'+type(e).__name__)
+  if cleanup_errors:failure='IndependentCleanupUnknown'
+  if result is None and (session/'pair-collector-result.json').exists():
+   try:
+    result=read_root_file(session/'pair-collector-result.json',4*1024*1024)
+    root_done=True
+   except Exception:failure='ReducedResultUnreadable'
+  out={'task':'PCTX01-G05-D05','failure_class':failure,'test_started':driver is not None,'collector_terminal':root_done,'service_capture':result,'ordinary_tool_cleanup':cleanup,'cleanup_errors':cleanup_errors,'qualification':False,'limits':plan['limits']}
+  (B/'pctx01-startup-reason-stack-result.json').write_text(json.dumps(out,indent=2)+'\n')
+ print(json.dumps({'test_started':driver is not None,'failure':failure,'collector_terminal':root_done}))
+if __name__=='__main__':
+ ap=argparse.ArgumentParser();ap.add_argument('--execute',action='store_true');a=ap.parse_args()
+ if a.execute:execute()
+ else:
+  for n in ['pctx01-startup-reason-stack-parser.py.txt','pctx01-startup-reason-stack-collector.py.txt','pctx01-startup-reason-stack-forward-run.py.txt']:compile((B/n).read_text(),n,'exec')
+  print('PASS: syntax only; no privileged execution, target discovery or original test')
