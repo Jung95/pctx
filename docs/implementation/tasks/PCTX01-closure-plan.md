@@ -13,7 +13,7 @@ R01–R12 local12/12 qualifies only that pure-admission subset. Closed rows belo
 are deliberately bounded subconditions; G09 independently retains every required
 release-platform condition. A closed local row does not qualify an untested OS.
 
-Current bounded detail closure: **28/40**; whole gates **0/10**.
+Current bounded detail closure: **30/40**; whole gates **0/10**.
 
 | Fixed ID | State | Completion condition | Source | Spec | Evidence prefix |
 | --- | --- | --- | --- | --- | --- |
@@ -29,7 +29,7 @@ Current bounded detail closure: **28/40**; whole gates **0/10**.
 | PCTX01-G03-D04 | closed | Group explicit input/stdin schema and size failures with producer-dependent checks; prove common refusal precedence and effects for admitted inputs, preserving policy5/state9 | main.rs,input.rs,work.rs,quota.rs,operations.rs,pack.rs,filters.rs | §14/27/33/38 | pctx01-handoff-input-verification.json, pctx01-argument-preflight-verification.json |
 | PCTX01-G04-D01 | closed | One complete safe JSON refusal document for semantic/parser/timeout errors across admitted refusal representations | domain.rs,main.rs | §8/14 | pctx01-refusal-envelope-verification.json, pctx01-refusal-rendering-verification.json |
 | PCTX01-G04-D02 | closed | Shared final-byte minimum/error budget and execution fallback preserve child truth and durable reread handles; bounded tested fallback cases only, universal serialization/destination bounds remain G04-D03 | main.rs,render.rs | §8/14/38 | pctx01-budget-fallback-verification.json |
-| PCTX01-G04-D03 | open | Complete success/partial/error envelope required fields and exact final bytes for all supported representation/destination classes; no interrupted JSON or fabricated omitted count | main.rs,domain.rs,render.rs | §8/14/38 | pctx01-run-final-bytes-verification.json, pctx01-representation-admission-verification.json |
+| PCTX01-G04-D03 | closed | Complete success/partial/error envelope required fields and exact final bytes for all supported representation/destination classes; no interrupted JSON or fabricated omitted count | main.rs,domain.rs,render.rs | §8/14/38 | pctx01-run-final-bytes-verification.json, pctx01-representation-admission-verification.json |
 | PCTX01-G04-D04 | closed | Existing NDJSON and native-hook exceptions use their own framing and pre-effect unsupported-format refusal | main.rs,watch.rs,adapter.rs | §14/38 | pctx01-delivery-verification.json, pctx01-nested-execution-verification.json |
 | PCTX01-G05-D01 | closed | Actual child0/1/2/signal and prelaunch/not-spawned truth stay distinct from PCTX status on native Unix | main.rs,output.rs,query_process.rs | §14/38 | pctx01-run-exit-verification.json |
 | PCTX01-G05-D02 | closed | Complete native callback/post-spawn fault injection while retaining already observed capture/publication child outcome, artifact and no-rerun truth | main.rs,output.rs,runner.rs | §14/38 | pctx01-nested-execution-verification.json, pctx01-run-exit-verification.json, pctx01-postspawn-callback-verification.json, pctx01-postspawn-capture-verification.json, pctx01-postspawn-receipt-verification.json, pctx01-postspawn-runner-verification.json |
@@ -298,3 +298,30 @@ metadata and native240-byte workspace4case controls pass; final73 related/static
 PASS. [Evidence](../evidence/pctx01-metadata-fit-verification.json). General final
 overflow after metadata exhaustion remains open and is the exact next action;
 do not expand another helper. Fixed29/40, whole0/10/scope/denominator unchanged.
+
+## G04-D03 bounded local closure — current
+
+Only **PCTX01** is active and remains `implementing`. **G04-D03 is closed for
+its bounded local common contract**: detail30/40; whole gates0/10. Scope and
+all frozen denominators remain unchanged. [Evidence](../evidence/pctx01-final-capacity-verification.json)
+records final111 focused tests PASS, locked all-target Clippy -D warnings PASS,
+format PASS and independent read-only review with no material blocker.
+
+After declared metadata reductions, remaining overflow is a complete
+`BUDGET_TOO_SMALL` error under AC13, with exact requested/delivered bytes and
+`limit_exceeded=true`; this is an explicit failure exception, not budget compliance.
+Primary error/exit, available execution proof and reread handles remain intact.
+20 overflow controls synthesize proof and use actual atomic-file delivery; they
+are not native forced-oversized CLI executions. Native Markdown6 leaves x2
+response destinations and stream4 routes x2 absent/existing destinations pass.
+The 140-row crosswalk classifies existing source routes, not140 executed producers.
+Linked prior Read24, identity/Adapter/error, metadata and native Run evidence
+qualifies representative shared boundaries; independent producer semantics remain
+with their existing owners. Initial product/test-fixture/invocation failures are
+retained in logs, including Markdown diagnostic precedence and self-indexed SQLite.
+
+Next: **G06-D03 within PCTX01**, successful-empty versus capability/resource6
+and incomplete3 for the already frozen producer families. Finish that condition
+before G07-D03. No other official task starts. Original four macOS1s startup
+product failures, required-platform gaps and inactive PCTX36/PCTX47 backlog
+remain open. No Actions, whole/platform rerun or push retry. All jobs terminal.

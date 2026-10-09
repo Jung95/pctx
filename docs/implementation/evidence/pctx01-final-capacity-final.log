@@ -1,0 +1,195 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.40s
+     Running unittests src/main.rs (target/debug/deps/pctx-5861ab217462b7f0)
+
+running 7 tests
+test finite_route_tests::renderer_refusal_keeps_typed_error_and_incomplete_coverage ... ok
+test cli_help::tests::every_declared_leaf_has_an_explicit_effect_contract ... ok
+test cli_args::tests::producer_repetition_and_literal_child_options_preserve_exact_values ... ok
+test cli_args::tests::pack_artifact_output_and_global_output_share_one_singular_binding ... ok
+test cli_args::tests::defaults_and_fresh_parses_do_not_count_as_duplicate_inputs ... ok
+test finite_route_tests::finite_work_quota_adapter_reads_do_not_time_execution ... ok
+test parser_contract_tests::frozen_visible_parser_schema_and_cases ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 6.38s
+
+     Running tests/cli_contract.rs (target/debug/deps/cli_contract-7fe808194ea4872f)
+
+running 14 tests
+test invalid_capacity_is_json_even_for_markdown_and_never_writes_output ... ok
+test invalid_json_cli_inputs_still_return_one_json_document ... ok
+test minimum_error_budget_boundary_is_argument_validation_before_project_access ... ok
+test every_stdout_budget_route_rejects_tiny_capacity_without_child_or_local_files ... ok
+test inventory_cli_reports_static_candidates_without_execution_or_authority ... ok
+test valid_minimum_capacity_with_oversize_mandatory_rule_keeps_budget_exit_eight ... ok
+test markdown_is_a_safe_document_and_unsupported_formats_precede_writes ... ok
+test invalid_project_and_merged_user_policy_never_become_successful_empty_results ... ok
+test security_applies_to_direct_reads_and_cached_metadata ... ok
+test strict_lookup_retains_available_evidence_and_reports_incomplete_refresh ... ok
+test context_budget_is_exact_json_and_required_rules_are_not_cut ... ok
+test non_git_exploration_changes_and_idempotent_init ... ok
+test tiny_budgets_preserve_index_lease_checks_and_context_receipt_ledgers ... ok
+test ndjson_snapshot_follow_and_resume_have_no_event_gap ... ok
+
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.01s
+
+     Running tests/cli_frontend.rs (target/debug/deps/cli_frontend-4948844b4d514170)
+
+running 27 tests
+test non_utf8_argument_returns_structured_error_without_panic_or_effect ... ok
+test help_and_version_are_successful_without_project_access ... ok
+test no_color_suppresses_help_on_a_real_terminal_including_nested_help ... ok
+test parser_diagnostics_mask_secrets_and_escape_control_characters ... ok
+test native_hook_invalid_transports_refuse_before_project_or_output_access ... ok
+test parser_errors_respect_actual_json_option_and_do_not_load_project ... ok
+test parsed_run_preflight_refusals_attest_no_child_before_any_access ... ok
+test plain_parser_diagnostics_escape_bidi_c1_and_line_controls ... ok
+test root_version_is_exact_and_ignores_project_output_and_query_options ... ok
+test initialized_producer_errors_keep_identity_in_each_document_and_destination ... ok
+test native_metadata_overflow_keeps_prelaunch_truth_and_declares_omitted_identity ... ok
+test nested_global_positions_select_the_same_root_format_and_timeout ... ok
+test invalid_strict_queries_preserve_generation_database_sources_and_output_path ... ok
+test partial_refresh_does_not_claim_the_requested_outline_is_wholly_unsupported ... ok
+test streaming_response_files_refuse_before_discovery_or_destination_access ... ok
+test semantic_refusals_are_one_safe_json_document_for_every_requested_format ... ok
+test singular_global_duplicates_are_rejected_before_project_and_output_effects ... ok
+test undeliverable_parser_capacity_semantic_and_timeout_refusals_return_io_exit ... ok
+test undeliverable_plain_parser_diagnostic_returns_io_exit_without_panic ... ok
+test unsupported_ndjson_is_rejected_before_project_discovery_or_init ... ok
+test valid_minimum_capacity_bounds_semantic_and_timeout_refusals_without_writes ... ok
+test saved_output_invalid_arguments_refuse_before_project_and_response_access ... ok
+test unsupported_markdown_refuses_before_response_files_and_stream_dispatch ... FAILED
+test pack_artifact_output_is_required_once_and_works_at_every_command_depth ... ok
+test outline_empty_unsupported_and_partial_are_distinct_in_every_representation ... ok
+test read_final_document_budget_uses_emitted_format_and_preserves_excerpt_truth ... ok
+test every_visible_help_path_describes_schema_and_effects_without_project_access ... ok
+
+failures:
+
+---- unsupported_markdown_refuses_before_response_files_and_stream_dispatch stdout ----
+
+thread 'unsupported_markdown_refuses_before_response_files_and_stream_dispatch' (9324130) panicked at tests/cli_frontend.rs:574:13:
+assertion `left == right` failed: ["board", "--watch"]
+  left: String("Streaming transport requires stdout")
+ right: "Markdown supports build, outline, read and handoff"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    unsupported_markdown_refuses_before_response_files_and_stream_dispatch
+
+test result: FAILED. 26 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.04s
+
+error: test failed, to rerun pass `--test cli_frontend`
+     Running tests/cli_refusal_envelope.rs (target/debug/deps/cli_refusal_envelope-e0fa1efd013109e3)
+
+running 4 tests
+test semantic_and_representation_refusals_do_not_claim_completed_execution ... ok
+test install_required_and_duplicate_options_keep_parser_envelope_and_no_effects ... ok
+test admitted_install_failures_keep_state_classification_and_response_destination ... ok
+test all_visible_leaf_unknown_options_refuse_before_project_and_output ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.57s
+
+     Running tests/cli_run_exit.rs (target/debug/deps/cli_run_exit-6950b2b7b4cecebc)
+
+running 11 tests
+test missing_project_is_prelaunch_failure_in_both_modes_without_files ... ok
+test project_refusal_near_minimum_keeps_original_exit_and_fits ... ok
+test project_refusals_preserve_typed_exit_and_message_before_spawn ... ok
+test actual_prelaunch_refusal_has_no_child_outcome_or_invocation ... ok
+test admitted_small_run_budgets_preserve_prelaunch_truth_without_artifact ... ok
+test actual_spawn_failure_never_becomes_success_or_child_exit ... ok
+test publication_failure_preserves_child_outcome_and_never_retries ... ok
+test incomplete_capture_is_partial_without_replacing_child_success ... ok
+test actual_execution_timeout_preserves_observation_but_returns_wrapper_error ... ok
+test actual_child_codes_and_signal_are_distinct_from_wrapper_status ... ok
+test final_serialized_budget_preserves_actual_child_truth_and_full_reread ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.25s
+
+     Running tests/context_adaptive.rs (target/debug/deps/context_adaptive-70b876c348e77459)
+
+running 7 tests
+test markdown_final_document_uses_the_same_exact_accounting ... ok
+test final_escaped_document_budget_and_unsupported_tokenizer_remain_truthful ... ok
+test excerpts_preserve_exact_original_ranges_and_unsupported_signature_is_explicit ... ok
+test multiline_signatures_have_verified_utf8_crlf_ranges_and_distinct_outlines ... ok
+test explicit_seed_survives_lower_priority_imports_under_tight_budget ... ok
+test final_omissions_fit_without_cutting_mandatory_task_rules_or_decisions ... ok
+test adaptive_budget_uses_intermediate_tiers_and_accounts_final_overhead_deterministically ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.33s
+
+     Running tests/context_delivery_selection.rs (target/debug/deps/context_delivery_selection-2d942bfc32429490)
+
+running 8 tests
+test source_changed_during_delivery_preparation_cannot_publish_stale_spans ... ok
+test consumer_overhead_cannot_remove_mandatory_rules_or_fake_a_fitting_packet ... ok
+test owner_pause_during_delivery_preparation_cannot_publish_selected_bodies ... ok
+test task_file_source_change_during_measurement_never_emits_captured_body ... ok
+test changed_or_deleted_source_classification_during_measurement_prevents_delivery ... ok
+test consumer_envelope_and_escaped_overhead_drive_tiers_and_exact_capacity ... ok
+test omitted_replacement_changed_during_delivery_invalidates_unchanged_selected_decision ... ok
+test consumer_failure_and_original_deadline_cannot_publish_a_selection ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.06s
+
+     Running tests/core_security.rs (target/debug/deps/core_security-7b0e487db632e698)
+
+running 12 tests
+test cr06_equals_format_errors_are_single_json_documents ... ok
+test cr01_handoff_symlink_cannot_write_outside_project ... ok
+test cr04_require_complete_does_not_hide_skipped_input ... ok
+test cr08_checkpoint_metadata_obeys_new_security_exclusions ... ok
+test cr09_freshness_is_validated_and_off_is_visible ... ok
+test cr05_public_envelope_reports_truncation_and_parser_partial ... ok
+test cr02_embedded_private_key_fragments_are_masked ... ok
+test checkpoint_scope_unique_rename_and_checksum_failure_are_explicit ... ok
+test rebuild_refuses_foreign_workspace_without_replacing_index ... ok
+test rebuild_refuses_newer_schema_without_replacing_original ... ok
+test rebuild_preserves_checkpoints_and_quarantines_corrupt_index ... ok
+test cr10_explicit_seed_limit_is_reported ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.82s
+
+     Running tests/render.rs (target/debug/deps/render-cc917b0b7eea1064)
+
+running 13 tests
+test budget_fallback_never_fabricates_child_truth_without_attestation ... ok
+test budget_fallback_keeps_nested_execution_truth_and_retrieval_kind ... ok
+test errors_partial_scope_and_negative_report_are_explicit_without_success_claim ... ok
+test json_formats_are_one_minified_document_including_exact_final_newline ... ok
+test terminal_hidden_unicode_is_json_escaped_without_changing_values ... ok
+test signatures_and_outlines_are_visible_with_ranges_and_literal_control_escaping ... ok
+test malicious_fences_and_controls_cannot_escape_literal_source_and_roundtrip_exactly ... ok
+test preexisting_masking_and_unicode_are_not_changed_or_inferred ... ok
+test outline_and_handoff_display_source_provenance_and_keep_unknown_fields ... ok
+test renderer_never_enforces_or_silently_cuts_a_reported_budget ... ok
+test support_is_exact_and_unsupported_markdown_returns_argument_error ... ok
+test oversized_fallback_metadata_is_explicitly_omitted_without_losing_execution ... ok
+test remaining_proof_overflow_is_complete_measured_budget_failure_with_primary_precedence ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.47s
+
+     Running tests/session_render_budget.rs (target/debug/deps/session_render_budget-2e37552a4a4fa12a)
+
+running 13 tests
+test task_file_inside_project_cannot_bypass_source_topic_delivery ... ok
+test managed_decision_topics_and_handoff_sources_are_not_packet_topic_overrides ... ok
+test source_topics_cannot_be_bypassed_by_public_packet_seed_or_pack_scope ... ok
+test task_input_provenance_distinguishes_relative_project_external_and_stdin ... ok
+test exact_final_budget_and_representation_receipts_require_explicit_ack ... ok
+test original_cli_budget_bounds_writer_admission_without_context_or_epoch_writes ... ok
+test adaptive_delta_resends_unreceived_body_and_reuses_acknowledged_receipts ... ok
+test terminal_escape_overflow_is_rejected_before_context_emission_or_event ... ok
+test registered_role_and_topic_controls_precede_context_and_resume_requires_fresh_baseline ... ok
+test supersession_links_invalidate_unchanged_source_without_reviving_it_on_replacement_cancellation ... ok
+test unchanged_git_does_not_hide_decision_or_memory_change_retirement_and_deletion ... ok
+test pack_consumer_binding_uses_actual_agent_lease_and_cannot_survive_policy_or_epoch_change ... ok
+test omitted_sources_are_not_acknowledged_and_later_delivery_is_explicit ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.35s
+
+error: 1 target failed:
+    `--test cli_frontend`

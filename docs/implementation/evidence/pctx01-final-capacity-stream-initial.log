@@ -1,0 +1,22 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.54s
+     Running tests/cli_frontend.rs (target/debug/deps/cli_frontend-4948844b4d514170)
+
+running 1 test
+test streaming_response_files_refuse_before_discovery_or_destination_access ... FAILED
+
+failures:
+
+---- streaming_response_files_refuse_before_discovery_or_destination_access stdout ----
+
+thread 'streaming_response_files_refuse_before_discovery_or_destination_access' (9322855) panicked at tests/cli_frontend.rs:1066:64:
+called `Result::unwrap()` on an `Err` value: Error("EOF while parsing a value", line: 1, column: 0)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    streaming_response_files_refuse_before_discovery_or_destination_access
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 26 filtered out; finished in 0.71s
+
+error: test failed, to rerun pass `--test cli_frontend`

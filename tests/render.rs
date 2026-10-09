@@ -267,9 +267,9 @@ fn oversized_fallback_metadata_is_explicitly_omitted_without_losing_execution() 
     let mut original = envelope("run", proof.clone());
     original["workspace_id"] = json!("w".repeat(10000));
     original["validation"]["scope"] = json!(["a".repeat(10000)]);
-    let (mut fallback, exit) = render::budget_fallback("run", &original, "/data", 0);
+    let (mut fallback, mut exit) = render::budget_fallback("run", &original, "/data", 0);
     assert_eq!(exit, 8);
-    let bytes = render::fit_fallback_metadata(&mut fallback, 1000);
+    let bytes = render::fit_fallback_metadata(&mut fallback, 1000, &mut exit);
     assert!(bytes.len() <= 1000, "{}", bytes.len());
     assert_eq!(serde_json::from_slice::<Value>(&bytes).unwrap(), fallback);
     assert_eq!(fallback["data"], proof);
@@ -281,4 +281,70 @@ fn oversized_fallback_metadata_is_explicitly_omitted_without_losing_execution() 
     assert!(omitted.contains(&json!("workspace_id")));
     assert!(omitted.contains(&json!("validation")));
     assert_eq!(fallback["errors"][0]["code"], "BUDGET_TOO_SMALL");
+}
+
+#[test]
+fn remaining_proof_overflow_is_complete_measured_budget_failure_with_primary_precedence() {
+    for (status, primary_exit) in [
+        ("ok", 0),
+        ("partial", 3),
+        ("error", 5),
+        ("error", 7),
+        ("error", 130),
+    ] {
+        for length in [9000, 9900, 9990, 99990] {
+            let proof = json!({"spawned":true,"termination":"exited","child_exit_code":23,"signal":null,
+                "output_id":"OUT-fixture","query_ref":"r".repeat(length),"raw_available":true});
+            let mut original = envelope("run", proof.clone());
+            original["status"] = json!(status);
+            if status == "error" {
+                original["errors"] =
+                    json!([{"code":"PRIMARY_FIXTURE","message":"prior failure","retryable":false}]);
+            }
+            let (mut fallback, mut exit) =
+                render::budget_fallback("run", &original, "/data", primary_exit);
+            let bytes = render::fit_fallback_metadata(&mut fallback, 3000, &mut exit);
+            assert!(bytes.len() > 3000);
+            assert!(bytes.ends_with(b"\n"));
+            assert_eq!(serde_json::from_slice::<Value>(&bytes).unwrap(), fallback);
+            assert_eq!(fallback["data"], proof);
+            assert_eq!(fallback["status"], "error");
+            assert_eq!(fallback["coverage"]["status"], "partial");
+            assert_eq!(exit, if status == "error" { primary_exit } else { 8 });
+            assert_eq!(
+                fallback["truncation"]["budget_failure"]["requested_bytes"],
+                3000
+            );
+            assert_eq!(
+                fallback["truncation"]["budget_failure"]["delivered_bytes"],
+                bytes.len()
+            );
+            assert_eq!(
+                fallback["truncation"]["budget_failure"]["limit_exceeded"],
+                true
+            );
+            let errors = fallback["errors"].as_array().unwrap();
+            assert_eq!(
+                errors
+                    .iter()
+                    .filter(|error| error["code"] == "BUDGET_TOO_SMALL")
+                    .count(),
+                1
+            );
+            if status == "error" {
+                assert_eq!(errors[0]["code"], "PRIMARY_FIXTURE");
+            }
+            let temp = tempfile::tempdir().unwrap();
+            let destination = temp.path().join("failure.json");
+            pctx::project::atomic_write(&destination, &bytes, false).unwrap();
+            assert_eq!(std::fs::read(&destination).unwrap(), bytes);
+            assert_eq!(
+                pctx::project::atomic_write(&destination, b"replacement", false)
+                    .unwrap_err()
+                    .exit,
+                9
+            );
+            assert_eq!(std::fs::read(destination).unwrap(), bytes);
+        }
+    }
 }

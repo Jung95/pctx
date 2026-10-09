@@ -796,6 +796,19 @@ fn validate_representation(cli: &Cli) -> Result<()> {
             2,
         ));
     }
+    if cli.output.is_some()
+        && (matches!(cli.format, Format::Ndjson)
+            || matches!(
+                &cli.command,
+                Command::Board { watch: true } | Command::Activity { follow: true, .. }
+            ))
+    {
+        return Err(Error::new(
+            "INVALID_ARGUMENT",
+            "Streaming transport requires stdout",
+            2,
+        ));
+    }
     Ok(())
 }
 
@@ -1288,7 +1301,7 @@ fn main() {
         // smaller than that envelope cannot hold a valid error document.
         bytes = encoded(&mut response, &Format::Json, &mut exit, deadline);
         if bytes.len() > limit {
-            bytes = pctx::render::fit_fallback_metadata(&mut response, limit);
+            bytes = pctx::render::fit_fallback_metadata(&mut response, limit, &mut exit);
         }
     }
     if let Command::Run(r) = &cli.command

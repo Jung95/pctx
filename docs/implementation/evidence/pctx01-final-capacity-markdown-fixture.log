@@ -1,0 +1,22 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.54s
+     Running tests/cli_frontend.rs (target/debug/deps/cli_frontend-4948844b4d514170)
+
+running 1 test
+test all_markdown_leaf_classes_keep_complete_envelopes_on_stdout_and_files ... FAILED
+
+failures:
+
+---- all_markdown_leaf_classes_keep_complete_envelopes_on_stdout_and_files stdout ----
+
+thread 'all_markdown_leaf_classes_keep_complete_envelopes_on_stdout_and_files' (9330269) panicked at tests/cli_frontend.rs:1101:9:
+Output { status: ExitStatus(unix_wait_status(768)), stdout: "{\"command\":\"index update\",\"coverage\":{\"reasons\":[\"request_incomplete\"],\"status\":\"partial\"},\"data\":{\"coverage\":\"partial\",\"files\":7,\"generation_id\":\"GEN-16931d41-65fd-485a-85e3-26de361f5036\",\"reused_files\":0,\"skipped\":[{\"path\":\"data/workspaces/WS-58ba9304-8fa7-4a54-a530-a25bfaaabaec/index.sqlite3\",\"reason\":\"UNSUPPORTED_ENCODING\"},{\"path\":\"data/workspaces/WS-58ba9304-8fa7-4a54-a530-a25bfaaabaec/index.sqlite3-shm\",\"reason\":\"UNSUPPORTED_ENCODING\"},{\"path\":\"data/workspaces/WS-58ba9304-8fa7-4a54-a530-a25bfaaabaec/index.sqlite3-wal\",\"reason\":\"UNSUPPORTED_ENCODING\"}]},\"errors\":[],\"generation_id\":\"GEN-16931d41-65fd-485a-85e3-26de361f5036\",\"project_id\":\"7ab13b3c-fc8d-472b-acce-a0d1b47bac75\",\"schema_version\":\"1.0\",\"status\":\"partial\",\"truncation\":{\"reasons\":[],\"truncated\":false},\"validation\":{\"checked_at\":\"2026-10-09T03:06:07.279Z\",\"mode\":\"matched\",\"scope\":[],\"workspace_atomic\":false},\"warnings\":[],\"workspace_id\":\"WS-58ba9304-8fa7-4a54-a530-a25bfaaabaec\"}\n", stderr: "" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    all_markdown_leaf_classes_keep_complete_envelopes_on_stdout_and_files
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 27 filtered out; finished in 0.70s
+
+error: test failed, to rerun pass `--test cli_frontend`

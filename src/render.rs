@@ -122,7 +122,7 @@ pub fn render(envelope: &Value, format: Format) -> Result<Vec<u8>> {
 /// Reduce only envelope metadata when the first fallback still exceeds capacity.
 /// Null IDs mean "not reported" here, as explicitly listed in metadata_omitted;
 /// execution proof, typed errors and reread handles are never removed.
-pub fn fit_fallback_metadata(response: &mut Value, limit: usize) -> Vec<u8> {
+pub fn fit_fallback_metadata(response: &mut Value, limit: usize, exit: &mut i32) -> Vec<u8> {
     let mut bytes = json_document(response);
     let mut remaining = vec!["project_id", "workspace_id", "generation_id", "validation"];
     while bytes.len() > limit && !remaining.is_empty() {
@@ -153,6 +153,49 @@ pub fn fit_fallback_metadata(response: &mut Value, limit: usize) -> Vec<u8> {
             .as_array_mut()
             .unwrap()
             .push(json!(key));
+        bytes = json_document(response);
+    }
+    if bytes.len() > limit {
+        // AC13 permits a complete BUDGET_TOO_SMALL failure when remaining
+        // evidence cannot fit. This is never a claim of budget compliance.
+        let established_failure = response["status"] == "error"
+            && response["errors"]
+                .as_array()
+                .is_some_and(|errors| !errors.is_empty());
+        if !established_failure || *exit == 0 {
+            *exit = 8;
+        }
+        response["status"] = json!("error");
+        response["coverage"]["status"] = json!("partial");
+        if !response["errors"].is_array() {
+            response["errors"] = json!([]);
+        }
+        if !response["errors"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .any(|error| error["code"] == "BUDGET_TOO_SMALL")
+        {
+            response["errors"]
+                .as_array_mut()
+                .unwrap()
+                .push(json!(Error::new(
+                    "BUDGET_TOO_SMALL",
+                    "Remaining execution/error evidence exceeds byte budget",
+                    8
+                )));
+        }
+        response["truncation"]["budget_failure"] = json!({"requested_bytes":limit,
+            "delivered_bytes":0,"limit_exceeded":true});
+        // Including this counter changes its own document size. Decimal length
+        // stabilizes in at most three measurements, including a power-of-ten crossing.
+        for _ in 0..3 {
+            bytes = json_document(response);
+            if response["truncation"]["budget_failure"]["delivered_bytes"] == json!(bytes.len()) {
+                return bytes;
+            }
+            response["truncation"]["budget_failure"]["delivered_bytes"] = json!(bytes.len());
+        }
         bytes = json_document(response);
     }
     bytes

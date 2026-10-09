@@ -309,8 +309,8 @@
     {
       "id": "PCTX01-G04-D03",
       "gate": "G04",
-      "status": "open",
-      "local_implementation": "bounded Read/provenance/truncation/capacity/metadata reduction verified; general irreducible fallback limit and destination matrix remaining",
+      "status": "closed",
+      "local_implementation": "qualified bounded local common serialization/representation/destination contract; explicit AC13 complete-error exception; producer semantics and platforms separate",
       "completion_condition": "Complete success/partial/error envelope required fields and exact final bytes for all supported representation/destination classes; no interrupted JSON or fabricated omitted count",
       "spec_sections": [
         "8",
@@ -325,15 +325,16 @@
         "pctx01-caller-schema-verification.json",
         "pctx01-read-final-budget-verification.json",
         "pctx01-fallback-provenance-verification.json",
-        "pctx01-metadata-fit-verification.json"
+        "pctx01-metadata-fit-verification.json",
+        "pctx01-final-capacity-verification.json"
       ],
       "verification_environment": "Native macOS arm64 local common proof; all release platforms separately required by G09",
-      "macOS_arm64": "remaining",
+      "macOS_arm64": "bounded_verified",
       "macOS_x86_64": "unverified; G09-D02",
       "Linux_x86_64": "unverified; G09-D03",
       "Linux_aarch64": "prior fixed-source full only; inspect linked manifest per contract",
       "Windows_x86_64": "unverified; G09-D04",
-      "documentation_evidence": "71 focusedPASS/static; failure attempts retained; current responsibility audit preserves existing finite scope and40 denominator"
+      "documentation_evidence": "pctx01-final-capacity-verification.json"
     },
     {
       "id": "PCTX01-G04-D04",
@@ -995,9 +996,9 @@
       "documentation_evidence": "closure plan recorded; execution gaps retained"
     }
   ],
-  "closed_details": 29,
+  "closed_details": 30,
   "execution_order": [
-    "G04-D03 + G06-D03 + G07-D03 (existing response matrix)",
+    "G06-D03 then G07-D03 (existing response matrix; only one condition at a time)",
     "G08-D04 + G05-D05 (remaining phase/startup conditions, original budgets)",
     "G10-D04 (candidate checks)",
     "G09-D01..D04 (required real platform matrix; no Actions without existing authorization)",
@@ -1014,13 +1015,13 @@
     "PCTX01-G10-D03"
   ],
   "latest_condition_closure": {
-    "id": "PCTX01-G05-D02",
-    "detail_before": 28,
-    "detail_after": 29,
+    "id": "PCTX01-G04-D03",
+    "detail_before": 29,
+    "detail_after": 30,
     "denominator_before": 40,
     "denominator_after": 40,
-    "scope": "bounded native postspawn common error/response contract; all seven fixed phase groups represented. G08/G09 and independent producer acceptance remain separate.",
-    "independent_review": "/root/work_control; pctx01-postspawn-runner-verification.json"
+    "scope": "bounded local common envelope/final bytes/representation/destination; producer semantics, original startup failures and release platforms remain separate",
+    "independent_review": "/root/work_control; pctx01-final-capacity-verification.json"
   },
   "summary_reconciliation": {
     "previous_summary": 25,

@@ -1,0 +1,1278 @@
+{
+  "task": "PCTX01",
+  "condition": "G04-D03",
+  "denominator": 140,
+  "new_ids": [],
+  "source_of_ids": "Existing frozen PCTX01-command-admission-registry.md/json; no enumeration expansion",
+  "common_routes": {
+    "normal": "main::execute -> domain::envelope/error_envelope -> encoded -> budget/Read guard -> response stdout or atomic_write",
+    "argument_refusal": "JSON when JSON requested; semantic/capacity/representation refusals always one standard JSON on stdout before output authority; plain parser/help/version framing remains explicit",
+    "budget_exception": "after reductions, complete BUDGET_TOO_SMALL error only with exact requested/delivered bytes; existing primary failure/native proof retained; not a claim of budget compliance",
+    "protocol_exceptions": "Board/Activity event/row framing and successful hook-native stdout; hidden guardians are internal transports outside140 visible leaves"
+  },
+  "rows": [
+    {
+      "id": "C001",
+      "path": "activity",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk",
+      "conditional_transport": "NDJSON event records or compact watch/follow rows on stdout; --output refused2 pre-effect; JSON watch/follow refused2"
+    },
+    {
+      "id": "C002",
+      "path": "adapter claude doctor",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C003",
+      "path": "adapter claude event",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk",
+      "conditional_transport": "--hook native hook JSON success on stdout, --output refused2; nonhook standard envelope; failure standard envelope"
+    },
+    {
+      "id": "C004",
+      "path": "adapter claude install",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C005",
+      "path": "adapter claude plan",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C006",
+      "path": "adapter claude protocol-fixture",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C007",
+      "path": "adapter claude statusline",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C008",
+      "path": "adapter claude uninstall",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C009",
+      "path": "adapter claude verify",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C010",
+      "path": "agent heartbeat",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C011",
+      "path": "agent list",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C012",
+      "path": "agent register",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C013",
+      "path": "agent report",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C014",
+      "path": "agent show",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C015",
+      "path": "board",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk",
+      "conditional_transport": "NDJSON event records or compact watch/follow rows on stdout; --output refused2 pre-effect; JSON watch/follow refused2"
+    },
+    {
+      "id": "C016",
+      "path": "build",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "shared full-envelope appendix",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "caller final-document bytes",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C017",
+      "path": "cache stats",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C018",
+      "path": "changes",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C019",
+      "path": "check begin",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C020",
+      "path": "check list",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C021",
+      "path": "check plan",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C022",
+      "path": "check record",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C023",
+      "path": "check run",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "caller final-document bytes + execution admission",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C024",
+      "path": "check show",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C025",
+      "path": "checkpoint create",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C026",
+      "path": "checkpoint delete",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C027",
+      "path": "checkpoint list",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C028",
+      "path": "context ack",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C029",
+      "path": "context get",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "caller final-document bytes",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C030",
+      "path": "control backup",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout; --output names artifact, never overwritten by response",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C031",
+      "path": "control restore",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C032",
+      "path": "decision record",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C033",
+      "path": "decision request",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C034",
+      "path": "decision show",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C035",
+      "path": "doctor",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C036",
+      "path": "extract",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "caller final-document bytes",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C037",
+      "path": "filter activate",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C038",
+      "path": "filter apply",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C039",
+      "path": "filter explain",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C040",
+      "path": "filter test",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C041",
+      "path": "filter validate",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C042",
+      "path": "find",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C043",
+      "path": "handoff create",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "shared full-envelope appendix",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C044",
+      "path": "handoff show",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "shared full-envelope appendix",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C045",
+      "path": "handoff update",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "shared full-envelope appendix",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C046",
+      "path": "impact",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C047",
+      "path": "inbox read",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C048",
+      "path": "index gc",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C049",
+      "path": "index rebuild",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C050",
+      "path": "index update",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C051",
+      "path": "init",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C052",
+      "path": "inventory audit",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C053",
+      "path": "inventory profile",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C054",
+      "path": "inventory scan",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C055",
+      "path": "job cancel",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C056",
+      "path": "message ack",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C057",
+      "path": "message resolve",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C058",
+      "path": "message send",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C059",
+      "path": "outline",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "shared full-envelope appendix",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C060",
+      "path": "output find",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C061",
+      "path": "output render",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C062",
+      "path": "output show",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C063",
+      "path": "owner queue",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C064",
+      "path": "pack create",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout; --output names artifact, never overwritten by response",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C065",
+      "path": "pack inspect",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C066",
+      "path": "pack plan",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C067",
+      "path": "pack verify",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C068",
+      "path": "policy attest-owner",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C069",
+      "path": "policy evaluate",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C070",
+      "path": "policy exception-record",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C071",
+      "path": "policy exception-revoke",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C072",
+      "path": "policy release",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C073",
+      "path": "policy report-evaluate",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C074",
+      "path": "policy report-fingerprint",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C075",
+      "path": "query",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C076",
+      "path": "quota ingest",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C077",
+      "path": "quota plan",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C078",
+      "path": "quota reconcile",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C079",
+      "path": "quota release",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C080",
+      "path": "quota report",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C081",
+      "path": "quota reserve",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C082",
+      "path": "read",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "shared full-envelope appendix",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "fixed65536 final-document bytes",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C083",
+      "path": "refs",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C084",
+      "path": "repo status",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C085",
+      "path": "resource status",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C086",
+      "path": "role list",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C087",
+      "path": "role pause",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C088",
+      "path": "role resume",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C089",
+      "path": "run",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "caller final-document bytes + execution admission",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C090",
+      "path": "runner check-plan",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C091",
+      "path": "runner check-run",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "caller final-document bytes + execution admission",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C092",
+      "path": "runner helper-cancel",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C093",
+      "path": "runner helper-release",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C094",
+      "path": "runner helper-request",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "caller final-document bytes + execution admission",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C095",
+      "path": "runner helper-status",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C096",
+      "path": "runner job-cancel",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C097",
+      "path": "runner resource-status",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C098",
+      "path": "runner trust",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C099",
+      "path": "savings opportunities",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C100",
+      "path": "savings report",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C101",
+      "path": "schedule add",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C102",
+      "path": "schedule inspect",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C103",
+      "path": "schedule install",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C104",
+      "path": "schedule list",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C105",
+      "path": "schedule pause",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C106",
+      "path": "schedule plan",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C107",
+      "path": "schedule reconcile",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C108",
+      "path": "schedule recover",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C109",
+      "path": "schedule remove",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C110",
+      "path": "schedule resume",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C111",
+      "path": "schedule run-loop",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C112",
+      "path": "schedule tick",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C113",
+      "path": "schedule uninstall",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C114",
+      "path": "schedule update",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C115",
+      "path": "session attach",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C116",
+      "path": "session boundary",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C117",
+      "path": "session reconcile",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C118",
+      "path": "session suspend",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C119",
+      "path": "status",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C120",
+      "path": "task assign",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C121",
+      "path": "task block",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C122",
+      "path": "task cancel",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C123",
+      "path": "task claim",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C124",
+      "path": "task complete",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C125",
+      "path": "task create",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C126",
+      "path": "task criterion accept",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C127",
+      "path": "task edit",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C128",
+      "path": "task list",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C129",
+      "path": "task pause",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C130",
+      "path": "task ready",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C131",
+      "path": "task reassign",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C132",
+      "path": "task reopen",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C133",
+      "path": "task resume",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C134",
+      "path": "task review",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C135",
+      "path": "task show",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C136",
+      "path": "task start",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C137",
+      "path": "task submit",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C138",
+      "path": "trace",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C139",
+      "path": "trust add",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    },
+    {
+      "id": "C140",
+      "path": "trust plan",
+      "ordinary_response": "shared schema1.0 envelope; JSON/compact; complete single document with final newline",
+      "markdown": "INVALID_ARGUMENT2 before effects",
+      "response_destination": "stdout or atomic no-replace response file; existing-file conflict9/publication I/O7",
+      "budget": "no declared stdout final-byte budget",
+      "evidence_scope": "common serialization/delivery contract; independent producer semantics not qualified by this crosswalk"
+    }
+  ]
+}

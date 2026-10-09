@@ -9,7 +9,7 @@ reorganization is now fixed in [closure plan](tasks/PCTX01-closure-plan.md) and
 progress and actual code/Git/jobs before resuming. Historical A/R and old next
 lists are bounded evidence, not alternate execution plans.
 
-Detail closure29/40; whole gates0/10. First whole-detail denominator40; previous
+Detail closure30/40; whole gates0/10. First whole-detail denominator40; previous
 whole gates10 remain10, help172/leaves140/Rgroups12 unchanged. R local12/12 is
 not all-local completion. Other official tasks remain inactive. Do not repeat
 this initial reorganization; execute fixed conditions to closure. PCTX01 done
@@ -18,8 +18,8 @@ then next official task's finite list within the same Goal.
 ## Publication boundary — current
 
 Verified Runner finalization changes are committed locally as
-`9e2e0b52fb71e2f238cc12fd8eb6e4d77829776e` with `[skip ci]`; working tree was
-clean after that commit. Source/binary/log hashes and the fixed40-item register
+`9e2e0b52fb71e2f238cc12fd8eb6e4d77829776e` with `[skip ci]`; that is a historical publication attempt. Additional local commits through
+ceaec8b and current G04-D03 changes remain unpublished. Source/binary/log hashes and the fixed40-item register
 were checked (29 closed, whole gates0/10). Normal push to the verified configured
 origin `https://github.com/Jung95/pctx.git`, branch `main`, was rejected by automatic
 approval review: explicit authorization for the destination/default-branch side
@@ -28,100 +28,41 @@ attempted. `origin/main` remains `17298fcb4eed7af5ddab2dd5da81ac2800e085ee` loca
 The objective file explicitly requests commit/push to this repository; publication
 now awaits the user's explicit approval for `main` to resolve the review boundary.
 No Actions were dispatched. PCTX01 remains the only active official task and is
-incomplete; G04-D03 remains next within that same task after this boundary.
+incomplete; G06-D03 is next within that same task.
 
-## Current G04-D03 metadata fitting boundary — 2026-10-09
+## Current G04-D03 closure — 2026-10-09
 
-Only **PCTX01** is active; **G04-D03 remains open**, detail29/40 and whole0/10 unchanged.
-[Metadata-fitting evidence](evidence/pctx01-metadata-fit-verification.json) records
-final JSON remeasurement after reducing oversized known envelope metadata. Replaced
-fields are listed exactly in `truncation.metadata_omitted`; null IDs mean not reported
-in this declared presentation reduction. Validation mode omitted avoids inventing
-freshness/validation assertions; prior checked_at remains the observation timestamp.
-Data execution proof, typed errors and reread handles are preserved.
+Only **PCTX01** is active and remains `implementing`. **G04-D03 is closed for
+its bounded local common contract**: detail30/40; whole gates0/10. Scope and
+all frozen denominators remain unchanged. [Evidence](evidence/pctx01-final-capacity-verification.json)
+records final111 focused tests PASS, locked all-target Clippy -D warnings PASS,
+format PASS and independent read-only review with no material blocker.
 
-Synthetic10000-character workspace/scope serializer control preserves child23 and
-OUT-fixture proof within1000 bytes; it is not an actual native child observation.
-Actual240-byte workspace registry binding has4 JSON/compact xstdout/file cases at
-measured819 minimum, all<=limit with observed project identity, declared workspace
-omission and prelaunch not_started/null child/output truth. Final73 related tests
-PASS (7binary/26frontend/4refusal/11Run/12render/13session); Clippy/format PASS.
-Independent read-only review accepts this bounded reduction, not general closure.
+After declared metadata reductions, remaining overflow is a complete
+`BUDGET_TOO_SMALL` error under AC13, with exact requested/delivered bytes and
+`limit_exceeded=true`; this is an explicit failure exception, not budget compliance.
+Primary error/exit, available execution proof and reread handles remain intact.
+20 overflow controls synthesize proof and use actual atomic-file delivery; they
+are not native forced-oversized CLI executions. Native Markdown6 leaves x2
+response destinations and stream4 routes x2 absent/existing destinations pass.
+The 140-row crosswalk classifies existing source routes, not140 executed producers.
+Linked prior Read24, identity/Adapter/error, metadata and native Run evidence
+qualifies representative shared boundaries; independent producer semantics remain
+with their existing owners. Initial product/test-fixture/invocation failures are
+retained in logs, including Markdown diagnostic precedence and self-indexed SQLite.
 
-The helper can still exhaust reducible metadata while required proof/errors/
-truncation or retained timestamp exceed capacity. Main does not yet enforce a
-final <=limit result in that case. Largest-field selection is finite, not maximum
-actual savings. **Exact next action: resolve this general final overflow contract**
-without dropping execution/error truth or cutting JSON, then finish the existing
-representation/destination crosswalk. Do not expand another metadata helper or
-producer function. Prior responsibility audit/fixed scope remain authoritative;
-no new IDs/denominator or repeated G01-G10 reorganization. Original failures,
-required platforms and inactive PCTX36/PCTX47 backlog remain; no whole/platform
-rerun, push retry or Actions. All jobs terminal.
+Next: **G06-D03 within PCTX01**, successful-empty versus capability/resource6
+and incomplete3 for the already frozen producer families. Finish that condition
+before G07-D03. No other official task starts. Original four macOS1s startup
+product failures, required-platform gaps and inactive PCTX36/PCTX47 backlog
+remain open. No Actions, whole/platform rerun or push retry. All jobs terminal.
 
-## Current G04-D03 fallback boundary — 2026-10-09
-
-Only **PCTX01** is active; **G04-D03 remains open**, detail29/40 and whole0/10 unchanged.
-[Fallback evidence](evidence/pctx01-fallback-provenance-verification.json) records
-known identity/validation/data retained through rendering refusals and the shared
-final-timeout conversion, presentation truncation explicitly marked, and exact
-warning records withheld (not estimated source-result counts). Initialized producer
-errors now retain the Project already opened, without another discovery/read.
-
-Final71 focused tests PASS (7binary/25frontend/4refusal/11Run/11render/13session);
-locked all-target Clippy and format PASS. Actual initialized Read6case and Adapter
-6error-class/x2format/x3destination controls compare previously observed identity.
-The private expired-render boundary verifies original clock/error retention; actual
-CLI final-timeout phase-race timing remains unqualified. Initial16PASS2FAIL,
-69PASS1FAIL735bytes>690, initialized Read0PASS1FAIL and stale anonymous-identity
-helper70PASS1FAIL are retained. Helper assertions now compare exact known identity;
-pre-effect cases continue to require null identity. No retry success erases failures.
-
-Capacity calculation now reserves ordinary generated UUID/WS/GEN identities and
-presentation-truncation metadata using sizing sentinels never emitted as identity.
-Seven no-effect actual CLI probes record command-specific capacities; this does not
-qualify arbitrary large persisted metadata or every accepted identifier spelling.
-Final fallback still needs a second byte-bound guard and the remaining fixed
-representation/destination proof. Those are the exact next same-condition actions.
-
-After two G04-D03 updates without closure, responsibility/completion are reconciled:
-no independent producer expansion/new IDs, no denominator change, and no repeated
-G01-G10 reorganization. Finish the existing general fallback overflow contract and
-140-leaf representation/destination crosswalk before extending implementation.
-Required platforms, original four macOS1s startup failures and inactive PCTX36/PCTX47
-backlog remain. No whole/platform rerun, push retry or Actions; all jobs terminal.
-
-## Current G04-D03 Read boundary — 2026-10-09
-
-Only **PCTX01** is active; **G04-D03 remains open**. Detail29/40 and whole gates0/10
-are unchanged. [Read final-document evidence](evidence/pctx01-read-final-budget-verification.json)
-records actual Unicode/Markdown expansion losing a usable excerpt (initial0PASS/1FAIL),
-then the repair measuring the chosen final representation, newline and final
-truncation metadata after each UTF-8-safe body reduction. Source identity/hash and
-usable prefix excerpts survive; `--require-complete` returns PARTIAL_RESULT3 on
-presentation reduction rather than claiming a complete body.
-
-The24-case CLI matrix covers two bodies, three formats, stdout/response file and
-both completeness modes, with required envelope fields and exact65536-byte limit.
-Final product source70 related tests PASS (7binary/24frontend/4refusal/11Run/11render/
-13session); locked all-target Clippy and format PASS. Initial collapsible-if lint
-failure is retained, repaired without suppression. Independent read-only review
-found no blocker in this bounded repair; original range retention is source-reviewed,
-not explicitly asserted by the native control. No whole or additional platform run.
-
-Next **same-condition** work: preserve established identity/generation/validation
-through budget/render-error/final-timeout fallbacks; disclose presentation truncation
-and warning omissions; verify metadata-only fallback sizes and remaining destination
-classes against the existing140-leaf crosswalk. No producer expansion/new IDs.
-Original four macOS1s startup failures and inactive PCTX36/PCTX47 backlog remain.
-Main publication is still awaiting explicit user authorization after automatic
-review rejection; no push retry or Actions. All verification jobs are terminal.
 
 ## Current source and verification
 
 Only **PCTX01** is active, lowest incomplete official ID/no prerequisite. The
 fixed [closure plan](tasks/PCTX01-closure-plan.md) and 40-item register now have
-**29/40** locally closed, **0/10** whole gates; denominator40, 140 leaves/172 help
+**30/40** locally closed, **0/10** whole gates; denominator40, 140 leaves/172 help
 paths/12 historical R groups and required platforms are unchanged.
 
 **PCTX01-G05-D02 is closed as bounded local native postspawn qualification**.

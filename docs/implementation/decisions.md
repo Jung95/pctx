@@ -1309,3 +1309,16 @@ proof, errors and reread handles. Synthetic large metadata and native240-byte
 workspace controls/final73 related/static pass, bounded review accepted. This is
 not general enforcement: irreducible proof/errors/truncation overflow still needs
 a final checked contract. Existing fixed scope and responsibility audit remain.
+
+## Final capacity exception (PCTX01 G04-D03)
+
+AC13 permits valid JSON within the final limit **or BUDGET_TOO_SMALL**. After
+content and declared metadata reductions, required execution/error evidence may
+still exceed the limit. Emit a complete error with exact requested/delivered bytes
+and explicit limit_exceeded, preserving established primary failures and proof.
+Use exit8 for formerly successful/partial results, retain an established primary
+processing/refusal/cancellation exit. This qualifies common serialization only;
+it does not lower producer acceptance or required-platform conditions. A greedy
+metadata reducer is finite but is not proven to maximize actual byte savings.
+Stream transports require stdout; reject --output before effects after existing
+hook/Markdown representation checks to retain diagnostic precedence.

@@ -1051,6 +1051,132 @@ fn native_metadata_overflow_keeps_prelaunch_truth_and_declares_omitted_identity(
 }
 
 #[test]
+fn streaming_response_files_refuse_before_discovery_or_destination_access() {
+    for route in [
+        vec!["--format", "ndjson", "board"],
+        vec!["--format", "ndjson", "activity"],
+        vec!["--format", "compact", "board", "--watch"],
+        vec!["--format", "compact", "activity", "--follow"],
+    ] {
+        for existing in [false, true] {
+            let f = Fixture::new();
+            let destination = f.temp.path().join("response");
+            if existing {
+                fs::write(&destination, b"original").unwrap();
+            }
+            let missing = f.temp.path().join("missing");
+            let mut request = args(&route);
+            request.extend([
+                OsString::from("--root"),
+                missing.into(),
+                OsString::from("--output"),
+                destination.clone().into(),
+            ]);
+            let out = f.run(&request);
+            assert_eq!(out.status.code(), Some(2), "{route:?}: {out:?}");
+            let v: Value = serde_json::from_slice(&out.stdout).unwrap();
+            assert_eq!(v["errors"][0]["code"], "INVALID_ARGUMENT");
+            assert!(v["project_id"].is_null());
+            if existing {
+                assert_eq!(fs::read(destination).unwrap(), b"original");
+            } else {
+                assert!(!destination.exists());
+            }
+            assert_eq!(
+                fs::read_dir(f.temp.path()).unwrap().count(),
+                usize::from(existing)
+            );
+        }
+    }
+}
+
+#[test]
+fn all_markdown_leaf_classes_keep_complete_envelopes_on_stdout_and_files() {
+    for to_file in [false, true] {
+        let f = Fixture::new();
+        let root = f.temp.path().join("project");
+        fs::create_dir(&root).unwrap();
+        let invoke = |arguments: &[OsString]| {
+            let mut request = vec![OsString::from("--root"), root.clone().into()];
+            request.extend_from_slice(arguments);
+            f.run(&request)
+        };
+        let source = root.join("body.txt").to_str().unwrap().to_owned();
+        fs::write(root.join("code.py"), "def inspect(): return 1\n").unwrap();
+        fs::write(root.join("body.txt"), "# Goal\nReview code.\n").unwrap();
+        assert!(invoke(&args(&["init"])).status.success());
+        let indexed = invoke(&args(&["index", "update"]));
+        assert!(indexed.status.success(), "{indexed:?}");
+        for route in [
+            vec!["outline", "code.py", "--freshness", "strict"],
+            vec!["read", "code.py"],
+            vec![
+                "build",
+                "--task",
+                "review code",
+                "--seed",
+                "code.py",
+                "--budget-bytes",
+                "24000",
+            ],
+            vec![
+                "handoff",
+                "create",
+                "--name",
+                "fixture",
+                "--from-file",
+                &source,
+            ],
+            vec!["handoff", "update", "fixture", "--from-file", &source],
+            vec!["handoff", "show", "fixture"],
+        ] {
+            let destination = f.temp.path().join("markdown-response");
+            let mut request = args(&["--format", "markdown"]);
+            request.extend(args(&route));
+            if to_file {
+                request.extend([OsString::from("--output"), destination.clone().into()]);
+            }
+            let mut out = invoke(&request);
+            assert_eq!(out.status.code(), Some(0), "{route:?}: {out:?}");
+            assert!(out.stderr.is_empty());
+            if to_file {
+                assert!(out.stdout.is_empty());
+                out.stdout = fs::read(&destination).unwrap();
+                fs::remove_file(destination).unwrap();
+            }
+            let v = outline_document(&out, "markdown");
+            for key in [
+                "schema_version",
+                "command",
+                "status",
+                "project_id",
+                "workspace_id",
+                "generation_id",
+                "validation",
+                "coverage",
+                "data",
+                "truncation",
+                "warnings",
+                "errors",
+            ] {
+                assert!(v.get(key).is_some(), "{route:?}: missing {key}");
+            }
+            assert_eq!(v["schema_version"], "1.0");
+            assert_eq!(v["status"], "ok");
+            assert_eq!(v["validation"]["workspace_atomic"], false);
+            assert!(v["project_id"].is_string() && v["workspace_id"].is_string());
+            assert!(out.stdout.ends_with(b"\n"));
+            if route[0] == "build" {
+                assert!(out.stdout.len() <= 24000);
+            }
+            if route[0] == "read" {
+                assert!(out.stdout.len() <= 65536);
+            }
+        }
+    }
+}
+
+#[test]
 fn read_final_document_budget_uses_emitted_format_and_preserves_excerpt_truth() {
     for source in ["\u{202e}".repeat(12000), "a".repeat(48000)] {
         let f = Fixture::new();
