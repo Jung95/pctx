@@ -289,3 +289,12 @@ reduction and frozen destination/representation crosswalk remain open. After two
 updates without closure, scope/completion were reconciled: same G04-D03 common
 contract, no independent producer expansion/new IDs or denominator change.
 [Evidence](../evidence/pctx01-fallback-provenance-verification.json);29/40, whole0/10.
+
+## G04-D03 bounded metadata fitting — current
+
+Exact replaced envelope fields are disclosed, with omitted validation rather than
+invented freshness and unchanged execution/error/reread proof. Synthetic large
+metadata and native240-byte workspace4case controls pass; final73 related/static
+PASS. [Evidence](../evidence/pctx01-metadata-fit-verification.json). General final
+overflow after metadata exhaustion remains open and is the exact next action;
+do not expand another helper. Fixed29/40, whole0/10/scope/denominator unchanged.

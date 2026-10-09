@@ -212,3 +212,11 @@ does not count unobserved source results. Current minimum capacities are
 [actual no-effect CLI probes](../implementation/evidence/pctx01-fallback-provenance-minimums-qualified.json).
 This reserves ordinary generated identifiers; general oversized metadata and
 post-fallback byte-bound qualification remain open.
+
+If first-fallback metadata still does not fit, bounded metadata reduction lists
+replaced envelope fields in `truncation.metadata_omitted`. A listed null identity
+means not reported in that presentation. Listed validation uses `mode:"omitted"`
+instead of a newly inferred freshness assertion; its prior `checked_at` remains
+the observation timestamp. Execution proof, errors and reread handles stay intact.
+[Focused proof](../implementation/evidence/pctx01-metadata-fit-verification.json)
+does not yet qualify irreducible proof/error overflow or universal budget compliance.

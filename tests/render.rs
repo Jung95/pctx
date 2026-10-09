@@ -259,3 +259,26 @@ fn budget_fallback_never_fabricates_child_truth_without_attestation() {
     assert_eq!(fallback["data"], original["data"]);
     assert!(fallback["data"].get("spawned").is_none());
 }
+
+#[test]
+fn oversized_fallback_metadata_is_explicitly_omitted_without_losing_execution() {
+    let proof = json!({"spawned":true,"child_exit_code":23,"signal":null,"termination":"exited",
+        "output_id":"OUT-fixture","raw_available":true});
+    let mut original = envelope("run", proof.clone());
+    original["workspace_id"] = json!("w".repeat(10000));
+    original["validation"]["scope"] = json!(["a".repeat(10000)]);
+    let (mut fallback, exit) = render::budget_fallback("run", &original, "/data", 0);
+    assert_eq!(exit, 8);
+    let bytes = render::fit_fallback_metadata(&mut fallback, 1000);
+    assert!(bytes.len() <= 1000, "{}", bytes.len());
+    assert_eq!(serde_json::from_slice::<Value>(&bytes).unwrap(), fallback);
+    assert_eq!(fallback["data"], proof);
+    assert_eq!(fallback["validation"]["mode"], "omitted");
+    assert!(fallback["workspace_id"].is_null());
+    let omitted = fallback["truncation"]["metadata_omitted"]
+        .as_array()
+        .unwrap();
+    assert!(omitted.contains(&json!("workspace_id")));
+    assert!(omitted.contains(&json!("validation")));
+    assert_eq!(fallback["errors"][0]["code"], "BUDGET_TOO_SMALL");
+}

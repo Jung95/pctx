@@ -30,6 +30,35 @@ now awaits the user's explicit approval for `main` to resolve the review boundar
 No Actions were dispatched. PCTX01 remains the only active official task and is
 incomplete; G04-D03 remains next within that same task after this boundary.
 
+## Current G04-D03 metadata fitting boundary — 2026-10-09
+
+Only **PCTX01** is active; **G04-D03 remains open**, detail29/40 and whole0/10 unchanged.
+[Metadata-fitting evidence](evidence/pctx01-metadata-fit-verification.json) records
+final JSON remeasurement after reducing oversized known envelope metadata. Replaced
+fields are listed exactly in `truncation.metadata_omitted`; null IDs mean not reported
+in this declared presentation reduction. Validation mode omitted avoids inventing
+freshness/validation assertions; prior checked_at remains the observation timestamp.
+Data execution proof, typed errors and reread handles are preserved.
+
+Synthetic10000-character workspace/scope serializer control preserves child23 and
+OUT-fixture proof within1000 bytes; it is not an actual native child observation.
+Actual240-byte workspace registry binding has4 JSON/compact xstdout/file cases at
+measured819 minimum, all<=limit with observed project identity, declared workspace
+omission and prelaunch not_started/null child/output truth. Final73 related tests
+PASS (7binary/26frontend/4refusal/11Run/12render/13session); Clippy/format PASS.
+Independent read-only review accepts this bounded reduction, not general closure.
+
+The helper can still exhaust reducible metadata while required proof/errors/
+truncation or retained timestamp exceed capacity. Main does not yet enforce a
+final <=limit result in that case. Largest-field selection is finite, not maximum
+actual savings. **Exact next action: resolve this general final overflow contract**
+without dropping execution/error truth or cutting JSON, then finish the existing
+representation/destination crosswalk. Do not expand another metadata helper or
+producer function. Prior responsibility audit/fixed scope remain authoritative;
+no new IDs/denominator or repeated G01-G10 reorganization. Original failures,
+required platforms and inactive PCTX36/PCTX47 backlog remain; no whole/platform
+rerun, push retry or Actions. All jobs terminal.
+
 ## Current G04-D03 fallback boundary — 2026-10-09
 
 Only **PCTX01** is active; **G04-D03 remains open**, detail29/40 and whole0/10 unchanged.

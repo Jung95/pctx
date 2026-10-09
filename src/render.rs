@@ -119,6 +119,45 @@ pub fn render(envelope: &Value, format: Format) -> Result<Vec<u8>> {
     Ok(document.into_bytes())
 }
 
+/// Reduce only envelope metadata when the first fallback still exceeds capacity.
+/// Null IDs mean "not reported" here, as explicitly listed in metadata_omitted;
+/// execution proof, typed errors and reread handles are never removed.
+pub fn fit_fallback_metadata(response: &mut Value, limit: usize) -> Vec<u8> {
+    let mut bytes = json_document(response);
+    let mut remaining = vec!["project_id", "workspace_id", "generation_id", "validation"];
+    while bytes.len() > limit && !remaining.is_empty() {
+        let (position, _) = remaining
+            .iter()
+            .enumerate()
+            .max_by_key(|(_, key)| {
+                response
+                    .get(**key)
+                    .map(json_document)
+                    .map(|bytes| bytes.len())
+                    .unwrap_or(0)
+            })
+            .unwrap();
+        let key = remaining.remove(position);
+        if response[key].is_null() {
+            continue;
+        }
+        response[key] = if key == "validation" {
+            json!({"mode":"omitted","scope":[],"checked_at":response["validation"]["checked_at"],"workspace_atomic":false})
+        } else {
+            Value::Null
+        };
+        if !response["truncation"]["metadata_omitted"].is_array() {
+            response["truncation"]["metadata_omitted"] = json!([]);
+        }
+        response["truncation"]["metadata_omitted"]
+            .as_array_mut()
+            .unwrap()
+            .push(json!(key));
+        bytes = json_document(response);
+    }
+    bytes
+}
+
 // JSON C0 escapes come from serde_json. Escape C1, bidi formatting and line separators
 // too: they are valid JSON characters, but should not control a terminal or review UI.
 // These JSON escapes round-trip to the identical original Value.

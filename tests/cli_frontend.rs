@@ -974,6 +974,83 @@ fn initialized_producer_errors_keep_identity_in_each_document_and_destination() 
 }
 
 #[test]
+fn native_metadata_overflow_keeps_prelaunch_truth_and_declares_omitted_identity() {
+    let f = Fixture::new();
+    let init = f.run(&args(&["--format", "json", "init"]));
+    assert!(init.status.success());
+    let initialized: Value = serde_json::from_slice(&init.stdout).unwrap();
+    let registry_path = f.temp.path().join("data/registry.json");
+    let mut registry: Value = serde_json::from_slice(&fs::read(&registry_path).unwrap()).unwrap();
+    let binding = registry["roots"]
+        .as_object_mut()
+        .unwrap()
+        .values_mut()
+        .next()
+        .unwrap();
+    let old = binding["workspace_id"].as_str().unwrap().to_owned();
+    let wide = format!("WS-{}", "w".repeat(237));
+    fs::rename(
+        f.temp.path().join("data/workspaces").join(&old),
+        f.temp.path().join("data/workspaces").join(&wide),
+    )
+    .unwrap();
+    binding["workspace_id"] = serde_json::json!(wide);
+    fs::write(registry_path, serde_json::to_vec(&registry).unwrap()).unwrap();
+    let probe = f.run(&args(&[
+        "--format",
+        "json",
+        "run",
+        "--budget-bytes",
+        "1",
+        "--",
+        "unused-fixture-program",
+    ]));
+    let refusal: Value = serde_json::from_slice(&probe.stdout).unwrap();
+    let limit = refusal["data"]["minimum_budget_bytes"].as_u64().unwrap() as usize;
+    for format in ["compact", "json"] {
+        for to_file in [false, true] {
+            let destination = f.temp.path().join("bounded-response");
+            let mut request = args(&[
+                "--format",
+                format,
+                "run",
+                "--budget-bytes",
+                &limit.to_string(),
+            ]);
+            if to_file {
+                request.extend([OsString::from("--output"), destination.clone().into()]);
+            }
+            request.extend(args(&["--", "unused-fixture-program"]));
+            let out = f.run(&request);
+            assert_eq!(out.status.code(), Some(8), "{out:?}");
+            assert!(out.stderr.is_empty());
+            let bytes = if to_file {
+                assert!(out.stdout.is_empty());
+                let bytes = fs::read(&destination).unwrap();
+                fs::remove_file(destination).unwrap();
+                bytes
+            } else {
+                out.stdout
+            };
+            assert!(bytes.len() <= limit, "{} > {limit}", bytes.len());
+            let v: Value = serde_json::from_slice(&bytes).unwrap();
+            assert_eq!(v["data"]["spawned"], false);
+            assert_eq!(v["data"]["termination"], "not_started");
+            assert!(v["data"]["child_exit_code"].is_null());
+            assert!(v["data"]["output_id"].is_null());
+            assert_eq!(v["project_id"], initialized["project_id"]);
+            assert!(v["workspace_id"].is_null());
+            assert!(
+                v["truncation"]["metadata_omitted"]
+                    .as_array()
+                    .unwrap()
+                    .contains(&serde_json::json!("workspace_id"))
+            );
+        }
+    }
+}
+
+#[test]
 fn read_final_document_budget_uses_emitted_format_and_preserves_excerpt_truth() {
     for source in ["\u{202e}".repeat(12000), "a".repeat(48000)] {
         let f = Fixture::new();

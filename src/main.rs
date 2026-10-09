@@ -1287,6 +1287,9 @@ fn main() {
         // The complete JSON error is the smallest reversible fallback. Budgets
         // smaller than that envelope cannot hold a valid error document.
         bytes = encoded(&mut response, &Format::Json, &mut exit, deadline);
+        if bytes.len() > limit {
+            bytes = pctx::render::fit_fallback_metadata(&mut response, limit);
+        }
     }
     if let Command::Run(r) = &cli.command
         && response["status"] == "ok"

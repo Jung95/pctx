@@ -1297,3 +1297,15 @@ metadata too; sentinels are measurement inputs only. Arbitrary oversized metadat
 and the post-fallback bound remain open. Final71 related/static PASS; original
 failures retained. Responsibility audit after two nonclosing G04-D03 updates
 freezes the same finite ownership/scope and next overflow/destination proof.
+
+## Explicitly unreported metadata in bounded fallback fitting — G04-D03
+
+When ordinary fallback metadata does not fit, reduce only known envelope metadata
+and remeasure escaped final JSON with newline. Record exact replaced fields in
+truncation.metadata_omitted so null IDs indicate not reported presentation, not a
+new unknown-project assertion. Validation mode omitted makes no new matched/strict
+claim; checked_at remains the original observation timestamp. Preserve execution
+proof, errors and reread handles. Synthetic large metadata and native240-byte
+workspace controls/final73 related/static pass, bounded review accepted. This is
+not general enforcement: irreducible proof/errors/truncation overflow still needs
+a final checked contract. Existing fixed scope and responsibility audit remain.

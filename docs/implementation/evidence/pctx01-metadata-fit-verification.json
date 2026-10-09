@@ -1,0 +1,112 @@
+{
+  "task": "PCTX01",
+  "condition": "PCTX01-G04-D03",
+  "status": "implementing; bounded metadata reduction verified; general irreducible fallback limit/destination closure remains open",
+  "base_revision": "43d0709",
+  "environment": {
+    "system": "macOS-26.7.1-arm64-arm-64bit-Mach-O",
+    "architecture": "arm64",
+    "rust": "1.99.0"
+  },
+  "fixed_register": {
+    "closed_details": 29,
+    "detail_denominator": 40,
+    "closed_gates": 0,
+    "gate_denominator": 10,
+    "new_ids": []
+  },
+  "source_sha256": {
+    "src/main.rs": "23e02827df7167de1ad7a2c3f12c24637413104f868e6045c0cf8d3c7494c9bd",
+    "src/render.rs": "29021da031ff425745d98d6526c559d98e4cc9f0acafa080a3217d7a01298ff1",
+    "src/domain.rs": "9cd872bc33dcccf77c2a40892bc95fa375f9655744339cf09e716b489fa24bd5",
+    "tests/render.rs": "99c4f16ac64788578b77cc030d28e0c452109a9d501dcb34a07722238779d333",
+    "tests/cli_frontend.rs": "bcc0a0007b263c0624bd4c545455e09272c1d769a88a366bbac3d9991dcbda05",
+    "Cargo.toml": "179b02f69bdd7c61adc41ed5f71f8737ee692655b46b0bfeb9c1ffe165d8e97f",
+    "Cargo.lock": "f96362897990caba560793601bc9fca08cef5c977907bb06889d5595d2acd7b0"
+  },
+  "artifacts_sha256": {
+    "target/debug/pctx": "f6691c09f0f062705cba00577364252cd328831792d001199ce728624b2cd433",
+    "target/debug/deps/pctx-5861ab217462b7f0": "13d4684601f58031a0420671e207b43e0288bd89bda7c0af7c90dace4500904c",
+    "target/debug/deps/render-cc917b0b7eea1064": "3df1062d97f62d3e61240e198c3c7036c954daee284904bb5e969f998a8a82eb",
+    "target/debug/deps/cli_frontend-4948844b4d514170": "03ff4312d908d180a7e49d1e7a58b71270e7ea068f344b434766fb9ceb45da9c"
+  },
+  "log_sha256": {
+    "pctx01-metadata-fit-clippy.log": "559137a16e92c7a405502755c499157e12cb90d912f4e9f9344d78da635e22b3",
+    "pctx01-metadata-fit-format.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "pctx01-metadata-fit-native.log": "e4165afaf5df971db0288ebc3496d8025079f96f7081b6264f783dd9ea498c3c",
+    "pctx01-metadata-fit-related.log": "6140b4f073b3d9d34b6f1551b9a78c67ec4d6a02dbb51ea1da26c29b82345a80",
+    "pctx01-metadata-fit-selected.log": "0064708e2b5f688106b09495caf29a1349411d4d8ecd226e828e20843c90adfd"
+  },
+  "runs": [
+    {
+      "session": 47191,
+      "log": "pctx01-metadata-fit-selected.log",
+      "exit": 0,
+      "passed": 1,
+      "failed": 0
+    },
+    {
+      "session": 22726,
+      "log": "pctx01-metadata-fit-native.log",
+      "exit": 0,
+      "passed": 1,
+      "failed": 0
+    },
+    {
+      "session": 31495,
+      "log": "pctx01-metadata-fit-related.log",
+      "exit": 0,
+      "passed": 73,
+      "failed": 0,
+      "suites": {
+        "binary": 7,
+        "frontend": 26,
+        "refusal": 4,
+        "Run": 11,
+        "render": 12,
+        "session": 13
+      }
+    },
+    {
+      "session": 77215,
+      "log": "pctx01-metadata-fit-clippy.log",
+      "exit": 0
+    },
+    {
+      "log": "pctx01-metadata-fit-format.log",
+      "exit": 0
+    }
+  ],
+  "qualified_controls": {
+    "unit": "Synthetic envelope with10000-character workspace ID and validation scope, child23 and OUT-fixture proof. Final JSON <=1000, proof/errors unchanged, declared validation/workspace metadata omissions. This is a pure serializer control, not a native executed child observation.",
+    "native": "Actual registry bound workspace renamed to a240-byte component; real CLI at measured minimum819 refuses prelaunch8 without invoking unused program. JSON/compact xstdout/file =4 outcomes, exact emitted size <=limit, unchanged observed project ID, explicitly unreported workspace ID and retained not_started/null child/output truth.",
+    "existing": "Related original-clock/minimum/minimum+1/error/native-run/Read/context/representation/destination controls remain passing."
+  },
+  "semantics": {
+    "metadata_omitted": "Exact list of replaced envelope fields, not source-result counts. Null IDs in this fallback are not reported, not unknown anonymous-project claims.",
+    "validation": "mode omitted reports presentation omission rather than fresh matched/strict/off assertion; prior checked_at remains the observation timestamp.",
+    "preserved": "Data execution proof, typed errors, reread handles and warning omission counters are retained."
+  },
+  "independent_review": {
+    "agent": "/root/work_control",
+    "mode": "read-only/no edits/tests/builds",
+    "result": "No blocker in bounded metadata-only reduction; explicit omissions, reversible measurement and execution/error preservation accepted.",
+    "remaining": "Helper may exhaust reducible fields while proof/errors/truncation or retained timestamp still exceed capacity; main accepts returned bytes without a final enforced <=limit result. Largest serialized field is not necessarily maximum savings after replacement/disclosure overhead."
+  },
+  "remaining": [
+    "General irreducible post-fallback byte-limit enforcement, without losing native truth, typed refusal or complete JSON; current helper can still return over-budget bytes",
+    "Remaining frozen representation/destination crosswalk and natural metadata cases",
+    "Required phase/startup/platform/integration gates"
+  ],
+  "scope_control": "Previously reconciled fixed G04-D03 common response/byte ownership retained. No new producer functions, IDs, denominator or repeated G01-G10 reorganization. Resolve general final overflow contract next; do not expand another metadata helper.",
+  "retained_failures": [
+    "Earlier fallback16PASS2FAIL known identity loss",
+    "Earlier69PASS1FAIL735>690 capacity and initialized Read0PASS1FAIL",
+    "Original four macOS1s startup product failures; unchanged budgets",
+    "Inactive PCTX36 Tick failure"
+  ],
+  "platform_scope": "Native macOS arm64 focused only; required macOS x86_64/Linux x86_64/Windows x86_64 unverified; Linux aarch64 supporting only",
+  "whole_suite_green": false,
+  "github_actions_dispatched": false,
+  "push_state": "Prior main automatic approval rejection persists; no retry/workaround."
+}
