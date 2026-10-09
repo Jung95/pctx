@@ -1,5 +1,9 @@
 # PCTX01 reverse comparison input recovery
 
+**Consumed and complete:** closed3PASS/1FAIL,open3PASS/1FAIL. Do not rerun the
+command below. See [verification](evidence/pctx01-startup-host-reverse-recovery-comparison-verification.json).
+The remaining procedure is historical.
+
 The previous reverse run stopped after four closed-phase passes because the keyboard
 was set to Korean at OPEN. Its results remain;the comparison was incomplete. This
 new finite comparison uses the same frozen source/binary and fresh session. Both

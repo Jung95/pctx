@@ -1,0 +1,8 @@
+{
+  "generated_root": "/private/tmp/pctx01-host-reverse-0wwokltp",
+  "removed": true,
+  "scope": "generated isolated source,build,old and recovery sessions only;shared build/userfiles untouched",
+  "authentication": false,
+  "ready_inputs": "historical consumed paths,removed after hash audit",
+  "logs_receipts": "retained"
+}

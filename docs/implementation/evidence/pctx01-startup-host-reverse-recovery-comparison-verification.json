@@ -1,0 +1,137 @@
+{
+  "task": "PCTX01",
+  "condition": "PCTX01-G05-D05",
+  "complete_protocol": true,
+  "frozen_inputs_match": true,
+  "source_revision": "b047613b1101400827ea801b834d1c062f824483",
+  "per_test_receipts_logs_match": true,
+  "phases": {
+    "B": {
+      "pass": 3,
+      "fail": 1,
+      "timeout_pids": [
+        23085,
+        23087
+      ]
+    },
+    "A": {
+      "pass": 3,
+      "fail": 1,
+      "timeout_pids": [
+        23257,
+        23258,
+        23260,
+        23261,
+        23262,
+        23264
+      ]
+    }
+  },
+  "failure_fields_elapsed_ms_stdout_stderr_pid": {
+    "B": [
+      [
+        "1000",
+        "0",
+        "0",
+        "23085"
+      ],
+      [
+        "1000",
+        "0",
+        "0",
+        "23087"
+      ]
+    ],
+    "A": [
+      [
+        "1000",
+        "0",
+        "0",
+        "23264"
+      ],
+      [
+        "1000",
+        "0",
+        "0",
+        "23262"
+      ],
+      [
+        "1000",
+        "0",
+        "0",
+        "23261"
+      ],
+      [
+        "1000",
+        "0",
+        "0",
+        "23258"
+      ],
+      [
+        "1000",
+        "0",
+        "0",
+        "23257"
+      ],
+      [
+        "1000",
+        "0",
+        "0",
+        "23260"
+      ]
+    ]
+  },
+  "actual_attempt_denominators": "unavailable/censored;do not infer128 for failed tests or compare failure rates",
+  "known_owned_PID_state": {
+    "23069": "absent",
+    "23074": "absent",
+    "23076": "absent",
+    "23079": "absent",
+    "23085": "absent",
+    "23087": "absent",
+    "23178": "absent",
+    "23235": "absent",
+    "23238": "absent",
+    "23256": "absent",
+    "23257": "absent",
+    "23258": "absent",
+    "23260": "absent",
+    "23261": "absent",
+    "23262": "absent",
+    "23264": "absent",
+    "23313": "absent"
+  },
+  "cleanup_scope": "runner,8testparents,8reportedexpiredchildren only;allchildren not inventoried",
+  "combined_interpretation": "Earlier open3/1 closed4/0,partialclosed4/0,and now reverseclosed3/1 open3/1:closing Codex is not sufficient in these declared-state observations;later-phase pass is not universal. Local host causality and remaining helpers not established. No product correction or acceptance closure.",
+  "administrator_authentication": 0,
+  "acceptance": "G05-D05 remains product_failure;33/40details,0/10whole gates",
+  "evidence_sha256": {
+    "pctx01-startup-host-reverse-recovery-comparison-A-0-result.json": "c6ba462197d6b3ccf79ed21313a2f67e78a2a6dc63da3477649ed09f5d275437",
+    "pctx01-startup-host-reverse-recovery-comparison-A-0-test.log": "2815ada75e7d7a55aa55790dd8fd938da7ca2ab26b5f9fce529be13a02857b4e",
+    "pctx01-startup-host-reverse-recovery-comparison-A-1-result.json": "c9a59b8186552b3f8dc7743252ef4361ff74a41700ee4169bca77908ff6fbefd",
+    "pctx01-startup-host-reverse-recovery-comparison-A-1-test.log": "d3c30625f7a7a1cc94346b164ccfb77e7df44f86ab8fd68856db5e1668465358",
+    "pctx01-startup-host-reverse-recovery-comparison-A-2-result.json": "1688feba2006c12d0c65a3390553d7c54942965f172fbf0420747cfc3530f722",
+    "pctx01-startup-host-reverse-recovery-comparison-A-2-test.log": "0dc0230ca03e17219274544a614f999935e56cfef55f5438022495a89a0792ca",
+    "pctx01-startup-host-reverse-recovery-comparison-A-3-result.json": "a9816dac7af304cee99ddd06f0a0be742601074912d231385a199f1f256dc8d3",
+    "pctx01-startup-host-reverse-recovery-comparison-A-3-test.log": "eb65c6ab17479d51343040742054c36c193e97e9e5de3822fd8e0a9454469d75",
+    "pctx01-startup-host-reverse-recovery-comparison-B-0-result.json": "c5245f5e47e91c94c2801ef6950b0ac9f9bbc9391cf74183e7304e76c9f8ae4d",
+    "pctx01-startup-host-reverse-recovery-comparison-B-0-test.log": "c291ff1feac46105288786b298dbbe30db844f74a4f7ef1d48937daf76631c8a",
+    "pctx01-startup-host-reverse-recovery-comparison-B-1-result.json": "e8d396881a421262e7ef1a28a6e37099ea60c8e2fb2a6116d4ef3028bd2ae2d0",
+    "pctx01-startup-host-reverse-recovery-comparison-B-1-test.log": "3828b8946dc78a29837a22d04bc79ada9c955de051fc81578d10182d9cd1597c",
+    "pctx01-startup-host-reverse-recovery-comparison-B-2-result.json": "34913444de12b55b32ef37ff9027b100b631416e617f623a851712dc6fd54c75",
+    "pctx01-startup-host-reverse-recovery-comparison-B-2-test.log": "021558d1607f2950670180c45f05325e82f76f1f688631d8d1299672559a9287",
+    "pctx01-startup-host-reverse-recovery-comparison-B-3-result.json": "d9a71e2f6b6224e0416e7e249685fded3daea504a5d77371462021b1e0395384",
+    "pctx01-startup-host-reverse-recovery-comparison-B-3-test.log": "a7fc55fcbebc562335c1d3454ed3638a31f54aa71479d5400741a77c0c1be786",
+    "pctx01-startup-host-reverse-recovery-comparison-phase-B-complete.json": "5ae8ba62634239a87a0b3df6362c3cdbc04c3dac67e7164c348348eb797875c5",
+    "pctx01-startup-host-reverse-recovery-comparison-result.json": "0e1e0f7feaa96adae55e46480da250be95a6d84264b5a43e9f2946519ffb8589"
+  },
+  "independent_review": "work_control:all83inputhash checks match;logs agree;no attempt denominators;neither app closure nor later execution is a supported cure;stop unchanged controls",
+  "triage_evidence": [
+    "pctx01-startup-auth-all-four-capture-verification.json",
+    "pctx01-startup-auth-all-four-capture-analysis.json",
+    "pctx01-startup-policy-ownership-reconciliation.json",
+    "pctx01-startup-host-control-comparison-verification.json",
+    "pctx01-startup-host-reverse-comparison-verification.json"
+  ],
+  "next": "retain product_failure;no further unchanged host controls;repair only after evidenced PCTX cause or supported platform correction"
+}

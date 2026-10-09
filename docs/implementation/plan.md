@@ -1,5 +1,26 @@
 # Implementation plan
 
+## Completed reverse recovery — current, 2026-10-09
+
+[Verification](evidence/pctx01-startup-host-reverse-recovery-comparison-verification.json)
+binds all frozen/current inputs and eight matching receipts/logs. Bdeclared-closed:
+3PASS/1FAIL,concurrency2zero-outputTIMEOUT23085/23087 at1000ms. Adeclared-open:
+3PASS/1FAIL,concurrency6zero-outputTIMEOUT at1000ms. Both complete measured phases
+retain original source,binary,1s/8x16/group/streams/overflow. Actual failed-attempt
+counts are unavailable/censored;do not infer128 or compare failure rates. No auth.
+
+Earlier forward3/1→4/0 and partialclosed4/0 remain separate evidence. The new closed
+failure contradicts a sufficient close-app workaround in declared-state observations;
+second-phase success is not universal. Host causality/helper absence remains unproved.
+No product repair or exemption: G05-D05 product_failure,33/40details,0/10whole gates.
+Runner,8parents,8reportedexpired PIDs absent;allchild inventory unavailable. Sessions
+CONSUMED;do not run earlier operator commands. No further unchanged app-state control
+or known-wait kernel capture is justified. Next corrective evidence requires a
+specific demonstrated PCTX cause or applicable supported platform correction;required
+macOSx64/Linuxx64/Windowsx64 remain unverified. No task switch or live heavy job.
+Earlier prepared/waiting instructions are superseded by this result.
+
+
 ## Completed ordinary-user host comparison — current, 2026-10-09
 
 [Verified comparison](evidence/pctx01-startup-host-control-comparison-verification.json)

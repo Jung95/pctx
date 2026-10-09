@@ -1,0 +1,12 @@
+{
+  "phase": "B",
+  "test": "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+  "parent_pid": 23076,
+  "uid": 502,
+  "test_exit": 0,
+  "runner_elapsed_seconds": 0.38002391695044935,
+  "runner_utc_start": "2026-10-09T09:55:41.203682+00:00",
+  "reported_timeout_pids": [],
+  "host_state": "human-declared-closed",
+  "host_process_absence_verified": false
+}

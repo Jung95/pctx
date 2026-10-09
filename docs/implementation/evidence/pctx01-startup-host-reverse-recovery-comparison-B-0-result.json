@@ -1,0 +1,12 @@
+{
+  "phase": "B",
+  "test": "query_program_resolution_uses_captured_command_path",
+  "parent_pid": 23074,
+  "uid": 502,
+  "test_exit": 0,
+  "runner_elapsed_seconds": 0.37640908296452835,
+  "runner_utc_start": "2026-10-09T09:55:40.825800+00:00",
+  "reported_timeout_pids": [],
+  "host_state": "human-declared-closed",
+  "host_process_absence_verified": false
+}
