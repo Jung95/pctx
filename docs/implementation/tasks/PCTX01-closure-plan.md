@@ -278,3 +278,14 @@ pass; initial lost-excerpt and Clippy failures retained. See
 [evidence](../evidence/pctx01-read-final-budget-verification.json).
 G04-D03 remains open for fixed fallback identity/validation, presentation omission
 and metadata-only/destination conditions. Detail29/40, whole0/10 unchanged.
+
+## G04-D03 current fallback qualification and responsibility audit
+
+Established response metadata/data, known opened Project identity, explicit
+presentation truncation and exact warning omission counts are locally qualified.
+Generated-ID capacity reserve repairs actual735bytes>690 boundary failure; final71
+related/static PASS, prior failures retained. General fallback overflow after
+reduction and frozen destination/representation crosswalk remain open. After two
+updates without closure, scope/completion were reconciled: same G04-D03 common
+contract, no independent producer expansion/new IDs or denominator change.
+[Evidence](../evidence/pctx01-fallback-provenance-verification.json);29/40, whole0/10.

@@ -33,18 +33,18 @@ The CLI checks the byte budget **after** rendering the final document, including
 
 A byte budget smaller than one complete newline-terminated JSON error envelope is an invalid argument (`INVALID_ARGUMENT`, exit 2). It is rejected before project loading, index refresh, check/lease mutation, context emission or child execution. The rejection is one JSON document on stdout, including when Markdown or `--output` was requested; invalid arguments never create the requested output file. This necessary rejection document can exceed the invalid requested limit.
 
-The guard derives a command-specific conservative bound from the real serializer, envelope keys, fixed error message and `data.minimum_budget_bytes`. It reserves a full nanosecond RFC3339 timestamp and includes the final newline. The returned `minimum_budget_bytes` is authoritative if a future schema changes these sizes; this is not an arbitrary global execution threshold.
+The guard derives a command-specific conservative bound from the real serializer, envelope keys, fixed error message and `data.minimum_budget_bytes`. It reserves a full nanosecond RFC3339 timestamp, ordinary initialized UUID/WS/GEN identities, presentation truncation metadata and the final newline. These sizing sentinels are never emitted as actual identities. The returned `minimum_budget_bytes` is authoritative if a future schema changes these sizes; this is not an arbitrary global execution threshold.
 
 | Command | Current minimum valid stdout capacity | Separate execution/selection limit |
 | --- | --- | --- |
-| `build` | 515 bytes | Required task/rules must fit the actual selected document. |
-| `context get` | 517 bytes | Required full task/rules/references must fit before recording an emission. |
-| `extract` | 517 bytes | Actual selected source and provenance must fit. |
-| `run` | 513 bytes | Existing supervision metadata admission requires at least 3,000 bytes. |
-| `runner check-run` | 516 bytes | Existing registered evidence admission requires at least 8,192 bytes. |
-| `check run` (positional key or `--key`) | 515 bytes | Same registered check backend and 8,192-byte admission. |
-| `runner helper-request` | 516 bytes | Helper evidence uses its registered execution backend and configured admission. |
-| `read` | 514 bytes for the error envelope | Uses a fixed 65,536-byte output bound; there is no `--budget-bytes` argument. |
+| `build` | 644 bytes | Required task/rules must fit the actual selected document. |
+| `context get` | 646 bytes | Required full task/rules/references must fit before recording an emission. |
+| `extract` | 646 bytes | Actual selected source and provenance must fit. |
+| `run` | 819 bytes | Existing supervision metadata admission requires at least 3,000 bytes. |
+| `runner check-run` | 645 bytes | Existing registered evidence admission requires at least 8,192 bytes. |
+| `check run` (positional key or `--key`) | 644 bytes | Same registered check backend and 8,192-byte admission. |
+| `runner helper-request` | 645 bytes | Helper evidence uses its registered execution backend and configured admission. |
+| `read` | Fixed bound; no caller-selected budget | Uses a fixed 65,536-byte output bound; there is no `--budget-bytes` argument. |
 
 A budget equal to the minimum passes this argument guard. It can still produce `BUDGET_TOO_SMALL` (exit 8) when required context or execution metadata cannot fit. For example, a mandatory rule exceeding a valid 2,000-byte build budget fails with exit 8; no partial required-rule success is fabricated. These are different errors from an invalid document capacity.
 
@@ -203,3 +203,12 @@ explicit `returned_excerpt`/truncation/partial coverage receipt. `--require-comp
 returns `PARTIAL_RESULT` (exit3) for this reduction. This bounded behavior is
 [verified locally](../implementation/evidence/pctx01-read-final-budget-verification.json);
 whole frontend/platform qualification remains open.
+
+Known response identity, validation and independently observed data survive common
+rendering/final-timeout errors. Errors after a successful project open retain the
+observed project/workspace IDs. Budget fallback marks presentation truncation;
+`truncation.warnings_omitted` is the exact count of withheld warning records and
+does not count unobserved source results. Current minimum capacities are
+[actual no-effect CLI probes](../implementation/evidence/pctx01-fallback-provenance-minimums-qualified.json).
+This reserves ordinary generated identifiers; general oversized metadata and
+post-fallback byte-bound qualification remain open.

@@ -1,0 +1,37 @@
+{
+  "run": {
+    "exit": 2,
+    "minimum_budget_bytes": 819,
+    "code": "INVALID_ARGUMENT"
+  },
+  "build": {
+    "exit": 2,
+    "minimum_budget_bytes": 644,
+    "code": "INVALID_ARGUMENT"
+  },
+  "context get": {
+    "exit": 2,
+    "minimum_budget_bytes": 646,
+    "code": "INVALID_ARGUMENT"
+  },
+  "extract": {
+    "exit": 2,
+    "minimum_budget_bytes": 646,
+    "code": "INVALID_ARGUMENT"
+  },
+  "runner check-run": {
+    "exit": 2,
+    "minimum_budget_bytes": 645,
+    "code": "INVALID_ARGUMENT"
+  },
+  "check run": {
+    "exit": 2,
+    "minimum_budget_bytes": 644,
+    "code": "INVALID_ARGUMENT"
+  },
+  "runner helper-request": {
+    "exit": 2,
+    "minimum_budget_bytes": 645,
+    "code": "INVALID_ARGUMENT"
+  }
+}

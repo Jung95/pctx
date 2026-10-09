@@ -1281,3 +1281,19 @@ when presentation reduction occurs. Original range remains provenance for the
 selected source, not a new exact span for shortened masked text. Native24case and
 final70 related tests/static pass; independent bounded review accepts the repair.
 The whole fallback/provenance/truncation/destination condition stays open.
+
+## Preserve already observed envelope metadata during failures — G04-D03
+
+Specification §§8/14/38 forbids presenting incomplete results as normal complete
+execution. Use a shared error mutation retaining established identity/validation
+and independently observed data rather than constructing a fresh anonymous matched
+response. The final-timeout branch preserves facts without relaxing its clock.
+Record Project immediately after successful open/init so later producer errors
+retain that identity without extra discovery. Budget reduction explicitly marks
+presentation truncation and exact withheld warning records; it does not fabricate
+unobserved source-result counts. Reversible JSON escaping/newline is shared with
+error delivery. Native minimum overflow735>690 requires sizing ordinary initialized
+metadata too; sentinels are measurement inputs only. Arbitrary oversized metadata
+and the post-fallback bound remain open. Final71 related/static PASS; original
+failures retained. Responsibility audit after two nonclosing G04-D03 updates
+freezes the same finite ownership/scope and next overflow/destination proof.

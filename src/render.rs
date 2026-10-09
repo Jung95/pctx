@@ -67,6 +67,30 @@ pub fn budget_fallback(
             .as_array()
             .is_some_and(|errors| !errors.is_empty());
     let mut response = crate::domain::envelope(command, None, Value::Object(proof));
+    for key in ["project_id", "workspace_id", "generation_id", "validation"] {
+        if let Some(value) = original.get(key) {
+            response[key] = value.clone();
+        }
+    }
+    if let Some(truncation) = original.get("truncation").filter(|value| value.is_object()) {
+        response["truncation"] = truncation.clone();
+    }
+    response["truncation"]["truncated"] = json!(true);
+    if !response["truncation"]["reasons"].is_array() {
+        response["truncation"]["reasons"] = json!([]);
+    }
+    let reasons = response["truncation"]["reasons"].as_array_mut().unwrap();
+    if !reasons.contains(&json!("presentation_budget")) {
+        reasons.push(json!("presentation_budget"));
+    }
+    if let Some(warnings) = original["warnings"]
+        .as_array()
+        .filter(|warnings| !warnings.is_empty())
+    {
+        // This is an exact count of withheld warning records, not an estimate
+        // of source results or candidates that were never counted.
+        response["truncation"]["warnings_omitted"] = json!(warnings.len());
+    }
     response["status"] = json!("error");
     response["coverage"] = json!({"status":"partial","reasons":["presentation_budget"]});
     if preserve_refusal {
@@ -81,6 +105,9 @@ pub fn budget_fallback(
 
 /// Returns the entire UTF-8 document, including its final newline. Never truncates data.
 pub fn render(envelope: &Value, format: Format) -> Result<Vec<u8>> {
+    if matches!(format, Format::Compact | Format::Json) {
+        return Ok(json_document(envelope));
+    }
     let mut document = match format {
         Format::Compact => json_text(envelope, false)?,
         Format::Json => json_text(envelope, false)?,
@@ -104,6 +131,17 @@ fn json_text(value: &Value, pretty: bool) -> Result<String> {
     } else {
         serde_json::to_string(value)?
     };
+    Ok(escape_json_controls(&serialized))
+}
+
+/// A serde_json Value is already a valid JSON tree. Its infallible Display
+/// serialization lets error delivery share the same reversible escaping.
+pub fn json_document(value: &Value) -> Vec<u8> {
+    let mut text = escape_json_controls(&value.to_string());
+    text.push('\n');
+    text.into_bytes()
+}
+fn escape_json_controls(serialized: &str) -> String {
     let mut text = String::with_capacity(serialized.len());
     for c in serialized.chars() {
         if hidden(c) {
@@ -112,7 +150,7 @@ fn json_text(value: &Value, pretty: bool) -> Result<String> {
             text.push(c);
         }
     }
-    Ok(text)
+    text
 }
 /// Escape terminal controls in literal source and plain CLI diagnostics.
 pub fn diagnostic_text(source: &str) -> String {

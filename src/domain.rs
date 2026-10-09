@@ -103,8 +103,14 @@ pub fn error_envelope(
     error: Error,
 ) -> Value {
     let mut response = envelope(command, project, data);
+    set_error(&mut response, error);
+    response
+}
+
+/// Mark a completed envelope as refused without replacing its established
+/// identity, validation, warnings, truncation or independently observed data.
+pub fn set_error(response: &mut Value, error: Error) {
     response["status"] = json!("error");
     response["coverage"] = json!({"status":"partial","reasons":[error.code.clone()]});
     response["errors"] = json!([error]);
-    response
 }

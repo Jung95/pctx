@@ -1,0 +1,5 @@
+error: unexpected argument 'budget_fallback_keeps_nested_execution_truth_and_retrieval_kind' found
+
+Usage: cargo test [OPTIONS] [TESTNAME] [-- [ARGS]...]
+
+For more information, try '--help'.

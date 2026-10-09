@@ -1,0 +1,157 @@
+{
+  "task": "PCTX01",
+  "condition": "PCTX01-G04-D03",
+  "status": "implementing; established-response provenance, warning omission and ordinary capacity repair locally qualified; whole condition open",
+  "base_revision": "a6f9292",
+  "environment": {
+    "system": "macOS-26.7.1-arm64-arm-64bit-Mach-O",
+    "architecture": "arm64",
+    "rust": "1.99.0"
+  },
+  "fixed_register": {
+    "closed_details": 29,
+    "detail_denominator": 40,
+    "closed_gates": 0,
+    "gate_denominator": 10,
+    "new_ids": []
+  },
+  "source_sha256": {
+    "src/main.rs": "9fe0c2faae858cd940a41a39134be13112e12d8248767f5071264c2c0d1c432b",
+    "src/domain.rs": "9cd872bc33dcccf77c2a40892bc95fa375f9655744339cf09e716b489fa24bd5",
+    "src/render.rs": "63363e60b525671c74d5da9b0bfee2757d5b5c82590c130236afce63d17a61b4",
+    "src/project.rs": "8e12777b3c7af0c439aaecdca645011bd316723cd35ccd17f014b7a19df2a727",
+    "tests/render.rs": "5a484cfb1d48ad01e7f56bbf68960d389ea67badc442ef9fef75f0f79aac788a",
+    "tests/cli_frontend.rs": "88e739075c28063face2ee226e8f675f53cf6a7d1c260bfc14740691d7ebb32b",
+    "tests/cli_refusal_envelope.rs": "2d72c24785e2599ba6f41a5ea687631ce5fdd658cfa172bf7b814fc62923e00c",
+    "Cargo.toml": "179b02f69bdd7c61adc41ed5f71f8737ee692655b46b0bfeb9c1ffe165d8e97f",
+    "Cargo.lock": "f96362897990caba560793601bc9fca08cef5c977907bb06889d5595d2acd7b0"
+  },
+  "artifacts_sha256": {
+    "target/debug/pctx": "5d57ac6ca3533e2eaa1619e05ffa4ad163cd7685f0b7eee677150b03ea2dcd4d",
+    "target/debug/deps/cli_frontend-4948844b4d514170": "3678342a9786485d0ab6985759eceb752085edbce0b37bd207d3e3527f5b8fc4",
+    "target/debug/deps/render-cc917b0b7eea1064": "6a4c76e8fff96f3db3858851f2c13b3126868a9e637b60256d295e1e0de57038",
+    "target/debug/deps/pctx-5861ab217462b7f0": "64cfb57b734f3f4b195698c745b160249b658558413d49acb833c753a67fbbc1"
+  },
+  "log_sha256": {
+    "pctx01-fallback-provenance-clippy.log": "7d93137263bed59443409decf5b2a0bd314078ab57a1ea75f9724b657cd26ee5",
+    "pctx01-fallback-provenance-final.log": "7d78bd6ad87f367a92c180c96d8c844161fec327add71fc74f396c19b1bd4491",
+    "pctx01-fallback-provenance-format.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "pctx01-fallback-provenance-initial.log": "2ac44f4764cedfc7c6636f0390fdc23f32da4692f9fd0598897f0cfb1cf0bb19",
+    "pctx01-fallback-provenance-integrated.log": "d090c7a38ae58754d17c4b33021ddfcf655d57a8b3a8918a3cefbd6509a5dc5e",
+    "pctx01-fallback-provenance-producer-initial.log": "4fc4edb9323db49add438a9576a8661c81491f9ceccafdcbb4a4c141cc628788",
+    "pctx01-fallback-provenance-qualified.log": "0f91a05e5c3b1ceebdc20d87d0de0a6febce6cc2d7a9ff0abdbe7571c9ddb237",
+    "pctx01-fallback-provenance-related.log": "72afaaed708157280f5d15b56390eabb90ab7c645eceefce16b31b684e6d36f1",
+    "pctx01-fallback-provenance-selection.log": "1cbc9303c58cba4ad5971e37bbcde06cf0fc98d2a03cc351e31211c36026acfd"
+  },
+  "runs": [
+    {
+      "log": "pctx01-fallback-provenance-selection.log",
+      "session": null,
+      "exit": 1,
+      "passed": 0,
+      "failed": 0
+    },
+    {
+      "log": "pctx01-fallback-provenance-initial.log",
+      "session": 57744,
+      "exit": 101,
+      "passed": 16,
+      "failed": 2
+    },
+    {
+      "log": "pctx01-fallback-provenance-related.log",
+      "session": 35957,
+      "exit": 101,
+      "passed": 69,
+      "failed": 1
+    },
+    {
+      "log": "pctx01-fallback-provenance-final.log",
+      "session": 40823,
+      "exit": 0,
+      "passed": 70,
+      "failed": 0
+    },
+    {
+      "log": "pctx01-fallback-provenance-producer-initial.log",
+      "session": 63621,
+      "exit": 101,
+      "passed": 0,
+      "failed": 1
+    },
+    {
+      "log": "pctx01-fallback-provenance-integrated.log",
+      "session": 42374,
+      "exit": 101,
+      "passed": 70,
+      "failed": 1
+    },
+    {
+      "log": "pctx01-fallback-provenance-qualified.log",
+      "session": 26475,
+      "exit": 0,
+      "passed": 71,
+      "failed": 0
+    },
+    {
+      "log": "pctx01-fallback-provenance-clippy.log",
+      "session": 5081,
+      "exit": 0,
+      "passed": 0,
+      "failed": 0
+    },
+    {
+      "log": "pctx01-fallback-provenance-format.log",
+      "session": null,
+      "exit": 0,
+      "passed": 0,
+      "failed": 0
+    }
+  ],
+  "retained_attempts": {
+    "selection": "Two positional Cargo test filters rejected before tests; corrected explicit target selection, no overwritten log.",
+    "initial": "Actual16PASS2FAIL: known identity lost by binary render-error boundary and shared budget fallback.",
+    "related": "69PASS1FAIL: native prelaunch Run fallback735bytes exceeded accepted690 minimum after metadata retention.",
+    "producer-initial": "Actual0PASS1FAIL: initialized missing-file Read loses established project identity.",
+    "integrated": "70PASS1FAIL: existing admitted Adapter install helper incorrectly required anonymous identities; changed to exact identity established by native plan. Pre-effect cases still explicitly require null identities.",
+    "minimum_probe": "Initial registry probe omitted required task-id/run options for two Runner cases; null minimum results are retained and not capacity evidence. Corrected seven cases are authoritative."
+  },
+  "controls": [
+    "Binary rendering-error conversion under no deadline/original expired deadline preserves established project/workspace/generation/validation/data; hidden Unicode remains escaped and newline included",
+    "Shared budget fallback retains established identity and validation; sets presentation truncation and exact omitted-warning record count, retains prior truncation reasons and native execution proof",
+    "Actual initialized missing-file Read errors retain identity from successful init across3formats x2stdout/file destinations",
+    "Native Adapter admitted producer errors span6errorclasses x2formats x3destinations, compare exact plan identity; existing destination remains untouched with conflict9",
+    "Existing Read24case and Run/native-outcome/final-byte/minimum/minimum+1/context/representation controls included in final71PASS",
+    "Sizing-only initialized UUID/WS/GEN sentinels and presentation truncation metadata raise command-specific capacity; no fabricated identity is emitted by anonymous preflight",
+    "Seven actual capacity probes refuse2 before missing root/data/config creation; minimum values in qualified probe artifact"
+  ],
+  "capacity_evidence": {
+    "pctx01-fallback-provenance-minimums.json": "338b417b0843b3858d747c7a2399265369fc5ce7a4c507666a0cfe80bf9d4928",
+    "pctx01-fallback-provenance-minimums-qualified.json": "ca45d469da6aee2aaa835fd50098090119589d25068265c510b58ef2625e36d7"
+  },
+  "limits": [
+    "Original timed binary renderer failure is deterministic private boundary proof; final-timeout branch uses the same helper by source review, no actual CLI wall-clock phase-race qualification",
+    "Capacity reserve covers ordinary generated identifier shapes, not arbitrary large persisted metadata, expanded validation scopes, warning count digits or all accepted UUID spellings",
+    "Final byte limit still lacks a second guard after metadata-preserving budget fallback; G04-D03 remains open until general oversized-metadata behavior and destination matrix are proven",
+    "No whole-suite or new required-platform integration claim"
+  ],
+  "independent_review": {
+    "agent": "/root/work_control",
+    "mode": "read-only/no edits/builds/tests",
+    "initial_result": "Bounded established metadata/truncation/JSON escaping repair sound; missing final fallback guard and outer initialized producer identity identified.",
+    "latest_result": "No blocker in bounded opened-project identity, fixture criteria or standard-generated-ID capacity correction; final general fallback byte-limit enforcement remains open."
+  },
+  "responsibility_audit": {
+    "trigger": "Two consecutive G04-D03 integration updates without whole-condition closure",
+    "decision": "Stop further implementation expansion; retain existing G04-D03 common ownership and fixed40-item denominator. Repairs are original response field/omission contracts, not independent producer features.",
+    "exact_next": "Resolve final overflow after fallback for general metadata, then fixed representation/destination crosswalk; do not add more producer routes or redo G01-G10 reorganization."
+  },
+  "retained_product_failures": [
+    "Original four macOS1s startup failures, original budgets unchanged",
+    "Inactive PCTX36 Schedule Tick failure"
+  ],
+  "platform_scope": "Focused native macOS arm64; macOS x86_64/Linux x86_64/Windows x86_64 unverified; Linux aarch64 supporting only",
+  "whole_suite_green": false,
+  "github_actions_dispatched": false,
+  "push_state": "Main automatic review rejection remains; no retry or workaround."
+}

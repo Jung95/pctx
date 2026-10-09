@@ -72,7 +72,7 @@ impl Fixture {
     }
 }
 
-fn error_document(o: &Output, code: &str, exit: i32, command: &str) {
+fn error_document(o: &Output, code: &str, exit: i32, command: &str, established: Option<&Value>) {
     assert_eq!(o.status.code(), Some(exit), "{o:?}");
     assert!(o.stderr.is_empty(), "{o:?}");
     assert!(o.stdout.ends_with(b"\n"));
@@ -81,7 +81,14 @@ fn error_document(o: &Output, code: &str, exit: i32, command: &str) {
     assert_eq!(v["schema_version"], "1.0");
     assert_eq!(v["command"], command);
     assert_eq!(v["status"], "error");
-    assert!(v["project_id"].is_null() && v["workspace_id"].is_null());
+    for key in ["project_id", "workspace_id"] {
+        assert_eq!(
+            v[key],
+            established
+                .map(|response| response[key].clone())
+                .unwrap_or(Value::Null)
+        );
+    }
     assert!(v["generation_id"].is_null());
     assert_eq!(v["validation"]["mode"], "matched");
     assert_eq!(v["validation"]["scope"], serde_json::json!([]));
@@ -144,7 +151,7 @@ fn all_visible_leaf_unknown_options_refuse_before_project_and_output() {
                 c.args(leaf["path"].as_str().unwrap().split_whitespace());
                 let o = c.arg("--pctx-invalid-fixture-option").output().unwrap();
                 if format == "json" {
-                    error_document(&o, "INVALID_ARGUMENT", 2, "arguments");
+                    error_document(&o, "INVALID_ARGUMENT", 2, "arguments", None);
                 } else {
                     assert_eq!(o.status.code(), Some(2), "{o:?}");
                     assert!(o.stdout.is_empty());
@@ -199,7 +206,7 @@ fn install_required_and_duplicate_options_keep_parser_envelope_and_no_effects() 
                 .args(form)
                 .output()
                 .unwrap();
-            error_document(&o, "INVALID_ARGUMENT", 2, "arguments");
+            error_document(&o, "INVALID_ARGUMENT", 2, "arguments", None);
             assert_eq!(f.state(), before);
             assert_eq!(fs::read(&response).unwrap(), b"original response");
         }
@@ -236,7 +243,7 @@ fn semantic_and_representation_refusals_do_not_claim_completed_execution() {
             } else {
                 "PLAN_MISMATCH"
             };
-            error_document(&o, code, 2, "adapter");
+            error_document(&o, code, 2, "adapter", None);
             assert_eq!(f.state(), before);
         }
     }
@@ -355,7 +362,7 @@ fn admitted_install_failures_keep_state_classification_and_response_destination(
                         assert!(o.stdout.is_empty());
                         o.stdout = fs::read(&response).unwrap();
                     }
-                    error_document(&o, code, exit, "adapter");
+                    error_document(&o, code, exit, "adapter", Some(&planned));
                 }
                 assert_eq!(f.state(), before);
             }

@@ -1,0 +1,24 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.52s
+     Running tests/cli_frontend.rs (target/debug/deps/cli_frontend-4948844b4d514170)
+
+running 1 test
+test initialized_producer_errors_keep_identity_in_each_document_and_destination ... FAILED
+
+failures:
+
+---- initialized_producer_errors_keep_identity_in_each_document_and_destination stdout ----
+
+thread 'initialized_producer_errors_keep_identity_in_each_document_and_destination' (9299496) panicked at tests/cli_frontend.rs:969:17:
+assertion `left == right` failed: json: lost project_id
+  left: Null
+ right: String("70d4d31e-845b-4402-9e72-bd3f73a0b0e3")
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    initialized_producer_errors_keep_identity_in_each_document_and_destination
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 24 filtered out; finished in 0.69s
+
+error: test failed, to rerun pass `--test cli_frontend`

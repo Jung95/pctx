@@ -348,10 +348,8 @@ fn encoded(
         Err(error) => {
             let error = request_error(deadline, error);
             *exit = error.exit;
-            *value = domain::error_envelope("render", None, Value::Null, error);
-            let mut bytes = value.to_string().into_bytes();
-            bytes.push(b'\n');
-            bytes
+            domain::set_error(value, error);
+            pctx::render::json_document(value)
         }
     }
 }
@@ -460,12 +458,14 @@ fn request_error(deadline: Option<pctx::deadline::Deadline>, error: Error) -> Er
 fn execute(
     cli: &Cli,
     deadline: Option<pctx::deadline::Deadline>,
+    opened_project: &mut Option<Project>,
 ) -> Result<(String, Project, Value)> {
     pctx::cancellation::check()?;
     validate_representation(cli)?;
     let root = project::detect_root_with_deadline(cli.root.as_deref(), deadline)?;
     if matches!(cli.command, Command::Init) {
         let p = Project::init(&root)?;
+        *opened_project = Some(p.clone());
         return Ok((
             "init".into(),
             p.clone(),
@@ -473,6 +473,7 @@ fn execute(
         ));
     }
     let p = Project::open_with_deadline(&root, deadline)?;
+    *opened_project = Some(p.clone());
     let (name, data) = match &cli.command {
         Command::Init => unreachable!(),
         Command::Operations(c) => ("operations", operations::execute(&p, c)?),
@@ -750,6 +751,13 @@ fn minimum_error_budget(command: &str) -> Result<usize> {
     let mut minimum = 0;
     for _ in 0..3 {
         let mut response = minimum_budget_error(command, minimum);
+        // Reserve the metadata of an initialized response as well as the
+        // anonymous admission error. These are sizing sentinels only, never
+        // emitted identities or claims about an unopened project.
+        response["project_id"] = json!("00000000-0000-0000-0000-000000000000");
+        response["workspace_id"] = json!("WS-00000000-0000-0000-0000-000000000000");
+        response["generation_id"] = json!("GEN-00000000-0000-0000-0000-000000000000");
+        response["truncation"] = json!({"truncated":true,"reasons":["presentation_budget"]});
         response["validation"]["checked_at"] = json!("2000-01-01T00:00:00.123456789+00:00");
         let measured = pctx::render::render(&response, pctx::render::Format::Json)?.len();
         if measured == minimum {
@@ -1005,7 +1013,7 @@ fn main() {
         return;
     }
     let mut opened_project = None;
-    let (mut response, mut exit) = match execute(&cli, deadline) {
+    let (mut response, mut exit) = match execute(&cli, deadline, &mut opened_project) {
         Ok((name, p, data)) => {
             let mut out = domain::envelope(&name, Some(&p), data);
             let freshness = match &cli.command {
@@ -1077,7 +1085,7 @@ fn main() {
             // Run's producer facade retains every post-spawn failure as data.
             // An outer execute error therefore attests failure before dispatch.
             let data = prelaunch_data(cli.command.name(), &e);
-            let out = domain::error_envelope(cli.command.name(), None, data, e);
+            let out = domain::error_envelope(cli.command.name(), opened_project.as_ref(), data, e);
             (out, exit)
         }
     };
@@ -1238,10 +1246,7 @@ fn main() {
         && let Some(deadline) = deadline
         && let Err(e) = deadline.check()
     {
-        response = domain::envelope(cli.command.name(), None, Value::Null);
-        response["status"] = json!("error");
-        response["coverage"] = json!({"status":"partial","reasons":["TIMEOUT"]});
-        response["errors"] = json!([e]);
+        domain::set_error(&mut response, e);
         exit = 7;
         bytes = encoded(&mut response, &Format::Json, &mut exit, Some(deadline));
     }
@@ -1369,6 +1374,11 @@ mod finite_route_tests {
         let original = std::time::Instant::now() - std::time::Duration::from_secs(1);
         for deadline in [None, Some(pctx::deadline::Deadline::from_instant(original))] {
             let mut response = domain::envelope("adapter", None, Value::Null);
+            response["project_id"] = json!("observed-project");
+            response["generation_id"] = json!("observed-generation");
+            response["validation"]["mode"] = json!("off");
+            response["data"] = json!({"observed":"\u{202e}"});
+            let established = response.clone();
             let mut exit = 0;
             let bytes = encoded(&mut response, &Format::Markdown, &mut exit, deadline);
             let decoded: Value = serde_json::from_slice(&bytes).unwrap();
@@ -1379,12 +1389,22 @@ mod finite_route_tests {
             };
             assert_eq!(exit, expected_exit);
             assert_eq!(decoded["status"], "error");
+            for key in [
+                "project_id",
+                "workspace_id",
+                "generation_id",
+                "validation",
+                "data",
+            ] {
+                assert_eq!(decoded[key], established[key], "lost {key}");
+            }
+            assert!(!bytes.contains(&0xe2), "hidden Unicode must remain escaped");
             assert_eq!(
                 decoded["coverage"],
                 json!({"status":"partial","reasons":[code]})
             );
             assert_eq!(decoded["errors"][0]["code"], code);
-            assert!(decoded["data"].is_null());
+            assert_eq!(decoded["data"], established["data"]);
             assert_eq!(decoded, response);
             assert!(bytes.ends_with(b"\n"));
             if let Some(deadline) = deadline {

@@ -215,10 +215,19 @@ fn budget_fallback_keeps_nested_execution_truth_and_retrieval_kind() {
         json!({"execution":observed,"independent_report":"not copied"}),
     );
     original["warnings"] = json!(["x".repeat(10_000)]);
+    original["project_id"] = json!("project-observed");
+    original["workspace_id"] = json!("workspace-observed");
+    original["generation_id"] = json!("generation-observed");
+    original["validation"] = json!({"mode":"strict","scope":["src/a.rs"],"checked_at":"2000-01-01T00:00:00Z","workspace_atomic":false});
     let (fallback, exit) = render::budget_fallback("check", &original, "/data/execution", 2);
     assert_eq!(exit, 8);
     assert_eq!(fallback["data"], observed);
     assert_eq!(fallback["errors"][0]["code"], "BUDGET_TOO_SMALL");
+    for key in ["project_id", "workspace_id", "generation_id", "validation"] {
+        assert_eq!(fallback[key], original[key], "lost {key}");
+    }
+    assert_eq!(fallback["truncation"]["truncated"], true);
+    assert_eq!(fallback["truncation"]["warnings_omitted"], 1);
     assert_eq!(
         fallback["coverage"]["reasons"],
         json!(["presentation_budget"])

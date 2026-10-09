@@ -942,6 +942,38 @@ fn outline_document(out: &Output, format: &str) -> Value {
 }
 
 #[test]
+fn initialized_producer_errors_keep_identity_in_each_document_and_destination() {
+    let f = Fixture::new();
+    let init = f.run(&args(&["--format", "json", "init"]));
+    assert!(init.status.success());
+    let established: Value = serde_json::from_slice(&init.stdout).unwrap();
+    for format in ["json", "compact", "markdown"] {
+        for to_file in [false, true] {
+            let destination = f.temp.path().join("failure-response");
+            let mut request = args(&["--format", format, "read", "absent.txt"]);
+            if to_file {
+                request.extend([OsString::from("--output"), destination.clone().into()]);
+            }
+            let mut out = f.run(&request);
+            assert_eq!(out.status.code(), Some(7), "{out:?}");
+            assert!(out.stderr.is_empty());
+            if to_file {
+                assert!(out.stdout.is_empty());
+                out.stdout = fs::read(&destination).unwrap();
+                fs::remove_file(destination).unwrap();
+            }
+            let response = outline_document(&out, format);
+            assert_eq!(response["status"], "error");
+            assert_eq!(response["errors"][0]["code"], "IO_ERROR");
+            for key in ["project_id", "workspace_id"] {
+                assert_eq!(response[key], established[key], "{format}: lost {key}");
+            }
+            assert_eq!(response["coverage"]["status"], "partial");
+        }
+    }
+}
+
+#[test]
 fn read_final_document_budget_uses_emitted_format_and_preserves_excerpt_truth() {
     for source in ["\u{202e}".repeat(12000), "a".repeat(48000)] {
         let f = Fixture::new();

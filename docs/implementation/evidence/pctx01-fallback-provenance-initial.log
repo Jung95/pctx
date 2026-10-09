@@ -1,0 +1,65 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.53s
+     Running unittests src/main.rs (target/debug/deps/pctx-5861ab217462b7f0)
+
+running 7 tests
+test finite_route_tests::renderer_refusal_keeps_typed_error_and_incomplete_coverage ... FAILED
+test cli_help::tests::every_declared_leaf_has_an_explicit_effect_contract ... ok
+test cli_args::tests::producer_repetition_and_literal_child_options_preserve_exact_values ... ok
+test cli_args::tests::pack_artifact_output_and_global_output_share_one_singular_binding ... ok
+test cli_args::tests::defaults_and_fresh_parses_do_not_count_as_duplicate_inputs ... ok
+test finite_route_tests::finite_work_quota_adapter_reads_do_not_time_execution ... ok
+test parser_contract_tests::frozen_visible_parser_schema_and_cases ... ok
+
+failures:
+
+---- finite_route_tests::renderer_refusal_keeps_typed_error_and_incomplete_coverage stdout ----
+
+thread 'finite_route_tests::renderer_refusal_keeps_typed_error_and_incomplete_coverage' (9292179) panicked at src/main.rs:1388:17:
+assertion `left == right` failed: lost project_id
+  left: Null
+ right: String("observed-project")
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    finite_route_tests::renderer_refusal_keeps_typed_error_and_incomplete_coverage
+
+test result: FAILED. 6 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 6.33s
+
+error: test failed, to rerun pass `--bin pctx`
+     Running tests/render.rs (target/debug/deps/render-cc917b0b7eea1064)
+
+running 11 tests
+test budget_fallback_keeps_nested_execution_truth_and_retrieval_kind ... FAILED
+test json_formats_are_one_minified_document_including_exact_final_newline ... ok
+test malicious_fences_and_controls_cannot_escape_literal_source_and_roundtrip_exactly ... ok
+test budget_fallback_never_fabricates_child_truth_without_attestation ... ok
+test signatures_and_outlines_are_visible_with_ranges_and_literal_control_escaping ... ok
+test preexisting_masking_and_unicode_are_not_changed_or_inferred ... ok
+test terminal_hidden_unicode_is_json_escaped_without_changing_values ... ok
+test errors_partial_scope_and_negative_report_are_explicit_without_success_claim ... ok
+test outline_and_handoff_display_source_provenance_and_keep_unknown_fields ... ok
+test support_is_exact_and_unsupported_markdown_returns_argument_error ... ok
+test renderer_never_enforces_or_silently_cuts_a_reported_budget ... ok
+
+failures:
+
+---- budget_fallback_keeps_nested_execution_truth_and_retrieval_kind stdout ----
+
+thread 'budget_fallback_keeps_nested_execution_truth_and_retrieval_kind' (9292208) panicked at tests/render.rs:227:9:
+assertion `left == right` failed: lost project_id
+  left: Null
+ right: String("project-observed")
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    budget_fallback_keeps_nested_execution_truth_and_retrieval_kind
+
+test result: FAILED. 10 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--test render`
+error: 2 targets failed:
+    `--bin pctx`
+    `--test render`

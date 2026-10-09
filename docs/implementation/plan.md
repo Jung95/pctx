@@ -17,6 +17,38 @@ if external conditions block completion, report the exact condition and required
 action, preserve the current task, and do not select another task. Current selection:
 PCTX01, implementing, no next official task.
 
+## Current G04-D03 fallback boundary — 2026-10-09
+
+Only **PCTX01** is active; **G04-D03 remains open**, detail29/40 and whole0/10 unchanged.
+[Fallback evidence](evidence/pctx01-fallback-provenance-verification.json) records
+known identity/validation/data retained through rendering refusals and the shared
+final-timeout conversion, presentation truncation explicitly marked, and exact
+warning records withheld (not estimated source-result counts). Initialized producer
+errors now retain the Project already opened, without another discovery/read.
+
+Final71 focused tests PASS (7binary/25frontend/4refusal/11Run/11render/13session);
+locked all-target Clippy and format PASS. Actual initialized Read6case and Adapter
+6error-class/x2format/x3destination controls compare previously observed identity.
+The private expired-render boundary verifies original clock/error retention; actual
+CLI final-timeout phase-race timing remains unqualified. Initial16PASS2FAIL,
+69PASS1FAIL735bytes>690, initialized Read0PASS1FAIL and stale anonymous-identity
+helper70PASS1FAIL are retained. Helper assertions now compare exact known identity;
+pre-effect cases continue to require null identity. No retry success erases failures.
+
+Capacity calculation now reserves ordinary generated UUID/WS/GEN identities and
+presentation-truncation metadata using sizing sentinels never emitted as identity.
+Seven no-effect actual CLI probes record command-specific capacities; this does not
+qualify arbitrary large persisted metadata or every accepted identifier spelling.
+Final fallback still needs a second byte-bound guard and the remaining fixed
+representation/destination proof. Those are the exact next same-condition actions.
+
+After two G04-D03 updates without closure, responsibility/completion are reconciled:
+no independent producer expansion/new IDs, no denominator change, and no repeated
+G01-G10 reorganization. Finish the existing general fallback overflow contract and
+140-leaf representation/destination crosswalk before extending implementation.
+Required platforms, original four macOS1s startup failures and inactive PCTX36/PCTX47
+backlog remain. No whole/platform rerun, push retry or Actions; all jobs terminal.
+
 ## Current G04-D03 Read boundary — 2026-10-09
 
 Only **PCTX01** is active; **G04-D03 remains open**. Detail29/40 and whole gates0/10
