@@ -2,7 +2,8 @@
 
 ## Historical URL association and own privacy control — current, 2026-10-09
 
-PCTX01-G05-D05 remains product_failure,33/40 details,0/10 gates. Approved original
+PCTX01-G05-D05 remains product_failure. Whole PCTX01 totals:33/40 details,0/10 gates.
+Approved original
 1000ms/8×16 run exit101:98 recorded,96OUTPUT,2TIMEOUT45676/45677,30 censored.
 Exact-owned-URL query1 exit0,[]/0events;query2 not run;association unknown.
 Own NSURL control4events:default%@ redacted,public%@ matches;diagnostic privacy

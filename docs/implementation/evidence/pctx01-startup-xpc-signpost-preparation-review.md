@@ -1,6 +1,6 @@
 # Exact-owned-URL historical assessment preparation
 
-PCTX01-G05-D05 remains **product_failure**, 33/40 details and 0/10 gates.
+PCTX01-G05-D05 remains **product_failure**, whole PCTX01 totals are 33/40 details and 0/10 gates.
 No product fix, original test execution, service observation or administrator
 request occurred in this preparation. Original acceptance remains 1000ms,
 8×16 concurrency, native execution and all stream/group/cancellation contracts.

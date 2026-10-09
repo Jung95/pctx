@@ -1,6 +1,6 @@
 # Historical exact-owned-URL result and diagnostic privacy control
 
-PCTX01-G05-D05 remains **product_failure**, 33/40 details and 0/10 gates.
+PCTX01-G05-D05 remains **product_failure**, whole PCTX01 totals are 33/40 details and 0/10 gates.
 The approved scope was consumed once. No platform/product repair was implemented.
 
 ## Original-condition failure
@@ -68,3 +68,7 @@ Static follow-up found candidate names`samplingUUID`,`sha256hash`, and
 public logging, request linkage, successful-path emission or API support.
 [Candidate offsets](pctx01-startup-xpc-public-binding-candidates.json) are a
 starting point for call-site review, not authorization to inspect more runtime data.
+
+Independent final passive review found no material evidence or completion-claim
+blocker. It confirmed the own-control/privacy distinction, cleanup receipts and
+build-only label. D05 remains unresolved; counts above are whole PCTX01 totals.
