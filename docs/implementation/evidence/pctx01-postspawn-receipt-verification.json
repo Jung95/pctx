@@ -1,0 +1,143 @@
+{
+  "task": "PCTX01",
+  "condition": "PCTX01-G05-D02",
+  "status": "open",
+  "base_revision": "7350cf48599a8751466d26a99052e098fd601c08",
+  "environment": {
+    "system": "Darwin",
+    "machine": "arm64",
+    "rust": "1.99.0"
+  },
+  "fixed_register": {
+    "closed_details": 28,
+    "detail_denominator": 40,
+    "closed_gates": 0,
+    "gate_denominator": 10,
+    "new_ids": []
+  },
+  "scope": "Output-job receipt phase bounded local proof; remaining three Runner phases keep condition open. No slot-release or whole-suite/platform claim.",
+  "phase_status": {
+    "pipe setup": "prior bounded local proof",
+    "native wait": "prior bounded local proof",
+    "capture workers": "prior bounded local proof",
+    "job receipt publication": "bounded local proof",
+    "CheckRun backend-error cleanup": "remaining",
+    "CheckRun completion": "remaining",
+    "Local Helper completion": "remaining"
+  },
+  "repair": "Active failure enters supervised capture/reap; final native receipt attempted before compact/artifact save so its failure is persisted as pctx_error and no passing report is available on reread. Active/final publication/errors are separate from native outcome/raw artifact/resource state. Receipt errors take precedence over cancellation; independent cancelled termination is retained.",
+  "native_test": "output::capture_tests::native_job_receipt_failures_preserve_artifact_and_block_pass_evidence",
+  "native_cases": [
+    "Actual directory-over-file obstruction after spawn: active+final receipt failure, SIGKILL retained, both streams/raw artifact present, phase errors, prior starting receipt bytes unchanged, no gate report/rerun.",
+    "Obstruction in poll after active receipt: final receipt failure, native exit0 retained, both streams/raw artifact present, IO_ERROR7, prior active receipt bytes unchanged, no gate report/rerun.",
+    "No obstruction: active+final receipt published, native exit0, actual typed passing report remains available.",
+    "Observed cancellation plus final receipt obstruction: IO_ERROR7 overrides CANCELLED130, independent cancelled termination/SIGKILL and available streams/artifact retained; no passing report/rerun."
+  ],
+  "runs": [
+    {
+      "session": 17733,
+      "log": "pctx01-postspawn-receipt-initial.log",
+      "result": "0PASS1FAIL",
+      "purpose": "Ignored active-receipt error reproduced; test reaches no execution error and fails before final/control scenarios.",
+      "snapshot": "pctx01-postspawn-receipt-initial-hashes.json"
+    },
+    {
+      "session": 23936,
+      "log": "pctx01-postspawn-receipt-native.log",
+      "result": "1PASS",
+      "scope": "Three native receipt scenarios before later byte-exact/phase-error assertions."
+    },
+    {
+      "session": 75427,
+      "log": "pctx01-postspawn-receipt-regression.log",
+      "result": "99PASS1FAIL",
+      "counts": {
+        "lib": 48,
+        "cli_cancellation": 5,
+        "cli_run_exit": 11,
+        "runner_pass": 35,
+        "runner_fail": 1
+      },
+      "failure": "Existing cancellation-publication fixture parses empty child.pid after file-existence-only wait; product contract assertions are not reached. Product source unchanged in following fixture repair."
+    },
+    {
+      "session": 38441,
+      "log": "pctx01-postspawn-receipt-runner-final.log",
+      "result": "36PASS",
+      "scope": "All Runner tests after both sibling fixtures emit newline-delimited PID and wait for complete positive record under unchanged5s allowance."
+    },
+    {
+      "session": null,
+      "log": "pctx01-postspawn-receipt-clippy.log",
+      "result": "PASS",
+      "command": "cargo clippy --locked --all-targets -- -D warnings",
+      "scope": "Static check before final cancellation-priority correction."
+    },
+    {
+      "session": 81654,
+      "log": "pctx01-postspawn-receipt-cancellation-initial.log",
+      "result": "0PASS1FAIL",
+      "scope": "Fourth combination reveals proposed receipt implementation kept cancellation above storage error; candidate repaired before integration."
+    },
+    {
+      "session": 19552,
+      "log": "pctx01-postspawn-receipt-final.log",
+      "result": "100PASS",
+      "scope": "Final source with independent cancellation observation/receipt processing precedence and complete PID fixture readiness;100 focused controls.",
+      "counts": {
+        "lib": 48,
+        "cli_cancellation": 5,
+        "cli_run_exit": 11,
+        "runner": 36
+      }
+    },
+    {
+      "session": 12013,
+      "log": "pctx01-postspawn-receipt-clippy-final.log",
+      "result": "PASS",
+      "command": "cargo clippy --locked --all-targets -- -D warnings",
+      "scope": "Final source."
+    },
+    {
+      "log": "pctx01-postspawn-receipt-format.log",
+      "result": "PASS",
+      "command": "cargo fmt --all -- --check"
+    }
+  ],
+  "current_focused_qualification": "Final source100PASS in19552:48lib/5CLI cancellation/11Run exit/36Runner. Earlier99PASS1FAIL, ignored receipt failure and candidate cancellation-priority failure are retained. No whole suite.",
+  "fixture_failure_retained": "99PASS1FAIL is not erased by rerun; the specific demonstrated empty-file readiness race is repaired, with source-bound evidence. Original four macOS1s startup product failures are unchanged.",
+  "review": {
+    "agent": "/root/work_control",
+    "mode": "read-only, no edits/builds",
+    "finding": "No blocker in receipt-phase implementation and cancellation precedence; byte-exact retained receipt assertions added. Final100 and static checks PASS. Three Runner finalization groups remain open."
+  },
+  "required_platforms": "macOS arm64/x86_64, Linux x86_64, Windows x86_64; only focused macOS arm64 native proof here",
+  "github_actions_dispatched": false,
+  "source_sha256": {
+    "src/output.rs": "e9c86b6d90a4f3fa311f74bc59fe6c9a3eb2a801a7f98852c8105fda86cc6493",
+    "src/runner.rs": "c55b5cdb20f0f82f73647a7afceda41ef2737c4601206c72691efbc7c5819db3",
+    "src/main.rs": "1f8c0ec5227eb346494036e5e544e6baef250f543714eed8005f748c5d50b32a",
+    "src/cancellation.rs": "4901638803bb82894b3211d0f9a8f9537850c4bfed3ac178489ec20780114d4f",
+    "tests/runner.rs": "65ad8b8f1b0c5493ca49b2d66d1ceea67ea0674dcff2e75868da86f188092308",
+    "Cargo.toml": "179b02f69bdd7c61adc41ed5f71f8737ee692655b46b0bfeb9c1ffe165d8e97f",
+    "Cargo.lock": "f96362897990caba560793601bc9fca08cef5c977907bb06889d5595d2acd7b0"
+  },
+  "artifacts_sha256": {
+    "target/debug/pctx": "6e917dea4c62d4a38044a1e701c16511dfa83179704c58edfd3d015ddeb793d5",
+    "target/debug/deps/pctx-ae897bec01e143c7": "12d053f467fb95baf358e66591e1eeca3492a1aaddc661df6b8b3b27f96f2844"
+  },
+  "log_sha256": {
+    "pctx01-postspawn-receipt-initial.log": "117be0a581396af34730693b701a41306932c37fc3a24dd284bb4d35673c5291",
+    "pctx01-postspawn-receipt-native.log": "965bdd7f7c371ce1c79513a0bbc8f4a160e12360667cab589d12ad9594e91c53",
+    "pctx01-postspawn-receipt-regression.log": "66041f48162e4b4823777f83adfec46f2c2698d03b3cda9cbb42ad875d6e6695",
+    "pctx01-postspawn-receipt-runner-final.log": "40b7bfb294a583501e0f0494cb6a4e6f0da512fcb8f2fef715676ced6a808c2c",
+    "pctx01-postspawn-receipt-clippy.log": "0270d4dcf2d9678a65030bf04385475bd13113c97574b65ba69cc46165063b74",
+    "pctx01-postspawn-receipt-cancellation-initial.log": "1064a2ee0565e274089f55a211e419679116f239c6bea4ddda318bdbaf4cccfc",
+    "pctx01-postspawn-receipt-final.log": "ef21b6b6250beeba4241208c6c1f09f41c4ddefa217fb7b775d13d75e55a8ae1",
+    "pctx01-postspawn-receipt-clippy-final.log": "1fb37f3ab42a1fd46cbf42155fc8d8ae51700a000a1890e8bd3f37dca8b5ab6a",
+    "pctx01-postspawn-receipt-format.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "snapshot_sha256": {
+    "pctx01-postspawn-receipt-initial-hashes.json": "35f0d78a5b42151705c8c9be81f9532f319f0a9c2d3e6b046303823aece1e72e"
+  }
+}

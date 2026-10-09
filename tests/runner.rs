@@ -357,7 +357,7 @@ fn cancel_observed_parent(mut child: std::process::Child) -> Output {
 #[test]
 fn ctrl_c_local_helper_preserves_child_receipt_and_releases_observed_aux_capacity() {
     let f = Fixture::new(
-        "printf 'one\\n' >> .pctx/invocations\nprintf '%s' \"$$\" > .pctx/child.pid\nexec /bin/sleep 30\n",
+        "printf 'one\\n' >> .pctx/invocations\nprintf '%s\\n' \"$$\" > .pctx/child.pid\nexec /bin/sleep 30\n",
         false,
         None,
     );
@@ -379,11 +379,7 @@ fn ctrl_c_local_helper_preserves_child_receipt_and_releases_observed_aux_capacit
         .stderr(Stdio::piped())
         .spawn()
         .unwrap();
-    wait_marker(&target.join(".pctx/child.pid"));
-    let pid: i32 = fs::read_to_string(target.join(".pctx/child.pid"))
-        .unwrap()
-        .parse()
-        .unwrap();
+    let pid = wait_pid_marker(&target.join(".pctx/child.pid"));
     let slot = f.host.join("slots/aux-agent.json");
     assert!(slot.exists());
     let out = cancel_observed_parent(child);
@@ -477,7 +473,7 @@ fn ctrl_c_canonical_check_finishes_guardian_before_releasing_mutex() {
 fn ctrl_c_check_publication_failure_keeps_native_truth_and_released_capacity() {
     use fs2::FileExt;
     let f = Fixture::new(
-        "printf 'one\\n' >> .pctx/invocations\nprintf '%s' \"$$\" > .pctx/child.pid\nexec /bin/sleep 30\n",
+        "printf 'one\\n' >> .pctx/invocations\nprintf '%s\\n' \"$$\" > .pctx/child.pid\nexec /bin/sleep 30\n",
         true,
         None,
     );
@@ -493,11 +489,7 @@ fn ctrl_c_check_publication_failure_keeps_native_truth_and_released_capacity() {
         .stderr(Stdio::piped())
         .spawn()
         .unwrap();
-    wait_marker(&f.root.join(".pctx/child.pid"));
-    let pid: i32 = fs::read_to_string(f.root.join(".pctx/child.pid"))
-        .unwrap()
-        .parse()
-        .unwrap();
+    let pid = wait_pid_marker(&f.root.join(".pctx/child.pid"));
     let out = cancel_observed_parent(child);
     let v: Value = serde_json::from_slice(&out.stdout).unwrap();
     assert_eq!(out.status.code(), Some(7), "{out:?}");
@@ -723,6 +715,23 @@ fn legacy(path: &std::path::Path, marker: &std::path::Path, mode: &str) -> std::
         .stderr(Stdio::null())
         .spawn()
         .unwrap()
+}
+fn wait_pid_marker(path: &std::path::Path) -> i32 {
+    let end = Instant::now() + Duration::from_secs(5);
+    loop {
+        if let Ok(text) = fs::read_to_string(path)
+            && text.ends_with('\n')
+            && let Ok(pid) = text.trim().parse::<i32>()
+            && pid > 0
+        {
+            return pid;
+        }
+        assert!(
+            Instant::now() < end,
+            "Complete child PID receipt was not published"
+        );
+        std::thread::sleep(Duration::from_millis(5));
+    }
 }
 fn wait_marker(path: &std::path::Path) {
     let end = Instant::now() + Duration::from_secs(5);

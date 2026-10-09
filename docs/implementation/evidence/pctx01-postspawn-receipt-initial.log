@@ -1,0 +1,22 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.14s
+     Running unittests src/lib.rs (target/debug/deps/pctx-ae897bec01e143c7)
+
+running 1 test
+test output::capture_tests::native_job_receipt_failures_preserve_artifact_and_block_pass_evidence ... FAILED
+
+failures:
+
+---- output::capture_tests::native_job_receipt_failures_preserve_artifact_and_block_pass_evidence stdout ----
+
+thread 'output::capture_tests::native_job_receipt_failures_preserve_artifact_and_block_pass_evidence' (9250330) panicked at src/output.rs:2214:51:
+called `Option::unwrap()` on a `None` value
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    output::capture_tests::native_job_receipt_failures_preserve_artifact_and_block_pass_evidence
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 47 filtered out; finished in 0.15s
+
+error: test failed, to rerun pass `--lib`

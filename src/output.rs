@@ -1558,14 +1558,24 @@ fn run_inner(
         // pipes and native child under supervision so cleanup still publishes
         // already-observed output and exit truth, without executing again.
         let mut monitor_error = spawn_observation.err();
+        let mut cancelled = monitor_error
+            .as_ref()
+            .is_some_and(|error| error.code == "CANCELLED");
         // If this parent dies, this durable receipt remains active_or_unknown; TTL never frees resources.
-        let _ = atomic_write(
+        let active_receipt_error = atomic_write(
             &job_path,
             &serde_json::to_vec(
                 &json!({"execution_id":execution_id,"pid":pid,"process_group":pid,"state":"active_or_unknown","started_at":now(),"resource_admission":if registered{"registered_profile_external_resource_ledger"}else{"non_heavy_manual"}}),
             )?,
             true,
-        );
+        ).err();
+        if let Some(error) = active_receipt_error.as_ref()
+            && monitor_error
+                .as_ref()
+                .is_none_or(|current| current.code == "CANCELLED")
+        {
+            monitor_error = Some(error.clone());
+        }
         let stop = Arc::new(AtomicBool::new(false));
         let nul_framed = matches!(
             parser_identity,
@@ -1611,6 +1621,7 @@ fn run_inner(
                 None => Ok(()),
             });
             if let Err(e) = poll {
+                cancelled |= e.code == "CANCELLED";
                 monitor_error = Some(e);
                 // Reobserve ownership before signaling: a callback could have
                 // consumed the native wait status or otherwise lost identity.
@@ -1692,10 +1703,7 @@ fn run_inner(
         let signal: Option<i32> = None;
         let termination = if status.is_none() {
             "unknown"
-        } else if monitor_error
-            .as_ref()
-            .is_some_and(|e| e.code == "CANCELLED")
-        {
+        } else if cancelled {
             "cancelled"
         } else if timed_out {
             "timed_out"
@@ -1743,12 +1751,45 @@ fn run_inner(
             retrieval_bytes: 0,
             delivery_attempts: 0,
         };
+        // Native termination durability is separate from artifact publication.
+        // Observe its failure before rendering/saving so reread cannot turn a
+        // failed supervision receipt into passing typed evidence.
+        let final_receipt_error = atomic_write(
+            &job_path,
+            &serde_json::to_vec(
+                &json!({"execution_id":execution_id,"pid":pid,"state":if status.is_none(){"child_unknown"}else if a.capture_complete{"child_exited"}else{"child_exited_descendants_unknown"},"termination":a.termination,"child_exit_code":a.child_exit_code,"signal":a.signal}),
+            )?,
+            true,
+        ).err();
+        if let Some(error) = final_receipt_error.as_ref() {
+            if monitor_error
+                .as_ref()
+                .is_none_or(|current| current.code == "CANCELLED")
+            {
+                monitor_error = Some(error.clone());
+            }
+            a.pctx_error = monitor_error.as_ref().map(|error| error.code.clone());
+        }
         // Execution presentation retains its existing bounded-record contract;
         // a query budget never replaces the completed child's exit truth.
         let mut execution_presentation = p.clone();
         execution_presentation.deadline = None;
         let mut data = compact(&execution_presentation, &a, r.budget_bytes)?;
         data["exit_policy"] = json!(r.exit_policy);
+        let mut receipt_errors = Vec::new();
+        for (phase, error) in [
+            ("active", active_receipt_error.as_ref()),
+            ("final", final_receipt_error.as_ref()),
+        ] {
+            if let Some(error) = error {
+                receipt_errors.push(json!({"phase":phase,"exit":error.exit,"error":error}));
+            }
+        }
+        data["job_receipt_publication"] = json!({
+            "active":if active_receipt_error.is_some(){"failed"}else{"published"},
+            "final":if final_receipt_error.is_some(){"failed"}else{"published"},
+            "errors":receipt_errors
+        });
         if let Some(error) = monitor_error {
             data["processing_exit"] = json!(error.exit);
             data["processing_error"] = json!(error);
@@ -1763,13 +1804,6 @@ fn run_inner(
             data["processing_error"] = json!(e);
             data["raw_available"] = json!(false);
         }
-        let _ = atomic_write(
-            &job_path,
-            &serde_json::to_vec(
-                &json!({"execution_id":execution_id,"pid":pid,"state":if status.is_none(){"child_unknown"}else if a.capture_complete{"child_exited"}else{"child_exited_descendants_unknown"},"termination":a.termination,"child_exit_code":a.child_exit_code,"signal":a.signal}),
-            )?,
-            true,
-        );
         Ok(data)
     }
 }
@@ -2131,6 +2165,178 @@ mod capture_tests {
         fs::create_dir_all(&p.workspace_dir).unwrap();
         fs::create_dir_all(&p.control_dir).unwrap();
         p
+    }
+    #[cfg(unix)]
+    #[test]
+    fn native_job_receipt_failures_preserve_artifact_and_block_pass_evidence() {
+        use std::cell::{Cell, RefCell};
+        for phase in ["active", "final", "none", "cancelled_final"] {
+            let temp = tempfile::tempdir().unwrap();
+            let base = fs::canonicalize(temp.path()).unwrap();
+            let p = native_project(&base);
+            let report = json!({"schema_version":1,"check_key":"unit","producer":"fixture",
+                "source":"fixture","exit_code":0,"tests":1,"passed":1,"failed":0,
+                "errors":0,"skipped":0,"result":"passed","started_at":1,"finished_at":2,
+                "environment":{}});
+            fs::write(p.root.join("fixture.sh"), format!(
+                "printf '%s\n' '{report}'\nprintf 'observed stderr\n' >&2\nprintf x >> invocation\nwhile [ ! -f allow_exit ]; do /bin/sleep 0.01; done\nexit 0\n"
+            )).unwrap();
+            let request = RunRequest {
+                task_id: None,
+                session: None,
+                retain: "temporary".into(),
+                execution_timeout_ms: Some(5000),
+                budget_bytes: 8192,
+                exit_policy: "pctx".into(),
+                stdin: "closed".into(),
+                argv: vec!["/bin/sh".into(), "fixture.sh".into()],
+            };
+            let binding = registered_binding_at(&p, &request.argv, ".").unwrap();
+            let pid = Cell::new(0);
+            let _cleanup = NativeCleanup(&pid);
+            let blocked = Cell::new(false);
+            let previous = RefCell::new(None::<Value>);
+            let original_bytes = RefCell::new(Vec::new());
+            let saved_path = RefCell::new(None::<PathBuf>);
+            let obstruct = || {
+                if blocked.replace(true) {
+                    return;
+                }
+                let path = fs::read_dir(p.data_dir.join("output-jobs"))
+                    .unwrap()
+                    .map(|entry| entry.unwrap().path())
+                    .find(|path| {
+                        path.extension()
+                            .is_some_and(|extension| extension == "json")
+                    })
+                    .unwrap();
+                let bytes = fs::read(&path).unwrap();
+                *previous.borrow_mut() = Some(serde_json::from_slice(&bytes).unwrap());
+                *original_bytes.borrow_mut() = bytes;
+                *saved_path.borrow_mut() = Some(path.with_extension("saved"));
+                fs::rename(&path, path.with_extension("saved")).unwrap();
+                fs::create_dir(&path).unwrap(); // Actual atomic rename failure; no mocked writer.
+            };
+            let data = run_registered_monitored(
+                &p,
+                &request,
+                ".",
+                &BTreeMap::new(),
+                binding["fingerprint"].as_str().unwrap(),
+                &mut |native_pid| {
+                    pid.set(native_pid);
+                    let limit = Instant::now() + Duration::from_secs(2);
+                    while fs::read(p.root.join("invocation")).ok().as_deref() != Some(b"x") {
+                        assert!(Instant::now() < limit, "Fixture body did not start");
+                        thread::sleep(Duration::from_millis(1));
+                    }
+                    if phase == "active" {
+                        obstruct();
+                    }
+                    Ok(())
+                },
+                &mut || {
+                    if phase == "final" || phase == "cancelled_final" {
+                        obstruct();
+                    }
+                    if phase == "cancelled_final" {
+                        return Err(err("CANCELLED", "Observed cancellation", 130));
+                    }
+                    fs::write(p.root.join("allow_exit"), b"x").unwrap();
+                    Ok(())
+                },
+            )
+            .unwrap();
+            if phase == "none" {
+                assert!(execution_error(&data).is_none());
+                assert_eq!(data["job_receipt_publication"]["active"], "published");
+                assert_eq!(data["job_receipt_publication"]["final"], "published");
+            } else {
+                assert_eq!(execution_error(&data).unwrap().code, "IO_ERROR");
+                assert_eq!(execution_error(&data).unwrap().exit, 7);
+                assert_eq!(
+                    data["job_receipt_publication"]["active"],
+                    if phase == "active" {
+                        "failed"
+                    } else {
+                        "published"
+                    }
+                );
+                assert_eq!(data["job_receipt_publication"]["final"], "failed");
+                assert_eq!(
+                    previous.borrow().as_ref().unwrap()["state"],
+                    if phase == "active" {
+                        "starting"
+                    } else {
+                        "active_or_unknown"
+                    }
+                );
+            }
+            let errors = data["job_receipt_publication"]["errors"]
+                .as_array()
+                .unwrap();
+            assert_eq!(
+                errors.len(),
+                match phase {
+                    "active" => 2,
+                    "final" | "cancelled_final" => 1,
+                    _ => 0,
+                }
+            );
+            for error in errors {
+                assert_eq!(error["exit"], 7);
+                assert_eq!(error["error"]["code"], "IO_ERROR");
+            }
+            if phase != "none" {
+                assert_eq!(
+                    fs::read(saved_path.borrow().as_ref().unwrap()).unwrap(),
+                    *original_bytes.borrow()
+                );
+            }
+            if phase == "active" || phase == "cancelled_final" {
+                assert_eq!(data["signal"], libc::SIGKILL);
+                if phase == "cancelled_final" {
+                    assert_eq!(data["termination"], "cancelled");
+                }
+            } else {
+                assert_eq!(data["child_exit_code"], 0);
+                assert_eq!(data["termination"], "exited");
+            }
+            assert_eq!(data["raw_available"], true);
+            assert_eq!(data["capture_complete"], true);
+            let artifact = load(&p, data["output_id"].as_str().unwrap()).unwrap();
+            assert_eq!(typed_report(&artifact).is_some(), phase == "none");
+            assert_eq!(
+                observed_report(&p, &artifact.output_id).unwrap().is_some(),
+                phase == "none"
+            );
+            assert_eq!(
+                artifact
+                    .records
+                    .iter()
+                    .filter(|record| record.stream == "stdout")
+                    .map(|record| record.text.as_str())
+                    .collect::<Vec<_>>()
+                    .join("\n"),
+                report.to_string()
+            );
+            assert!(
+                artifact
+                    .records
+                    .iter()
+                    .any(|record| record.stream == "stderr" && record.text == "observed stderr")
+            );
+            assert_eq!(fs::read(p.root.join("invocation")).unwrap(), b"x");
+            let mut status = 0;
+            assert_eq!(
+                unsafe { libc::waitpid(pid.get() as i32, &mut status, libc::WNOHANG) },
+                -1
+            );
+            assert_eq!(
+                std::io::Error::last_os_error().raw_os_error(),
+                Some(libc::ECHILD)
+            );
+        }
     }
     #[cfg(unix)]
     #[test]

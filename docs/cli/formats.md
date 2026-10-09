@@ -136,6 +136,16 @@ alone is not proof that a readable artifact exists. Accounting warnings remain
 separate from the completed response. These execution proofs are native Unix;
 Windows status and containment qualification remain required.
 
+Spawned execution data includes `job_receipt_publication`: separate `active` and
+`final` publication states (`published` or `failed`) plus phase-specific errors.
+These describe the native job receipt, independently of `raw_available` for the
+output artifact. Receipt failure retains child status and available output but
+cannot establish passing typed evidence, including through artifact reread.
+A receipt storage error also takes precedence over cancellation130 while the
+independent cancelled native termination remains. A
+final native receipt can be published even if subsequent artifact storage fails;
+that does not promise that a raw artifact exists or that resources were released.
+
 A parsed `run` request refused before launch carries `spawned:false`,
 `termination:not_started`, null child code/signal and its PCTX error even when
 capacity, representation or query-timeout admission fails. The measured minimum

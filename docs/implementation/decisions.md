@@ -1222,3 +1222,30 @@ receipt/Runner phases stay open. After two updates without closing the entire
 condition, responsibility/completion were reconciled: §14/38 common child/error
 response boundary remains PCTX01, independent producer semantics stay inactive,
 40 fixed conditions/28closed are unchanged, and no mandatory bar is lowered.
+
+## PCTX01-G05-D02 job receipt durability — 2026-10-09
+
+Output-job active/final atomic writes are mandatory observation receipts, not best
+effort success signals. Active publication failure becomes monitored processing
+failure; final native receipt is attempted before compact/artifact publication,
+so its error is included in the artifact and blocks passing reread evidence.
+Response reports both receipt phases and errors independently from artifact
+availability, native status and resource ownership. Preserving captured output
+never invents durable job state or grants gate evidence. No stored schema change.
+
+Real directory-over-file obstruction reproduces the ignored error, then verifies
+both failure phases and a successful passing control. Byte-exact retained prior
+receipt assertions distinguish last-known metadata from failed new publication.
+The related native regression also exposed an existing empty PID-file fixture
+race; emit newline-delimited PID and wait for the complete record in both sibling
+fixtures within their unchanged5s limit. Retain99PASS1FAIL alongside the repaired
+Runner evidence; original four1s-budget product startup failures are unchanged.
+Seven existing phase groups/four qualified/three Runner groups remaining; no new
+condition IDs, independent producer expansion or whole-condition closure.
+
+The final receipt control also reproduces the candidate's cancellation-precedence
+mistake: final receipt failure retained CANCELLED130 instead of storage7. Repair
+tracks observed cancellation independently from primary processing error, so
+receipt failure wins while native cancelled termination/SIGKILL remain. This is
+the existing G05-D06 processing/publication precedence applied to G05-D02, not a
+new condition or reopened exit category. Candidate failure remains in evidence.
