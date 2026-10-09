@@ -1,0 +1,27 @@
+{
+  "task": "PCTX01",
+  "condition": "PCTX01-G05-D05",
+  "checked": "2026-10-09 Europe/Berlin",
+  "query_basis": "exact observed AppleSystemPolicy/ASPEvaluationManager kernel script-policy wait;new Apple primary-source search",
+  "sources": [
+    {
+      "url": "https://support.apple.com/en-ie/guide/security/sece3b202c4b/web",
+      "published": "2026-08-03",
+      "facts": [
+        "macOS26.4+ introduces three terminal/script protections",
+        "pasteboard command blocking may inspect descendant behavior of pasted commands across terminal emulators",
+        "AppleScript/JXA scanning is integrated into OpenScripting"
+      ],
+      "limits": "No mapping to recorded kernel stack,no script-launch latency promise,no applicable fix;AppleScript scanning is not proof of shell-script cause."
+    },
+    {
+      "url": "https://developer.apple.com/documentation/security/defining-launch-environment-and-library-constraints",
+      "fetch": "web retrieval exposes7lines only;not sufficient contents",
+      "limits": "Search snippet is insufficient for a corrective implementation claim."
+    }
+  ],
+  "conclusion": "No supported correction or specific PCTX causal operation established. Process-tree provenance can persist independently of UI host presence in the documented mechanism,but attribution to these timeouts remains unproved.",
+  "execution": "no test,no process observation,no administrator authentication,no security setting/provenance manipulation",
+  "acceptance": "product_failure;33/40details,0/10whole gates",
+  "next": "Need applicable documented correction or causally supported PCTX defect;do not perform unchanged controls or provenance changes to avoid security assessment"
+}

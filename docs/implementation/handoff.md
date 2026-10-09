@@ -1,5 +1,10 @@
 # Resume handoff
 
+[Apple primary-source check](evidence/pctx01-startup-apple-policy-docs-check.json)
+found documented terminal process-tree protections,but no cause mapping or supported
+correction for these timeouts. No security/provenance change or new test performed.
+Current corrective boundary remains the consolidated triage below.
+
 Current corrective boundary: [consolidated startup triage](pctx01-startup-triage.md).
 No unchanged host-control/kernel-capture retry is justified;G05-D05 remains an
 unresolved product failure. Resume with a demonstrated causal PCTX operation or

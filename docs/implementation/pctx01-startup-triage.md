@@ -65,3 +65,16 @@ and final closure remain open. No other official task is activated.
 
 [Consolidation hashes](evidence/pctx01-startup-consolidated-triage.json) bind this
 record to the inspected source and evidence inputs.
+
+## Apple policy documentation check
+
+The [bounded primary-source check](evidence/pctx01-startup-apple-policy-docs-check.json)
+fetched Apple's [Terminal and script protections](https://support.apple.com/en-ie/guide/security/sece3b202c4b/web).
+For macOS26.4+,the document describes independent protections including descendant
+behavior inspection after pasted terminal commands. This explains why changing UI
+app presence alone is not a comprehensive control of documented process-tree policy
+inputs,but does not attribute these timeouts to that mechanism. The AppleScript/JXA
+section is not proof about the shell-script fixtures. No matching stack explanation,
+latency guarantee or applicable correction was identified. Another launch-constraint
+page was not readable enough to support a correction claim. No new test,process
+observation,authentication or policy/provenance manipulation occurred.
