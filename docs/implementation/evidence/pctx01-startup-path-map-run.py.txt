@@ -1,0 +1,31 @@
+from pathlib import Path
+import subprocess,json,os,hashlib,time,signal,datetime
+repo=Path('/Users/dev/PCTX');base=repo/'docs/implementation/evidence';meta=json.loads(Path('/private/tmp/pctx01-path-map-ready.json').read_text());root=Path(meta['root']);records=Path(meta['records']);assert os.getuid()==502 and os.geteuid()==502
+assert hashlib.sha256((repo/'src/query_process.rs').read_bytes()).hexdigest()==meta['original_query_source_sha256']
+assert (repo/'tests/project_deadline.rs').read_bytes()==(Path(meta['source'])/'tests/project_deadline.rs').read_bytes()
+assert hashlib.sha256((Path(meta['source'])/'src/query_process.rs').read_bytes()).hexdigest()==meta['instrumented_query_source_sha256']
+artifacts=[json.loads(s) for s in (root/'build.jsonl').read_text().splitlines() if s.startswith('{')];bins=[r['executable'] for r in artifacts if r.get('reason')=='compiler-artifact' and r.get('target',{}).get('name')=='project_deadline' and r.get('executable')];assert len(bins)==1
+binary=Path(bins[0]);sha=hashlib.sha256(binary.read_bytes()).hexdigest()
+(root/'consumed').open('x').close()
+name='concurrent_query_startup_preserves_group_streams_and_original_one_second_budget';log=base/'pctx01-startup-path-map-test.log';start=time.time_ns()
+with log.open('xb') as out:
+ child=subprocess.Popen([str(binary),'--exact',name,'--nocapture','--test-threads=1'],stdout=out,stderr=subprocess.STDOUT)
+ try:code=child.wait(timeout=30);watchdog=False
+ except subprocess.TimeoutExpired:
+  watchdog=True;child.send_signal(signal.SIGINT)
+  try:code=child.wait(timeout=3)
+  except subprocess.TimeoutExpired:child.kill();code=child.wait()
+end=time.time_ns();all_rows=[];expired=[];missing=[]
+for file in sorted(records.glob('*.mapping.json')):
+ row=json.loads(file.read_text());out=file.with_name(file.name.replace('.mapping.json','.outcome.json'))
+ if out.exists():outcome=json.loads(out.read_text())
+ else:outcome={'code':'UNKNOWN'};missing.append(row['pid'])
+ target={k:row[k] for k in ['pid','ppid','uid','start_sec','start_usec','record_wall_ns','device','inode','size','fixture_exact_content']};target['path_sha256']=hashlib.sha256(row['executable'].encode()).hexdigest();target['outcome']=outcome
+ try:os.kill(row['pid'],0);target['liveness']='present_or_reused; identity not inspected'
+ except ProcessLookupError:target['liveness']='absent'
+ all_rows.append(target)
+ if outcome['code']=='TIMEOUT':expired.append(target)
+ else:file.unlink();out.unlink(missing_ok=True)
+result={'task':'PCTX01-G05-D05','method':meta['method'],'revision':meta['revision'],'test':name,'uid':os.getuid(),'parent_pid':child.pid,'start_wall_ns':start,'end_wall_ns':end,'exit':code,'outer_watchdog':watchdog,'binary_sha256':sha,'source_hashes':{k:v for k,v in meta.items() if k.endswith('sha256')},'mapped_outcomes':len(all_rows),'expired_owned_targets':expired,'missing_outcomes':missing,'mapping_counts_are_censored':code!=0,'qualification':False,'observer_limits':meta['observer_limits'],'no_service_observation':True,'no_authentication':True,'no_security_change':True,'mapping_records':all_rows,'private_expired_manifest_directory':str(records),'log_sha256':hashlib.sha256(log.read_bytes()).hexdigest()}
+(base/'pctx01-startup-path-map-result.json').write_text(json.dumps(result,indent=2)+'\n');(base/'pctx01-startup-path-map-prepared.json').write_text(json.dumps(meta,indent=2)+'\n');(base/'pctx01-startup-path-map-run.py.txt').write_bytes(Path(__file__).read_bytes())
+print(json.dumps({'exit':code,'outer_watchdog':watchdog,'mapped_outcomes':len(all_rows),'expired_pids':[r['pid'] for r in expired],'missing_outcomes':missing,'all_mapped_pids_absent':all(r['liveness']=='absent' for r in all_rows),'qualification':False}))

@@ -1,0 +1,54 @@
+{
+  "task": "PCTX01-G05-D05",
+  "tests_passed": 3,
+  "tests_failed": 1,
+  "samples": 26,
+  "physical_bytes": [
+    17179869184
+  ],
+  "pressure_values_raw": [
+    1
+  ],
+  "swap_used_reported_M_range": [
+    841.5,
+    841.5
+  ],
+  "free_pages_range": [
+    15981,
+    21742
+  ],
+  "page_size_bytes": 16384,
+  "counter_deltas": {
+    "Swapins": 0,
+    "Swapouts": 0,
+    "Pageins": 758,
+    "Pageouts": 0,
+    "Compressions": 0,
+    "Decompressions": 260
+  },
+  "pressure_interpretation": {
+    "sysctl_1": "Normal dispatch flag according to published Apple XNU; internal normal enum is0 and must not be confused with sysctl output.",
+    "handler_source": "https://raw.githubusercontent.com/apple-oss-distributions/xnu/main/bsd/kern/kern_memorystatus_notify.c",
+    "flag_source": "https://raw.githubusercontent.com/apple-oss-distributions/xnu/main/bsd/sys/event_private.h",
+    "limit": "Published source interpretation,not a verified exact installed-kernel source match."
+  },
+  "inference": "Timeout reproduced with sampled normal aggregate pressure and no swap-in/out or pageout increment. Current observations do not support a shortage/swap-thrashing explanation; transient-between-samples shortage or specific-service delay is not excluded.",
+  "qualification": false,
+  "source_hashes": {
+    "src/query_process.rs": "bf661f4b8d0ed472585244ada4ac0e946221de364c100039cd20aee56fd8d0d2",
+    "tests/project_deadline.rs": "8b9fbc97fbd5acaf612b2d75b94cf810faa2b61614b654495082462b1941a8dc",
+    "Cargo.lock": "f96362897990caba560793601bc9fca08cef5c977907bb06889d5595d2acd7b0",
+    "target/debug/deps/project_deadline-f7e8b9d913251d84": "24c8fd6546d0c4e5f7d9519cdf1406dc1122be0b38f5dab5d42014b6a2c8ba0c"
+  },
+  "log_hashes_verified": true,
+  "known_parent_timeout_children": {
+    "28793": "absent",
+    "28832": "absent",
+    "28844": "absent",
+    "28848": "absent",
+    "28853": "absent",
+    "28965": "absent"
+  },
+  "build_metadata_sha256": "5bef608ebc3c3e4b0b18148083abf7626f9e58f8c0b4c3be3588a5458499fed3",
+  "temporary_build_metadata_removed": true
+}

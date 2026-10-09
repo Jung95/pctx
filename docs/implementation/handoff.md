@@ -1,5 +1,71 @@
 # Resume handoff
 
+## Requested memory recheck — current, 2026-10-09
+
+Human requested a new original-test recheck and raised memory shortage as a
+hypothesis. [Verification](evidence/pctx01-startup-memory-recheck-verification.json):
+freshly rebuilt UNMODIFIED product and original test source,four tests once,
+ordinaryUID502,original1000ms and8×16. ThreePASS,concurrencyFAIL101;children28848/
+28853 expire with zero streams,no EOF/root exit/group proof. No retry or watchdog
+substitution. Previous failures remain;PCTX01-G05-D05 product_failure,33/40details,
+0/10whole gates. Only PCTX01 active.
+
+Twenty-six passive aggregate memory snapshots include7around concurrency:16GiB
+physical RAM,pressure raw1throughout,swap841.5reportedM unchanged,deltaSwapins/
+Swapouts/Pageouts0. Published Apple XNU's sysctl converts internal levels to
+notification flags:raw1means Normal,NOT the internal enum's Warning1. Exact
+installed kernel source match is not established. Free pages alone are not all
+available memory. Current snapshots do not support memory shortage/swap thrashing
+as the explanation;transients between samples and service-specific delay remain
+unexcluded. No memory pressure was generated,no other-app data/logs collected,
+no administrator authentication or security/service change.
+
+Original src/test hashes and all4log hashes verify. Named4parents+2expired children
+are absent;temporary build metadata removed. Shared target now contains a newly
+rebuilt unmodified-product test binary,superseding the earlier diagnostic-artifact
+warning. No live test or authentication pending. Prepared target-path signpost
+scope below STILL requires separate content-scope approval and has not executed;
+its owned synthetic27817metadata files remain private for that finite lookup.
+Next is that target-specific approved correlation,not another unchanged rerun or
+another PCTX task. No supported causal startup repair established.
+
+## Target-path correlation prepared — current, 2026-10-09
+
+Only PCTX01 remains active; G05-D05 is product_failure,33/40details and0/10whole
+gates. [Static current-binary audit](evidence/pctx01-startup-policy-static-map.json)
+finds distinct PID,evaluation ID and signpost ID. Conditional Path/EvaluationID
+signposts share the last ID; the consumed PID-labelled query omitted signposts.
+This demonstrates a correlation limitation,not missing/emitted events or a cause.
+
+A new ordinary-user [owned-fixture mapping diagnostic](evidence/pctx01-startup-path-map-result.json)
+runs the original concurrency test once,unchanged1000ms/8×16/test source. Exit101:
+113mapped outcomes,112OUTPUT and1TIMEOUT27817,zero missing outcomes. The failed
+run is censored; no128-attempt denominator or acceptance PASS. Mapping adds
+post-spawn overhead within the original deadline; outcome writes follow original
+kill/reap cleanup. File checks do not prove atomic executed-content identity.
+
+[Own synthetic schema control](evidence/pctx01-startup-signpost-schema-control.json)
+returns4same-ID signposts using actual local JSON fields. It observes only its own
+emitter,not the policy service,and does not establish service emission/retention.
+[Cleanup](evidence/pctx01-startup-path-map-cleanup.json) confirms115named/mapped
+PIDs absent and removes source/tools. Two mode0600 synthetic-target metadata files
+remain in the named0700 temporary directory solely for the next finite query.
+Shared target retains an instrumented diagnostic artifact; do not reuse it as
+product acceptance evidence. Product src and original tests are unchanged.
+
+[Prepared next scope](evidence/pctx01-startup-signpost-target-scope-plan.json):
+separate service log-content approval REQUIRED before execution. At most2ordinary
+UID queries,one exact2sUTC window and servicePID665/path. First selects ONLY the
+owned synthetic fixture Path payload; second runs ONLY with one admitted numeric
+signpost ID,selecting EvaluationID and GatekeeperEvaluation records. Default masking,
+no private-mode activation,service signals,new test/retry,wider fallback or raw disk
+messages. Numeric/literal exports,30s cooperative query budget and byte/event caps.
+The end signpost cannot prove a successful driver call,kernel wakeup or child payload.
+No service query has run;no live job or macOS authentication pending. Next action:
+obtain this concrete separate content-scope approval,execute finite reader once,
+retain inconclusive/ambiguous outcomes and remove the two temporary metadata files.
+Do not transition to another PCTX task or repeat prior diagnostics.
+
 ## Historical target-log query completed — current, 2026-10-09
 
 [Verification](evidence/pctx01-startup-target-log-verification.json): human-approved

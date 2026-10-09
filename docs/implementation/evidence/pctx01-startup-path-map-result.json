@@ -1,0 +1,2311 @@
+{
+  "task": "PCTX01-G05-D05",
+  "method": "one original concurrency test; native owned-child BSD identity plus exact synthetic fixture path; no service observation, retention, retry, auth or security change",
+  "revision": "c207c780dc064e7f855a907cec6297d49ba3b132",
+  "test": "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget",
+  "uid": 502,
+  "parent_pid": 27803,
+  "start_wall_ns": 1791543849336381000,
+  "end_wall_ns": 1791543852080461000,
+  "exit": 101,
+  "outer_watchdog": false,
+  "binary_sha256": "d8abc7e5d947552ea90647c4d44b4b4315c0c2312bf2291353c3d9d56f54219f",
+  "source_hashes": {
+    "test_source_sha256": "8b9fbc97fbd5acaf612b2d75b94cf810faa2b61614b654495082462b1941a8dc",
+    "original_query_source_sha256": "bf661f4b8d0ed472585244ada4ac0e946221de364c100039cd20aee56fd8d0d2",
+    "instrumented_query_source_sha256": "d6aa2789de0c5adf703771767cb8ab225439d3d4fd3b33d37595eb05c12bc8cc"
+  },
+  "mapped_outcomes": 113,
+  "expired_owned_targets": [
+    {
+      "pid": 27817,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543850,
+      "start_usec": 999247,
+      "record_wall_ns": 1791543850999879000,
+      "device": 16777230,
+      "inode": 274113424,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "ff015b12d436dc640edb7d12f835bc4b13b456bb9a95b649fff6f18589d4ae8c",
+      "outcome": {
+        "code": "TIMEOUT"
+      },
+      "liveness": "absent"
+    }
+  ],
+  "missing_outcomes": [],
+  "mapping_counts_are_censored": true,
+  "qualification": false,
+  "observer_limits": [
+    "Mapping adds synchronous post-spawn work within originaldeadline; phases include its overhead.",
+    "Best-effort outcome is after existing cancellation/reap cleanup.",
+    "File identity/content checks do not prove atomic executed-content identity.",
+    "Missing mapping/outcome remains unknown."
+  ],
+  "no_service_observation": true,
+  "no_authentication": true,
+  "no_security_change": true,
+  "mapping_records": [
+    {
+      "pid": 27811,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543850,
+      "start_usec": 999077,
+      "record_wall_ns": 1791543850999800000,
+      "device": 16777230,
+      "inode": 274113419,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "11166582ed9acdb24350bcc964f760651e51c120e4ad3fc78896cac0c82b4df4",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27812,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543850,
+      "start_usec": 999108,
+      "record_wall_ns": 1791543851000226000,
+      "device": 16777230,
+      "inode": 274113423,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "73b3eb1a119587c0076cf72b9a803e873888c8d7dbe894ad86f175f89ec0b9ca",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27813,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543850,
+      "start_usec": 999130,
+      "record_wall_ns": 1791543851000291000,
+      "device": 16777230,
+      "inode": 274113421,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "2e50420579a90a1b6f1def5650539bed49225084ee64fdbf995fe4039d63980d",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27814,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543850,
+      "start_usec": 999159,
+      "record_wall_ns": 1791543850999869000,
+      "device": 16777230,
+      "inode": 274113420,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "04b1deca5d61dece427abd9af04325b3909fb4ede82b53d2db492f475235a0a5",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27815,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543850,
+      "start_usec": 999235,
+      "record_wall_ns": 1791543850999798000,
+      "device": 16777230,
+      "inode": 274113422,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "a80314936b5628bc3ceb71446c825420e56b033bc82c15383db0c6af9bf54a5f",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27816,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543850,
+      "start_usec": 999238,
+      "record_wall_ns": 1791543851000149000,
+      "device": 16777230,
+      "inode": 274113417,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "0dcd616a27d0738b199531202fbb977194348c03503beaf4bf21a5af1b2f1ffd",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27817,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543850,
+      "start_usec": 999247,
+      "record_wall_ns": 1791543850999879000,
+      "device": 16777230,
+      "inode": 274113424,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "ff015b12d436dc640edb7d12f835bc4b13b456bb9a95b649fff6f18589d4ae8c",
+      "outcome": {
+        "code": "TIMEOUT"
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27818,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543850,
+      "start_usec": 999288,
+      "record_wall_ns": 1791543851000264000,
+      "device": 16777230,
+      "inode": 274113418,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "14b6a628668bb3f2df7c605cf23a8ce6d4e6a09d4bae26c5daf212776dbaff66",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27819,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 248864,
+      "record_wall_ns": 1791543851249631000,
+      "device": 16777230,
+      "inode": 274113420,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "04b1deca5d61dece427abd9af04325b3909fb4ede82b53d2db492f475235a0a5",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27820,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 263146,
+      "record_wall_ns": 1791543851263422000,
+      "device": 16777230,
+      "inode": 274113420,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "04b1deca5d61dece427abd9af04325b3909fb4ede82b53d2db492f475235a0a5",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27821,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 269172,
+      "record_wall_ns": 1791543851269363000,
+      "device": 16777230,
+      "inode": 274113420,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "04b1deca5d61dece427abd9af04325b3909fb4ede82b53d2db492f475235a0a5",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27822,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 276075,
+      "record_wall_ns": 1791543851276253000,
+      "device": 16777230,
+      "inode": 274113420,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "04b1deca5d61dece427abd9af04325b3909fb4ede82b53d2db492f475235a0a5",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27823,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 282986,
+      "record_wall_ns": 1791543851283188000,
+      "device": 16777230,
+      "inode": 274113420,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "04b1deca5d61dece427abd9af04325b3909fb4ede82b53d2db492f475235a0a5",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27824,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 289879,
+      "record_wall_ns": 1791543851290054000,
+      "device": 16777230,
+      "inode": 274113420,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "04b1deca5d61dece427abd9af04325b3909fb4ede82b53d2db492f475235a0a5",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27825,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 296868,
+      "record_wall_ns": 1791543851297074000,
+      "device": 16777230,
+      "inode": 274113420,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "04b1deca5d61dece427abd9af04325b3909fb4ede82b53d2db492f475235a0a5",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27826,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 303774,
+      "record_wall_ns": 1791543851303944000,
+      "device": 16777230,
+      "inode": 274113420,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "04b1deca5d61dece427abd9af04325b3909fb4ede82b53d2db492f475235a0a5",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27827,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 310462,
+      "record_wall_ns": 1791543851310680000,
+      "device": 16777230,
+      "inode": 274113420,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "04b1deca5d61dece427abd9af04325b3909fb4ede82b53d2db492f475235a0a5",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27828,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 317375,
+      "record_wall_ns": 1791543851317537000,
+      "device": 16777230,
+      "inode": 274113420,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "04b1deca5d61dece427abd9af04325b3909fb4ede82b53d2db492f475235a0a5",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27829,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 324212,
+      "record_wall_ns": 1791543851324363000,
+      "device": 16777230,
+      "inode": 274113420,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "04b1deca5d61dece427abd9af04325b3909fb4ede82b53d2db492f475235a0a5",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27830,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 329966,
+      "record_wall_ns": 1791543851330148000,
+      "device": 16777230,
+      "inode": 274113420,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "04b1deca5d61dece427abd9af04325b3909fb4ede82b53d2db492f475235a0a5",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27831,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 336212,
+      "record_wall_ns": 1791543851336397000,
+      "device": 16777230,
+      "inode": 274113420,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "04b1deca5d61dece427abd9af04325b3909fb4ede82b53d2db492f475235a0a5",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27832,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 339729,
+      "record_wall_ns": 1791543851339914000,
+      "device": 16777230,
+      "inode": 274113421,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "2e50420579a90a1b6f1def5650539bed49225084ee64fdbf995fe4039d63980d",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27833,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 342555,
+      "record_wall_ns": 1791543851342708000,
+      "device": 16777230,
+      "inode": 274113420,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "04b1deca5d61dece427abd9af04325b3909fb4ede82b53d2db492f475235a0a5",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27834,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 346701,
+      "record_wall_ns": 1791543851346854000,
+      "device": 16777230,
+      "inode": 274113421,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "2e50420579a90a1b6f1def5650539bed49225084ee64fdbf995fe4039d63980d",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27835,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 348831,
+      "record_wall_ns": 1791543851349017000,
+      "device": 16777230,
+      "inode": 274113420,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "04b1deca5d61dece427abd9af04325b3909fb4ede82b53d2db492f475235a0a5",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27836,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 353633,
+      "record_wall_ns": 1791543851353790000,
+      "device": 16777230,
+      "inode": 274113421,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "2e50420579a90a1b6f1def5650539bed49225084ee64fdbf995fe4039d63980d",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27837,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 360542,
+      "record_wall_ns": 1791543851360728000,
+      "device": 16777230,
+      "inode": 274113421,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "2e50420579a90a1b6f1def5650539bed49225084ee64fdbf995fe4039d63980d",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27838,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 367476,
+      "record_wall_ns": 1791543851367662000,
+      "device": 16777230,
+      "inode": 274113421,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "2e50420579a90a1b6f1def5650539bed49225084ee64fdbf995fe4039d63980d",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27839,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 373458,
+      "record_wall_ns": 1791543851373619000,
+      "device": 16777230,
+      "inode": 274113421,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "2e50420579a90a1b6f1def5650539bed49225084ee64fdbf995fe4039d63980d",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27840,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 379203,
+      "record_wall_ns": 1791543851379368000,
+      "device": 16777230,
+      "inode": 274113421,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "2e50420579a90a1b6f1def5650539bed49225084ee64fdbf995fe4039d63980d",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27841,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 386043,
+      "record_wall_ns": 1791543851386197000,
+      "device": 16777230,
+      "inode": 274113421,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "2e50420579a90a1b6f1def5650539bed49225084ee64fdbf995fe4039d63980d",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27842,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 391732,
+      "record_wall_ns": 1791543851391894000,
+      "device": 16777230,
+      "inode": 274113421,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "2e50420579a90a1b6f1def5650539bed49225084ee64fdbf995fe4039d63980d",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27843,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 397989,
+      "record_wall_ns": 1791543851398160000,
+      "device": 16777230,
+      "inode": 274113421,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "2e50420579a90a1b6f1def5650539bed49225084ee64fdbf995fe4039d63980d",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27844,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 404846,
+      "record_wall_ns": 1791543851405016000,
+      "device": 16777230,
+      "inode": 274113421,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "2e50420579a90a1b6f1def5650539bed49225084ee64fdbf995fe4039d63980d",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27845,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 410512,
+      "record_wall_ns": 1791543851410679000,
+      "device": 16777230,
+      "inode": 274113421,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "2e50420579a90a1b6f1def5650539bed49225084ee64fdbf995fe4039d63980d",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27846,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 417333,
+      "record_wall_ns": 1791543851417489000,
+      "device": 16777230,
+      "inode": 274113421,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "2e50420579a90a1b6f1def5650539bed49225084ee64fdbf995fe4039d63980d",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27847,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 424162,
+      "record_wall_ns": 1791543851424315000,
+      "device": 16777230,
+      "inode": 274113421,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "2e50420579a90a1b6f1def5650539bed49225084ee64fdbf995fe4039d63980d",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27848,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 430968,
+      "record_wall_ns": 1791543851431142000,
+      "device": 16777230,
+      "inode": 274113421,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "2e50420579a90a1b6f1def5650539bed49225084ee64fdbf995fe4039d63980d",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27849,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 447771,
+      "record_wall_ns": 1791543851447952000,
+      "device": 16777230,
+      "inode": 274113423,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "73b3eb1a119587c0076cf72b9a803e873888c8d7dbe894ad86f175f89ec0b9ca",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27850,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 454752,
+      "record_wall_ns": 1791543851454904000,
+      "device": 16777230,
+      "inode": 274113423,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "73b3eb1a119587c0076cf72b9a803e873888c8d7dbe894ad86f175f89ec0b9ca",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27851,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 461861,
+      "record_wall_ns": 1791543851462030000,
+      "device": 16777230,
+      "inode": 274113423,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "73b3eb1a119587c0076cf72b9a803e873888c8d7dbe894ad86f175f89ec0b9ca",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27852,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 468811,
+      "record_wall_ns": 1791543851468966000,
+      "device": 16777230,
+      "inode": 274113423,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "73b3eb1a119587c0076cf72b9a803e873888c8d7dbe894ad86f175f89ec0b9ca",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27853,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 474991,
+      "record_wall_ns": 1791543851475179000,
+      "device": 16777230,
+      "inode": 274113423,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "73b3eb1a119587c0076cf72b9a803e873888c8d7dbe894ad86f175f89ec0b9ca",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27854,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 481909,
+      "record_wall_ns": 1791543851482102000,
+      "device": 16777230,
+      "inode": 274113423,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "73b3eb1a119587c0076cf72b9a803e873888c8d7dbe894ad86f175f89ec0b9ca",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27855,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 488803,
+      "record_wall_ns": 1791543851488957000,
+      "device": 16777230,
+      "inode": 274113423,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "73b3eb1a119587c0076cf72b9a803e873888c8d7dbe894ad86f175f89ec0b9ca",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27856,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 495800,
+      "record_wall_ns": 1791543851496018000,
+      "device": 16777230,
+      "inode": 274113423,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "73b3eb1a119587c0076cf72b9a803e873888c8d7dbe894ad86f175f89ec0b9ca",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27857,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 502702,
+      "record_wall_ns": 1791543851502865000,
+      "device": 16777230,
+      "inode": 274113423,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "73b3eb1a119587c0076cf72b9a803e873888c8d7dbe894ad86f175f89ec0b9ca",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27858,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 509625,
+      "record_wall_ns": 1791543851509909000,
+      "device": 16777230,
+      "inode": 274113423,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "73b3eb1a119587c0076cf72b9a803e873888c8d7dbe894ad86f175f89ec0b9ca",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27859,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 516617,
+      "record_wall_ns": 1791543851516802000,
+      "device": 16777230,
+      "inode": 274113423,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "73b3eb1a119587c0076cf72b9a803e873888c8d7dbe894ad86f175f89ec0b9ca",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27860,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 523432,
+      "record_wall_ns": 1791543851523602000,
+      "device": 16777230,
+      "inode": 274113423,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "73b3eb1a119587c0076cf72b9a803e873888c8d7dbe894ad86f175f89ec0b9ca",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27861,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 530329,
+      "record_wall_ns": 1791543851530534000,
+      "device": 16777230,
+      "inode": 274113423,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "73b3eb1a119587c0076cf72b9a803e873888c8d7dbe894ad86f175f89ec0b9ca",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27862,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 537182,
+      "record_wall_ns": 1791543851537346000,
+      "device": 16777230,
+      "inode": 274113423,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "73b3eb1a119587c0076cf72b9a803e873888c8d7dbe894ad86f175f89ec0b9ca",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27863,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 543733,
+      "record_wall_ns": 1791543851543920000,
+      "device": 16777230,
+      "inode": 274113423,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "73b3eb1a119587c0076cf72b9a803e873888c8d7dbe894ad86f175f89ec0b9ca",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27864,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 551154,
+      "record_wall_ns": 1791543851551344000,
+      "device": 16777230,
+      "inode": 274113417,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "0dcd616a27d0738b199531202fbb977194348c03503beaf4bf21a5af1b2f1ffd",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27865,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 558128,
+      "record_wall_ns": 1791543851558282000,
+      "device": 16777230,
+      "inode": 274113417,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "0dcd616a27d0738b199531202fbb977194348c03503beaf4bf21a5af1b2f1ffd",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27866,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 565112,
+      "record_wall_ns": 1791543851565266000,
+      "device": 16777230,
+      "inode": 274113417,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "0dcd616a27d0738b199531202fbb977194348c03503beaf4bf21a5af1b2f1ffd",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27867,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 572054,
+      "record_wall_ns": 1791543851572202000,
+      "device": 16777230,
+      "inode": 274113417,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "0dcd616a27d0738b199531202fbb977194348c03503beaf4bf21a5af1b2f1ffd",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27868,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 578976,
+      "record_wall_ns": 1791543851579133000,
+      "device": 16777230,
+      "inode": 274113417,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "0dcd616a27d0738b199531202fbb977194348c03503beaf4bf21a5af1b2f1ffd",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27869,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 585955,
+      "record_wall_ns": 1791543851586111000,
+      "device": 16777230,
+      "inode": 274113417,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "0dcd616a27d0738b199531202fbb977194348c03503beaf4bf21a5af1b2f1ffd",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27870,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 592922,
+      "record_wall_ns": 1791543851593094000,
+      "device": 16777230,
+      "inode": 274113417,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "0dcd616a27d0738b199531202fbb977194348c03503beaf4bf21a5af1b2f1ffd",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27871,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 599970,
+      "record_wall_ns": 1791543851600177000,
+      "device": 16777230,
+      "inode": 274113417,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "0dcd616a27d0738b199531202fbb977194348c03503beaf4bf21a5af1b2f1ffd",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27872,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 607018,
+      "record_wall_ns": 1791543851607235000,
+      "device": 16777230,
+      "inode": 274113417,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "0dcd616a27d0738b199531202fbb977194348c03503beaf4bf21a5af1b2f1ffd",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27873,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 614092,
+      "record_wall_ns": 1791543851614306000,
+      "device": 16777230,
+      "inode": 274113417,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "0dcd616a27d0738b199531202fbb977194348c03503beaf4bf21a5af1b2f1ffd",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27874,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 620282,
+      "record_wall_ns": 1791543851620497000,
+      "device": 16777230,
+      "inode": 274113417,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "0dcd616a27d0738b199531202fbb977194348c03503beaf4bf21a5af1b2f1ffd",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27875,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 627174,
+      "record_wall_ns": 1791543851627423000,
+      "device": 16777230,
+      "inode": 274113417,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "0dcd616a27d0738b199531202fbb977194348c03503beaf4bf21a5af1b2f1ffd",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27876,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 634362,
+      "record_wall_ns": 1791543851634575000,
+      "device": 16777230,
+      "inode": 274113417,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "0dcd616a27d0738b199531202fbb977194348c03503beaf4bf21a5af1b2f1ffd",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27877,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 641462,
+      "record_wall_ns": 1791543851641676000,
+      "device": 16777230,
+      "inode": 274113417,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "0dcd616a27d0738b199531202fbb977194348c03503beaf4bf21a5af1b2f1ffd",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27878,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 648532,
+      "record_wall_ns": 1791543851648730000,
+      "device": 16777230,
+      "inode": 274113417,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "0dcd616a27d0738b199531202fbb977194348c03503beaf4bf21a5af1b2f1ffd",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27879,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 748315,
+      "record_wall_ns": 1791543851748507000,
+      "device": 16777230,
+      "inode": 274113422,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "a80314936b5628bc3ceb71446c825420e56b033bc82c15383db0c6af9bf54a5f",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27880,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 755451,
+      "record_wall_ns": 1791543851755607000,
+      "device": 16777230,
+      "inode": 274113422,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "a80314936b5628bc3ceb71446c825420e56b033bc82c15383db0c6af9bf54a5f",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27881,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 762523,
+      "record_wall_ns": 1791543851762699000,
+      "device": 16777230,
+      "inode": 274113422,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "a80314936b5628bc3ceb71446c825420e56b033bc82c15383db0c6af9bf54a5f",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27882,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 769406,
+      "record_wall_ns": 1791543851769604000,
+      "device": 16777230,
+      "inode": 274113422,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "a80314936b5628bc3ceb71446c825420e56b033bc82c15383db0c6af9bf54a5f",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27883,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 776358,
+      "record_wall_ns": 1791543851776548000,
+      "device": 16777230,
+      "inode": 274113422,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "a80314936b5628bc3ceb71446c825420e56b033bc82c15383db0c6af9bf54a5f",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27884,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 783242,
+      "record_wall_ns": 1791543851783405000,
+      "device": 16777230,
+      "inode": 274113422,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "a80314936b5628bc3ceb71446c825420e56b033bc82c15383db0c6af9bf54a5f",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27885,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 789725,
+      "record_wall_ns": 1791543851789898000,
+      "device": 16777230,
+      "inode": 274113422,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "a80314936b5628bc3ceb71446c825420e56b033bc82c15383db0c6af9bf54a5f",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27886,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 796595,
+      "record_wall_ns": 1791543851796779000,
+      "device": 16777230,
+      "inode": 274113422,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "a80314936b5628bc3ceb71446c825420e56b033bc82c15383db0c6af9bf54a5f",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27887,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 803426,
+      "record_wall_ns": 1791543851803598000,
+      "device": 16777230,
+      "inode": 274113422,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "a80314936b5628bc3ceb71446c825420e56b033bc82c15383db0c6af9bf54a5f",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27888,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 810320,
+      "record_wall_ns": 1791543851810510000,
+      "device": 16777230,
+      "inode": 274113422,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "a80314936b5628bc3ceb71446c825420e56b033bc82c15383db0c6af9bf54a5f",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27889,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 817164,
+      "record_wall_ns": 1791543851817327000,
+      "device": 16777230,
+      "inode": 274113422,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "a80314936b5628bc3ceb71446c825420e56b033bc82c15383db0c6af9bf54a5f",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27890,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 824000,
+      "record_wall_ns": 1791543851824153000,
+      "device": 16777230,
+      "inode": 274113422,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "a80314936b5628bc3ceb71446c825420e56b033bc82c15383db0c6af9bf54a5f",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27891,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 830450,
+      "record_wall_ns": 1791543851830616000,
+      "device": 16777230,
+      "inode": 274113422,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "a80314936b5628bc3ceb71446c825420e56b033bc82c15383db0c6af9bf54a5f",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27892,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 837316,
+      "record_wall_ns": 1791543851837498000,
+      "device": 16777230,
+      "inode": 274113422,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "a80314936b5628bc3ceb71446c825420e56b033bc82c15383db0c6af9bf54a5f",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27893,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 844022,
+      "record_wall_ns": 1791543851844226000,
+      "device": 16777230,
+      "inode": 274113422,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "a80314936b5628bc3ceb71446c825420e56b033bc82c15383db0c6af9bf54a5f",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27894,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 849120,
+      "record_wall_ns": 1791543851849289000,
+      "device": 16777230,
+      "inode": 274113419,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "11166582ed9acdb24350bcc964f760651e51c120e4ad3fc78896cac0c82b4df4",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27895,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 856142,
+      "record_wall_ns": 1791543851856310000,
+      "device": 16777230,
+      "inode": 274113419,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "11166582ed9acdb24350bcc964f760651e51c120e4ad3fc78896cac0c82b4df4",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27896,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 863135,
+      "record_wall_ns": 1791543851863299000,
+      "device": 16777230,
+      "inode": 274113419,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "11166582ed9acdb24350bcc964f760651e51c120e4ad3fc78896cac0c82b4df4",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27897,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 870034,
+      "record_wall_ns": 1791543851870224000,
+      "device": 16777230,
+      "inode": 274113419,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "11166582ed9acdb24350bcc964f760651e51c120e4ad3fc78896cac0c82b4df4",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27898,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 876963,
+      "record_wall_ns": 1791543851877153000,
+      "device": 16777230,
+      "inode": 274113419,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "11166582ed9acdb24350bcc964f760651e51c120e4ad3fc78896cac0c82b4df4",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27899,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 883828,
+      "record_wall_ns": 1791543851883991000,
+      "device": 16777230,
+      "inode": 274113419,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "11166582ed9acdb24350bcc964f760651e51c120e4ad3fc78896cac0c82b4df4",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27900,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 890679,
+      "record_wall_ns": 1791543851890848000,
+      "device": 16777230,
+      "inode": 274113419,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "11166582ed9acdb24350bcc964f760651e51c120e4ad3fc78896cac0c82b4df4",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27901,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 897614,
+      "record_wall_ns": 1791543851897796000,
+      "device": 16777230,
+      "inode": 274113419,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "11166582ed9acdb24350bcc964f760651e51c120e4ad3fc78896cac0c82b4df4",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27902,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 904486,
+      "record_wall_ns": 1791543851904652000,
+      "device": 16777230,
+      "inode": 274113419,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "11166582ed9acdb24350bcc964f760651e51c120e4ad3fc78896cac0c82b4df4",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27903,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 910410,
+      "record_wall_ns": 1791543851910572000,
+      "device": 16777230,
+      "inode": 274113419,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "11166582ed9acdb24350bcc964f760651e51c120e4ad3fc78896cac0c82b4df4",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27904,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 917264,
+      "record_wall_ns": 1791543851917423000,
+      "device": 16777230,
+      "inode": 274113419,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "11166582ed9acdb24350bcc964f760651e51c120e4ad3fc78896cac0c82b4df4",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27905,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 923003,
+      "record_wall_ns": 1791543851923184000,
+      "device": 16777230,
+      "inode": 274113419,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "11166582ed9acdb24350bcc964f760651e51c120e4ad3fc78896cac0c82b4df4",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27906,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 929905,
+      "record_wall_ns": 1791543851930071000,
+      "device": 16777230,
+      "inode": 274113419,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "11166582ed9acdb24350bcc964f760651e51c120e4ad3fc78896cac0c82b4df4",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27907,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 936760,
+      "record_wall_ns": 1791543851936914000,
+      "device": 16777230,
+      "inode": 274113419,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "11166582ed9acdb24350bcc964f760651e51c120e4ad3fc78896cac0c82b4df4",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27908,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 943661,
+      "record_wall_ns": 1791543851943839000,
+      "device": 16777230,
+      "inode": 274113419,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "11166582ed9acdb24350bcc964f760651e51c120e4ad3fc78896cac0c82b4df4",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27909,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 952907,
+      "record_wall_ns": 1791543851953078000,
+      "device": 16777230,
+      "inode": 274113418,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "14b6a628668bb3f2df7c605cf23a8ce6d4e6a09d4bae26c5daf212776dbaff66",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27910,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 959913,
+      "record_wall_ns": 1791543851960071000,
+      "device": 16777230,
+      "inode": 274113418,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "14b6a628668bb3f2df7c605cf23a8ce6d4e6a09d4bae26c5daf212776dbaff66",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27911,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 966916,
+      "record_wall_ns": 1791543851967084000,
+      "device": 16777230,
+      "inode": 274113418,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "14b6a628668bb3f2df7c605cf23a8ce6d4e6a09d4bae26c5daf212776dbaff66",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27912,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 973976,
+      "record_wall_ns": 1791543851974132000,
+      "device": 16777230,
+      "inode": 274113418,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "14b6a628668bb3f2df7c605cf23a8ce6d4e6a09d4bae26c5daf212776dbaff66",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27913,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 980878,
+      "record_wall_ns": 1791543851981061000,
+      "device": 16777230,
+      "inode": 274113418,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "14b6a628668bb3f2df7c605cf23a8ce6d4e6a09d4bae26c5daf212776dbaff66",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27914,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 987810,
+      "record_wall_ns": 1791543851988000000,
+      "device": 16777230,
+      "inode": 274113418,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "14b6a628668bb3f2df7c605cf23a8ce6d4e6a09d4bae26c5daf212776dbaff66",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27915,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543851,
+      "start_usec": 993888,
+      "record_wall_ns": 1791543851994081000,
+      "device": 16777230,
+      "inode": 274113418,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "14b6a628668bb3f2df7c605cf23a8ce6d4e6a09d4bae26c5daf212776dbaff66",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27916,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543852,
+      "start_usec": 869,
+      "record_wall_ns": 1791543852001056000,
+      "device": 16777230,
+      "inode": 274113418,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "14b6a628668bb3f2df7c605cf23a8ce6d4e6a09d4bae26c5daf212776dbaff66",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27917,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543852,
+      "start_usec": 7779,
+      "record_wall_ns": 1791543852007959000,
+      "device": 16777230,
+      "inode": 274113418,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "14b6a628668bb3f2df7c605cf23a8ce6d4e6a09d4bae26c5daf212776dbaff66",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27918,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543852,
+      "start_usec": 14660,
+      "record_wall_ns": 1791543852014819000,
+      "device": 16777230,
+      "inode": 274113418,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "14b6a628668bb3f2df7c605cf23a8ce6d4e6a09d4bae26c5daf212776dbaff66",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27919,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543852,
+      "start_usec": 21486,
+      "record_wall_ns": 1791543852021640000,
+      "device": 16777230,
+      "inode": 274113418,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "14b6a628668bb3f2df7c605cf23a8ce6d4e6a09d4bae26c5daf212776dbaff66",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27920,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543852,
+      "start_usec": 28355,
+      "record_wall_ns": 1791543852028533000,
+      "device": 16777230,
+      "inode": 274113418,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "14b6a628668bb3f2df7c605cf23a8ce6d4e6a09d4bae26c5daf212776dbaff66",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27921,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543852,
+      "start_usec": 35147,
+      "record_wall_ns": 1791543852035293000,
+      "device": 16777230,
+      "inode": 274113418,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "14b6a628668bb3f2df7c605cf23a8ce6d4e6a09d4bae26c5daf212776dbaff66",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27922,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543852,
+      "start_usec": 41987,
+      "record_wall_ns": 1791543852042147000,
+      "device": 16777230,
+      "inode": 274113418,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "14b6a628668bb3f2df7c605cf23a8ce6d4e6a09d4bae26c5daf212776dbaff66",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    },
+    {
+      "pid": 27923,
+      "ppid": 27803,
+      "uid": 502,
+      "start_sec": 1791543852,
+      "start_usec": 47876,
+      "record_wall_ns": 1791543852048060000,
+      "device": 16777230,
+      "inode": 274113418,
+      "size": 65,
+      "fixture_exact_content": true,
+      "path_sha256": "14b6a628668bb3f2df7c605cf23a8ce6d4e6a09d4bae26c5daf212776dbaff66",
+      "outcome": {
+        "code": "OUTPUT",
+        "exit_success": true,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      },
+      "liveness": "absent"
+    }
+  ],
+  "private_expired_manifest_directory": "/private/tmp/pctx01-path-map-joxx04hy/records",
+  "log_sha256": "d0884782f1d610a78cb6eee6d3fed3fc6190ef7f276d5abe8fa4f677391487dc"
+}

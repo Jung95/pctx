@@ -1,0 +1,48 @@
+from pathlib import Path
+import subprocess,tempfile,json,hashlib,os
+repo=Path('/Users/dev/PCTX'); root=Path(tempfile.mkdtemp(prefix='pctx01-path-map-',dir='/private/tmp')); os.chmod(root,0o700)
+source=root/'source'; source.mkdir(); records=root/'records';records.mkdir(mode=0o700)
+archive=subprocess.check_output(['git','archive','HEAD','Cargo.toml','Cargo.lock','src','tests'],cwd=repo)
+subprocess.run(['tar','-x','-C',str(source)],input=archive,check=True)
+p=source/'src/query_process.rs';s=p.read_text()
+a='let mut command = Command::new(executable);';assert s.count(a)==1;s=s.replace(a,'let diagnostic_executable = executable.clone();\n        '+a)
+a='let mut child = command.spawn()?;';assert s.count(a)==1;s=s.replace(a,a+'\n        let diagnostic = PathMappingDiagnostic::new(child.id(), &diagnostic_executable);')
+a='        result\n    }\n    #[cfg(windows)]';assert s.count(a)==1;s=s.replace(a,'        if let Some(d) = &diagnostic { d.outcome(&result); }\n'+a)
+s+='''
+// Isolated owned-fixture mapping only; not product code or qualification.
+#[cfg(target_os = "macos")]
+struct PathMappingDiagnostic { path: std::path::PathBuf }
+#[cfg(target_os = "macos")]
+impl PathMappingDiagnostic {
+    fn new(pid:u32, executable:&std::path::Path) -> Option<Self> {
+        use std::os::unix::fs::{MetadataExt,OpenOptionsExt};
+        let expected=b"#!/bin/sh\\nkill -0 -$$ || exit 47\\nprintf stdout\\nprintf stderr >&2\\n";
+        let before=std::fs::symlink_metadata(executable).ok()?;
+        if !before.is_file() || before.uid()!=unsafe {libc::getuid()} || before.len()!=expected.len() as u64 {return None;}
+        if std::fs::read(executable).ok()?.as_slice()!=expected {return None;}
+        let after=std::fs::symlink_metadata(executable).ok()?;
+        if before.dev()!=after.dev() || before.ino()!=after.ino() || before.len()!=after.len() {return None;}
+        let mut b:libc::proc_bsdinfo=unsafe {std::mem::zeroed()};
+        if unsafe {libc::proc_pidinfo(pid as i32,libc::PROC_PIDTBSDINFO,0,(&mut b as *mut libc::proc_bsdinfo).cast(),std::mem::size_of_val(&b) as i32)}!=std::mem::size_of_val(&b) as i32 || b.pbi_pid!=pid || b.pbi_ppid!=std::process::id() || b.pbi_uid!=before.uid() {return None;}
+        let root=std::path::Path::new(option_env!("PCTX_PATH_MAPPING_ROOT")?);
+        let filename=format!("{}-{}-{}",pid,b.pbi_start_tvsec,b.pbi_start_tvusec);
+        let path=root.join(&filename);
+        let mut f=std::fs::OpenOptions::new().write(true).create_new(true).mode(0o600).open(path.with_extension("mapping.json")).ok()?;
+        let wall_ns=std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).ok()?.as_nanos();
+        serde_json::to_writer(&mut f,&serde_json::json!({"pid":pid,"ppid":b.pbi_ppid,"uid":b.pbi_uid,"start_sec":b.pbi_start_tvsec,"start_usec":b.pbi_start_tvusec,"record_wall_ns":wall_ns,"executable":executable,"device":after.dev(),"inode":after.ino(),"size":after.len(),"fixture_exact_content":true})).ok()?;
+        Some(Self {path})
+    }
+    fn outcome(&self,result:&Result<Output>) {
+        use std::os::unix::fs::OpenOptionsExt;
+        if let Ok(mut f)=std::fs::OpenOptions::new().write(true).create_new(true).mode(0o600).open(self.path.with_extension("outcome.json")) {
+            let row=match result {Ok(o)=>serde_json::json!({"code":"OUTPUT","exit_success":o.status.success(),"stdout_bytes":o.stdout.len(),"stderr_bytes":o.stderr.len()}),Err(e)=>serde_json::json!({"code":e.code})};
+            let _=serde_json::to_writer(&mut f,&row);
+        }
+    }
+}
+'''
+p.write_text(s)
+meta={'task':'PCTX01-G05-D05','root':str(root),'source':str(source),'records':str(records),'revision':subprocess.check_output(['git','rev-parse','HEAD'],cwd=repo,text=True).strip(),'qualification':False,'test_source_sha256':hashlib.sha256((source/'tests/project_deadline.rs').read_bytes()).hexdigest(),'original_query_source_sha256':hashlib.sha256((repo/'src/query_process.rs').read_bytes()).hexdigest(),'instrumented_query_source_sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'method':'one original concurrency test; native owned-child BSD identity plus exact synthetic fixture path; no service observation, retention, retry, auth or security change'}
+(root/'prepared.json').write_text(json.dumps(meta,indent=2)+'\n')
+Path('/private/tmp/pctx01-path-map-ready.json').write_text(json.dumps(meta,indent=2)+'\n')
+print(json.dumps(meta))

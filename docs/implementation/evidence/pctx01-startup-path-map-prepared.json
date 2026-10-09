@@ -1,0 +1,18 @@
+{
+  "task": "PCTX01-G05-D05",
+  "root": "/private/tmp/pctx01-path-map-joxx04hy",
+  "source": "/private/tmp/pctx01-path-map-joxx04hy/source",
+  "records": "/private/tmp/pctx01-path-map-joxx04hy/records",
+  "revision": "c207c780dc064e7f855a907cec6297d49ba3b132",
+  "qualification": false,
+  "test_source_sha256": "8b9fbc97fbd5acaf612b2d75b94cf810faa2b61614b654495082462b1941a8dc",
+  "original_query_source_sha256": "bf661f4b8d0ed472585244ada4ac0e946221de364c100039cd20aee56fd8d0d2",
+  "instrumented_query_source_sha256": "d6aa2789de0c5adf703771767cb8ab225439d3d4fd3b33d37595eb05c12bc8cc",
+  "method": "one original concurrency test; native owned-child BSD identity plus exact synthetic fixture path; no service observation, retention, retry, auth or security change",
+  "observer_limits": [
+    "Mapping adds synchronous post-spawn work within originaldeadline; phases include its overhead.",
+    "Best-effort outcome is after existing cancellation/reap cleanup.",
+    "File identity/content checks do not prove atomic executed-content identity.",
+    "Missing mapping/outcome remains unknown."
+  ]
+}

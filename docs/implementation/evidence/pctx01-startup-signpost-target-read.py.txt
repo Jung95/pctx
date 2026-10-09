@@ -1,0 +1,126 @@
+"""Prepared finite target-path/signpost correlation. Execution needs separate scope approval."""
+import argparse, datetime, hashlib, json, os, re, selectors, subprocess, time
+from pathlib import Path
+BASE=Path('/Users/dev/PCTX/docs/implementation/evidence')
+PLAN=BASE/'pctx01-startup-signpost-target-scope-plan.json'
+START=datetime.datetime(2026,10,9,11,4,10,tzinfo=datetime.timezone.utc)
+END=START+datetime.timedelta(seconds=2)
+BIRTH=datetime.datetime.fromtimestamp(1791543850,datetime.timezone.utc)+datetime.timedelta(microseconds=999247)
+SOURCE='/usr/libexec/syspolicyd'
+SERVICE_PID=665
+PATH_SHA='ff015b12d436dc640edb7d12f835bc4b13b456bb9a95b649fff6f18589d4ae8c'
+MANIFEST=Path('/private/tmp/pctx01-path-map-joxx04hy/records/27817-1791543850-999247.mapping.json')
+
+def admit(row):
+    if not isinstance(row,dict) or row.get('processID')!=SERVICE_PID or row.get('processImagePath')!=SOURCE or row.get('eventType')!='signpostEvent' or row.get('signpostScope')!='process':return None
+    try:
+        stamp=datetime.datetime.fromisoformat(row.get('timestamp',''))
+        if stamp.tzinfo is None or not START<=stamp.astimezone(datetime.timezone.utc)<=END:return None
+    except (ValueError,TypeError):return None
+    ident=row.get('signpostID')
+    if type(ident)!=int or not 0<ident<2**64-2:return None
+    return stamp.astimezone(datetime.timezone.utc),ident
+
+def path_ids(rows,expected):
+    if not isinstance(rows,list) or len(rows)>16:raise ValueError('path event cap')
+    matched=[]
+    for row in rows:
+        admitted=admit(row)
+        if admitted is None:continue
+        stamp,ident=admitted
+        if row.get('signpostName')=='Path' and row.get('signpostType')=='event' and row.get('eventMessage')==expected and stamp>=BIRTH:matched.append({'timestamp_utc':stamp.isoformat(),'signpost_id':ident})
+    return matched
+
+def reduce_interval(rows,ident):
+    if not isinstance(rows,list) or len(rows)>32:raise ValueError('interval event cap')
+    output=[];discarded=0
+    for row in rows:
+        admitted=admit(row)
+        if admitted is None or admitted[1]!=ident:discarded+=1;continue
+        stamp,_=admitted;name=row.get('signpostName');kind=row.get('signpostType');message=row.get('eventMessage')
+        if name=='EvaluationID' and kind=='event' and isinstance(message,str) and re.fullmatch(r'[0-9]{1,19}',message) and 0<int(message)<2**63:
+            output.append({'timestamp_utc':stamp.isoformat(),'kind':'evaluation_id','evaluation_id':int(message)})
+        elif name=='GatekeeperEvaluation' and kind in ['begin','end'] and message=='':
+            output.append({'timestamp_utc':stamp.isoformat(),'kind':'interval_'+kind})
+        else:discarded+=1
+    return {'events':output,'discarded_unrecognized':discarded}
+
+def query(predicate,deadline,receipts):
+    args=['/usr/bin/log','show','--start','2026-10-09 11:04:10+0000','--end','2026-10-09 11:04:12+0000','--timezone','UTC','--style','json','--signpost','--info','--no-debug','--no-pager','--predicate',predicate]
+    selector=selectors.DefaultSelector();proc=None;buffers={};receipt=None
+    try:
+        proc=subprocess.Popen(args,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+        receipt={'pid':proc.pid,'exit':None,'raw_bytes':0,'reaped':False};receipts.append(receipt)
+        for stream in [proc.stdout,proc.stderr]:
+            os.set_blocking(stream.fileno(),False);selector.register(stream,selectors.EVENT_READ);buffers[stream.fileno()]=bytearray()
+        while selector.get_map():
+            remaining=deadline-time.monotonic()
+            if remaining<=0:raise RuntimeError('total query watchdog')
+            for key,_ in selector.select(min(.1,remaining)):
+                data=os.read(key.fd,8192)
+                if not data:selector.unregister(key.fileobj);continue
+                if sum(len(v) for v in buffers.values())+len(data)>65536:raise RuntimeError('raw byte cap')
+                buffers[key.fd].extend(data)
+        remaining=deadline-time.monotonic()
+        if remaining<=0:raise RuntimeError('total query watchdog')
+        code=proc.wait(timeout=remaining)
+        receipt['exit']=code
+        if code!=0:raise RuntimeError('log query failed; no fallback')
+        return json.loads(buffers[proc.stdout.fileno()])
+    finally:
+        try:
+            if proc is not None:
+                if proc.poll() is None:
+                    proc.terminate()
+                    try:proc.wait(timeout=1)
+                    except subprocess.TimeoutExpired:proc.kill();proc.wait(timeout=1)
+                if receipt is not None:
+                    receipt.update({'exit':proc.returncode,'raw_bytes':sum(len(v) for v in buffers.values()),'reaped':proc.returncode is not None})
+        finally:
+            selector.close()
+            if proc is not None:
+                for stream in [proc.stdout,proc.stderr]:
+                    if stream is not None:stream.close()
+
+def execute():
+    if os.getuid()!=502 or os.geteuid()!=502:raise SystemExit('ordinary UID502 required')
+    plan=json.loads(PLAN.read_text())
+    if plan.get('human_scope_approval')!='approved':raise SystemExit('separate scope approval required')
+    if hashlib.sha256(Path(__file__).read_bytes()).hexdigest()!=plan['reader_sha256']:raise SystemExit('reader drift')
+    if hashlib.sha256(MANIFEST.read_bytes()).hexdigest()!=plan['private_manifest_sha256']:raise SystemExit('manifest drift')
+    info=MANIFEST.stat()
+    if info.st_uid!=502 or info.st_mode&0o777!=0o600:raise SystemExit('private manifest refused')
+    row=json.loads(MANIFEST.read_text());expected=row['executable']
+    if row['pid']!=27817 or row['uid']!=502 or row['ppid']!=27803 or row['start_sec']!=1791543850 or row['start_usec']!=999247 or row.get('fixture_exact_content') is not True or hashlib.sha256(expected.encode()).hexdigest()!=PATH_SHA:raise SystemExit('owned target mapping refused')
+    claim=BASE/'pctx01-startup-signpost-target-consumed.json';claim.open('x').close()
+    deadline=time.monotonic()+30;receipts=[]
+    source='processIdentifier == 665 AND processImagePath == "/usr/libexec/syspolicyd" AND type == signpostEvent'
+    predicate=source+' AND signpostName == "Path" AND signpostType == event AND composedMessage == '+json.dumps(expected)
+    matches=[];ids=[];interval=None;failure=None
+    try:
+        rows=query(predicate,deadline,receipts);matches=path_ids(rows,expected);ids=sorted({r['signpost_id'] for r in matches})
+        if len(ids)==1:
+            predicate=source+f' AND signpostIdentifier == {ids[0]} AND (signpostName == "EvaluationID" OR signpostName == "GatekeeperEvaluation")'
+            rows=query(predicate,deadline,receipts);interval=reduce_interval(rows,ids[0])
+    except Exception as error:
+        known={'RuntimeError','ValueError','OSError','TimeoutExpired','JSONDecodeError','TypeError'}
+        failure=type(error).__name__ if type(error).__name__ in known else 'UnknownCollectorError'
+    result={'task':'PCTX01-G05-D05','target_pid':27817,'path_sha256':PATH_SHA,'path_matches':matches,'unique_signpost_ids':ids,'interval':interval,'queries':receipts,'failure_class':failure,'complete':failure is None,'qualification':False,'administrator_authentication':False,'limitation':'No/multiple IDs stop correlation; end does not prove kernel acknowledgement or child execution. Path/time association is evidence,not a public supported PID binding.'}
+    (BASE/'pctx01-startup-signpost-target-result.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps({'failure_class':failure,'queries':len(receipts),'path_matches':len(matches),'unique_ids':len(ids),'interval_events':len(interval['events']) if interval else 0}))
+
+def selftest():
+    row={'processID':665,'processImagePath':SOURCE,'eventType':'signpostEvent','signpostScope':'process','timestamp':'2026-10-09T11:04:11+00:00','signpostID':42,'signpostName':'Path','signpostType':'event','eventMessage':'/owned/SYNTHETIC'}
+    assert len(path_ids([row],'/owned/SYNTHETIC'))==1
+    for change in [{'processID':666},{'signpostID':True},{'signpostID':2**64-1},{'timestamp':'2026-10-09T11:04:10+00:00'},{'eventMessage':'<private>'},{'eventMessage':'/owned/SYNTHETIC-extra'}]:assert path_ids([dict(row,**change)],'/owned/SYNTHETIC')==[]
+    events=[dict(row,signpostName='EvaluationID',eventMessage='599'),dict(row,signpostName='GatekeeperEvaluation',signpostType='end',eventMessage=''),dict(row,signpostName='EvaluationID',eventMessage='SECRET_TOKEN'),dict(row,signpostName='Path',eventMessage='/owned/SECRET')]
+    reduced=reduce_interval(events,42);assert len(reduced['events'])==2 and reduced['discarded_unrecognized']==2
+    assert 'SECRET' not in json.dumps(reduced) and '/owned' not in json.dumps(reduced)
+    assert reduce_interval(events,43)['events']==[]
+    for function,args in [(path_ids,([row]*17,'/owned/SYNTHETIC')),(reduce_interval,([row]*33,42))]:
+        try:function(*args)
+        except ValueError:pass
+        else:raise AssertionError('event cap')
+    print(json.dumps({'result':'PASS','scope':'synthetic source/time/identity/path/numeric admission and privacy controls; no service query','executed_log_queries':0}))
+parser=argparse.ArgumentParser();parser.add_argument('--selftest',action='store_true');args=parser.parse_args()
+if args.selftest:selftest()
+else:execute()

@@ -1,0 +1,11 @@
+#include <os/log.h>
+#include <os/signpost.h>
+int main(void) {
+    os_log_t log = os_log_create("org.pctx.diagnostic.synthetic", "mapping");
+    os_signpost_id_t id = os_signpost_id_generate(log);
+    os_signpost_interval_begin(log,id,"GatekeeperEvaluation");
+    os_signpost_event_emit(log,id,"Path","%{public}s","PCTX_SYNTHETIC_ONLY");
+    os_signpost_event_emit(log,id,"EvaluationID","%{public}lld",(long long)599);
+    os_signpost_interval_end(log,id,"GatekeeperEvaluation");
+    return 0;
+}

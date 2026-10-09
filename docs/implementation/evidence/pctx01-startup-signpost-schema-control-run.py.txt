@@ -1,0 +1,17 @@
+import subprocess,time,datetime,json,os,hashlib
+from pathlib import Path
+root=Path('/private/tmp/pctx01-path-map-joxx04hy');base=Path('/Users/dev/PCTX/docs/implementation/evidence');assert os.getuid()==502
+(root/'signpost-control-consumed').open('x').close()
+start=datetime.datetime.now(datetime.timezone.utc).replace(microsecond=0);child=subprocess.Popen([str(root/'signpost-control')]);code=child.wait(timeout=5);time.sleep(.5)
+end=max(start+datetime.timedelta(seconds=2),datetime.datetime.now(datetime.timezone.utc).replace(microsecond=0)+datetime.timedelta(seconds=1))
+predicate=f'processIdentifier == {child.pid} AND processImagePath == "{root}/signpost-control" AND subsystem == "org.pctx.diagnostic.synthetic"'
+args=['/usr/bin/log','show','--start',start.strftime('%Y-%m-%d %H:%M:%S%z'),'--end',end.strftime('%Y-%m-%d %H:%M:%S%z'),'--timezone','UTC','--style','json','--signpost','--info','--no-debug','--no-pager','--predicate',predicate]
+r=subprocess.run(args,capture_output=True,timeout=15);assert len(r.stdout)<=32768
+rows=json.loads(r.stdout) if r.returncode==0 else [];assert isinstance(rows,list) and len(rows)<=16
+out=[]
+for row in rows:
+ assert row.get('processID')==child.pid and row.get('subsystem')=='org.pctx.diagnostic.synthetic'
+ fields={k:v for k,v in row.items() if k.lower().startswith('signpost') and isinstance(v,(str,int))}
+ out.append({'field_names':sorted(row),'signpost_fields':fields,'payload_is_expected':row.get('eventMessage') in ['', 'PCTX_SYNTHETIC_ONLY','599'],'message_type':row.get('messageType'),'event_type':row.get('eventType')})
+receipt={'task':'PCTX01-G05-D05','kind':'own synthetic signpost schema control; not an acceptance test or service query','emitter_pid':child.pid,'emitter_exit':code,'query_exit':r.returncode,'window_start':start.isoformat(),'window_end':end.isoformat(),'events':len(rows),'rows':out,'raw_bytes':len(r.stdout),'no_raw_messages_exported':True,'service_observed':False,'authentication':False,'security_or_logging_configuration_changed':False,'emitter_sha256':hashlib.sha256((root/'signpost-control').read_bytes()).hexdigest(),'limitation':'Own synthetic public payload does not prove policy-service event enablement,privacy,retention or field compatibility.'}
+(base/'pctx01-startup-signpost-schema-control.json').write_text(json.dumps(receipt,indent=2)+'\n');(base/'pctx01-startup-signpost-schema-control.c.txt').write_bytes((root/'signpost-control.c').read_bytes());(base/'pctx01-startup-signpost-schema-control-run.py.txt').write_bytes(Path(__file__).read_bytes());print(json.dumps(receipt))

@@ -1,0 +1,66 @@
+{
+  "task": "PCTX01-G05-D05",
+  "state": "prepared; separate service log-content approval required; not executed",
+  "human_scope_approval": "pending",
+  "hypothesis": "Existing path/evaluation-ID signposts may distinguish a policy request from its completion; prior PID-labelled non-signpost query did not cover this channel.",
+  "target": {
+    "owned_child_pid": 27817,
+    "owned_child_uid": 502,
+    "owned_child_parent": 27803,
+    "native_start_sec": 1791543850,
+    "native_start_usec": 999247,
+    "exact_synthetic_fixture_content": true,
+    "fixture_path_sha256": "ff015b12d436dc640edb7d12f835bc4b13b456bb9a95b649fff6f18589d4ae8c",
+    "private_manifest": "/private/tmp/pctx01-path-map-joxx04hy/records/27817-1791543850-999247.mapping.json",
+    "service_pid": 665,
+    "service_path": "/usr/libexec/syspolicyd",
+    "service_identity_basis": "previous finite native identity admission; new historical query filters PID/path,does not observe service process state"
+  },
+  "window": {
+    "start_utc": "2026-10-09T11:04:10+00:00",
+    "end_utc": "2026-10-09T11:04:12+00:00",
+    "seconds": 2,
+    "path_admission_not_before_native_birth": "2026-10-09T11:04:10.999247+00:00"
+  },
+  "queries": {
+    "maximum": 2,
+    "first": "Only service PID/path and signpost Path event whose payload equals frozen owned synthetic fixture canonical path.",
+    "second": "Only if exactly one admitted signpost ID: same PID/path/window,that numeric signpostIdentifier,EvaluationID or GatekeeperEvaluation names.",
+    "no_or_multiple_matches": "Stop; no retry,wider time/filter,other service,kernel query or additional test."
+  },
+  "limits": {
+    "total_watchdog_seconds": "30s cooperative query budget plus at most2s termination/reap grace",
+    "per_query_raw_bytes": 65536,
+    "first_events": 16,
+    "second_events": 32,
+    "raw_storage": "memory only",
+    "export": "admitted timestamp/numeric signpost/evaluation IDs,begin/end literal categories,counts and known tool PIDs only",
+    "cleanup_grace_seconds": 2
+  },
+  "permissions": {
+    "administrator_authentication_expected": false,
+    "ordinary_uid": 502,
+    "sandbox_escalation_needed_for_log_reader": true,
+    "logging_configuration_change": false,
+    "private_logging_activation": false,
+    "service_restart_or_signal": false,
+    "new_original_test": false,
+    "external_posting": false
+  },
+  "privacy": "Exact synthetic path is query input; arbitrary service payloads discarded,not exported; private manifest mode0600,parent0700. No secret,URL,environment,raw messages or other-app paths exported.",
+  "interpretation_limits": [
+    "Emission and retention on this host remain unknown.",
+    "Path/time correlation is not a supported public PID binding; ambiguity remains unknown.",
+    "User-space end may follow a failed driver call; no kernel acknowledgement/waiter-release/payload success claim.",
+    "No acceptance closure follows this diagnostic."
+  ],
+  "reader": "/Users/dev/PCTX/docs/implementation/evidence/pctx01-startup-signpost-target-read.py.txt",
+  "reader_sha256": "e2815d6546109337e08000dfce89c81ee101103890c00110491614dda2f2d267",
+  "private_manifest_sha256": "88f431ca7b6035575bda827500163268c516da025f9549c5ba5a7b8958f2bed6",
+  "controls": "Offline admission/privacy/eventcap controls pass; separate own synthetic emitter returned4same-ID signposts with actual JSON schema,not service observations.",
+  "closure": {
+    "details": "33/40",
+    "whole_gates": "0/10",
+    "state": "product_failure"
+  }
+}

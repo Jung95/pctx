@@ -1,0 +1,64 @@
+"""One user-requested four-test recheck with passive aggregate memory counters."""
+import datetime,hashlib,json,os,re,signal,subprocess,time
+from pathlib import Path
+REPO=Path('/Users/dev/PCTX');BASE=REPO/'docs/implementation/evidence';PREFIX='pctx01-startup-memory-recheck'
+assert os.getuid()==502 and os.geteuid()==502
+build=Path('/private/tmp/pctx01-startup-memory-recheck-build.jsonl')
+rows=[json.loads(s) for s in build.read_text().splitlines() if s.startswith('{')]
+binaries=[r['executable'] for r in rows if r.get('reason')=='compiler-artifact' and r.get('target',{}).get('name')=='project_deadline' and r.get('executable')];assert len(binaries)==1
+binary=Path(binaries[0]);hashes={str(p.relative_to(REPO)):hashlib.sha256(p.read_bytes()).hexdigest() for p in [REPO/'src/query_process.rs',REPO/'tests/project_deadline.rs',REPO/'Cargo.lock',binary]}
+assert hashes['src/query_process.rs']=='bf661f4b8d0ed472585244ada4ac0e946221de364c100039cd20aee56fd8d0d2'
+assert hashes['tests/project_deadline.rs']=='8b9fbc97fbd5acaf612b2d75b94cf810faa2b61614b654495082462b1941a8dc'
+(BASE/(PREFIX+'-consumed.json')).open('x').close()
+
+def memory():
+    record={'timestamp_utc':datetime.datetime.now(datetime.timezone.utc).isoformat()}
+    for name,args in [('vm_stat',['/usr/bin/vm_stat']),('sysctl',['/usr/sbin/sysctl','hw.memsize','vm.swapusage','kern.memorystatus_vm_pressure_level'])]:
+        try:
+            r=subprocess.run(args,capture_output=True,text=True,timeout=2)
+            record[name+'_exit']=r.returncode
+            if r.returncode!=0:continue
+            if name=='vm_stat':
+                page=re.search(r'page size of ([0-9]+) bytes',r.stdout);record['page_size_bytes']=int(page[1]) if page else None
+                counters={}
+                for line in r.stdout.splitlines():
+                    m=re.fullmatch(r'\s*([A-Za-z "-]+):\s*([0-9]+)\.\s*',line)
+                    if m:counters[m[1].strip('"')]=int(m[2])
+                record['vm_counters']=counters
+            else:
+                m=re.search(r'hw.memsize: ([0-9]+)',r.stdout);record['physical_bytes']=int(m[1]) if m else None
+                m=re.search(r'kern.memorystatus_vm_pressure_level: ([0-9]+)',r.stdout);record['pressure_level_raw']=int(m[1]) if m else None
+                m=re.search(r'total = ([0-9.]+)M\s+used = ([0-9.]+)M\s+free = ([0-9.]+)M',r.stdout)
+                record['swap_reported_M']={'total':float(m[1]),'used':float(m[2]),'free':float(m[3])} if m else None
+        except (subprocess.TimeoutExpired,OSError):record[name+'_unavailable']=True
+    return record
+
+names=['query_program_resolution_uses_captured_command_path','relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry','concurrent_query_startup_preserves_group_streams_and_original_one_second_budget','simultaneous_streams_are_collected_and_overflow_never_infers_success']
+runs=[];all_samples=[]
+for index,name in enumerate(names):
+    assert hashlib.sha256(binary.read_bytes()).hexdigest()==hashes[str(binary.relative_to(REPO))]
+    samples=[memory()];begin=time.monotonic();start=datetime.datetime.now(datetime.timezone.utc).isoformat();log=BASE/(PREFIX+f'-stage-{index}-test.log');watchdog=False
+    with log.open('xb') as output:
+        child=subprocess.Popen([str(binary),'--exact',name,'--nocapture','--test-threads=1'],stdout=output,stderr=subprocess.STDOUT,cwd=REPO)
+        try:
+            while child.poll() is None:
+                if time.monotonic()-begin>30:raise subprocess.TimeoutExpired(str(binary),30)
+                samples.append(memory())
+                try:child.wait(timeout=.25)
+                except subprocess.TimeoutExpired:pass
+            code=child.wait()
+        except subprocess.TimeoutExpired:
+            watchdog=True;child.send_signal(signal.SIGINT)
+            try:code=child.wait(timeout=3)
+            except subprocess.TimeoutExpired:child.kill();code=child.wait()
+    samples.append(memory());raw=log.read_text();timeouts=sorted(set(int(p) for p in re.findall(r'root_pid=([0-9]+)',raw)))
+    absent={}
+    for pid in [child.pid]+timeouts:
+        try:os.kill(pid,0);absent[str(pid)]='present_or_reused; not inspected'
+        except ProcessLookupError:absent[str(pid)]='absent'
+    row={'test':name,'parent_pid':child.pid,'exit':code,'outer_watchdog':watchdog,'start_utc':start,'wall_seconds':time.monotonic()-begin,'timeout_root_pids':timeouts,'known_liveness':absent,'log_sha256':hashlib.sha256(log.read_bytes()).hexdigest(),'memory_samples':samples}
+    runs.append(row);all_samples+=samples;print(json.dumps({'stage':index,'test':name,'exit':code,'timeout_root_pids':timeouts,'samples':len(samples)}),flush=True)
+    if watchdog:break
+result={'task':'PCTX01-G05-D05','reason':'Human explicitly requested a recheck and raised memory shortage as a possible cause.','uid':502,'source_hashes':hashes,'binary':str(binary),'original_contract':'1000ms,8workers×16queries,native exec/cwd/env,owned group,streams and overflow; unmodified original product/test sources','runs':runs,'aggregate_memory_only':True,'memory_pressure_generated':False,'administrator_authentication':False,'service_observation':False,'retry_inside_batch':False,'qualification':False,'limits':['Counter sampling/tool processes can perturb timing; passes do not qualify repair or erase prior failures.','Global pressure/swap/free pages cannot identify the reason for one child policy wait or prove/exclude transient memory shortage between samples.','No OOM/service/other-app logs queried. Failed concurrency outcomes remain censored.'],'closure':{'details':'33/40','whole_gates':'0/10','state':'product_failure'}}
+(BASE/(PREFIX+'-result.json')).write_text(json.dumps(result,indent=2)+'\n')
+print(json.dumps({'tests_run':len(runs),'passed':sum(r['exit']==0 for r in runs),'failed':sum(r['exit']!=0 for r in runs),'pressure_levels_raw':sorted(set(s['pressure_level_raw'] for s in all_samples if s.get('pressure_level_raw') is not None)),'qualification':False}))

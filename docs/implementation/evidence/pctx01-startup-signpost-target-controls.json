@@ -1,0 +1,20 @@
+{
+  "selftest": "PASS",
+  "executed_service_queries": 0,
+  "native_schema_control": "pctx01-startup-signpost-schema-control.json",
+  "reader_sha256": "e2815d6546109337e08000dfce89c81ee101103890c00110491614dda2f2d267",
+  "private_manifest_sha256": "88f431ca7b6035575bda827500163268c516da025f9549c5ba5a7b8958f2bed6",
+  "notes": [
+    "Controls validate reduction,not service retention or latency.",
+    "Initial synthetic C compile lacked explicitSDK and failed; specifying installedSDKcompiled it. No originaltestretry occurred."
+  ],
+  "lifecycle_controls": {
+    "result": "PASS",
+    "spawn_failure_closes_selector": true,
+    "post_spawn_setup_failure_terminates_reaps_closes": true,
+    "byte_cap_failure_preserves_receipt_and_reaps": true,
+    "real_log_queries_executed": 0,
+    "byte_cap_before_retention_rechecked": true,
+    "cap_control_retained_bytes": 0
+  }
+}

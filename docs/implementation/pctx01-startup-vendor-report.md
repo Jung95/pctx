@@ -42,6 +42,23 @@ Its separate final-return deadline repair does not address prepayload startup wa
   references to the two expired owned PIDs,returns0events. Missing records are
   inconclusive;no broader query/private logging mode was used.
 
+## Current correlation limitation
+
+Static inspection of this installed policy-service binary finds separate PID,
+evaluation ID and signpost ID. Its conditional Path and EvaluationID signposts
+share the signpost ID; the prior PID-labelled query excluded this channel. This
+is not evidence that events were emitted or retained. A new owned-fixture mapping
+run preserves the original concurrency test and expires one child at the original
+deadline. Mapping is instrumented and does not qualify a repair. A target-specific
+finite signpost read is prepared,not executed,pending separate content-scope approval.
+No vendor submission or security change follows this draft.
+
+A later human-requested unmodified-product recheck again yields3PASS/1concurrency
+FAIL with two zero-output original-deadline expiries.26aggregate memory samples
+have normal published-XNU pressure flag1,unchanged swap use and zero swap-in/out/
+pageout deltas. This does not support active swap thrashing in that interval,but
+cannot exclude unsampled transients or establish a policy-service cause.
+
 ## Evidence and requested guidance
 
 See [consolidated triage](pctx01-startup-triage.md),

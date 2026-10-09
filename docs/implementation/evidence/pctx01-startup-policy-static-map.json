@@ -1,0 +1,64 @@
+{
+  "task": "PCTX01-G05-D05",
+  "kind": "static_binary_and_offline_predicate_audit",
+  "binary": "/usr/libexec/syspolicyd",
+  "binary_sha256": "f515a5958a5172c28bc19c787878e192b0c2a8f60ffad3975bf8ef1098baa84f",
+  "binary_bytes": 2663392,
+  "runtime_observation": false,
+  "log_queries": 0,
+  "tests_run": 0,
+  "administrator_authentications": 0,
+  "facts": [
+    "Current script evaluation log has two object fields and no explicit PID.",
+    "Selector includes separate withPID and forEvaluationID arguments; current call keeps incomingx3 and incomingx1 distinct.",
+    "Current gatekeeper method conditionally emits Path and EvaluationID with the same generated signpost ID.",
+    "Completion callback sends evaluation result before end signpost; driver call can fail.",
+    "Local log(1) omits signposts unless --signpost is specified.",
+    "Consumed query required PID-labelled message text and omitted --signpost."
+  ],
+  "offline_controls": {
+    "result": "PASS",
+    "synthetic_messages_rejected_by_old_PID_label_matcher": 3,
+    "labelled_PID_positive_control": true,
+    "PID_suffix_refused": true,
+    "actual_log_records_used": false
+  },
+  "independent_review": "work_control independently confirmed caller/stub/selector/methodtypes/signposts/completion ordering",
+  "historical_primary_source": {
+    "url": "https://objective-see.org/blog/blog_0x64.html",
+    "date": "2021-04-26",
+    "use": "Historical architecture comparison only; distinct evaluation ID and kernel response correlation. No bypass/debugging/security changes used.",
+    "limit": "Not evidence of current runtime events, their emission, privacy, retention or latency cause."
+  },
+  "limits": [
+    "No historical expired PID to scriptpath/evaluationID mapping was saved.",
+    "No event emission,retention,privacy setting,queue saturation or causal startup repair established.",
+    "An end signpost alone cannot prove kernel acknowledgement,waiter release or child payload.",
+    "Static strings/signposts are internal implementation evidence,not a supported public collection contract."
+  ],
+  "acceptance": {
+    "state": "product_failure",
+    "details_closed": 33,
+    "details_total": 40,
+    "whole_gates_closed": 0,
+    "whole_gates_total": 10
+  },
+  "static_addresses": {
+    "script_log": "0x100030364",
+    "gatekeeper_call": "0x1000303e4",
+    "objc_stub": "0x1000bfb00",
+    "selector_reference": "0x10011a700",
+    "selector_string": "0x1000d3e6f",
+    "gatekeeper_implementation": "0x10003322c",
+    "completion_callback": "0x100033754",
+    "send_result_implementation": "0x100032fd4",
+    "driver_call": "0x1000331a4"
+  },
+  "method_encoding": "v76@0:8I16i20@24@32@40@48B56q60@68",
+  "argument_correlation": {
+    "PID": "withPID incomingx3 \u2192 savedx20 \u2192 outgoingx3",
+    "evaluation_ID": "incomingx1 \u2192 savedx23 \u2192 callerstacksp+8 \u2192 methodx29+0x18 \u2192 x28",
+    "signpost_ID": "separately generated x24; Path and EvaluationID payloads share this value",
+    "limit": "Do not equate childPID,evaluationID and signpostID."
+  }
+}

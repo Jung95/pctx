@@ -1,0 +1,10 @@
+{
+  "task": "PCTX01-G05-D05",
+  "reviewer": "work_control",
+  "static_map": "Independently confirmed distinct PID/evaluationID/signpostID and current selector/types/callback order.",
+  "path_mapping": "Confirmed113=112OUTPUT+1TIMEOUT,source/test/log hashes,diagnostic/censored limitations. Outcome-placement blocker fixed before actual test.",
+  "memory_recheck": "Confirmed all source/binary/fourlog hashes,3PASS1FAIL,twozerooutputTIMEOUTs,26pressure1samples,swap/pageout deltas0.",
+  "pending_reader": "Selector setup/reap/partial receipt and pre-retention cap issues corrected; reviewer reports no remaining material blocker. Scope approval still pending; no service query performed.",
+  "closure": "33/40details,0/10whole gates;G05-D05product_failure",
+  "no_acceptance_repair_claim": true
+}

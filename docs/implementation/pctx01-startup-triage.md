@@ -129,3 +129,47 @@ All earlier authentication/log-approval instructions and commands are consumed.
 Next needs target-specific evaluation mapping or an applicable supported platform
 correction. Do not repeat unchanged diagnostics. A minimal vendor evidence report
 is prepared;external posting/messaging is not authorized or performed.
+
+## Current static correlation and owned-path mapping — 2026-10-09
+
+The [installed-binary audit](evidence/pctx01-startup-policy-static-map.json) confirms
+that the script log has no explicit PID field and evaluation IDs differ from PIDs.
+The current gatekeeper implementation conditionally emits Path and EvaluationID
+payloads sharing a separately generated signpost ID. Local log(1) omits signposts
+unless requested. Historical primary reverse-engineering provides architectural
+comparison only ([Objective-See,2021](https://objective-see.org/blog/blog_0x64.html));
+no old vulnerability,debugging advice or security bypass is applied here.
+
+The previous query's empty result did not test this channel. Current completion
+callback sends its result before its end signpost; driver failure is possible.
+An end cannot prove kernel acknowledgement,waiter release or payload execution.
+No current latency cause or applicable platform correction follows static analysis.
+
+New [owned-path diagnostic](evidence/pctx01-startup-path-map-result.json): original
+concurrency test once,ordinary UID502,unchanged source/1000ms/8×16,native exec,
+cwd/env/group/streams/cancellation. Exit101,113mapped outcomes,oneTIMEOUT27817.
+Counts are censored. Mapping adds synchronous work within the original clock;
+outcome writes occur after cleanup. PID/native start/parent/UID and exact synthetic
+fixture content are admitted; files are not an atomic executed-content proof.
+Missing observations are unknown. No source patch or acceptance qualification.
+
+The [own synthetic schema control](evidence/pctx01-startup-signpost-schema-control.json)
+validates4same-ID records and actual JSON fields without service observation.
+[Next finite scope](evidence/pctx01-startup-signpost-target-scope-plan.json) is prepared
+but awaits separate approval: target-specific existing Path→signpostID→EvaluationID/
+interval records,one2sUTC window,no private logging or wider fallback. At most two
+queries; zero or ambiguous IDs stop. PCTX01 remains33/40details,0/10whole gates.
+
+## Human-requested memory recheck — 2026-10-09
+
+[Verification](evidence/pctx01-startup-memory-recheck-verification.json) records3PASS/
+1concurrencyFAIL from unmodified product/tests,each once at original1000ms/8×16.
+Expired28848/28853 have zero streams,no rootexit/EOF/group proof.26passive aggregate
+samples show16GiB RAM,normal published-XNU sysctl flag1,unchanged841.5reportedM
+swap,deltaSwapins/Swapouts/Pageouts0. The sysctl emits converted notification flags,
+not internal enum values. Exact installed-source match is not established.
+
+This does not support shortage/swap thrashing in the observed interval;it does
+not exclude unsampled transients or identify policy-service latency. No artificial
+pressure,service/app logs,administrator authentication or settings change. Prior
+failures remain. PCTX01-G05-D05 product_failure,33/40details,0/10whole gates.
