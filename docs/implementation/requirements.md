@@ -1,5 +1,21 @@
 # Implementation requirements
 
+## Lifecycle-aware stack diagnosis — current, 2026-10-09
+
+PCTX01-G05-D05 remains product_failure,33/40 details,0/10 gates. Observer ready,
+owned trigger admitted11.559ms later; exact transient endpoint found on first
+bounded query without launch/warmup. Original1000ms/8×16 test exit101:98 outcomes,
+96OUTPUT,2TIMEOUT43019/43025,30 planned calls censored. No repaired acceptance.
+Both2s/10ms samplers exit0/reaped; XprotectService reduction ValueError invalidates
+both captures,0 retained samples; exact refusal reason unknown,raw deleted.
+Root terminal receipt validated,104 known generated PIDs absent,private prepared
+source removed. Product/test/lock unchanged; normal-source rebuild before
+qualification. Finite scope consumed; no automatic retry/Actions/task switch.
+New parser/collector candidates preserve fixed failure codes without raw strings;
+synthetic controls pass,not prior-failure attribution or live validation.
+Next within D05: review reason-preserving candidates and obtain interpretable
+operation evidence under unchanged contracts. [Result](evidence/pctx01-startup-lifecycle-stack-review.md).
+
 ## Paired authentication retry — current, 2026-10-09
 
 PCTX01-G05-D05 remains product_failure,33/40 details,0/10 gates. Explicit retry

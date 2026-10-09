@@ -1,0 +1,431 @@
+{
+  "task": "PCTX01-G05-D05",
+  "known_pids": [
+    {
+      "pid": 42959,
+      "state": "absent"
+    },
+    {
+      "pid": 43000,
+      "state": "absent"
+    },
+    {
+      "pid": 43003,
+      "state": "absent"
+    },
+    {
+      "pid": 43004,
+      "state": "absent"
+    },
+    {
+      "pid": 43018,
+      "state": "absent"
+    },
+    {
+      "pid": 43019,
+      "state": "absent"
+    },
+    {
+      "pid": 43020,
+      "state": "absent"
+    },
+    {
+      "pid": 43021,
+      "state": "absent"
+    },
+    {
+      "pid": 43022,
+      "state": "absent"
+    },
+    {
+      "pid": 43023,
+      "state": "absent"
+    },
+    {
+      "pid": 43024,
+      "state": "absent"
+    },
+    {
+      "pid": 43025,
+      "state": "absent"
+    },
+    {
+      "pid": 43027,
+      "state": "absent"
+    },
+    {
+      "pid": 43028,
+      "state": "absent"
+    },
+    {
+      "pid": 43029,
+      "state": "absent"
+    },
+    {
+      "pid": 43030,
+      "state": "absent"
+    },
+    {
+      "pid": 43031,
+      "state": "absent"
+    },
+    {
+      "pid": 43032,
+      "state": "absent"
+    },
+    {
+      "pid": 43033,
+      "state": "absent"
+    },
+    {
+      "pid": 43034,
+      "state": "absent"
+    },
+    {
+      "pid": 43035,
+      "state": "absent"
+    },
+    {
+      "pid": 43036,
+      "state": "absent"
+    },
+    {
+      "pid": 43037,
+      "state": "absent"
+    },
+    {
+      "pid": 43038,
+      "state": "absent"
+    },
+    {
+      "pid": 43039,
+      "state": "absent"
+    },
+    {
+      "pid": 43040,
+      "state": "absent"
+    },
+    {
+      "pid": 43041,
+      "state": "absent"
+    },
+    {
+      "pid": 43042,
+      "state": "absent"
+    },
+    {
+      "pid": 43043,
+      "state": "absent"
+    },
+    {
+      "pid": 43044,
+      "state": "absent"
+    },
+    {
+      "pid": 43045,
+      "state": "absent"
+    },
+    {
+      "pid": 43046,
+      "state": "absent"
+    },
+    {
+      "pid": 43047,
+      "state": "absent"
+    },
+    {
+      "pid": 43048,
+      "state": "absent"
+    },
+    {
+      "pid": 43049,
+      "state": "absent"
+    },
+    {
+      "pid": 43050,
+      "state": "absent"
+    },
+    {
+      "pid": 43051,
+      "state": "absent"
+    },
+    {
+      "pid": 43052,
+      "state": "absent"
+    },
+    {
+      "pid": 43053,
+      "state": "absent"
+    },
+    {
+      "pid": 43054,
+      "state": "absent"
+    },
+    {
+      "pid": 43055,
+      "state": "absent"
+    },
+    {
+      "pid": 43056,
+      "state": "absent"
+    },
+    {
+      "pid": 43057,
+      "state": "absent"
+    },
+    {
+      "pid": 43058,
+      "state": "absent"
+    },
+    {
+      "pid": 43059,
+      "state": "absent"
+    },
+    {
+      "pid": 43060,
+      "state": "absent"
+    },
+    {
+      "pid": 43061,
+      "state": "absent"
+    },
+    {
+      "pid": 43062,
+      "state": "absent"
+    },
+    {
+      "pid": 43063,
+      "state": "absent"
+    },
+    {
+      "pid": 43064,
+      "state": "absent"
+    },
+    {
+      "pid": 43065,
+      "state": "absent"
+    },
+    {
+      "pid": 43066,
+      "state": "absent"
+    },
+    {
+      "pid": 43067,
+      "state": "absent"
+    },
+    {
+      "pid": 43068,
+      "state": "absent"
+    },
+    {
+      "pid": 43069,
+      "state": "absent"
+    },
+    {
+      "pid": 43070,
+      "state": "absent"
+    },
+    {
+      "pid": 43071,
+      "state": "absent"
+    },
+    {
+      "pid": 43072,
+      "state": "absent"
+    },
+    {
+      "pid": 43073,
+      "state": "absent"
+    },
+    {
+      "pid": 43074,
+      "state": "absent"
+    },
+    {
+      "pid": 43075,
+      "state": "absent"
+    },
+    {
+      "pid": 43076,
+      "state": "absent"
+    },
+    {
+      "pid": 43077,
+      "state": "absent"
+    },
+    {
+      "pid": 43078,
+      "state": "absent"
+    },
+    {
+      "pid": 43079,
+      "state": "absent"
+    },
+    {
+      "pid": 43080,
+      "state": "absent"
+    },
+    {
+      "pid": 43081,
+      "state": "absent"
+    },
+    {
+      "pid": 43082,
+      "state": "absent"
+    },
+    {
+      "pid": 43083,
+      "state": "absent"
+    },
+    {
+      "pid": 43084,
+      "state": "absent"
+    },
+    {
+      "pid": 43085,
+      "state": "absent"
+    },
+    {
+      "pid": 43086,
+      "state": "absent"
+    },
+    {
+      "pid": 43087,
+      "state": "absent"
+    },
+    {
+      "pid": 43088,
+      "state": "absent"
+    },
+    {
+      "pid": 43089,
+      "state": "absent"
+    },
+    {
+      "pid": 43090,
+      "state": "absent"
+    },
+    {
+      "pid": 43091,
+      "state": "absent"
+    },
+    {
+      "pid": 43092,
+      "state": "absent"
+    },
+    {
+      "pid": 43093,
+      "state": "absent"
+    },
+    {
+      "pid": 43094,
+      "state": "absent"
+    },
+    {
+      "pid": 43095,
+      "state": "absent"
+    },
+    {
+      "pid": 43096,
+      "state": "absent"
+    },
+    {
+      "pid": 43097,
+      "state": "absent"
+    },
+    {
+      "pid": 43098,
+      "state": "absent"
+    },
+    {
+      "pid": 43099,
+      "state": "absent"
+    },
+    {
+      "pid": 43100,
+      "state": "absent"
+    },
+    {
+      "pid": 43101,
+      "state": "absent"
+    },
+    {
+      "pid": 43102,
+      "state": "absent"
+    },
+    {
+      "pid": 43103,
+      "state": "absent"
+    },
+    {
+      "pid": 43104,
+      "state": "absent"
+    },
+    {
+      "pid": 43105,
+      "state": "absent"
+    },
+    {
+      "pid": 43106,
+      "state": "absent"
+    },
+    {
+      "pid": 43107,
+      "state": "absent"
+    },
+    {
+      "pid": 43108,
+      "state": "absent"
+    },
+    {
+      "pid": 43109,
+      "state": "absent"
+    },
+    {
+      "pid": 43110,
+      "state": "absent"
+    },
+    {
+      "pid": 43111,
+      "state": "absent"
+    },
+    {
+      "pid": 43112,
+      "state": "absent"
+    },
+    {
+      "pid": 43113,
+      "state": "absent"
+    },
+    {
+      "pid": 43114,
+      "state": "absent"
+    },
+    {
+      "pid": 43115,
+      "state": "absent"
+    },
+    {
+      "pid": 43116,
+      "state": "absent"
+    },
+    {
+      "pid": 43117,
+      "state": "absent"
+    },
+    {
+      "pid": 43118,
+      "state": "absent"
+    }
+  ],
+  "all_known_pids_absent": true,
+  "known_pid_count": 104,
+  "prepared_root_removed": true,
+  "root_private_raw_removed_by_terminal_receipt": true,
+  "source_hashes_unchanged": true,
+  "qualification": false,
+  "limits": [
+    "Known PID absence is not universal descendant proof.",
+    "Discarded raw sample cannot be reconstructed or parsed again."
+  ]
+}

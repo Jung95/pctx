@@ -1,0 +1,62 @@
+"""Reduce bounded sample data to allowlisted images and numeric code offsets."""
+import re,json
+TARGETS={
+ 'syspolicyd':'/usr/libexec/syspolicyd',
+ 'XprotectService':'/System/Library/PrivateFrameworks/XprotectFramework.framework/Versions/A/XPCServices/XprotectService.xpc/Contents/MacOS/XprotectService'}
+IMAGES={**TARGETS,
+ 'Security':'/System/Library/Frameworks/Security.framework/Versions/A/Security',
+ 'XprotectFramework':'/System/Library/PrivateFrameworks/XprotectFramework.framework/Versions/A/XprotectFramework',
+ 'yara':'/System/Library/PrivateFrameworks/yara.framework/Versions/A/yara',
+ 'libdispatch.dylib':'/usr/lib/system/libdispatch.dylib',
+ 'libsystem_kernel.dylib':'/usr/lib/system/libsystem_kernel.dylib',
+ 'libsystem_pthread.dylib':'/usr/lib/system/libsystem_pthread.dylib',
+ 'libcorecrypto.dylib':'/usr/lib/system/libcorecrypto.dylib'}
+class ParseFailure(ValueError):
+ def __init__(self,code):self.code=code
+def reduce_sample(raw,pid,name,images=None):
+ images=IMAGES if images is None else images
+ if len(raw.encode())>8*1024*1024:raise ParseFailure('raw_cap')
+ if not re.search(r'^Process:\s+'+re.escape(name)+r' \['+str(pid)+r'\]\s*$',raw,re.M):raise ParseFailure('process_header')
+ target=images[name]
+ if not re.search(r'^Path:\s+'+re.escape(target)+r'\s*$',raw,re.M):raise ParseFailure('path_header')
+ if raw.count('Call graph:')!=1 or raw.count('Binary Images:')!=1:raise ParseFailure('boundaries')
+ graph=raw.split('Call graph:',1)[1].split('Binary Images:',1)[0]
+ end=re.search(r'^Total number in stack|^Sort by top of stack',graph,re.M)
+ if not end:raise ParseFailure('graph_terminal')
+ graph=graph[:end.start()];admitted={}
+ for l in raw.split('Binary Images:',1)[1].splitlines():
+  m=re.fullmatch(r'\s*(0x[0-9a-fA-F]+)\s+-\s+(0x[0-9a-fA-F]+)\s+\+?(\S+)\s+.*?<([0-9A-Fa-f-]{36})>\s+(\S+)\s*',l)
+  if not m:continue
+  lo,hi,n,u,path=m.groups()
+  if images.get(n)!=path:continue
+  if n in admitted:raise ParseFailure('ambiguous_image')
+  low,high=int(lo,16),int(hi,16)
+  if high<low:raise ParseFailure('image_range')
+  admitted[n]=(low,high,u.upper())
+ if name not in admitted:raise ParseFailure('target_image_absent')
+ frames=[];thread=None;unknown=0
+ for l in graph.splitlines():
+  t=re.match(r'^\s*(\d+)\s+Thread_(\d+)\b',l)
+  if t:thread=int(t[2]);continue
+  m=re.match(r'^([\s+|:!]*)?(\d+)\s+.*?\(in ([^)]+)\).*?\[(0x[0-9A-Fa-f]+)\]\s*$',l)
+  if not m:
+   if l.strip():unknown+=1
+   continue
+  prefix,weight,n,address=m.groups()
+  if thread is None or n not in admitted:unknown+=1;continue
+  low,high,u=admitted[n];address=int(address,16)
+  if not low<=address<=high:raise ParseFailure('frame_outside_image')
+  if len(frames)>=20000:raise ParseFailure('frame_cap')
+  frames.append({'thread_id':thread,'depth':len(prefix),'inclusive_weight':int(weight),'image':n,'image_uuid':u,'code_offset':address-low})
+ if not frames:raise ParseFailure('no_admitted_frames')
+ return {'frames':frames,'unpublished_rows':unknown,'raw_retained':False,'symbols_or_queue_names_retained':False,'absolute_addresses_retained':False,'limit':'Inclusive stack weights, not CPU time or per-request attribution. UUID/offset require matching static image before symbolication.'}
+def selftest():
+ r='Process: syspolicyd [123]\nPath: /usr/libexec/syspolicyd\nCall graph:\n  9 Thread_77 DispatchQueue_1: SECRET\n    9 PRIVATE_DATA (in syspolicyd) + 4 [0x1004]\n    4 SECRET (in OTHER) [0x9000]\nTotal number in stack\nBinary Images:\n 0x1000 - 0x2000 syspolicyd (1) <11111111-1111-1111-1111-111111111111> /usr/libexec/syspolicyd\n 0x9000 - 0xa000 OTHER (1) <22222222-2222-2222-2222-222222222222> /Users/secret\n'
+ o=reduce_sample(r,123,'syspolicyd');assert o['frames'][0]['code_offset']==4 and len(o['frames'])==1
+ for secret in ['PRIVATE','SECRET','/Users','0x1004','DispatchQueue']:assert secret not in json.dumps(o)
+ for bad in [r.replace('[123]','[124]'),r.replace('Path: /usr/libexec/syspolicyd','Path: /other'),r.replace('[0x1004]','[0x3000]'),r.replace('Binary Images:','missing')]:
+  try:reduce_sample(bad,123,'syspolicyd')
+  except ValueError:pass
+  else:raise AssertionError('bad sample admitted')
+ print('PASS: numeric image/UUID/offset reduction; source/range/boundary refusals; private strings discarded; no service observed')
+if __name__=='__main__':selftest()

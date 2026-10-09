@@ -1,0 +1,12 @@
+{
+  "task": "PCTX01-G05-D05",
+  "scope_consumed": true,
+  "authentication_wrapper_attempts": 1,
+  "original_test_runs": 1,
+  "test_exit": 101,
+  "samples_retained": 0,
+  "collector_failure_stage": "sample_reduce",
+  "collector_failure_target": "XprotectService",
+  "all_known_pids_absent": true,
+  "qualification": false
+}

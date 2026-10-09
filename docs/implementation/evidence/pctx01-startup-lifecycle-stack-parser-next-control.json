@@ -1,0 +1,13 @@
+{
+  "task": "PCTX01-G05-D05",
+  "fixed_reason_codes": [
+    "process_header",
+    "path_header",
+    "target_image_absent",
+    "no_admitted_frames"
+  ],
+  "replayed_real_sample": false,
+  "administrator_or_service_observation": false,
+  "actual_prior_failure_reason": "unknown; raw discarded",
+  "qualification": false
+}

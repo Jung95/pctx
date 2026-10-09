@@ -1,0 +1,57 @@
+{
+  "task": "PCTX01-G05-D05",
+  "status": "prepared lifecycle-aware batch; not executed",
+  "human_scope_approval": "approved",
+  "administrator_work_authorization": "User now permits necessary administrator-authentication work; previous explicit requirement to separately approve changed operating-process scope retained.",
+  "pre_execution_review": "approved",
+  "targets": [
+    {
+      "name": "syspolicyd",
+      "path": "/usr/libexec/syspolicyd",
+      "required_uid": 0,
+      "binary_sha256": "f515a5958a5172c28bc19c787878e192b0c2a8f60ffad3975bf8ef1098baa84f"
+    },
+    {
+      "name": "XprotectService",
+      "path": "/System/Library/PrivateFrameworks/XprotectFramework.framework/Versions/A/XPCServices/XprotectService.xpc/Contents/MacOS/XprotectService",
+      "required_uid": 0,
+      "binary_sha256": "d8cf6a1ac365a6c81ab695a6ec62ed914df54926497e8ea1b43315265ac7ba8c"
+    }
+  ],
+  "identity_admission": "Before original test require unique syspolicyd exact UID0/path/native birth. After one fresh owned-child trigger, seek unique XprotectService exact UID0/path/native birth with at most50 exact-name queries, each <=100ms and bounded remaining earliest original deadline. No endpoint launch/restart/warmup. Absent/ambiguous/late endpoint invalidates capture; original test runs without waiting/renewal.",
+  "new_hypothesis": "Admit syspolicyd before test; discover transient XprotectService only after owned child, within unchanged earliest deadline, without endpoint warmup.",
+  "commands": [
+    "/usr/bin/sample <admitted syspolicyd PID> 2 10 -file <root-private raw>",
+    "/usr/bin/sample <admitted XprotectService PID> 2 10 -file <root-private raw>"
+  ],
+  "sampling": "One near-concurrent pair:2seconds per target at10ms interval,total4 requested sampler-seconds. Each sampler has6second shared receipt watchdog; SIGTERM/kill only generated tools for cleanup. Requested duration is not a hard kernel-time guarantee.",
+  "authentication": "One /usr/bin/osascript administrator authentication runs embedded,pinned finite observer with /usr/bin/python3 -I. Ordinary UID502 runs original test only after observer-ready. No credentials stored or authentication bypass.",
+  "test": "One byte-identical original1000ms/8x16 startup test. One numeric owned trigger after first spawn adds filesystem observation cost under original running deadline; no renewal/prewarm/retry/interpreter/security exemption.",
+  "data": "RLIMIT_FSIZE hard8MiB per sampler file plus post-capture read8MiB cap per transient root-private0600 raw sample;20,000 exported frames per target maximum. Only fixed allowlisted image alias/UUID/relative code offset,thread id,depth,inclusive weight and minimal nativeidentity/CPU/thread counters retained. Raw strings/function symbols/queue names/image paths/absolute addresses discarded. No heap/message/environment/argv/other-process sample.",
+  "impact": "sample briefly suspends/resumes target service threads; other launches may be affected. Captures overlap other service requests; cannot assign request-specific CPU or complete185ms partition.",
+  "test_binary": "/Users/dev/PCTX/target/debug/deps/project_deadline-f7e8b9d913251d84",
+  "test_binary_sha256": "f426763a818baf9af91d6a3eaae72f53adc559410e0dbce0e30a1580eded40ce",
+  "file_hashes": {
+    "pctx01-startup-pair-stack-parser.py.txt": "2c2ff41c436a7f598886f384bef63de48df19836458761e6635aac9da1e83321",
+    "pctx01-startup-lifecycle-stack-collector.py.txt": "a5aa9ec665476bc859a19dcd602a6a85f807e101b3a6cb770a7ad683ca181f22",
+    "pctx01-startup-lifecycle-stack-run.py.txt": "8e0ceb8053a87c4fa28b18b7a7685bf33e0513b203e2324d0cfacf56e7ceaba8",
+    "pctx01-startup-lifecycle-stack-forward-run.py.txt": "e4dc3afc7f4564453859b7673652f247160540de38e5249cad8667e55b432302",
+    "pctx01-startup-lifecycle-stack-forward-prepared.json": "493c83fd41f69b8bc9950fd54b65f81c30dad132bcbd66740c71f532c1841856",
+    "pctx01-startup-pair-stack-signal.rs.txt": "08e17cbe43285eaac18308bce2dc0556cc47f59c97c3302a8dcfcbe2b895a321"
+  },
+  "limits": [
+    "Diagnostic interference; test outcomes not qualification.",
+    "Known PID absence/root reap do not prove universal descendant cleanup.",
+    "Service pre/post admission retains narrow PID reuse race.",
+    "Any timeout/identity/parser/cleanup failure invalidates attribution, no fallback/retry.",
+    "Both services must exist at readiness; no endpoint invocation to warm or create service.",
+    "Unexpected root collector death requires minimal cleanup audit before reuse.",
+    "Late endpoint discovery can miss the relevant scan; absence after deadline gives no XProtect cost attribution.",
+    "Deadline admission is cooperative; native sampler spawn may finish after check."
+  ],
+  "qualification": false,
+  "trigger_admission": "One atomic numeric first-owned-child marker; exact parent binary/UID502/native birth and child PID/PPID/UID/birth,non-zombie live state; native tick age<=100ms and admission before earliest original deadline. No waiting or renewed deadline in product path.",
+  "cleanup": "Stop/reap every generated sampler before raw-directory removal. If reap/removal cannot be proven, keep private directory recorded as cleanup-unknown, invalidate attribution. Coordinator cleanup branches are independent.",
+  "review_basis": "Independent passive reviewer confirms recomputed deadline around endpoint query, pre-launch admission, receipt-based collector terminal and existing cleanup/privacy. Seven synthetic lifecycle controls pass; no live observation by reviewer.",
+  "approval_basis": "Existing exact syspolicyd+XprotectService scope approved by human; user now says proceed after reported next step was lifecycle-aware diagnostic correction. Same targets/sample commands/durations/data/impact; no target extension."
+}
