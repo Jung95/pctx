@@ -1,0 +1,47 @@
+"""Scope-gated one-shot System Trace. No execution without changed-scope approval."""
+from pathlib import Path
+import json,os,subprocess,time,hashlib,signal,shutil,argparse
+B=Path('/Users/dev/PCTX/docs/implementation/evidence');P=B/'pctx01-startup-instruments-system-trace-plan.json'
+def execute():
+ plan=json.loads(P.read_text());assert plan['human_scope_approval']=='approved' and plan['independent_review']=='approved' and os.getuid()==os.geteuid()==502
+ for name,sha in plan['file_hashes'].items():assert hashlib.sha256((B/name).read_bytes()).hexdigest()==sha
+ assert hashlib.sha256(Path(plan['test_binary']).read_bytes()).hexdigest()==plan['test_binary_sha256']
+ for name,sha in plan['source_hashes'].items():assert hashlib.sha256((Path('/Users/dev/PCTX')/name).read_bytes()).hexdigest()==sha
+ (B/'pctx01-startup-instruments-system-trace-consumed.json').open('x').close()
+ root=Path(plan['private_root']);assert root.stat().st_uid==502 and root.stat().st_mode&0o777==0o700;os.umask(0o077)
+ (root/'approved-plan.json').write_text(json.dumps(plan)+'\n');shutil.copyfile(B/'pctx01-startup-instruments-system-trace-target.py.txt',root/'target.py');p=None;failure=None;size=0;started=time.monotonic();console=root/'recorder.log'
+ args=[plan['xctrace'],'record','--template','System Trace','--time-limit','7s','--output',str(root/'capture.trace'),'--recording-options',str(B/'pctx01-startup-instruments-system-trace-options.json'),'--launch','--','/opt/homebrew/bin/python3',str(root/'target.py'),str(root)]
+ try:
+  with console.open('xb') as out:
+   p=subprocess.Popen(args,stdout=out,stderr=subprocess.STDOUT,stdin=subprocess.DEVNULL,start_new_session=True,cwd='/Users/dev/PCTX')
+   while p.poll() is None:
+    size=sum(q.stat().st_size for q in root.rglob('*') if q.is_file() and not q.is_symlink())
+    if size>67_108_864:raise RuntimeError('PrivateOutputCap')
+    if time.monotonic()-started>60:raise TimeoutError('RecorderWallLimit')
+    time.sleep(.1)
+   if p.returncode!=0:failure='RecorderNonzero'
+ except BaseException as e:failure=type(e).__name__
+ finally:
+  cleanup_errors=[]
+  if p is not None and p.poll() is None:
+   for send,seconds in [(lambda:p.send_signal(signal.SIGINT),5),(p.terminate,3),(p.kill,2)]:
+    if p.poll() is not None:break
+    try:send();p.wait(timeout=seconds)
+    except BaseException as e:cleanup_errors.append(type(e).__name__)
+  # Always wait: recorder exit alone does not exclude delayed target launch.
+  until=time.monotonic()+40;target=None
+  while time.monotonic()<until:
+   try:
+    if (root/'target-result.json').exists():
+     target=json.loads((root/'target-result.json').read_text());break
+   except BaseException:failure='TargetReceiptUnknown';break
+   time.sleep(.1)
+  if target is None:failure=failure or 'TargetLaunchOrCleanupUnknown'
+  if p is not None and p.poll() is None:failure='RecorderCleanupUnknown'
+  result={'task':'PCTX01-G05-D05','recorder_pid':p.pid if p else None,'recorder_exit':p.returncode if p else None,'recorder_reaped':p is not None and p.returncode is not None,'failure':failure,'target':target,'cleanup_errors':cleanup_errors,'target_terminal_state':'receipt_present' if target else 'launch_or_cleanup_unknown','observed_private_bytes':size,'raw_trace_private':True,'public_export_performed':False,'qualification':False,'scope_consumed':True,'private_root':str(root),'cleanup_limits':'Missing target receipt or unknown child identities require owned audit before deletion; no restart/fallback.'}
+  dest=B/'pctx01-startup-instruments-system-trace-result.json';tmp=dest.with_suffix('.tmp');tmp.write_text(json.dumps(result,indent=2)+'\n');os.replace(tmp,dest)
+  print(json.dumps({'failure':failure,'recorder_exit':result['recorder_exit'],'target':target,'private_bytes':size}))
+if __name__=='__main__':
+ ap=argparse.ArgumentParser();ap.add_argument('--execute',action='store_true');a=ap.parse_args()
+ if a.execute:execute()
+ else:print('Prepared; fresh changed-scope approval and independent review required. No recording started.')

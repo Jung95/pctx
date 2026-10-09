@@ -519,7 +519,8 @@
         "pctx01-startup-xpc-public-binding-review.md",
         "pctx01-startup-xpc-public-binding-map.json",
         "pctx01-startup-xpc-public-binding-checks.json",
-        "pctx01-startup-platform-feedback-draft.md"
+        "pctx01-startup-platform-feedback-draft.md",
+        "pctx01-startup-instruments-system-trace-review.md"
       ],
       "verification_environment": "Native macOS arm64 local common proof; all release platforms separately required by G09",
       "macOS_arm64": "failure",
@@ -527,7 +528,7 @@
       "Linux_x86_64": "unverified; G09-D03",
       "Linux_aarch64": "prior fixed-source full only; inspect linked manifest per contract",
       "Windows_x86_64": "unverified; G09-D04",
-      "documentation_evidence": "Current: original1000ms8x16 diagnostic98recorded96OUTPUT2TIMEOUT45676/45677,30censored; exact-owned-URL stored query0events unknown attribution; own NSURL default%@redacted/public%@visible does not establish service runtime state; numerical service frames show compiler preparation only at service level; public binding static review:rule UUID,behavioral hashes,internal GK analytics,scan-error-only hash,no demonstrated public request/compiler interval; no productrepair/qualification. Prior evidence retained in linked artifacts. Known owned processes absent/private roots removed; normal-source build-only restored. Next verified public timestamped observable or vendor-supported correction; minimal draft local/unsubmitted; no further runtime query justified by names."
+      "documentation_evidence": "Current: original1000ms8x16 diagnostic98recorded96OUTPUT2TIMEOUT45676/45677,30censored; exact-owned-URL stored query0events unknown attribution; own NSURL default%@redacted/public%@visible does not establish service runtime state; numerical service frames show compiler preparation only at service level; public binding static review:rule UUID,behavioral hashes,internal GK analytics,scan-error-only hash,no demonstrated public request/compiler interval; no productrepair/qualification. Prior evidence retained in linked artifacts. Known owned processes absent/private roots removed; normal-source build-only restored. Next verified public timestamped observable or vendor-supported correction; minimal draft local/unsubmitted; no further runtime query justified by names.; SystemTrace1approvedattempt failedcapacity64MiBstop at400006733logicalbytes,recorder-9/TOC10;originaltest101TIMEOUT47364;known5PIDsabsent/private raw removed;userraisedsoftcap1GiB,retryseparateonce-onlyscopepending;no causalrepair."
     },
     {
       "id": "PCTX01-G05-D06",

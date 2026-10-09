@@ -1,5 +1,16 @@
 # Implementation progress
 
+## Instruments System Trace capacity failure — current, 2026-10-09
+
+PCTX01-G05-D05 remains product_failure;whole PCTX01 totals33/40 details,0/10 gates.
+Approved7s trace attempted once;original1000ms8x16 test101/TIMEOUT47364.
+Logical outputstop64MiB hit at400006733bytes;recorder-9 and TOCexport10 invalidate
+trace. No compiler/request cause established. Known5PIDs absent;private raw removed.
+User requested outputstop increase to1GiB;7s/test contracts unchanged. Retry prepared
+with distinct receipts and firstmarker preserved;fresh once-only count approval
+pending. No second recording,productchange,Actions or task switch.
+[Result,cleanup and limits](evidence/pctx01-startup-instruments-system-trace-review.md).
+
 ## Public identifier call-site review — current, 2026-10-09
 
 Only PCTX01-G05-D05 remains active/product_failure; whole PCTX01 totals33/40

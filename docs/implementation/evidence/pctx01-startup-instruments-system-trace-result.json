@@ -1,0 +1,29 @@
+{
+  "task": "PCTX01-G05-D05",
+  "recorder_pid": 47346,
+  "recorder_exit": -9,
+  "recorder_reaped": true,
+  "failure": "RuntimeError",
+  "target": {
+    "wrapper_pid": 47357,
+    "test_root_pid": 47358,
+    "test_exit": 101,
+    "root_reaped": true,
+    "failure": null,
+    "elapsed_ns": 6170955500,
+    "qualification": false,
+    "limits": "Original root only; known query children require post-run numeric identity/liveness audit."
+  },
+  "cleanup_errors": [
+    "TimeoutExpired",
+    "TimeoutExpired"
+  ],
+  "target_terminal_state": "receipt_present",
+  "observed_private_bytes": 400006733,
+  "raw_trace_private": true,
+  "public_export_performed": false,
+  "qualification": false,
+  "scope_consumed": true,
+  "private_root": "/private/tmp/pctx01-system-trace-gyfi8g2x",
+  "cleanup_limits": "Missing target receipt or unknown child identities require owned audit before deletion; no restart/fallback."
+}

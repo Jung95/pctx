@@ -1,0 +1,13 @@
+{
+  "task": "PCTX01-G05-D05",
+  "existing_saved_trace_only": true,
+  "new_recording": false,
+  "exit": 10,
+  "failure": "ExportNonzero",
+  "table_schemas": [],
+  "table_count": 0,
+  "export_pid": 47623,
+  "export_reaped": true,
+  "raw_messages_exported": false,
+  "qualification": false
+}

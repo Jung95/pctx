@@ -1,0 +1,11 @@
+{
+  "Points of Interest": {
+    "excludeOSLogs": true
+  },
+  "Time Profiler": {
+    "contextSwitchSampling": true,
+    "highFrequencySampling": false,
+    "recordKernelStacks": true,
+    "recordWaitingThreads": true
+  }
+}

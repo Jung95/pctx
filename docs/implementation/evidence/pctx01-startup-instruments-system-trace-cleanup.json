@@ -1,0 +1,15 @@
+{
+  "task": "PCTX01-G05-D05",
+  "known_owned_pids_absent": [
+    47346,
+    47357,
+    47358,
+    47364,
+    47623
+  ],
+  "private_trace_removed": true,
+  "final_private_logical_bytes_before_removal": 32489169,
+  "scope_consumed": true,
+  "qualification": false,
+  "limits": "Known root/wrapper/recorder/export and reported failed query only; complete successful descendant identity enumeration unavailable."
+}
