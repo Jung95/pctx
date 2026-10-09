@@ -162,8 +162,8 @@
     },
     {
       "group": "work typed JSON/restore archive",
-      "current": "caller_input_contract three Work routes and Restore: syntax/typed top-level shape, caps and owner/revision order; current work_control11 PASS",
-      "remaining": "Reconcile authored schema controls with source/task/check/lease-dependent acceptance; retain archive checksum/project/state priorities"
+      "current": "Prior cap proof; current Task Create/Edit authored schema40 native combinations and Restore schema/project/checksum6; Backup stdout/archive routing repaired.",
+      "remaining": "Check Record source/task/check/lease-dependent validation; broader archive state acceptance uses existing producer evidence."
     },
     {
       "group": "operations raw/sanitized JSON",
@@ -172,13 +172,13 @@
     },
     {
       "group": "quota UsageBatch",
-      "current": "Caller syntax/shape, 1MiB exact/overflow, owner-first, current quota7 PASS",
-      "remaining": "Explicit schema/observation-count matrix and existing normalized replay/hash precedence"
+      "current": "Prior cap/owner proof plus12 native schema/shape/empty-batch controls.",
+      "remaining": "Observation semantics, count/cap precedence and normalized replay/hash controls;12 combinations do not prove valid count boundary."
     },
     {
       "group": "schedule definition/reviewed plan",
-      "current": "Caller Add/Update/Install syntax/shape, 64KiB/256KiB exact/overflow, owner-first; current schedule17 PASS",
-      "remaining": "Authored schema and producer-dependent definition/plan identity/state acceptance; no installation algorithm expansion"
+      "current": "Prior cap/owner proof plus32 native authored definition schema combinations on Add/Update.",
+      "remaining": "Reviewed-plan identity/state and definition revision/identity precedence; no installation algorithm expansion."
     },
     {
       "group": "adapter config/event/protocol/statusline",

@@ -1,0 +1,25 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.74s
+     Running tests/caller_input_contract.rs (target/debug/deps/caller_input_contract-08b980fca1808cc1)
+
+running 5 tests
+test caller_owner_and_task_revision_priorities_do_not_become_universal_input_first ... ok
+test exact_file_caps_reach_json_decoder_and_overflow_preserves_existing_input_errors ... ok
+
+thread 'quota_batch_schema_and_restore_identity_refusals_are_safe_input_errors' (9171522) panicked at tests/caller_input_contract.rs:433:5:
+Output { status: ExitStatus(unix_wait_status(2304)), stdout: "", stderr: "REVISION_CONFLICT: Output already exists\n" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test quota_batch_schema_and_restore_identity_refusals_are_safe_input_errors ... FAILED
+Caller syntax/shape native combinations:80
+test caller_json_syntax_and_typed_shape_are_input_two_and_preserve_prepared_state ... ok
+Authored Task/Schedule schema native combinations:72
+test authored_task_and_schedule_schema_refusals_preserve_prepared_state ... ok
+
+failures:
+
+failures:
+    quota_batch_schema_and_restore_identity_refusals_are_safe_input_errors
+
+test result: FAILED. 4 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.63s
+
+error: test failed, to rerun pass `--test caller_input_contract`

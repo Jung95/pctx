@@ -1105,3 +1105,15 @@ release-platform qualification stays in G09, actual callback faults in G05-D02,
 and independent schedule/recovery correctness with its producer owner. The
 fixed40 denominator remains; detail count23 to24. No Schedule algorithm change,
 OS registration, stricter accepted JSON schema or discarded initial evidence.
+
+## Control Backup artifact destination (2026-10-09)
+
+Specification §14 response contracts and §33/PCTX26 explicit backup require the
+archive and command response to remain distinct. Actual CLI evidence at baseline
+a0e89b9 showed a valid archive published before main attempted to write a response
+to the same create-only destination, yielding false exit9. The shared response
+router now treats Control Backup like existing Pack Create: output selects the
+artifact, success/error responses use stdout. Archive format, producer checks and
+create-only collision refusal remain unchanged. This is PCTX01-G04-D03 common
+delivery ownership, not independent PCTX26 implementation or completion. Evidence:
+[evidence/pctx01-caller-schema-verification.json](evidence/pctx01-caller-schema-verification.json).

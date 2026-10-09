@@ -1237,11 +1237,15 @@ fn main() {
             .unwrap_or(exit);
     }
     // Clap propagates the shared --output argument to the global field. For
-    // Pack Create it names the artifact; its response still belongs on stdout.
+    // Pack Create and Control Backup it names the artifact; their responses
+    // still belong on stdout, including errors before artifact publication.
     let response_output = match &cli.command {
         Command::Pack {
             command: pack::PackCommand::Create { .. },
-        } => None,
+        }
+        | Command::Work(work::WorkCommand::Control {
+            command: work::ControlCommand::Backup { .. },
+        }) => None,
         _ => cli.output.as_ref(),
     };
     let delivered = if let Some(output) = response_output {

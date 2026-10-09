@@ -16,17 +16,20 @@ in [PCTX01-closure-plan](tasks/PCTX01-closure-plan.md), its40-item register and
 140 leaves/172 help paths/12 bounded R groups remain fixed. Required macOS
 arm64/x86_64, Linux x86_64 and Windows x86_64 integration are separately open G09.
 
-Current **G03-D04 is open**. A shared bounded explicit-file reader now repairs
-metadata-check/unbounded-read growth in five frozen caller sites/eight consumers:
-Work JSON/Restore, Quota Ingest and Schedule definition/reviewed plan. Prior caps,
-caller2 versus stored7, owner5/revision9, literal-dash and regular-file semantics
-remain. Original optional deadlines are preserved; no write-query clock invented.
-Unit4, native3 and focused related85 PASS; format/Clippy PASS. Prepared logical
-SQL/schema+non-DB state preserved; no physical WAL or first-use rollback claim.
-[Current cap evidence](evidence/pctx01-caller-bound-verification.json) and the
-[finite caller map](evidence/pctx01-caller-input-matrix.json) retain all18 caller
-sites in seven existing boundary groups, with actual remaining controls. This is
-implementation progress, not closure of the whole input condition or new scope.
+Current **G03-D04 and G04-D03 remain open**. Authored input controls now
+qualify72 Task/Schedule schema combinations,12 Quota schema/shape/empty-batch
+combinations and6 Restore schema/project/checksum refusals, in JSON and compact.
+All compare prepared logical SQL/schema and non-DB bytes. A real CLI Backup
+exposed a common response-destination defect: it published the archive then
+attempted to publish the response to the same file, returning9. Control Backup
+now preserves the archive destination and delivers success/error envelopes on
+stdout, as declared in help. Real success and collision9 preserve archive bytes.
+The relative-path fixture failure, actual publication failure and initial compile
+failure are retained; final focused35 PASS (binary7/caller5/frontend23), format
+and locked all-target Clippy PASS. Independent review accepted the bounded repair.
+[Current schema/output evidence](evidence/pctx01-caller-schema-verification.json).
+Prior cap repair remains qualified by its own source-bound evidence; whole input
+and output conditions are not closed. Detail25/40 and whole0/10 are unchanged.
 
 Prior G02-D04 parser1855 cases/10184 native refusals and G05-D04 stored48-site
 closures remain qualified by their linked evidence. Current binary7 replays the

@@ -1,0 +1,57 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.36s
+     Running unittests src/main.rs (target/debug/deps/pctx-5861ab217462b7f0)
+
+running 7 tests
+test finite_route_tests::renderer_refusal_keeps_typed_error_and_incomplete_coverage ... ok
+test cli_help::tests::every_declared_leaf_has_an_explicit_effect_contract ... ok
+test cli_args::tests::producer_repetition_and_literal_child_options_preserve_exact_values ... ok
+test cli_args::tests::pack_artifact_output_and_global_output_share_one_singular_binding ... ok
+test cli_args::tests::defaults_and_fresh_parses_do_not_count_as_duplicate_inputs ... ok
+test finite_route_tests::finite_work_quota_adapter_reads_do_not_time_execution ... ok
+test parser_contract_tests::frozen_visible_parser_schema_and_cases ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 6.39s
+
+     Running tests/caller_input_contract.rs (target/debug/deps/caller_input_contract-08b980fca1808cc1)
+
+running 5 tests
+test caller_owner_and_task_revision_priorities_do_not_become_universal_input_first ... ok
+test exact_file_caps_reach_json_decoder_and_overflow_preserves_existing_input_errors ... ok
+test quota_batch_schema_and_restore_identity_refusals_are_safe_input_errors ... ok
+Caller syntax/shape native combinations:80
+test caller_json_syntax_and_typed_shape_are_input_two_and_preserve_prepared_state ... ok
+Authored Task/Schedule schema native combinations:72
+test authored_task_and_schedule_schema_refusals_preserve_prepared_state ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.77s
+
+     Running tests/cli_frontend.rs (target/debug/deps/cli_frontend-4948844b4d514170)
+
+running 23 tests
+test non_utf8_argument_returns_structured_error_without_panic_or_effect ... ok
+test help_and_version_are_successful_without_project_access ... ok
+test parser_diagnostics_mask_secrets_and_escape_control_characters ... ok
+test no_color_suppresses_help_on_a_real_terminal_including_nested_help ... ok
+test parser_errors_respect_actual_json_option_and_do_not_load_project ... ok
+test parsed_run_preflight_refusals_attest_no_child_before_any_access ... ok
+test native_hook_invalid_transports_refuse_before_project_or_output_access ... ok
+test root_version_is_exact_and_ignores_project_output_and_query_options ... ok
+test plain_parser_diagnostics_escape_bidi_c1_and_line_controls ... ok
+test nested_global_positions_select_the_same_root_format_and_timeout ... ok
+test partial_refresh_does_not_claim_the_requested_outline_is_wholly_unsupported ... ok
+test semantic_refusals_are_one_safe_json_document_for_every_requested_format ... ok
+test undeliverable_parser_capacity_semantic_and_timeout_refusals_return_io_exit ... ok
+test singular_global_duplicates_are_rejected_before_project_and_output_effects ... ok
+test unsupported_ndjson_is_rejected_before_project_discovery_or_init ... ok
+test undeliverable_plain_parser_diagnostic_returns_io_exit_without_panic ... ok
+test invalid_strict_queries_preserve_generation_database_sources_and_output_path ... ok
+test valid_minimum_capacity_bounds_semantic_and_timeout_refusals_without_writes ... ok
+test saved_output_invalid_arguments_refuse_before_project_and_response_access ... ok
+test unsupported_markdown_refuses_before_response_files_and_stream_dispatch ... ok
+test pack_artifact_output_is_required_once_and_works_at_every_command_depth ... ok
+test outline_empty_unsupported_and_partial_are_distinct_in_every_representation ... ok
+test every_visible_help_path_describes_schema_and_effects_without_project_access ... ok
+
+test result: ok. 23 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.27s
+

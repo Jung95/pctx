@@ -20,6 +20,9 @@ pctx control backup --output /path/to/new-backup.json
 pctx doctor --format json
 ```
 
+For `control backup`, `--output` selects a new archive file; the command response stays on stdout. An existing destination is refused with exit9 and preserved.
+
+
 Remove the binary using `cargo uninstall --root "$HOME/.local" pctx` or remove the explicitly installed archive binary. User-created rules, tasks, handoffs, and backups remain. Review `pctx status --format json` for the local index/control locations before deleting any data manually. Index data is derived; control data contains durable work originals.
 
 ## Isolated development

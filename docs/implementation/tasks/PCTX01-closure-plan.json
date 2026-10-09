@@ -244,7 +244,8 @@
         "pctx01-handoff-input-verification.json",
         "pctx01-argument-preflight-verification.json",
         "pctx01-caller-bound-verification.json",
-        "pctx01-caller-input-matrix.json"
+        "pctx01-caller-input-matrix.json",
+        "pctx01-caller-schema-verification.json"
       ],
       "verification_environment": "Native macOS arm64 local common proof; all release platforms separately required by G09",
       "macOS_arm64": "partial_bounded_proof",
@@ -317,7 +318,8 @@
       "paths": "main.rs,domain.rs,render.rs",
       "evidence": [
         "pctx01-run-final-bytes-verification.json",
-        "pctx01-representation-admission-verification.json"
+        "pctx01-representation-admission-verification.json",
+        "pctx01-caller-schema-verification.json"
       ],
       "verification_environment": "Native macOS arm64 local common proof; all release platforms separately required by G09",
       "macOS_arm64": "remaining",

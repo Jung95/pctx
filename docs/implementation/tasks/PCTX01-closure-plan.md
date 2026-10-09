@@ -132,3 +132,20 @@ remaining payload controls without new IDs. Evidence: pctx01-caller-bound-
 verification.json and pctx01-caller-input-matrix.json. Detail25/40, whole0/10,
 unchanged; G03-D04 remains open. Current Tick incidental pass does not erase
 retained PCTX36 failure. Required platforms and original startup failures remain.
+
+## Current bounded schema and backup response proof
+
+Current **G03-D04 and G04-D03 remain open**. Authored input controls now
+qualify72 Task/Schedule schema combinations,12 Quota schema/shape/empty-batch
+combinations and6 Restore schema/project/checksum refusals, in JSON and compact.
+All compare prepared logical SQL/schema and non-DB bytes. A real CLI Backup
+exposed a common response-destination defect: it published the archive then
+attempted to publish the response to the same file, returning9. Control Backup
+now preserves the archive destination and delivers success/error envelopes on
+stdout, as declared in help. Real success and collision9 preserve archive bytes.
+The relative-path fixture failure, actual publication failure and initial compile
+failure are retained; final focused35 PASS (binary7/caller5/frontend23), format
+and locked all-target Clippy PASS. Independent review accepted the bounded repair.
+[Current schema/output evidence](../evidence/pctx01-caller-schema-verification.json).
+Prior cap repair remains qualified by its own source-bound evidence; whole input
+and output conditions are not closed. Detail25/40 and whole0/10 are unchanged.

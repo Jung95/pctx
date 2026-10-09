@@ -17,17 +17,20 @@ then next official task's finite list within the same Goal.
 
 ## Current source and verification
 
-Current G03-D04 cap repair is qualified, whole condition open. Runtime files:
-input.rs/work.rs/quota.rs/schedule.rs; tests/caller_input_contract.rs. Shared
-bounded_file_bytes limits regular reads to cap+1, uses the caller's optional
-original deadline, preserves prior cap/messages/admission and literal filenames.
-Five frozen caller sites/eight consumers covered; no producer expansion.
-Unit4 PASS53731, native3 PASS9158 (80 syntax/shape combinations plus cap/priority),
-related85 PASS47587, format/Clippy PASS97284. Independent scoped review accepted
-repair only. All jobs terminal. Evidence: pctx01-caller-bound-verification.json.
-Prepared logical SQL/schema+non-DB comparisons do not claim WAL byte immutability.
-Archive256MiB oversize-before-body proved; exact-cap/growth not allocated at256MiB.
-Windows hard I/O bounds unproved. No new symlink identity/race guarantee.
+Current **G03-D04 and G04-D03 remain open**. Authored input controls now
+qualify72 Task/Schedule schema combinations,12 Quota schema/shape/empty-batch
+combinations and6 Restore schema/project/checksum refusals, in JSON and compact.
+All compare prepared logical SQL/schema and non-DB bytes. A real CLI Backup
+exposed a common response-destination defect: it published the archive then
+attempted to publish the response to the same file, returning9. Control Backup
+now preserves the archive destination and delivers success/error envelopes on
+stdout, as declared in help. Real success and collision9 preserve archive bytes.
+The relative-path fixture failure, actual publication failure and initial compile
+failure are retained; final focused35 PASS (binary7/caller5/frontend23), format
+and locked all-target Clippy PASS. Independent review accepted the bounded repair.
+[Current schema/output evidence](evidence/pctx01-caller-schema-verification.json).
+Prior cap repair remains qualified by its own source-bound evidence; whole input
+and output conditions are not closed. Detail25/40 and whole0/10 are unchanged.
 
 Prior G02-D04 and G05-D04 closures preserved; current saved parser replay7 and
 persisted22 pass. Detail25/40, whole0/10, unchanged. Four original macOS startup
@@ -37,8 +40,9 @@ PCTX36 failure remains unresolved. No live job or whole/platform rerun.
 ## Next exact action and ownership
 
 Only PCTX01. Read pctx01-caller-input-matrix.json: frozen18 caller sites in seven
-existing groups. Finish remaining authored-schema controls for Work/Restore,
-Quota batch schema/count, Schedule definition/reviewed plan; raw/sanitized
+existing groups. Current Task/Schedule schema72, Quota schema/shape12 and Restore identity6 have
+bounded proof; finish Check/lease, Quota observation/count/replay and Schedule
+reviewed-plan identity/state controls; raw/sanitized
 Operations64KiB syntax/shape; Adapter hook/statusline shapes; FilterSuite,
 Inventory Profile/Audit, Pack external JSON, RunnerMemory4096byte and Handoff
 metadata controls, reusing explicitly named existing proofs. Literal '-' is

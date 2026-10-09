@@ -1,0 +1,87 @@
+{
+  "task": "PCTX01",
+  "items": [
+    "PCTX01-G03-D04",
+    "PCTX01-G04-D03"
+  ],
+  "status": "implementing; bounded schema and backup response repair qualified, whole conditions open",
+  "baseline_revision": "a0e89b9664d28ae9e9e489487e5162c01a9db054",
+  "fixed_detail_closed": 25,
+  "fixed_detail_denominator": 40,
+  "whole_gates_closed": 0,
+  "whole_gates_denominator": 10,
+  "paths_sha256": {
+    "src/main.rs": "11a1cba15057735d5a5a9cd44c0b6be4ee1b0a79513d33b91dcd49f9e8cb5f9c",
+    "src/cli_help.rs": "f4c61a04d434835ca57bb6f53353bff36718cec4d43585b9d219448167805d97",
+    "tests/caller_input_contract.rs": "98d20771a6347050398d502c424a50690a101be754f57724ea3a401371bca493",
+    "src/work.rs": "a5c89c59fb012d871a9a9ea335d698b6b4fd05e4e549236c8b1a6835d4bd8170",
+    "src/quota.rs": "4ba68daf5ab85ab3c3676848646f05896f72c072581a8d3fefcee387ce737fe7",
+    "src/schedule.rs": "fdd6d8f8c1b34d51ab62ad6790270e9ef700b1f282d2eb48455092e5e569ca9f"
+  },
+  "binary_sha256": "e2f84cdc4ea9f6d7f511a01397e5e831eae3e21d5a0b9b7e33988bcc31ceb5ab",
+  "environment": {
+    "system": "macOS-26.7.1-arm64-arm-64bit-Mach-O",
+    "architecture": "arm64",
+    "rust": "1.99.0"
+  },
+  "results": [
+    {
+      "job": "57308",
+      "exit": 101,
+      "passed": 4,
+      "failed": 1,
+      "log": "pctx01-caller-schema-first.log",
+      "meaning": "Relative backup fixture output parent absent; Restore controls not reached."
+    },
+    {
+      "job": "65077",
+      "exit": 101,
+      "passed": 4,
+      "failed": 1,
+      "log": "pctx01-caller-schema-final.log",
+      "meaning": "Absolute path reproduced real archive publication followed by response collision9."
+    },
+    {
+      "job": "86224",
+      "exit": 101,
+      "log": "pctx01-caller-schema-repaired.log",
+      "meaning": "Compile failure: initial repair used unflattened Command::Control. No tests executed."
+    },
+    {
+      "job": "34315",
+      "exit": 0,
+      "passed": 35,
+      "failed": 0,
+      "log": "pctx01-caller-schema-qualified.log",
+      "meaning": "Binary7 (saved parser1855 replay), actual caller5, frontend23."
+    },
+    {
+      "job": "48726",
+      "exit": 0,
+      "log": "pctx01-caller-schema-static.log",
+      "meaning": "Locked all-target Clippy warnings denied."
+    },
+    {
+      "exit": 0,
+      "log": "pctx01-caller-schema-format.log",
+      "meaning": "Format check."
+    }
+  ],
+  "qualified_controls": {
+    "task_schedule": "72 native combinations:10 Task mutations x2 routes x2 formats;8 Schedule mutations x2 routes x2 formats",
+    "quota": "12 native schema/shape/empty-batch combinations; no observation semantic/upper-count claim",
+    "restore": "6 native schema/project/checksum mutations against real archive",
+    "backup": "Actual success archive plus stdout envelope, collision9 stdout preserves original archive and logical state",
+    "snapshots": "Prepared logical SQL/schema and non-DB bytes; no WAL byte or first-use rollback claim"
+  },
+  "review": "work_control independent read-only review accepted corrected routing and bounded scope; no builds/edits.",
+  "remaining": [
+    "Other fixed G03-D04 groups and Check/lease/observation/plan priorities",
+    "G04-D03 remaining representation/destination matrix",
+    "Fixed G03-D03/G05-D06 grammar and exits/cancellation",
+    "All G09 required platforms and four original macOS startup product failures",
+    "Historical inactive PCTX36 Tick failure remains unresolved"
+  ],
+  "actions_dispatched": false,
+  "whole_suite_green": false
+}

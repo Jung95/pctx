@@ -83,7 +83,9 @@ fn effect(path: &str) -> Option<&'static str> {
             "write: agent metadata and observations"
         }
         "check begin" | "check record" => "write: check records; does not launch a child",
-        "control backup" => "write: explicit control archive",
+        "control backup" => {
+            "write: explicit control archive; --output names the archive and the response remains on stdout"
+        }
         "control restore" => {
             "write: control namespace and invalidation; does not restore processes"
         }
@@ -171,7 +173,7 @@ pub(super) fn annotate(mut command: Command) -> Command {
             "read/write/execute depend on the selected subcommand; see its --help"
         };
         *command = command.clone().after_help(format!(
-            "Contract: standard JSON envelope schema 1.0 (payloads retain their own versions).\nEffects: {effects}.\nCommon options: --root, --format, --output, --timeout-ms and --no-color each accept one explicit occurrence across the command path. --output writes the requested output file (pack create: artifact instead of response; streaming routes reject it); project-backed operations may initialize local schema/cache. --help and --version do not access the project."
+            "Contract: standard JSON envelope schema 1.0 (payloads retain their own versions).\nEffects: {effects}.\nCommon options: --root, --format, --output, --timeout-ms and --no-color each accept one explicit occurrence across the command path. --output writes the requested output file (pack create/control backup: artifact instead of response; streaming routes reject it); project-backed operations may initialize local schema/cache. --help and --version do not access the project."
         ));
         for child in command.get_subcommands_mut() {
             let next = if path.is_empty() {

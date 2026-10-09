@@ -337,3 +337,143 @@ fn caller_owner_and_task_revision_priorities_do_not_become_universal_input_first
         assert_eq!(f.state(), before, "{args:?}");
     }
 }
+
+#[test]
+fn authored_task_and_schedule_schema_refusals_preserve_prepared_state() {
+    let f = Fixture::new();
+    let before = f.state();
+    let task: Value = serde_json::from_slice(&fs::read(f.base.join("seed.json")).unwrap()).unwrap();
+    let schedule: Value =
+        serde_json::from_slice(&fs::read(f.base.join("schedule.json")).unwrap()).unwrap();
+    let task_changes = [
+        ("/schema_version", json!(2)),
+        ("/schema_version", json!("1")),
+        ("/title", json!(" ")),
+        ("/priority", json!("P4")),
+        ("/scope", json!([])),
+        ("/scope", json!(["../escape"])),
+        ("/acceptance/0/weight", json!(0)),
+        ("/acceptance/0/evidence_check_keys", json!(["unregistered"])),
+        ("/checks/0/kind", json!("unknown")),
+        ("/checks/0/allowed_sources", json!(["claimed_runner"])),
+    ];
+    let schedule_changes = [
+        ("/schema_version", json!(2)),
+        ("/schema_version", json!("1")),
+        ("/timezone", json!("unsupported-zone")),
+        ("/cadence/at", json!("25:00")),
+        ("/valid_from", json!("yesterday")),
+        ("/job", json!("unknown")),
+        ("/bridge", json!("unknown")),
+        ("/misfire", json!("run_all")),
+    ];
+    let mut attempts = 0;
+    for (seed, changes, selected) in [
+        (&task, task_changes.as_slice(), [0, 1]),
+        (&schedule, schedule_changes.as_slice(), [5, 6]),
+    ] {
+        for (pointer, value) in changes {
+            let mut body = seed.clone();
+            // Defaulted fields can be absent in the valid authored seed.
+            if let Some(field) = body.pointer_mut(pointer) {
+                *field = value.clone();
+            } else {
+                let (parent, key) = pointer.rsplit_once('/').unwrap();
+                body.pointer_mut(parent).unwrap()[key] = value.clone();
+            }
+            fs::write(f.base.join("caller.json"), body.to_string()).unwrap();
+            for route in selected {
+                let routes = f.routes();
+                let args = &routes[route].0;
+                for format in ["json", "compact"] {
+                    refusal(&f.run(format, "owner", args), 2, "INVALID_ARGUMENT");
+                    assert_eq!(f.state(), before, "{pointer} {args:?}");
+                    attempts += 1;
+                }
+            }
+        }
+    }
+    eprintln!("Authored Task/Schedule schema native combinations:{attempts}");
+}
+
+#[test]
+fn quota_batch_schema_and_restore_identity_refusals_are_safe_input_errors() {
+    let f = Fixture::new();
+    let before = f.state();
+    for body in [
+        json!({"schema_version":2,"observations":[]}),
+        json!({"schema_version":1,"observations":[]}),
+        json!({"schema_version":"1","observations":[]}),
+        json!({"schema_version":1,"observations":null}),
+        json!({"schema_version":1,"observations":[{}]}),
+        json!({"schema_version":1,"observations":[],"PCTX_CALLER_SENTINEL":true}),
+    ] {
+        fs::write(f.base.join("caller.json"), body.to_string()).unwrap();
+        for format in ["json", "compact"] {
+            refusal(
+                &f.run(format, "owner", &f.routes()[4].0),
+                2,
+                "INVALID_ARGUMENT",
+            );
+            assert_eq!(f.state(), before);
+        }
+    }
+    // Produce a real archive rather than inventing a checksum-valid fixture.
+    let backup_path = f.base.join("backup.json");
+    let output = f.run(
+        "json",
+        "owner",
+        &[
+            "control",
+            "backup",
+            "--output",
+            backup_path.to_str().unwrap(),
+        ],
+    );
+    assert!(output.status.success(), "{output:?}");
+    let response: Value = serde_json::from_slice(&output.stdout).unwrap();
+    assert_eq!(response["status"], "ok");
+    assert_eq!(response["command"], "work");
+    assert!(output.stderr.is_empty());
+    let archive: Value = serde_json::from_slice(&fs::read(backup_path).unwrap()).unwrap();
+    let after_backup = f.state();
+    let original_archive = fs::read(f.base.join("backup.json")).unwrap();
+    // Artifact collision is an error envelope on stdout, never a second write
+    // of either a response or a newly generated archive over the first backup.
+    refusal(
+        &f.run(
+            "json",
+            "owner",
+            &[
+                "control",
+                "backup",
+                "--output",
+                f.base.join("backup.json").to_str().unwrap(),
+            ],
+        ),
+        9,
+        "REVISION_CONFLICT",
+    );
+    assert_eq!(
+        fs::read(f.base.join("backup.json")).unwrap(),
+        original_archive
+    );
+    assert_eq!(f.state(), after_backup);
+    for (key, value) in [
+        ("schema_version", json!(2)),
+        ("project_id", json!("other-project")),
+        ("database_hash", json!("wrong-checksum")),
+    ] {
+        let mut body = archive.clone();
+        body[key] = value;
+        fs::write(f.base.join("caller.json"), body.to_string()).unwrap();
+        for format in ["json", "compact"] {
+            refusal(
+                &f.run(format, "owner", &f.routes()[3].0),
+                2,
+                "INVALID_ARCHIVE",
+            );
+            assert_eq!(f.state(), after_backup, "{key}");
+        }
+    }
+}
