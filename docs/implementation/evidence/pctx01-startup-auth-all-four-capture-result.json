@@ -1,0 +1,347 @@
+{
+  "plan": {
+    "revision": "f195d14db4ba976f4e72cb19699cb268895af970",
+    "tests": [
+      "query_program_resolution_uses_captured_command_path",
+      "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+      "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget",
+      "simultaneous_streams_are_collected_and_overflow_never_infers_success"
+    ],
+    "authentication_entries": 1,
+    "uid": 502,
+    "root": "/private/tmp/pctx01-original-observation-x24p0cyy/session",
+    "ordinary_user_tests": true,
+    "retry": false
+  },
+  "osascript_exit": 1,
+  "batch_collector_exit": 36,
+  "authentication_stdout": "",
+  "authentication_stderr": "0:174: execution error: Re-spawning to avoid IPC\nSampling project_deadline-f7e8b9d913251d84 [17805], sh [17807], sh [17809], sh [17808], sh [17811], sh [17812], sh [17810], and sh [17813] for 1 seconds with 5 milliseconds of run time between samples\nFocusing on project_deadline-f7e8b9d913251d84 [17805]\nSampling completed, processing symbols...\nSpindump analysis written to file /private/tmp/pctx01-root-kernel-rUe6pc/kernel.txt\nRe-spawning to avoid IPC\nSampling project_deadline-f7e8b9d913251d84 [17924] and 17925 [17925] for 1 seconds with 5 milliseconds of run time between samples\nFocusing on project_deadline-f7e8b9d913251d84 [17924]\nSampling completed, processing symbols...\nSpindump analysis written to file /private/tmp/pctx01-root-kernel-jziQDj/kernel.txt (36)\n",
+  "runs": [
+    {
+      "stage": 0,
+      "test": "query_program_resolution_uses_captured_command_path",
+      "parent_pid": 17796,
+      "test_exit": 0,
+      "collector_terminal": true,
+      "collector_exit": 36,
+      "cohort": [
+        {
+          "deadline_lower_us": 311491434718,
+          "deadline_upper_us": 311491434718,
+          "origin_us": 311490434718,
+          "parent_ppid": 17786,
+          "parent_start_sec": 1791535903,
+          "parent_start_usec": 607771,
+          "pid": 17799,
+          "ppid": 17796,
+          "record_us": 311490435501,
+          "start_sec": 1791535904,
+          "start_usec": 120611,
+          "uid": 502
+        }
+      ],
+      "acknowledged": [
+        {
+          "deadline_lower_us": 311491434718,
+          "deadline_upper_us": 311491434718,
+          "origin_us": 311490434718,
+          "parent_ppid": 17786,
+          "parent_start_sec": 1791535903,
+          "parent_start_usec": 607771,
+          "pid": 17799,
+          "ppid": 17796,
+          "record_us": 311490435501,
+          "start_sec": 1791535904,
+          "start_usec": 120611,
+          "uid": 502
+        }
+      ],
+      "trace_exists": false
+    },
+    {
+      "stage": 1,
+      "test": "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+      "parent_pid": 17800,
+      "test_exit": 0,
+      "collector_terminal": true,
+      "collector_exit": 25,
+      "cohort": [],
+      "acknowledged": [],
+      "trace_exists": false
+    },
+    {
+      "stage": 2,
+      "test": "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget",
+      "parent_pid": 17805,
+      "test_exit": 101,
+      "collector_terminal": true,
+      "collector_exit": 0,
+      "cohort": [
+        {
+          "deadline_lower_us": 311491973902,
+          "deadline_upper_us": 311491973902,
+          "origin_us": 311490973902,
+          "parent_ppid": 17786,
+          "parent_start_sec": 1791535904,
+          "parent_start_usec": 654850,
+          "pid": 17806,
+          "ppid": 17805,
+          "record_us": 311490974646,
+          "start_sec": 1791535904,
+          "start_usec": 659676,
+          "uid": 502
+        },
+        {
+          "deadline_lower_us": 311491974394,
+          "deadline_upper_us": 311491974394,
+          "origin_us": 311490974394,
+          "parent_ppid": 17786,
+          "parent_start_sec": 1791535904,
+          "parent_start_usec": 654850,
+          "pid": 17807,
+          "ppid": 17805,
+          "record_us": 311490974957,
+          "start_sec": 1791535904,
+          "start_usec": 659988,
+          "uid": 502
+        },
+        {
+          "deadline_lower_us": 311491974478,
+          "deadline_upper_us": 311491974478,
+          "origin_us": 311490974478,
+          "parent_ppid": 17786,
+          "parent_start_sec": 1791535904,
+          "parent_start_usec": 654850,
+          "pid": 17809,
+          "ppid": 17805,
+          "record_us": 311490975019,
+          "start_sec": 1791535904,
+          "start_usec": 660127,
+          "uid": 502
+        },
+        {
+          "deadline_lower_us": 311491974568,
+          "deadline_upper_us": 311491974568,
+          "origin_us": 311490974568,
+          "parent_ppid": 17786,
+          "parent_start_sec": 1791535904,
+          "parent_start_usec": 654850,
+          "pid": 17808,
+          "ppid": 17805,
+          "record_us": 311490974937,
+          "start_sec": 1791535904,
+          "start_usec": 660101,
+          "uid": 502
+        },
+        {
+          "deadline_lower_us": 311491974626,
+          "deadline_upper_us": 311491974626,
+          "origin_us": 311490974626,
+          "parent_ppid": 17786,
+          "parent_start_sec": 1791535904,
+          "parent_start_usec": 654850,
+          "pid": 17811,
+          "ppid": 17805,
+          "record_us": 311490974994,
+          "start_sec": 1791535904,
+          "start_usec": 660173,
+          "uid": 502
+        },
+        {
+          "deadline_lower_us": 311491974626,
+          "deadline_upper_us": 311491974626,
+          "origin_us": 311490974626,
+          "parent_ppid": 17786,
+          "parent_start_sec": 1791535904,
+          "parent_start_usec": 654850,
+          "pid": 17812,
+          "ppid": 17805,
+          "record_us": 311490975060,
+          "start_sec": 1791535904,
+          "start_usec": 660190,
+          "uid": 502
+        },
+        {
+          "deadline_lower_us": 311491974628,
+          "deadline_upper_us": 311491974628,
+          "origin_us": 311490974628,
+          "parent_ppid": 17786,
+          "parent_start_sec": 1791535904,
+          "parent_start_usec": 654850,
+          "pid": 17810,
+          "ppid": 17805,
+          "record_us": 311490975060,
+          "start_sec": 1791535904,
+          "start_usec": 660171,
+          "uid": 502
+        },
+        {
+          "deadline_lower_us": 311491974650,
+          "deadline_upper_us": 311491974650,
+          "origin_us": 311490974650,
+          "parent_ppid": 17786,
+          "parent_start_sec": 1791535904,
+          "parent_start_usec": 654850,
+          "pid": 17813,
+          "ppid": 17805,
+          "record_us": 311490975026,
+          "start_sec": 1791535904,
+          "start_usec": 660194,
+          "uid": 502
+        }
+      ],
+      "acknowledged": [
+        {
+          "deadline_lower_us": 311491974394,
+          "deadline_upper_us": 311491974394,
+          "origin_us": 311490974394,
+          "parent_ppid": 17786,
+          "parent_start_sec": 1791535904,
+          "parent_start_usec": 654850,
+          "pid": 17807,
+          "ppid": 17805,
+          "record_us": 311490974957,
+          "start_sec": 1791535904,
+          "start_usec": 659988,
+          "uid": 502
+        },
+        {
+          "deadline_lower_us": 311491974478,
+          "deadline_upper_us": 311491974478,
+          "origin_us": 311490974478,
+          "parent_ppid": 17786,
+          "parent_start_sec": 1791535904,
+          "parent_start_usec": 654850,
+          "pid": 17809,
+          "ppid": 17805,
+          "record_us": 311490975019,
+          "start_sec": 1791535904,
+          "start_usec": 660127,
+          "uid": 502
+        },
+        {
+          "deadline_lower_us": 311491974568,
+          "deadline_upper_us": 311491974568,
+          "origin_us": 311490974568,
+          "parent_ppid": 17786,
+          "parent_start_sec": 1791535904,
+          "parent_start_usec": 654850,
+          "pid": 17808,
+          "ppid": 17805,
+          "record_us": 311490974937,
+          "start_sec": 1791535904,
+          "start_usec": 660101,
+          "uid": 502
+        },
+        {
+          "deadline_lower_us": 311491974626,
+          "deadline_upper_us": 311491974626,
+          "origin_us": 311490974626,
+          "parent_ppid": 17786,
+          "parent_start_sec": 1791535904,
+          "parent_start_usec": 654850,
+          "pid": 17811,
+          "ppid": 17805,
+          "record_us": 311490974994,
+          "start_sec": 1791535904,
+          "start_usec": 660173,
+          "uid": 502
+        },
+        {
+          "deadline_lower_us": 311491974626,
+          "deadline_upper_us": 311491974626,
+          "origin_us": 311490974626,
+          "parent_ppid": 17786,
+          "parent_start_sec": 1791535904,
+          "parent_start_usec": 654850,
+          "pid": 17812,
+          "ppid": 17805,
+          "record_us": 311490975060,
+          "start_sec": 1791535904,
+          "start_usec": 660190,
+          "uid": 502
+        },
+        {
+          "deadline_lower_us": 311491974628,
+          "deadline_upper_us": 311491974628,
+          "origin_us": 311490974628,
+          "parent_ppid": 17786,
+          "parent_start_sec": 1791535904,
+          "parent_start_usec": 654850,
+          "pid": 17810,
+          "ppid": 17805,
+          "record_us": 311490975060,
+          "start_sec": 1791535904,
+          "start_usec": 660171,
+          "uid": 502
+        },
+        {
+          "deadline_lower_us": 311491974650,
+          "deadline_upper_us": 311491974650,
+          "origin_us": 311490974650,
+          "parent_ppid": 17786,
+          "parent_start_sec": 1791535904,
+          "parent_start_usec": 654850,
+          "pid": 17813,
+          "ppid": 17805,
+          "record_us": 311490975026,
+          "start_sec": 1791535904,
+          "start_usec": 660194,
+          "uid": 502
+        }
+      ],
+      "trace_exists": true
+    },
+    {
+      "stage": 3,
+      "test": "simultaneous_streams_are_collected_and_overflow_never_infers_success",
+      "parent_pid": 17924,
+      "test_exit": 0,
+      "collector_terminal": true,
+      "collector_exit": 0,
+      "cohort": [
+        {
+          "deadline_lower_us": 311495438445,
+          "deadline_upper_us": 311495438445,
+          "origin_us": 311494438445,
+          "parent_ppid": 17786,
+          "parent_start_sec": 1791535908,
+          "parent_start_usec": 119517,
+          "pid": 17925,
+          "ppid": 17924,
+          "record_us": 311494438712,
+          "start_sec": 1791535908,
+          "start_usec": 123940,
+          "uid": 502
+        }
+      ],
+      "acknowledged": [
+        {
+          "deadline_lower_us": 311495438445,
+          "deadline_upper_us": 311495438445,
+          "origin_us": 311494438445,
+          "parent_ppid": 17786,
+          "parent_start_sec": 1791535908,
+          "parent_start_usec": 119517,
+          "pid": 17925,
+          "ppid": 17924,
+          "record_us": 311494438712,
+          "start_sec": 1791535908,
+          "start_usec": 123940,
+          "uid": 502
+        }
+      ],
+      "trace_exists": true
+    }
+  ],
+  "tests_started": true,
+  "limits": [
+    "Instrumented IO and post-outcome identity retention alter scheduling; not unchanged-product qualification.",
+    "Original1s/8x16/group/streams remain; cancellation precedes diagnostic retention.",
+    "One first-cohort observation per test, at most8 children; no automatic retry.",
+    "Actual admitted/traced identity plus timing and eventual outcome are required for a narrow cause claim.",
+    "Authentication can await the human before tests; collection/tool limits are cooperative with OS kill/reap latency.",
+    "Unexpected coordinator death invalidates cleanup assumptions; inspect exact owned tools before another batch."
+  ]
+}

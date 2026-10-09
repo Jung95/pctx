@@ -26,51 +26,63 @@ batch is justified only by newly necessary evidence or a different recorded meth
 No sudoers/SIP/Gatekeeper/auth-cache changes, permanent root services or password
 storage. Tool sandbox approval and macOS administrator authentication are separate:
 a permitted tool escalation still executes as the normal user unless explicitly
-authenticated otherwise. The current four original startup tests need no root, so
-their finite user-state batch runs without authentication. Root-only kernel facts
-remain unavailable; do not turn that into an exemption or switch official tasks.
+authenticated otherwise. The four original startup tests themselves remain ordinary-user.
+Their root-only kernel observation was collected in one finite authenticated batch
+5159; the exact expired-child wait is now present. Do not collect it again or turn
+that evidence into a product exemption or official-task switch.
 PCTX01-G05-D05 product_failure, detail33/40 and whole0/10 unchanged.
 
 Owned-group session3921 TERMINAL1: authentication canceled(-128), driver never
 started, no collector readiness/trace. Empty session, observer15593 absent. Historical
 live/fresh-auth next steps below are superseded. Do not reopen that batch.
 
-## One-authentication four-test kernel batch — prepared, not executed
+## One-authentication four-test kernel batch — terminal5159
 
-[Readiness](evidence/pctx01-startup-auth-all-four-batch-ready.json) binds isolated
-sourcef195d14, exact unchanged original four-test file, test/collector binary hashes,
-wrapper/hook/native sources. Normal-user locked/offline no-run build PASS; native
-strict compiler/Python AST PASS. Ordinary coordinator rejection20 leaves all4 stage
-directories empty. Plan-only shows four exact tests, ordinary UID502, ONE auth entry
-and no retry. Real receipt-helper concurrent-reader/exclusive-collision control PASS
-without root/test/auth execution; generated control directory removed. Read-only
-review accepted after correcting partially published terminal receipts. Root-private
-failure cleanup and separate tool group/5s kill trigger are implemented; subsequent
-OS reap latency remains cooperative, not a hard overall5s promise.
+[Verification](evidence/pctx01-startup-auth-all-four-capture-verification.json),
+[analysis](evidence/pctx01-startup-auth-all-four-capture-analysis.json) and
+[cleanup](evidence/pctx01-startup-auth-all-four-capture-cleanup.json) bind original
+sourcef195d14, preparation54bd7a0, unchanged original test and all ready hashes
+(rechecked after execution). ONE administrator entry point executed all4 ordinary-
+user original tests without further authentication. Individual results3PASS and
+original concurrent8x16 FAIL101. Wrapper0 is bookkeeping; outerOS-script1 reflects
+rootbatch36, NOT denied authentication. Stage collector exits36/25/0/0 respectively:
+first candidate excluded/no tool, second no eligible ACK/request, last two tool0.
+All stages finished and results retained; collector refusal is not a product failure.
 
-The ordinary-user batch45335 now proves the eventual-expired child16508 waiting
-before deadline, but no causal wait function. This new method addresses that exact
-missing observation: one root coordinator loops all4 original tests; every product
-test remains ordinary-user, original1s/8x16/group/stream/overflow assertions. One
-initial-cohort capture per stage, at most8 acknowledged own child identities, plus
-its own original test parent. PID/UID/ancestry/native start and native executable
-path match are required. Selected failures are canceled before post-outcome PID
-retention; collector-terminal follows actual tool wait/reap, then retention release.
-No whole-host sampling, persistent root service, OS policy change or pass retries.
-Stored collector logs preserve admissions/tool status even if the outer AppleScript
-returns nonzero. Individual test/collector/OS-script results remain separate.
+Concurrency98spawns/outcomes96success+2zero-outputTIMEOUT17810/17812. Six workers
+finish16; two stop first failure, so98 is censored, not128 completed trials. Both
+expired native identities were actually admitted and traced: sh17810/unique1412065,
+sh17812/unique1412067, UID502,parent17805, exact native starts1791535904.660171/.660190.
+Each has142 AppleSystemPolicy script-evaluation-wait samples(1–142): procNotifyExecComplete
+→ evaluateScript → waitForEvaluation → waitOnEvaluation → lck_mtx_sleep. Earliest
+sample is~293829/~293810us after native fork; original post-spawn bounds432/434us
+and coarse +/-1ms report timestamps still place early samples before original1s
+expiry under stable wall mapping. Child end10:51:45.661 is near cancellation; do
+NOT claim all142 samples pre-cancel, whole1s continuously waiting, or exact signal
+ordering from pre-publication outcome timestamps1000960/1000843us.
 
-Next: execute this prepared finite batch using the current persistent owned-target
-consent and ONE normal macOS authentication. No second conversational approval
-needed within that exact scope. Do not reopen old canceled3921 or repeat successful-
-single-target80102. If OS authentication is canceled, preserve it; no prompt loop.
-A live auth handle is a verified wait; no original test starts before readiness.
-Only actually included/traced eventual-expired identities with a pre-cancel trace
-interval can support a narrow wait claim. Kernel capture is not a product repair.
-G05-D05 product_failure,33/40 details and0/10 whole gates unchanged; no other official
-task active. Four-test sessions and output prefix are unused until actual launch.
+This is the first exact eventual-expired original-supervisor kernel-wait evidence;
+older successful-target stacks remain separate. It proves the sampled pre-deadline
+blocking path in this instrumented run, not a product repair or environment exemption.
+Underlying reason for delayed policy evaluation is unknown; no syspolicyd/other
+operational process was observed. Stage2 unique traced IDs exactly own parent+7
+admitted roots. Stage3 admitted17925 has no child trace section; tool0/parent trace
+is not proof of its child stack. No whole-host/other-user sampling or policy changes.
 
-## Ordinary-user four-test diagnostic — terminal45335
+All103query children+4test parents+wrapper17786/osascript17787=109recorded IDs are
+absent; all4collector terminal receipts and2tool wait/reap0 records, no root-private
+trace directories at final observation. No live heavy job. Session5159 and prefix
+are USED; do not rerun or open a new authentication to obtain this now-present datum.
+Independent read-only review accepted counts/identity/timing/scope/exits/limits.
+Current PCTX01/G05-D05 product_failure,33/40details and0/10whole gates unchanged.
+
+Next: reconcile this observed OS script-policy wait with the actual supervisor and
+original acceptance contracts to identify a justified product correction. Do not
+weaken1s/8x16/stream/group tests, warm up/cache trust, change interpreter, bypass
+security or reclassify as external_wait. No new privileged capture is justified
+for this already established wait. Only PCTX01 remains active; no task switch.
+
+## Prior ordinary-user four-test diagnostic — terminal45335
 
 [Result](evidence/pctx01-startup-user-state-capture-result.json),
 [analysis](evidence/pctx01-startup-user-state-capture-analysis.json) and
@@ -101,12 +113,10 @@ before execution; prior source/build hashes retained. All118 generated children
 and4 test parents absent. No live heavy job or privileged process. Session is USED;
 no automatic unchanged rerun. PCTX01/G05-D05 product_failure,33/40 and0/10 unchanged.
 
-Next: use expired-child state evidence for a concrete nonprivileged implementation
-hypothesis; do not repeat the same diagnostic or switch tasks. If the missing exact
-kernel wait is indispensable after ordinary analysis, prepare all necessary owned-
-process observations as one finite authenticated batch under the policy above.
-One auth must cover the prepared list; no per-test auth wrappers. That earlier ordinary runner does not implement root batching; the new prepared
-four-stage collector above now implements the routing, still not runtime verified. No new administrator prompt has been opened.
+That ordinary batch's missing causal kernel wait was later collected in5159 above.
+Its own historical records still contain no kernel stack and cannot establish the
+later identity's cause. Do not reuse its session or turn its3PASS into a repair.
+The current next action belongs to terminal5159, not this earlier method.
 
 ## Prior persistent diagnostic consent — scope retained, batching policy above governs
 

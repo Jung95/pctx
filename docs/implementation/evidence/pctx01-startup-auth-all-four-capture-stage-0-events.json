@@ -1,0 +1,28 @@
+{
+  "17799-spawn.json": {
+    "deadline_lower_us": 311491434718,
+    "deadline_upper_us": 311491434718,
+    "origin_us": 311490434718,
+    "parent_ppid": 17786,
+    "parent_start_sec": 1791535903,
+    "parent_start_usec": 607771,
+    "pid": 17799,
+    "ppid": 17796,
+    "record_us": 311490435501,
+    "start_sec": 1791535904,
+    "start_usec": 120611,
+    "uid": 502
+  },
+  "17799-retention.json": {
+    "begin_us": 311490713581,
+    "end_us": 311490713584,
+    "pid": 17799
+  },
+  "17799-outcome.json": {
+    "at_us": 311490713461,
+    "code": "success",
+    "pid": 17799,
+    "stderr_bytes": 0,
+    "stdout_bytes": 13
+  }
+}

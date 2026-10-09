@@ -1,0 +1,171 @@
+{
+  "task": "PCTX01",
+  "condition": "PCTX01-G05-D05",
+  "total_children": 103,
+  "stages": [
+    {
+      "stage": 0,
+      "test": "query_program_resolution_uses_captured_command_path",
+      "test_exit": 0,
+      "collector_exit": 36,
+      "spawns": 1,
+      "outcomes": {
+        "success": 1
+      },
+      "included_pids": [],
+      "trace_pids": [],
+      "expired": [],
+      "actual_scope_subset_of_named_targets": true
+    },
+    {
+      "stage": 1,
+      "test": "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+      "test_exit": 0,
+      "collector_exit": 25,
+      "spawns": 2,
+      "outcomes": {
+        "success": 2
+      },
+      "included_pids": [],
+      "trace_pids": [],
+      "expired": [],
+      "actual_scope_subset_of_named_targets": true
+    },
+    {
+      "stage": 2,
+      "test": "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget",
+      "test_exit": 101,
+      "collector_exit": 0,
+      "spawns": 98,
+      "outcomes": {
+        "success": 96,
+        "TIMEOUT": 2
+      },
+      "included_pids": [
+        17807,
+        17809,
+        17808,
+        17811,
+        17812,
+        17810,
+        17813
+      ],
+      "trace_pids": [
+        17805,
+        17807,
+        17808,
+        17809,
+        17810,
+        17811,
+        17812,
+        17813
+      ],
+      "expired": [
+        {
+          "pid": 17812,
+          "native_identity": {
+            "deadline_lower_us": 311491974626,
+            "deadline_upper_us": 311491974626,
+            "origin_us": 311490974626,
+            "parent_ppid": 17786,
+            "parent_start_sec": 1791535904,
+            "parent_start_usec": 654850,
+            "pid": 17812,
+            "ppid": 17805,
+            "record_us": 311490975060,
+            "start_sec": 1791535904,
+            "start_usec": 660190,
+            "uid": 502
+          },
+          "outcome": {
+            "at_us": 311491975469,
+            "code": "TIMEOUT",
+            "pid": 17812,
+            "stderr_bytes": 0,
+            "stdout_bytes": 0
+          },
+          "outcome_original_age_us": 1000843,
+          "included": true,
+          "trace_uid_ppid_match": true,
+          "trace_unique_pid": 1412067,
+          "trace_samples": [
+            142,
+            1,
+            142
+          ],
+          "first_report_sample_after_native_fork_us": 293810,
+          "postspawn_native_fork_upper_bound_us": 434,
+          "has_policy_script_wait": true,
+          "sampling_global_begin": "2026-10-09 10:51:44.954 +0200",
+          "child_report_end": "2026-10-09 10:51:45.661 +0200",
+          "timing_limits": "Wall/native mapping assumes stable wall clock; first report millisecond timestamp coarse +/-1ms. First index1 proves early observed wait; final child end near deadline can straddle cancellation, so NOT all142 samples claimed pre-cancel."
+        },
+        {
+          "pid": 17810,
+          "native_identity": {
+            "deadline_lower_us": 311491974628,
+            "deadline_upper_us": 311491974628,
+            "origin_us": 311490974628,
+            "parent_ppid": 17786,
+            "parent_start_sec": 1791535904,
+            "parent_start_usec": 654850,
+            "pid": 17810,
+            "ppid": 17805,
+            "record_us": 311490975060,
+            "start_sec": 1791535904,
+            "start_usec": 660171,
+            "uid": 502
+          },
+          "outcome": {
+            "at_us": 311491975588,
+            "code": "TIMEOUT",
+            "pid": 17810,
+            "stderr_bytes": 0,
+            "stdout_bytes": 0
+          },
+          "outcome_original_age_us": 1000960,
+          "included": true,
+          "trace_uid_ppid_match": true,
+          "trace_unique_pid": 1412065,
+          "trace_samples": [
+            142,
+            1,
+            142
+          ],
+          "first_report_sample_after_native_fork_us": 293829,
+          "postspawn_native_fork_upper_bound_us": 432,
+          "has_policy_script_wait": true,
+          "sampling_global_begin": "2026-10-09 10:51:44.954 +0200",
+          "child_report_end": "2026-10-09 10:51:45.661 +0200",
+          "timing_limits": "Wall/native mapping assumes stable wall clock; first report millisecond timestamp coarse +/-1ms. First index1 proves early observed wait; final child end near deadline can straddle cancellation, so NOT all142 samples claimed pre-cancel."
+        }
+      ],
+      "actual_scope_subset_of_named_targets": true
+    },
+    {
+      "stage": 3,
+      "test": "simultaneous_streams_are_collected_and_overflow_never_infers_success",
+      "test_exit": 0,
+      "collector_exit": 0,
+      "spawns": 2,
+      "outcomes": {
+        "success": 1,
+        "PARTIAL_RESULT": 1
+      },
+      "included_pids": [
+        17925
+      ],
+      "trace_pids": [
+        17924
+      ],
+      "expired": [],
+      "actual_scope_subset_of_named_targets": true
+    }
+  ],
+  "one_authentication_entry": true,
+  "all_original_tests_ordinary_uid": 502,
+  "root_batch_exit": 36,
+  "osascript_exit": 1,
+  "authentication_denied": false,
+  "interpretation": "Actual eventual-expired original-supervisor child17810/17812 sampled in AppleSystemPolicy script-evaluation wait before expiry in this instrumented run; specific observed prepayload blocking path now evidenced. This is not a product fix, whole1s continuous-wait proof, or environmental exemption. Underlying reason for delayed policy response is unknown; no observation of syspolicyd or any other process."
+}

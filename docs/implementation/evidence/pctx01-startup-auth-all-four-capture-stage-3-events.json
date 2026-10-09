@@ -1,0 +1,49 @@
+{
+  "17925-retention.json": {
+    "begin_us": 311494728235,
+    "end_us": 311496922823,
+    "pid": 17925
+  },
+  "17925-outcome.json": {
+    "at_us": 311494728111,
+    "code": "success",
+    "pid": 17925,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "17937-outcome.json": {
+    "at_us": 311497246752,
+    "code": "PARTIAL_RESULT",
+    "pid": 17937,
+    "stderr_bytes": 0,
+    "stdout_bytes": 0
+  },
+  "17937-spawn.json": {
+    "deadline_lower_us": 311497924430,
+    "deadline_upper_us": 311497924430,
+    "origin_us": 311496924430,
+    "parent_ppid": 17786,
+    "parent_start_sec": 1791535908,
+    "parent_start_usec": 119517,
+    "pid": 17937,
+    "ppid": 17924,
+    "record_us": 311496924786,
+    "start_sec": 1791535910,
+    "start_usec": 609954,
+    "uid": 502
+  },
+  "17925-spawn.json": {
+    "deadline_lower_us": 311495438445,
+    "deadline_upper_us": 311495438445,
+    "origin_us": 311494438445,
+    "parent_ppid": 17786,
+    "parent_start_sec": 1791535908,
+    "parent_start_usec": 119517,
+    "pid": 17925,
+    "ppid": 17924,
+    "record_us": 311494438712,
+    "start_sec": 1791535908,
+    "start_usec": 123940,
+    "uid": 502
+  }
+}

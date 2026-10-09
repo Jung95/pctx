@@ -1,0 +1,86 @@
+{
+  "task": "PCTX01",
+  "condition": "PCTX01-G05-D05",
+  "status": "product_failure unresolved; exact eventual-expired kernel script-policy wait captured",
+  "session": 5159,
+  "wrapper_exit": 0,
+  "osascript_exit": 1,
+  "root_batch_exit": 36,
+  "authentication_entry_points": 1,
+  "authentication_denied": false,
+  "original_test_source_unchanged": true,
+  "ready_input_hashes_rechecked_after_execution": true,
+  "source_revision": "f195d14db4ba976f4e72cb19699cb268895af970",
+  "prepared_publication": "54bd7a0",
+  "test_verdicts": {
+    "query_program_resolution_uses_captured_command_path": 0,
+    "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry": 0,
+    "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget": 101,
+    "simultaneous_streams_are_collected_and_overflow_never_infers_success": 0
+  },
+  "collector_stage_exits": [
+    36,
+    25,
+    0,
+    0
+  ],
+  "total_children": 103,
+  "concurrency_counts": {
+    "spawns": 98,
+    "outcomes": 98,
+    "success": 96,
+    "TIMEOUT": 2,
+    "limits": "six workers16, two stop firstfailure;98censored,not128complete"
+  },
+  "expired_traced_pids": [
+    17810,
+    17812
+  ],
+  "expired_policy_samples": 142,
+  "wait_chain": "AppleSystemPolicy::procNotifyExecComplete -> evaluateScript -> waitForEvaluation -> ASPEvaluationManager::waitOnEvaluation -> lck_mtx_sleep",
+  "trace_scope": "stage2 unique targets exactly own parent17805+7admittedchildren;stage3 trace only own parent17924, admitted17925notobserved in trace;no other-user/operational process sampled",
+  "first_sample_after_native_fork_us": {
+    "17810": 293829,
+    "17812": 293810
+  },
+  "postspawn_upper_fork_bounds_us": {
+    "17810": 432,
+    "17812": 434
+  },
+  "timing_limits": "Early first-index1 samples precede original1s expiry under stable wall/native mapping and coarse +/-1ms report time. Child end45.661near1s can cross expiry/cancellation; do not claimall142pre-cancel. Outcome time before publication,not exactsignal time.",
+  "cleanup": "103children+4parents+ordinarywrapper/osascript=109recordedPID identities all absent;all4collector terminal receipts;2toolwait/reap0records;rootprivate dirs empty at observation",
+  "independent_review": "work_control independently checked actual admission/unique tracePID set/nativeidentity/sample timing/counts/cleanup/auth-vs-batch exits. No more capture needed for this now-present datum.",
+  "limits": [
+    "No unchanged-product qualification or repaired startup contract.",
+    "No environment exemption or acceptance reduction.",
+    "Underlying reason for delayed policy evaluation remains unknown;syspolicyd not directly observed.",
+    "Stage0excluded candidate/no tool36;stage1noeligible request25;these are collector refusals,not authdenial or product failures.",
+    "Stage3tool0,parent trace does not imply admitted successful child stack was captured.",
+    "One auth entry point/four stages routing runtime verified;OS kill/reap and crash cleanup remain cooperative.",
+    "Required native platform gates remain incomplete."
+  ],
+  "details_closed": 33,
+  "detail_denominator": 40,
+  "whole_gates_closed": 0,
+  "whole_gate_denominator": 10,
+  "files": {
+    "pctx01-startup-auth-all-four-capture-analysis.json": "51e7324c01ec4c33efc0de0983033a45a0c3028e08f20f1fa7c2e5ea6ed8e38c",
+    "pctx01-startup-auth-all-four-capture-cleanup.json": "2d186487f527880d61efaf71610b51a966cab3fa1dfec3830b7eb081d85f73dd",
+    "pctx01-startup-auth-all-four-capture-result.json": "3b3599cb695d84475ada4f1b1e3c662d1f650078e3953a2b2da331f8492674e2",
+    "pctx01-startup-auth-all-four-capture-stage-0-collector.log": "5ed9b2c7488aec51ad668c8dbe9e7aae5ae00c96c70c32285153de6a61dc538e",
+    "pctx01-startup-auth-all-four-capture-stage-0-events.json": "b25cc3e51c8a4e8e808eb7c550cb82a6eeda3d47db3a337e6d51c52af3c542ad",
+    "pctx01-startup-auth-all-four-capture-stage-0-test.log": "8f055245965045d9cc252ce0a46a1768a3cdbee29807a36fe968b728139fd99e",
+    "pctx01-startup-auth-all-four-capture-stage-1-collector.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "pctx01-startup-auth-all-four-capture-stage-1-events.json": "a64533a0a8b2538458b2a36b203e43a53e3805b5c2a6f370f56badc6e0616a01",
+    "pctx01-startup-auth-all-four-capture-stage-1-test.log": "5ca3b6e93afce523fbd5e9fc07c5dc6191fdfd70f6e4b32b28597740d4a1e0c0",
+    "pctx01-startup-auth-all-four-capture-stage-2-collector.log": "c175cda53faa0ef3e8c76df393910facbb6aa322dcfc4084c424708907e82583",
+    "pctx01-startup-auth-all-four-capture-stage-2-events.json": "e6a463d31d111fe2710f9970d50b68cfb4f1135762ddf7f9454e7922641f34fb",
+    "pctx01-startup-auth-all-four-capture-stage-2-test.log": "b9ff225a54b9fdc7845e8609dd4c63b6b12c6ecc751ac41dc5113c0e46851971",
+    "pctx01-startup-auth-all-four-capture-stage-2-trace.txt": "958bebcdbe721b35d289eb3d19e16228e5a17114fd3fd79cb7b56eb5cd55f02b",
+    "pctx01-startup-auth-all-four-capture-stage-3-collector.log": "8468c6f630d9ceea934fb292665e6a5f52ce0a3171b475ab2762aa98a44c7987",
+    "pctx01-startup-auth-all-four-capture-stage-3-events.json": "175bd8afbeecb50412e141bedeace18b0f32166ff7cb1f7842611ec04ac7a1cd",
+    "pctx01-startup-auth-all-four-capture-stage-3-test.log": "c2cbbdf5a9657bf8dd3b9403fcab57adac2fec01015e6d067cf3c912b5dcdc4c",
+    "pctx01-startup-auth-all-four-capture-stage-3-trace.txt": "628ff28ad4b80cc36c4edf4ab94979862d1d818c5887d960f813e68fd4f94694"
+  },
+  "readiness_sha256": "068c0872c73519f63cf732537fe0700be4fe49b43523e80ff7fbc43f548cecd9"
+}

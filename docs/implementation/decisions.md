@@ -26,14 +26,25 @@ batch is justified only by newly necessary evidence or a different recorded meth
 No sudoers/SIP/Gatekeeper/auth-cache changes, permanent root services or password
 storage. Tool sandbox approval and macOS administrator authentication are separate:
 a permitted tool escalation still executes as the normal user unless explicitly
-authenticated otherwise. The current four original startup tests need no root, so
-their finite user-state batch runs without authentication. Root-only kernel facts
-remain unavailable; do not turn that into an exemption or switch official tasks.
+authenticated otherwise. The four original startup tests themselves remain ordinary-user.
+Their root-only kernel observation was collected in one finite authenticated batch
+5159; the exact expired-child wait is now present. Do not collect it again or turn
+that evidence into a product exemption or official-task switch.
 PCTX01-G05-D05 product_failure, detail33/40 and whole0/10 unchanged.
 
 Owned-group session3921 TERMINAL1: authentication canceled(-128), driver never
 started, no collector readiness/trace. Empty session, observer15593 absent. Historical
 live/fresh-auth next steps below are superseded. Do not reopen that batch.
+
+## Exact expired-child policy wait — bounded interpretation
+
+Terminal5159 achieved one-auth/four-stage routing and the formerly missing exact
+pre-deadline kernel wait of eventual-expired17810/17812. Keep originalG05-D05 as
+product_failure: observed AppleSystemPolicy script evaluation is a narrow blocking
+path, not repair, exemption or proof of all1s continuously waiting. Stop further
+capture for this datum. Analyze actual supervisor/acceptance ownership before any
+source change; no interpreter substitution, policy bypass, warmup or pass retries.
+[Verification](evidence/pctx01-startup-auth-all-four-capture-verification.json).
 
 ## Prior persistent diagnostic consent — scope retained, batching policy above governs
 

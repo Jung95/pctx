@@ -1,0 +1,8 @@
+{"kind":"group_admission","pid":17807,"included":true,"age_us":271521}
+{"kind":"group_admission","pid":17809,"included":true,"age_us":271489}
+{"kind":"group_admission","pid":17808,"included":true,"age_us":271416}
+{"kind":"group_admission","pid":17811,"included":true,"age_us":271372}
+{"kind":"group_admission","pid":17812,"included":true,"age_us":271382}
+{"kind":"group_admission","pid":17810,"included":true,"age_us":271390}
+{"kind":"group_admission","pid":17813,"included":true,"age_us":271380}
+{"kind":"collector","pid":17805,"ppid":17786,"identity":true,"pre_launch_native_us":311491246040,"tool_exit":0,"tool_signal":0,"trace_copied":true,"observation_us":3085574}
