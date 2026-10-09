@@ -1,0 +1,47 @@
+{
+  "task": "PCTX01-G05-D05",
+  "root_terminal_receipt": true,
+  "wrapper_reaped_exit0": true,
+  "tools": [
+    {
+      "role": "authentication_wrapper",
+      "pid": 42454,
+      "state": "absent"
+    },
+    {
+      "role": "collector",
+      "pid": 42466,
+      "state": "absent"
+    }
+  ],
+  "post_attempt_exact_target_identity": [
+    {
+      "target": "syspolicyd",
+      "candidate_count": 1,
+      "pgrep_exit": 0,
+      "candidates": [
+        {
+          "pid": 665,
+          "bsd_readable": false,
+          "uid": null,
+          "start_sec": null,
+          "start_usec": null,
+          "exact_expected_path": true,
+          "path_readable": true
+        }
+      ]
+    },
+    {
+      "target": "XprotectService",
+      "candidate_count": 0,
+      "pgrep_exit": 1,
+      "candidates": []
+    }
+  ],
+  "qualification": false,
+  "limits": [
+    "Post-attempt identities cannot establish identity state at original admission.",
+    "No service stack/CPU/message or other-process inspection; no test retry."
+  ],
+  "prepared_root_removed": true
+}

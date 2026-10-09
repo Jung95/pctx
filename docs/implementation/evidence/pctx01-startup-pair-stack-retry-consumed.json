@@ -1,0 +1,14 @@
+{
+  "task": "PCTX01-G05-D05",
+  "scope_consumed": true,
+  "reason": "Explicit user-requested retry after absence; pre-test authentication readiness300s.",
+  "authentication_wrapper_attempts": 1,
+  "original_test_runs": 0,
+  "samples_retained": 0,
+  "root_terminal_receipt": true,
+  "failure_class": "AssertionError before ready; exact stage not retained",
+  "known_generated_tools_absent": true,
+  "prepared_root_removed": true,
+  "source_hashes_unchanged": true,
+  "qualification": false
+}

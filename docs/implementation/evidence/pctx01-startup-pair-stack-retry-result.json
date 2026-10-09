@@ -1,0 +1,41 @@
+{
+  "task": "PCTX01-G05-D05",
+  "failure_class": "RuntimeError",
+  "test_started": false,
+  "collector_terminal": false,
+  "service_capture": {
+    "task": "PCTX01-G05-D05",
+    "collector_pid": 42466,
+    "failure_class": "AssertionError",
+    "samples": [],
+    "sampler_cleanup": [],
+    "raw_retained": false,
+    "private_directory": null,
+    "private_removed": true,
+    "qualification": false,
+    "limits": [
+      "Sampling briefly suspends service threads; timing and outcomes perturbed.",
+      "Only temporal overlap with owned child; no request-specific CPU or rule-cost attribution.",
+      "Native pre/post and header checks retain narrow PID reuse race.",
+      "Unexpected collector death needs private-directory/process cleanup audit."
+    ]
+  },
+  "ordinary_tool_cleanup": [
+    {
+      "role": "authentication_wrapper",
+      "pid": 42454,
+      "exit": 0,
+      "reaped": true
+    }
+  ],
+  "cleanup_errors": [],
+  "qualification": false,
+  "limits": [
+    "Diagnostic interference; test outcomes not qualification.",
+    "Known PID absence/root reap do not prove universal descendant cleanup.",
+    "Service pre/post admission retains narrow PID reuse race.",
+    "Any timeout/identity/parser/cleanup failure invalidates attribution, no fallback/retry.",
+    "Both services must exist at readiness; no endpoint invocation to warm or create service.",
+    "Unexpected root collector death requires minimal cleanup audit before reuse."
+  ]
+}

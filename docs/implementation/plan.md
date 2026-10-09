@@ -1,6 +1,21 @@
 # Implementation plan
 
-## Paired authentication handoff — current, 2026-10-09
+## Paired authentication retry — current, 2026-10-09
+
+PCTX01-G05-D05 remains product_failure,33/40 details,0/10 gates. Explicit retry
+executed root collector42466; root terminal AssertionError before ready,wrapper42454
+exit0/reaped; both generated PIDs absent.0 original tests,0 samplers/raw/samples.
+Post-attempt exact-name audit:syspolicyd665 expected path,ordinary BSD unreadable;
+XprotectService0 candidates. This does not pinpoint earlier generic assertion.
+Unused prepared source/mailbox removed; product/test/lock hashes unchanged.
+Prior attempt records preserved; retry scope consumed,no automatic rerun/Actions.
+Coordinator collector_terminal:false is bookkeeping; root terminal receipt proves
+this collector ended. Authentication UI not directly observed. Next within D05:
+precise admission receipts and transient endpoint lifecycle strategy preserving
+original1000ms/8×16,without endpoint warmup. Normal-source rebuild before qualification.
+[Retry result](evidence/pctx01-startup-pair-stack-retry-review.md).
+
+## Paired authentication handoff — earlier, 2026-10-09
 
 PCTX01-G05-D05 remains product_failure,33/40 details,0/10 gates. Exact two-target
 scope approved and consumed. Root-ready confirmation timed out180s; cleanup wait75s
@@ -12,7 +27,7 @@ Next: obtain user report of whether authentication UI appeared/completed,resolve
 handoff/cleanup uncertainty before any changed method; do not rerun consumed command.
 No official task switch or Actions. [Outcome](evidence/pctx01-startup-pair-stack-authentication-result.md).
 
-## Prepared paired administrator diagnosis — current, 2026-10-09
+## Prepared paired administrator diagnosis — earlier, 2026-10-09
 
 PCTX01-G05-D05 remains product_failure,33/40 details,0/10 gates. User permits
 necessary admin authentication; fresh exact-target extension remains pending
