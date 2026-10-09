@@ -1,6 +1,23 @@
 # Resume handoff
 
-## Supported correction review and minimal vendor payload — current, 2026-10-09
+## Small-stage source decomposition — current, 2026-10-09
+
+Only PCTX01-G05-D05 active/product_failure; PCTX01 remains33/40 details,0/10 gates.
+User requested smaller code-part diagnosis. Actual fixture/admission/spawn/collector/
+cleanup source and retained installed call sites split into stages A–K. Latest exact
+child policy wait is established; earlier queue/whole-scan and service compiler
+samples remain different evidence populations. Policy and XP can overlap.
+Compiler UTF8String ingestion, compiled-rule extraction and target-file scan are
+separate inspected boundaries; no owned-request inner cost or reuse defect proved.
+Concurrent fixture environment comes from product clearing plus five Git safety
+variables, not copying template env_clear. No source/test change, test/capture/log
+query/admin/platform change/Actions or external submission. All finite scopes consumed.
+Next same D05: narrow compiler-input/extraction versus file-scan analysis and a
+verified owned-request phase bridge before any newly scoped runtime collection;
+then justified correction and all original acceptance. Vendor payload remains local.
+[Stage boundaries, evidence and limits](evidence/pctx01-startup-stage-decomposition.md).
+
+## Supported correction review and minimal vendor payload — historical, 2026-10-09
 
 Only PCTX01-G05-D05 active/product_failure; PCTX01 stays33/40 details,0/10 gates.
 AppleScript main-thread workaround is a different mechanism and priming is excluded.
