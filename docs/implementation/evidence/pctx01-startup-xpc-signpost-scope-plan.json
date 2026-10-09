@@ -1,7 +1,7 @@
 {
   "task": "PCTX01-G05-D05",
-  "status": "prepared historical exact-owned-URL method; not executed",
-  "human_scope_approval": "pending",
+  "status": "consumed once; original test failed; stored exact URL association unknown; private root removed",
+  "human_scope_approval": "approved",
   "pre_execution_review": "approved",
   "target": "Exact XprotectService processImagePath. Query1 URL events whose composedMessage equals frozen owned synthetic fixture URL only. Query2 only admittedservicePID/signpostID pairs and XprotectAssessment/XprotectAssessment error boundaries.",
   "purpose": "Join exact owned fixture URL and unique servicePID/signpostID to whole XP assessment interval,not compiler-only duration.",
@@ -26,5 +26,6 @@
   },
   "qualification": false,
   "controls": "Synthetic exclusive-URL/lifetime/missing/redacted/multipleIDs parsercontrols pass; build-only11.75s. Earlier owned historical --signpost schema control returned4events on same installedhost. New own live control returned0signposts;live service strategy rejected before execution.",
-  "review_evidence": "Independent work_control passive final review: lifecycle, deadline, owned cleanup gates, hashes, byte-identical original test and multiple-ID refusal verified; human scope approval still pending."
+  "review_evidence": "Independent work_control passive final review: lifecycle, deadline, owned cleanup gates, hashes, byte-identical original test and multiple-ID refusal verified; human scope approval still pending.",
+  "approval_evidence": "User explicitly approved this historical stored-log scope once via call_dfc00489432a4f29bd90a0d2b098476e reply."
 }

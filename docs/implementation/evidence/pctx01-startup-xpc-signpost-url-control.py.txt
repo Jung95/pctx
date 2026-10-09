@@ -1,0 +1,42 @@
+"""Once-only own NSURL emission/visibility control; no service or product test."""
+from pathlib import Path
+import os,json,tempfile,subprocess,selectors,time,datetime,shutil
+B=Path('/Users/dev/PCTX/docs/implementation/evidence')
+assert os.getuid()==os.geteuid()==502
+(B/'pctx01-startup-xpc-signpost-url-control-consumed.json').open('x').close()
+root=Path(tempfile.mkdtemp(prefix='pctx01-owned-url-',dir='/private/tmp'));procs=[];failure=None;rows=[];raw=bytearray();events=[];expected='file:///private/tmp/PCTX%20synthetic%20fixture';helper_values=[];bytes_read=0
+try:
+ source=root/'control.m';source.write_bytes((B/'pctx01-startup-xpc-signpost-url-control.m.txt').read_bytes());binary=root/'control'
+ p=subprocess.Popen(['/usr/bin/clang','-isysroot','/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk','-framework','Foundation',str(source),'-o',str(binary)],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL);procs.append(p);assert p.wait(timeout=10)==0
+ start=datetime.datetime.now(datetime.timezone.utc).replace(microsecond=0)
+ p=subprocess.Popen([str(binary)],stdout=subprocess.PIPE,stderr=subprocess.DEVNULL);procs.append(p);output=p.communicate(timeout=3)[0];assert p.returncode==0 and len(output)<=4096;helper_values=output.decode().splitlines();assert len(helper_values)==3
+ end=datetime.datetime.now(datetime.timezone.utc).replace(microsecond=0)+datetime.timedelta(seconds=1);end=max(end,start+datetime.timedelta(seconds=2));assert (end-start).total_seconds()<=4
+ predicate=f'processIdentifier == {p.pid} AND processImagePath == '+json.dumps(str(binary))+' AND subsystem == "org.pctx.diagnostic.owned.url"'
+ sel=selectors.DefaultSelector();q=None;until=time.monotonic()+15
+ try:
+  q=subprocess.Popen(['/usr/bin/log','show','--start',start.strftime('%Y-%m-%d %H:%M:%S%z'),'--end',end.strftime('%Y-%m-%d %H:%M:%S%z'),'--timezone','UTC','--style','json','--signpost','--info','--no-debug','--no-pager','--predicate',predicate],stdout=subprocess.PIPE,stderr=subprocess.PIPE);procs.append(q)
+  for stream in [q.stdout,q.stderr]:os.set_blocking(stream.fileno(),False);sel.register(stream,selectors.EVENT_READ)
+  while sel.get_map():
+   remaining=until-time.monotonic();assert remaining>0
+   for key,_ in sel.select(min(.1,remaining)):
+    chunk=os.read(key.fd,4096);bytes_read+=len(chunk);assert bytes_read<=32768
+    if not chunk:sel.unregister(key.fileobj);continue
+    if key.fileobj is q.stdout:raw.extend(chunk)
+  assert q.wait(timeout=max(.001,until-time.monotonic()))==0;rows=json.loads(raw);assert isinstance(rows,list) and len(rows)<=16
+  for row in rows:
+   assert row['processID']==p.pid and row['processImagePath']==str(binary) and row['subsystem']=='org.pctx.diagnostic.owned.url'
+   if row.get('eventType')=='signpostEvent':events.append({'name':row.get('signpostName'),'type':row.get('signpostType'),'payload_exact_expected':row.get('eventMessage')==expected,'payload_redacted':row.get('eventMessage')=='<private>'})
+ finally:
+  sel.close();raw.clear()
+  if q:
+   if q.poll() is None:q.kill();q.wait(timeout=2)
+   q.stdout.close();q.stderr.close()
+except BaseException as e:failure=type(e).__name__
+finally:
+ rows.clear();raw.clear();receipts=[]
+ for p in procs:
+  if p.poll() is None:p.kill();p.wait(timeout=2)
+  receipts.append({'pid':p.pid,'exit':p.returncode,'reaped':True})
+ shutil.rmtree(root)
+ result={'task':'PCTX01-G05-D05','failure':failure,'owned_url_absoluteString_matches_Path_as_uri':bool(helper_values and helper_values[0]==expected),'owned_url_description_matches_Path_as_uri':bool(len(helper_values)>1 and helper_values[1]==expected),'owned_signpost_enabled':helper_values[2]=='1' if len(helper_values)==3 else None,'events':events,'raw_bytes':bytes_read,'receipts':receipts,'private_removed':not root.exists(),'raw_retained':False,'service_observation':False,'original_test_executed':False,'qualification':False,'limits':'Own NSURL control cannot establish service URL rendering,bookmark paths,emission,retention or privacy.'}
+ (B/'pctx01-startup-xpc-signpost-url-control.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result))

@@ -1,0 +1,14 @@
+#import <Foundation/Foundation.h>
+#import <os/signpost.h>
+int main(void) { @autoreleasepool {
+ os_log_t log = os_log_create("org.pctx.diagnostic.owned.url", "signposts");
+ NSURL *url = [NSURL fileURLWithPath:@"/private/tmp/PCTX synthetic fixture" isDirectory:NO];
+ os_signpost_id_t sid = os_signpost_id_generate(log);
+ printf("%s\n", [[url absoluteString] UTF8String]);
+ printf("%s\n", [[url description] UTF8String]);
+ printf("%d\n", os_signpost_enabled(log));
+ os_signpost_interval_begin(log, sid, "OwnedAssessment");
+ os_signpost_event_emit(log, sid, "OwnedURLDefault", "%@", url);
+ os_signpost_event_emit(log, sid, "OwnedURLPublic", "%{public}@", url);
+ os_signpost_interval_end(log, sid, "OwnedAssessment");
+ } return 0; }

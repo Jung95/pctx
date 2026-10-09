@@ -1,0 +1,225 @@
+{
+  "task": "PCTX01-G05-D05",
+  "source": "Installed XprotectService static file printable strings",
+  "candidates": [
+    {
+      "file_offset": "0x19855",
+      "literal": "_sampling_uuid"
+    },
+    {
+      "file_offset": "0x1992a",
+      "literal": "XPUserInfoYARAScanErrorFileSHA256"
+    },
+    {
+      "file_offset": "0x19dc5",
+      "literal": "cdhash"
+    },
+    {
+      "file_offset": "0x19dcc",
+      "literal": "sha256"
+    },
+    {
+      "file_offset": "0x19f0a",
+      "literal": "xpProcessCdhash"
+    },
+    {
+      "file_offset": "0x19f3d",
+      "literal": "xpProcessSha256"
+    },
+    {
+      "file_offset": "0x19f71",
+      "literal": "xpResponsibleCdhash"
+    },
+    {
+      "file_offset": "0x19fb0",
+      "literal": "xpResponsibleSha256"
+    },
+    {
+      "file_offset": "0x1aebd",
+      "literal": "T@\"NSUUID\",R,N,V_samplingUUID"
+    },
+    {
+      "file_offset": "0x1b9e8",
+      "literal": "_samplingUUID"
+    },
+    {
+      "file_offset": "0x1baac",
+      "literal": "_signpostID"
+    },
+    {
+      "file_offset": "0x1bdd7",
+      "literal": "cdhash"
+    },
+    {
+      "file_offset": "0x1cc71",
+      "literal": "samplingUUID"
+    },
+    {
+      "file_offset": "0x1ced1",
+      "literal": "sha256hash"
+    },
+    {
+      "file_offset": "0x28c88",
+      "literal": "_CC_SHA256_Final"
+    },
+    {
+      "file_offset": "0x28c99",
+      "literal": "_CC_SHA256_Init"
+    },
+    {
+      "file_offset": "0x28ca9",
+      "literal": "_CC_SHA256_Update"
+    },
+    {
+      "file_offset": "0x28e01",
+      "literal": "_ccsha256_di"
+    },
+    {
+      "file_offset": "0x296fc",
+      "literal": "Cdhash"
+    },
+    {
+      "file_offset": "0x297bb",
+      "literal": "FileSHA256"
+    },
+    {
+      "file_offset": "0x2b47c",
+      "literal": "_XPEventKeyCdhash"
+    },
+    {
+      "file_offset": "0x2b577",
+      "literal": "_XPUserInfoYARAScanErrorFileSHA256"
+    },
+    {
+      "file_offset": "0x2b83b",
+      "literal": "_CC_SHA256_Final"
+    },
+    {
+      "file_offset": "0x2b84c",
+      "literal": "_CC_SHA256_Init"
+    },
+    {
+      "file_offset": "0x2b85c",
+      "literal": "_CC_SHA256_Update"
+    },
+    {
+      "file_offset": "0x2c0a5",
+      "literal": "_ccsha256_di"
+    },
+    {
+      "file_offset": "0x2e3e0",
+      "literal": "<key>cdhashes</key>"
+    },
+    {
+      "file_offset": "0x4ad45",
+      "literal": "_sampling_uuid"
+    },
+    {
+      "file_offset": "0x4ae1a",
+      "literal": "XPUserInfoYARAScanErrorFileSHA256"
+    },
+    {
+      "file_offset": "0x4b2b5",
+      "literal": "cdhash"
+    },
+    {
+      "file_offset": "0x4b2bc",
+      "literal": "sha256"
+    },
+    {
+      "file_offset": "0x4b3fa",
+      "literal": "xpProcessCdhash"
+    },
+    {
+      "file_offset": "0x4b42d",
+      "literal": "xpProcessSha256"
+    },
+    {
+      "file_offset": "0x4b461",
+      "literal": "xpResponsibleCdhash"
+    },
+    {
+      "file_offset": "0x4b4a0",
+      "literal": "xpResponsibleSha256"
+    },
+    {
+      "file_offset": "0x4c479",
+      "literal": "T@\"NSUUID\",R,N,V_samplingUUID"
+    },
+    {
+      "file_offset": "0x4cfa4",
+      "literal": "_samplingUUID"
+    },
+    {
+      "file_offset": "0x4d068",
+      "literal": "_signpostID"
+    },
+    {
+      "file_offset": "0x4d393",
+      "literal": "cdhash"
+    },
+    {
+      "file_offset": "0x4e21e",
+      "literal": "samplingUUID"
+    },
+    {
+      "file_offset": "0x4e47e",
+      "literal": "sha256hash"
+    },
+    {
+      "file_offset": "0x5c83b",
+      "literal": "_CC_SHA256_Final"
+    },
+    {
+      "file_offset": "0x5c84c",
+      "literal": "_CC_SHA256_Init"
+    },
+    {
+      "file_offset": "0x5c85c",
+      "literal": "_CC_SHA256_Update"
+    },
+    {
+      "file_offset": "0x5c967",
+      "literal": "_ccsha256_di"
+    },
+    {
+      "file_offset": "0x5d6cc",
+      "literal": "Cdhash"
+    },
+    {
+      "file_offset": "0x5d78b",
+      "literal": "FileSHA256"
+    },
+    {
+      "file_offset": "0x5f44c",
+      "literal": "_XPEventKeyCdhash"
+    },
+    {
+      "file_offset": "0x5f547",
+      "literal": "_XPUserInfoYARAScanErrorFileSHA256"
+    },
+    {
+      "file_offset": "0x5f80b",
+      "literal": "_CC_SHA256_Final"
+    },
+    {
+      "file_offset": "0x5f81c",
+      "literal": "_CC_SHA256_Init"
+    },
+    {
+      "file_offset": "0x5f82c",
+      "literal": "_CC_SHA256_Update"
+    },
+    {
+      "file_offset": "0x60074",
+      "literal": "_ccsha256_di"
+    },
+    {
+      "file_offset": "0x61ff0",
+      "literal": "<key>cdhashes</key>"
+    }
+  ],
+  "status": "Candidate names only; no proved public emission,failed-request binding or shared identifier",
+  "service_observation": false,
+  "qualification": false
+}

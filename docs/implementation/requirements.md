@@ -1,6 +1,20 @@
 # Implementation requirements
 
-## Exact-owned-URL historical diagnostic preparation — current, 2026-10-09
+## Historical URL association and own privacy control — current, 2026-10-09
+
+PCTX01-G05-D05 remains product_failure,33/40 details,0/10 gates. Approved original
+1000ms/8×16 run exit101:98 recorded,96OUTPUT,2TIMEOUT45676/45677,30 censored.
+Exact-owned-URL query1 exit0,[]/0events;query2 not run;association unknown.
+Own NSURL control4events:default%@ redacted,public%@ matches;diagnostic privacy
+obstacle supported,actual service state and timeout cause unproved. No private-log
+activation/security change/admin request. Scope consumed;no repeat or widened read.
+101 known original/tool PIDs and3 control PIDs absent;private roots/raw removed.
+Normal-source build-only8.67s restored;no product fix or qualification.
+Next only within D05: inspect already-public hash/request binding or supported
+vendor route preserving original conditions and privacy constraints.
+[Evidence and limits](evidence/pctx01-startup-xpc-signpost-result-review.md).
+
+## Exact-owned-URL historical diagnostic preparation — historical, 2026-10-09
 
 PCTX01-G05-D05 remains product_failure,33/40 details,0/10 gates. Static XP
 begin/URL/end markers share an assessment ID; they bracket whole assessment,

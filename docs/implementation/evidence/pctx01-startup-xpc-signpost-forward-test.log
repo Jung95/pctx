@@ -1,0 +1,21 @@
+
+running 1 test
+test concurrent_query_startup_preserves_group_streams_and_original_one_second_budget ... 
+thread '<unnamed>' (10106074) panicked at tests/project_deadline.rs:584:26:
+called `Result::unwrap()` on an `Err` value: Error { code: "TIMEOUT", message: "Request deadline expired (phase=wait_next_observation, elapsed_ms=998, spawn_ms=0, iterations=165, stdout_eof=false, stderr_eof=false, stdout_bytes=0, stderr_bytes=0, root_exit_observed=false, waitid_signo=0, waitid_code=0, group_probes=0, group_has_others=None, root_pid=45677, native_child=Some(\"status=2,flags=20987920,pgid_matches=true,ppid_matches=true,start_sec=1791576042,start_usec=790508,threads=1,running=0,cpu_user=0,cpu_system=466,mach_calls=0,unix_calls=0,context_switches=2\"))", retryable: false, exit: 7 }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+thread '<unnamed>' (10106072) panicked at tests/project_deadline.rs:584:26:
+called `Result::unwrap()` on an `Err` value: Error { code: "TIMEOUT", message: "Request deadline expired (phase=wait_next_observation, elapsed_ms=998, spawn_ms=0, iterations=166, stdout_eof=false, stderr_eof=false, stdout_bytes=0, stderr_bytes=0, root_exit_observed=false, waitid_signo=0, waitid_code=0, group_probes=0, group_has_others=None, root_pid=45676, native_child=Some(\"status=2,flags=20987920,pgid_matches=true,ppid_matches=true,start_sec=1791576042,start_usec=790461,threads=1,running=0,cpu_user=0,cpu_system=498,mach_calls=0,unix_calls=0,context_switches=2\"))", retryable: false, exit: 7 }
+
+thread 'concurrent_query_startup_preserves_group_streams_and_original_one_second_budget' (10106066) panicked at tests/project_deadline.rs:593:27:
+called `Result::unwrap()` on an `Err` value: Any { .. }
+FAILED
+
+failures:
+
+failures:
+    concurrent_query_startup_preserves_group_streams_and_original_one_second_budget
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 13 filtered out; finished in 1.05s
+

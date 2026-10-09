@@ -1,0 +1,62 @@
+{
+  "task": "PCTX01-G05-D05",
+  "failure": null,
+  "owned_url_absoluteString_matches_Path_as_uri": true,
+  "owned_url_description_matches_Path_as_uri": true,
+  "owned_signpost_enabled": true,
+  "events": [
+    {
+      "name": "OwnedAssessment",
+      "type": "begin",
+      "payload_exact_expected": false,
+      "payload_redacted": false
+    },
+    {
+      "name": "OwnedURLDefault",
+      "type": "event",
+      "payload_exact_expected": false,
+      "payload_redacted": true
+    },
+    {
+      "name": "OwnedURLPublic",
+      "type": "event",
+      "payload_exact_expected": true,
+      "payload_redacted": false
+    },
+    {
+      "name": "OwnedAssessment",
+      "type": "end",
+      "payload_exact_expected": false,
+      "payload_redacted": false
+    }
+  ],
+  "raw_bytes": 4394,
+  "receipts": [
+    {
+      "pid": 45938,
+      "exit": 0,
+      "reaped": true
+    },
+    {
+      "pid": 45941,
+      "exit": 0,
+      "reaped": true
+    },
+    {
+      "pid": 45942,
+      "exit": 0,
+      "reaped": true
+    }
+  ],
+  "private_removed": true,
+  "raw_retained": false,
+  "service_observation": false,
+  "original_test_executed": false,
+  "qualification": false,
+  "limits": "Own NSURL control cannot establish service URL rendering,bookmark paths,emission,retention or privacy.",
+  "known_owned_pids_absent": [
+    45938,
+    45941,
+    45942
+  ]
+}

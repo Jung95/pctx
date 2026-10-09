@@ -1,0 +1,10 @@
+{
+  "task": "PCTX01-G05-D05",
+  "kind": "normal source build only; no qualification or test run",
+  "command": "cargo test --locked --offline --test project_deadline --no-run",
+  "exit": 0,
+  "reported_build_seconds": 8.67,
+  "PCTX_PHASE_TRACE_ROOT_set": false,
+  "binary_sha256": "a35909766c54e7b07642a8e21d6629e1c0130ad87ee6e9b55d346542ee078942",
+  "qualification": false
+}
