@@ -7,10 +7,15 @@ Static analysis confirms a serial policy scan queue; the16-path historical
 join shows1.154068s accumulated scans, expired child last. Current original
 concurrency diagnostic fails101:113 outcomes/112OUTPUT/1TIMEOUT35071;
 15 attempts censored, no drops, all known114 PIDs absent, source unchanged.
-Owned hashes and native/UTC deadline bounds are captured. A fresh3-second,
-16-hash stored-log read is prepared but pending separate human scope approval.
-No causal repair or task closure; next action is scoped attribution, then an
-applicable repair at unchanged acceptance criteria. No unchanged rerun.
+Approved3-second/16-hash log read executed once:16 events, all8 owned paths
+joined. Serial scans span1.092233s. Failed35071 starts scanning913.425ms after
+birth;185.029ms scan result is98.881–98.883ms after its original deadline.
+All7 successes have results before deadline. Independent review confirms the
+join/arithmetic; raw logs discarded, query reaped/absent, no admin prompt.
+Direct evidence supports serial policy scan backlog consuming startup budget.
+No product repair or closure. Next: identify an applicable correction preserving
+original acceptance conditions; exact queue arrival/kernel reply/scan cost
+cause remain unknown. This finite scope is consumed; no unchanged rerun.
 [Evidence and limits](pctx01-startup-triage.md).
 
 ## Contract and environment

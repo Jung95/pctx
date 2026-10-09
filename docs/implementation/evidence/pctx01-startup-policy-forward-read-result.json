@@ -1,0 +1,100 @@
+{
+  "task": "PCTX01-G05-D05",
+  "plan_sha256": "2d5a816e55b33adb9d65ab7fbcf347b03d83592a3f01f8ab4b619d491d9d4d7e",
+  "receipt": {
+    "pid": 36440,
+    "exit": 0,
+    "reaped": true,
+    "raw_bytes": 17401
+  },
+  "failure_class": null,
+  "reduced": {
+    "events": [
+      {
+        "timestamp_utc": "2026-10-09T12:43:38.076915+00:00",
+        "stage": "performScan",
+        "path_hash": "8e5e4265fc04971d"
+      },
+      {
+        "timestamp_utc": "2026-10-09T12:43:38.293778+00:00",
+        "stage": "evaluateScanResult",
+        "path_hash": "8e5e4265fc04971d"
+      },
+      {
+        "timestamp_utc": "2026-10-09T12:43:38.294034+00:00",
+        "stage": "performScan",
+        "path_hash": "36d5f2e5281c88ca"
+      },
+      {
+        "timestamp_utc": "2026-10-09T12:43:38.391490+00:00",
+        "stage": "evaluateScanResult",
+        "path_hash": "36d5f2e5281c88ca"
+      },
+      {
+        "timestamp_utc": "2026-10-09T12:43:38.391710+00:00",
+        "stage": "performScan",
+        "path_hash": "780076033e3ad9ab"
+      },
+      {
+        "timestamp_utc": "2026-10-09T12:43:38.491775+00:00",
+        "stage": "evaluateScanResult",
+        "path_hash": "780076033e3ad9ab"
+      },
+      {
+        "timestamp_utc": "2026-10-09T12:43:38.491996+00:00",
+        "stage": "performScan",
+        "path_hash": "fee98f0b58761baf"
+      },
+      {
+        "timestamp_utc": "2026-10-09T12:43:38.678069+00:00",
+        "stage": "evaluateScanResult",
+        "path_hash": "fee98f0b58761baf"
+      },
+      {
+        "timestamp_utc": "2026-10-09T12:43:38.678280+00:00",
+        "stage": "performScan",
+        "path_hash": "e0d6f00f0c9731be"
+      },
+      {
+        "timestamp_utc": "2026-10-09T12:43:38.784457+00:00",
+        "stage": "evaluateScanResult",
+        "path_hash": "e0d6f00f0c9731be"
+      },
+      {
+        "timestamp_utc": "2026-10-09T12:43:38.784693+00:00",
+        "stage": "performScan",
+        "path_hash": "ed0dfc1bdec454ae"
+      },
+      {
+        "timestamp_utc": "2026-10-09T12:43:38.883246+00:00",
+        "stage": "evaluateScanResult",
+        "path_hash": "ed0dfc1bdec454ae"
+      },
+      {
+        "timestamp_utc": "2026-10-09T12:43:38.883471+00:00",
+        "stage": "performScan",
+        "path_hash": "855018541bdc1df7"
+      },
+      {
+        "timestamp_utc": "2026-10-09T12:43:38.983904+00:00",
+        "stage": "evaluateScanResult",
+        "path_hash": "855018541bdc1df7"
+      },
+      {
+        "timestamp_utc": "2026-10-09T12:43:38.984119+00:00",
+        "stage": "performScan",
+        "path_hash": "6b59796c7968d6f5"
+      },
+      {
+        "timestamp_utc": "2026-10-09T12:43:39.169148+00:00",
+        "stage": "evaluateScanResult",
+        "path_hash": "6b59796c7968d6f5"
+      }
+    ],
+    "rejected": 0
+  },
+  "qualification": false,
+  "administrator_authentication": false,
+  "raw_retained": false,
+  "limits": "One stored-log read, three-second interval,16 exact owned hashes, GK scan/result stages only; ordinary UID502,no administrator authentication, no sampling, no config/security change. 64KiB raw cap,12s watchdog, no fallback. Raw memory discarded; export only admitted timestamp/stage/hash. Noncryptographic hash collision and hidden wall-clock step remain limitations; no kernel acknowledgment inference."
+}

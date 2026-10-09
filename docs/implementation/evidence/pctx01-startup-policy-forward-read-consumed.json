@@ -1,0 +1,13 @@
+{
+  "task": "PCTX01-G05-D05",
+  "scope_consumed": true,
+  "plan_sha256": "2d5a816e55b33adb9d65ab7fbcf347b03d83592a3f01f8ab4b619d491d9d4d7e",
+  "queries": 1,
+  "receipt": {
+    "pid": 36440,
+    "exit": 0,
+    "reaped": true,
+    "raw_bytes": 17401
+  },
+  "rerun_authorized": false
+}

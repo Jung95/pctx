@@ -1,0 +1,20 @@
+"""Offline join of approved reduced events to exact owned first-attempt records."""
+from pathlib import Path
+import json,datetime,hashlib
+B=Path('/Users/dev/PCTX/docs/implementation/evidence')
+p=json.loads((B/'pctx01-startup-policy-forward-scope-plan.json').read_text());r=json.loads((B/'pctx01-startup-policy-forward-read-result.json').read_text());assert r['failure_class'] is None and r['reduced']['rejected']==0
+assert r['plan_sha256']==hashlib.sha256((B/'pctx01-startup-policy-forward-scope-plan.json').read_bytes()).hexdigest()
+def ns(s):
+ t=datetime.datetime.fromisoformat(s).astimezone(datetime.timezone.utc);epoch=datetime.datetime(1970,1,1,tzinfo=datetime.timezone.utc);d=t-epoch;return (d.days*86400+d.seconds)*10**9+d.microseconds*1000
+rows=[]
+for target in p['targets']:
+ es=[e for e in r['reduced']['events'] if e['path_hash'] in target['hashes']];assert len(es)==2 and len({e['path_hash'] for e in es})==1
+ starts=[e for e in es if e['stage']=='performScan'];ends=[e for e in es if e['stage']=='evaluateScanResult'];assert len(starts)==len(ends)==1
+ start=ns(starts[0]['timestamp_utc']);end=ns(ends[0]['timestamp_utc']);birth=target['identity'][3]*10**9+target['identity'][4]*1000;assert birth<=start<end
+ rows.append({'pid':target['pid'],'outcome':target['outcome']['code'],'matched_path_hash':es[0]['path_hash'],'birth_utc_ns':birth,'scan_start_utc':starts[0]['timestamp_utc'],'scan_result_utc':ends[0]['timestamp_utc'],'scan_start_ns':start,'scan_result_ns':end,'birth_to_scan_start_ns':start-birth,'scan_interval_ns':end-start,'deadline_utc_low_ns':target['deadline_utc_low_ns'],'deadline_utc_high_ns':target['deadline_utc_high_ns'],'result_minus_deadline_interval_ns':[end-target['deadline_utc_high_ns'],end-target['deadline_utc_low_ns']]})
+rows.sort(key=lambda x:x['scan_start_ns']);gaps=[rows[i+1]['scan_start_ns']-rows[i]['scan_result_ns'] for i in range(len(rows)-1)];assert all(x>=0 for x in gaps)
+assert len(rows)==8 and len({x['matched_path_hash'] for x in rows})==8 and rows[-1]['outcome']=='TIMEOUT' and rows[-1]['pid']==35071
+assert all(x['result_minus_deadline_interval_ns'][1]<0 for x in rows[:-1]) and rows[-1]['result_minus_deadline_interval_ns'][0]>0
+raw=json.loads((B/'pctx01-startup-policy-forward-pid-35071-events.json').read_text());offset=p['clock_offset_envelope_ns'];marks={name:tick for tick,name,_ in raw['points'] if name in ['collection_terminal','group_kill_begin','group_kill_end','root_kill_begin','root_kill_end']};wallmarks={name:[tick+offset[0],tick+offset[1]] for name,tick in marks.items()}
+out={'task':p['task'],'rows_scan_order':rows,'inter_scan_gaps_ns':gaps,'batch_scan_span_ns':rows[-1]['scan_result_ns']-rows[0]['scan_start_ns'],'failed_child_native_marks_utc_bounds_ns':wallmarks,'source_result_sha256':hashlib.sha256((B/'pctx01-startup-policy-forward-read-result.json').read_bytes()).hexdigest(),'checks':{'eight_unique_owned_hash_pairs':True,'nonoverlapping_scans':True,'all_seven_success_results_before_deadline':True,'failed_child_last_result_after_deadline':True},'qualification':False,'interpretation':'Direct owned-file/time association supports serial macOS policy scan backlog consuming original startup budget. Birth-to-scan is not exact dispatch queue residence. Policy scan result is not kernel reply acknowledgment or child execution. Noncryptographic hash collision and intermediate wall-clock change remain theoretical limits. Diagnostic cannot qualify product repair.'}
+(B/'pctx01-startup-policy-forward-joined.json').write_text(json.dumps(out,indent=2)+'\n');print(json.dumps(out,indent=2))

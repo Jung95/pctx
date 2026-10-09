@@ -1,0 +1,17 @@
+{
+  "task": "PCTX01-G05-D05",
+  "checks": {
+    "one_consumed_scope": true,
+    "log_exit_zero": true,
+    "reader_reaped_absent": true,
+    "reader_unchanged": true,
+    "scope_hash_matches_read": true,
+    "16_admitted_no_rejects": true,
+    "raw_under_64KiB_not_retained": true,
+    "eight_join_checks": true
+  },
+  "administrator_authentication": false,
+  "service_sampling": false,
+  "tests_reexecuted": false,
+  "qualification": false
+}

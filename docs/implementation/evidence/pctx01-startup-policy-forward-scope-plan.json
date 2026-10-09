@@ -1,6 +1,6 @@
 {
   "task": "PCTX01-G05-D05",
-  "human_scope_approval": "pending",
+  "human_scope_approval": "approved",
   "source_pid": 665,
   "source_path": "/usr/libexec/syspolicyd",
   "start_utc": "2026-10-09T12:43:38+00:00",
@@ -192,5 +192,6 @@
   ],
   "read_limit": "One stored-log read, three-second interval,16 exact owned hashes, GK scan/result stages only; ordinary UID502,no administrator authentication, no sampling, no config/security change. 64KiB raw cap,12s watchdog, no fallback. Raw memory discarded; export only admitted timestamp/stage/hash. Noncryptographic hash collision and hidden wall-clock step remain limitations; no kernel acknowledgment inference.",
   "qualification": false,
-  "reader_sha256": "3ecdb68ccec0d931c5706cad146928fb66dbbcda7aa366dfab00f132167148c1"
+  "reader_sha256": "3ecdb68ccec0d931c5706cad146928fb66dbbcda7aa366dfab00f132167148c1",
+  "approval_basis": "Human instruction: \uc774\ubc88 \uc2e4\ud328\uc640 \uc815\ucc45 \ub85c\uadf8\ub97c \uc9c1\uc811 \uc5f0\uacb0; exact previously presented finite scope, no expansion."
 }

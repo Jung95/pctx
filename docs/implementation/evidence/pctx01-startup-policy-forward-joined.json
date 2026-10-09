@@ -1,0 +1,190 @@
+{
+  "task": "PCTX01-G05-D05",
+  "rows_scan_order": [
+    {
+      "pid": 35068,
+      "outcome": "OUTPUT",
+      "matched_path_hash": "8e5e4265fc04971d",
+      "birth_utc_ns": 1791549818070542000,
+      "scan_start_utc": "2026-10-09T12:43:38.076915+00:00",
+      "scan_result_utc": "2026-10-09T12:43:38.293778+00:00",
+      "scan_start_ns": 1791549818076915000,
+      "scan_result_ns": 1791549818293778000,
+      "birth_to_scan_start_ns": 6373000,
+      "scan_interval_ns": 216863000,
+      "deadline_utc_low_ns": 1791549819070156666,
+      "deadline_utc_high_ns": 1791549819070158666,
+      "result_minus_deadline_interval_ns": [
+        -776380666,
+        -776378666
+      ]
+    },
+    {
+      "pid": 35067,
+      "outcome": "OUTPUT",
+      "matched_path_hash": "36d5f2e5281c88ca",
+      "birth_utc_ns": 1791549818070523000,
+      "scan_start_utc": "2026-10-09T12:43:38.294034+00:00",
+      "scan_result_utc": "2026-10-09T12:43:38.391490+00:00",
+      "scan_start_ns": 1791549818294034000,
+      "scan_result_ns": 1791549818391490000,
+      "birth_to_scan_start_ns": 223511000,
+      "scan_interval_ns": 97456000,
+      "deadline_utc_low_ns": 1791549819070137708,
+      "deadline_utc_high_ns": 1791549819070139708,
+      "result_minus_deadline_interval_ns": [
+        -678649708,
+        -678647708
+      ]
+    },
+    {
+      "pid": 35069,
+      "outcome": "OUTPUT",
+      "matched_path_hash": "780076033e3ad9ab",
+      "birth_utc_ns": 1791549818070560000,
+      "scan_start_utc": "2026-10-09T12:43:38.391710+00:00",
+      "scan_result_utc": "2026-10-09T12:43:38.491775+00:00",
+      "scan_start_ns": 1791549818391710000,
+      "scan_result_ns": 1791549818491775000,
+      "birth_to_scan_start_ns": 321150000,
+      "scan_interval_ns": 100065000,
+      "deadline_utc_low_ns": 1791549819069675000,
+      "deadline_utc_high_ns": 1791549819069715000,
+      "result_minus_deadline_interval_ns": [
+        -577940000,
+        -577900000
+      ]
+    },
+    {
+      "pid": 35066,
+      "outcome": "OUTPUT",
+      "matched_path_hash": "fee98f0b58761baf",
+      "birth_utc_ns": 1791549818070503000,
+      "scan_start_utc": "2026-10-09T12:43:38.491996+00:00",
+      "scan_result_utc": "2026-10-09T12:43:38.678069+00:00",
+      "scan_start_ns": 1791549818491996000,
+      "scan_result_ns": 1791549818678069000,
+      "birth_to_scan_start_ns": 421493000,
+      "scan_interval_ns": 186073000,
+      "deadline_utc_low_ns": 1791549819070052709,
+      "deadline_utc_high_ns": 1791549819070054709,
+      "result_minus_deadline_interval_ns": [
+        -391985709,
+        -391983709
+      ]
+    },
+    {
+      "pid": 35070,
+      "outcome": "OUTPUT",
+      "matched_path_hash": "e0d6f00f0c9731be",
+      "birth_utc_ns": 1791549818070623000,
+      "scan_start_utc": "2026-10-09T12:43:38.678280+00:00",
+      "scan_result_utc": "2026-10-09T12:43:38.784457+00:00",
+      "scan_start_ns": 1791549818678280000,
+      "scan_result_ns": 1791549818784457000,
+      "birth_to_scan_start_ns": 607657000,
+      "scan_interval_ns": 106177000,
+      "deadline_utc_low_ns": 1791549819070173458,
+      "deadline_utc_high_ns": 1791549819070175458,
+      "result_minus_deadline_interval_ns": [
+        -285718458,
+        -285716458
+      ]
+    },
+    {
+      "pid": 35072,
+      "outcome": "OUTPUT",
+      "matched_path_hash": "ed0dfc1bdec454ae",
+      "birth_utc_ns": 1791549818070730000,
+      "scan_start_utc": "2026-10-09T12:43:38.784693+00:00",
+      "scan_result_utc": "2026-10-09T12:43:38.883246+00:00",
+      "scan_start_ns": 1791549818784693000,
+      "scan_result_ns": 1791549818883246000,
+      "birth_to_scan_start_ns": 713963000,
+      "scan_interval_ns": 98553000,
+      "deadline_utc_low_ns": 1791549819070070500,
+      "deadline_utc_high_ns": 1791549819070073500,
+      "result_minus_deadline_interval_ns": [
+        -186827500,
+        -186824500
+      ]
+    },
+    {
+      "pid": 35073,
+      "outcome": "OUTPUT",
+      "matched_path_hash": "855018541bdc1df7",
+      "birth_utc_ns": 1791549818070757000,
+      "scan_start_utc": "2026-10-09T12:43:38.883471+00:00",
+      "scan_result_utc": "2026-10-09T12:43:38.983904+00:00",
+      "scan_start_ns": 1791549818883471000,
+      "scan_result_ns": 1791549818983904000,
+      "birth_to_scan_start_ns": 812714000,
+      "scan_interval_ns": 100433000,
+      "deadline_utc_low_ns": 1791549819070048500,
+      "deadline_utc_high_ns": 1791549819070051500,
+      "result_minus_deadline_interval_ns": [
+        -86147500,
+        -86144500
+      ]
+    },
+    {
+      "pid": 35071,
+      "outcome": "TIMEOUT",
+      "matched_path_hash": "6b59796c7968d6f5",
+      "birth_utc_ns": 1791549818070694000,
+      "scan_start_utc": "2026-10-09T12:43:38.984119+00:00",
+      "scan_result_utc": "2026-10-09T12:43:39.169148+00:00",
+      "scan_start_ns": 1791549818984119000,
+      "scan_result_ns": 1791549819169148000,
+      "birth_to_scan_start_ns": 913425000,
+      "scan_interval_ns": 185029000,
+      "deadline_utc_low_ns": 1791549819070264542,
+      "deadline_utc_high_ns": 1791549819070266542,
+      "result_minus_deadline_interval_ns": [
+        98881458,
+        98883458
+      ]
+    }
+  ],
+  "inter_scan_gaps_ns": [
+    256000,
+    220000,
+    221000,
+    211000,
+    236000,
+    225000,
+    215000
+  ],
+  "batch_scan_span_ns": 1092233000,
+  "failed_child_native_marks_utc_bounds_ns": {
+    "collection_terminal": [
+      1791549819072253000,
+      1791549819072255000
+    ],
+    "group_kill_begin": [
+      1791549819072268000,
+      1791549819072270000
+    ],
+    "group_kill_end": [
+      1791549819072272000,
+      1791549819072274000
+    ],
+    "root_kill_begin": [
+      1791549819072272000,
+      1791549819072274000
+    ],
+    "root_kill_end": [
+      1791549819072273000,
+      1791549819072275000
+    ]
+  },
+  "source_result_sha256": "56c7411b717cd9ac2b497ba5da34589365a19be47f85423121bb624a4ef1e61b",
+  "checks": {
+    "eight_unique_owned_hash_pairs": true,
+    "nonoverlapping_scans": true,
+    "all_seven_success_results_before_deadline": true,
+    "failed_child_last_result_after_deadline": true
+  },
+  "qualification": false,
+  "interpretation": "Direct owned-file/time association supports serial macOS policy scan backlog consuming original startup budget. Birth-to-scan is not exact dispatch queue residence. Policy scan result is not kernel reply acknowledgment or child execution. Noncryptographic hash collision and intermediate wall-clock change remain theoretical limits. Diagnostic cannot qualify product repair."
+}

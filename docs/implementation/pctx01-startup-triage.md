@@ -38,16 +38,45 @@ clock endpoint bounds overlap with a2us total envelope; an intermediate clock
 step is not excluded. Post-reap diagnostics can affect later iterations and
 are not qualification. [Verification](evidence/pctx01-startup-policy-forward-verification.json).
 
-The next discriminating step is one fresh finite stored-service-log read:
-12:43:38–12:43:41 UTC, only16 exact hashes of the eight first owned fixtures,
-GK scan/result stages,64KiB cap/12s watchdog, ordinary UID, no admin prompt,
-no service sampling/configuration change or fallback. It is prepared with
-reducer refusal controls, but **pending separate human scope approval**;
-previous finite service/log scopes were consumed and are not reusable.
-[Concrete scope](evidence/pctx01-startup-policy-forward-scope-plan.json).
-No applicable product/platform repair is established; no unchanged rerun,
-policy bypass, warmup, fixture replacement or acceptance reduction is justified.
-Shared target has diagnostic artifacts: rebuild original before acceptance.
+Human authorized the concrete fresh stored-service-log scope. It executed once:
+12:43:38–12:43:41 UTC,16 exact owned hashes/GK scan-result messages, exit0,
+17,401 raw bytes,16 admitted events/0 rejects. Raw memory discarded; reader
+36440 reaped and absent. No admin authentication, sampling, configuration change,
+fallback query or new product test. Scope is now consumed.
+[Read verification](evidence/pctx01-startup-policy-forward-read-verification.json).
+
+All8 first owned fixtures have one unique scan/result pair. Scan order:
+35068,35067,35069,35066,35070,35072,35073,35071. Non-overlapping scans have
+211–256us gaps and span1.092233s. All7 successful children have policy results
+before their original deadlines; failed35071 is last.
+
+| Failed35071 event | UTC, 2026-10-09 |
+| --- | --- |
+| Owned native birth | 12:43:38.070694 |
+| Scan starts | 12:43:38.984119 |
+| Original deadline bounds | 12:43:39.070264542–39.070266542 |
+| Parent observes timeout bounds | 12:43:39.072253–39.072255 |
+| Policy scan result | 12:43:39.169148 |
+
+Birth-to-scan is913.425ms; scan lasts185.029ms, with only86.146–86.148ms
+of the original budget left when it starts. Result is98.881–98.883ms after
+deadline. Every recorded drain remains zero; no root exit is observed.
+Cancellation starts15us after parent timeout observation. Independent reviewer
+/root/work_control confirms the eight-path join and arithmetic.
+[Offline join](evidence/pctx01-startup-policy-forward-joined.json).
+
+This directly associates the expired original-supervisor owned fixture with a
+policy scan finishing too late, supporting accumulated serial policy scanning
+as the startup-budget failure mechanism. It does not reveal exact queue arrival,
+kernel reply/acknowledgment/waiter release, or why individual scans take this
+long (including XProtect involvement). Hashes remain noncryptographic and the
+wall/native conversion assumes no hidden intermediate wall-clock step.
+Instrumentation can perturb scheduling. No product repair/qualification follows.
+Next within PCTX01-G05-D05: determine an applicable causal correction preserving
+original1000ms/8×16/native exec/stream/group conditions. No policy bypass, warmup,
+fixture replacement or deadline reduction; no unchanged rerun. Shared target
+contains diagnostic artifacts and must rebuild originals before acceptance.
+Private source/records/helpers were removed; selected numeric evidence retained.
 
 ## Late child chronology — earlier, 2026-10-09
 
