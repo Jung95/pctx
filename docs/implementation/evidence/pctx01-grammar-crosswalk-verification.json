@@ -1,0 +1,95 @@
+{
+  "task": "PCTX01",
+  "item": "PCTX01-G03-D03",
+  "status": "closed bounded local G03-D03 pure grammar; whole task/platforms incomplete",
+  "baseline_revision": "ec76216d2dd74b50dc4bdd62dd52b30228d21da9",
+  "runtime_changed": false,
+  "fixed_detail_closed_before": 26,
+  "fixed_detail_denominator": 40,
+  "whole_gates_closed": 0,
+  "whole_gates_denominator": 10,
+  "crosswalk": "pctx01-grammar-crosswalk.json",
+  "crosswalk_sha256": "5b1cbcaf1b6e2e9c020dc9c631d1ad3fe137d406afe51459eb956eeb5e78e605",
+  "paths_sha256": {
+    "src/adapter.rs": "41f18fda7ee7f3852e5ad49e5d9098f21474d5a1915ba6d48db52cfbcabf9def",
+    "src/broker.rs": "252c56c96599a5b4b0795e3fc4283bb35563742ea8ba61cfea790f262feebce1",
+    "src/cli_args.rs": "2ae3676485714fc79c19ceed1f96c94347d7458286a0ae07e9096af308576d39",
+    "src/context.rs": "faa1b3c76ffc53e7240a809ae226d229252ec056d0b985b4adecd62df6a4dcb9",
+    "src/extract.rs": "76e36421efa026822cd551a3c5cd51d8c58c1263c966b92dcc5a15ec269b4f4b",
+    "src/filters.rs": "2d24ede383d1779e2d9fe8d97fa005c0bdd3ab454ea2267d5bc0d09f7415f542",
+    "src/graph.rs": "54da586daa91a3c7f2e97534fa68824ff0e0d796dd69054be27960799d94e2c7",
+    "src/inventory.rs": "b5508410b77fabe332beb3bb7b793bd94908a6f2b1249fe542cf391078b78612",
+    "src/main.rs": "11a1cba15057735d5a5a9cd44c0b6be4ee1b0a79513d33b91dcd49f9e8cb5f9c",
+    "src/operations.rs": "37393df0108ee918b3680ab2d3c45905ea95c38fef1c384cafdc8281538a366f",
+    "src/output.rs": "d14a138e780e8ac87408c803cda30c115867f5d825ac17789bbeedc1c7696c73",
+    "src/pack.rs": "a6fa74d6ae0ab46f57b32a3bd03cd3a8e5b69da17cc091c9abb81a5596f76d4c",
+    "src/parser_contract_tests.rs": "dd3b117226b48bf3f7e76159a17767edbb6ce6aa80b96c6b00a5604e9b9fb576",
+    "src/quota.rs": "4ba68daf5ab85ab3c3676848646f05896f72c072581a8d3fefcee387ce737fe7",
+    "src/runner.rs": "600aaee24adb4cc7169bd17909a181bf73fabe4a19902a0387a7e507d80fd708",
+    "src/schedule.rs": "fdd6d8f8c1b34d51ab62ad6790270e9ef700b1f282d2eb48455092e5e569ca9f",
+    "src/search.rs": "15483186930d9c818e56ea96b15585e7912af4cb759850b7d1c766d86a1588a8",
+    "src/session.rs": "ca151ac9451579726d149490ab6c48a9e796143327208c9fb855ab5734ae5612",
+    "src/storage.rs": "64d8aa5e4913cc632d66f261cc2773f9988efa78cddb3c6b72014a505afa2e64",
+    "src/work.rs": "a5c89c59fb012d871a9a9ea335d698b6b4fd05e4e549236c8b1a6835d4bd8170",
+    "tests/runner.rs": "356092374d1b3621896fd9b48587a565f00cb9cc78f0fe393b74f4f075baa4e4"
+  },
+  "binary_sha256": "e2f84cdc4ea9f6d7f511a01397e5e831eae3e21d5a0b9b7e33988bcc31ceb5ab",
+  "environment": {
+    "system": "macOS-26.7.1-arm64-arm-64bit-Mach-O",
+    "architecture": "arm64",
+    "rust": "1.99.0"
+  },
+  "results": [
+    {
+      "job": "71900",
+      "exit": 0,
+      "passed": 93,
+      "failed": 0,
+      "log": "pctx01-grammar-crosswalk-native.log",
+      "scope": "Binary7 including1855 saved cases exact140-leaf parser replay;16 authored admission suites86 tests. All native no-effect/accepted-boundary/source-priority controls with original scopes."
+    },
+    {
+      "job": "52889",
+      "exit": 0,
+      "passed": 1,
+      "failed": 0,
+      "log": "pctx01-grammar-capacity-native.log",
+      "scope": "Existing CheckRun and Work alias capacity8; local Helper capacity8/owner5; accepted cloud queued intent below local floor without child/model/slot."
+    },
+    {
+      "job": "10062",
+      "exit": 0,
+      "passed": 1,
+      "failed": 0,
+      "log": "pctx01-grammar-run-capacity-native.log",
+      "scope": "Existing Run lowercommoncapacity2 vs admitted operation capacity8; no child/artifact and exact final serialized bytes."
+    },
+    {
+      "exit": 0,
+      "log": "pctx01-grammar-crosswalk-static.log",
+      "scope": "Locked all-target Clippy warnings denied."
+    },
+    {
+      "exit": 0,
+      "log": "pctx01-grammar-crosswalk-format.log",
+      "scope": "Format check."
+    }
+  ],
+  "logs_sha256": {
+    "pctx01-grammar-crosswalk-native.log": "d44ad11a6b46145fdd4113ccdb87998fcab4dabb31ac1c551ec1ed114e319706",
+    "pctx01-grammar-capacity-native.log": "74d84b9d3b253c0b1105b047d5dbe654dd91e025fbe422d7efd81564cebf6591",
+    "pctx01-grammar-run-capacity-native.log": "b18d093acee110b1cb94aaa9db595fb32fcc1a6d2b645f26a86b8c0378648de4",
+    "pctx01-grammar-crosswalk-static.log": "6eaff51418cdf3d30775e8f72e66ed0e2318d8d3d7fc81368c8832f02eb53934",
+    "pctx01-grammar-crosswalk-format.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "contract_reconciliation": "All140 stable C IDs map to named current pure validators or explicitly unrestricted parser/lookup routes. HistoricalA/R/C evidence reused without treating12Rgroups as all-local proof. Operational metadata-capacity floors8 preserve Helper owner/task and platform priority, classified as existing G04-D03/G05-D06; no new argument restriction, guard reordering, ID or denominator.",
+  "limits": [
+    "Native macOSarm64 bounded local qualification only; all required G09 platforms remain open",
+    "No independent producer task completed",
+    "No whole suite or platform run; original four macOS startup product failures and inactive PCTX36 Tick failure retained",
+    "G04 budget endpoint/state combinations and G05 cancellation/exit matrix remain open",
+    "No Actions dispatched; original execution clocks, archive formats, parent/child lock contracts unchanged"
+  ],
+  "fixed_detail_closed": 27,
+  "review": "work_control read-only final artifact audit:140 unique C IDs/routes equal frozen registry, source hashes match, pure validator/lookup exclusions and Activity/Install/Filter/capacity exceptions verified; no remaining G03-D03 blocker. No reviewer edits/builds/tests."
+}

@@ -14,31 +14,27 @@ Only **PCTX01** is active. It is the lowest-numbered incomplete official develop
 
 Only PCTX01 is active. The one-time whole-G01–G10 reorganization remains fixed
 in [PCTX01-closure-plan](tasks/PCTX01-closure-plan.md), its40-item register and
-140-leaf crosswalk. Detail **26/40**, whole gates **0/10**, unchanged this candidate.
+140-leaf crosswalk. Detail **27/40**, whole gates **0/10**, unchanged this candidate.
 140 leaves/172 help paths/12 bounded R groups remain fixed. Required macOS
 arm64/x86_64, Linux x86_64 and Windows x86_64 integration are separately open G09.
 
-Current **G03-D04 is closed as a bounded local common-input condition**.
-All18 frozen caller/config/external JSON sites in seven existing groups now map
-to named current or unchanged-branch prior proof. Current actual caller13 PASS,
-related40 PASS, preceding caller11 PASS and Runner29 PASS; the new memory control
-passes1 after disabling fixture diagnostics. Initial encoding, absolute Pack path
-and diagnostics-mode test premise failures are retained without product changes.
-Operations10 readers cover100 syntax/shape/encoding combinations plus20 cap and
-2 owner controls; Adapter required shapes/unsupported6 and Statusline version
-priorities remain distinct. Inventory explicit schema2, source UTF8 class3 and
-partial discovered-config observations are not conflated. Filter manifest refusal,
-Pack project-relative external syntax, Handoff permitted metadata/body, real-lease
-Check Report14 controls and memory4096/4097 no-child/no-heavy-grant are qualified.
-Quota10000/10001 cannot fit the original1MiB cap: minimum required-key encoding is
-217bytes; actual cap-first2 is proved, not accepted-count semantics. Archive256MiB
-proof remains oversize admission, not allocated exact-cap/growth. Prepared logical
-SQL/schema and non-DB comparisons do not claim physical WAL or first-use rollback.
-Format/locked all-target Clippy PASS; independent fixed-site audit found no common
-input gap. [Closure evidence](evidence/pctx01-caller-groups-verification.json) and
-[18-site crosswalk](evidence/pctx01-caller-input-matrix.json) preserve producer
-ownership and required-platform limits. Detail **26/40**, whole gates **0/10**.
-G04-D03 remains open; the prior Backup output repair remains qualified.
+Current **G03-D03 is closed as bounded local pure-grammar qualification**.
+The [140-route crosswalk](evidence/pctx01-grammar-crosswalk.json) preserves all
+C001–C140 identities and maps actual validators, unrestricted lookup/parser-only
+routes and input/state-dependent exceptions to source hashes and named proofs.
+Current focused93 PASS includes exact1855-case/140-leaf parser replay and16
+existing authored admission suites. Additional Runner capacity1 and existing Run
+capacity1 PASS qualify explicit operational metadata-budget8 exceptions without
+child/resource effects. These floors remain in producers: local Helper owner/task
+checks precede capacity, and cloud intent bypasses the local floor. They belong to
+existing G04-D03/G05-D06 response-budget/exit conditions, not invented argument2
+restrictions or reordered policy/state/capability. Exact endpoint/state combinations
+remain there. Format/locked all-target Clippy PASS; independent final mapping
+review found no missing pure-grammar boundary. No runtime behavior changed.
+[Current evidence](evidence/pctx01-grammar-crosswalk-verification.json).
+G03-D04 input closure remains qualified; independent producer semantics, G08 races,
+G09 native platforms and four original macOS startup failures remain separate.
+Detail **27/40**, whole gates **0/10**; denominator and140/172/12 counts unchanged.
 
 Prior G02-D04 parser1855 cases/10184 native refusals and G05-D04 stored48-site
 closures remain qualified by their linked evidence. Current binary7 replays the
@@ -47,9 +43,9 @@ macOS startup product failures remain. Current focused Tick passes once but its
 occurrence algorithm is unchanged; retained inactive PCTX36 failure is not erased.
 Whole suite is not green. No Actions, full/platform run or active heavy job.
 
-Next fixed candidate: finish **G03-D03 + G05-D06** using the frozen140-route
-grammar crosswalk and one shared exit/cancellation matrix. G03-D04 common-input
-closure does not qualify independent producer functionality or G08/G09 conditions.
+Next fixed candidate: finish **G05-D06** one shared exit/cancellation matrix.
+Closed G03-D03/D04 do not qualify independent producer functionality or G08/G09.
+Keep operational metadata-capacity8 and owner/state priorities explicit.
 No lookup-grammar invention, independent producer expansion, new IDs or denominator.
 PCTX01 remains active until all40 conditions and required platforms qualify.
 

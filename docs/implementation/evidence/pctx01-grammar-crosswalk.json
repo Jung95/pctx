@@ -1,0 +1,1196 @@
+{
+  "task": "PCTX01",
+  "item": "PCTX01-G03-D03",
+  "baseline_revision": "ec76216d2dd74b50dc4bdd62dd52b30228d21da9",
+  "status": "qualified bounded local pure-grammar crosswalk; whole task/platforms incomplete",
+  "leaf_count": 140,
+  "leaf_ids": "C001-C140 unchanged",
+  "group_contracts": {
+    "activity": {
+      "source": "src/work.rs",
+      "validator": "work::validate_activity_cursor",
+      "prior_evidence": "pctx01-activity-admission-verification.json",
+      "boundary": "Finite branch and stream branch validate cursor before discovery; stream transport and watch-JSON refusal retain prior priority.",
+      "current_source_sha256": "a5c89c59fb012d871a9a9ea335d698b6b4fd05e4e549236c8b1a6835d4bd8170"
+    },
+    "adapter": {
+      "source": "src/adapter.rs",
+      "validator": "adapter::validate_adapter_request",
+      "prior_evidence": "pctx01-adapter-admission-verification.json",
+      "boundary": "Labels/install hash are pure; Event key depends on PreToolUse input; config/protocol/bindings are separate.",
+      "current_source_sha256": "41f18fda7ee7f3852e5ad49e5d9098f21474d5a1915ba6d48db52cfbcabf9def",
+      "additional_prior_evidence": [
+        "pctx01-install-admission-verification.json"
+      ]
+    },
+    "work": {
+      "source": "src/work.rs",
+      "validator": "work::validate_work_request",
+      "prior_evidence": "pctx01-control-admission-verification.json",
+      "boundary": "Agent registration/report and transition reasons are pure. Check Run missing key is Clap plus library guard. Registered lookup IDs, leases, CAS, task/check existence are dynamic.",
+      "current_source_sha256": "a5c89c59fb012d871a9a9ea335d698b6b4fd05e4e549236c8b1a6835d4bd8170",
+      "additional_prior_evidence": [
+        "pctx01-report-admission-verification.json"
+      ]
+    },
+    "checkpoint": {
+      "source": "src/storage.rs",
+      "validator": "storage::validate_checkpoint_request",
+      "prior_evidence": "pctx01-checkpoint-admission-verification.json",
+      "boundary": "Create name/glob scopes validated; Delete/List IDs remain lookup grammar.",
+      "current_source_sha256": "64d8aa5e4913cc632d66f261cc2773f9988efa78cddb3c6b72014a505afa2e64"
+    },
+    "context": {
+      "source": "src/session.rs",
+      "validator": "session::validate_context_request",
+      "prior_evidence": "pctx01-context-admission-verification.json",
+      "boundary": "Get mode/full-since/scope and Ack provenance validated; current session/receipt/policy are dynamic.",
+      "current_source_sha256": "ca151ac9451579726d149490ab6c48a9e796143327208c9fb855ab5734ae5612"
+    },
+    "operations": {
+      "source": "src/operations.rs",
+      "validator": "operations::validate_operation_request",
+      "prior_evidence": "pctx01-operations-admission-verification.json",
+      "boundary": "Queue/Inbox bounds, exactly-one recipient, Resolve evidence and restrictions validated. Registered recipient aliases remain lookup-dependent; raw JSON is G03-D04.",
+      "current_source_sha256": "37393df0108ee918b3680ab2d3c45905ea95c38fef1c384cafdc8281538a366f",
+      "additional_prior_evidence": [
+        "pctx01-control-admission-verification.json"
+      ]
+    },
+    "extract": {
+      "source": "src/extract.rs",
+      "validator": "extract::validate_request",
+      "prior_evidence": "pctx01-argument-preflight-verification.json",
+      "boundary": "Location syntax, path/line pairing, view/unit/source requirement; output artifact/source existence remain dynamic.",
+      "current_source_sha256": "76e36421efa026822cd551a3c5cd51d8c58c1263c966b92dcc5a15ec269b4f4b"
+    },
+    "filter": {
+      "source": "src/filters.rs",
+      "validator": "filters::validate_filter_request",
+      "prior_evidence": "pctx01-filter-admission-verification.json",
+      "boundary": "Activate ID, Explain bounded argv, relative UTF8 paths; absolute paths interpreted against actual project root.",
+      "current_source_sha256": "2d24ede383d1779e2d9fe8d97fa005c0bdd3ab454ea2267d5bc0d09f7415f542"
+    },
+    "search": {
+      "source": "src/search.rs",
+      "validator": "search::validate_find_request/validate_structure_request/validate_read_request/validate_outline_request",
+      "prior_evidence": "pctx01-argument-preflight-verification.json",
+      "boundary": "Search/structure limits and selectors, Read exclusivity/line/path, Outline freshness/scopes; source/symbol IDs remain dynamic.",
+      "current_source_sha256": "15483186930d9c818e56ea96b15585e7912af4cb759850b7d1c766d86a1588a8",
+      "additional_prior_evidence": [
+        "pctx01-caller-schema-verification.json:cli_frontend23 PASS including invalid_strict_queries_preserve_generation_database_sources_and_output_path"
+      ]
+    },
+    "graph": {
+      "source": "src/graph.rs",
+      "validator": "graph::validate_request",
+      "prior_evidence": "pctx01-argument-preflight-verification.json",
+      "boundary": "Direction/depth and lexical path before graph/source access.",
+      "current_source_sha256": "54da586daa91a3c7f2e97534fa68824ff0e0d796dd69054be27960799d94e2c7"
+    },
+    "handoff": {
+      "source": "src/storage.rs",
+      "validator": "storage::validate_handoff_name",
+      "prior_evidence": "pctx01-handoff-input-verification.json",
+      "boundary": "Create/Show/Update name grammar shared; caller payload is G03-D04 and checkpoint content remains producer-owned.",
+      "current_source_sha256": "64d8aa5e4913cc632d66f261cc2773f9988efa78cddb3c6b72014a505afa2e64"
+    },
+    "inventory": {
+      "source": "src/inventory.rs",
+      "validator": "inventory::validate_inventory_request",
+      "prior_evidence": "pctx01-inventory-admission-verification.json",
+      "boundary": "Profile/Audit/optional Scan lexical paths; supplied expiry remains before scan work.",
+      "current_source_sha256": "b5508410b77fabe332beb3bb7b793bd94908a6f2b1249fe542cf391078b78612"
+    },
+    "runner": {
+      "source": "src/runner.rs",
+      "validator": "runner::validate_runner_request",
+      "prior_evidence": "pctx01-runner-admission-verification.json",
+      "boundary": "Job/Helper private IDs and HelperRequest mode/scope grammar; key/task/run lookup unrestricted. Operational capacity floors are explicit separate prelaunch failure8.",
+      "current_source_sha256": "600aaee24adb4cc7169bd17909a181bf73fabe4a19902a0387a7e507d80fd708"
+    },
+    "output": {
+      "source": "src/output.rs",
+      "validator": "output::validate_output_request",
+      "prior_evidence": "pctx01-output-admission-verification.json",
+      "boundary": "Output IDs, full/compact selectors, line ranges and literal/limit; metadata/artifact lookup separate.",
+      "current_source_sha256": "d14a138e780e8ac87408c803cda30c115867f5d825ac17789bbeedc1c7696c73"
+    },
+    "pack": {
+      "source": "src/pack.rs",
+      "validator": "pack::validate_pack_request",
+      "prior_evidence": "pctx01-pack-admission-verification.json",
+      "boundary": "Plan scope/content/budget/split and Create plan ID; output normalization follows policy and artifacts/plans remain dynamic.",
+      "current_source_sha256": "a6fa74d6ae0ab46f57b32a3bd03cd3a8e5b69da17cc091c9abb81a5596f76d4c"
+    },
+    "quota": {
+      "source": "src/quota.rs",
+      "validator": "quota::validate_quota_request",
+      "prior_evidence": "pctx01-control-admission-verification.json",
+      "boundary": "Report/Plan/Reconcile/Reserve arguments and Ingest key; usage JSON and observation lookup remain G03-D04/producer.",
+      "current_source_sha256": "4ba68daf5ab85ab3c3676848646f05896f72c072581a8d3fefcee387ce737fe7",
+      "additional_prior_evidence": [
+        "pctx01-report-admission-verification.json"
+      ]
+    },
+    "repo": {
+      "source": "src/broker.rs",
+      "validator": "broker::validate_repo_request",
+      "prior_evidence": "pctx01-repo-admission-verification.json",
+      "boundary": "Fields and workspace selection pure; Git/current cache/registration dynamic.",
+      "current_source_sha256": "252c56c96599a5b4b0795e3fc4283bb35563742ea8ba61cfea790f262feebce1"
+    },
+    "run": {
+      "source": "src/output.rs",
+      "validator": "output::validate_run_request",
+      "prior_evidence": "pctx01-execution-admission-verification.json",
+      "boundary": "Modes/bounded argv are grammar;3000byte metadata floor is BUDGET_TOO_SMALL8 prelaunch failure.",
+      "current_source_sha256": "d14a138e780e8ac87408c803cda30c115867f5d825ac17789bbeedc1c7696c73"
+    },
+    "schedule": {
+      "source": "src/schedule.rs",
+      "validator": "schedule::validate_schedule_request",
+      "prior_evidence": "pctx01-schedule-admission-verification.json",
+      "boundary": "Labels/RFC3339/loop bounds/reason/plan checked; RunLoop namespace/purpose eligible-tick exception and Inspect/Uninstall unrestricted lookup retained.",
+      "current_source_sha256": "fdd6d8f8c1b34d51ab62ad6790270e9ef700b1f282d2eb48455092e5e569ca9f"
+    },
+    "session": {
+      "source": "src/session.rs",
+      "validator": "session::validate_session_request",
+      "prior_evidence": "pctx01-report-admission-verification.json",
+      "boundary": "Attach identities and Suspend/Boundary reasons pure; reconcile/session existence dynamic.",
+      "current_source_sha256": "ca151ac9451579726d149490ab6c48a9e796143327208c9fb855ab5734ae5612",
+      "additional_prior_evidence": [
+        "pctx01-control-admission-verification.json"
+      ]
+    },
+    "build": {
+      "source": "src/context.rs",
+      "validator": "context::validate_build_request",
+      "prior_evidence": "pctx01-argument-preflight-verification.json",
+      "boundary": "Task-source exclusivity/presence, detail/depth and tokenizer unsupported6; body/task lookup separate.",
+      "current_source_sha256": "faa1b3c76ffc53e7240a809ae226d229252ec056d0b985b4adecd62df6a4dcb9"
+    },
+    "trust": {
+      "source": "src/output.rs",
+      "validator": "output::validate_trust_request",
+      "prior_evidence": "pctx01-execution-admission-verification.json",
+      "boundary": "Bounded argv pure; actual executable/owner/trust binding dynamic.",
+      "current_source_sha256": "d14a138e780e8ac87408c803cda30c115867f5d825ac17789bbeedc1c7696c73"
+    },
+    "parser_only": {
+      "source": "src/main.rs",
+      "validator": "Clap/representation/capacity admission; no additional source-independent producer grammar",
+      "prior_evidence": "pctx01-parser-verification.json",
+      "boundary": "No new identifier/path lexical restrictions invented. Existing typed fields/conflicts use frozen1855 parser cases; source/policy/state remain in producer.",
+      "current_source_sha256": "11a1cba15057735d5a5a9cd44c0b6be4ee1b0a79513d33b91dcd49f9e8cb5f9c"
+    }
+  },
+  "routes": [
+    {
+      "leaf_id": "C001",
+      "route": "activity",
+      "contract_group": "activity",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C002",
+      "route": "adapter claude doctor",
+      "contract_group": "adapter",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C003",
+      "route": "adapter claude event",
+      "contract_group": "adapter",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C004",
+      "route": "adapter claude install",
+      "contract_group": "adapter",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C005",
+      "route": "adapter claude plan",
+      "contract_group": "adapter",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C006",
+      "route": "adapter claude protocol-fixture",
+      "contract_group": "adapter",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C007",
+      "route": "adapter claude statusline",
+      "contract_group": "adapter",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C008",
+      "route": "adapter claude uninstall",
+      "contract_group": "adapter",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C009",
+      "route": "adapter claude verify",
+      "contract_group": "adapter",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C010",
+      "route": "agent heartbeat",
+      "contract_group": "work",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C011",
+      "route": "agent list",
+      "contract_group": "work",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C012",
+      "route": "agent register",
+      "contract_group": "work",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C013",
+      "route": "agent report",
+      "contract_group": "work",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C014",
+      "route": "agent show",
+      "contract_group": "work",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C015",
+      "route": "board",
+      "contract_group": "parser_only",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C016",
+      "route": "build",
+      "contract_group": "build",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C017",
+      "route": "cache stats",
+      "contract_group": "parser_only",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C018",
+      "route": "changes",
+      "contract_group": "parser_only",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C019",
+      "route": "check begin",
+      "contract_group": "work",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C020",
+      "route": "check list",
+      "contract_group": "work",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C021",
+      "route": "check plan",
+      "contract_group": "work",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C022",
+      "route": "check record",
+      "contract_group": "work",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C023",
+      "route": "check run",
+      "contract_group": "work",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C024",
+      "route": "check show",
+      "contract_group": "work",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C025",
+      "route": "checkpoint create",
+      "contract_group": "checkpoint",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C026",
+      "route": "checkpoint delete",
+      "contract_group": "checkpoint",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C027",
+      "route": "checkpoint list",
+      "contract_group": "checkpoint",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C028",
+      "route": "context ack",
+      "contract_group": "context",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C029",
+      "route": "context get",
+      "contract_group": "context",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C030",
+      "route": "control backup",
+      "contract_group": "work",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C031",
+      "route": "control restore",
+      "contract_group": "work",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C032",
+      "route": "decision record",
+      "contract_group": "operations",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C033",
+      "route": "decision request",
+      "contract_group": "operations",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C034",
+      "route": "decision show",
+      "contract_group": "operations",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C035",
+      "route": "doctor",
+      "contract_group": "parser_only",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C036",
+      "route": "extract",
+      "contract_group": "extract",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C037",
+      "route": "filter activate",
+      "contract_group": "filter",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C038",
+      "route": "filter apply",
+      "contract_group": "filter",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C039",
+      "route": "filter explain",
+      "contract_group": "filter",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C040",
+      "route": "filter test",
+      "contract_group": "filter",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C041",
+      "route": "filter validate",
+      "contract_group": "filter",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C042",
+      "route": "find",
+      "contract_group": "search",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C043",
+      "route": "handoff create",
+      "contract_group": "handoff",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C044",
+      "route": "handoff show",
+      "contract_group": "handoff",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C045",
+      "route": "handoff update",
+      "contract_group": "handoff",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C046",
+      "route": "impact",
+      "contract_group": "graph",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C047",
+      "route": "inbox read",
+      "contract_group": "operations",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C048",
+      "route": "index gc",
+      "contract_group": "parser_only",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C049",
+      "route": "index rebuild",
+      "contract_group": "parser_only",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C050",
+      "route": "index update",
+      "contract_group": "parser_only",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C051",
+      "route": "init",
+      "contract_group": "parser_only",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C052",
+      "route": "inventory audit",
+      "contract_group": "inventory",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C053",
+      "route": "inventory profile",
+      "contract_group": "inventory",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C054",
+      "route": "inventory scan",
+      "contract_group": "inventory",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C055",
+      "route": "job cancel",
+      "contract_group": "runner",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C056",
+      "route": "message ack",
+      "contract_group": "operations",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C057",
+      "route": "message resolve",
+      "contract_group": "operations",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C058",
+      "route": "message send",
+      "contract_group": "operations",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C059",
+      "route": "outline",
+      "contract_group": "search",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C060",
+      "route": "output find",
+      "contract_group": "output",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C061",
+      "route": "output render",
+      "contract_group": "output",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C062",
+      "route": "output show",
+      "contract_group": "output",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C063",
+      "route": "owner queue",
+      "contract_group": "operations",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C064",
+      "route": "pack create",
+      "contract_group": "pack",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C065",
+      "route": "pack inspect",
+      "contract_group": "pack",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C066",
+      "route": "pack plan",
+      "contract_group": "pack",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C067",
+      "route": "pack verify",
+      "contract_group": "pack",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C068",
+      "route": "policy attest-owner",
+      "contract_group": "operations",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C069",
+      "route": "policy evaluate",
+      "contract_group": "operations",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C070",
+      "route": "policy exception-record",
+      "contract_group": "operations",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C071",
+      "route": "policy exception-revoke",
+      "contract_group": "operations",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C072",
+      "route": "policy release",
+      "contract_group": "operations",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C073",
+      "route": "policy report-evaluate",
+      "contract_group": "operations",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C074",
+      "route": "policy report-fingerprint",
+      "contract_group": "operations",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C075",
+      "route": "query",
+      "contract_group": "search",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C076",
+      "route": "quota ingest",
+      "contract_group": "quota",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C077",
+      "route": "quota plan",
+      "contract_group": "quota",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C078",
+      "route": "quota reconcile",
+      "contract_group": "quota",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C079",
+      "route": "quota release",
+      "contract_group": "quota",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C080",
+      "route": "quota report",
+      "contract_group": "quota",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C081",
+      "route": "quota reserve",
+      "contract_group": "quota",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C082",
+      "route": "read",
+      "contract_group": "search",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C083",
+      "route": "refs",
+      "contract_group": "graph",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C084",
+      "route": "repo status",
+      "contract_group": "repo",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C085",
+      "route": "resource status",
+      "contract_group": "parser_only",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C086",
+      "route": "role list",
+      "contract_group": "operations",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C087",
+      "route": "role pause",
+      "contract_group": "operations",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C088",
+      "route": "role resume",
+      "contract_group": "operations",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C089",
+      "route": "run",
+      "contract_group": "run",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C090",
+      "route": "runner check-plan",
+      "contract_group": "runner",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C091",
+      "route": "runner check-run",
+      "contract_group": "runner",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C092",
+      "route": "runner helper-cancel",
+      "contract_group": "runner",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C093",
+      "route": "runner helper-release",
+      "contract_group": "runner",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C094",
+      "route": "runner helper-request",
+      "contract_group": "runner",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C095",
+      "route": "runner helper-status",
+      "contract_group": "runner",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C096",
+      "route": "runner job-cancel",
+      "contract_group": "runner",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C097",
+      "route": "runner resource-status",
+      "contract_group": "runner",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C098",
+      "route": "runner trust",
+      "contract_group": "runner",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C099",
+      "route": "savings opportunities",
+      "contract_group": "parser_only",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C100",
+      "route": "savings report",
+      "contract_group": "parser_only",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C101",
+      "route": "schedule add",
+      "contract_group": "schedule",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C102",
+      "route": "schedule inspect",
+      "contract_group": "schedule",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C103",
+      "route": "schedule install",
+      "contract_group": "schedule",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C104",
+      "route": "schedule list",
+      "contract_group": "schedule",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C105",
+      "route": "schedule pause",
+      "contract_group": "schedule",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C106",
+      "route": "schedule plan",
+      "contract_group": "schedule",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C107",
+      "route": "schedule reconcile",
+      "contract_group": "schedule",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C108",
+      "route": "schedule recover",
+      "contract_group": "schedule",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C109",
+      "route": "schedule remove",
+      "contract_group": "schedule",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C110",
+      "route": "schedule resume",
+      "contract_group": "schedule",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C111",
+      "route": "schedule run-loop",
+      "contract_group": "schedule",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C112",
+      "route": "schedule tick",
+      "contract_group": "schedule",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C113",
+      "route": "schedule uninstall",
+      "contract_group": "schedule",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C114",
+      "route": "schedule update",
+      "contract_group": "schedule",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C115",
+      "route": "session attach",
+      "contract_group": "session",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C116",
+      "route": "session boundary",
+      "contract_group": "session",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C117",
+      "route": "session reconcile",
+      "contract_group": "session",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C118",
+      "route": "session suspend",
+      "contract_group": "session",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C119",
+      "route": "status",
+      "contract_group": "parser_only",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C120",
+      "route": "task assign",
+      "contract_group": "work",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C121",
+      "route": "task block",
+      "contract_group": "work",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C122",
+      "route": "task cancel",
+      "contract_group": "work",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C123",
+      "route": "task claim",
+      "contract_group": "work",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C124",
+      "route": "task complete",
+      "contract_group": "work",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C125",
+      "route": "task create",
+      "contract_group": "work",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C126",
+      "route": "task criterion accept",
+      "contract_group": "work",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C127",
+      "route": "task edit",
+      "contract_group": "work",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C128",
+      "route": "task list",
+      "contract_group": "work",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C129",
+      "route": "task pause",
+      "contract_group": "work",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C130",
+      "route": "task ready",
+      "contract_group": "work",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C131",
+      "route": "task reassign",
+      "contract_group": "work",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C132",
+      "route": "task reopen",
+      "contract_group": "work",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C133",
+      "route": "task resume",
+      "contract_group": "work",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C134",
+      "route": "task review",
+      "contract_group": "work",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C135",
+      "route": "task show",
+      "contract_group": "work",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C136",
+      "route": "task start",
+      "contract_group": "work",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C137",
+      "route": "task submit",
+      "contract_group": "work",
+      "additional_pure_grammar": false,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C138",
+      "route": "trace",
+      "contract_group": "graph",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C139",
+      "route": "trust add",
+      "contract_group": "trust",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    },
+    {
+      "leaf_id": "C140",
+      "route": "trust plan",
+      "contract_group": "trust",
+      "additional_pure_grammar": true,
+      "parser_proof": "pctx01-parser-verification.json; current exact schema replay in pctx01-grammar-crosswalk-native.log"
+    }
+  ],
+  "operational_capacity_exceptions": {
+    "run": {
+      "source": "output::run_inner",
+      "condition": "budget_bytes<3000",
+      "error": "BUDGET_TOO_SMALL8",
+      "proof": "cli_run_exit::admitted_small_run_budgets_preserve_prelaunch_truth_without_artifact",
+      "ordering": "Original clock then metadata capacity before modes; no child/artifact."
+    },
+    "runner check-run/check run": {
+      "source": "runner Unix CheckRun",
+      "condition": "budget_bytes<8192",
+      "error": "BUDGET_TOO_SMALL8",
+      "proof": "runner::producer_capacity_guards_preserve_budget_eight_owner_priority_and_intent_exception",
+      "ordering": "Unix capacity before profile/planning; nonUnix capability priority remains original."
+    },
+    "runner helper-request": {
+      "source": "runner::helper_request",
+      "condition": "mode==local && budget_bytes<8192",
+      "error": "BUDGET_TOO_SMALL8",
+      "proof": "runner::producer_capacity_guards_preserve_budget_eight_owner_priority_and_intent_exception",
+      "ordering": "Owner and task_check BEFORE local capacity; nonlocal intent bypasses floor and authorizes scope before queued receipt. No child/model/slot."
+    }
+  },
+  "capacity_ownership": "Existing G04-D03 serialized response budget and G05-D06 exit8. These valid parsed requests can fail operational capacity; no invented grammar2 or reordered owner/state/capability. Endpoint/state combinations remain there.",
+  "remaining": "G04/G05/G06/G07/G08/G09/G10 fixed conditions, including cancellation/platform/startup; no independent producer semantics closed."
+}

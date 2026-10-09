@@ -1,0 +1,197 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.34s
+     Running unittests src/main.rs (target/debug/deps/pctx-5861ab217462b7f0)
+
+running 7 tests
+test finite_route_tests::renderer_refusal_keeps_typed_error_and_incomplete_coverage ... ok
+test cli_help::tests::every_declared_leaf_has_an_explicit_effect_contract ... ok
+test cli_args::tests::producer_repetition_and_literal_child_options_preserve_exact_values ... ok
+test cli_args::tests::pack_artifact_output_and_global_output_share_one_singular_binding ... ok
+test cli_args::tests::defaults_and_fresh_parses_do_not_count_as_duplicate_inputs ... ok
+test finite_route_tests::finite_work_quota_adapter_reads_do_not_time_execution ... ok
+test parser_contract_tests::frozen_visible_parser_schema_and_cases ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 6.42s
+
+     Running tests/activity_preflight.rs (target/debug/deps/activity_preflight-75d999e79acf25ab)
+
+running 4 tests
+test direct_activity_and_watch_refusal_keep_original_expiry_and_state ... ok
+test accepted_activity_boundaries_return_empty_without_cursor_narrowing_or_new_clock ... ok
+test malformed_activity_cursor_types_refuse_before_discovery_and_output ... ok
+test native_negative_activity_cursor_precedes_discovery_without_changing_transport ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.06s
+
+     Running tests/adapter_install_preflight.rs (target/debug/deps/adapter_install_preflight-c596ba16db1decb6)
+
+running 5 tests
+test install_hash_admission_preserves_exact_hex_grammar ... ok
+test direct_invalid_install_keeps_state_and_original_expiry ... ok
+test isolated_nonowner_direct_install_admission_and_authority ... ok
+test native_accepted_install_keeps_authority_and_publishes_only_planned_settings ... ok
+test native_invalid_install_is_before_scope_authority_and_response ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.37s
+
+     Running tests/adapter_preflight.rs (target/debug/deps/adapter_preflight-6aa1789fcd433973)
+
+running 6 tests
+test direct_adapter_labels_keep_original_expiry_and_no_effects ... ok
+test adapter_label_boundaries_preserve_existing_grammar ... ok
+test isolated_nonowner_adapter_admission_precedes_authority ... ok
+test native_accepted_plan_labels_preserve_owner_authority ... ok
+test native_event_keys_remain_input_dependent_and_replay_is_stable ... ok
+test adapter_labels_precede_project_and_response_effects ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.28s
+
+     Running tests/argument_preflight.rs (target/debug/deps/argument_preflight-832306f7119f152d)
+
+running 5 tests
+test context_pure_contract_preserves_error_codes_and_task_source_exclusivity ... ok
+test extract_preflight_keeps_multisource_and_artifact_only_requests_dynamic ... ok
+test invalid_context_does_not_wait_for_task_stdin_or_touch_storage ... ok
+test graph_existing_depth_and_direction_limits_precede_path_authority ... ok
+test extract_static_location_errors_leave_dirty_index_and_sources_untouched ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/argument_preflight_cli.rs (target/debug/deps/argument_preflight_cli-8d5109e5406e1ac8)
+
+running 3 tests
+test valid_read_aliases_line_clamping_and_outline_remain_available ... ok
+test malformed_read_build_extract_and_graph_inputs_refuse_before_discovery ... ok
+test rejected_requests_do_not_refresh_dirty_index_or_write_response ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.20s
+
+     Running tests/checkpoint_preflight.rs (target/debug/deps/checkpoint_preflight-84e094c99f03ba49)
+
+running 3 tests
+test checkpoint_producer_validation_precedes_writer_and_manifest ... ok
+test checkpoint_display_names_and_dot_glob_scopes_remain_supported ... ok
+test invalid_checkpoint_arguments_have_no_project_or_response_effects ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+
+     Running tests/context_preflight.rs (target/debug/deps/context_preflight-8e4a1d8597c82b95)
+
+running 3 tests
+test context_producer_validation_precedes_session_database ... ok
+test valid_context_arguments_still_require_a_project_session ... ok
+test invalid_context_arguments_have_no_project_or_response_effects ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.16s
+
+     Running tests/control_preflight.rs (target/debug/deps/control_preflight-1104ac0ed832cb66)
+
+running 18 tests
+test report_session_ingest_direct_refusals_preserve_storage_and_original_expiry ... ok
+test operation_direct_refusals_preserve_state_and_original_expiry ... ok
+test direct_producers_refuse_before_database_and_preserve_original_expiry ... ok
+test runner_direct_pure_refusal_preserves_storage_and_original_expiry ... ok
+test runner_valid_boundaries_preserve_existing_non_owner_policy ... ok
+test role_pure_arguments_precede_project_and_response_effects ... ok
+test report_session_ingest_arguments_precede_project_and_response_effects ... ok
+test operation_boundaries_aliases_and_valid_non_owner_policy_are_preserved ... ok
+test valid_control_arguments_reach_existing_authorization_and_state_flows ... ok
+test schedule_pure_arguments_precede_project_and_response_effects ... ok
+test session_pure_arguments_precede_project_and_response_effects ... ok
+test runner_pure_arguments_precede_project_and_response_effects ... ok
+test valid_grammar_does_not_bypass_non_owner_authority ... ok
+test report_and_session_accepted_boundaries_keep_replay_and_state_contracts ... ok
+test quota_pure_arguments_precede_project_and_response_effects ... ok
+test operation_remaining_pure_arguments_precede_project_and_response_effects ... ok
+test work_pure_arguments_precede_project_and_response_effects ... ok
+test malformed_reviewed_schedule_provider_refuses_without_panic_or_installation ... ok
+
+test result: ok. 18 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.68s
+
+     Running tests/execution_preflight.rs (target/debug/deps/execution_preflight-abdedd2027af4e4d)
+
+running 5 tests
+test shared_execution_boundaries_preserve_modes_empty_elements_and_budget_priority ... ok
+test direct_execution_refusals_preserve_storage_and_original_expiry ... ok
+test isolated_nonowner_trust_admission_keeps_invalid_expired_and_authority_distinct ... ok
+test native_trust_plan_accepts_exact_boundaries_without_execution_or_trust_writes ... ok
+test execution_argv_limits_precede_project_and_response_effects ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.19s
+
+     Running tests/filter_preflight.rs (target/debug/deps/filter_preflight-c42afe2a3953f33b)
+
+running 4 tests
+test shared_filter_grammar_preserves_paths_modes_and_existing_bounds ... ok
+test direct_filter_refusals_preserve_storage_and_original_expiry ... ok
+test native_filter_paths_preview_and_state_guards_keep_original_contracts ... ok
+test filter_arguments_precede_project_and_response_effects ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.22s
+
+     Running tests/handoff_preflight.rs (target/debug/deps/handoff_preflight-00ee29a516bfb75e)
+
+running 5 tests
+test library_invalid_name_and_original_expiry_refuse_before_input_or_artifacts ... ok
+test fifo_input_is_refused_without_blocking_or_creating_checkpoints ... ok
+test oversize_and_invalid_utf8_inputs_preserve_every_index_checkpoint_and_file ... ok
+test invalid_names_on_every_leaf_refuse_before_discovery_or_response_writes ... ok
+test explicit_regular_file_semantics_and_create_update_show_are_preserved ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.17s
+
+     Running tests/inventory_preflight.rs (target/debug/deps/inventory_preflight-07a39eacf3239e33)
+
+running 5 tests
+test shared_inventory_grammar_preserves_reader_normalization_and_scan_bounds ... ok
+test expired_scan_limits_keep_original_timeout_priority ... ok
+test direct_inventory_paths_precede_root_checks_and_preserve_original_expiry ... ok
+test accepted_inventory_paths_preserve_profile_audit_scan_and_policy_contracts ... ok
+test lexical_inventory_arguments_precede_project_and_response_effects ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.36s
+
+     Running tests/pack_preflight.rs (target/debug/deps/pack_preflight-b27b32b47eb4d308)
+
+running 4 tests
+test pack_plan_producer_preserves_pure_errors_and_original_expiry ... ok
+test invalid_pack_create_ids_have_no_project_or_artifact_effects ... ok
+test valid_pack_plan_preserves_metadata_and_duplicate_scopes ... ok
+test invalid_pack_plan_arguments_have_no_project_or_response_effects ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.24s
+
+     Running tests/policy_controls_cli.rs (target/debug/deps/policy_controls_cli-526f5c770024b1b9)
+
+running 7 tests
+test original_owner_only_release_and_stale_revision_never_mutates_policy ... ok
+test legacy_owner_is_unknown_until_explicit_attestation_and_agent_run_cannot_claim_owner ... ok
+test report_source_topics_require_explicit_coverage_and_unknown_sources_hold ... ok
+test explicitly_authored_reporting_precedence_scope_and_revocation ... ok
+test managed_source_topic_change_blocks_previously_allowed_report_and_ack ... ok
+test reporting_exception_delivers_mailbox_only_and_revocation_blocks_ack ... ok
+test reporting_pause_exception_expires_without_releasing_pause ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.79s
+
+     Running tests/repo_preflight.rs (target/debug/deps/repo_preflight-7a92a364b9d86625)
+
+running 4 tests
+test repo_producer_validation_precedes_database ... ok
+test valid_repo_selection_preserves_non_git_unsupported_truth ... ok
+test valid_repo_fields_preserve_supported_git_observation ... ok
+test invalid_repo_arguments_have_no_project_or_response_effects ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.22s
+
+     Running tests/schedule_preflight.rs (target/debug/deps/schedule_preflight-d777e2d31ef63d03)
+
+running 5 tests
+test schedule_boundaries_preserve_existing_exceptions ... ok
+test direct_schedule_arguments_keep_original_expiry_and_no_effects ... ok
+test isolated_nonowner_schedule_admission_keeps_authority_and_expiry ... ok
+test native_schedule_boundaries_replay_and_future_tick_preserve_contracts ... ok
+test schedule_arguments_precede_project_and_response_effects ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.59s
+

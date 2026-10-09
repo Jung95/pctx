@@ -186,3 +186,13 @@ for currently unrestricted lookup keys.
 | C138 | `trace` | src/graph.rs | Existing parser/shared admission or state/input-dependent checks; whole matrix open |
 | C139 | `trust add` | src/output.rs | R08 |
 | C140 | `trust plan` | src/output.rs | R08 |
+
+## Current bounded G03-D03 closure
+
+The140 stable C IDs now have a source-bound complete pure-grammar crosswalk in
+[grammar crosswalk](../evidence/pctx01-grammar-crosswalk.json) and
+[qualification](../evidence/pctx01-grammar-crosswalk-verification.json). The table
+above remains the frozen historical inventory. G03-D03 is locally qualified;
+A/R subsets alone never constituted the whole proof. Current detail27/40,
+whole gates0/10; independent input/state/operational-capacity and platform limits
+are explicit in the new crosswalk. No new lookup lexical rules or task IDs.

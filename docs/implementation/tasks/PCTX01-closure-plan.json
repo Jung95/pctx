@@ -205,8 +205,8 @@
     {
       "id": "PCTX01-G03-D03",
       "gate": "G03",
-      "status": "open",
-      "local_implementation": "remaining",
+      "status": "closed",
+      "local_implementation": "qualified_bounded_pure_grammar",
       "completion_condition": "Freeze and execute remaining source-independent grammar/no-effect cases for all 140 leaves; reuse closed A/R/C cases, do not invent lookup grammar",
       "spec_sections": [
         "14",
@@ -216,15 +216,17 @@
       "owner": "PCTX01 common boundary; independent producer semantics retain requirement/task owner",
       "paths": "main.rs and shared producer validators",
       "evidence": [
-        "pctx01-admission-registry.json"
+        "pctx01-admission-registry.json",
+        "pctx01-grammar-crosswalk.json",
+        "pctx01-grammar-crosswalk-verification.json"
       ],
       "verification_environment": "Native macOS arm64 local common proof; all release platforms separately required by G09",
-      "macOS_arm64": "remaining",
+      "macOS_arm64": "qualified_bounded_local",
       "macOS_x86_64": "unverified; G09-D02",
       "Linux_x86_64": "unverified; G09-D03",
       "Linux_aarch64": "prior fixed-source full only; inspect linked manifest per contract",
       "Windows_x86_64": "unverified; G09-D04",
-      "documentation_evidence": "closure plan recorded; execution gaps retained"
+      "documentation_evidence": "140 stable route IDs, exact validators and explicit input/state/operational-capacity exceptions reconciled"
     },
     {
       "id": "PCTX01-G03-D04",

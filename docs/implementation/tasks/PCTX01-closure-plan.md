@@ -13,7 +13,7 @@ R01–R12 local12/12 qualifies only that pure-admission subset. Closed rows belo
 are deliberately bounded subconditions; G09 independently retains every required
 release-platform condition. A closed local row does not qualify an untested OS.
 
-Current bounded detail closure: **26/40**; whole gates **0/10**.
+Current bounded detail closure: **27/40**; whole gates **0/10**.
 
 | Fixed ID | State | Completion condition | Source | Spec | Evidence prefix |
 | --- | --- | --- | --- | --- | --- |
@@ -25,7 +25,7 @@ Current bounded detail closure: **26/40**; whole gates **0/10**.
 | PCTX01-G02-D04 | closed | Complete remaining typed/missing/value/conflict parser cases for the frozen 140-leaf schema; record accepted/refused options and effect snapshots | main.rs,cli_args.rs; parser_contract_tests.rs; tests/parser_schema_cli.rs | §14 | pctx01-parser-verification.json |
 | PCTX01-G03-D01 | closed | Historical A01-A11 and R01-R12 pure admission contracts are locally qualified, with exact exceptions and producer state boundaries | main.rs and shared producer validators | §14/27/38 | pctx01-report-admission-verification.json |
 | PCTX01-G03-D02 | closed | Activity nonnegative cursor and Install explicit hash grammar precede discovery/lock/output effects | main.rs,work.rs,adapter.rs | §14/38 | pctx01-activity-admission-verification.json, pctx01-install-admission-verification.json |
-| PCTX01-G03-D03 | open | Freeze and execute remaining source-independent grammar/no-effect cases for all 140 leaves; reuse closed A/R/C cases, do not invent lookup grammar | main.rs and shared producer validators | §14/27/38 | pctx01-admission-registry.json |
+| PCTX01-G03-D03 | closed | Freeze and execute remaining source-independent grammar/no-effect cases for all 140 leaves; reuse closed A/R/C cases, do not invent lookup grammar | main.rs and shared producer validators | §14/27/38 | pctx01-admission-registry.json |
 | PCTX01-G03-D04 | closed | Group explicit input/stdin schema and size failures with producer-dependent checks; prove common refusal precedence and effects for admitted inputs, preserving policy5/state9 | main.rs,input.rs,work.rs,quota.rs,operations.rs,pack.rs,filters.rs | §14/27/33/38 | pctx01-handoff-input-verification.json, pctx01-argument-preflight-verification.json |
 | PCTX01-G04-D01 | closed | One complete safe JSON refusal document for semantic/parser/timeout errors across admitted refusal representations | domain.rs,main.rs | §8/14 | pctx01-refusal-envelope-verification.json, pctx01-refusal-rendering-verification.json |
 | PCTX01-G04-D02 | closed | Shared final-byte minimum/error budget and execution fallback preserve child truth and durable reread handles; bounded tested fallback cases only, universal serialization/destination bounds remain G04-D03 | main.rs,render.rs | §8/14/38 | pctx01-budget-fallback-verification.json |
@@ -173,3 +173,23 @@ input gap. [Closure evidence](../evidence/pctx01-caller-groups-verification.json
 [18-site crosswalk](../evidence/pctx01-caller-input-matrix.json) preserve producer
 ownership and required-platform limits. Detail **26/40**, whole gates **0/10**.
 G04-D03 remains open; the prior Backup output repair remains qualified.
+
+## Current G03-D03 pure-grammar closure
+
+Current **G03-D03 is closed as bounded local pure-grammar qualification**.
+The [140-route crosswalk](../evidence/pctx01-grammar-crosswalk.json) preserves all
+C001–C140 identities and maps actual validators, unrestricted lookup/parser-only
+routes and input/state-dependent exceptions to source hashes and named proofs.
+Current focused93 PASS includes exact1855-case/140-leaf parser replay and16
+existing authored admission suites. Additional Runner capacity1 and existing Run
+capacity1 PASS qualify explicit operational metadata-budget8 exceptions without
+child/resource effects. These floors remain in producers: local Helper owner/task
+checks precede capacity, and cloud intent bypasses the local floor. They belong to
+existing G04-D03/G05-D06 response-budget/exit conditions, not invented argument2
+restrictions or reordered policy/state/capability. Exact endpoint/state combinations
+remain there. Format/locked all-target Clippy PASS; independent final mapping
+review found no missing pure-grammar boundary. No runtime behavior changed.
+[Current evidence](../evidence/pctx01-grammar-crosswalk-verification.json).
+G03-D04 input closure remains qualified; independent producer semantics, G08 races,
+G09 native platforms and four original macOS startup failures remain separate.
+Detail **27/40**, whole gates **0/10**; denominator and140/172/12 counts unchanged.

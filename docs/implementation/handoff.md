@@ -9,7 +9,7 @@ reorganization is now fixed in [closure plan](tasks/PCTX01-closure-plan.md) and
 progress and actual code/Git/jobs before resuming. Historical A/R and old next
 lists are bounded evidence, not alternate execution plans.
 
-Detail closure26/40; whole gates0/10. First whole-detail denominator40; previous
+Detail closure27/40; whole gates0/10. First whole-detail denominator40; previous
 whole gates10 remain10, help172/leaves140/Rgroups12 unchanged. R local12/12 is
 not all-local completion. Other official tasks remain inactive. Do not repeat
 this initial reorganization; execute fixed conditions to closure. PCTX01 done
@@ -17,43 +17,41 @@ then next official task's finite list within the same Goal.
 
 ## Current source and verification
 
-Current **G03-D04 is closed as a bounded local common-input condition**.
-All18 frozen caller/config/external JSON sites in seven existing groups now map
-to named current or unchanged-branch prior proof. Current actual caller13 PASS,
-related40 PASS, preceding caller11 PASS and Runner29 PASS; the new memory control
-passes1 after disabling fixture diagnostics. Initial encoding, absolute Pack path
-and diagnostics-mode test premise failures are retained without product changes.
-Operations10 readers cover100 syntax/shape/encoding combinations plus20 cap and
-2 owner controls; Adapter required shapes/unsupported6 and Statusline version
-priorities remain distinct. Inventory explicit schema2, source UTF8 class3 and
-partial discovered-config observations are not conflated. Filter manifest refusal,
-Pack project-relative external syntax, Handoff permitted metadata/body, real-lease
-Check Report14 controls and memory4096/4097 no-child/no-heavy-grant are qualified.
-Quota10000/10001 cannot fit the original1MiB cap: minimum required-key encoding is
-217bytes; actual cap-first2 is proved, not accepted-count semantics. Archive256MiB
-proof remains oversize admission, not allocated exact-cap/growth. Prepared logical
-SQL/schema and non-DB comparisons do not claim physical WAL or first-use rollback.
-Format/locked all-target Clippy PASS; independent fixed-site audit found no common
-input gap. [Closure evidence](evidence/pctx01-caller-groups-verification.json) and
-[18-site crosswalk](evidence/pctx01-caller-input-matrix.json) preserve producer
-ownership and required-platform limits. Detail **26/40**, whole gates **0/10**.
-G04-D03 remains open; the prior Backup output repair remains qualified.
+Current **G03-D03 is closed as bounded local pure-grammar qualification**.
+The [140-route crosswalk](evidence/pctx01-grammar-crosswalk.json) preserves all
+C001–C140 identities and maps actual validators, unrestricted lookup/parser-only
+routes and input/state-dependent exceptions to source hashes and named proofs.
+Current focused93 PASS includes exact1855-case/140-leaf parser replay and16
+existing authored admission suites. Additional Runner capacity1 and existing Run
+capacity1 PASS qualify explicit operational metadata-budget8 exceptions without
+child/resource effects. These floors remain in producers: local Helper owner/task
+checks precede capacity, and cloud intent bypasses the local floor. They belong to
+existing G04-D03/G05-D06 response-budget/exit conditions, not invented argument2
+restrictions or reordered policy/state/capability. Exact endpoint/state combinations
+remain there. Format/locked all-target Clippy PASS; independent final mapping
+review found no missing pure-grammar boundary. No runtime behavior changed.
+[Current evidence](evidence/pctx01-grammar-crosswalk-verification.json).
+G03-D04 input closure remains qualified; independent producer semantics, G08 races,
+G09 native platforms and four original macOS startup failures remain separate.
+Detail **27/40**, whole gates **0/10**; denominator and140/172/12 counts unchanged.
 
 Prior G02-D04 and G05-D04 closures preserved; current saved parser replay7 and
-persisted22 pass. Detail26/40, whole0/10, unchanged. Four original macOS startup
+persisted22 pass. Detail27/40, whole0/10, unchanged. Four original macOS startup
 product failures retained. Focused Tick passed once, algorithm unchanged; old
 PCTX36 failure remains unresolved. No live job or whole/platform rerun.
 
 ## Next exact action and ownership
 
-Only PCTX01. G03-D04 common input closure now26/40. Do not reopen the fixed
-18-site/seven-group input proof without changed code or an actual common defect.
-Next finish G03-D03 source-independent grammar using the frozen140-route crosswalk,
-closed A/R/C and parser cases, and G05-D06 one shared exit/cancellation matrix.
-No lookup grammar invention. Then follow fixed response/empty/control, phase/
-startup, integration candidate and required-platform sequence. Independent producer
-semantics remain their inactive official owners; no new IDs or denominator.
-No whole-plan/closed parser/storage/input re-audit or separate producer expansion.
+Only PCTX01. G03-D03/D04 local common closure now27/40; do not reopen without
+changed code or actual common defects. Next finish G05-D06 one shared exit matrix:
+0,2,3,4,5,6,7,8,9,10,130 and child exception; cancellation is unimplemented centrally.
+Read current source/spec before fixing it. Preserve child native status, cleanup,
+living-child resource ownership, complete JSON and the original request clock.
+Run/Check/Helper capacity8 is operational, with Helper owner/task priority and
+nonlocal-intent exception; boundary/state controls remain G04/G05 as recorded.
+Then follow fixed response/empty/control, phase/startup, integration and required
+platform sequence. No new IDs/denominator, independent producer expansion or
+whole-plan/closed parser/storage/input/grammar re-audit.
 Only whole PCTX01 completion allows next official task. Normal main [skip ci]
 commit/push authorized; no Actions (3000min), Node24 retained; no operational effects.
 

@@ -562,6 +562,87 @@ fn invalid_memory_fixture_never_spawns_or_grants_heavy_resources() {
         assert!(output.stderr.is_empty(), "{output:?}");
     }
 }
+
+#[test]
+fn producer_capacity_guards_preserve_budget_eight_owner_priority_and_intent_exception() {
+    let f = Fixture::new("touch capacity-child-started\nexit 0\n", true, None);
+    let mut registered = f.run_args();
+    registered.extend(["--budget-bytes", "5000"]);
+    let alias = [
+        "check",
+        "run",
+        "--task-id",
+        &f.task,
+        "--run",
+        &f.run,
+        "--key",
+        "unit",
+        "--budget-bytes",
+        "5000",
+    ];
+    let local = [
+        "runner",
+        "helper-request",
+        "--task-id",
+        &f.task,
+        "--key",
+        "unit",
+        "--run",
+        &f.run,
+        "--mode",
+        "local",
+        "--budget-bytes",
+        "5000",
+    ];
+    for args in [registered.as_slice(), alias.as_slice(), local.as_slice()] {
+        let output = f
+            .command(args)
+            .env_remove("PCTX_RUNNER_DIAGNOSTICS")
+            .output()
+            .unwrap();
+        assert_eq!(output.status.code(), Some(8), "{output:?}");
+        let value: Value = serde_json::from_slice(&output.stdout).unwrap();
+        assert_eq!(value["status"], "error");
+        assert_eq!(value["errors"][0]["code"], "BUDGET_TOO_SMALL");
+        assert!(output.stdout.len() <= 5000);
+        assert!(output.stderr.is_empty());
+        assert!(!f.root.join("capacity-child-started").exists());
+        assert!(!f.slot().exists());
+        assert!(!f.data.join("outputs").exists());
+    }
+    let output = f
+        .command(&local)
+        .env("PCTX_ACTOR", "agent")
+        .env_remove("PCTX_RUNNER_DIAGNOSTICS")
+        .output()
+        .unwrap();
+    assert_eq!(output.status.code(), Some(5), "{output:?}");
+    let value: Value = serde_json::from_slice(&output.stdout).unwrap();
+    assert_eq!(value["errors"][0]["code"], "POLICY_DENIED");
+    assert!(!f.slot().exists());
+    let queued = f.ok(&[
+        "runner",
+        "helper-request",
+        "--task-id",
+        &f.task,
+        "--key",
+        "unit",
+        "--run",
+        &f.run,
+        "--mode",
+        "cloud",
+        "--scope",
+        "code.rs",
+        "--budget-bytes",
+        "5000",
+    ]);
+    assert_eq!(queued["data"]["helper"]["state"], "queued_intent");
+    assert_eq!(queued["data"]["helper"]["started"], false);
+    assert_eq!(queued["data"]["slot_allocated"], false);
+    assert_eq!(queued["data"]["model_started"], false);
+    assert!(!f.root.join("capacity-child-started").exists());
+    assert!(!f.slot().exists());
+}
 fn linked_provider(f: &Fixture) -> PathBuf {
     let git = |args: &[&str]| {
         assert!(

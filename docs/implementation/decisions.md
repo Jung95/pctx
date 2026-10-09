@@ -1117,3 +1117,16 @@ artifact, success/error responses use stdout. Archive format, producer checks an
 create-only collision refusal remain unchanged. This is PCTX01-G04-D03 common
 delivery ownership, not independent PCTX26 implementation or completion. Evidence:
 [evidence/pctx01-caller-schema-verification.json](evidence/pctx01-caller-schema-verification.json).
+
+## Grammar versus operational execution capacity (2026-10-09)
+
+PCTX01-G03-D03 uses existing source-independent argument grammar; valid parsed
+requests may still fail operational response capacity8. Run metadata requires
+3000bytes, Unix registered Check evidence8192bytes, and local Helper evidence
+8192bytes. Helper owner/task checks precede its floor; cloud/native queued intent
+bypasses that local execution floor. Moving these to frontend argument2 would
+change policy/state/platform precedence. Keep original guards and clocks, record
+these boundaries in G04-D03/G05-D06 and prove no child/resource launch. The common
+minimum complete error-envelope floor remains argument2. Source§14/§40 and actual
+[capacity proof](evidence/pctx01-grammar-crosswalk-verification.json) qualify this
+classification; endpoint/state combinations remain open there.
