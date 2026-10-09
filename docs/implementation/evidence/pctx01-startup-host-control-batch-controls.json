@@ -1,7 +1,11 @@
 {
   "task": "PCTX01",
   "condition": "PCTX01-G05-D05",
-  "status": "prepared_not_executed",
+  "issue": "user launched from home; relative readiness paths caused FileNotFoundError before any test",
+  "fix": "readiness references and command arguments made absolute; binary/source/runner unchanged",
+  "previous_ready_sha256": "400af8f76fac5f51aabdc847d32f8201ee68bf09d0c0e1d12cb76a2da96aa827",
+  "ready_sha256": "053f02a21c2666a260cd2f7b5b8f1e3752ceee11114c592b66cd6e63b575602b",
+  "verified_caller_cwd": "/Users/dev",
   "plan_only_exit": 0,
   "plan": {
     "revision": "0d7560af6c99931c04afefb3ecdac0baa914af87",
@@ -27,11 +31,7 @@
   "non_tty_reason": "run interactively in an external Terminal; never from this chat executor",
   "session_unchanged_empty": true,
   "comparison_outputs_absent": true,
-  "python_ast": "pass",
   "original_tests_executed": 0,
   "administrator_authentications": 0,
-  "app_actions": 0,
-  "review": "work_control read-only review: no material protocol blocker; host state remains human-declared and A/B order remains confounded",
-  "ready_sha256": "400af8f76fac5f51aabdc847d32f8201ee68bf09d0c0e1d12cb76a2da96aa827",
   "no_product_acceptance_closed": true
 }

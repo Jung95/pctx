@@ -6,6 +6,10 @@ The purpose is to compare the same original tests while Codex is running and aft
 the operator quits it normally. Host state is declared by the operator; fixed order,
 time, cache, contention and possible remaining helpers prevent a causal conclusion.
 
+All readiness references are absolute; this command works from your home directory.
+The earlier home-directory FileNotFoundError occurred before any test and consumed
+no session. It is safe to start the corrected preparation with the same command.
+
 1. Open an external Terminal, keeping Codex running. Run:
 
    ```sh

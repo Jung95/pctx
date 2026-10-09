@@ -3,13 +3,13 @@
   "condition": "PCTX01-G05-D05",
   "status": "prepared only;no tests/authentication/app action",
   "revision": "0d7560af6c99931c04afefb3ecdac0baa914af87",
-  "prepared": "docs/implementation/evidence/pctx01-startup-host-control-batch-prepared.json",
+  "prepared": "/Users/dev/PCTX/docs/implementation/evidence/pctx01-startup-host-control-batch-prepared.json",
   "test_binary": "/private/tmp/pctx01-host-control-n48rqw_u/target/debug/deps/project_deadline-f7e8b9d913251d84",
   "files": {
-    "docs/implementation/evidence/pctx01-startup-host-control-batch-prepared.json": "d8134732cc3a8429413188c3cc00365314b3f35ec4fc58326a59dbac81a1b0b8",
+    "/Users/dev/PCTX/docs/implementation/evidence/pctx01-startup-host-control-batch-prepared.json": "d8134732cc3a8429413188c3cc00365314b3f35ec4fc58326a59dbac81a1b0b8",
     "/private/tmp/pctx01-host-control-n48rqw_u/target/debug/deps/project_deadline-f7e8b9d913251d84": "ebd7d8fe822b59e5f6dd906e113d4bf0a28ed96b17539ecebb134822b581f228",
-    "docs/implementation/evidence/pctx01-startup-host-control-prepare.py.txt": "28872916beeb72b8bf478012aa5bc750b49c54c0dbeb2472523037ed3ae1b594",
-    "docs/implementation/evidence/pctx01-startup-host-control-run.py.txt": "1c5e184644e79c4d202cc732d1cd5a0ffc8fde077f1be505d39ce3279db2446f"
+    "/Users/dev/PCTX/docs/implementation/evidence/pctx01-startup-host-control-prepare.py.txt": "28872916beeb72b8bf478012aa5bc750b49c54c0dbeb2472523037ed3ae1b594",
+    "/Users/dev/PCTX/docs/implementation/evidence/pctx01-startup-host-control-run.py.txt": "1c5e184644e79c4d202cc732d1cd5a0ffc8fde077f1be505d39ce3279db2446f"
   },
   "source_unchanged": true,
   "production_inputs_current": true,
@@ -21,10 +21,11 @@
   "needs": "human externalTerminal execution and normal Codex app closure betweenphases;never silently closeapp or execute controlinsideCodex",
   "run_arguments": [
     "/opt/homebrew/bin/python3",
-    "docs/implementation/evidence/pctx01-startup-host-control-run.py.txt",
+    "/Users/dev/PCTX/docs/implementation/evidence/pctx01-startup-host-control-run.py.txt",
     "--ready",
-    "docs/implementation/evidence/pctx01-startup-host-control-batch-ready.json",
+    "/Users/dev/PCTX/docs/implementation/evidence/pctx01-startup-host-control-batch-ready.json",
     "--output-prefix",
     "pctx01-startup-host-control-comparison"
-  ]
+  ],
+  "path_fix": "All readiness file references and run arguments are absolute; caller cwd is independent."
 }

@@ -1,5 +1,16 @@
 # Implementation progress
 
+## Host-control launch-path correction — 2026-10-09
+
+The operator launched from their home directory. Relative paths in readiness caused
+FileNotFoundError before a session marker or test launch. Readiness references and
+command arguments are now absolute; source, binary and runner are unchanged.
+[Controls](evidence/pctx01-startup-host-control-batch-controls.json) now verify plan-only
+success from `/Users/dev`, non-TTY refusal, matching hashes and an empty unused session.
+The same operator command can start the still-unexecuted comparison; this is not a
+product-test retry. No authentication or product acceptance change.
+
+
 ## Prepared ordinary-user host control — current next action, 2026-10-09
 
 [Readiness](evidence/pctx01-startup-host-control-batch-ready.json) and
