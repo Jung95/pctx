@@ -1,0 +1,87 @@
+"""Interactive external-Terminal A/B control; never closes or observes an app."""
+from pathlib import Path
+import argparse, datetime, hashlib, json, os, re, subprocess, sys, time
+
+base = Path('/Users/dev/PCTX/docs/implementation/evidence')
+repo = Path('/Users/dev/PCTX')
+parser = argparse.ArgumentParser()
+parser.add_argument('--ready', required=True)
+parser.add_argument('--output-prefix', required=True)
+parser.add_argument('--plan-only', action='store_true')
+args = parser.parse_args()
+if not re.fullmatch(r'pctx01-startup-[a-z0-9-]+', args.output_prefix):
+    raise SystemExit('invalid output prefix')
+if os.getuid() == 0 or os.getuid() != os.geteuid():
+    raise SystemExit('ordinary same-user execution required')
+ready = json.loads(Path(args.ready).read_text())
+meta = json.loads(Path(ready['prepared']).read_text())
+if os.getuid() != meta['uid']:
+    raise SystemExit('prepared owner differs')
+source = Path(meta['source'])
+session = Path(meta['session'])
+binary = Path(ready['test_binary'])
+def verify_inputs():
+    for path, digest in ready['files'].items():
+        if hashlib.sha256(Path(path).read_bytes()).hexdigest() != digest:
+            raise SystemExit('prepared input changed; do not execute stale verification')
+    for relative, digest in meta['source_inputs'].items():
+        if hashlib.sha256((source / relative).read_bytes()).hexdigest() != digest or hashlib.sha256((repo / relative).read_bytes()).hexdigest() != digest:
+            raise SystemExit('current production input differs from frozen source')
+verify_inputs()
+plan = {'revision': meta['revision'], 'binary_sha256': ready['files'][str(binary)], 'tests': meta['tests'], 'phases': ['A-human-declared-host-open', 'B-human-declared-host-closed'], 'runs_per_test_per_phase': 1, 'administrator_authentication': False, 'app_automation': False, 'app_process_inventory': False, 'original_test_changes': False, 'same_runner_environment_and_cwd': True}
+if args.plan_only:
+    print(json.dumps(plan)); raise SystemExit(0)
+if not sys.stdin.isatty():
+    raise SystemExit('run interactively in an external Terminal; never from this chat executor')
+if list(base.glob(args.output_prefix + '-*')) or any(session.iterdir()):
+    raise SystemExit('prefix/session consumed; no automatic retry')
+print('This is one fixed diagnostic comparison, not a product repair or acceptance exemption.')
+print('Run from an external Terminal that will stay open after quitting Codex.')
+print('No app/process inventory, credentials, stacks, OS settings or administrator authentication are used.')
+declaration = input('With Codex running, type EXTERNAL TERMINAL to run phase A once: ').strip()
+if declaration != 'EXTERNAL TERMINAL':
+    raise SystemExit('not started')
+with (session / 'started').open('x') as stream:
+    stream.write(f'{os.getpid()}\n')
+os.umask(0o077)
+# Both phases inherit exactly this process environment; never persist its values.
+execution_environment = dict(os.environ)
+rows = []
+def publish(suffix, value):
+    destination = base / (args.output_prefix + '-' + suffix + '.json')
+    staging = base / (args.output_prefix + '-' + suffix + '.staging')
+    with staging.open('x') as stream:
+        stream.write(json.dumps(value, indent=2) + '\n')
+    # Same-filesystem exclusive atomic visibility; not a crash-durability claim.
+    os.link(staging, destination)
+    staging.unlink()
+def run_phase(phase):
+    verify_inputs()
+    for index, name in enumerate(meta['tests']):
+        log = session / f'{phase}-{index}.log'
+        begin = time.monotonic()
+        utc = datetime.datetime.now(datetime.timezone.utc).isoformat()
+        with log.open('xb') as stream:
+            process = subprocess.Popen([str(binary), '--exact', name, '--nocapture'], cwd=source, env=execution_environment, stdout=stream, stderr=subprocess.STDOUT)
+            code = process.wait()
+        content = log.read_bytes()
+        destination = base / f'{args.output_prefix}-{phase}-{index}-test.log'
+        with destination.open('xb') as stream:
+            stream.write(content)
+        row = {'phase': phase, 'test': name, 'parent_pid': process.pid, 'uid': os.getuid(), 'test_exit': code, 'runner_elapsed_seconds': time.monotonic() - begin, 'runner_utc_start': utc, 'reported_timeout_pids': sorted(set(map(int, re.findall(rb'root_pid=(\d+)', content)))), 'host_state': 'human-declared-open' if phase == 'A' else 'human-declared-closed', 'host_process_absence_verified': False}
+        rows.append(row)
+        publish(f'{phase}-{index}-result', row)
+        print(f'Phase {phase}: {name}: exit {code}', flush=True)
+run_phase('A')
+publish('phase-A-complete', {'plan': plan, 'runs': rows, 'phase_B_started': False})
+print('Phase A is complete. Quit Codex normally, leaving this external Terminal open.')
+print('No test runs while this prompt waits. No fixed cooling/warmup interval or OS policy change is applied.')
+declaration = input('After quitting Codex, type CLOSED to run phase B once, or any other text to stop: ').strip()
+if declaration != 'CLOSED':
+    publish('result', {'plan': plan, 'runs': rows, 'complete': False, 'reason': 'phase B not authorized by human declaration', 'product_repair': False})
+    raise SystemExit(0)
+run_phase('B')
+verify_inputs()
+result = {'task': 'PCTX01', 'condition': 'PCTX01-G05-D05', 'plan': plan, 'runs': rows, 'complete': True, 'product_repair': False, 'limits': ['Individual test exits own verdicts; script exit0 is bookkeeping.', 'Host state is human-declared, not process-inventory verified; orphan helpers may remain.', 'A/B order is fixed; temporal/order/system-service contention effects remain confounded. Phase A is measured baseline, not hidden warmup.', 'Fresh scripts originate from unchanged original fixtures in each run; no cached/reused fixture path or interpreter substitution.', 'An isolated passing phase does not erase past failures, prove a host cause or close product acceptance.', 'Native spawn/filesystem/cancellation cleanup latency remains cooperative; no separate relaxed child deadline or hard overall runtime claim.', 'Unexpected runner/Terminal death during an active test invalidates cleanup assumptions; inspect exact owned test processes before any further experiment.']}
+publish('result', result)
+print('Both phases finished; every original result was retained. Reopen Codex and review the saved evidence.')

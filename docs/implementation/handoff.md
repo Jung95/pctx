@@ -1,5 +1,26 @@
 # Resume handoff
 
+## Prepared ordinary-user host control — current next action, 2026-10-09
+
+[Readiness](evidence/pctx01-startup-host-control-batch-ready.json) and
+[preflight controls](evidence/pctx01-startup-host-control-batch-controls.json)
+prepare a one-shot external-Terminal A/B comparison from unchanged source0d7560a.
+Isolated locked/offline build70491 finished0; no live heavy job. The four original
+tests have NOT been executed in this comparison. Plan-only passes; non-TTY execution
+refuses before any marker/test/output; the private session remains unused.
+Independent read-only review found no material protocol blocker.
+
+Use [operator instructions](pctx01-host-control.md) only when the human can keep an
+external Terminal open and quit Codex normally between the measured phases. No
+administrator authentication, app automation or process inventory is needed. Each
+phase runs every original test once with the same binary/environment/cwd and original
+1s/8x16/assertions; all failures are retained. Host state is human-declared, not
+verified; fixed order, time/cache/contention drift and orphan helpers confound causal
+claims. A passing comparison is neither a repair nor an acceptance exemption.
+Only PCTX01 remains active; G05-D05 product_failure, detail33/40, whole0/10 unchanged.
+The known kernel wait already has evidence; do not request authentication to repeat it.
+
+
 ## Development and authentication batching policy — current, 2026-10-09
 
 Ordinary-user implementation/build/test/review/commit/push proceeds while the human

@@ -1,5 +1,16 @@
 # Implementation decisions
 
+## Prepared host-control interpretation — 2026-10-09
+
+The ordinary-user A/B protocol in [operator instructions](pctx01-host-control.md)
+is an unexecuted diagnostic association control, not a product correction. Its fixed
+order and human-declared host closure cannot prove causality or absence of helper
+processes. Authentication batching policy remains: prepare the complete finite list
+first; use one authentication only for indispensable owned-target observation; keep
+product tests ordinary-user and preserve every original failure. No new authenticated
+batch is justified for the already captured expired-child kernel wait.
+
+
 ## Development and authentication batching policy — current, 2026-10-09
 
 Ordinary-user implementation/build/test/review/commit/push proceeds while the human
