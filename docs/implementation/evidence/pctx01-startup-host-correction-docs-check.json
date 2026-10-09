@@ -1,0 +1,27 @@
+{
+  "task": "PCTX01",
+  "condition": "PCTX01-G05-D05",
+  "checked_date": "2026-10-09 Europe/Berlin",
+  "method": "OpenAI Docs skill;official-domain topic search then fetched troubleshooting and changelog",
+  "sources": [
+    {
+      "url": "https://learn.chatgpt.com/docs/reference/troubleshooting",
+      "finding": "General stuck-state/terminal recovery advice;no identified AppleSystemPolicy prepayload one-second launch correction."
+    },
+    {
+      "url": "https://learn.chatgpt.com/docs/changelog",
+      "finding": "Fetched current changelog;exact syspolicyd,Gatekeeper,shell startup searches yielded no matches. Generic performance notes do not establish a correction for this failure."
+    }
+  ],
+  "conclusion": "No supported correction identified by this bounded search. This is not proof no correction exists or a diagnosis of the installed host. No fixed version is asserted.",
+  "local_evidence": "pctx01-startup-host-control-comparison-verification.json",
+  "actions_not_taken": [
+    "app update/restart",
+    "host or service process observation",
+    "security-policy change",
+    "another test run",
+    "administrator authentication"
+  ],
+  "acceptance": "product_failure remains;33/40details,0/10whole gates",
+  "next_evidence_needed": "a documented applicable correction or a materially changed host control separating fixed order/time from declared app state;requires operator coordination,not silent app control"
+}

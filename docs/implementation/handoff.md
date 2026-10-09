@@ -1,5 +1,19 @@
 # Resume handoff
 
+## Supported host-correction search — 2026-10-09
+
+[Bounded official-documentation check](evidence/pctx01-startup-host-correction-docs-check.json)
+fetched current [troubleshooting](https://learn.chatgpt.com/docs/reference/troubleshooting)
+and [changelog](https://learn.chatgpt.com/docs/changelog). No applicable correction or
+fixed version was identified for the observed prepayload policy wait; generic
+performance notes are insufficient. This does not establish that no correction
+exists. No app/OS changes, process observation, test retry or authentication occurred.
+The completed A/B result remains association evidence. G05-D05 stays product_failure;
+33/40details,0/10whole gates. Next evidence needs an applicable supported correction
+or a materially changed operator-coordinated control of order/time and host state.
+Do not repeat the consumed command or open another authenticated kernel batch.
+
+
 ## Completed ordinary-user host comparison — current, 2026-10-09
 
 [Verified comparison](evidence/pctx01-startup-host-control-comparison-verification.json)
