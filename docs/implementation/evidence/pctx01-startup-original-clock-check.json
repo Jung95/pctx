@@ -1,0 +1,14 @@
+{
+  "scope": "post-run read-only clock comparison, not exact-run offset",
+  "python_before_ns": 307711740749375,
+  "native_clock_monotonic_ns": 307709502072000,
+  "python_after_ns": 307711740753833,
+  "clock_gettime_exit": 0,
+  "sdk_constant": "MacOSX.sdk/usr/include/_time.h:159-160 CLOCK_MONOTONIC=6",
+  "process_check": {
+    "exit": 1,
+    "stdout": "  PID  PPID STAT COMM\n",
+    "stderr": "",
+    "event_child_count": 83
+  }
+}

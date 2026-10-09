@@ -1,0 +1,58 @@
+{
+  "revision": "dbba55f40ea146ab7c6d5185ebcfb6de79372033",
+  "session": "/private/tmp/pctx01-original-observation-zijybjcw/session",
+  "test": "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget",
+  "strict_compile": "previous native collector compile PASS; isolated Cargo --locked --offline project_deadline --no-run -j2 PASS",
+  "build_log_sha256": "9684a623cdaa828535a5ba7c9c9df7a9e8579075db9ad9c54d5ff8b1ba808808",
+  "test_source_unchanged": true,
+  "files": {
+    "original_query_source": {
+      "path": "/Users/dev/PCTX/src/query_process.rs",
+      "sha256": "74c4c46c6b224563c63e9e2d7a9beac7996ef69735b072a39ee22c9aa989d6cb"
+    },
+    "original_test_source": {
+      "path": "/Users/dev/PCTX/tests/project_deadline.rs",
+      "sha256": "8b9fbc97fbd5acaf612b2d75b94cf810faa2b61614b654495082462b1941a8dc"
+    },
+    "isolated_query_source": {
+      "path": "/private/tmp/pctx01-original-observation-zijybjcw/source/src/query_process.rs",
+      "sha256": "e4be58152999ccd706f42fcc3e7ed4512b393d370958a1c93a25d4ef7c75ce93"
+    },
+    "isolated_test_source": {
+      "path": "/private/tmp/pctx01-original-observation-zijybjcw/source/tests/project_deadline.rs",
+      "sha256": "8b9fbc97fbd5acaf612b2d75b94cf810faa2b61614b654495082462b1941a8dc"
+    },
+    "isolated_cargo_lock": {
+      "path": "/private/tmp/pctx01-original-observation-zijybjcw/source/Cargo.lock",
+      "sha256": "f96362897990caba560793601bc9fca08cef5c977907bb06889d5595d2acd7b0"
+    },
+    "hook": {
+      "path": "/Users/dev/PCTX/docs/implementation/evidence/pctx01-startup-original-hook.rs.txt",
+      "sha256": "1ff042f7f3e504a0e2a9f97ba7b891486f035c2cc149be15c77f9c3f836890e6"
+    },
+    "prepare": {
+      "path": "/Users/dev/PCTX/docs/implementation/evidence/pctx01-startup-original-prepare.py.txt",
+      "sha256": "89350a9856c8a4034cbf66c926905586251adf8e4357549e90e604953a90b478"
+    },
+    "observer": {
+      "path": "/Users/dev/PCTX/docs/implementation/evidence/pctx01-startup-original-observer.py.txt",
+      "sha256": "6908efae58bad44fbc3f9abfc829babfd3e55085485baf989cfe46ff0abc23c3"
+    },
+    "collector_source": {
+      "path": "/Users/dev/PCTX/docs/implementation/evidence/pctx01-startup-kernel-late.c.txt",
+      "sha256": "72f48e2aed8307602cdb88021e38465b2ef07891a7edd147252f9fc9979d14d3"
+    },
+    "collector_binary": {
+      "path": "/private/tmp/pctx01-startup-kernel-late",
+      "sha256": "b31ecfadbeccb9101f3dcfeb902d73af658ab2e54c658391e171312d4f9b6033"
+    },
+    "test_binary": {
+      "path": "/private/tmp/pctx01-original-observation-zijybjcw/target/debug/deps/project_deadline-f7e8b9d913251d84",
+      "sha256": "d9a4abe95e22b4d1b10df4c5a571d792533275a3e5970243e20332b3351a5069"
+    }
+  },
+  "authentication": "one OS request, root collector ready before ordinary user test; no retry",
+  "capture_limit": "one owned child, one fixed target-only spindump invocation",
+  "qualification": "diagnostic only; original unchanged failure status retained",
+  "selection_limit_seconds": 30
+}

@@ -1,0 +1,23 @@
+{
+  "revision": "dbba55f40ea146ab7c6d5185ebcfb6de79372033",
+  "scope": "one exact original concurrent8x16 test in isolated instrumented source; one target/collector/auth session, no retry",
+  "test_parent": 11946,
+  "test_binary": "/private/tmp/pctx01-original-observation-zijybjcw/target/debug/deps/project_deadline-f7e8b9d913251d84",
+  "test_sha256": "d9a4abe95e22b4d1b10df4c5a571d792533275a3e5970243e20332b3351a5069",
+  "test_exit": 101,
+  "collector_exit": 1,
+  "collector_stdout": "",
+  "collector_stderr": "0:159: execution error: \uba85\ub839\uc774 0\uc774 \uc544\ub2cc \uc0c1\ud0dc\ub85c \uc885\ub8cc\ub418\uc5c8\uc2b5\ub2c8\ub2e4. (25)\n",
+  "selected": null,
+  "retention_ack": false,
+  "batch": [],
+  "checks": [],
+  "trace_exists": false,
+  "limits": [
+    "Instrumented execution is diagnostic only, not unchanged original product qualification.",
+    "Deadline bounds use truncated microseconds: upper carries <1us rounding tolerance.",
+    "Outcome timestamp precedes diagnostic publication and signal; samples ending before outcome are pre-cancel, not exact signal latency.",
+    "Native/file observer calls and retention remain cooperative; unexpected parent/observer death invalidates pin assumptions.",
+    "Candidate ordering is polling receipt order; filename order breaks same-scan ties. Test logs go directly to private files to avoid blocked output pipes; this finite fixture supplies no universal log-size guarantee."
+  ]
+}

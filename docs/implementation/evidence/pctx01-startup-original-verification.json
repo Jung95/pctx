@@ -1,0 +1,110 @@
+{
+  "task": "PCTX01",
+  "condition": "PCTX01-G05-D05",
+  "status": "product failure unresolved; instrumented original test failed; observer clock defect corrected but not re-executed",
+  "session": 85149,
+  "source_revision": "dbba55f40ea146ab7c6d5185ebcfb6de79372033",
+  "test_exit": 101,
+  "wrapper_exit": 0,
+  "administrator_wrapper_exit": 1,
+  "collector_code": 25,
+  "collector_code_evidence": "Malformed no-eligible request; retained request text is no eligible original query child. No spindump tool was started.",
+  "counts": {
+    "spawn": 83,
+    "outcome": 83,
+    "success": 80,
+    "TIMEOUT": 3,
+    "selected": 0,
+    "trace": 0
+  },
+  "timeouts": [
+    {
+      "spawn": {
+        "deadline_lower_us": 307532641857,
+        "deadline_upper_us": 307532641857,
+        "origin_us": 307531641857,
+        "pid": 11947,
+        "ppid": 11946,
+        "record_us": 307531642801,
+        "start_sec": 1791531945,
+        "start_usec": 327841,
+        "uid": 502
+      },
+      "outcome": {
+        "at_us": 307532642576,
+        "code": "TIMEOUT",
+        "pid": 11947,
+        "stderr_bytes": 0,
+        "stdout_bytes": 0
+      }
+    },
+    {
+      "spawn": {
+        "deadline_lower_us": 307532641805,
+        "deadline_upper_us": 307532641805,
+        "origin_us": 307531641805,
+        "pid": 11949,
+        "ppid": 11946,
+        "record_us": 307531642801,
+        "start_sec": 1791531945,
+        "start_usec": 327846,
+        "uid": 502
+      },
+      "outcome": {
+        "at_us": 307532641871,
+        "code": "TIMEOUT",
+        "pid": 11949,
+        "stderr_bytes": 0,
+        "stdout_bytes": 0
+      }
+    },
+    {
+      "spawn": {
+        "deadline_lower_us": 307532641723,
+        "deadline_upper_us": 307532641724,
+        "origin_us": 307531641723,
+        "pid": 11951,
+        "ppid": 11946,
+        "record_us": 307531643299,
+        "start_sec": 1791531945,
+        "start_usec": 327866,
+        "uid": 502
+      },
+      "outcome": {
+        "at_us": 307532642300,
+        "code": "TIMEOUT",
+        "pid": 11951,
+        "stderr_bytes": 6,
+        "stdout_bytes": 6
+      }
+    }
+  ],
+  "cleanup": "Parent ps checked all83 event PIDs and11289/11290/11291/11946; none present. No root-private trace directory generated.",
+  "diagnostic_defect": "Used wrapper compares Python monotonic_ns absolute values to native CLOCK_MONOTONIC origin. Different clock domains; a post-run probe shows offset but not exact-run effect or sole cause.",
+  "correction": "Separate observer-clock-corrected artifact uses native clock_gettime(CLOCK_MONOTONIC=6) consistently for cross-language age and receipt windows; syntax/read-only helper check PASS. Not executed; used observer and its build hash preserved.",
+  "independent_review": "/root/work_control verified83/80/3, mixed-clock defect, distinction between pre-payload and EOF completion expiry, and no root-cause inference.",
+  "limits": [
+    "Five workers complete16 each and three stop at their first failure;83 is censored, not a fixed128-trial rate.",
+    "11947/11949 have zero bytes.11951 has both6-byte streams and is a distinct incomplete-EOF/root-observation expiry.",
+    "Diagnostic IO/retention alters scheduling; this test result is diagnostic, not unchanged original qualification.",
+    "No expired-child kernel stack, product repair, environment exemption or gate closure follows.",
+    "One auth/batch permission was used; no automatic authentication or test retry."
+  ],
+  "details_closed": 33,
+  "detail_denominator": 40,
+  "whole_gates_closed": 0,
+  "whole_gate_denominator": 10,
+  "files": {
+    "pctx01-startup-original-build.json": "b7aa4f8ded5d8282499b0b56e04c084b0c32e0b239289957a5633b9fd442ecb7",
+    "pctx01-startup-original-build.log": "9684a623cdaa828535a5ba7c9c9df7a9e8579075db9ad9c54d5ff8b1ba808808",
+    "pctx01-startup-original-clock-check.json": "0f9f9eb7db1806f7b7d7d0778648f85c49823438e67fc1bbdfa17cd160f87cb0",
+    "pctx01-startup-original-events.json": "af872b0835e4aa7e3e09d73054830f09292c928fb0eaeeba6d7d3cb5a0f2055c",
+    "pctx01-startup-original-hook.rs.txt": "1ff042f7f3e504a0e2a9f97ba7b891486f035c2cc149be15c77f9c3f836890e6",
+    "pctx01-startup-original-observer-clock-corrected.py.txt": "0938c0d239361b4d4890b56f7d24ada1c9a1b6ec4ed562ee9aa707cf9c0b3a88",
+    "pctx01-startup-original-observer.py.txt": "6908efae58bad44fbc3f9abfc829babfd3e55085485baf989cfe46ff0abc23c3",
+    "pctx01-startup-original-prepare.py.txt": "89350a9856c8a4034cbf66c926905586251adf8e4357549e90e604953a90b478",
+    "pctx01-startup-original-prepared.json": "2c020999332d7b76824d0d1729e2440fb872ab825fec897f41786f155bd850c2",
+    "pctx01-startup-original-result.json": "450399d72f20d07084fc7b0e3adba73a90c7db6a41098dfb51c7f86541de7b39",
+    "pctx01-startup-original-test.log": "c69b7c5328e2903e84bf806f1beabf6e4aa42f0934763f3f8b0c581f45e9a34e"
+  }
+}

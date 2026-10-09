@@ -1,0 +1,72 @@
+import json,os,shlex,subprocess,threading,time,hashlib,ctypes
+from pathlib import Path
+# Darwin SDK _time.h: CLOCK_MONOTONIC=6. Use the SAME clock as the native
+# collector/hook, rather than directly comparing Python mach absolute time.
+class Timespec(ctypes.Structure):
+ _fields_=[('sec',ctypes.c_long),('nsec',ctypes.c_long)]
+libsystem=ctypes.CDLL('/usr/lib/libSystem.B.dylib',use_errno=True)
+libsystem.clock_gettime.argtypes=[ctypes.c_int,ctypes.POINTER(Timespec)]
+libsystem.clock_gettime.restype=ctypes.c_int
+def native_ns():
+ stamp=Timespec()
+ if libsystem.clock_gettime(6,ctypes.byref(stamp))!=0:raise OSError(ctypes.get_errno(),'clock_gettime CLOCK_MONOTONIC')
+ return stamp.sec*1000000000+stamp.nsec
+base=Path('/Users/dev/PCTX/docs/implementation/evidence')
+meta=json.loads((base/'pctx01-startup-original-prepared.json').read_text())
+root=Path(meta['session']);helper='/private/tmp/pctx01-startup-kernel-late'
+tests=[p for p in (Path(meta['target'])/'debug/deps').glob('project_deadline-*') if p.is_file() and os.access(p,os.X_OK) and '.' not in p.name]
+if len(tests)!=1:raise SystemExit('expected one isolated test executable')
+if any(root.iterdir()):raise SystemExit('session must be unused; never automatic retry')
+test=tests[0]
+command=shlex.join([helper,'--collect',str(root),str(os.getuid())])
+auth=subprocess.Popen(['/usr/bin/osascript','-e','do shell script '+json.dumps(command)+' with administrator privileges'],stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True)
+print(json.dumps({'kind':'authorization','pid':auth.pid,'children_started':False,'root':str(root)}),flush=True)
+while not (root/'collector-ready').exists() and auth.poll() is None:time.sleep(.05)
+if auth.poll() is not None:
+ out,err=auth.communicate();r={'collector_exit':auth.returncode,'stdout':out,'stderr':err,'driver_started':False};(base/'pctx01-startup-original-result.json').write_text(json.dumps(r,indent=2)+'\n');print(json.dumps(r));raise SystemExit(1)
+stdout_path=root/'test.stdout';stderr_path=root/'test.stderr'
+with os.fdopen(os.open(stdout_path,os.O_WRONLY|os.O_CREAT|os.O_EXCL,0o600),'w') as so, os.fdopen(os.open(stderr_path,os.O_WRONLY|os.O_CREAT|os.O_EXCL,0o600),'w') as se:
+ p=subprocess.Popen([str(test),'--exact',meta['test'],'--nocapture'],stdout=so,stderr=se,text=True)
+print(json.dumps({'kind':'collector_ready','test_parent':p.pid}),flush=True)
+selected=None;batch=[];checks=[];seen=set();window_start=None
+selection_until=time.monotonic()+30
+while p.poll() is None and auth.poll() is None and time.monotonic()<selection_until:
+ now=native_ns()
+ for file in sorted(root.glob('*-spawn.json')):
+  row=json.loads(file.read_text());age=now//1000-row['origin_us']
+  if row['pid'] in seen or row['ppid']!=p.pid or row['uid']!=os.getuid() or not 750000<=age<1000000:continue
+  seen.add(row['pid']);batch.append({'receipt_ns':now,'row':row})
+  if window_start is None:window_start=now
+ if window_start is not None and now>=window_start+20000000:break
+ time.sleep(.001)
+if window_start is not None:
+ batch=[entry for entry in batch if window_start<=entry['receipt_ns']<=window_start+20000000]
+ for entry in reversed(batch):
+  row=entry['row'];age=native_ns()//1000-row['origin_us']
+  if not 0<=age<1000000:checks.append({'pid':row['pid'],'age_us':age,'live_exit':'expired'});continue
+  args=[helper,'--live',str(row['pid']),str(p.pid),str(row['start_sec']),str(row['start_usec']),str(os.getuid()),'owned']
+  v=subprocess.run(args,capture_output=True,text=True);checks.append({'pid':row['pid'],'age_us':age,'live_exit':v.returncode})
+  if v.returncode==0:selected=row;break
+request=root/'request-staging';retained=False
+if selected:
+ marker=root/'target-staging';marker.write_text(str(selected['pid'])+'\n');marker.rename(root/'capture-target')
+ until=time.monotonic()+3
+ while not (root/'capture-ack').exists() and time.monotonic()<until:time.sleep(.001)
+ retained=(root/'capture-ack').exists() and (root/'capture-ack').read_text().strip()==str(selected['pid'])
+ v=subprocess.run([helper,'--live',str(selected['pid']),str(p.pid),str(selected['start_sec']),str(selected['start_usec']),str(os.getuid()),'owned'],capture_output=True,text=True)
+ age=native_ns()//1000-selected['origin_us']
+ if retained and v.returncode==0 and 0<=age<1000000:request.write_text(f"{selected['pid']} {p.pid} {selected['start_sec']} {selected['start_usec']} {selected['origin_us']}\n")
+ else:request.write_text('selected no longer live/admitted\n')
+else:request.write_text('no eligible original query child\n')
+request.rename(root/'collector-request')
+out,err=auth.communicate()
+(root/'capture-done').write_text('collector terminal\n')
+p.wait()
+stdout=stdout_path.read_text();stderr=stderr_path.read_text()
+(base/'pctx01-startup-original-test.log').write_text(stdout+'\nSTDERR\n'+stderr)
+records={f.name:json.loads(f.read_text()) for f in root.glob('*.json')}
+(base/'pctx01-startup-original-events.json').write_text(json.dumps(records,indent=2)+'\n')
+trace=root/'kernel.txt'
+if trace.exists():(base/'pctx01-startup-original-trace.txt').write_bytes(trace.read_bytes())
+result={'revision':meta['revision'],'scope':'one exact original concurrent8x16 test in isolated instrumented source; one target/collector/auth session, no retry','test_parent':p.pid,'test_binary':str(test),'test_sha256':hashlib.sha256(test.read_bytes()).hexdigest(),'test_exit':p.returncode,'collector_exit':auth.returncode,'collector_stdout':out,'collector_stderr':err,'selected':selected,'retention_ack':retained,'batch':batch,'checks':checks,'trace_exists':trace.exists(),'limits':['Instrumented execution is diagnostic only, not unchanged original product qualification.','Deadline bounds use truncated microseconds: upper carries <1us rounding tolerance.','Outcome timestamp precedes diagnostic publication and signal; samples ending before outcome are pre-cancel, not exact signal latency.','Native/file observer calls and retention remain cooperative; unexpected parent/observer death invalidates pin assumptions.','Candidate ordering is polling receipt order; filename order breaks same-scan ties. Test logs go directly to private files to avoid blocked output pipes; this finite fixture supplies no universal log-size guarantee.']}
+(base/'pctx01-startup-original-result.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result),flush=True)

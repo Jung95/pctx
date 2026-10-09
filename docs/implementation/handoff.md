@@ -15,6 +15,33 @@ not all-local completion. Other official tasks remain inactive. Do not repeat
 this initial reorganization; execute fixed conditions to closure. PCTX01 done
 then next official task's finite list within the same Goal.
 
+## Authorized original-supervisor observation — terminal85149
+
+Authentication completed once; collector ready before ordinary-user original
+concurrency test. The instrumented isolated copy retains unchanged original1s,
+8x16/group/stream assertions, but diagnostic IO changes scheduling and supplies no
+unchanged-product qualification. Test FAILED101; wrapper terminal0 is bookkeeping.
+83 spawns/outcomes:80 success,3 TIMEOUT. Five workers complete16 each; three stop
+on first failure, so83 is censored, not128 trials.11947/11949 produce0/0bytes;
+11951 produces6/6bytes with incomplete EOF/root completion. Do not merge causes.
+
+No target/ACK/trace. Collector rejected the no-eligible request with code25;
+this is not an authentication denial. A concrete diagnostic defect was found:
+Python monotonic absolute values were compared to native CLOCK_MONOTONIC origin.
+A later read-only probe confirms different clock values but cannot establish the
+exact-run offset or sole cause. Used artifacts/hashes are preserved. Separate
+clock-corrected observer uses the native clock consistently; AST/helper read checks
+PASS, not executed. No new auth prompt or runtime retry is authorized by this
+completed one-batch request. [Manifest](evidence/pctx01-startup-original-verification.json)
+binds sources/build/results/clock probe and independent review.
+
+All83 child PIDs and wrapper/observer/UI/test11946 absent at parent cleanup check;
+no privileged trace directory generated. No live job. G05-D05 remains product
+failure,33/40 and0/10 unchanged. Next requires exact expired-child pre-cancel wait
+proof or an evidenced supervisor repair; do not repeat unchanged qualification,
+use successful-target analogy, or switch official task. The corrected diagnostic
+is prepared for a separately requested finite batch, not automatically launched.
+
 ## G05-D05 ordinary-user disposition — 2026-10-09
 
 At published source1a31f19, parent inspection and independent read-only review
