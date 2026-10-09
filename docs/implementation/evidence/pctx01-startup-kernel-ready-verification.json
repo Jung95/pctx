@@ -1,0 +1,155 @@
+{
+  "task": "PCTX01",
+  "condition": "PCTX01-G05-D05",
+  "status": "product_failure unresolved; exact nonexpired-child policy wait observed",
+  "session": 91326,
+  "base_revision": "7e3456f",
+  "environment": {
+    "OS": "macOS26.7.1 build25G241",
+    "architecture": "arm64/arm64e",
+    "CPU": 10,
+    "memory_GiB": 16
+  },
+  "authorization": "Human approved administrator diagnosis then all project development; one normal authentication before ordinary-user children, no permanent privilege/policy change",
+  "driver_exit": 0,
+  "collector_exit": 0,
+  "tool_exit": 0,
+  "trace_copied": true,
+  "raw_results": 128,
+  "raw_expired": 1,
+  "raw_within_preprobe_criterion": 127,
+  "cleanup_failures": 0,
+  "selected_identity": {
+    "kind": "snapshot",
+    "worker": 1,
+    "wave": 0,
+    "pid": 7093,
+    "start_sec": 1791525707,
+    "start_usec": 126610,
+    "origin_us": 301293514997,
+    "identity": true,
+    "at_us": 250710,
+    "end_us": 250721,
+    "observer_us": 11,
+    "pre_expiry": true,
+    "status": 2,
+    "flags": 20987920,
+    "task_bytes": 96,
+    "user_cpu": 0,
+    "system_cpu": 1298,
+    "mach_calls": 0,
+    "unix_calls": 0,
+    "context_switches": 2,
+    "thread_list_bytes": 8,
+    "task_name_result": 0,
+    "task_basic_result": 0,
+    "task_suspend_count": 0,
+    "threads": [
+      {
+        "id": 0,
+        "bytes": 112,
+        "run_state": 3,
+        "flags": 0,
+        "sleep_time": 0,
+        "user_cpu": 0,
+        "system_cpu": 54000
+      }
+    ]
+  },
+  "selected_result": {
+    "kind": "result",
+    "worker": 1,
+    "wave": 0,
+    "pid": 7093,
+    "spawn_us": 118,
+    "observation_us": 354043,
+    "expired": false,
+    "within_budget": true,
+    "stdout_bytes": 6,
+    "stderr_bytes": 6,
+    "actual_signal": 0,
+    "exit_code": 0,
+    "kill_rc": 0,
+    "cleanup_us": 2,
+    "cleanup_failed": false,
+    "snapshots": 1
+  },
+  "expired_result": {
+    "kind": "result",
+    "worker": 7,
+    "wave": 0,
+    "pid": 7100,
+    "spawn_us": 240,
+    "observation_us": 1000791,
+    "expired": true,
+    "within_budget": false,
+    "stdout_bytes": 0,
+    "stderr_bytes": 0,
+    "actual_signal": 9,
+    "exit_code": -1,
+    "kill_rc": 0,
+    "cleanup_us": 1264,
+    "cleanup_failed": false,
+    "snapshots": 2
+  },
+  "collector": {
+    "kind": "collector",
+    "pid": 7093,
+    "ppid": 7082,
+    "identity": true,
+    "pre_launch_us": 252825,
+    "tool_exit": 0,
+    "tool_signal": 0,
+    "trace_copied": true,
+    "observation_us": 2565266
+  },
+  "trace": {
+    "PID": 7093,
+    "PPID": 7082,
+    "UID": 502,
+    "samples": 14,
+    "policy_wait_samples": 13,
+    "running_dyld_samples": 1,
+    "wall_interval_client_timezone": "2026-10-09 08:01:47.411\u201308:01:47.477 +0200",
+    "wall_age_since_native_fork_ms": [
+      284.39,
+      350.39
+    ],
+    "wait_path": [
+      "AppleSystemPolicy::procNotifyExecComplete",
+      "AppleSystemPolicy::evaluateScript",
+      "AppleSystemPolicy::waitForEvaluation",
+      "ASPEvaluationManager::waitOnEvaluation",
+      "lck_mtx_sleep"
+    ]
+  },
+  "evidence_sha256": {
+    "pctx01-startup-kernel-ready.c.txt": "cfc4535c5389f3ae2d2ff134482435936c5107539cc29be495e95541ea7fea18",
+    "pctx01-startup-kernel-ready.py.txt": "a6519de35bf58b02b9b8f2787edc413c35498c46567c1deb9b2154e6a27a1c40",
+    "pctx01-startup-kernel-ready-result.json": "a6bf229358f11807743a01d4ac3770bb3cf374138f484510d7ddff701612429c",
+    "pctx01-startup-kernel-ready.jsonl": "49ee414c4ecd44118517307f3e62fc6e0d1e300b0fbe4c9195a549a4f5eaf945",
+    "pctx01-startup-kernel-ready-trace.txt": "f3b144396cbee760bd6e754b34d53fd173f1b00215964090b34b07907a4e7540"
+  },
+  "binary_sha256": "c3e28bdd6db6a341d60bb402df20875f395bcc09ad1ae9250814bca1c1034356",
+  "terminal_cleanup": "Exact known observer6144/driver7082/target7093 absent; driver successful wave reaps; no pctx01-root-kernel private directory remained",
+  "independent_review": {
+    "agent": "/root/work_control",
+    "result": "Corrected file/identity admission no material blocker; trace proves wait of this nonexpired target only; expired7100 is untraced; next select still-live750ms snapshot",
+    "no_edits_builds_tests": true
+  },
+  "limitations": [
+    "Not an original four-test repair/qualification. Raw single-threaded parent differs from actual multithreaded supervisor.",
+    "Trace target succeeded at recorded354043us, whereas distinct7100 expired1000791us. No cause assigned to untraced expiry or original failures.",
+    "Wall interval is aligned to native fork time; result and original budget use pre-spawn monotonic origin. Their small spawn offset and wall resolution are not universal cross-clock proof.",
+    "Raw within-budget uses pre-waitid criterion, not precise post-probe exit timing. Observer perturbs work.",
+    "Collector elapsed2565266us includes launch/tool/report/transfer; -timelimit2 is not a hard whole-observer2s wall bound. Auth is separate before child launch.",
+    "Failure paths can retain root temp/partial files; observer/driver liveness and cooperative native-call limits remain."
+  ],
+  "fixed_status": {
+    "closed_details": 33,
+    "details": 40,
+    "closed_whole_gates": 0,
+    "whole_gates": 10
+  },
+  "next_action": "One changed750ms candidate selection with exact retained identity and original1s cancellation, no warmup. Only exact traced child expiry with pre-cancel policy wait qualifies that narrow cause; success/ineligible remains inconclusive. No official-task switch."
+}

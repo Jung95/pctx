@@ -19,6 +19,18 @@ whole goal. Target-only administrator diagnostic authorization remains pending.
 
 The pre-existing eleventh M30 has finished and remains historical evidence. Packaging target-directory repair and approval-memory integration are backlog. No unrelated implementation or verification is active.
 
+## Latest successful single-auth observation — 2026-10-09
+
+[Ready collector manifest](evidence/pctx01-startup-kernel-ready-verification.json)
+binds actual target7093 policy-wait stacks13/14 samples at284–350ms after native
+fork. That selected child succeeded; separate raw7100 expired and is untraced.
+Raw128/127 recorded within/1 expiry, driver/collector/tool terminal0, all child
+reaps/root-private cleanup confirmed. No original startup repair/exemption follows.
+Independent review agrees. Next same-condition changed selection: one still-live
+750ms target with original1s cancellation; no warmup or unchanged retry. PCTX01
+G05-D05 stays product_failure, detail33/40 and whole gates0/10. Human administrator
+and main publication approvals granted; old pending/rejected statements historical.
+
 ## Latest authorized kernel observation — 2026-10-09
 
 [Terminal administrator diagnostic](evidence/pctx01-startup-kernel-observation-verification.json)

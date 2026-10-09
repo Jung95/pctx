@@ -15,6 +15,32 @@ not all-local completion. Other official tasks remain inactive. Do not repeat
 this initial reorganization; execute fixed conditions to closure. PCTX01 done
 then next official task's finite list within the same Goal.
 
+## Single-authentication collector — terminal session91326
+
+Human authentication completed; administrator collector ready before ordinary-user
+workload. Driver/collector/tool all terminal0, trace safely copied; exact observer/
+driver/target PIDs6144/7082/7093 absent, all wave reaps and root-private cleanup
+confirmed. [Manifest](evidence/pctx01-startup-kernel-ready-verification.json)
+binds code/binary/raw results/trace; strict native compile and Python syntax pass.
+
+Raw128:127 pre-probe within-budget,1 actual original1s expiry7100, no cleanup
+failures. Selected PID7093/parent7082/UID502 has14 samples,13 in AppleSystemPolicy
+script-evaluation waiting and1 running dyld. Trace wall interval08:01:47.411–.477
++0200 is284–350ms after native fork; pre-spawn original clock is separate by spawn
+offset. Selected child exited0 with6/6bytes at recorded354043us. Expired7100 is
+untraced; no cause assigned to it or original four tests. No repair/exemption.
+
+Independent read-only review confirms these limits. Collector runtime2.565s is
+launch/tool/report/transfer, not a hard2s wall cap. Observer/cooperative native
+calls and failure-path cleanup limits remain. All jobs terminal. Main published
+through7e3456f; current new ready evidence remains local pending integration commit.
+
+Next exact G05-D05 action: one changed selection of first identity-bound still-live
+750ms snapshot for the single target-only collector, original1s cancellation/8x16,
+no warmup. Qualify narrow expired-child wait only if the exact traced target expires
+with samples before its cancellation; otherwise report inconclusive. No repeated
+unchanged test or next official task. Details33/40 and whole gates0/10 unchanged.
+
 ## Authorized kernel observation — terminal session33313
 
 Human target-only administrator authorization granted2026-10-09. Session33313

@@ -1,0 +1,90 @@
+{
+  "driver_exit": 0,
+  "driver_stderr": "",
+  "root": "/private/tmp/pctx01-kernel-ready-z5a0eulw",
+  "parent": 7082,
+  "selected": {
+    "kind": "snapshot",
+    "worker": 1,
+    "wave": 0,
+    "pid": 7093,
+    "start_sec": 1791525707,
+    "start_usec": 126610,
+    "origin_us": 301293514997,
+    "identity": true,
+    "at_us": 250710,
+    "end_us": 250721,
+    "observer_us": 11,
+    "pre_expiry": true,
+    "status": 2,
+    "flags": 20987920,
+    "task_bytes": 96,
+    "user_cpu": 0,
+    "system_cpu": 1298,
+    "mach_calls": 0,
+    "unix_calls": 0,
+    "context_switches": 2,
+    "thread_list_bytes": 8,
+    "task_name_result": 0,
+    "task_basic_result": 0,
+    "task_suspend_count": 0,
+    "threads": [
+      {
+        "id": 0,
+        "bytes": 112,
+        "run_state": 3,
+        "flags": 0,
+        "sleep_time": 0,
+        "user_cpu": 0,
+        "system_cpu": 54000
+      }
+    ]
+  },
+  "observers": [
+    {
+      "selected": {
+        "kind": "snapshot",
+        "worker": 1,
+        "wave": 0,
+        "pid": 7093,
+        "start_sec": 1791525707,
+        "start_usec": 126610,
+        "origin_us": 301293514997,
+        "identity": true,
+        "at_us": 250710,
+        "end_us": 250721,
+        "observer_us": 11,
+        "pre_expiry": true,
+        "status": 2,
+        "flags": 20987920,
+        "task_bytes": 96,
+        "user_cpu": 0,
+        "system_cpu": 1298,
+        "mach_calls": 0,
+        "unix_calls": 0,
+        "context_switches": 2,
+        "thread_list_bytes": 8,
+        "task_name_result": 0,
+        "task_basic_result": 0,
+        "task_suspend_count": 0,
+        "threads": [
+          {
+            "id": 0,
+            "bytes": 112,
+            "run_state": 3,
+            "flags": 0,
+            "sleep_time": 0,
+            "user_cpu": 0,
+            "system_cpu": 54000
+          }
+        ]
+      },
+      "retention_ack": true,
+      "collector_exit": 0,
+      "collector_stdout": "{\"kind\":\"collector\",\"pid\":7093,\"ppid\":7082,\"identity\":true,\"pre_launch_us\":252825,\"tool_exit\":0,\"tool_signal\":0,\"trace_copied\":true,\"observation_us\":2565266}\n",
+      "collector_stderr": ""
+    }
+  ],
+  "trace_exists": true,
+  "scope": "one identity-validated original-clock child, administrator ready before ordinary-user workload"
+}
