@@ -1,0 +1,24 @@
+from pathlib import Path
+import json,subprocess,tempfile,os,argparse,re
+repo=Path('/Users/dev/PCTX');base=repo/'docs/implementation/evidence'
+parser=argparse.ArgumentParser();parser.add_argument('--output-prefix',required=True);args=parser.parse_args();prefix=args.output_prefix
+if not re.fullmatch(r'pctx01-startup-[a-z0-9-]+',prefix):raise SystemExit('invalid evidence prefix')
+if list(base.glob(prefix+'-*')):raise SystemExit('evidence prefix already used')
+root=Path(tempfile.mkdtemp(prefix='pctx01-original-observation-',dir='/private/tmp'))
+source=root/'source';source.mkdir();session=root/'session';session.mkdir(mode=0o700)
+archive=subprocess.run(['git','archive','HEAD','Cargo.toml','Cargo.lock','src','tests'],cwd=repo,capture_output=True,check=True)
+subprocess.run(['tar','-x','-C',str(source)],input=archive.stdout,check=True)
+p=source/'src/query_process.rs';s=p.read_text();s+='\n'+(base/'pctx01-startup-original-hook.rs.txt').read_text()
+def replace(a,b):
+ global s
+ assert s.count(a)==1,(a,s.count(a))
+ s=s.replace(a,b,1)
+replace('let mut child = command.spawn()?;', 'let diagnostic_bounds = StartupDiagnostic::clock_bounds(deadline);\n        let mut child = command.spawn()?;\n        let diagnostic = StartupDiagnostic::new(child.id(), diagnostic_bounds);')
+replace('observation.iterations = observation.iterations.saturating_add(1);', 'observation.iterations = observation.iterations.saturating_add(1);\n                if let Some(d) = &diagnostic { d.ack(); }')
+replace('// No further signals are allowed after this transition.', 'if let Some(d) = &diagnostic { d.outcome("success", out.len(), err.len()); d.retain(); }\n                    // No further signals are allowed after this transition.')
+replace('if result.is_err() && root_identity_retained {', 'if let Err(e) = &result { if let Some(d) = &diagnostic { d.outcome(&e.code, observation.stdout_bytes, observation.stderr_bytes); } }\n        if result.is_err() && root_identity_retained {')
+replace('let _ = child.kill();', 'let _ = child.kill();\n            if let Some(d) = &diagnostic { d.retain(); }')
+p.write_text(s)
+meta={'revision':subprocess.check_output(['git','rev-parse','HEAD'],cwd=repo,text=True).strip(),'root':str(root),'source':str(source),'session':str(session),'target':str(root/'target'),'test':'concurrent_query_startup_preserves_group_streams_and_original_one_second_budget'}
+(base/(prefix+'-prepared.json')).write_text(json.dumps(meta,indent=2)+'\n')
+print(json.dumps(meta))

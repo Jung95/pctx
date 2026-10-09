@@ -1,0 +1,30 @@
+{
+  "task": "PCTX01",
+  "condition": "PCTX01-G05-D05",
+  "source_revision": "8f94269345b19b3077d81d4571235e7ee617535d",
+  "status": "prepared only; no new test or privileged execution",
+  "build": "isolated --locked/offline project_deadline --no-run -j2 PASS",
+  "native_clock_control": "pctx01-startup-clock-control.json PASS; old mixed-domain comparison counterexample retained",
+  "test_source_unchanged": true,
+  "session_empty": true,
+  "source_and_binary": {
+    "/private/tmp/pctx01-original-observation-jsldqf8s/source/src/query_process.rs": "e4be58152999ccd706f42fcc3e7ed4512b393d370958a1c93a25d4ef7c75ce93",
+    "/private/tmp/pctx01-original-observation-jsldqf8s/source/tests/project_deadline.rs": "8b9fbc97fbd5acaf612b2d75b94cf810faa2b61614b654495082462b1941a8dc",
+    "/private/tmp/pctx01-original-observation-jsldqf8s/source/Cargo.lock": "f96362897990caba560793601bc9fca08cef5c977907bb06889d5595d2acd7b0",
+    "/private/tmp/pctx01-original-observation-jsldqf8s/target/debug/deps/project_deadline-f7e8b9d913251d84": "b3e168f6d0e6845997a177226176db9d6ff0df75e117d587f4f814e211323a63",
+    "/private/tmp/pctx01-startup-kernel-late": "b31ecfadbeccb9101f3dcfeb902d73af658ab2e54c658391e171312d4f9b6033",
+    "docs/implementation/evidence/pctx01-startup-original-observer-native-clock.py.txt": "f3e3d82ed37bf6ac166f6c9e960982c9e0b2d821d09c04c49c94f6759150a83a",
+    "docs/implementation/evidence/pctx01-startup-original-prepare-fresh.py.txt": "86a43746745e2809d2ce9c8a7c838c0ce9f76995d1c4ea8c7b3b73bad47b8d37"
+  },
+  "run_arguments": [
+    "python3",
+    "docs/implementation/evidence/pctx01-startup-original-observer-native-clock.py.txt",
+    "--prepared",
+    "/Users/dev/PCTX/docs/implementation/evidence/pctx01-startup-native-clock-batch-prepared.json",
+    "--output-prefix",
+    "pctx01-startup-native-clock-capture"
+  ],
+  "execution_boundary": "New explicit finite-batch user request needed before opening another OS authentication prompt. One original8x16 test / one target-only capture / no retry.",
+  "review": "Independent read-only review found no material clock/routing blocker; prefix guard is sequential, not concurrent reservation.",
+  "limits": "No original startup repair, kernel-capture proof or gate qualification."
+}

@@ -1,0 +1,8 @@
+{
+  "revision": "8f94269345b19b3077d81d4571235e7ee617535d",
+  "root": "/private/tmp/pctx01-original-observation-jsldqf8s",
+  "source": "/private/tmp/pctx01-original-observation-jsldqf8s/source",
+  "session": "/private/tmp/pctx01-original-observation-jsldqf8s/session",
+  "target": "/private/tmp/pctx01-original-observation-jsldqf8s/target",
+  "test": "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget"
+}

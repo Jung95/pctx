@@ -1,0 +1,17 @@
+{
+  "scope": "ordinary-user clock interoperability only; no original test/privileged observer rerun",
+  "native_before_ns": 307890153775000,
+  "native_child_ns": 307890523471000,
+  "native_after_ns": 307890524414000,
+  "corrected_same_clock_envelope": true,
+  "old_python_before_ns": 307892342580500,
+  "old_python_after_ns": 307892713130916,
+  "old_mixed_clock_envelope": false,
+  "files": {
+    "pctx01-startup-clock-control.c.txt": "38c12dee82bb8b944d868877354e8ad0e30ed38235dbb09eecda7e8fcb1a1989",
+    "pctx01-startup-original-observer-clock-corrected.py.txt": "0938c0d239361b4d4890b56f7d24ada1c9a1b6ec4ed562ee9aa707cf9c0b3a88",
+    "pctx01-startup-clock-control.py.txt": "bdbc6563a79e389ef511d408314a3d58f531d01fdbf3d61f4afc2c3d648b84f1"
+  },
+  "binary_sha256": "771f092f4834c8925e034039106f1aaed223d843ae1eb943e2b968d80513b6cd",
+  "limits": "This control validates native-clock compatibility, not kernel capture, original startup fix or gate qualification."
+}

@@ -1,0 +1,22 @@
+# Read-only native-clock interoperability control; no root collector or tests.
+import ast,ctypes,hashlib,json,subprocess,time
+from pathlib import Path
+base=Path('/Users/dev/PCTX/docs/implementation/evidence')
+observer=base/'pctx01-startup-original-observer-clock-corrected.py.txt'
+tree=ast.parse(observer.read_text())
+nodes=[]
+for node in tree.body:
+ if isinstance(node,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='base' for t in node.targets):break
+ nodes.append(node)
+ns={};exec(compile(ast.Module(body=nodes,type_ignores=[]),str(observer),'exec'),ns)
+native_ns=ns['native_ns'];binary=Path('/private/tmp/pctx01-startup-clock-control')
+source=base/'pctx01-startup-clock-control.c.txt'
+subprocess.run(['/Library/Developer/CommandLineTools/usr/bin/clang','-isysroot','/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk','-x','c','-Wall','-Wextra','-Werror',str(source),'-o',str(binary)],check=True)
+native_before=native_ns();old_before=time.monotonic_ns()
+p=subprocess.run([str(binary)],capture_output=True,text=True,check=True)
+old_after=time.monotonic_ns();native_after=native_ns();child=int(p.stdout.strip())
+assert native_before<=child<=native_after
+# The control also retains a counterexample for the old mixed-domain assumption,
+# without claiming that its offset measured here equals the original run's offset.
+r={'scope':'ordinary-user clock interoperability only; no original test/privileged observer rerun','native_before_ns':native_before,'native_child_ns':child,'native_after_ns':native_after,'corrected_same_clock_envelope':True,'old_python_before_ns':old_before,'old_python_after_ns':old_after,'old_mixed_clock_envelope':old_before<=child<=old_after,'files':{str(x.name):hashlib.sha256(x.read_bytes()).hexdigest() for x in [source,observer,Path(__file__)]},'binary_sha256':hashlib.sha256(binary.read_bytes()).hexdigest(),'limits':'This control validates native-clock compatibility, not kernel capture, original startup fix or gate qualification.'}
+(base/'pctx01-startup-clock-control.json').write_text(json.dumps(r,indent=2)+'\n');print(json.dumps(r))

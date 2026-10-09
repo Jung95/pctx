@@ -1,5 +1,27 @@
 # Implementation progress
 
+## Native-clock correction — prepared, not executed
+
+[Ordinary-user clock control](evidence/pctx01-startup-clock-control.json) verifies
+native C CLOCK_MONOTONIC lies inside the corrected Python native-clock envelope;
+the old Python absolute envelope excludes it. Strict C compile/control PASS;
+this is present clock interoperability, not historical offset or startup repair.
+Independent read-only review confirms all cross-language ages/receipt windows use
+native clock; local30s/3s guards use only their own elapsed clock.
+
+[Fresh batch readiness](evidence/pctx01-startup-native-clock-batch-ready.json)
+binds isolated source8f94269, original test bytes unchanged, separate build/binary,
+unused session and explicit prepared/output-prefix runner arguments. Locked/offline
+no-run build PASS; no test, privileged collector or new authentication executed.
+Historical source/result artifacts remain unchanged. New runner refuses a reused
+output prefix/session; single-run sequential guard, no concurrent reservation claim.
+
+Next requires a new explicit user request for this finite batch under the current
+prompt policy: one authentication, one original concurrent test, one target-only
+capture, no retry. The previous execution request finished without a trace and
+is not automatic permission to reopen dialogs. Keep G05-D05 product_failure,
+33/40 details and0/10 whole gates unchanged; no other official task.
+
 ## Authorized original-supervisor observation — terminal85149
 
 Authentication completed once; collector ready before ordinary-user original
