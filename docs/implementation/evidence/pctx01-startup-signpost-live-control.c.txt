@@ -1,0 +1,20 @@
+#include <os/log.h>
+#include <os/signpost.h>
+#include <stdio.h>
+#include <unistd.h>
+int main(void) {
+ os_log_t log=os_log_create("org.pctx.diagnostic.live-control", "mapping");
+ char line[16];unsigned sequence=0;
+ setvbuf(stdout,NULL,_IONBF,0);
+ printf("ready %d\n",getpid());
+ while(fgets(line,sizeof(line),stdin)) {
+  if(line[0]=='q')break;
+  printf("enabled %u %d\n",sequence,os_signpost_enabled(log));
+  os_signpost_id_t id=os_signpost_id_generate(log);
+  os_signpost_interval_begin(log,id,"PCTXControl");
+  os_signpost_event_emit(log,id,"PCTXSequence","%{public}u",sequence);
+  os_signpost_interval_end(log,id,"PCTXControl");
+  os_log(log,"PCTXControl %{public}u",sequence++);
+ }
+ return 0;
+}
