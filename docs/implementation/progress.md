@@ -1,6 +1,18 @@
 # Implementation progress
 
-## Policy queue attribution — current, 2026-10-09
+## Repair review at original conditions — current, 2026-10-09
+
+PCTX01-G05-D05 remains product_failure; fixed33/40 details,0/10 whole gates.
+No causal PCTX patch is supported yet: failed-path validation63us/spawn628us
+versus98.88ms late policy result. Existing static evidence shows scan queue
+already configured USER_INTERACTIVE QoS; caller-priority promotion lacks a
+matching cause. Admission serialization cannot renew the original deadline.
+Interpreter/prewarm/reuse/security exceptions do not preserve conditions.
+Next: identify the expensive scan operation and an applicable platform/product
+correction. No test rerun, service collection or OS/security change performed.
+[Candidate decisions and full verification requirements](evidence/pctx01-startup-preserved-condition-review.md).
+
+## Policy queue attribution — earlier, 2026-10-09
 
 PCTX01-G05-D05 remains `product_failure`, fixed33/40 details,0/10 whole gates.
 Static analysis confirms a serial policy scan queue; the16-path historical
