@@ -41,27 +41,22 @@ expansion. Exact eventual-expired child's pre-cancel wait remains missing; no
 supervisor repair or environment exemption. Current user one-batch authorization
 is exhausted. Only PCTX01/G05-D05 active, product_failure;33/40 and0/10 unchanged.
 
-## Native-clock correction — prepared, not executed
+## Historical native-clock preparation — consumed by session80102
 
-[Ordinary-user clock control](evidence/pctx01-startup-clock-control.json) verifies
-native C CLOCK_MONOTONIC lies inside the corrected Python native-clock envelope;
-the old Python absolute envelope excludes it. Strict C compile/control PASS;
-this is present clock interoperability, not historical offset or startup repair.
-Independent read-only review confirms all cross-language ages/receipt windows use
-native clock; local30s/3s guards use only their own elapsed clock.
+[Ordinary-user clock control](evidence/pctx01-startup-clock-control.json) validated
+cross-language CLOCK_MONOTONIC interoperability; the old mixed-domain comparison
+failed. The prepared isolated source/build in
+[readiness](evidence/pctx01-startup-native-clock-batch-ready.json) was subsequently
+executed once in terminal80102 above. Its session and capture output prefix are
+USED, not current unused execution targets. Readiness fields describe pre-launch
+history; do not repeat those runner arguments or reopen authentication from them.
 
-[Fresh batch readiness](evidence/pctx01-startup-native-clock-batch-ready.json)
-binds isolated source8f94269, original test bytes unchanged, separate build/binary,
-unused session and explicit prepared/output-prefix runner arguments. Locked/offline
-no-run build PASS; no test, privileged collector or new authentication executed.
-Historical source/result artifacts remain unchanged. New runner refuses a reused
-output prefix/session; single-run sequential guard, no concurrent reservation claim.
-
-Next requires a new explicit user request for this finite batch under the current
-prompt policy: one authentication, one original concurrent test, one target-only
-capture, no retry. The previous execution request finished without a trace and
-is not automatic permission to reopen dialogs. Keep G05-D05 product_failure,
-33/40 details and0/10 whole gates unchanged; no other official task.
+No fresh batch is prepared or authorized. The corrected observer captured a
+successful original-supervisor child; the eventual-expired identities remain
+untraced. Existing read-only supervisor review found no evidenced causal code
+repair. No new producer work, diagnostic expansion, unchanged rerun or official
+task switch is justified by this result. Keep G05-D05 product_failure,33/40 details
+and0/10 whole gates, with the exact missing expired-child wait proof recorded above.
 
 ## Authorized original-supervisor observation — terminal85149
 
