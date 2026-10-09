@@ -1,0 +1,32 @@
+{
+  "plan": {
+    "revision": "b047613b1101400827ea801b834d1c062f824483",
+    "binary_sha256": "b879de4189027ae9ca489a1d0bd34bf7515a05958748593fcb4f69dccbe2a5f1",
+    "tests": [
+      "query_program_resolution_uses_captured_command_path",
+      "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+      "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget",
+      "simultaneous_streams_are_collected_and_overflow_never_infers_success"
+    ],
+    "phases": [
+      "B-human-declared-host-closed",
+      "A-human-declared-host-open"
+    ],
+    "runs_per_test_per_phase": 1,
+    "administrator_authentication": false,
+    "app_automation": false,
+    "app_process_inventory": false,
+    "original_test_changes": false,
+    "same_runner_environment_and_cwd": true
+  },
+  "caller_cwd": "/Users/dev",
+  "plan_only_exit": 0,
+  "non_tty_exit": 1,
+  "non_tty_reason": "run interactively in an external Terminal; never from this chat executor",
+  "source_inputs_identical_to_previous_comparison": true,
+  "private_session_empty": true,
+  "original_tests_executed": 0,
+  "authentication": 0,
+  "ready_sha256": "76507885d35e27abd9b264229c06e7b3fbfd7bfb80ef94ea15be2fb7ad433f80",
+  "independent_review": "work_control:no material blocker;genuine Bclosed then Aopen;tests once each;guards/noauth/noappautomation;simple later-pass hypothesis only;time/cache/contention/reopen confounds remain"
+}

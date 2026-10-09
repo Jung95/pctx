@@ -1,5 +1,25 @@
 # Implementation progress
 
+## Prepared reverse-order control — current next action, 2026-10-09
+
+[Readiness](evidence/pctx01-startup-host-reverse-batch-ready.json) and
+[controls](evidence/pctx01-startup-host-reverse-batch-controls.json) prepare one Bclosed
+then Aopen experiment, reversing the consumed prior order to test the simple
+always-second-pass explanation. All product-source inputs match the prior comparison;
+new isolated build23760 finished0. Binary identity differs from the previous build
+but is frozen identically within both new phases. No original test executed yet.
+Home-directory plan-only passes; nonTTY refuses before effects; session unused.
+Independent work_control review found no material blocker.
+
+[Operator procedure](pctx01-host-reverse.md) needs external Terminal plus normal
+human quit/reopen. No administrator authentication or app automation. Each original
+test runs once per phase with unchanged1s/8x16/streams/group/overflow assertions,
+same captured environment/cwd and all failures retained. This does not fully remove
+time/cache/contention/reopen/helper confounds and cannot itself close product failure.
+Do not reuse the consumed prior comparison command. Only PCTX01/G05-D05 active;
+33/40details,0/10whole gates unchanged. No live heavy job.
+
+
 ## Supported host-correction search — 2026-10-09
 
 [Bounded official-documentation check](evidence/pctx01-startup-host-correction-docs-check.json)

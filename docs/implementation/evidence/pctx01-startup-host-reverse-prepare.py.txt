@@ -1,0 +1,24 @@
+"""Prepare an unchanged original-test binary; no test, app or auth operation."""
+from pathlib import Path
+import argparse, hashlib, json, os, subprocess, tempfile
+
+repo = Path('/Users/dev/PCTX')
+base = repo / 'docs/implementation/evidence'
+parser = argparse.ArgumentParser()
+parser.add_argument('--output-prefix', required=True)
+args = parser.parse_args()
+if args.output_prefix != 'pctx01-startup-host-reverse-batch' or list(base.glob(args.output_prefix + '-*')):
+    raise SystemExit('preparation prefix invalid or consumed')
+root = Path(tempfile.mkdtemp(prefix='pctx01-host-reverse-', dir='/private/tmp'))
+source = root / 'source'
+source.mkdir()
+session = root / 'session'
+session.mkdir(mode=0o700)
+archive = subprocess.run(['git', 'archive', 'HEAD', 'Cargo.toml', 'Cargo.lock', 'src', 'tests'], cwd=repo, capture_output=True, check=True)
+subprocess.run(['tar', '-x', '-C', str(source)], input=archive.stdout, check=True)
+inputs = [source / 'Cargo.toml', source / 'Cargo.lock', source / 'tests/project_deadline.rs'] + sorted(p for p in (source / 'src').rglob('*') if p.is_file())
+for p in inputs:
+    assert p.read_bytes() == (repo / p.relative_to(source)).read_bytes(), 'archive and worktree differ'
+meta = {'task': 'PCTX01', 'condition': 'PCTX01-G05-D05', 'revision': subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=repo, text=True).strip(), 'root': str(root), 'source': str(source), 'session': str(session), 'target': str(root / 'target'), 'uid': os.getuid(), 'source_inputs': {str(p.relative_to(source)): hashlib.sha256(p.read_bytes()).hexdigest() for p in inputs}, 'archive_sha256': hashlib.sha256(archive.stdout).hexdigest(), 'source_mutations': False, 'tests': ['query_program_resolution_uses_captured_command_path', 'relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry', 'concurrent_query_startup_preserves_group_streams_and_original_one_second_budget', 'simultaneous_streams_are_collected_and_overflow_never_infers_success'], 'design': 'one fixed B/A reverse-order experiment from external Terminal, same binary/cwd/inherited environment, each exact test once per phase;human declares host state;no process inventory,root,warmup,retry or app automation'}
+(base / (args.output_prefix + '-prepared.json')).write_text(json.dumps(meta, indent=2) + '\n')
+print(json.dumps({k: meta[k] for k in ['revision', 'root', 'source', 'session', 'target', 'source_mutations']}))

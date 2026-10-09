@@ -1,0 +1,19 @@
+{
+  "task": "PCTX01",
+  "condition": "PCTX01-G05-D05",
+  "status": "prepared_not_executed",
+  "revision": "b047613b1101400827ea801b834d1c062f824483",
+  "prepared": "/Users/dev/PCTX/docs/implementation/evidence/pctx01-startup-host-reverse-batch-prepared.json",
+  "test_binary": "/private/tmp/pctx01-host-reverse-0wwokltp/target/debug/deps/project_deadline-f7e8b9d913251d84",
+  "files": {
+    "/Users/dev/PCTX/docs/implementation/evidence/pctx01-startup-host-reverse-batch-prepared.json": "3d582e6c391c849a80e95c2194017429d56ea71682a54c6d86aef258bed13ef8",
+    "/private/tmp/pctx01-host-reverse-0wwokltp/target/debug/deps/project_deadline-f7e8b9d913251d84": "b879de4189027ae9ca489a1d0bd34bf7515a05958748593fcb4f69dccbe2a5f1",
+    "/Users/dev/PCTX/docs/implementation/evidence/pctx01-startup-host-reverse-prepare.py.txt": "cea07662fb9706c5a1bf2ee631a6200d539472bcca72177d49966094555aa4c1",
+    "/Users/dev/PCTX/docs/implementation/evidence/pctx01-startup-host-reverse-run.py.txt": "77419f4e5bbf4f34cd54394a07a9b94e1c77568fb71e064e3fab2952ea14c6e5"
+  },
+  "source_unchanged": true,
+  "build": "23760terminal0 locked/offline no-run",
+  "comparison_reason": "reverse previous host-open then host-closed order;test simple always-later-pass explanation,not causal proof",
+  "limits": "human-declared host state;reopen workload/time/global-state/helper confounds;no product repair",
+  "runs_per_test_per_phase": 1
+}
