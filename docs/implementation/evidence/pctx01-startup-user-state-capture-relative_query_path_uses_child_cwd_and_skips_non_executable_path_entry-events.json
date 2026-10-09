@@ -1,0 +1,40 @@
+{
+  "16497-16501-spawn.json": {
+    "deadline_lower_us": 310148076292,
+    "deadline_upper_us": 310148076292,
+    "origin_us": 310147076292,
+    "pid": 16501,
+    "ppid": 16497,
+    "record_us": 310147076532,
+    "start_sec": 1791534560,
+    "start_usec": 761760,
+    "uid": 502
+  },
+  "16497-16499-spawn.json": {
+    "deadline_lower_us": 310147830441,
+    "deadline_upper_us": 310147830441,
+    "origin_us": 310146830441,
+    "pid": 16499,
+    "ppid": 16497,
+    "record_us": 310146830800,
+    "start_sec": 1791534560,
+    "start_usec": 515992,
+    "uid": 502
+  },
+  "16497-16499-outcome.json": {
+    "at_us": 310147076004,
+    "code": "success",
+    "pid": 16499,
+    "ppid": 16497,
+    "stderr_bytes": 0,
+    "stdout_bytes": 9
+  },
+  "16497-16501-outcome.json": {
+    "at_us": 310147082938,
+    "code": "success",
+    "pid": 16501,
+    "ppid": 16497,
+    "stderr_bytes": 0,
+    "stdout_bytes": 9
+  }
+}

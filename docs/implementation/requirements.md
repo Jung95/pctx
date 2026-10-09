@@ -1,5 +1,79 @@
 # Implementation requirements
 
+## Development and authentication batching policy — current, 2026-10-09
+
+Ordinary-user implementation/build/test/review/commit/push proceeds while the human
+is away. Latest instruction: ONLY when administrator observation is indispensable,
+gather all required privileged verification into one prepared finite batch, request
+ONE macOS authentication for that batch, then execute its full prepared list without
+per-test authentication. Exit the privileged collector at batch completion. Existing
+persistent consent covers only minimal read-only observation of generated/owned
+PCTX01 test processes; it is not unrestricted root authorization. Do not launch
+individual privileged wrappers or reopen canceled historical sessions.
+
+Before that exceptional batch, finish ordinary preparation: exact test list/source/
+binary identities, bounded collection per owned PID/native start/executable, expected
+outputs, original clocks/concurrency/assertions, cleanup and failure reporting. Keep
+product tests as the ordinary user; the single authenticated process only observes
+admitted owned targets. Use explicit finite batch lifetime and one authentication
+entry point, rather than assuming sudo cache persists across unrelated executions.
+A failed test remains failed; continue independent items in that same prepared batch
+only with safe cleanup, never rerun to obtain a pass. Report individual results and
+missing observations, not merely the authenticated wrapper exit. If authentication
+is canceled, preserve it and continue nonprivileged work; do not prompt-loop. A new
+batch is justified only by newly necessary evidence or a different recorded method.
+
+No sudoers/SIP/Gatekeeper/auth-cache changes, permanent root services or password
+storage. Tool sandbox approval and macOS administrator authentication are separate:
+a permitted tool escalation still executes as the normal user unless explicitly
+authenticated otherwise. The current four original startup tests need no root, so
+their finite user-state batch runs without authentication. Root-only kernel facts
+remain unavailable; do not turn that into an exemption or switch official tasks.
+PCTX01-G05-D05 product_failure, detail33/40 and whole0/10 unchanged.
+
+Owned-group session3921 TERMINAL1: authentication canceled(-128), driver never
+started, no collector readiness/trace. Empty session, observer15593 absent. Historical
+live/fresh-auth next steps below are superseded. Do not reopen that batch.
+
+## Ordinary-user four-test diagnostic — terminal45335
+
+[Result](evidence/pctx01-startup-user-state-capture-result.json),
+[analysis](evidence/pctx01-startup-user-state-capture-analysis.json) and
+[cleanup](evidence/pctx01-startup-user-state-capture-cleanup.json): UID/EUID502,
+no macOS authentication, root collector, attachment, retention or retry. Four exact
+unchanged original tests executed once each in one finite serial batch. Individual
+results: captured PATH PASS, relative PATH/cwd PASS, simultaneous streams/overflow
+PASS, original concurrent8x16 FAIL101. These diagnostic-copy passes do not erase
+historic failures or qualify a product fix. Production source/tests remain unchanged.
+
+Concurrency113 spawns/outcomes:112 success,1 zero-output TIMEOUT16508. Seven workers
+finish16; one stops at its first failure, so113 is censored, not128 completed trials.
+Expired16508/parent16502/native start1791534560.777254 has exact-byte identity-valid
+ordinary task/thread snapshots at254242–254306us and754989–755019us on the original
+clock, before expiry. Task96bytes/thread112bytes, one waiting thread(run_state3),
+zero user-time raw counters/zero Unix and Mach syscall counters; task system-time
+raw805 and thread raw33000 are separate API counters, not an asserted shared unit.
+Path hash matches /bin/sh pathname bytes, not binary/script contents; no raw path stored. Thread handle0
+is recorded; do not infer persistent unique thread identity from it. No kernel
+stack or causal policy-wait proof. The successful-target root stacks from80102
+cannot be assigned to this eventual-expired child.
+
+Isolated sourcebase0bea58c; original test SHA256 remains8b9fbc97fbd5acaf612b2d75b94cf810faa2b61614b654495082462b1941a8dc.
+[Readiness](evidence/pctx01-startup-user-state-batch-ready.json) binds source/binary/
+hook/runner. Initial build was never executed; independent review found diagnostic
+panic could bypass cleanup. Corrected to best-effort IO/invalid-clock sentinel
+before execution; prior source/build hashes retained. All118 generated children
+and4 test parents absent. No live heavy job or privileged process. Session is USED;
+no automatic unchanged rerun. PCTX01/G05-D05 product_failure,33/40 and0/10 unchanged.
+
+Next: use expired-child state evidence for a concrete nonprivileged implementation
+hypothesis; do not repeat the same diagnostic or switch tasks. If the missing exact
+kernel wait is indispensable after ordinary analysis, prepare all necessary owned-
+process observations as one finite authenticated batch under the policy above.
+One auth must cover the prepared list; no per-test auth wrappers. That exceptional
+multi-test root batch is a preparation contract, not implemented/runtime-verified
+by this ordinary-user runner. No new administrator prompt has been opened.
+
 ## Corrected diagnostic — terminal80102
 
 One authentication completed; native-clock collector/tool terminal0 and trace

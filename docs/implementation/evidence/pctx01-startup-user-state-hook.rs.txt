@@ -1,0 +1,86 @@
+// Diagnostic copy only. No elevation, kernel stack read, attachment or retention.
+struct StartupDiagnostic {
+    pid: u32,
+    start: (u64, u64),
+    root: std::path::PathBuf,
+    bounds: (u64, u64),
+    next: usize,
+}
+impl StartupDiagnostic {
+    fn native_us() -> u64 {
+        let mut t: libc::timespec = unsafe { std::mem::zeroed() };
+        if unsafe { libc::clock_gettime(libc::CLOCK_MONOTONIC, &mut t) } != 0 { return 0; }
+        t.tv_sec as u64 * 1_000_000 + t.tv_nsec as u64 / 1000
+    }
+    fn clock_bounds(deadline: Deadline) -> (u64, u64) {
+        let low = Self::native_us();
+        let remaining = deadline.instant().checked_duration_since(std::time::Instant::now()).unwrap_or_default().as_micros() as u64;
+        let high = Self::native_us();
+        if low == 0 || high == 0 { return (0, 0); }
+        (low.saturating_add(remaining), high.saturating_add(remaining))
+    }
+    fn bsd(pid: u32) -> Option<libc::proc_bsdinfo> {
+        let mut b = unsafe { std::mem::zeroed::<libc::proc_bsdinfo>() };
+        let n = unsafe { libc::proc_pidinfo(pid as i32, libc::PROC_PIDTBSDINFO, 0, (&mut b as *mut libc::proc_bsdinfo).cast(), std::mem::size_of_val(&b) as i32) };
+        (n == std::mem::size_of_val(&b) as i32 && b.pbi_pid == pid && b.pbi_ppid == std::process::id() && b.pbi_uid == unsafe { libc::getuid() }).then_some(b)
+    }
+    fn same_identity(&self) -> bool {
+        Self::bsd(self.pid).is_some_and(|b| (b.pbi_start_tvsec, b.pbi_start_tvusec) == self.start)
+    }
+    fn publish(&self, suffix: &str, row: serde_json::Value) {
+        let path = self.root.join(format!("{}-{}-{suffix}.json", std::process::id(), self.pid));
+        let staging = path.with_extension("staging");
+        // Finite generated fixture only; diagnostic IO can perturb scheduling.
+        if let Ok(bytes) = serde_json::to_vec(&row) {
+            if std::fs::write(&staging, bytes).is_ok() { let _ = std::fs::rename(staging, path); }
+        } // Missing records remain unknown; never unwind past child cleanup.
+    }
+    fn new(pid: u32, bounds: (u64, u64)) -> Option<Self> {
+        let root = std::path::PathBuf::from(option_env!("PCTX_ORIGINAL_DIAGNOSTIC_ROOT")?);
+        if bounds.0 == 0 || bounds.1 == 0 { return None; }
+        let b = Self::bsd(pid)?;
+        let d = Self { pid, start: (b.pbi_start_tvsec, b.pbi_start_tvusec), root, bounds, next: 0 };
+        d.publish("spawn", serde_json::json!({"pid":pid,"ppid":b.pbi_ppid,"uid":b.pbi_uid,"start_sec":b.pbi_start_tvsec,"start_usec":b.pbi_start_tvusec,"origin_us":bounds.0.saturating_sub(1_000_000),"deadline_lower_us":bounds.0,"deadline_upper_us":bounds.1,"record_us":Self::native_us()}));
+        Some(d)
+    }
+    fn observe(&mut self, deadline: Deadline) {
+        const AGES: [u64; 2] = [250_000, 750_000];
+        if self.next == AGES.len() || Self::native_us() < self.bounds.0.saturating_sub(1_000_000) + AGES[self.next] || std::time::Instant::now() >= deadline.instant() { return; }
+        let index = self.next;
+        self.next += 1;
+        let begin = Self::native_us();
+        if begin == 0 || !self.same_identity() { return; }
+        let mut exit = unsafe { std::mem::zeroed::<libc::siginfo_t>() };
+        let wait_rc = unsafe { libc::waitid(libc::P_PID, self.pid, &mut exit, libc::WEXITED | libc::WNOHANG | libc::WNOWAIT) };
+        if wait_rc != 0 || exit.si_signo != 0 { return; }
+        let mut task = unsafe { std::mem::zeroed::<libc::proc_taskinfo>() };
+        let task_bytes = unsafe { libc::proc_pidinfo(self.pid as i32, libc::PROC_PIDTASKINFO, 0, (&mut task as *mut libc::proc_taskinfo).cast(), std::mem::size_of_val(&task) as i32) };
+        let task_error = (task_bytes != std::mem::size_of_val(&task) as i32).then(|| std::io::Error::last_os_error().raw_os_error());
+        let task_data = (task_bytes == std::mem::size_of_val(&task) as i32).then(|| serde_json::json!({"user_time_raw":task.pti_total_user,"system_time_raw":task.pti_total_system,"threads":task.pti_threadnum,"running":task.pti_numrunning,"unix_syscalls":task.pti_syscalls_unix,"mach_syscalls":task.pti_syscalls_mach,"context_switches":task.pti_csw}));
+        let mut handles = [0u64; 32];
+        // SDK sys/proc_info.h: PROC_PIDLISTTHREADS=6, pthread handles, not unique IDs.
+        let list_bytes = unsafe { libc::proc_pidinfo(self.pid as i32, 6, 0, handles.as_mut_ptr().cast(), std::mem::size_of_val(&handles) as i32) };
+        let list_error = (list_bytes <= 0).then(|| std::io::Error::last_os_error().raw_os_error());
+        let list_valid = list_bytes > 0 && list_bytes as usize <= std::mem::size_of_val(&handles) && list_bytes % 8 == 0;
+        let mut threads = Vec::new();
+        if list_valid {
+            for &handle in &handles[..list_bytes as usize / 8] {
+                let mut t = unsafe { std::mem::zeroed::<libc::proc_threadinfo>() };
+                let n = unsafe { libc::proc_pidinfo(self.pid as i32, libc::PROC_PIDTHREADINFO, handle, (&mut t as *mut libc::proc_threadinfo).cast(), std::mem::size_of_val(&t) as i32) };
+                let valid = n == std::mem::size_of_val(&t) as i32;
+                let error = (!valid).then(|| std::io::Error::last_os_error().raw_os_error());
+                threads.push(serde_json::json!({"handle":handle,"returned_bytes":n,"expected_bytes":std::mem::size_of_val(&t),"errno":error,"data":valid.then(||serde_json::json!({"run_state":t.pth_run_state,"user_time_raw":t.pth_user_time,"system_time_raw":t.pth_system_time,"cpu_usage":t.pth_cpu_usage,"sleep_time":t.pth_sleep_time}))}));
+            }
+        }
+        let mut path = [0u8; 4096];
+        let path_bytes = unsafe { libc::proc_pidpath(self.pid as i32, path.as_mut_ptr().cast(), path.len() as u32) };
+        let path_error = (path_bytes <= 0).then(|| std::io::Error::last_os_error().raw_os_error());
+        let path_hash = if path_bytes > 0 && path_bytes as usize <= path.len() { use sha2::Digest; Some(format!("{:x}", sha2::Sha256::digest(&path[..path_bytes as usize]))) } else { None };
+        let identity_after = self.same_identity();
+        let end = Self::native_us();
+        self.publish(&format!("state-{index}"), serde_json::json!({"pid":self.pid,"ppid":std::process::id(),"start_sec":self.start.0,"start_usec":self.start.1,"requested_age_us":AGES[index],"begin_us":begin,"end_us":end,"observation_us":end.saturating_sub(begin),"identity_before":true,"identity_after":identity_after,"clock_valid":end != 0,"before_deadline_lower":end != 0 && end < self.bounds.0,"task_returned_bytes":task_bytes,"task_expected_bytes":std::mem::size_of_val(&task),"task_errno":task_error,"task":task_data,"thread_list_bytes":list_bytes,"thread_list_errno":list_error,"thread_list_valid":list_valid,"thread_list_capacity":handles.len(),"thread_list_may_be_truncated":list_bytes as usize == std::mem::size_of_val(&handles),"threads":threads,"executable_path_bytes":path_bytes,"executable_path_errno":path_error,"executable_path_sha256":path_hash,"kernel_stack":null}));
+    }
+    fn outcome(&self, code: &str, out: usize, err: usize) {
+        self.publish("outcome", serde_json::json!({"pid":self.pid,"ppid":std::process::id(),"code":code,"at_us":Self::native_us(),"stdout_bytes":out,"stderr_bytes":err}));
+    }
+}

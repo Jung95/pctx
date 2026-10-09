@@ -1,0 +1,54 @@
+{
+  "task": "PCTX01",
+  "condition": "PCTX01-G05-D05",
+  "revision": "0bea58c354b3a1a62f094b4818f1d9cb46f776a2",
+  "uid": 502,
+  "euid": 502,
+  "macos_authentication": false,
+  "root_collector": false,
+  "binary": "/private/tmp/pctx01-user-state-3bjhg1ks/target/debug/deps/project_deadline-f7e8b9d913251d84",
+  "binary_sha256": "1c188ca7d28b1c0b2bd3a18baf092417dba5a7a28c9e2e1d96299146ad1e3cb6",
+  "test_source_sha256": "8b9fbc97fbd5acaf612b2d75b94cf810faa2b61614b654495082462b1941a8dc",
+  "runs": [
+    {
+      "test": "query_program_resolution_uses_captured_command_path",
+      "parent_pid": 16494,
+      "exit": 0,
+      "spawns": 1,
+      "outcomes": 1,
+      "state_samples": 1
+    },
+    {
+      "test": "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+      "parent_pid": 16497,
+      "exit": 0,
+      "spawns": 2,
+      "outcomes": 2,
+      "state_samples": 0
+    },
+    {
+      "test": "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget",
+      "parent_pid": 16502,
+      "exit": 101,
+      "spawns": 113,
+      "outcomes": 113,
+      "state_samples": 12
+    },
+    {
+      "test": "simultaneous_streams_are_collected_and_overflow_never_infers_success",
+      "parent_pid": 16624,
+      "exit": 0,
+      "spawns": 2,
+      "outcomes": 2,
+      "state_samples": 0
+    }
+  ],
+  "kernel_stack": null,
+  "limits": [
+    "Instrumented ordinary-user IO changes scheduling; no unchanged-product qualification.",
+    "No retention, time extension, interpreter change, warmup or automatic retry.",
+    "Native state and zero CPU do not identify a causal kernel/policy wait.",
+    "Missing, short, truncated or identity-mismatched API results remain unknown.",
+    "Wrapper exit is bookkeeping; individual test exits own the test verdict."
+  ]
+}

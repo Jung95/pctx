@@ -1,0 +1,41 @@
+from pathlib import Path
+import argparse, hashlib, json, os, re, subprocess
+base = Path('/Users/dev/PCTX/docs/implementation/evidence')
+parser = argparse.ArgumentParser()
+parser.add_argument('--prepared', required=True)
+parser.add_argument('--output-prefix', required=True)
+args = parser.parse_args()
+prefix = args.output_prefix
+if os.getuid() == 0 or os.geteuid() != os.getuid():
+    raise SystemExit('ordinary same-user execution required')
+if not re.fullmatch(r'pctx01-startup-[a-z0-9-]+', prefix) or list(base.glob(prefix + '-*')):
+    raise SystemExit('invalid or already used prefix')
+meta = json.loads(Path(args.prepared).read_text())
+session = Path(meta['session'])
+if any(session.iterdir()):
+    raise SystemExit('session consumed; no automatic retry')
+tests = [p for p in (Path(meta['target']) / 'debug/deps').glob('project_deadline-*') if p.is_file() and os.access(p, os.X_OK) and '.' not in p.name]
+if len(tests) != 1:
+    raise SystemExit('expected one isolated executable')
+binary = tests[0]
+assert hashlib.sha256((Path(meta['source']) / 'tests/project_deadline.rs').read_bytes()).hexdigest() == meta['test_source_sha256']
+# Atomic guard against a second driver using this session, before any test launch.
+with (session / 'driver-started').open('x') as f:
+    f.write(f'{os.getpid()}\n')
+rows = []
+for name in meta['tests']:
+    log = session / (name + '.log')
+    with log.open('xb') as stream:
+        process = subprocess.Popen([str(binary), '--exact', name, '--nocapture'], stdout=stream, stderr=subprocess.STDOUT)
+        print(json.dumps({'test': name, 'parent_pid': process.pid, 'uid': os.getuid(), 'macos_authentication': False}), flush=True)
+        code = process.wait()
+    events = {f.name: json.loads(f.read_text()) for f in session.glob(f'{process.pid}-*.json')}
+    stem = prefix + '-' + name
+    (base / (stem + '.log')).write_bytes(log.read_bytes())
+    (base / (stem + '-events.json')).write_text(json.dumps(events, indent=2) + '\n')
+    row = {'test': name, 'parent_pid': process.pid, 'exit': code, 'spawns': sum(k.endswith('-spawn.json') for k in events), 'outcomes': sum(k.endswith('-outcome.json') for k in events), 'state_samples': sum('-state-' in k for k in events)}
+    rows.append(row)
+    print(json.dumps(row), flush=True)
+result = {'task': 'PCTX01', 'condition': 'PCTX01-G05-D05', 'revision': meta['revision'], 'uid': os.getuid(), 'euid': os.geteuid(), 'macos_authentication': False, 'root_collector': False, 'binary': str(binary), 'binary_sha256': hashlib.sha256(binary.read_bytes()).hexdigest(), 'test_source_sha256': meta['test_source_sha256'], 'runs': rows, 'kernel_stack': None, 'limits': ['Instrumented ordinary-user IO changes scheduling; no unchanged-product qualification.', 'No retention, time extension, interpreter change, warmup or automatic retry.', 'Native state and zero CPU do not identify a causal kernel/policy wait.', 'Missing, short, truncated or identity-mismatched API results remain unknown.', 'Wrapper exit is bookkeeping; individual test exits own the test verdict.']}
+(base / (prefix + '-result.json')).write_text(json.dumps(result, indent=2) + '\n')
+print(json.dumps(result), flush=True)

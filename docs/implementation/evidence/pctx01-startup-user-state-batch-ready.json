@@ -1,0 +1,15 @@
+{
+  "source_revision": "0bea58c354b3a1a62f094b4818f1d9cb46f776a2",
+  "build": "locked offline no-run PASS; final clock sentinel build",
+  "test_source_unchanged": true,
+  "session_empty": true,
+  "review": "work_control initial diagnostic panic blocker corrected before tests; final native clock0 propagates bounds(0,0), raw CPU counters; no root/attachment/retention",
+  "files": {
+    "/private/tmp/pctx01-user-state-3bjhg1ks/source/src/query_process.rs": "447ccd26a98e1c3ff45313a5181fb704647ab20e79449c89aeac74d72ac80c65",
+    "/private/tmp/pctx01-user-state-3bjhg1ks/source/tests/project_deadline.rs": "8b9fbc97fbd5acaf612b2d75b94cf810faa2b61614b654495082462b1941a8dc",
+    "/private/tmp/pctx01-user-state-3bjhg1ks/target/debug/deps/project_deadline-f7e8b9d913251d84": "1c188ca7d28b1c0b2bd3a18baf092417dba5a7a28c9e2e1d96299146ad1e3cb6",
+    "docs/implementation/evidence/pctx01-startup-user-state-hook.rs.txt": "b863400cbf3e5cf57ed1f39464f4ebc1c85408248f555682e350f46678e74f32",
+    "docs/implementation/evidence/pctx01-startup-user-state-prepare.py.txt": "06e58d641e910a5a6c5786dde5eb6be4596d7d69388d9888e09c70dff991051f",
+    "docs/implementation/evidence/pctx01-startup-user-state-run.py.txt": "2ba774f57aa681f1860f939b279aedd22b0bd7ed570c29dfc983dcfa1fa69b28"
+  }
+}

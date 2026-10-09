@@ -1,0 +1,72 @@
+{
+  "task": "PCTX01",
+  "condition": "PCTX01-G05-D05",
+  "status": "product_failure; authentication-free finite diagnostic route verified",
+  "source_revision": "0bea58c354b3a1a62f094b4818f1d9cb46f776a2",
+  "session": 45335,
+  "wrapper_exit": 0,
+  "individual_test_verdicts": {
+    "query_program_resolution_uses_captured_command_path": 0,
+    "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry": 0,
+    "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget": 101,
+    "simultaneous_streams_are_collected_and_overflow_never_infers_success": 0
+  },
+  "macos_authentication": false,
+  "uid": 502,
+  "euid": 502,
+  "original_test_source_unchanged": true,
+  "ready_files_hashes_rechecked": true,
+  "original_contracts": "1s,8workersx16,group and stdout/stderr/overflow assertions unchanged; no warmup/retry/retention/interpreter substitution",
+  "total_children": 118,
+  "parents": 4,
+  "concurrency": {
+    "spawns": 113,
+    "success": 112,
+    "TIMEOUT": 1,
+    "denominator_limit": "seven workers16 each,one stops firstfailure;censored113,not128"
+  },
+  "expired_pid": 16508,
+  "expired_native_start": [
+    1791534560,
+    777254
+  ],
+  "samples": "identity and bytes valid;254242-254306us and754989-755019us before original expiry;waiting state3;raw CPU counters;no causal kernel reason",
+  "cleanup": "all122 exact children+parent PIDs absent at final observation,no auth/root process launched",
+  "review": "work_control independently confirmed source/counts/timing/API validity/path hash limits; corrected118vs117count before publication; initial diagnostic panic blocker corrected before any execution",
+  "policy": "ordinary development without auth;only indispensable privileged observations gathered into one finite prepared batch,oneOSauthentication,ownedtargets only,exitafterward;rootbatchcontract is preparation policy,not runtime verified by ordinary runner",
+  "limits": [
+    "No product repair or unchanged-original qualification.",
+    "No causal kernel stack/policy attribution to expired child.",
+    "Observed pathname hash is not binary-content or script identity.",
+    "API units raw;handle0 not persistent unique threadidentity.",
+    "Required native platform gates remain incomplete."
+  ],
+  "details_closed": 33,
+  "detail_denominator": 40,
+  "whole_gates_closed": 0,
+  "whole_gate_denominator": 10,
+  "files": {
+    "pctx01-startup-user-state-batch-build.log": "025a171940451c786a13f734ae2a9df2293b955f7bcd57c1ee3e632ffa3a940c",
+    "pctx01-startup-user-state-batch-corrected-build.log": "f821445c5e049b24279559c7c0451d725952a475024c88b77a873af1030d5d88",
+    "pctx01-startup-user-state-batch-final-build.log": "80147980ce35e9ba175e72567a4b6c30e47f872ad8fe4b9aae4d961152ff4645",
+    "pctx01-startup-user-state-batch-prepared.json": "53d6e5d251c82546a8ee59c34d82bdd08a7cbc7bf96afc6426fcfdadc787c210",
+    "pctx01-startup-user-state-batch-ready.json": "c3aec0bc28fe81d960f904e472638e8c08a7d8cbb7a3c3119e60dff20d11b0ee",
+    "pctx01-startup-user-state-capture-analysis.json": "27be7536d901cfb94a51820df4ca43af1263981ad543048111951688d4bf9d97",
+    "pctx01-startup-user-state-capture-cleanup.json": "4bfda4cad24de9c2268d1b6dc2289a5505497f5b463593fea29a969ad657a3ef",
+    "pctx01-startup-user-state-capture-concurrent_query_startup_preserves_group_streams_and_original_one_second_budget-events.json": "980ff0355f9e3774bd6b0387cf09d77f35c6fec5d7737449084fa4c871028819",
+    "pctx01-startup-user-state-capture-concurrent_query_startup_preserves_group_streams_and_original_one_second_budget.log": "5c93a0d562d3638dfd467e74a60674985722ada5960892da8f40b594bcaf07c4",
+    "pctx01-startup-user-state-capture-query_program_resolution_uses_captured_command_path-events.json": "bec5e824f50b579caf5006b1523c27701c98750cc9f65947b977f072b2ceeef4",
+    "pctx01-startup-user-state-capture-query_program_resolution_uses_captured_command_path.log": "8f055245965045d9cc252ce0a46a1768a3cdbee29807a36fe968b728139fd99e",
+    "pctx01-startup-user-state-capture-relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry-events.json": "dd20c18d7baf1353d27c50d921072f405f071046a91f24b7cc0dfcfe3ad3c64b",
+    "pctx01-startup-user-state-capture-relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry.log": "b06df5c4a569089aaac68072e888a37101370bd72b29dbd4e8b3e0c825b223c8",
+    "pctx01-startup-user-state-capture-result.json": "ab020afd1c48cdc44cca2f3f88ca1bccac2f4af2a772230d6cd884a171d37335",
+    "pctx01-startup-user-state-capture-simultaneous_streams_are_collected_and_overflow_never_infers_success-events.json": "05e781a5a43cc10067aeddf50b69b81267380c64dd9d1fb2aba09dda3c21ac89",
+    "pctx01-startup-user-state-capture-simultaneous_streams_are_collected_and_overflow_never_infers_success.log": "8e1cb17e5a50473768ddbacdc39d02a409a4f0425d897c11d5d6dc5f18633274",
+    "pctx01-startup-user-state-hook-initial.rs.txt": "fdaaca546fe273a415d15b2b9ebf60ecb78b70682479895ef71874ab170da408",
+    "pctx01-startup-user-state-hook.rs.txt": "b863400cbf3e5cf57ed1f39464f4ebc1c85408248f555682e350f46678e74f32",
+    "pctx01-startup-user-state-initial-build.json": "47aaf2577e21eef08875f6c419baf397f1c827d70902a3bf4426fb6e68733c25",
+    "pctx01-startup-user-state-prepare.py.txt": "06e58d641e910a5a6c5786dde5eb6be4596d7d69388d9888e09c70dff991051f",
+    "pctx01-startup-user-state-run.py.txt": "2ba774f57aa681f1860f939b279aedd22b0bd7ed570c29dfc983dcfa1fa69b28",
+    "pctx01-startup-owned-group-capture-result.json": "304a7e7d8471abb7ec077ee53242cb569308e97129ca3df0669584ff33b32580"
+  }
+}

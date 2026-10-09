@@ -1,5 +1,60 @@
 # Implementation decisions
 
+## Development and authentication batching policy — current, 2026-10-09
+
+Ordinary-user implementation/build/test/review/commit/push proceeds while the human
+is away. Latest instruction: ONLY when administrator observation is indispensable,
+gather all required privileged verification into one prepared finite batch, request
+ONE macOS authentication for that batch, then execute its full prepared list without
+per-test authentication. Exit the privileged collector at batch completion. Existing
+persistent consent covers only minimal read-only observation of generated/owned
+PCTX01 test processes; it is not unrestricted root authorization. Do not launch
+individual privileged wrappers or reopen canceled historical sessions.
+
+Before that exceptional batch, finish ordinary preparation: exact test list/source/
+binary identities, bounded collection per owned PID/native start/executable, expected
+outputs, original clocks/concurrency/assertions, cleanup and failure reporting. Keep
+product tests as the ordinary user; the single authenticated process only observes
+admitted owned targets. Use explicit finite batch lifetime and one authentication
+entry point, rather than assuming sudo cache persists across unrelated executions.
+A failed test remains failed; continue independent items in that same prepared batch
+only with safe cleanup, never rerun to obtain a pass. Report individual results and
+missing observations, not merely the authenticated wrapper exit. If authentication
+is canceled, preserve it and continue nonprivileged work; do not prompt-loop. A new
+batch is justified only by newly necessary evidence or a different recorded method.
+
+No sudoers/SIP/Gatekeeper/auth-cache changes, permanent root services or password
+storage. Tool sandbox approval and macOS administrator authentication are separate:
+a permitted tool escalation still executes as the normal user unless explicitly
+authenticated otherwise. The current four original startup tests need no root, so
+their finite user-state batch runs without authentication. Root-only kernel facts
+remain unavailable; do not turn that into an exemption or switch official tasks.
+PCTX01-G05-D05 product_failure, detail33/40 and whole0/10 unchanged.
+
+Owned-group session3921 TERMINAL1: authentication canceled(-128), driver never
+started, no collector readiness/trace. Empty session, observer15593 absent. Historical
+live/fresh-auth next steps below are superseded. Do not reopen that batch.
+
+## Prior persistent diagnostic consent — scope retained, batching policy above governs
+
+The human persistently authorizes minimal read-only state/stack/kernel observation
+of test processes generated and owned by the PCTX diagnostic operator for PCTX01
+macOS startup failures. Do not ask conversational approval again for the same
+purpose/owned-target scope. Prepare tools, bind exact PID/UID/native start/executable,
+collect bounded observations and clean up generated tools. A rerun requires a
+recorded different hypothesis or collection method, never an unchanged pass retry.
+Normal-user original timeouts/concurrency/failure conditions remain unchanged;
+diagnostic success or later passing tests do not qualify a product fix.
+
+No unrelated apps/users/operational processes, secrets, security-policy changes,
+protection disabling or permanent privileged service are authorized. Minimize and
+mask evidence; do not leave unnecessary privileged processes. Changed scope needs
+specific targets/command/impact and separate permission. Do not bypass macOS/tool/
+automatic approval authentication; request OS authentication only when required,
+and never store passwords. This explicit authorization supersedes prior fresh-
+conversational-approval requirements ONLY within this scope; old manifests retain
+the permission state at their creation, not the current execution policy.
+
 ## Administrator prompt policy — current, 2026-10-09
 
 The user requested an end to repeated administrator dialogs. Ordinary-user

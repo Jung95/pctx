@@ -1,0 +1,15 @@
+{
+  "revision": "0bea58c354b3a1a62f094b4818f1d9cb46f776a2",
+  "root": "/private/tmp/pctx01-user-state-3bjhg1ks",
+  "source": "/private/tmp/pctx01-user-state-3bjhg1ks/source",
+  "session": "/private/tmp/pctx01-user-state-3bjhg1ks/session",
+  "target": "/private/tmp/pctx01-user-state-3bjhg1ks/target",
+  "test_source_sha256": "8b9fbc97fbd5acaf612b2d75b94cf810faa2b61614b654495082462b1941a8dc",
+  "method": "ordinary-user proc state at original250/750ms; no auth/attachment/retention/kernel stacks",
+  "tests": [
+    "query_program_resolution_uses_captured_command_path",
+    "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+    "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget",
+    "simultaneous_streams_are_collected_and_overflow_never_infers_success"
+  ]
+}

@@ -1,0 +1,5 @@
+{
+  "source_sha256": "868a0948accb3fb988758f8c7cccbf5ef307cc133cfcc3c9b88407fa0e88acdd",
+  "binary_sha256": "9654e3fcf1ed290ffe9007f512e5c2c2a3fe822054c8c8741b3cecdfbbe6a6bc",
+  "disposition": "build PASS; never executed; reviewer found diagnostic panic bypass cleanup risk; corrected before any test"
+}

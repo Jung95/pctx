@@ -1,0 +1,6 @@
+
+running 1 test
+test relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 13 filtered out; finished in 0.25s
+

@@ -1,0 +1,2749 @@
+{
+  "16502-16614-spawn.json": {
+    "deadline_lower_us": 310149113305,
+    "deadline_upper_us": 310149113305,
+    "origin_us": 310148113305,
+    "pid": 16614,
+    "ppid": 16502,
+    "record_us": 310148113478,
+    "start_sec": 1791534561,
+    "start_usec": 798743,
+    "uid": 502
+  },
+  "16502-16623-spawn.json": {
+    "deadline_lower_us": 310149173795,
+    "deadline_upper_us": 310149173795,
+    "origin_us": 310148173795,
+    "pid": 16623,
+    "ppid": 16502,
+    "record_us": 310148173991,
+    "start_sec": 1791534561,
+    "start_usec": 859245,
+    "uid": 502
+  },
+  "16502-16528-spawn.json": {
+    "deadline_lower_us": 310148479536,
+    "deadline_upper_us": 310148479536,
+    "origin_us": 310147479536,
+    "pid": 16528,
+    "ppid": 16502,
+    "record_us": 310147479709,
+    "start_sec": 1791534561,
+    "start_usec": 164978,
+    "uid": 502
+  },
+  "16502-16504-outcome.json": {
+    "at_us": 310147465455,
+    "code": "success",
+    "pid": 16504,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16551-outcome.json": {
+    "at_us": 310147641571,
+    "code": "success",
+    "pid": 16551,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16582-spawn.json": {
+    "deadline_lower_us": 310148919429,
+    "deadline_upper_us": 310148919429,
+    "origin_us": 310147919429,
+    "pid": 16582,
+    "ppid": 16502,
+    "record_us": 310147919595,
+    "start_sec": 1791534561,
+    "start_usec": 604865,
+    "uid": 502
+  },
+  "16502-16503-outcome.json": {
+    "at_us": 310147360363,
+    "code": "success",
+    "pid": 16503,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16556-outcome.json": {
+    "at_us": 310147759721,
+    "code": "success",
+    "pid": 16556,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16556-spawn.json": {
+    "deadline_lower_us": 310148754078,
+    "deadline_upper_us": 310148754078,
+    "origin_us": 310147754078,
+    "pid": 16556,
+    "ppid": 16502,
+    "record_us": 310147754279,
+    "start_sec": 1791534561,
+    "start_usec": 439538,
+    "uid": 502
+  },
+  "16502-16561-spawn.json": {
+    "deadline_lower_us": 310148784879,
+    "deadline_upper_us": 310148784879,
+    "origin_us": 310147784879,
+    "pid": 16561,
+    "ppid": 16502,
+    "record_us": 310147785046,
+    "start_sec": 1791534561,
+    "start_usec": 470320,
+    "uid": 502
+  },
+  "16502-16608-spawn.json": {
+    "deadline_lower_us": 310149054860,
+    "deadline_upper_us": 310149054860,
+    "origin_us": 310148054860,
+    "pid": 16608,
+    "ppid": 16502,
+    "record_us": 310148055020,
+    "start_sec": 1791534561,
+    "start_usec": 740297,
+    "uid": 502
+  },
+  "16502-16534-spawn.json": {
+    "deadline_lower_us": 310148517579,
+    "deadline_upper_us": 310148517579,
+    "origin_us": 310147517579,
+    "pid": 16534,
+    "ppid": 16502,
+    "record_us": 310147517769,
+    "start_sec": 1791534561,
+    "start_usec": 203030,
+    "uid": 502
+  },
+  "16502-16503-spawn.json": {
+    "deadline_lower_us": 310148090797,
+    "deadline_upper_us": 310148090797,
+    "origin_us": 310147090797,
+    "pid": 16503,
+    "ppid": 16502,
+    "record_us": 310147091733,
+    "start_sec": 1791534560,
+    "start_usec": 776707,
+    "uid": 502
+  },
+  "16502-16516-outcome.json": {
+    "at_us": 310147400810,
+    "code": "success",
+    "pid": 16516,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16543-outcome.json": {
+    "at_us": 310147590775,
+    "code": "success",
+    "pid": 16543,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16511-outcome.json": {
+    "at_us": 310147367451,
+    "code": "success",
+    "pid": 16511,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16544-outcome.json": {
+    "at_us": 310147597132,
+    "code": "success",
+    "pid": 16544,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16506-state-0.json": {
+    "before_deadline_lower": true,
+    "begin_us": 310147347358,
+    "clock_valid": true,
+    "end_us": 310147347404,
+    "executable_path_bytes": 7,
+    "executable_path_errno": null,
+    "executable_path_sha256": "77bafa9e3a8a092afc4f1dd84e6e1cc58b68f42eb934bf0f6b73deb2518f78a3",
+    "identity_after": true,
+    "identity_before": true,
+    "kernel_stack": null,
+    "observation_us": 46,
+    "pid": 16506,
+    "ppid": 16502,
+    "requested_age_us": 250000,
+    "start_sec": 1791534560,
+    "start_usec": 777227,
+    "task": {
+      "context_switches": 1,
+      "mach_syscalls": 0,
+      "running": 0,
+      "system_time_raw": 672,
+      "threads": 1,
+      "unix_syscalls": 0,
+      "user_time_raw": 0
+    },
+    "task_errno": null,
+    "task_expected_bytes": 96,
+    "task_returned_bytes": 96,
+    "thread_list_bytes": 8,
+    "thread_list_capacity": 32,
+    "thread_list_errno": null,
+    "thread_list_may_be_truncated": false,
+    "thread_list_valid": true,
+    "threads": [
+      {
+        "data": {
+          "cpu_usage": 0,
+          "run_state": 3,
+          "sleep_time": 0,
+          "system_time_raw": 28000,
+          "user_time_raw": 0
+        },
+        "errno": null,
+        "expected_bytes": 112,
+        "handle": 0,
+        "returned_bytes": 112
+      }
+    ]
+  },
+  "16502-16512-spawn.json": {
+    "deadline_lower_us": 310148367684,
+    "deadline_upper_us": 310148367684,
+    "origin_us": 310147367684,
+    "pid": 16512,
+    "ppid": 16502,
+    "record_us": 310147367865,
+    "start_sec": 1791534561,
+    "start_usec": 53129,
+    "uid": 502
+  },
+  "16502-16527-outcome.json": {
+    "at_us": 310147479330,
+    "code": "success",
+    "pid": 16527,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16572-outcome.json": {
+    "at_us": 310147850638,
+    "code": "success",
+    "pid": 16572,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16525-spawn.json": {
+    "deadline_lower_us": 310148452991,
+    "deadline_upper_us": 310148452991,
+    "origin_us": 310147452991,
+    "pid": 16525,
+    "ppid": 16502,
+    "record_us": 310147453138,
+    "start_sec": 1791534561,
+    "start_usec": 138420,
+    "uid": 502
+  },
+  "16502-16619-spawn.json": {
+    "deadline_lower_us": 310149146973,
+    "deadline_upper_us": 310149146973,
+    "origin_us": 310148146973,
+    "pid": 16619,
+    "ppid": 16502,
+    "record_us": 310148147155,
+    "start_sec": 1791534561,
+    "start_usec": 832418,
+    "uid": 502
+  },
+  "16502-16570-spawn.json": {
+    "deadline_lower_us": 310148837008,
+    "deadline_upper_us": 310148837009,
+    "origin_us": 310147837008,
+    "pid": 16570,
+    "ppid": 16502,
+    "record_us": 310147837263,
+    "start_sec": 1791534561,
+    "start_usec": 522477,
+    "uid": 502
+  },
+  "16502-16520-outcome.json": {
+    "at_us": 310147426247,
+    "code": "success",
+    "pid": 16520,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16575-outcome.json": {
+    "at_us": 310147878885,
+    "code": "success",
+    "pid": 16575,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16547-spawn.json": {
+    "deadline_lower_us": 310148610239,
+    "deadline_upper_us": 310148610239,
+    "origin_us": 310147610239,
+    "pid": 16547,
+    "ppid": 16502,
+    "record_us": 310147610416,
+    "start_sec": 1791534561,
+    "start_usec": 295682,
+    "uid": 502
+  },
+  "16502-16593-spawn.json": {
+    "deadline_lower_us": 310148981143,
+    "deadline_upper_us": 310148981143,
+    "origin_us": 310147981143,
+    "pid": 16593,
+    "ppid": 16502,
+    "record_us": 310147981316,
+    "start_sec": 1791534561,
+    "start_usec": 666589,
+    "uid": 502
+  },
+  "16502-16608-outcome.json": {
+    "at_us": 310148061411,
+    "code": "success",
+    "pid": 16608,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16535-outcome.json": {
+    "at_us": 310147529956,
+    "code": "success",
+    "pid": 16535,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16560-outcome.json": {
+    "at_us": 310147784758,
+    "code": "success",
+    "pid": 16560,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16539-spawn.json": {
+    "deadline_lower_us": 310148549319,
+    "deadline_upper_us": 310148549319,
+    "origin_us": 310147549319,
+    "pid": 16539,
+    "ppid": 16502,
+    "record_us": 310147549481,
+    "start_sec": 1791534561,
+    "start_usec": 234757,
+    "uid": 502
+  },
+  "16502-16598-outcome.json": {
+    "at_us": 310148007970,
+    "code": "success",
+    "pid": 16598,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16532-outcome.json": {
+    "at_us": 310147511154,
+    "code": "success",
+    "pid": 16532,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16567-outcome.json": {
+    "at_us": 310147830069,
+    "code": "success",
+    "pid": 16567,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16605-spawn.json": {
+    "deadline_lower_us": 310149035628,
+    "deadline_upper_us": 310149035629,
+    "origin_us": 310148035628,
+    "pid": 16605,
+    "ppid": 16502,
+    "record_us": 310148035817,
+    "start_sec": 1791534561,
+    "start_usec": 721073,
+    "uid": 502
+  },
+  "16502-16520-spawn.json": {
+    "deadline_lower_us": 310148419715,
+    "deadline_upper_us": 310148419715,
+    "origin_us": 310147419715,
+    "pid": 16520,
+    "ppid": 16502,
+    "record_us": 310147419875,
+    "start_sec": 1791534561,
+    "start_usec": 105147,
+    "uid": 502
+  },
+  "16502-16517-spawn.json": {
+    "deadline_lower_us": 310148400964,
+    "deadline_upper_us": 310148400964,
+    "origin_us": 310147400964,
+    "pid": 16517,
+    "ppid": 16502,
+    "record_us": 310147401172,
+    "start_sec": 1791534561,
+    "start_usec": 86425,
+    "uid": 502
+  },
+  "16502-16542-spawn.json": {
+    "deadline_lower_us": 310148578987,
+    "deadline_upper_us": 310148578987,
+    "origin_us": 310147578987,
+    "pid": 16542,
+    "ppid": 16502,
+    "record_us": 310147579171,
+    "start_sec": 1791534561,
+    "start_usec": 264433,
+    "uid": 502
+  },
+  "16502-16575-spawn.json": {
+    "deadline_lower_us": 310148872276,
+    "deadline_upper_us": 310148872276,
+    "origin_us": 310147872276,
+    "pid": 16575,
+    "ppid": 16502,
+    "record_us": 310147872491,
+    "start_sec": 1791534561,
+    "start_usec": 557729,
+    "uid": 502
+  },
+  "16502-16545-outcome.json": {
+    "at_us": 310147603359,
+    "code": "success",
+    "pid": 16545,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16510-outcome.json": {
+    "at_us": 310147753778,
+    "code": "success",
+    "pid": 16510,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16542-outcome.json": {
+    "at_us": 310147584511,
+    "code": "success",
+    "pid": 16542,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16517-outcome.json": {
+    "at_us": 310147406887,
+    "code": "success",
+    "pid": 16517,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16600-spawn.json": {
+    "deadline_lower_us": 310149008345,
+    "deadline_upper_us": 310149008345,
+    "origin_us": 310148008345,
+    "pid": 16600,
+    "ppid": 16502,
+    "record_us": 310148008567,
+    "start_sec": 1791534561,
+    "start_usec": 693818,
+    "uid": 502
+  },
+  "16502-16596-spawn.json": {
+    "deadline_lower_us": 310148994727,
+    "deadline_upper_us": 310148994727,
+    "origin_us": 310147994727,
+    "pid": 16596,
+    "ppid": 16502,
+    "record_us": 310147994949,
+    "start_sec": 1791534561,
+    "start_usec": 680182,
+    "uid": 502
+  },
+  "16502-16557-outcome.json": {
+    "at_us": 310147766645,
+    "code": "success",
+    "pid": 16557,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16506-state-1.json": {
+    "before_deadline_lower": true,
+    "begin_us": 310147846684,
+    "clock_valid": true,
+    "end_us": 310147846723,
+    "executable_path_bytes": 7,
+    "executable_path_errno": null,
+    "executable_path_sha256": "77bafa9e3a8a092afc4f1dd84e6e1cc58b68f42eb934bf0f6b73deb2518f78a3",
+    "identity_after": true,
+    "identity_before": true,
+    "kernel_stack": null,
+    "observation_us": 39,
+    "pid": 16506,
+    "ppid": 16502,
+    "requested_age_us": 750000,
+    "start_sec": 1791534560,
+    "start_usec": 777227,
+    "task": {
+      "context_switches": 1,
+      "mach_syscalls": 0,
+      "running": 0,
+      "system_time_raw": 672,
+      "threads": 1,
+      "unix_syscalls": 0,
+      "user_time_raw": 0
+    },
+    "task_errno": null,
+    "task_expected_bytes": 96,
+    "task_returned_bytes": 96,
+    "thread_list_bytes": 8,
+    "thread_list_capacity": 32,
+    "thread_list_errno": null,
+    "thread_list_may_be_truncated": false,
+    "thread_list_valid": true,
+    "threads": [
+      {
+        "data": {
+          "cpu_usage": 0,
+          "run_state": 3,
+          "sleep_time": 0,
+          "system_time_raw": 28000,
+          "user_time_raw": 0
+        },
+        "errno": null,
+        "expected_bytes": 112,
+        "handle": 0,
+        "returned_bytes": 112
+      }
+    ]
+  },
+  "16502-16550-outcome.json": {
+    "at_us": 310147634769,
+    "code": "success",
+    "pid": 16550,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16505-outcome.json": {
+    "at_us": 310147857996,
+    "code": "success",
+    "pid": 16505,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16609-outcome.json": {
+    "at_us": 310148086277,
+    "code": "success",
+    "pid": 16609,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16587-spawn.json": {
+    "deadline_lower_us": 310148953082,
+    "deadline_upper_us": 310148953082,
+    "origin_us": 310147953082,
+    "pid": 16587,
+    "ppid": 16502,
+    "record_us": 310147953251,
+    "start_sec": 1791534561,
+    "start_usec": 638519,
+    "uid": 502
+  },
+  "16502-16578-spawn.json": {
+    "deadline_lower_us": 310148892799,
+    "deadline_upper_us": 310148892800,
+    "origin_us": 310147892799,
+    "pid": 16578,
+    "ppid": 16502,
+    "record_us": 310147893071,
+    "start_sec": 1791534561,
+    "start_usec": 578280,
+    "uid": 502
+  },
+  "16502-16566-outcome.json": {
+    "at_us": 310147823341,
+    "code": "success",
+    "pid": 16566,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16533-outcome.json": {
+    "at_us": 310147517436,
+    "code": "success",
+    "pid": 16533,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16611-spawn.json": {
+    "deadline_lower_us": 310149093062,
+    "deadline_upper_us": 310149093062,
+    "origin_us": 310148093062,
+    "pid": 16611,
+    "ppid": 16502,
+    "record_us": 310148093244,
+    "start_sec": 1791534561,
+    "start_usec": 778504,
+    "uid": 502
+  },
+  "16502-16561-outcome.json": {
+    "at_us": 310147791414,
+    "code": "success",
+    "pid": 16561,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16534-outcome.json": {
+    "at_us": 310147523682,
+    "code": "success",
+    "pid": 16534,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16507-state-0.json": {
+    "before_deadline_lower": true,
+    "begin_us": 310147345964,
+    "clock_valid": true,
+    "end_us": 310147346011,
+    "executable_path_bytes": 7,
+    "executable_path_errno": null,
+    "executable_path_sha256": "77bafa9e3a8a092afc4f1dd84e6e1cc58b68f42eb934bf0f6b73deb2518f78a3",
+    "identity_after": true,
+    "identity_before": true,
+    "kernel_stack": null,
+    "observation_us": 47,
+    "pid": 16507,
+    "ppid": 16502,
+    "requested_age_us": 250000,
+    "start_sec": 1791534560,
+    "start_usec": 777250,
+    "task": {
+      "context_switches": 1,
+      "mach_syscalls": 0,
+      "running": 0,
+      "system_time_raw": 595,
+      "threads": 1,
+      "unix_syscalls": 0,
+      "user_time_raw": 0
+    },
+    "task_errno": null,
+    "task_expected_bytes": 96,
+    "task_returned_bytes": 96,
+    "thread_list_bytes": 8,
+    "thread_list_capacity": 32,
+    "thread_list_errno": null,
+    "thread_list_may_be_truncated": false,
+    "thread_list_valid": true,
+    "threads": [
+      {
+        "data": {
+          "cpu_usage": 0,
+          "run_state": 3,
+          "sleep_time": 0,
+          "system_time_raw": 24000,
+          "user_time_raw": 0
+        },
+        "errno": null,
+        "expected_bytes": 112,
+        "handle": 0,
+        "returned_bytes": 112
+      }
+    ]
+  },
+  "16502-16574-outcome.json": {
+    "at_us": 310147872116,
+    "code": "success",
+    "pid": 16574,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16521-outcome.json": {
+    "at_us": 310147432978,
+    "code": "success",
+    "pid": 16521,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16564-spawn.json": {
+    "deadline_lower_us": 310148803712,
+    "deadline_upper_us": 310148803712,
+    "origin_us": 310147803712,
+    "pid": 16564,
+    "ppid": 16502,
+    "record_us": 310147803896,
+    "start_sec": 1791534561,
+    "start_usec": 489158,
+    "uid": 502
+  },
+  "16502-16553-spawn.json": {
+    "deadline_lower_us": 310148648549,
+    "deadline_upper_us": 310148648549,
+    "origin_us": 310147648549,
+    "pid": 16553,
+    "ppid": 16502,
+    "record_us": 310147648741,
+    "start_sec": 1791534561,
+    "start_usec": 333997,
+    "uid": 502
+  },
+  "16502-16573-outcome.json": {
+    "at_us": 310147865352,
+    "code": "success",
+    "pid": 16573,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16526-outcome.json": {
+    "at_us": 310147472396,
+    "code": "success",
+    "pid": 16526,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16506-spawn.json": {
+    "deadline_lower_us": 310148091618,
+    "deadline_upper_us": 310148091618,
+    "origin_us": 310147091618,
+    "pid": 16506,
+    "ppid": 16502,
+    "record_us": 310147092246,
+    "start_sec": 1791534560,
+    "start_usec": 777227,
+    "uid": 502
+  },
+  "16502-16531-spawn.json": {
+    "deadline_lower_us": 310148498759,
+    "deadline_upper_us": 310148498759,
+    "origin_us": 310147498759,
+    "pid": 16531,
+    "ppid": 16502,
+    "record_us": 310147498938,
+    "start_sec": 1791534561,
+    "start_usec": 184205,
+    "uid": 502
+  },
+  "16502-16563-spawn.json": {
+    "deadline_lower_us": 310148797473,
+    "deadline_upper_us": 310148797473,
+    "origin_us": 310147797473,
+    "pid": 16563,
+    "ppid": 16502,
+    "record_us": 310147797673,
+    "start_sec": 1791534561,
+    "start_usec": 482930,
+    "uid": 502
+  },
+  "16502-16554-spawn.json": {
+    "deadline_lower_us": 310148655332,
+    "deadline_upper_us": 310148655332,
+    "origin_us": 310147655332,
+    "pid": 16554,
+    "ppid": 16502,
+    "record_us": 310147655521,
+    "start_sec": 1791534561,
+    "start_usec": 340780,
+    "uid": 502
+  },
+  "16502-16616-outcome.json": {
+    "at_us": 310148133335,
+    "code": "success",
+    "pid": 16616,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16536-spawn.json": {
+    "deadline_lower_us": 310148530142,
+    "deadline_upper_us": 310148530142,
+    "origin_us": 310147530142,
+    "pid": 16536,
+    "ppid": 16502,
+    "record_us": 310147530394,
+    "start_sec": 1791534561,
+    "start_usec": 215612,
+    "uid": 502
+  },
+  "16502-16611-outcome.json": {
+    "at_us": 310148099665,
+    "code": "success",
+    "pid": 16611,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16586-outcome.json": {
+    "at_us": 310147952970,
+    "code": "success",
+    "pid": 16586,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16579-outcome.json": {
+    "at_us": 310147906223,
+    "code": "success",
+    "pid": 16579,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16581-outcome.json": {
+    "at_us": 310147919305,
+    "code": "success",
+    "pid": 16581,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16604-outcome.json": {
+    "at_us": 310148035503,
+    "code": "success",
+    "pid": 16604,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16621-spawn.json": {
+    "deadline_lower_us": 310149160406,
+    "deadline_upper_us": 310149160406,
+    "origin_us": 310148160406,
+    "pid": 16621,
+    "ppid": 16502,
+    "record_us": 310148160576,
+    "start_sec": 1791534561,
+    "start_usec": 845841,
+    "uid": 502
+  },
+  "16502-16616-spawn.json": {
+    "deadline_lower_us": 310149126719,
+    "deadline_upper_us": 310149126719,
+    "origin_us": 310148126719,
+    "pid": 16616,
+    "ppid": 16502,
+    "record_us": 310148126938,
+    "start_sec": 1791534561,
+    "start_usec": 812168,
+    "uid": 502
+  },
+  "16502-16548-spawn.json": {
+    "deadline_lower_us": 310148616105,
+    "deadline_upper_us": 310148616105,
+    "origin_us": 310147616105,
+    "pid": 16548,
+    "ppid": 16502,
+    "record_us": 310147616269,
+    "start_sec": 1791534561,
+    "start_usec": 301544,
+    "uid": 502
+  },
+  "16502-16603-outcome.json": {
+    "at_us": 310148028641,
+    "code": "success",
+    "pid": 16603,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16580-spawn.json": {
+    "deadline_lower_us": 310148906340,
+    "deadline_upper_us": 310148906340,
+    "origin_us": 310147906340,
+    "pid": 16580,
+    "ppid": 16502,
+    "record_us": 310147906517,
+    "start_sec": 1791534561,
+    "start_usec": 591781,
+    "uid": 502
+  },
+  "16502-16593-outcome.json": {
+    "at_us": 310147987706,
+    "code": "success",
+    "pid": 16593,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16539-outcome.json": {
+    "at_us": 310147555843,
+    "code": "success",
+    "pid": 16539,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16508-outcome.json": {
+    "at_us": 310148091835,
+    "code": "TIMEOUT",
+    "pid": 16508,
+    "ppid": 16502,
+    "stderr_bytes": 0,
+    "stdout_bytes": 0
+  },
+  "16502-16559-spawn.json": {
+    "deadline_lower_us": 310148772408,
+    "deadline_upper_us": 310148772408,
+    "origin_us": 310147772408,
+    "pid": 16559,
+    "ppid": 16502,
+    "record_us": 310147772588,
+    "start_sec": 1791534561,
+    "start_usec": 457856,
+    "uid": 502
+  },
+  "16502-16607-spawn.json": {
+    "deadline_lower_us": 310149048181,
+    "deadline_upper_us": 310149048181,
+    "origin_us": 310148048181,
+    "pid": 16607,
+    "ppid": 16502,
+    "record_us": 310148048373,
+    "start_sec": 1791534561,
+    "start_usec": 733627,
+    "uid": 502
+  },
+  "16502-16620-outcome.json": {
+    "at_us": 310148160281,
+    "code": "success",
+    "pid": 16620,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16527-spawn.json": {
+    "deadline_lower_us": 310148472584,
+    "deadline_upper_us": 310148472584,
+    "origin_us": 310147472584,
+    "pid": 16527,
+    "ppid": 16502,
+    "record_us": 310147472754,
+    "start_sec": 1791534561,
+    "start_usec": 158025,
+    "uid": 502
+  },
+  "16502-16510-spawn.json": {
+    "deadline_lower_us": 310148091720,
+    "deadline_upper_us": 310148091721,
+    "origin_us": 310147091720,
+    "pid": 16510,
+    "ppid": 16502,
+    "record_us": 310147092247,
+    "start_sec": 1791534560,
+    "start_usec": 777293,
+    "uid": 502
+  },
+  "16502-16548-outcome.json": {
+    "at_us": 310147622205,
+    "code": "success",
+    "pid": 16548,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16545-spawn.json": {
+    "deadline_lower_us": 310148597307,
+    "deadline_upper_us": 310148597307,
+    "origin_us": 310147597307,
+    "pid": 16545,
+    "ppid": 16502,
+    "record_us": 310147597488,
+    "start_sec": 1791534561,
+    "start_usec": 282752,
+    "uid": 502
+  },
+  "16502-16572-spawn.json": {
+    "deadline_lower_us": 310148843890,
+    "deadline_upper_us": 310148843890,
+    "origin_us": 310147843890,
+    "pid": 16572,
+    "ppid": 16502,
+    "record_us": 310147844102,
+    "start_sec": 1791534561,
+    "start_usec": 529353,
+    "uid": 502
+  },
+  "16502-16602-outcome.json": {
+    "at_us": 310148021824,
+    "code": "success",
+    "pid": 16602,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16509-spawn.json": {
+    "deadline_lower_us": 310148091722,
+    "deadline_upper_us": 310148091722,
+    "origin_us": 310147091722,
+    "pid": 16509,
+    "ppid": 16502,
+    "record_us": 310147092206,
+    "start_sec": 1791534560,
+    "start_usec": 777265,
+    "uid": 502
+  },
+  "16502-16602-spawn.json": {
+    "deadline_lower_us": 310149015190,
+    "deadline_upper_us": 310149015190,
+    "origin_us": 310148015190,
+    "pid": 16602,
+    "ppid": 16502,
+    "record_us": 310148015402,
+    "start_sec": 1791534561,
+    "start_usec": 700650,
+    "uid": 502
+  },
+  "16502-16605-outcome.json": {
+    "at_us": 310148041271,
+    "code": "success",
+    "pid": 16605,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16538-outcome.json": {
+    "at_us": 310147549209,
+    "code": "success",
+    "pid": 16538,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16592-outcome.json": {
+    "at_us": 310147981010,
+    "code": "success",
+    "pid": 16592,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16595-outcome.json": {
+    "at_us": 310147994557,
+    "code": "success",
+    "pid": 16595,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16515-spawn.json": {
+    "deadline_lower_us": 310148387442,
+    "deadline_upper_us": 310148387442,
+    "origin_us": 310147387442,
+    "pid": 16515,
+    "ppid": 16502,
+    "record_us": 310147387668,
+    "start_sec": 1791534561,
+    "start_usec": 72903,
+    "uid": 502
+  },
+  "16502-16522-spawn.json": {
+    "deadline_lower_us": 310148433087,
+    "deadline_upper_us": 310148433087,
+    "origin_us": 310147433087,
+    "pid": 16522,
+    "ppid": 16502,
+    "record_us": 310147433245,
+    "start_sec": 1791534561,
+    "start_usec": 118522,
+    "uid": 502
+  },
+  "16502-16610-outcome.json": {
+    "at_us": 310148092949,
+    "code": "success",
+    "pid": 16610,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16577-spawn.json": {
+    "deadline_lower_us": 310148885890,
+    "deadline_upper_us": 310148885890,
+    "origin_us": 310147885890,
+    "pid": 16577,
+    "ppid": 16502,
+    "record_us": 310147886141,
+    "start_sec": 1791534561,
+    "start_usec": 571359,
+    "uid": 502
+  },
+  "16502-16617-outcome.json": {
+    "at_us": 310148140062,
+    "code": "success",
+    "pid": 16617,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16540-spawn.json": {
+    "deadline_lower_us": 310148555944,
+    "deadline_upper_us": 310148555944,
+    "origin_us": 310147555944,
+    "pid": 16540,
+    "ppid": 16502,
+    "record_us": 310147556103,
+    "start_sec": 1791534561,
+    "start_usec": 241379,
+    "uid": 502
+  },
+  "16502-16580-outcome.json": {
+    "at_us": 310147912640,
+    "code": "success",
+    "pid": 16580,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16578-outcome.json": {
+    "at_us": 310147899473,
+    "code": "success",
+    "pid": 16578,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16587-outcome.json": {
+    "at_us": 310147959640,
+    "code": "success",
+    "pid": 16587,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16621-outcome.json": {
+    "at_us": 310148166994,
+    "code": "success",
+    "pid": 16621,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16551-spawn.json": {
+    "deadline_lower_us": 310148634938,
+    "deadline_upper_us": 310148634939,
+    "origin_us": 310147634938,
+    "pid": 16551,
+    "ppid": 16502,
+    "record_us": 310147635168,
+    "start_sec": 1791534561,
+    "start_usec": 320402,
+    "uid": 502
+  },
+  "16502-16566-spawn.json": {
+    "deadline_lower_us": 310148816306,
+    "deadline_upper_us": 310148816306,
+    "origin_us": 310147816306,
+    "pid": 16566,
+    "ppid": 16502,
+    "record_us": 310147816883,
+    "start_sec": 1791534561,
+    "start_usec": 501917,
+    "uid": 502
+  },
+  "16502-16549-outcome.json": {
+    "at_us": 310147629038,
+    "code": "success",
+    "pid": 16549,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16533-spawn.json": {
+    "deadline_lower_us": 310148511268,
+    "deadline_upper_us": 310148511268,
+    "origin_us": 310147511268,
+    "pid": 16533,
+    "ppid": 16502,
+    "record_us": 310147511438,
+    "start_sec": 1791534561,
+    "start_usec": 196707,
+    "uid": 502
+  },
+  "16502-16504-spawn.json": {
+    "deadline_lower_us": 310148091674,
+    "deadline_upper_us": 310148091674,
+    "origin_us": 310147091674,
+    "pid": 16504,
+    "ppid": 16502,
+    "record_us": 310147091968,
+    "start_sec": 1791534560,
+    "start_usec": 777163,
+    "uid": 502
+  },
+  "16502-16585-spawn.json": {
+    "deadline_lower_us": 310148939689,
+    "deadline_upper_us": 310148939689,
+    "origin_us": 310147939689,
+    "pid": 16585,
+    "ppid": 16502,
+    "record_us": 310147939857,
+    "start_sec": 1791534561,
+    "start_usec": 625130,
+    "uid": 502
+  },
+  "16502-16509-outcome.json": {
+    "at_us": 310148079393,
+    "code": "success",
+    "pid": 16509,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16613-spawn.json": {
+    "deadline_lower_us": 310149106548,
+    "deadline_upper_us": 310149106548,
+    "origin_us": 310148106548,
+    "pid": 16613,
+    "ppid": 16502,
+    "record_us": 310148106708,
+    "start_sec": 1791534561,
+    "start_usec": 791986,
+    "uid": 502
+  },
+  "16502-16518-spawn.json": {
+    "deadline_lower_us": 310148407009,
+    "deadline_upper_us": 310148407009,
+    "origin_us": 310147407009,
+    "pid": 16518,
+    "ppid": 16502,
+    "record_us": 310147407231,
+    "start_sec": 1791534561,
+    "start_usec": 92480,
+    "uid": 502
+  },
+  "16502-16568-outcome.json": {
+    "at_us": 310147836818,
+    "code": "success",
+    "pid": 16568,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16590-outcome.json": {
+    "at_us": 310147974608,
+    "code": "success",
+    "pid": 16590,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16521-spawn.json": {
+    "deadline_lower_us": 310148426397,
+    "deadline_upper_us": 310148426397,
+    "origin_us": 310147426397,
+    "pid": 16521,
+    "ppid": 16502,
+    "record_us": 310147426608,
+    "start_sec": 1791534561,
+    "start_usec": 111851,
+    "uid": 502
+  },
+  "16502-16607-outcome.json": {
+    "at_us": 310148054750,
+    "code": "success",
+    "pid": 16607,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16516-spawn.json": {
+    "deadline_lower_us": 310148394217,
+    "deadline_upper_us": 310148394217,
+    "origin_us": 310147394217,
+    "pid": 16516,
+    "ppid": 16502,
+    "record_us": 310147394424,
+    "start_sec": 1791534561,
+    "start_usec": 79670,
+    "uid": 502
+  },
+  "16502-16600-outcome.json": {
+    "at_us": 310148015003,
+    "code": "success",
+    "pid": 16600,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16543-spawn.json": {
+    "deadline_lower_us": 310148584725,
+    "deadline_upper_us": 310148584725,
+    "origin_us": 310147584725,
+    "pid": 16543,
+    "ppid": 16502,
+    "record_us": 310147584910,
+    "start_sec": 1791534561,
+    "start_usec": 270175,
+    "uid": 502
+  },
+  "16502-16574-spawn.json": {
+    "deadline_lower_us": 310148865520,
+    "deadline_upper_us": 310148865520,
+    "origin_us": 310147865520,
+    "pid": 16574,
+    "ppid": 16502,
+    "record_us": 310147865735,
+    "start_sec": 1791534561,
+    "start_usec": 550978,
+    "uid": 502
+  },
+  "16502-16585-outcome.json": {
+    "at_us": 310147946224,
+    "code": "success",
+    "pid": 16585,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16528-outcome.json": {
+    "at_us": 310147486130,
+    "code": "success",
+    "pid": 16528,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16582-outcome.json": {
+    "at_us": 310147925968,
+    "code": "success",
+    "pid": 16582,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16615-outcome.json": {
+    "at_us": 310148126564,
+    "code": "success",
+    "pid": 16615,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16568-spawn.json": {
+    "deadline_lower_us": 310148830227,
+    "deadline_upper_us": 310148830227,
+    "origin_us": 310147830227,
+    "pid": 16568,
+    "ppid": 16502,
+    "record_us": 310147830424,
+    "start_sec": 1791534561,
+    "start_usec": 515681,
+    "uid": 502
+  },
+  "16502-16509-state-0.json": {
+    "before_deadline_lower": true,
+    "begin_us": 310147343392,
+    "clock_valid": true,
+    "end_us": 310147343544,
+    "executable_path_bytes": 7,
+    "executable_path_errno": null,
+    "executable_path_sha256": "77bafa9e3a8a092afc4f1dd84e6e1cc58b68f42eb934bf0f6b73deb2518f78a3",
+    "identity_after": true,
+    "identity_before": true,
+    "kernel_stack": null,
+    "observation_us": 152,
+    "pid": 16509,
+    "ppid": 16502,
+    "requested_age_us": 250000,
+    "start_sec": 1791534560,
+    "start_usec": 777265,
+    "task": {
+      "context_switches": 1,
+      "mach_syscalls": 0,
+      "running": 0,
+      "system_time_raw": 667,
+      "threads": 1,
+      "unix_syscalls": 0,
+      "user_time_raw": 0
+    },
+    "task_errno": null,
+    "task_expected_bytes": 96,
+    "task_returned_bytes": 96,
+    "thread_list_bytes": 8,
+    "thread_list_capacity": 32,
+    "thread_list_errno": null,
+    "thread_list_may_be_truncated": false,
+    "thread_list_valid": true,
+    "threads": [
+      {
+        "data": {
+          "cpu_usage": 0,
+          "run_state": 3,
+          "sleep_time": 0,
+          "system_time_raw": 27000,
+          "user_time_raw": 0
+        },
+        "errno": null,
+        "expected_bytes": 112,
+        "handle": 0,
+        "returned_bytes": 112
+      }
+    ]
+  },
+  "16502-16612-outcome.json": {
+    "at_us": 310148106424,
+    "code": "success",
+    "pid": 16612,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16579-spawn.json": {
+    "deadline_lower_us": 310148899620,
+    "deadline_upper_us": 310148899620,
+    "origin_us": 310147899620,
+    "pid": 16579,
+    "ppid": 16502,
+    "record_us": 310147899835,
+    "start_sec": 1791534561,
+    "start_usec": 585075,
+    "uid": 502
+  },
+  "16502-16610-spawn.json": {
+    "deadline_lower_us": 310149086416,
+    "deadline_upper_us": 310149086417,
+    "origin_us": 310148086416,
+    "pid": 16610,
+    "ppid": 16502,
+    "record_us": 310148086584,
+    "start_sec": 1791534561,
+    "start_usec": 771861,
+    "uid": 502
+  },
+  "16502-16519-outcome.json": {
+    "at_us": 310147419614,
+    "code": "success",
+    "pid": 16519,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16623-outcome.json": {
+    "at_us": 310148180452,
+    "code": "success",
+    "pid": 16623,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16586-spawn.json": {
+    "deadline_lower_us": 310148946384,
+    "deadline_upper_us": 310148946384,
+    "origin_us": 310147946384,
+    "pid": 16586,
+    "ppid": 16502,
+    "record_us": 310147946595,
+    "start_sec": 1791534561,
+    "start_usec": 631837,
+    "uid": 502
+  },
+  "16502-16559-outcome.json": {
+    "at_us": 310147778984,
+    "code": "success",
+    "pid": 16559,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16565-spawn.json": {
+    "deadline_lower_us": 310148809999,
+    "deadline_upper_us": 310148809999,
+    "origin_us": 310147809999,
+    "pid": 16565,
+    "ppid": 16502,
+    "record_us": 310147810215,
+    "start_sec": 1791534561,
+    "start_usec": 495456,
+    "uid": 502
+  },
+  "16502-16552-spawn.json": {
+    "deadline_lower_us": 310148641723,
+    "deadline_upper_us": 310148641724,
+    "origin_us": 310147641723,
+    "pid": 16552,
+    "ppid": 16502,
+    "record_us": 310147641937,
+    "start_sec": 1791534561,
+    "start_usec": 327181,
+    "uid": 502
+  },
+  "16502-16507-spawn.json": {
+    "deadline_lower_us": 310148091650,
+    "deadline_upper_us": 310148091650,
+    "origin_us": 310147091650,
+    "pid": 16507,
+    "ppid": 16502,
+    "record_us": 310147092244,
+    "start_sec": 1791534560,
+    "start_usec": 777250,
+    "uid": 502
+  },
+  "16502-16530-spawn.json": {
+    "deadline_lower_us": 310148493082,
+    "deadline_upper_us": 310148493082,
+    "origin_us": 310147493082,
+    "pid": 16530,
+    "ppid": 16502,
+    "record_us": 310147493337,
+    "start_sec": 1791534561,
+    "start_usec": 178555,
+    "uid": 502
+  },
+  "16502-16508-state-1.json": {
+    "before_deadline_lower": true,
+    "begin_us": 310147846677,
+    "clock_valid": true,
+    "end_us": 310147846707,
+    "executable_path_bytes": 7,
+    "executable_path_errno": null,
+    "executable_path_sha256": "77bafa9e3a8a092afc4f1dd84e6e1cc58b68f42eb934bf0f6b73deb2518f78a3",
+    "identity_after": true,
+    "identity_before": true,
+    "kernel_stack": null,
+    "observation_us": 30,
+    "pid": 16508,
+    "ppid": 16502,
+    "requested_age_us": 750000,
+    "start_sec": 1791534560,
+    "start_usec": 777254,
+    "task": {
+      "context_switches": 1,
+      "mach_syscalls": 0,
+      "running": 0,
+      "system_time_raw": 805,
+      "threads": 1,
+      "unix_syscalls": 0,
+      "user_time_raw": 0
+    },
+    "task_errno": null,
+    "task_expected_bytes": 96,
+    "task_returned_bytes": 96,
+    "thread_list_bytes": 8,
+    "thread_list_capacity": 32,
+    "thread_list_errno": null,
+    "thread_list_may_be_truncated": false,
+    "thread_list_valid": true,
+    "threads": [
+      {
+        "data": {
+          "cpu_usage": 0,
+          "run_state": 3,
+          "sleep_time": 0,
+          "system_time_raw": 33000,
+          "user_time_raw": 0
+        },
+        "errno": null,
+        "expected_bytes": 112,
+        "handle": 0,
+        "returned_bytes": 112
+      }
+    ]
+  },
+  "16502-16583-outcome.json": {
+    "at_us": 310147932864,
+    "code": "success",
+    "pid": 16583,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16529-outcome.json": {
+    "at_us": 310147492894,
+    "code": "success",
+    "pid": 16529,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16584-outcome.json": {
+    "at_us": 310147939572,
+    "code": "success",
+    "pid": 16584,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16583-spawn.json": {
+    "deadline_lower_us": 310148926187,
+    "deadline_upper_us": 310148926187,
+    "origin_us": 310147926187,
+    "pid": 16583,
+    "ppid": 16502,
+    "record_us": 310147926433,
+    "start_sec": 1791534561,
+    "start_usec": 611657,
+    "uid": 502
+  },
+  "16502-16615-spawn.json": {
+    "deadline_lower_us": 310149120040,
+    "deadline_upper_us": 310149120040,
+    "origin_us": 310148120040,
+    "pid": 16615,
+    "ppid": 16502,
+    "record_us": 310148120198,
+    "start_sec": 1791534561,
+    "start_usec": 805477,
+    "uid": 502
+  },
+  "16502-16613-outcome.json": {
+    "at_us": 310148113131,
+    "code": "success",
+    "pid": 16613,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16622-spawn.json": {
+    "deadline_lower_us": 310149167121,
+    "deadline_upper_us": 310149167121,
+    "origin_us": 310148167121,
+    "pid": 16622,
+    "ppid": 16502,
+    "record_us": 310148167278,
+    "start_sec": 1791534561,
+    "start_usec": 852559,
+    "uid": 502
+  },
+  "16502-16508-state-0.json": {
+    "before_deadline_lower": true,
+    "begin_us": 310147345930,
+    "clock_valid": true,
+    "end_us": 310147345994,
+    "executable_path_bytes": 7,
+    "executable_path_errno": null,
+    "executable_path_sha256": "77bafa9e3a8a092afc4f1dd84e6e1cc58b68f42eb934bf0f6b73deb2518f78a3",
+    "identity_after": true,
+    "identity_before": true,
+    "kernel_stack": null,
+    "observation_us": 64,
+    "pid": 16508,
+    "ppid": 16502,
+    "requested_age_us": 250000,
+    "start_sec": 1791534560,
+    "start_usec": 777254,
+    "task": {
+      "context_switches": 1,
+      "mach_syscalls": 0,
+      "running": 0,
+      "system_time_raw": 805,
+      "threads": 1,
+      "unix_syscalls": 0,
+      "user_time_raw": 0
+    },
+    "task_errno": null,
+    "task_expected_bytes": 96,
+    "task_returned_bytes": 96,
+    "thread_list_bytes": 8,
+    "thread_list_capacity": 32,
+    "thread_list_errno": null,
+    "thread_list_may_be_truncated": false,
+    "thread_list_valid": true,
+    "threads": [
+      {
+        "data": {
+          "cpu_usage": 0,
+          "run_state": 3,
+          "sleep_time": 0,
+          "system_time_raw": 33000,
+          "user_time_raw": 0
+        },
+        "errno": null,
+        "expected_bytes": 112,
+        "handle": 0,
+        "returned_bytes": 112
+      }
+    ]
+  },
+  "16502-16614-outcome.json": {
+    "at_us": 310148119902,
+    "code": "success",
+    "pid": 16614,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16529-spawn.json": {
+    "deadline_lower_us": 310148486334,
+    "deadline_upper_us": 310148486334,
+    "origin_us": 310147486334,
+    "pid": 16529,
+    "ppid": 16502,
+    "record_us": 310147486487,
+    "start_sec": 1791534561,
+    "start_usec": 171769,
+    "uid": 502
+  },
+  "16502-16596-outcome.json": {
+    "at_us": 310148001351,
+    "code": "success",
+    "pid": 16596,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16557-spawn.json": {
+    "deadline_lower_us": 310148759982,
+    "deadline_upper_us": 310148759982,
+    "origin_us": 310147759982,
+    "pid": 16557,
+    "ppid": 16502,
+    "record_us": 310147760233,
+    "start_sec": 1791534561,
+    "start_usec": 445457,
+    "uid": 502
+  },
+  "16502-16560-spawn.json": {
+    "deadline_lower_us": 310148779138,
+    "deadline_upper_us": 310148779138,
+    "origin_us": 310147779138,
+    "pid": 16560,
+    "ppid": 16502,
+    "record_us": 310147779342,
+    "start_sec": 1791534561,
+    "start_usec": 464592,
+    "uid": 502
+  },
+  "16502-16609-spawn.json": {
+    "deadline_lower_us": 310149079608,
+    "deadline_upper_us": 310149079609,
+    "origin_us": 310148079608,
+    "pid": 16609,
+    "ppid": 16502,
+    "record_us": 310148079816,
+    "start_sec": 1791534561,
+    "start_usec": 765066,
+    "uid": 502
+  },
+  "16502-16535-spawn.json": {
+    "deadline_lower_us": 310148523821,
+    "deadline_upper_us": 310148523821,
+    "origin_us": 310147523821,
+    "pid": 16535,
+    "ppid": 16502,
+    "record_us": 310147523998,
+    "start_sec": 1791534561,
+    "start_usec": 209264,
+    "uid": 502
+  },
+  "16502-16606-outcome.json": {
+    "at_us": 310148048027,
+    "code": "success",
+    "pid": 16606,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16509-state-1.json": {
+    "before_deadline_lower": true,
+    "begin_us": 310147846677,
+    "clock_valid": true,
+    "end_us": 310147846707,
+    "executable_path_bytes": 7,
+    "executable_path_errno": null,
+    "executable_path_sha256": "77bafa9e3a8a092afc4f1dd84e6e1cc58b68f42eb934bf0f6b73deb2518f78a3",
+    "identity_after": true,
+    "identity_before": true,
+    "kernel_stack": null,
+    "observation_us": 30,
+    "pid": 16509,
+    "ppid": 16502,
+    "requested_age_us": 750000,
+    "start_sec": 1791534560,
+    "start_usec": 777265,
+    "task": {
+      "context_switches": 1,
+      "mach_syscalls": 0,
+      "running": 0,
+      "system_time_raw": 667,
+      "threads": 1,
+      "unix_syscalls": 0,
+      "user_time_raw": 0
+    },
+    "task_errno": null,
+    "task_expected_bytes": 96,
+    "task_returned_bytes": 96,
+    "thread_list_bytes": 8,
+    "thread_list_capacity": 32,
+    "thread_list_errno": null,
+    "thread_list_may_be_truncated": false,
+    "thread_list_valid": true,
+    "threads": [
+      {
+        "data": {
+          "cpu_usage": 0,
+          "run_state": 3,
+          "sleep_time": 0,
+          "system_time_raw": 27000,
+          "user_time_raw": 0
+        },
+        "errno": null,
+        "expected_bytes": 112,
+        "handle": 0,
+        "returned_bytes": 112
+      }
+    ]
+  },
+  "16502-16513-spawn.json": {
+    "deadline_lower_us": 310148374519,
+    "deadline_upper_us": 310148374519,
+    "origin_us": 310147374519,
+    "pid": 16513,
+    "ppid": 16502,
+    "record_us": 310147374736,
+    "start_sec": 1791534561,
+    "start_usec": 59979,
+    "uid": 502
+  },
+  "16502-16524-spawn.json": {
+    "deadline_lower_us": 310148446363,
+    "deadline_upper_us": 310148446363,
+    "origin_us": 310147446363,
+    "pid": 16524,
+    "ppid": 16502,
+    "record_us": 310147446521,
+    "start_sec": 1791534561,
+    "start_usec": 131795,
+    "uid": 502
+  },
+  "16502-16618-spawn.json": {
+    "deadline_lower_us": 310149140206,
+    "deadline_upper_us": 310149140207,
+    "origin_us": 310148140206,
+    "pid": 16618,
+    "ppid": 16502,
+    "record_us": 310148140366,
+    "start_sec": 1791534561,
+    "start_usec": 825641,
+    "uid": 502
+  },
+  "16502-16558-outcome.json": {
+    "at_us": 310147772266,
+    "code": "success",
+    "pid": 16558,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16546-spawn.json": {
+    "deadline_lower_us": 310148603523,
+    "deadline_upper_us": 310148603524,
+    "origin_us": 310147603523,
+    "pid": 16546,
+    "ppid": 16502,
+    "record_us": 310147603685,
+    "start_sec": 1791534561,
+    "start_usec": 288958,
+    "uid": 502
+  },
+  "16502-16538-spawn.json": {
+    "deadline_lower_us": 310148542611,
+    "deadline_upper_us": 310148542611,
+    "origin_us": 310147542611,
+    "pid": 16538,
+    "ppid": 16502,
+    "record_us": 310147542830,
+    "start_sec": 1791534561,
+    "start_usec": 228068,
+    "uid": 502
+  },
+  "16502-16518-outcome.json": {
+    "at_us": 310147413675,
+    "code": "success",
+    "pid": 16518,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16604-spawn.json": {
+    "deadline_lower_us": 310149028836,
+    "deadline_upper_us": 310149028836,
+    "origin_us": 310148028836,
+    "pid": 16604,
+    "ppid": 16502,
+    "record_us": 310148029102,
+    "start_sec": 1791534561,
+    "start_usec": 714314,
+    "uid": 502
+  },
+  "16502-16622-outcome.json": {
+    "at_us": 310148173644,
+    "code": "success",
+    "pid": 16622,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16592-spawn.json": {
+    "deadline_lower_us": 310148974810,
+    "deadline_upper_us": 310148974810,
+    "origin_us": 310147974810,
+    "pid": 16592,
+    "ppid": 16502,
+    "record_us": 310147975138,
+    "start_sec": 1791534561,
+    "start_usec": 660282,
+    "uid": 502
+  },
+  "16502-16595-spawn.json": {
+    "deadline_lower_us": 310148987917,
+    "deadline_upper_us": 310148987917,
+    "origin_us": 310147987917,
+    "pid": 16595,
+    "ppid": 16502,
+    "record_us": 310147988162,
+    "start_sec": 1791534561,
+    "start_usec": 673389,
+    "uid": 502
+  },
+  "16502-16515-outcome.json": {
+    "at_us": 310147394054,
+    "code": "success",
+    "pid": 16515,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16540-outcome.json": {
+    "at_us": 310147562480,
+    "code": "success",
+    "pid": 16540,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16512-outcome.json": {
+    "at_us": 310147374283,
+    "code": "success",
+    "pid": 16512,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16547-outcome.json": {
+    "at_us": 310147615942,
+    "code": "success",
+    "pid": 16547,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16508-spawn.json": {
+    "deadline_lower_us": 310148091688,
+    "deadline_upper_us": 310148091689,
+    "origin_us": 310147091688,
+    "pid": 16508,
+    "ppid": 16502,
+    "record_us": 310147092247,
+    "start_sec": 1791534560,
+    "start_usec": 777254,
+    "uid": 502
+  },
+  "16502-16603-spawn.json": {
+    "deadline_lower_us": 310149021999,
+    "deadline_upper_us": 310149022000,
+    "origin_us": 310148021999,
+    "pid": 16603,
+    "ppid": 16502,
+    "record_us": 310148022219,
+    "start_sec": 1791534561,
+    "start_usec": 707460,
+    "uid": 502
+  },
+  "16502-16507-outcome.json": {
+    "at_us": 310147571958,
+    "code": "success",
+    "pid": 16507,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16552-outcome.json": {
+    "at_us": 310147648371,
+    "code": "success",
+    "pid": 16552,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16589-spawn.json": {
+    "deadline_lower_us": 310148962391,
+    "deadline_upper_us": 310148962391,
+    "origin_us": 310147962391,
+    "pid": 16589,
+    "ppid": 16502,
+    "record_us": 310147962624,
+    "start_sec": 1791534561,
+    "start_usec": 647868,
+    "uid": 502
+  },
+  "16502-16555-outcome.json": {
+    "at_us": 310147668711,
+    "code": "success",
+    "pid": 16555,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16514-spawn.json": {
+    "deadline_lower_us": 310148380689,
+    "deadline_upper_us": 310148380689,
+    "origin_us": 310147380689,
+    "pid": 16514,
+    "ppid": 16502,
+    "record_us": 310147380882,
+    "start_sec": 1791534561,
+    "start_usec": 66136,
+    "uid": 502
+  },
+  "16502-16523-spawn.json": {
+    "deadline_lower_us": 310148439728,
+    "deadline_upper_us": 310148439728,
+    "origin_us": 310147439728,
+    "pid": 16523,
+    "ppid": 16502,
+    "record_us": 310147439893,
+    "start_sec": 1791534561,
+    "start_usec": 125166,
+    "uid": 502
+  },
+  "16502-16576-spawn.json": {
+    "deadline_lower_us": 310148879054,
+    "deadline_upper_us": 310148879054,
+    "origin_us": 310147879054,
+    "pid": 16576,
+    "ppid": 16502,
+    "record_us": 310147879280,
+    "start_sec": 1791534561,
+    "start_usec": 564509,
+    "uid": 502
+  },
+  "16502-16541-spawn.json": {
+    "deadline_lower_us": 310148572168,
+    "deadline_upper_us": 310148572168,
+    "origin_us": 310147572168,
+    "pid": 16541,
+    "ppid": 16502,
+    "record_us": 310147572386,
+    "start_sec": 1791534561,
+    "start_usec": 257636,
+    "uid": 502
+  },
+  "16502-16536-outcome.json": {
+    "at_us": 310147536203,
+    "code": "success",
+    "pid": 16536,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16563-outcome.json": {
+    "at_us": 310147803590,
+    "code": "success",
+    "pid": 16563,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16550-spawn.json": {
+    "deadline_lower_us": 310148629231,
+    "deadline_upper_us": 310148629231,
+    "origin_us": 310147629231,
+    "pid": 16550,
+    "ppid": 16502,
+    "record_us": 310147629455,
+    "start_sec": 1791534561,
+    "start_usec": 314689,
+    "uid": 502
+  },
+  "16502-16567-spawn.json": {
+    "deadline_lower_us": 310148823467,
+    "deadline_upper_us": 310148823467,
+    "origin_us": 310147823467,
+    "pid": 16567,
+    "ppid": 16502,
+    "record_us": 310147823689,
+    "start_sec": 1791534561,
+    "start_usec": 508922,
+    "uid": 502
+  },
+  "16502-16531-outcome.json": {
+    "at_us": 310147505311,
+    "code": "success",
+    "pid": 16531,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16564-outcome.json": {
+    "at_us": 310147809841,
+    "code": "success",
+    "pid": 16564,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16532-spawn.json": {
+    "deadline_lower_us": 310148505428,
+    "deadline_upper_us": 310148505428,
+    "origin_us": 310147505428,
+    "pid": 16532,
+    "ppid": 16502,
+    "record_us": 310147505598,
+    "start_sec": 1791534561,
+    "start_usec": 190868,
+    "uid": 502
+  },
+  "16502-16505-spawn.json": {
+    "deadline_lower_us": 310148091657,
+    "deadline_upper_us": 310148091657,
+    "origin_us": 310147091657,
+    "pid": 16505,
+    "ppid": 16502,
+    "record_us": 310147092458,
+    "start_sec": 1791534560,
+    "start_usec": 777224,
+    "uid": 502
+  },
+  "16502-16598-spawn.json": {
+    "deadline_lower_us": 310149001535,
+    "deadline_upper_us": 310149001535,
+    "origin_us": 310148001535,
+    "pid": 16598,
+    "ppid": 16502,
+    "record_us": 310148001757,
+    "start_sec": 1791534561,
+    "start_usec": 686995,
+    "uid": 502
+  },
+  "16502-16510-state-0.json": {
+    "before_deadline_lower": true,
+    "begin_us": 310147346299,
+    "clock_valid": true,
+    "end_us": 310147346364,
+    "executable_path_bytes": 7,
+    "executable_path_errno": null,
+    "executable_path_sha256": "77bafa9e3a8a092afc4f1dd84e6e1cc58b68f42eb934bf0f6b73deb2518f78a3",
+    "identity_after": true,
+    "identity_before": true,
+    "kernel_stack": null,
+    "observation_us": 65,
+    "pid": 16510,
+    "ppid": 16502,
+    "requested_age_us": 250000,
+    "start_sec": 1791534560,
+    "start_usec": 777293,
+    "task": {
+      "context_switches": 1,
+      "mach_syscalls": 0,
+      "running": 0,
+      "system_time_raw": 279,
+      "threads": 1,
+      "unix_syscalls": 0,
+      "user_time_raw": 0
+    },
+    "task_errno": null,
+    "task_expected_bytes": 96,
+    "task_returned_bytes": 96,
+    "thread_list_bytes": 8,
+    "thread_list_capacity": 32,
+    "thread_list_errno": null,
+    "thread_list_may_be_truncated": false,
+    "thread_list_valid": true,
+    "threads": [
+      {
+        "data": {
+          "cpu_usage": 0,
+          "run_state": 3,
+          "sleep_time": 0,
+          "system_time_raw": 11000,
+          "user_time_raw": 0
+        },
+        "errno": null,
+        "expected_bytes": 112,
+        "handle": 0,
+        "returned_bytes": 112
+      }
+    ]
+  },
+  "16502-16612-spawn.json": {
+    "deadline_lower_us": 310149099824,
+    "deadline_upper_us": 310149099824,
+    "origin_us": 310148099824,
+    "pid": 16612,
+    "ppid": 16502,
+    "record_us": 310148100009,
+    "start_sec": 1791534561,
+    "start_usec": 785277,
+    "uid": 502
+  },
+  "16502-16524-outcome.json": {
+    "at_us": 310147452885,
+    "code": "success",
+    "pid": 16524,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16519-spawn.json": {
+    "deadline_lower_us": 310148413793,
+    "deadline_upper_us": 310148413793,
+    "origin_us": 310147413793,
+    "pid": 16519,
+    "ppid": 16502,
+    "record_us": 310147413966,
+    "start_sec": 1791534561,
+    "start_usec": 99234,
+    "uid": 502
+  },
+  "16502-16523-outcome.json": {
+    "at_us": 310147446255,
+    "code": "success",
+    "pid": 16523,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16576-outcome.json": {
+    "at_us": 310147885700,
+    "code": "success",
+    "pid": 16576,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16589-outcome.json": {
+    "at_us": 310147969013,
+    "code": "success",
+    "pid": 16589,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16505-state-0.json": {
+    "before_deadline_lower": true,
+    "begin_us": 310147346298,
+    "clock_valid": true,
+    "end_us": 310147346342,
+    "executable_path_bytes": 7,
+    "executable_path_errno": null,
+    "executable_path_sha256": "77bafa9e3a8a092afc4f1dd84e6e1cc58b68f42eb934bf0f6b73deb2518f78a3",
+    "identity_after": true,
+    "identity_before": true,
+    "kernel_stack": null,
+    "observation_us": 44,
+    "pid": 16505,
+    "ppid": 16502,
+    "requested_age_us": 250000,
+    "start_sec": 1791534560,
+    "start_usec": 777224,
+    "task": {
+      "context_switches": 2,
+      "mach_syscalls": 0,
+      "running": 0,
+      "system_time_raw": 508,
+      "threads": 1,
+      "unix_syscalls": 0,
+      "user_time_raw": 0
+    },
+    "task_errno": null,
+    "task_expected_bytes": 96,
+    "task_returned_bytes": 96,
+    "thread_list_bytes": 8,
+    "thread_list_capacity": 32,
+    "thread_list_errno": null,
+    "thread_list_may_be_truncated": false,
+    "thread_list_valid": true,
+    "threads": [
+      {
+        "data": {
+          "cpu_usage": 0,
+          "run_state": 3,
+          "sleep_time": 0,
+          "system_time_raw": 21000,
+          "user_time_raw": 0
+        },
+        "errno": null,
+        "expected_bytes": 112,
+        "handle": 0,
+        "returned_bytes": 112
+      }
+    ]
+  },
+  "16502-16619-outcome.json": {
+    "at_us": 310148153579,
+    "code": "success",
+    "pid": 16619,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16584-spawn.json": {
+    "deadline_lower_us": 310148933022,
+    "deadline_upper_us": 310148933022,
+    "origin_us": 310147933022,
+    "pid": 16584,
+    "ppid": 16502,
+    "record_us": 310147933204,
+    "start_sec": 1791534561,
+    "start_usec": 618468,
+    "uid": 502
+  },
+  "16502-16554-outcome.json": {
+    "at_us": 310147661926,
+    "code": "success",
+    "pid": 16554,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16505-state-1.json": {
+    "before_deadline_lower": true,
+    "begin_us": 310147845932,
+    "clock_valid": true,
+    "end_us": 310147845985,
+    "executable_path_bytes": 7,
+    "executable_path_errno": null,
+    "executable_path_sha256": "77bafa9e3a8a092afc4f1dd84e6e1cc58b68f42eb934bf0f6b73deb2518f78a3",
+    "identity_after": true,
+    "identity_before": true,
+    "kernel_stack": null,
+    "observation_us": 53,
+    "pid": 16505,
+    "ppid": 16502,
+    "requested_age_us": 750000,
+    "start_sec": 1791534560,
+    "start_usec": 777224,
+    "task": {
+      "context_switches": 2,
+      "mach_syscalls": 0,
+      "running": 0,
+      "system_time_raw": 508,
+      "threads": 1,
+      "unix_syscalls": 0,
+      "user_time_raw": 0
+    },
+    "task_errno": null,
+    "task_expected_bytes": 96,
+    "task_returned_bytes": 96,
+    "thread_list_bytes": 8,
+    "thread_list_capacity": 32,
+    "thread_list_errno": null,
+    "thread_list_may_be_truncated": false,
+    "thread_list_valid": true,
+    "threads": [
+      {
+        "data": {
+          "cpu_usage": 0,
+          "run_state": 3,
+          "sleep_time": 0,
+          "system_time_raw": 21000,
+          "user_time_raw": 0
+        },
+        "errno": null,
+        "expected_bytes": 112,
+        "handle": 0,
+        "returned_bytes": 112
+      }
+    ]
+  },
+  "16502-16553-outcome.json": {
+    "at_us": 310147655186,
+    "code": "success",
+    "pid": 16553,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16506-outcome.json": {
+    "at_us": 310147962241,
+    "code": "success",
+    "pid": 16506,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16562-spawn.json": {
+    "deadline_lower_us": 310148791546,
+    "deadline_upper_us": 310148791546,
+    "origin_us": 310147791546,
+    "pid": 16562,
+    "ppid": 16502,
+    "record_us": 310147791826,
+    "start_sec": 1791534561,
+    "start_usec": 476996,
+    "uid": 502
+  },
+  "16502-16555-spawn.json": {
+    "deadline_lower_us": 310148662100,
+    "deadline_upper_us": 310148662100,
+    "origin_us": 310147662100,
+    "pid": 16555,
+    "ppid": 16502,
+    "record_us": 310147662309,
+    "start_sec": 1791534561,
+    "start_usec": 347556,
+    "uid": 502
+  },
+  "16502-16537-spawn.json": {
+    "deadline_lower_us": 310148536351,
+    "deadline_upper_us": 310148536351,
+    "origin_us": 310147536351,
+    "pid": 16537,
+    "ppid": 16502,
+    "record_us": 310147536549,
+    "start_sec": 1791534561,
+    "start_usec": 221800,
+    "uid": 502
+  },
+  "16502-16546-outcome.json": {
+    "at_us": 310147610063,
+    "code": "success",
+    "pid": 16546,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16513-outcome.json": {
+    "at_us": 310147380449,
+    "code": "success",
+    "pid": 16513,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16541-outcome.json": {
+    "at_us": 310147578780,
+    "code": "success",
+    "pid": 16541,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16581-spawn.json": {
+    "deadline_lower_us": 310148912758,
+    "deadline_upper_us": 310148912758,
+    "origin_us": 310147912758,
+    "pid": 16581,
+    "ppid": 16502,
+    "record_us": 310147912937,
+    "start_sec": 1791534561,
+    "start_usec": 598199,
+    "uid": 502
+  },
+  "16502-16514-outcome.json": {
+    "at_us": 310147387273,
+    "code": "success",
+    "pid": 16514,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16620-spawn.json": {
+    "deadline_lower_us": 310149153721,
+    "deadline_upper_us": 310149153721,
+    "origin_us": 310148153721,
+    "pid": 16620,
+    "ppid": 16502,
+    "record_us": 310148153890,
+    "start_sec": 1791534561,
+    "start_usec": 839159,
+    "uid": 502
+  },
+  "16502-16617-spawn.json": {
+    "deadline_lower_us": 310149133475,
+    "deadline_upper_us": 310149133475,
+    "origin_us": 310148133475,
+    "pid": 16617,
+    "ppid": 16502,
+    "record_us": 310148133647,
+    "start_sec": 1791534561,
+    "start_usec": 818917,
+    "uid": 502
+  },
+  "16502-16549-spawn.json": {
+    "deadline_lower_us": 310148622409,
+    "deadline_upper_us": 310148622409,
+    "origin_us": 310147622409,
+    "pid": 16549,
+    "ppid": 16502,
+    "record_us": 310147622632,
+    "start_sec": 1791534561,
+    "start_usec": 307871,
+    "uid": 502
+  },
+  "16502-16577-outcome.json": {
+    "at_us": 310147892588,
+    "code": "success",
+    "pid": 16577,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16522-outcome.json": {
+    "at_us": 310147439610,
+    "code": "success",
+    "pid": 16522,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16570-outcome.json": {
+    "at_us": 310147843714,
+    "code": "success",
+    "pid": 16570,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16558-spawn.json": {
+    "deadline_lower_us": 310148766847,
+    "deadline_upper_us": 310148766847,
+    "origin_us": 310147766847,
+    "pid": 16558,
+    "ppid": 16502,
+    "record_us": 310147767007,
+    "start_sec": 1791534561,
+    "start_usec": 452283,
+    "uid": 502
+  },
+  "16502-16525-outcome.json": {
+    "at_us": 310147459652,
+    "code": "success",
+    "pid": 16525,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16606-spawn.json": {
+    "deadline_lower_us": 310149041425,
+    "deadline_upper_us": 310149041425,
+    "origin_us": 310148041425,
+    "pid": 16606,
+    "ppid": 16502,
+    "record_us": 310148041635,
+    "start_sec": 1791534561,
+    "start_usec": 726875,
+    "uid": 502
+  },
+  "16502-16618-outcome.json": {
+    "at_us": 310148146809,
+    "code": "success",
+    "pid": 16618,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16503-state-0.json": {
+    "before_deadline_lower": true,
+    "begin_us": 310147341080,
+    "clock_valid": true,
+    "end_us": 310147341222,
+    "executable_path_bytes": 7,
+    "executable_path_errno": null,
+    "executable_path_sha256": "77bafa9e3a8a092afc4f1dd84e6e1cc58b68f42eb934bf0f6b73deb2518f78a3",
+    "identity_after": true,
+    "identity_before": true,
+    "kernel_stack": null,
+    "observation_us": 142,
+    "pid": 16503,
+    "ppid": 16502,
+    "requested_age_us": 250000,
+    "start_sec": 1791534560,
+    "start_usec": 776707,
+    "task": {
+      "context_switches": 2,
+      "mach_syscalls": 0,
+      "running": 0,
+      "system_time_raw": 861,
+      "threads": 1,
+      "unix_syscalls": 0,
+      "user_time_raw": 0
+    },
+    "task_errno": null,
+    "task_expected_bytes": 96,
+    "task_returned_bytes": 96,
+    "thread_list_bytes": 8,
+    "thread_list_capacity": 32,
+    "thread_list_errno": null,
+    "thread_list_may_be_truncated": false,
+    "thread_list_valid": true,
+    "threads": [
+      {
+        "data": {
+          "cpu_usage": 0,
+          "run_state": 3,
+          "sleep_time": 0,
+          "system_time_raw": 35000,
+          "user_time_raw": 0
+        },
+        "errno": null,
+        "expected_bytes": 112,
+        "handle": 0,
+        "returned_bytes": 112
+      }
+    ]
+  },
+  "16502-16590-spawn.json": {
+    "deadline_lower_us": 310148969151,
+    "deadline_upper_us": 310148969151,
+    "origin_us": 310147969151,
+    "pid": 16590,
+    "ppid": 16502,
+    "record_us": 310147969326,
+    "start_sec": 1791534561,
+    "start_usec": 654598,
+    "uid": 502
+  },
+  "16502-16504-state-0.json": {
+    "before_deadline_lower": true,
+    "begin_us": 310147344292,
+    "clock_valid": true,
+    "end_us": 310147344348,
+    "executable_path_bytes": 7,
+    "executable_path_errno": null,
+    "executable_path_sha256": "77bafa9e3a8a092afc4f1dd84e6e1cc58b68f42eb934bf0f6b73deb2518f78a3",
+    "identity_after": true,
+    "identity_before": true,
+    "kernel_stack": null,
+    "observation_us": 56,
+    "pid": 16504,
+    "ppid": 16502,
+    "requested_age_us": 250000,
+    "start_sec": 1791534560,
+    "start_usec": 777163,
+    "task": {
+      "context_switches": 2,
+      "mach_syscalls": 0,
+      "running": 0,
+      "system_time_raw": 525,
+      "threads": 1,
+      "unix_syscalls": 0,
+      "user_time_raw": 0
+    },
+    "task_errno": null,
+    "task_expected_bytes": 96,
+    "task_returned_bytes": 96,
+    "thread_list_bytes": 8,
+    "thread_list_capacity": 32,
+    "thread_list_errno": null,
+    "thread_list_may_be_truncated": false,
+    "thread_list_valid": true,
+    "threads": [
+      {
+        "data": {
+          "cpu_usage": 0,
+          "run_state": 3,
+          "sleep_time": 0,
+          "system_time_raw": 21000,
+          "user_time_raw": 0
+        },
+        "errno": null,
+        "expected_bytes": 112,
+        "handle": 0,
+        "returned_bytes": 112
+      }
+    ]
+  },
+  "16502-16565-outcome.json": {
+    "at_us": 310147816151,
+    "code": "success",
+    "pid": 16565,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16530-outcome.json": {
+    "at_us": 310147498632,
+    "code": "success",
+    "pid": 16530,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16526-spawn.json": {
+    "deadline_lower_us": 310148465730,
+    "deadline_upper_us": 310148465730,
+    "origin_us": 310147465730,
+    "pid": 16526,
+    "ppid": 16502,
+    "record_us": 310147465957,
+    "start_sec": 1791534561,
+    "start_usec": 151211,
+    "uid": 502
+  },
+  "16502-16511-spawn.json": {
+    "deadline_lower_us": 310148360702,
+    "deadline_upper_us": 310148360702,
+    "origin_us": 310147360702,
+    "pid": 16511,
+    "ppid": 16502,
+    "record_us": 310147361015,
+    "start_sec": 1791534561,
+    "start_usec": 46202,
+    "uid": 502
+  },
+  "16502-16562-outcome.json": {
+    "at_us": 310147797334,
+    "code": "success",
+    "pid": 16562,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16544-spawn.json": {
+    "deadline_lower_us": 310148590957,
+    "deadline_upper_us": 310148590957,
+    "origin_us": 310147590957,
+    "pid": 16544,
+    "ppid": 16502,
+    "record_us": 310147591189,
+    "start_sec": 1791534561,
+    "start_usec": 276399,
+    "uid": 502
+  },
+  "16502-16537-outcome.json": {
+    "at_us": 310147542454,
+    "code": "success",
+    "pid": 16537,
+    "ppid": 16502,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "16502-16573-spawn.json": {
+    "deadline_lower_us": 310148858266,
+    "deadline_upper_us": 310148858266,
+    "origin_us": 310147858266,
+    "pid": 16573,
+    "ppid": 16502,
+    "record_us": 310147858761,
+    "start_sec": 1791534561,
+    "start_usec": 543885,
+    "uid": 502
+  }
+}

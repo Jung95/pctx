@@ -1,0 +1,71 @@
+{
+  "16494-16495-outcome.json": {
+    "at_us": 310146823721,
+    "code": "success",
+    "pid": 16495,
+    "ppid": 16494,
+    "stderr_bytes": 0,
+    "stdout_bytes": 13
+  },
+  "16494-16495-spawn.json": {
+    "deadline_lower_us": 310147544779,
+    "deadline_upper_us": 310147544779,
+    "origin_us": 310146544779,
+    "pid": 16495,
+    "ppid": 16494,
+    "record_us": 310146546641,
+    "start_sec": 1791534560,
+    "start_usec": 231495,
+    "uid": 502
+  },
+  "16494-16495-state-0.json": {
+    "before_deadline_lower": true,
+    "begin_us": 310146798184,
+    "clock_valid": true,
+    "end_us": 310146798323,
+    "executable_path_bytes": 7,
+    "executable_path_errno": null,
+    "executable_path_sha256": "77bafa9e3a8a092afc4f1dd84e6e1cc58b68f42eb934bf0f6b73deb2518f78a3",
+    "identity_after": true,
+    "identity_before": true,
+    "kernel_stack": null,
+    "observation_us": 139,
+    "pid": 16495,
+    "ppid": 16494,
+    "requested_age_us": 250000,
+    "start_sec": 1791534560,
+    "start_usec": 231495,
+    "task": {
+      "context_switches": 2,
+      "mach_syscalls": 0,
+      "running": 0,
+      "system_time_raw": 1337,
+      "threads": 1,
+      "unix_syscalls": 0,
+      "user_time_raw": 0
+    },
+    "task_errno": null,
+    "task_expected_bytes": 96,
+    "task_returned_bytes": 96,
+    "thread_list_bytes": 8,
+    "thread_list_capacity": 32,
+    "thread_list_errno": null,
+    "thread_list_may_be_truncated": false,
+    "thread_list_valid": true,
+    "threads": [
+      {
+        "data": {
+          "cpu_usage": 0,
+          "run_state": 3,
+          "sleep_time": 0,
+          "system_time_raw": 55000,
+          "user_time_raw": 0
+        },
+        "errno": null,
+        "expected_bytes": 112,
+        "handle": 0,
+        "returned_bytes": 112
+      }
+    ]
+  }
+}

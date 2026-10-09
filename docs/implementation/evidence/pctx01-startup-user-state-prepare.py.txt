@@ -1,0 +1,32 @@
+from pathlib import Path
+import argparse, hashlib, json, re, subprocess, tempfile
+repo = Path('/Users/dev/PCTX')
+base = repo / 'docs/implementation/evidence'
+parser = argparse.ArgumentParser()
+parser.add_argument('--output-prefix', required=True)
+prefix = parser.parse_args().output_prefix
+if not re.fullmatch(r'pctx01-startup-[a-z0-9-]+', prefix) or list(base.glob(prefix + '-*')):
+    raise SystemExit('invalid or already used prefix')
+root = Path(tempfile.mkdtemp(prefix='pctx01-user-state-', dir='/private/tmp'))
+source = root / 'source'
+source.mkdir()
+session = root / 'session'
+session.mkdir(mode=0o700)
+archive = subprocess.run(['git', 'archive', 'HEAD', 'Cargo.toml', 'Cargo.lock', 'src', 'tests'], cwd=repo, capture_output=True, check=True)
+subprocess.run(['tar', '-x', '-C', str(source)], input=archive.stdout, check=True)
+p = source / 'src/query_process.rs'
+s = p.read_text() + '\n' + (base / 'pctx01-startup-user-state-hook.rs.txt').read_text()
+def replace(a, b):
+    global s
+    assert s.count(a) == 1, (a, s.count(a))
+    s = s.replace(a, b, 1)
+replace('let mut child = command.spawn()?;', 'let diagnostic_bounds = StartupDiagnostic::clock_bounds(deadline);\n        let mut child = command.spawn()?;\n        let mut diagnostic = StartupDiagnostic::new(child.id(), diagnostic_bounds);')
+replace('observation.iterations = observation.iterations.saturating_add(1);', 'observation.iterations = observation.iterations.saturating_add(1);\n                if let Some(d) = &mut diagnostic { d.observe(deadline); }')
+replace('// No further signals are allowed after this transition.', 'if let Some(d) = &diagnostic { d.outcome("success", out.len(), err.len()); }\n                    // No further signals are allowed after this transition.')
+replace('if result.is_err() && root_identity_retained {', 'if let Err(e) = &result { if let Some(d) = &diagnostic { d.outcome(&e.code, observation.stdout_bytes, observation.stderr_bytes); } }\n        if result.is_err() && root_identity_retained {')
+p.write_text(s)
+test = source / 'tests/project_deadline.rs'
+assert test.read_bytes() == (repo / 'tests/project_deadline.rs').read_bytes()
+meta = {'revision': subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=repo, text=True).strip(), 'root': str(root), 'source': str(source), 'session': str(session), 'target': str(root / 'target'), 'test_source_sha256': hashlib.sha256(test.read_bytes()).hexdigest(), 'method': 'ordinary-user proc state at original250/750ms; no auth/attachment/retention/kernel stacks', 'tests': ['query_program_resolution_uses_captured_command_path', 'relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry', 'concurrent_query_startup_preserves_group_streams_and_original_one_second_budget', 'simultaneous_streams_are_collected_and_overflow_never_infers_success']}
+(base / (prefix + '-prepared.json')).write_text(json.dumps(meta, indent=2) + '\n')
+print(json.dumps(meta))
