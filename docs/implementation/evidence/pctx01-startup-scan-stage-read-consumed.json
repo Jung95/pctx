@@ -1,0 +1,12 @@
+{
+  "scope_consumed": true,
+  "queries": 1,
+  "receipt": {
+    "pid": 37298,
+    "exit": 0,
+    "reaped": true,
+    "raw_bytes": 2
+  },
+  "plan_sha256": "7baa239305bf229670c211b1659011ce79c25076c42868b1dce73ffd354f277d",
+  "rerun_authorized": false
+}

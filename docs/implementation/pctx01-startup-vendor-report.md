@@ -1,6 +1,20 @@
 # macOS script startup: minimal evidence report
 
-## Repair review at original conditions — current, 2026-10-09
+## Internal policy scan review — current, 2026-10-09
+
+PCTX01-G05-D05 remains product_failure; fixed33/40 details,0/10 whole gates.
+Installed code confirms synchronous policy/signature checks plus conditional
+async XProtect analysis and semaphore wait inside the serial scan path.
+Independent review confirms control flow, not actual185ms cost attribution.
+Fresh approved3-second/16-hash phase read exits0 with0events; scope consumed,
+reader reaped/absent, no fallback/test/admin prompt. No matching publicly
+supported platform fix established; current static XProtect metadata5366/163
+is not full ruleset/history/update eligibility. No product or system changes.
+Next: obtain a bounded owned-scan phase observable or vendor confirmation;
+existing service scopes cannot be repeated. No original acceptance reduction.
+[Evidence, Apple sources and limits](evidence/pctx01-startup-scan-cost-review.md).
+
+## Repair review at original conditions — earlier, 2026-10-09
 
 PCTX01-G05-D05 remains product_failure; fixed33/40 details,0/10 whole gates.
 No causal PCTX patch is supported yet: failed-path validation63us/spawn628us

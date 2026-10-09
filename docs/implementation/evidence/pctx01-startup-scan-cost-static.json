@@ -1,0 +1,2133 @@
+{
+  "task": "PCTX01-G05-D05",
+  "binary_sha256": "f515a5958a5172c28bc19c787878e192b0c2a8f60ffad3975bf8ef1098baa84f",
+  "method_start": "0x10005ab1c",
+  "next_known_method": "0x10005c2a0",
+  "calls": [
+    {
+      "instruction": "000000010005ab64\tbl\t0x1000bc528 ; symbol stub for: _objc_retain",
+      "target": "0x1000bc528",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005ab70\tbl\t0x1000bc528 ; symbol stub for: _objc_retain",
+      "target": "0x1000bc528",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005ab7c\tbl\t0x1000bc4e8 ; symbol stub for: _objc_opt_new",
+      "target": "0x1000bc4e8",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005aba4\tbl\t0x1000c2380",
+      "stub": "0x1000c2380",
+      "selector_slot": "0x10011b120",
+      "selector": "now"
+    },
+    {
+      "instruction": "000000010005abac\tbl\t0x1000bc548 ; symbol stub for: _objc_retainAutoreleasedReturnValue",
+      "target": "0x1000bc548",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005abbc\tbl\t0x1000bc3f8 ; symbol stub for: _objc_alloc_init",
+      "target": "0x1000bc3f8",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005abcc\tbl\t0x1000bfb80",
+      "stub": "0x1000bfb80",
+      "selector_slot": "0x10011a720",
+      "selector": "generateSignpostID"
+    },
+    {
+      "instruction": "000000010005abd8\tbl\t0x1000c6440",
+      "stub": "0x1000c6440",
+      "selector_slot": "0x10011c150",
+      "selector": "target"
+    },
+    {
+      "instruction": "000000010005abe0\tbl\t0x1000bc548 ; symbol stub for: _objc_retainAutoreleasedReturnValue",
+      "target": "0x1000bc548",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005abec\tbl\t0x1000c2c20",
+      "stub": "0x1000c2c20",
+      "selector_slot": "0x10011b348",
+      "selector": "progressHandler"
+    },
+    {
+      "instruction": "000000010005abf4\tbl\t0x1000bc548 ; symbol stub for: _objc_retainAutoreleasedReturnValue",
+      "target": "0x1000bc548",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005ac78\tbl\t0x1000bc4e8 ; symbol stub for: _objc_opt_new",
+      "target": "0x1000bc4e8",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005ac8c\tbl\t0x1000c5960",
+      "stub": "0x1000c5960",
+      "selector_slot": "0x10011be98",
+      "selector": "setXpResult:"
+    },
+    {
+      "instruction": "000000010005accc\tbl\t0x1000bef80",
+      "stub": "0x1000bef80",
+      "selector_slot": "0x10011a420",
+      "selector": "distantPast"
+    },
+    {
+      "instruction": "000000010005acd4\tbl\t0x1000bc548 ; symbol stub for: _objc_retainAutoreleasedReturnValue",
+      "target": "0x1000bc548",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005acdc\tbl\t0x1000c6660",
+      "stub": "0x1000c6660",
+      "selector_slot": "0x10011c1d8",
+      "selector": "timeIntervalSince1970"
+    },
+    {
+      "instruction": "000000010005acf0\tbl\t0x1000bc518 ; symbol stub for: _objc_release",
+      "target": "0x1000bc518",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005acfc\tbl\t0x1000c5f40",
+      "stub": "0x1000c5f40",
+      "selector_slot": "0x10011c010",
+      "selector": "signposts"
+    },
+    {
+      "instruction": "000000010005ad04\tbl\t0x1000bc548 ; symbol stub for: _objc_retainAutoreleasedReturnValue",
+      "target": "0x1000bc548",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005ad20\tbl\t0x1000bc5e8 ; symbol stub for: _os_signpost_enabled",
+      "target": "0x1000bc5e8",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005ad58\tbl\t0x1000bbaa8 ; symbol stub for: __os_signpost_emit_with_name_impl",
+      "target": "0x1000bbaa8",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005ad60\tbl\t0x1000bc518 ; symbol stub for: _objc_release",
+      "target": "0x1000bc518",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005ad6c\tbl\t0x1000c5f40",
+      "stub": "0x1000c5f40",
+      "selector_slot": "0x10011c010",
+      "selector": "signposts"
+    },
+    {
+      "instruction": "000000010005ad74\tbl\t0x1000bc548 ; symbol stub for: _objc_retainAutoreleasedReturnValue",
+      "target": "0x1000bc548",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005ad88\tbl\t0x1000bc5e8 ; symbol stub for: _os_signpost_enabled",
+      "target": "0x1000bc5e8",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005ad94\tbl\t0x1000c6e00",
+      "stub": "0x1000c6e00",
+      "selector_slot": "0x10011c3c0",
+      "selector": "url"
+    },
+    {
+      "instruction": "000000010005ad9c\tbl\t0x1000bc548 ; symbol stub for: _objc_retainAutoreleasedReturnValue",
+      "target": "0x1000bc548",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005ada4\tbl\t0x1000c26c0",
+      "stub": "0x1000c26c0",
+      "selector_slot": "0x10011b1f0",
+      "selector": "path"
+    },
+    {
+      "instruction": "000000010005adac\tbl\t0x1000bc548 ; symbol stub for: _objc_retainAutoreleasedReturnValue",
+      "target": "0x1000bc548",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005adf4\tbl\t0x1000bbaa8 ; symbol stub for: __os_signpost_emit_with_name_impl",
+      "target": "0x1000bbaa8",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005adfc\tbl\t0x1000bc518 ; symbol stub for: _objc_release",
+      "target": "0x1000bc518",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005ae04\tbl\t0x1000bc518 ; symbol stub for: _objc_release",
+      "target": "0x1000bc518",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005ae0c\tbl\t0x1000bc518 ; symbol stub for: _objc_release",
+      "target": "0x1000bc518",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005ae18\tbl\t0x1000c5880",
+      "stub": "0x1000c5880",
+      "selector_slot": "0x10011be60",
+      "selector": "setWasLocked:"
+    },
+    {
+      "instruction": "000000010005ae20\tbl\t0x1000bd880",
+      "stub": "0x1000bd880",
+      "selector_slot": "0x100119e60",
+      "selector": "allowSideEffects"
+    },
+    {
+      "instruction": "000000010005ae34\tbl\t0x1000c6540",
+      "stub": "0x1000c6540",
+      "selector_slot": "0x10011c190",
+      "selector": "targetQualifiesForTamperProtection:withScanResult:"
+    },
+    {
+      "instruction": "000000010005ae48\tbl\t0x1000c3080",
+      "stub": "0x1000c3080",
+      "selector_slot": "0x10011b460",
+      "selector": "registerBundleForProtection:"
+    },
+    {
+      "instruction": "000000010005ae64\tbl\t0x1000bf500",
+      "stub": "0x1000bf500",
+      "selector_slot": "0x10011a580",
+      "selector": "exec"
+    },
+    {
+      "instruction": "000000010005ae6c\tbl\t0x1000bc548 ; symbol stub for: _objc_retainAutoreleasedReturnValue",
+      "target": "0x1000bc548",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005ae78\tbl\t0x1000bc5d8 ; symbol stub for: _os_log_type_enabled",
+      "target": "0x1000bc5d8",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005ae8c\tbl\t0x1000b5f0c",
+      "target": "0x1000b5f0c",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005aea4\tbl\t0x1000c5880",
+      "stub": "0x1000c5880",
+      "selector_slot": "0x10011be60",
+      "selector": "setWasLocked:"
+    },
+    {
+      "instruction": "000000010005aeb0\tbl\t0x1000bf500",
+      "stub": "0x1000bf500",
+      "selector_slot": "0x10011a580",
+      "selector": "exec"
+    },
+    {
+      "instruction": "000000010005aeb8\tbl\t0x1000bc548 ; symbol stub for: _objc_retainAutoreleasedReturnValue",
+      "target": "0x1000bc548",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005aec4\tbl\t0x1000bc5d8 ; symbol stub for: _os_log_type_enabled",
+      "target": "0x1000bc5d8",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005af04\tbl\t0x1000bba98 ; symbol stub for: __os_log_impl",
+      "target": "0x1000bba98",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005af0c\tbl\t0x1000bc518 ; symbol stub for: _objc_release",
+      "target": "0x1000bc518",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005af68\tbl\t0x1000bc528 ; symbol stub for: _objc_retain",
+      "target": "0x1000bc528",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005af78\tbl\t0x1000bc528 ; symbol stub for: _objc_retain",
+      "target": "0x1000bc528",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005af84\tbl\t0x1000bc558 ; symbol stub for: _objc_retainBlock",
+      "target": "0x1000bc558",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005afd4\tbl\t0x1000bc558 ; symbol stub for: _objc_retainBlock",
+      "target": "0x1000bc558",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b020\tbl\t0x1000bc558 ; symbol stub for: _objc_retainBlock",
+      "target": "0x1000bc558",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b06c\tbl\t0x1000bc528 ; symbol stub for: _objc_retain",
+      "target": "0x1000bc528",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b078\tbl\t0x1000bc558 ; symbol stub for: _objc_retainBlock",
+      "target": "0x1000bc558",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b084\tbl\t0x1000c5fa0",
+      "stub": "0x1000c5fa0",
+      "selector_slot": "0x10011c028",
+      "selector": "skipXProtectScan"
+    },
+    {
+      "instruction": "000000010005b094\tbl\t0x1000c2380",
+      "stub": "0x1000c2380",
+      "selector_slot": "0x10011b120",
+      "selector": "now"
+    },
+    {
+      "instruction": "000000010005b09c\tbl\t0x1000bc548 ; symbol stub for: _objc_retainAutoreleasedReturnValue",
+      "target": "0x1000bc548",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b0b0\tbl\t0x1000c51e0",
+      "stub": "0x1000c51e0",
+      "selector_slot": "0x10011bcb8",
+      "selector": "setScanTime:"
+    },
+    {
+      "instruction": "000000010005b0b8\tbl\t0x1000bc518 ; symbol stub for: _objc_release",
+      "target": "0x1000bc518",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b0c4\tbl\t0x1000c3860",
+      "stub": "0x1000c3860",
+      "selector_slot": "0x10011b658",
+      "selector": "scanTime"
+    },
+    {
+      "instruction": "000000010005b0cc\tbl\t0x1000bc548 ; symbol stub for: _objc_retainAutoreleasedReturnValue",
+      "target": "0x1000bc548",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b0d4\tbl\t0x1000c6660",
+      "stub": "0x1000c6660",
+      "selector_slot": "0x10011c1d8",
+      "selector": "timeIntervalSince1970"
+    },
+    {
+      "instruction": "000000010005b0e8\tbl\t0x1000bc518 ; symbol stub for: _objc_release",
+      "target": "0x1000bc518",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b104\tbl\t0x1000c5960",
+      "stub": "0x1000c5960",
+      "selector_slot": "0x10011be98",
+      "selector": "setXpResult:"
+    },
+    {
+      "instruction": "000000010005b168\tbl\t0x1000bc528 ; symbol stub for: _objc_retain",
+      "target": "0x1000bc528",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b178\tbl\t0x1000bc558 ; symbol stub for: _objc_retainBlock",
+      "target": "0x1000bc558",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b184\tbl\t0x1000bbec8 ; symbol stub for: _dispatch_semaphore_create",
+      "target": "0x1000bbec8",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b198\tbl\t0x1000bc518 ; symbol stub for: _objc_release",
+      "target": "0x1000bc518",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b1e0\tbl\t0x1000bc528 ; symbol stub for: _objc_retain",
+      "target": "0x1000bc528",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b1fc\tbl\t0x1000bc558 ; symbol stub for: _objc_retainBlock",
+      "target": "0x1000bc558",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b240\tbl\t0x1000bc528 ; symbol stub for: _objc_retain",
+      "target": "0x1000bc528",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b250\tbl\t0x1000bc558 ; symbol stub for: _objc_retainBlock",
+      "target": "0x1000bc558",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b25c\tbl\t0x1000bc518 ; symbol stub for: _objc_release",
+      "target": "0x1000bc518",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b264\tbl\t0x1000bc518 ; symbol stub for: _objc_release",
+      "target": "0x1000bc518",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b26c\tbl\t0x1000bc518 ; symbol stub for: _objc_release",
+      "target": "0x1000bc518",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b27c\tbl\t0x1000c6060",
+      "stub": "0x1000c6060",
+      "selector_slot": "0x10011c058",
+      "selector": "startWithCancellationHandler:"
+    },
+    {
+      "instruction": "000000010005b288\tbl\t0x1000c4000",
+      "stub": "0x1000c4000",
+      "selector_slot": "0x10011b840",
+      "selector": "setCompletedUnits:"
+    },
+    {
+      "instruction": "000000010005b294\tbl\t0x1000c5600",
+      "stub": "0x1000c5600",
+      "selector_slot": "0x10011bdc0",
+      "selector": "setTotalUnits:"
+    },
+    {
+      "instruction": "000000010005b2a0\tbl\t0x1000bf500",
+      "stub": "0x1000bf500",
+      "selector_slot": "0x10011a580",
+      "selector": "exec"
+    },
+    {
+      "instruction": "000000010005b2a8\tbl\t0x1000bc548 ; symbol stub for: _objc_retainAutoreleasedReturnValue",
+      "target": "0x1000bc548",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b2b4\tbl\t0x1000bc5d8 ; symbol stub for: _os_log_type_enabled",
+      "target": "0x1000bc5d8",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b2f4\tbl\t0x1000bba98 ; symbol stub for: __os_log_impl",
+      "target": "0x1000bba98",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b2fc\tbl\t0x1000bc518 ; symbol stub for: _objc_release",
+      "target": "0x1000bc518",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b304\tbl\t0x1000c5fa0",
+      "stub": "0x1000c5fa0",
+      "selector_slot": "0x10011c028",
+      "selector": "skipXProtectScan"
+    },
+    {
+      "instruction": "000000010005b310\tbl\t0x1000c5f80",
+      "stub": "0x1000c5f80",
+      "selector_slot": "0x10011c020",
+      "selector": "skipSeenSoftware"
+    },
+    {
+      "instruction": "000000010005b320\tbl\t0x1000bf500",
+      "stub": "0x1000bf500",
+      "selector_slot": "0x10011a580",
+      "selector": "exec"
+    },
+    {
+      "instruction": "000000010005b328\tbl\t0x1000bc548 ; symbol stub for: _objc_retainAutoreleasedReturnValue",
+      "target": "0x1000bc548",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b334\tbl\t0x1000bc5d8 ; symbol stub for: _os_log_type_enabled",
+      "target": "0x1000bc5d8",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b374\tbl\t0x1000bba98 ; symbol stub for: __os_log_impl",
+      "target": "0x1000bba98",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b37c\tbl\t0x1000bc518 ; symbol stub for: _objc_release",
+      "target": "0x1000bc518",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b38c\tbl\t0x1000c1360",
+      "stub": "0x1000c1360",
+      "selector_slot": "0x10011ad18",
+      "selector": "isQuarantined"
+    },
+    {
+      "instruction": "000000010005b3ac\tbl\t0x1000c27e0",
+      "stub": "0x1000c27e0",
+      "selector_slot": "0x10011b238",
+      "selector": "performScan:allowSecAssessment:doDeepTraversal:withProgressReporter:withCancellationHandler:withErrorSet:"
+    },
+    {
+      "instruction": "000000010005b3b4\tbl\t0x1000bc548 ; symbol stub for: _objc_retainAutoreleasedReturnValue",
+      "target": "0x1000bc548",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b3c4\tbl\t0x1000bc528 ; symbol stub for: _objc_retain",
+      "target": "0x1000bc528",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b3cc\tbl\t0x1000bc518 ; symbol stub for: _objc_release",
+      "target": "0x1000bc518",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b3e4\tbl\t0x1000c5f80",
+      "stub": "0x1000c5f80",
+      "selector_slot": "0x10011c020",
+      "selector": "skipSeenSoftware"
+    },
+    {
+      "instruction": "000000010005b3f0\tbl\t0x1000c5fa0",
+      "stub": "0x1000c5fa0",
+      "selector_slot": "0x10011c028",
+      "selector": "skipXProtectScan"
+    },
+    {
+      "instruction": "000000010005b408\tbl\t0x1000bbee8 ; symbol stub for: _dispatch_semaphore_wait",
+      "target": "0x1000bbee8",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b418\tbl\t0x1000bf500",
+      "stub": "0x1000bf500",
+      "selector_slot": "0x10011a580",
+      "selector": "exec"
+    },
+    {
+      "instruction": "000000010005b420\tbl\t0x1000bc548 ; symbol stub for: _objc_retainAutoreleasedReturnValue",
+      "target": "0x1000bc548",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b42c\tbl\t0x1000bc5d8 ; symbol stub for: _os_log_type_enabled",
+      "target": "0x1000bc5d8",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b438\tbl\t0x1000bed20",
+      "stub": "0x1000bed20",
+      "selector_slot": "0x10011a388",
+      "selector": "deepPolicyMatch"
+    },
+    {
+      "instruction": "000000010005b444\tbl\t0x1000c6740",
+      "stub": "0x1000c6740",
+      "selector_slot": "0x10011c210",
+      "selector": "topLevelPolicyMatch"
+    },
+    {
+      "instruction": "000000010005b454\tbl\t0x1000c7360",
+      "stub": "0x1000c7360",
+      "selector_slot": "0x10011c518",
+      "selector": "xpResult"
+    },
+    {
+      "instruction": "000000010005b4b0\tbl\t0x1000bba98 ; symbol stub for: __os_log_impl",
+      "target": "0x1000bba98",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b4b8\tbl\t0x1000bc518 ; symbol stub for: _objc_release",
+      "target": "0x1000bc518",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b4c4\tbl\t0x1000c64c0",
+      "stub": "0x1000c64c0",
+      "selector_slot": "0x10011c170",
+      "selector": "targetIsBlocked:"
+    },
+    {
+      "instruction": "000000010005b4d4\tbl\t0x1000bf500",
+      "stub": "0x1000bf500",
+      "selector_slot": "0x10011a580",
+      "selector": "exec"
+    },
+    {
+      "instruction": "000000010005b4dc\tbl\t0x1000bc548 ; symbol stub for: _objc_retainAutoreleasedReturnValue",
+      "target": "0x1000bc548",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b4e8\tbl\t0x1000bc5d8 ; symbol stub for: _os_log_type_enabled",
+      "target": "0x1000bc5d8",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b4f4\tbl\t0x1000bed20",
+      "stub": "0x1000bed20",
+      "selector_slot": "0x10011a388",
+      "selector": "deepPolicyMatch"
+    },
+    {
+      "instruction": "000000010005b500\tbl\t0x1000c6740",
+      "stub": "0x1000c6740",
+      "selector_slot": "0x10011c210",
+      "selector": "topLevelPolicyMatch"
+    },
+    {
+      "instruction": "000000010005b510\tbl\t0x1000c7360",
+      "stub": "0x1000c7360",
+      "selector_slot": "0x10011c518",
+      "selector": "xpResult"
+    },
+    {
+      "instruction": "000000010005b56c\tbl\t0x1000bba98 ; symbol stub for: __os_log_impl",
+      "target": "0x1000bba98",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b574\tbl\t0x1000bc518 ; symbol stub for: _objc_release",
+      "target": "0x1000bc518",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b580\tbl\t0x1000c55e0",
+      "stub": "0x1000c55e0",
+      "selector_slot": "0x10011bdb8",
+      "selector": "setTopLevelPolicyMatch:"
+    },
+    {
+      "instruction": "000000010005b58c\tbl\t0x1000c40a0",
+      "stub": "0x1000c40a0",
+      "selector_slot": "0x10011b868",
+      "selector": "setDeepPolicyMatch:"
+    },
+    {
+      "instruction": "000000010005b59c\tbl\t0x1000c5960",
+      "stub": "0x1000c5960",
+      "selector_slot": "0x10011be98",
+      "selector": "setXpResult:"
+    },
+    {
+      "instruction": "000000010005b5d8\tbl\t0x1000bd5c0",
+      "stub": "0x1000bd5c0",
+      "selector_slot": "0x100119db0",
+      "selector": "addPolicyScanTarget:withPolicyResult:withMalwareResult:withFlags:"
+    },
+    {
+      "instruction": "000000010005b5e4\tbl\t0x1000c5f40",
+      "stub": "0x1000c5f40",
+      "selector_slot": "0x10011c010",
+      "selector": "signposts"
+    },
+    {
+      "instruction": "000000010005b5ec\tbl\t0x1000bc548 ; symbol stub for: _objc_retainAutoreleasedReturnValue",
+      "target": "0x1000bc548",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b600\tbl\t0x1000bc5e8 ; symbol stub for: _os_signpost_enabled",
+      "target": "0x1000bc5e8",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b638\tbl\t0x1000bbaa8 ; symbol stub for: __os_signpost_emit_with_name_impl",
+      "target": "0x1000bbaa8",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b640\tbl\t0x1000bc518 ; symbol stub for: _objc_release",
+      "target": "0x1000bc518",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b64c\tbl\t0x1000bed20",
+      "stub": "0x1000bed20",
+      "selector_slot": "0x10011a388",
+      "selector": "deepPolicyMatch"
+    },
+    {
+      "instruction": "000000010005b65c\tbl\t0x1000c7360",
+      "stub": "0x1000c7360",
+      "selector_slot": "0x10011c518",
+      "selector": "xpResult"
+    },
+    {
+      "instruction": "000000010005b668\tbl\t0x1000c7100",
+      "stub": "0x1000c7100",
+      "selector_slot": "0x10011c480",
+      "selector": "versionNumber"
+    },
+    {
+      "instruction": "000000010005b670\tbl\t0x1000bc548 ; symbol stub for: _objc_retainAutoreleasedReturnValue",
+      "target": "0x1000bc548",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b67c\tbl\t0x1000be180",
+      "stub": "0x1000be180",
+      "selector_slot": "0x10011a0a0",
+      "selector": "cdhash"
+    },
+    {
+      "instruction": "000000010005b684\tbl\t0x1000bc548 ; symbol stub for: _objc_retainAutoreleasedReturnValue",
+      "target": "0x1000bc548",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b690\tbl\t0x1000c1360",
+      "stub": "0x1000c1360",
+      "selector_slot": "0x10011ad18",
+      "selector": "isQuarantined"
+    },
+    {
+      "instruction": "000000010005b69c\tbl\t0x1000c6960",
+      "stub": "0x1000c6960",
+      "selector_slot": "0x10011c298",
+      "selector": "triggeredByLibraryLoad"
+    },
+    {
+      "instruction": "000000010005b6a8\tbl\t0x1000c0da0",
+      "stub": "0x1000c0da0",
+      "selector_slot": "0x10011aba8",
+      "selector": "isBundled"
+    },
+    {
+      "instruction": "000000010005b6b8\tbl\t0x1000c2380",
+      "stub": "0x1000c2380",
+      "selector_slot": "0x10011b120",
+      "selector": "now"
+    },
+    {
+      "instruction": "000000010005b6c0\tbl\t0x1000bc548 ; symbol stub for: _objc_retainAutoreleasedReturnValue",
+      "target": "0x1000bc548",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b6cc\tbl\t0x1000c6680",
+      "stub": "0x1000c6680",
+      "selector_slot": "0x10011c1e0",
+      "selector": "timeIntervalSinceDate:"
+    },
+    {
+      "instruction": "000000010005b6f4\tbl\t0x1000c3b80",
+      "stub": "0x1000c3b80",
+      "selector_slot": "0x10011b720",
+      "selector": "sendGatekeeperScan:withXprotectResult:withXprotectVersion:withSoftwareCdhash:wasSuccess:isQuarantined:isLibraryLoad:isBundled:withTime:"
+    },
+    {
+      "instruction": "000000010005b6fc\tbl\t0x1000bc518 ; symbol stub for: _objc_release",
+      "target": "0x1000bc518",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b704\tbl\t0x1000bc518 ; symbol stub for: _objc_release",
+      "target": "0x1000bc518",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b70c\tbl\t0x1000bc518 ; symbol stub for: _objc_release",
+      "target": "0x1000bc518",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b718\tbl\t0x1000c5420",
+      "stub": "0x1000c5420",
+      "selector_slot": "0x10011bd48",
+      "selector": "setSuccess:"
+    },
+    {
+      "instruction": "000000010005b724\tbl\t0x1000c4120",
+      "stub": "0x1000c4120",
+      "selector_slot": "0x10011b888",
+      "selector": "setDeveloperToolEnvironment:"
+    },
+    {
+      "instruction": "000000010005b72c\tbl\t0x1000bed20",
+      "stub": "0x1000bed20",
+      "selector_slot": "0x10011a388",
+      "selector": "deepPolicyMatch"
+    },
+    {
+      "instruction": "000000010005b738\tbl\t0x1000c4e60",
+      "stub": "0x1000c4e60",
+      "selector_slot": "0x10011bbd8",
+      "selector": "setPolicyMatch:"
+    },
+    {
+      "instruction": "000000010005b740\tbl\t0x1000c6740",
+      "stub": "0x1000c6740",
+      "selector_slot": "0x10011c210",
+      "selector": "topLevelPolicyMatch"
+    },
+    {
+      "instruction": "000000010005b74c\tbl\t0x1000c55e0",
+      "stub": "0x1000c55e0",
+      "selector_slot": "0x10011bdb8",
+      "selector": "setTopLevelPolicyMatch:"
+    },
+    {
+      "instruction": "000000010005b758\tbl\t0x1000c4300",
+      "stub": "0x1000c4300",
+      "selector_slot": "0x10011b900",
+      "selector": "setFlags:"
+    },
+    {
+      "instruction": "000000010005b768\tbl\t0x1000c4860",
+      "stub": "0x1000c4860",
+      "selector_slot": "0x10011ba58",
+      "selector": "setLastScanTime:"
+    },
+    {
+      "instruction": "000000010005b778\tbl\t0x1000c5980",
+      "stub": "0x1000c5980",
+      "selector_slot": "0x10011bea0",
+      "selector": "setXpScanResult:"
+    },
+    {
+      "instruction": "000000010005b780\tbl\t0x1000c6700",
+      "stub": "0x1000c6700",
+      "selector_slot": "0x10011c200",
+      "selector": "timestamp"
+    },
+    {
+      "instruction": "000000010005b788\tbl\t0x1000bc548 ; symbol stub for: _objc_retainAutoreleasedReturnValue",
+      "target": "0x1000bc548",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b790\tbl\t0x1000c6660",
+      "stub": "0x1000c6660",
+      "selector_slot": "0x10011c1d8",
+      "selector": "timeIntervalSince1970"
+    },
+    {
+      "instruction": "000000010005b7a0\tbl\t0x1000c57c0",
+      "stub": "0x1000c57c0",
+      "selector_slot": "0x10011be30",
+      "selector": "setValidationTime:"
+    },
+    {
+      "instruction": "000000010005b7a8\tbl\t0x1000bc518 ; symbol stub for: _objc_release",
+      "target": "0x1000bc518",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b7b0\tbl\t0x1000bc518 ; symbol stub for: _objc_release",
+      "target": "0x1000bc518",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b7b8\tbl\t0x1000bc518 ; symbol stub for: _objc_release",
+      "target": "0x1000bc518",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b7c0\tbl\t0x1000bc518 ; symbol stub for: _objc_release",
+      "target": "0x1000bc518",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b7c8\tbl\t0x1000bc518 ; symbol stub for: _objc_release",
+      "target": "0x1000bc518",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b7d0\tbl\t0x1000bc518 ; symbol stub for: _objc_release",
+      "target": "0x1000bc518",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b7d8\tbl\t0x1000bc518 ; symbol stub for: _objc_release",
+      "target": "0x1000bc518",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b7e4\tbl\t0x1000bb838 ; symbol stub for: __Block_object_dispose",
+      "target": "0x1000bb838",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b7f0\tbl\t0x1000bb838 ; symbol stub for: __Block_object_dispose",
+      "target": "0x1000bb838",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b7f8\tbl\t0x1000bc518 ; symbol stub for: _objc_release",
+      "target": "0x1000bc518",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b804\tbl\t0x1000bb838 ; symbol stub for: __Block_object_dispose",
+      "target": "0x1000bb838",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b80c\tbl\t0x1000bc518 ; symbol stub for: _objc_release",
+      "target": "0x1000bc518",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b814\tbl\t0x1000bc518 ; symbol stub for: _objc_release",
+      "target": "0x1000bc518",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b81c\tbl\t0x1000bc518 ; symbol stub for: _objc_release",
+      "target": "0x1000bc518",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b824\tbl\t0x1000bc518 ; symbol stub for: _objc_release",
+      "target": "0x1000bc518",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b830\tbl\t0x1000bb838 ; symbol stub for: __Block_object_dispose",
+      "target": "0x1000bb838",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b838\tbl\t0x1000bc518 ; symbol stub for: _objc_release",
+      "target": "0x1000bc518",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b840\tbl\t0x1000bc518 ; symbol stub for: _objc_release",
+      "target": "0x1000bc518",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b848\tbl\t0x1000bc518 ; symbol stub for: _objc_release",
+      "target": "0x1000bc518",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b850\tbl\t0x1000bc518 ; symbol stub for: _objc_release",
+      "target": "0x1000bc518",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b858\tbl\t0x1000bc518 ; symbol stub for: _objc_release",
+      "target": "0x1000bc518",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b860\tbl\t0x1000bc518 ; symbol stub for: _objc_release",
+      "target": "0x1000bc518",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b868\tbl\t0x1000bc518 ; symbol stub for: _objc_release",
+      "target": "0x1000bc518",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b870\tbl\t0x1000bc518 ; symbol stub for: _objc_release",
+      "target": "0x1000bc518",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b8d0\tbl\t0x1000c6e00",
+      "stub": "0x1000c6e00",
+      "selector_slot": "0x10011c3c0",
+      "selector": "url"
+    },
+    {
+      "instruction": "000000010005b8d8\tbl\t0x1000bc548 ; symbol stub for: _objc_retainAutoreleasedReturnValue",
+      "target": "0x1000bc548",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b8f0\tbl\t0x1000c2860",
+      "stub": "0x1000c2860",
+      "selector_slot": "0x10011b258",
+      "selector": "performXPScan:forcedRulesOnly:withResultsHandler:feedback:"
+    },
+    {
+      "instruction": "000000010005b8fc\tbl\t0x1000bc518 ; symbol stub for: _objc_release",
+      "target": "0x1000bc518",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b914\tbl\t0x1000bf500",
+      "stub": "0x1000bf500",
+      "selector_slot": "0x10011a580",
+      "selector": "exec"
+    },
+    {
+      "instruction": "000000010005b91c\tbl\t0x1000bc548 ; symbol stub for: _objc_retainAutoreleasedReturnValue",
+      "target": "0x1000bc548",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b928\tbl\t0x1000bc5d8 ; symbol stub for: _os_log_type_enabled",
+      "target": "0x1000bc5d8",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b938\tbl\t0x1000b5f64",
+      "target": "0x1000b5f64",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b94c\tbl\t0x1000c2a00",
+      "stub": "0x1000c2a00",
+      "selector_slot": "0x10011b2c0",
+      "selector": "policyResultIsYARAScanExempt:"
+    },
+    {
+      "instruction": "000000010005b95c\tbl\t0x1000bfac0",
+      "stub": "0x1000bfac0",
+      "selector_slot": "0x10011a6f0",
+      "selector": "forcedRulesPresent"
+    },
+    {
+      "instruction": "000000010005b974\tbl\t0x1000bc558 ; symbol stub for: _objc_retainBlock",
+      "target": "0x1000bc558",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b980\tbl\t0x1000bc518 ; symbol stub for: _objc_release",
+      "target": "0x1000bc518",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b994\tbl\t0x1000bc558 ; symbol stub for: _objc_retainBlock",
+      "target": "0x1000bc558",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b9a0\tbl\t0x1000bc518 ; symbol stub for: _objc_release",
+      "target": "0x1000bc518",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b9b0\tbl\t0x1000bf500",
+      "stub": "0x1000bf500",
+      "selector_slot": "0x10011a580",
+      "selector": "exec"
+    },
+    {
+      "instruction": "000000010005b9b8\tbl\t0x1000bc548 ; symbol stub for: _objc_retainAutoreleasedReturnValue",
+      "target": "0x1000bc548",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005b9c4\tbl\t0x1000bc5d8 ; symbol stub for: _os_log_type_enabled",
+      "target": "0x1000bc5d8",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005ba18\tbl\t0x1000bba98 ; symbol stub for: __os_log_impl",
+      "target": "0x1000bba98",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005ba20\tbl\t0x1000bc518 ; symbol stub for: _objc_release",
+      "target": "0x1000bc518",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005ba30\tbl\t0x1000c6e00",
+      "stub": "0x1000c6e00",
+      "selector_slot": "0x10011c3c0",
+      "selector": "url"
+    },
+    {
+      "instruction": "000000010005ba38\tbl\t0x1000bc548 ; symbol stub for: _objc_retainAutoreleasedReturnValue",
+      "target": "0x1000bc548",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005ba50\tbl\t0x1000c2860",
+      "stub": "0x1000c2860",
+      "selector_slot": "0x10011b258",
+      "selector": "performXPScan:forcedRulesOnly:withResultsHandler:feedback:"
+    },
+    {
+      "instruction": "000000010005ba5c\tbl\t0x1000bc518 ; symbol stub for: _objc_release",
+      "target": "0x1000bc518",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005ba6c\tbl\t0x1000bf500",
+      "stub": "0x1000bf500",
+      "selector_slot": "0x10011a580",
+      "selector": "exec"
+    },
+    {
+      "instruction": "000000010005ba74\tbl\t0x1000bc548 ; symbol stub for: _objc_retainAutoreleasedReturnValue",
+      "target": "0x1000bc548",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005ba80\tbl\t0x1000bc5d8 ; symbol stub for: _os_log_type_enabled",
+      "target": "0x1000bc5d8",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005ba90\tbl\t0x1000b5fb0",
+      "target": "0x1000b5fb0",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005baa0\tbl\t0x1000bc518 ; symbol stub for: _objc_release",
+      "target": "0x1000bc518",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005bab4\tbl\t0x1000bf500",
+      "stub": "0x1000bf500",
+      "selector_slot": "0x10011a580",
+      "selector": "exec"
+    },
+    {
+      "instruction": "000000010005babc\tbl\t0x1000bc548 ; symbol stub for: _objc_retainAutoreleasedReturnValue",
+      "target": "0x1000bc548",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005bac8\tbl\t0x1000bc5d8 ; symbol stub for: _os_log_type_enabled",
+      "target": "0x1000bc5d8",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005bb08\tbl\t0x1000bba98 ; symbol stub for: __os_log_impl",
+      "target": "0x1000bba98",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005bb10\tbl\t0x1000bc518 ; symbol stub for: _objc_release",
+      "target": "0x1000bc518",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005bb24\tbl\t0x1000c5940",
+      "stub": "0x1000c5940",
+      "selector_slot": "0x10011be90",
+      "selector": "setXPScanResultToNotScanned:"
+    },
+    {
+      "instruction": "000000010005bb34\tbl\t0x1000bb9d8 ; symbol stub for: ___stack_chk_fail",
+      "target": "0x1000bb9d8",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005bbc0\tbl\t0x1000bb838 ; symbol stub for: __Block_object_dispose",
+      "target": "0x1000bb838",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005bbcc\tbl\t0x1000bb838 ; symbol stub for: __Block_object_dispose",
+      "target": "0x1000bb838",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005bbd8\tbl\t0x1000bb838 ; symbol stub for: __Block_object_dispose",
+      "target": "0x1000bb838",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005bbe4\tbl\t0x1000bb838 ; symbol stub for: __Block_object_dispose",
+      "target": "0x1000bb838",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005bbf4\tbl\t0x1000bb878 ; symbol stub for: __Unwind_Resume",
+      "target": "0x1000bb878",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005bc54\tbl\t0x1000c67c0",
+      "stub": "0x1000c67c0",
+      "selector_slot": "0x10011c230",
+      "selector": "totalUnits"
+    },
+    {
+      "instruction": "000000010005bc68\tbl\t0x1000c5600",
+      "stub": "0x1000c5600",
+      "selector_slot": "0x10011bdc0",
+      "selector": "setTotalUnits:"
+    },
+    {
+      "instruction": "000000010005bc74\tbl\t0x1000c4000",
+      "stub": "0x1000c4000",
+      "selector_slot": "0x10011b840",
+      "selector": "setCompletedUnits:"
+    },
+    {
+      "instruction": "000000010005bce0\tbl\t0x1000bf500",
+      "stub": "0x1000bf500",
+      "selector_slot": "0x10011a580",
+      "selector": "exec"
+    },
+    {
+      "instruction": "000000010005bce8\tbl\t0x1000bc548 ; symbol stub for: _objc_retainAutoreleasedReturnValue",
+      "target": "0x1000bc548",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005bcf4\tbl\t0x1000bc5d8 ; symbol stub for: _os_log_type_enabled",
+      "target": "0x1000bc5d8",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005bd20\tbl\t0x1000bba98 ; symbol stub for: __os_log_impl",
+      "target": "0x1000bba98",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005bd28\tbl\t0x1000bc518 ; symbol stub for: _objc_release",
+      "target": "0x1000bc518",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005bd80\tbl\t0x1000bf500",
+      "stub": "0x1000bf500",
+      "selector_slot": "0x10011a580",
+      "selector": "exec"
+    },
+    {
+      "instruction": "000000010005bd88\tbl\t0x1000bc548 ; symbol stub for: _objc_retainAutoreleasedReturnValue",
+      "target": "0x1000bc548",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005bd94\tbl\t0x1000bc5d8 ; symbol stub for: _os_log_type_enabled",
+      "target": "0x1000bc5d8",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005bdc0\tbl\t0x1000bba98 ; symbol stub for: __os_log_impl",
+      "target": "0x1000bba98",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005bdc8\tbl\t0x1000bc518 ; symbol stub for: _objc_release",
+      "target": "0x1000bc518",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005be2c\tbl\t0x1000bf500",
+      "stub": "0x1000bf500",
+      "selector_slot": "0x10011a580",
+      "selector": "exec"
+    },
+    {
+      "instruction": "000000010005be34\tbl\t0x1000bc548 ; symbol stub for: _objc_retainAutoreleasedReturnValue",
+      "target": "0x1000bc548",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005be40\tbl\t0x1000bc5d8 ; symbol stub for: _os_log_type_enabled",
+      "target": "0x1000bc5d8",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005be4c\tbl\t0x1000bc518 ; symbol stub for: _objc_release",
+      "target": "0x1000bc518",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005be60\tbl\t0x1000b5ffc",
+      "target": "0x1000b5ffc",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005be80\tbl\t0x1000bf500",
+      "stub": "0x1000bf500",
+      "selector_slot": "0x10011a580",
+      "selector": "exec"
+    },
+    {
+      "instruction": "000000010005be88\tbl\t0x1000bc548 ; symbol stub for: _objc_retainAutoreleasedReturnValue",
+      "target": "0x1000bc548",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005be94\tbl\t0x1000bc5d8 ; symbol stub for: _os_log_type_enabled",
+      "target": "0x1000bc5d8",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005bea0\tbl\t0x1000bc518 ; symbol stub for: _objc_release",
+      "target": "0x1000bc518",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005beb8\tbl\t0x1000b6030",
+      "target": "0x1000b6030",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005bf44\tbl\t0x1000bc528 ; symbol stub for: _objc_retain",
+      "target": "0x1000bc528",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005bf50\tbl\t0x1000bf500",
+      "stub": "0x1000bf500",
+      "selector_slot": "0x10011a580",
+      "selector": "exec"
+    },
+    {
+      "instruction": "000000010005bf58\tbl\t0x1000bc548 ; symbol stub for: _objc_retainAutoreleasedReturnValue",
+      "target": "0x1000bc548",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005bf64\tbl\t0x1000bc5d8 ; symbol stub for: _os_log_type_enabled",
+      "target": "0x1000bc5d8",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005bfac\tbl\t0x1000bba98 ; symbol stub for: __os_log_impl",
+      "target": "0x1000bba98",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005bfb4\tbl\t0x1000bc518 ; symbol stub for: _objc_release",
+      "target": "0x1000bc518",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005bfc8\tbl\t0x1000bc528 ; symbol stub for: _objc_retain",
+      "target": "0x1000bc528",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005bfd4\tbl\t0x1000bc518 ; symbol stub for: _objc_release",
+      "target": "0x1000bc518",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005bfdc\tbl\t0x1000c3860",
+      "stub": "0x1000c3860",
+      "selector_slot": "0x10011b658",
+      "selector": "scanTime"
+    },
+    {
+      "instruction": "000000010005bfe4\tbl\t0x1000bc548 ; symbol stub for: _objc_retainAutoreleasedReturnValue",
+      "target": "0x1000bc548",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005bfec\tbl\t0x1000c6660",
+      "stub": "0x1000c6660",
+      "selector_slot": "0x10011c1d8",
+      "selector": "timeIntervalSince1970"
+    },
+    {
+      "instruction": "000000010005c004\tbl\t0x1000bc518 ; symbol stub for: _objc_release",
+      "target": "0x1000bc518",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005c020\tbl\t0x1000bbed8 ; symbol stub for: _dispatch_semaphore_signal",
+      "target": "0x1000bbed8",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005c028\tbl\t0x1000bc518 ; symbol stub for: _objc_release",
+      "target": "0x1000bc518",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005c058\tbl\t0x1000bb9d8 ; symbol stub for: ___stack_chk_fail",
+      "target": "0x1000bb9d8",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005c078\tbl\t0x1000bc528 ; symbol stub for: _objc_retain",
+      "target": "0x1000bc528",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005c088\tbl\t0x1000bb828 ; symbol stub for: __Block_object_assign",
+      "target": "0x1000bb828",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005c098\tbl\t0x1000bb828 ; symbol stub for: __Block_object_assign",
+      "target": "0x1000bb828",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005c0e0\tbl\t0x1000bb838 ; symbol stub for: __Block_object_dispose",
+      "target": "0x1000bb838",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005c0ec\tbl\t0x1000bb838 ; symbol stub for: __Block_object_dispose",
+      "target": "0x1000bb838",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005c0f8\tbl\t0x1000bb838 ; symbol stub for: __Block_object_dispose",
+      "target": "0x1000bb838",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005c150\tbl\t0x1000bc528 ; symbol stub for: _objc_retain",
+      "target": "0x1000bc528",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005c15c\tbl\t0x1000bf500",
+      "stub": "0x1000bf500",
+      "selector_slot": "0x10011a580",
+      "selector": "exec"
+    },
+    {
+      "instruction": "000000010005c164\tbl\t0x1000bc548 ; symbol stub for: _objc_retainAutoreleasedReturnValue",
+      "target": "0x1000bc548",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005c170\tbl\t0x1000bc5d8 ; symbol stub for: _os_log_type_enabled",
+      "target": "0x1000bc5d8",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005c1b8\tbl\t0x1000bba98 ; symbol stub for: __os_log_impl",
+      "target": "0x1000bba98",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005c1c0\tbl\t0x1000bc518 ; symbol stub for: _objc_release",
+      "target": "0x1000bc518",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005c1d4\tbl\t0x1000c7360",
+      "stub": "0x1000c7360",
+      "selector_slot": "0x10011c518",
+      "selector": "xpResult"
+    },
+    {
+      "instruction": "000000010005c1e0\tbl\t0x1000c7340",
+      "stub": "0x1000c7340",
+      "selector_slot": "0x10011c510",
+      "selector": "xProtectResultIsBlocked:"
+    },
+    {
+      "instruction": "000000010005c1f4\tbl\t0x1000bc528 ; symbol stub for: _objc_retain",
+      "target": "0x1000bc528",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005c200\tbl\t0x1000bc518 ; symbol stub for: _objc_release",
+      "target": "0x1000bc518",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005c208\tbl\t0x1000c3860",
+      "stub": "0x1000c3860",
+      "selector_slot": "0x10011b658",
+      "selector": "scanTime"
+    },
+    {
+      "instruction": "000000010005c210\tbl\t0x1000bc548 ; symbol stub for: _objc_retainAutoreleasedReturnValue",
+      "target": "0x1000bc548",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005c218\tbl\t0x1000c6660",
+      "stub": "0x1000c6660",
+      "selector_slot": "0x10011c1d8",
+      "selector": "timeIntervalSince1970"
+    },
+    {
+      "instruction": "000000010005c230\tbl\t0x1000bc518 ; symbol stub for: _objc_release",
+      "target": "0x1000bc518",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005c254\tbl\t0x1000c5940",
+      "stub": "0x1000c5940",
+      "selector_slot": "0x10011be90",
+      "selector": "setXPScanResultToNotScanned:"
+    },
+    {
+      "instruction": "000000010005c264\tbl\t0x1000bbed8 ; symbol stub for: _dispatch_semaphore_signal",
+      "target": "0x1000bbed8",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005c26c\tbl\t0x1000bc518 ; symbol stub for: _objc_release",
+      "target": "0x1000bc518",
+      "matching_method": []
+    },
+    {
+      "instruction": "000000010005c29c\tbl\t0x1000bb9d8 ; symbol stub for: ___stack_chk_fail",
+      "target": "0x1000bb9d8",
+      "matching_method": []
+    }
+  ],
+  "static_only": true,
+  "qualification": false,
+  "additional_methods": [
+    {
+      "class": "PolicyScanner",
+      "selector": "performScan:allowSecAssessment:doDeepTraversal:withProgressReporter:withCancellationHandler:withErrorSet:",
+      "start": "0x100048e1c",
+      "next_known_method": "0x10004a188",
+      "objc_calls": [
+        {
+          "instruction_address": "0000000100048e90",
+          "stub": "0x1000c60c0",
+          "selector_slot": "0x10011c070",
+          "selector": "staticCodeRef"
+        },
+        {
+          "instruction_address": "0000000100048ecc",
+          "stub": "0x1000c55e0",
+          "selector_slot": "0x10011bdb8",
+          "selector": "setTopLevelPolicyMatch:"
+        },
+        {
+          "instruction_address": "0000000100048ed8",
+          "stub": "0x1000c40a0",
+          "selector_slot": "0x10011b868",
+          "selector": "setDeepPolicyMatch:"
+        },
+        {
+          "instruction_address": "0000000100048ee4",
+          "stub": "0x1000c2380",
+          "selector_slot": "0x10011b120",
+          "selector": "now"
+        },
+        {
+          "instruction_address": "0000000100048efc",
+          "stub": "0x1000c55a0",
+          "selector_slot": "0x10011bda8",
+          "selector": "setTimestamp:"
+        },
+        {
+          "instruction_address": "0000000100048f24",
+          "stub": "0x1000c0c00",
+          "selector_slot": "0x10011ab40",
+          "selector": "isAppWrapper"
+        },
+        {
+          "instruction_address": "0000000100048f38",
+          "stub": "0x1000c6e00",
+          "selector_slot": "0x10011c3c0",
+          "selector": "url"
+        },
+        {
+          "instruction_address": "0000000100048f50",
+          "stub": "0x1000be960",
+          "selector_slot": "0x10011a298",
+          "selector": "currentDeviceID"
+        },
+        {
+          "instruction_address": "0000000100048f78",
+          "stub": "0x1000bd980",
+          "selector_slot": "0x100119ea0",
+          "selector": "appWrapperPolicyResult:forDeviceID:installProfile:checkResources:withProgressCallback:"
+        },
+        {
+          "instruction_address": "0000000100048f9c",
+          "stub": "0x1000c1620",
+          "selector_slot": "0x10011adc8",
+          "selector": "isValid"
+        },
+        {
+          "instruction_address": "0000000100048fac",
+          "stub": "0x1000c5ec0",
+          "selector_slot": "0x10011bff0",
+          "selector": "signerCategory"
+        },
+        {
+          "instruction_address": "0000000100048fd0",
+          "stub": "0x1000c1d40",
+          "selector_slot": "0x10011af90",
+          "selector": "mainBundle"
+        },
+        {
+          "instruction_address": "0000000100048ff4",
+          "stub": "0x1000c1ae0",
+          "selector_slot": "0x10011aef8",
+          "selector": "localizedStringForKey:value:table:"
+        },
+        {
+          "instruction_address": "0000000100049008",
+          "stub": "0x1000c6e00",
+          "selector_slot": "0x10011c3c0",
+          "selector": "url"
+        },
+        {
+          "instruction_address": "000000010004905c",
+          "stub": "0x1000bd4a0",
+          "selector_slot": "0x100119d68",
+          "selector": "addObject:"
+        },
+        {
+          "instruction_address": "0000000100049080",
+          "stub": "0x1000bf500",
+          "selector_slot": "0x10011a580",
+          "selector": "exec"
+        },
+        {
+          "instruction_address": "00000001000490bc",
+          "stub": "0x1000c55e0",
+          "selector_slot": "0x10011bdb8",
+          "selector": "setTopLevelPolicyMatch:"
+        },
+        {
+          "instruction_address": "00000001000490c8",
+          "stub": "0x1000c40a0",
+          "selector_slot": "0x10011b868",
+          "selector": "setDeepPolicyMatch:"
+        },
+        {
+          "instruction_address": "0000000100049204",
+          "stub": "0x1000c1d40",
+          "selector_slot": "0x10011af90",
+          "selector": "mainBundle"
+        },
+        {
+          "instruction_address": "0000000100049228",
+          "stub": "0x1000c1ae0",
+          "selector_slot": "0x10011aef8",
+          "selector": "localizedStringForKey:value:table:"
+        },
+        {
+          "instruction_address": "000000010004923c",
+          "stub": "0x1000c6e00",
+          "selector_slot": "0x10011c3c0",
+          "selector": "url"
+        },
+        {
+          "instruction_address": "0000000100049290",
+          "stub": "0x1000bd4a0",
+          "selector_slot": "0x100119d68",
+          "selector": "addObject:"
+        },
+        {
+          "instruction_address": "00000001000492b4",
+          "stub": "0x1000bf500",
+          "selector_slot": "0x10011a580",
+          "selector": "exec"
+        },
+        {
+          "instruction_address": "00000001000492ec",
+          "stub": "0x1000c55e0",
+          "selector_slot": "0x10011bdb8",
+          "selector": "setTopLevelPolicyMatch:"
+        },
+        {
+          "instruction_address": "00000001000492f8",
+          "stub": "0x1000c40a0",
+          "selector_slot": "0x10011b868",
+          "selector": "setDeepPolicyMatch:"
+        },
+        {
+          "instruction_address": "0000000100049310",
+          "stub": "0x1000c1240",
+          "selector_slot": "0x10011acd0",
+          "selector": "isModified"
+        },
+        {
+          "instruction_address": "000000010004931c",
+          "stub": "0x1000c6e00",
+          "selector_slot": "0x10011c3c0",
+          "selector": "url"
+        },
+        {
+          "instruction_address": "0000000100049378",
+          "stub": "0x1000bd4a0",
+          "selector_slot": "0x100119d68",
+          "selector": "addObject:"
+        },
+        {
+          "instruction_address": "0000000100049414",
+          "stub": "0x1000bf500",
+          "selector_slot": "0x10011a580",
+          "selector": "exec"
+        },
+        {
+          "instruction_address": "0000000100049480",
+          "stub": "0x1000bd4a0",
+          "selector_slot": "0x100119d68",
+          "selector": "addObject:"
+        },
+        {
+          "instruction_address": "00000001000494bc",
+          "stub": "0x1000be260",
+          "selector_slot": "0x10011a0d8",
+          "selector": "checkLegacyOverridesForTarget:withPolicyMatchOnFail:"
+        },
+        {
+          "instruction_address": "00000001000494e0",
+          "stub": "0x1000be7c0",
+          "selector_slot": "0x10011a230",
+          "selector": "count"
+        },
+        {
+          "instruction_address": "0000000100049518",
+          "stub": "0x1000be7c0",
+          "selector_slot": "0x10011a230",
+          "selector": "count"
+        },
+        {
+          "instruction_address": "0000000100049558",
+          "stub": "0x1000c40a0",
+          "selector_slot": "0x10011b868",
+          "selector": "setDeepPolicyMatch:"
+        },
+        {
+          "instruction_address": "0000000100049580",
+          "stub": "0x1000c5ec0",
+          "selector_slot": "0x10011bff0",
+          "selector": "signerCategory"
+        },
+        {
+          "instruction_address": "0000000100049594",
+          "stub": "0x1000c6280",
+          "selector_slot": "0x10011c0e0",
+          "selector": "stringWithFormat:"
+        },
+        {
+          "instruction_address": "00000001000495a8",
+          "stub": "0x1000c6e00",
+          "selector_slot": "0x10011c3c0",
+          "selector": "url"
+        },
+        {
+          "instruction_address": "0000000100049620",
+          "stub": "0x1000c55e0",
+          "selector_slot": "0x10011bdb8",
+          "selector": "setTopLevelPolicyMatch:"
+        },
+        {
+          "instruction_address": "000000010004962c",
+          "stub": "0x1000c40a0",
+          "selector_slot": "0x10011b868",
+          "selector": "setDeepPolicyMatch:"
+        },
+        {
+          "instruction_address": "0000000100049634",
+          "stub": "0x1000c1620",
+          "selector_slot": "0x10011adc8",
+          "selector": "isValid"
+        },
+        {
+          "instruction_address": "000000010004964c",
+          "stub": "0x1000c55e0",
+          "selector_slot": "0x10011bdb8",
+          "selector": "setTopLevelPolicyMatch:"
+        },
+        {
+          "instruction_address": "0000000100049660",
+          "stub": "0x1000c40a0",
+          "selector_slot": "0x10011b868",
+          "selector": "setDeepPolicyMatch:"
+        },
+        {
+          "instruction_address": "0000000100049670",
+          "stub": "0x1000bd4a0",
+          "selector_slot": "0x100119d68",
+          "selector": "addObject:"
+        },
+        {
+          "instruction_address": "00000001000496bc",
+          "stub": "0x1000c29c0",
+          "selector_slot": "0x10011b2b0",
+          "selector": "policyMatchForCode:withError:"
+        },
+        {
+          "instruction_address": "00000001000496c8",
+          "stub": "0x1000c55e0",
+          "selector_slot": "0x10011bdb8",
+          "selector": "setTopLevelPolicyMatch:"
+        },
+        {
+          "instruction_address": "00000001000497c0",
+          "stub": "0x1000bf500",
+          "selector_slot": "0x10011a580",
+          "selector": "exec"
+        },
+        {
+          "instruction_address": "0000000100049820",
+          "stub": "0x1000c55e0",
+          "selector_slot": "0x10011bdb8",
+          "selector": "setTopLevelPolicyMatch:"
+        },
+        {
+          "instruction_address": "000000010004982c",
+          "stub": "0x1000c40a0",
+          "selector_slot": "0x10011b868",
+          "selector": "setDeepPolicyMatch:"
+        },
+        {
+          "instruction_address": "0000000100049894",
+          "stub": "0x1000be7e0",
+          "selector_slot": "0x10011a238",
+          "selector": "countByEnumeratingWithState:objects:count:"
+        },
+        {
+          "instruction_address": "00000001000498e0",
+          "stub": "0x1000be4c0",
+          "selector_slot": "0x10011a170",
+          "selector": "code"
+        },
+        {
+          "instruction_address": "0000000100049908",
+          "stub": "0x1000be7e0",
+          "selector_slot": "0x10011a238",
+          "selector": "countByEnumeratingWithState:objects:count:"
+        },
+        {
+          "instruction_address": "0000000100049924",
+          "stub": "0x1000bf500",
+          "selector_slot": "0x10011a580",
+          "selector": "exec"
+        },
+        {
+          "instruction_address": "0000000100049984",
+          "stub": "0x1000bf500",
+          "selector_slot": "0x10011a580",
+          "selector": "exec"
+        },
+        {
+          "instruction_address": "0000000100049a00",
+          "stub": "0x1000be280",
+          "selector_slot": "0x10011a0e0",
+          "selector": "checkOpaqueSignatureForCode:withCancellationHandler:withError:"
+        },
+        {
+          "instruction_address": "0000000100049a30",
+          "stub": "0x1000bd4a0",
+          "selector_slot": "0x100119d68",
+          "selector": "addObject:"
+        },
+        {
+          "instruction_address": "0000000100049a68",
+          "stub": "0x1000c3160",
+          "selector_slot": "0x10011b498",
+          "selector": "removeAllObjects"
+        },
+        {
+          "instruction_address": "0000000100049b10",
+          "stub": "0x1000c4c80",
+          "selector_slot": "0x10011bb60",
+          "selector": "setObject:forKeyedSubscript:"
+        },
+        {
+          "instruction_address": "0000000100049b34",
+          "stub": "0x1000c4c80",
+          "selector_slot": "0x10011bb60",
+          "selector": "setObject:forKeyedSubscript:"
+        },
+        {
+          "instruction_address": "0000000100049b50",
+          "stub": "0x1000bf2e0",
+          "selector_slot": "0x10011a4f8",
+          "selector": "errorWithDomain:code:userInfo:"
+        },
+        {
+          "instruction_address": "0000000100049bb4",
+          "stub": "0x1000bf500",
+          "selector_slot": "0x10011a580",
+          "selector": "exec"
+        },
+        {
+          "instruction_address": "0000000100049c90",
+          "stub": "0x1000c6ce0",
+          "selector_slot": "0x10011c378",
+          "selector": "updateProgressForURL:withContext:"
+        },
+        {
+          "instruction_address": "0000000100049ca0",
+          "stub": "0x1000be920",
+          "selector_slot": "0x10011a288",
+          "selector": "current"
+        },
+        {
+          "instruction_address": "0000000100049cac",
+          "stub": "0x1000c6760",
+          "selector_slot": "0x10011c218",
+          "selector": "total"
+        },
+        {
+          "instruction_address": "0000000100049d04",
+          "stub": "0x1000c29c0",
+          "selector_slot": "0x10011b2b0",
+          "selector": "policyMatchForCode:withError:"
+        },
+        {
+          "instruction_address": "0000000100049d98",
+          "stub": "0x1000be4c0",
+          "selector_slot": "0x10011a170",
+          "selector": "code"
+        },
+        {
+          "instruction_address": "0000000100049da4",
+          "stub": "0x1000c2460",
+          "selector_slot": "0x10011b158",
+          "selector": "numberWithInteger:"
+        },
+        {
+          "instruction_address": "0000000100049ddc",
+          "stub": "0x1000c1d40",
+          "selector_slot": "0x10011af90",
+          "selector": "mainBundle"
+        },
+        {
+          "instruction_address": "0000000100049e00",
+          "stub": "0x1000c1ae0",
+          "selector_slot": "0x10011aef8",
+          "selector": "localizedStringForKey:value:table:"
+        },
+        {
+          "instruction_address": "0000000100049f00",
+          "stub": "0x1000bf500",
+          "selector_slot": "0x10011a580",
+          "selector": "exec"
+        },
+        {
+          "instruction_address": "0000000100049f2c",
+          "stub": "0x1000c26c0",
+          "selector_slot": "0x10011b1f0",
+          "selector": "path"
+        },
+        {
+          "instruction_address": "000000010004a028",
+          "stub": "0x1000bf500",
+          "selector_slot": "0x10011a580",
+          "selector": "exec"
+        }
+      ]
+    },
+    {
+      "class": "XPScanner",
+      "selector": "performXPScan:forcedRulesOnly:withResultsHandler:feedback:",
+      "start": "0x10006b978",
+      "next_known_method": "0x10006c230",
+      "objc_calls": [
+        {
+          "instruction_address": "000000010006b9d4",
+          "stub": "0x1000c08e0",
+          "selector_slot": "0x10011aa78",
+          "selector": "initWithURL:"
+        },
+        {
+          "instruction_address": "000000010006b9ec",
+          "stub": "0x1000c4cc0",
+          "selector_slot": "0x10011bb70",
+          "selector": "setOnlyForcedRules:"
+        },
+        {
+          "instruction_address": "000000010006baac",
+          "stub": "0x1000bdd00",
+          "selector_slot": "0x100119f80",
+          "selector": "beginAnalysisWithResultsHandler:feedback:"
+        },
+        {
+          "instruction_address": "000000010006bb4c",
+          "stub": "0x1000c5e80",
+          "selector_slot": "0x10011bfe0",
+          "selector": "signatureVersion"
+        },
+        {
+          "instruction_address": "000000010006bb5c",
+          "stub": "0x1000c6b00",
+          "selector_slot": "0x10011c300",
+          "selector": "unsignedLongLongValue"
+        },
+        {
+          "instruction_address": "000000010006bb68",
+          "stub": "0x1000c5200",
+          "selector_slot": "0x10011bcc0",
+          "selector": "setScanVersion:"
+        },
+        {
+          "instruction_address": "000000010006bb78",
+          "stub": "0x1000bdb60",
+          "selector_slot": "0x100119f18",
+          "selector": "assessmentResult"
+        },
+        {
+          "instruction_address": "000000010006bb84",
+          "stub": "0x1000c5960",
+          "selector_slot": "0x10011be98",
+          "selector": "setXpResult:"
+        },
+        {
+          "instruction_address": "000000010006bb8c",
+          "stub": "0x1000c3860",
+          "selector_slot": "0x10011b658",
+          "selector": "scanTime"
+        },
+        {
+          "instruction_address": "000000010006bba4",
+          "stub": "0x1000c51e0",
+          "selector_slot": "0x10011bcb8",
+          "selector": "setScanTime:"
+        },
+        {
+          "instruction_address": "000000010006bbb4",
+          "stub": "0x1000c5e20",
+          "selector_slot": "0x10011bfc8",
+          "selector": "signatureName"
+        },
+        {
+          "instruction_address": "000000010006bbcc",
+          "stub": "0x1000c4a00",
+          "selector_slot": "0x10011bac0",
+          "selector": "setMatchedRuleName:"
+        },
+        {
+          "instruction_address": "000000010006bbdc",
+          "stub": "0x1000c1e80",
+          "selector_slot": "0x10011afe0",
+          "selector": "matchedRule"
+        },
+        {
+          "instruction_address": "000000010006bbec",
+          "stub": "0x1000c37e0",
+          "selector_slot": "0x10011b638",
+          "selector": "samplingUUID"
+        },
+        {
+          "instruction_address": "000000010006bc04",
+          "stub": "0x1000c51a0",
+          "selector_slot": "0x10011bca8",
+          "selector": "setSamplingUUID:"
+        },
+        {
+          "instruction_address": "000000010006bc1c",
+          "stub": "0x1000bf760",
+          "selector_slot": "0x10011a618",
+          "selector": "fileURL"
+        },
+        {
+          "instruction_address": "000000010006bc3c",
+          "stub": "0x1000c4a20",
+          "selector_slot": "0x10011bac8",
+          "selector": "setMatchedURL:"
+        },
+        {
+          "instruction_address": "000000010006bcf4",
+          "stub": "0x1000bfba0",
+          "selector_slot": "0x10011a728",
+          "selector": "generic"
+        },
+        {
+          "instruction_address": "000000010006bd14",
+          "stub": "0x1000c26c0",
+          "selector_slot": "0x10011b1f0",
+          "selector": "path"
+        },
+        {
+          "instruction_address": "000000010006be28",
+          "stub": "0x1000bee60",
+          "selector_slot": "0x10011a3d8",
+          "selector": "dictionary"
+        },
+        {
+          "instruction_address": "000000010006be40",
+          "stub": "0x1000bea40",
+          "selector_slot": "0x10011a2d0",
+          "selector": "data"
+        },
+        {
+          "instruction_address": "000000010006be6c",
+          "stub": "0x1000c4c60",
+          "selector_slot": "0x10011bb58",
+          "selector": "setObject:forKey:"
+        },
+        {
+          "instruction_address": "000000010006be78",
+          "stub": "0x1000c23a0",
+          "selector_slot": "0x10011b128",
+          "selector": "null"
+        },
+        {
+          "instruction_address": "000000010006be9c",
+          "stub": "0x1000c4c60",
+          "selector_slot": "0x10011bb58",
+          "selector": "setObject:forKey:"
+        },
+        {
+          "instruction_address": "000000010006bebc",
+          "stub": "0x1000c4c60",
+          "selector_slot": "0x10011bb58",
+          "selector": "setObject:forKey:"
+        },
+        {
+          "instruction_address": "000000010006bed8",
+          "stub": "0x1000c4c60",
+          "selector_slot": "0x10011bb58",
+          "selector": "setObject:forKey:"
+        },
+        {
+          "instruction_address": "000000010006bf60",
+          "stub": "0x1000bfba0",
+          "selector_slot": "0x10011a728",
+          "selector": "generic"
+        },
+        {
+          "instruction_address": "000000010006bfac",
+          "stub": "0x1000bfba0",
+          "selector_slot": "0x10011a728",
+          "selector": "generic"
+        },
+        {
+          "instruction_address": "000000010006c078",
+          "stub": "0x1000bfba0",
+          "selector_slot": "0x10011a728",
+          "selector": "generic"
+        },
+        {
+          "instruction_address": "000000010006c0c0",
+          "stub": "0x1000bfba0",
+          "selector_slot": "0x10011a728",
+          "selector": "generic"
+        },
+        {
+          "instruction_address": "000000010006c0f4",
+          "stub": "0x1000bfba0",
+          "selector_slot": "0x10011a728",
+          "selector": "generic"
+        }
+      ]
+    }
+  ]
+}

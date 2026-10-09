@@ -1,0 +1,35 @@
+from pathlib import Path
+import json,re
+src=Path('/Users/dev/PCTX/docs/implementation/evidence/pctx01-startup-policy-queue-map.py.txt').read_text().split('selected=[x for x in methods')[0]
+exec(compile(src,'static_selector_parser','exec'))
+assert hashlib.sha256(allbytes).hexdigest()=='f515a5958a5172c28bc19c787878e192b0c2a8f60ffad3975bf8ef1098baa84f'
+lines=subprocess.check_output([tool,'-tvV',str(binary)],text=True).splitlines()
+start=0x10005ab1c;end=min(int(x['imp'],16) for x in methods if int(x['imp'],16)>start)
+selected=[];calls=[]
+for l in lines:
+ m=re.match(r'([0-9a-f]{16})\s',l)
+ if not m or not start<=int(m[1],16)<end:continue
+ selected.append(l);c=re.search(r'\bbl\s+0x([0-9a-f]+)',l)
+ if c:
+  address=int(c[1],16)
+  try:decoded=stub_selector(address)
+  except Exception:decoded={'target':hex(address),'matching_method':[x for x in methods if int(x['imp'],16)==address]}
+  calls.append({'instruction':l,**decoded})
+base.joinpath('pctx01-startup-scan-cost-static.json').write_text(json.dumps({'task':'PCTX01-G05-D05','binary_sha256':hashlib.sha256(allbytes).hexdigest(),'method_start':hex(start),'next_known_method':hex(end),'calls':calls,'static_only':True,'qualification':False},indent=2)+'\n')
+base.joinpath('pctx01-startup-scan-cost-disassembly.txt').write_text('\n'.join(selected)+'\n')
+print('EvaluationManager static call map saved')
+extra=[]
+for cls,sel in [('PolicyScanner','performScan:allowSecAssessment:doDeepTraversal:withProgressReporter:withCancellationHandler:withErrorSet:'),('XPScanner','performXPScan:forcedRulesOnly:withResultsHandler:feedback:')]:
+ method=next(x for x in methods if x['class']==cls and x['selector']==sel);lo=int(method['imp'],16);hi=min(int(x['imp'],16) for x in methods if int(x['imp'],16)>lo);out=[];decoded=[]
+ for l in lines:
+  m=re.match(r'([0-9a-f]{16})\s',l)
+  if not m or not lo<=int(m[1],16)<hi:continue
+  c=re.search(r'\bbl\s+0x([0-9a-f]+)',l)
+  if c:
+   try:
+    d=stub_selector(int(c[1],16));l+=' ; selector '+d['selector'];decoded.append({'instruction_address':m[1],**d})
+   except Exception:pass
+  out.append(l)
+ base.joinpath('pctx01-startup-scan-cost-'+cls.lower()+'.txt').write_text('\n'.join(out)+'\n');extra.append({'class':cls,'selector':sel,'start':hex(lo),'next_known_method':hex(hi),'objc_calls':decoded})
+r=json.loads(base.joinpath('pctx01-startup-scan-cost-static.json').read_text());r['additional_methods']=extra;base.joinpath('pctx01-startup-scan-cost-static.json').write_text(json.dumps(r,indent=2)+'\n')
+print('Additional scanner ranges saved:',[(x['class'],x['start'],x['next_known_method']) for x in extra])

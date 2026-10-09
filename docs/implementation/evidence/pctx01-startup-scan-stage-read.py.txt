@@ -1,0 +1,59 @@
+"""One finite historical service-log read; fresh human scope approval required."""
+from pathlib import Path
+import json,datetime,hashlib,os,re,selectors,subprocess,time,argparse
+B=Path('/Users/dev/PCTX/docs/implementation/evidence');PLAN=B/'pctx01-startup-scan-stage-scope-plan.json'
+def reduce(rows,p):
+    if not isinstance(rows,list) or len(rows)>128:raise ValueError('event cap')
+    known={h for x in p['targets'] for h in x['hashes']};out=[];rejected=0
+    start=datetime.datetime.fromisoformat(p['start_utc']);end=datetime.datetime.fromisoformat(p['end_utc'])
+    for r in rows:
+        if not isinstance(r,dict) or r.get('processID')!=p['source_pid'] or r.get('processImagePath')!=p['source_path'] or r.get('eventType')!='logEvent':rejected+=1;continue
+        try:t=datetime.datetime.fromisoformat(r['timestamp']);assert t.tzinfo is not None and start<=t<end
+        except (KeyError,ValueError,TypeError,AssertionError):rejected+=1;continue
+        msg=r.get('eventMessage','');stage=next((kind for prefix,kind in p['stages'].items() if isinstance(msg,str) and msg.startswith(prefix)),None)
+        matches=re.findall(r'\(path: ([0-9a-f]{1,16})\)',msg) if isinstance(msg,str) else []
+        if stage is None or len(matches)!=1 or matches[0] not in known:rejected+=1;continue
+        out.append({'timestamp_utc':t.astimezone(datetime.timezone.utc).isoformat(),'stage':stage,'path_hash':matches[0]})
+    return {'events':out,'rejected':rejected}
+def controls():
+    p=json.loads(PLAN.read_text());h=p['targets'][0]['hashes'][0]
+    r={'processID':p['source_pid'],'processImagePath':p['source_path'],'eventType':'logEvent','timestamp':p['start_utc'],'eventMessage':f'GK scan complete: PST: (path: {h}), (team: (null))'}
+    bad=[dict(r,processID=666),dict(r,processImagePath='/other'),dict(r,eventType='signpostEvent'),dict(r,timestamp=p['end_utc']),dict(r,eventMessage='secret'),dict(r,eventMessage=f'GK scan complete: PST: (path: {h}0), (team: (null))')]
+    assert len(reduce([r],p)['events'])==1 and reduce(bad,p)=={'events':[],'rejected':6}
+    print('PASS: own hash admitted; wrong PID/path/type/time/message/hash refused; no service read')
+def execute():
+    p=json.loads(PLAN.read_text());assert os.getuid()==502 and os.geteuid()==502
+    if p.get('human_scope_approval')!='approved':raise SystemExit('Fresh finite scope approval required')
+    assert hashlib.sha256(Path(__file__).read_bytes()).hexdigest()==p['reader_sha256']
+    assert hashlib.sha256((B/'pctx01-startup-policy-forward-result.json').read_bytes()).hexdigest()==p['forward_result_sha256']
+    (B/'pctx01-startup-scan-stage-read-consumed.json').open('x').close()
+    args=['/usr/bin/log','show','--start',datetime.datetime.fromisoformat(p['start_utc']).strftime('%Y-%m-%d %H:%M:%S%z'),'--end',datetime.datetime.fromisoformat(p['end_utc']).strftime('%Y-%m-%d %H:%M:%S%z'),'--timezone','UTC','--style','json','--info','--no-debug','--no-pager','--predicate',p['predicate']]
+    proc=None;sel=selectors.DefaultSelector();buf={};receipt={};result=None;failure=None
+    try:
+        deadline=time.monotonic()+12;proc=subprocess.Popen(args,stdout=subprocess.PIPE,stderr=subprocess.PIPE);receipt['pid']=proc.pid
+        for s in [proc.stdout,proc.stderr]:os.set_blocking(s.fileno(),False);sel.register(s,selectors.EVENT_READ);buf[s.fileno()]=bytearray()
+        while sel.get_map():
+            if time.monotonic()>=deadline:raise RuntimeError('watchdog')
+            for key,_ in sel.select(min(.1,max(0,deadline-time.monotonic()))):
+                data=os.read(key.fd,8192)
+                if not data:sel.unregister(key.fileobj);continue
+                if sum(map(len,buf.values()))+len(data)>65536:raise RuntimeError('byte cap')
+                buf[key.fd].extend(data)
+        code=proc.wait(timeout=max(.001,deadline-time.monotonic()))
+        if code:raise RuntimeError('query failure,no fallback')
+        result=reduce(json.loads(buf[proc.stdout.fileno()]),p)
+    except Exception as e:failure=type(e).__name__
+    finally:
+        if proc:
+            if proc.poll() is None:
+                proc.terminate()
+                try:proc.wait(timeout=1)
+                except subprocess.TimeoutExpired:proc.kill();proc.wait(timeout=1)
+            receipt.update({'exit':proc.returncode,'reaped':proc.returncode is not None,'raw_bytes':sum(map(len,buf.values()))})
+            for s in [proc.stdout,proc.stderr]:s.close()
+        sel.close();buf.clear()
+    out={'task':p['task'],'plan_sha256':hashlib.sha256(PLAN.read_bytes()).hexdigest(),'receipt':receipt,'failure_class':failure,'reduced':result,'qualification':False,'administrator_authentication':False,'raw_retained':False,'limits':p['read_limit']}
+    (B/'pctx01-startup-scan-stage-read-result.json').write_text(json.dumps(out,indent=2)+'\n');print(json.dumps({'receipt':receipt,'failure':failure,'admitted_events':len(result['events']) if result else 0}))
+if __name__=='__main__':
+    ap=argparse.ArgumentParser();ap.add_argument('--execute',action='store_true');a=ap.parse_args()
+    execute() if a.execute else controls()

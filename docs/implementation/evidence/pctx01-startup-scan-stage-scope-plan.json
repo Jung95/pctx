@@ -1,0 +1,198 @@
+{
+  "task": "PCTX01-G05-D05",
+  "source_pid": 665,
+  "source_path": "/usr/libexec/syspolicyd",
+  "start_utc": "2026-10-09T12:43:38+00:00",
+  "end_utc": "2026-10-09T12:43:41+00:00",
+  "targets": [
+    {
+      "pid": 35066,
+      "identity": [
+        35066,
+        35057,
+        502,
+        1791549818,
+        70503
+      ],
+      "hashes": [
+        "570203babb44f461",
+        "fee98f0b58761baf"
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "deadline_utc_low_ns": 1791549819070052709,
+      "deadline_utc_high_ns": 1791549819070054709
+    },
+    {
+      "pid": 35067,
+      "identity": [
+        35067,
+        35057,
+        502,
+        1791549818,
+        70523
+      ],
+      "hashes": [
+        "73b1d72ede21eefc",
+        "36d5f2e5281c88ca"
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "deadline_utc_low_ns": 1791549819070137708,
+      "deadline_utc_high_ns": 1791549819070139708
+    },
+    {
+      "pid": 35068,
+      "identity": [
+        35068,
+        35057,
+        502,
+        1791549818,
+        70542
+      ],
+      "hashes": [
+        "eb6a4b30261126cf",
+        "8e5e4265fc04971d"
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "deadline_utc_low_ns": 1791549819070156666,
+      "deadline_utc_high_ns": 1791549819070158666
+    },
+    {
+      "pid": 35069,
+      "identity": [
+        35069,
+        35057,
+        502,
+        1791549818,
+        70560
+      ],
+      "hashes": [
+        "f77a88a78368b05d",
+        "780076033e3ad9ab"
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "deadline_utc_low_ns": 1791549819069675000,
+      "deadline_utc_high_ns": 1791549819069715000
+    },
+    {
+      "pid": 35070,
+      "identity": [
+        35070,
+        35057,
+        502,
+        1791549818,
+        70623
+      ],
+      "hashes": [
+        "d49d7d0fff111f0",
+        "e0d6f00f0c9731be"
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "deadline_utc_low_ns": 1791549819070173458,
+      "deadline_utc_high_ns": 1791549819070175458
+    },
+    {
+      "pid": 35071,
+      "identity": [
+        35071,
+        35057,
+        502,
+        1791549818,
+        70694
+      ],
+      "hashes": [
+        "ae3eef89559552a7",
+        "6b59796c7968d6f5"
+      ],
+      "outcome": {
+        "code": "TIMEOUT"
+      },
+      "deadline_utc_low_ns": 1791549819070264542,
+      "deadline_utc_high_ns": 1791549819070266542
+    },
+    {
+      "pid": 35072,
+      "identity": [
+        35072,
+        35057,
+        502,
+        1791549818,
+        70730
+      ],
+      "hashes": [
+        "40a79ccee8aface0",
+        "ed0dfc1bdec454ae"
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "deadline_utc_low_ns": 1791549819070070500,
+      "deadline_utc_high_ns": 1791549819070073500
+    },
+    {
+      "pid": 35073,
+      "identity": [
+        35073,
+        35057,
+        502,
+        1791549818,
+        70757
+      ],
+      "hashes": [
+        "d5799e4131ac1aa9",
+        "855018541bdc1df7"
+      ],
+      "outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "deadline_utc_low_ns": 1791549819070048500,
+      "deadline_utc_high_ns": 1791549819070051500
+    }
+  ],
+  "forward_result_sha256": "d1ded28bed6f6d0c6ae8b51b13d0afba930bc1a411ebcb11cf17e99f430cc7d4",
+  "clock_offset_envelope_ns": [
+    1791224413685377000,
+    1791224413685379000
+  ],
+  "human_scope_approval": "approved",
+  "stages": {
+    "GK scan complete:": "scan_complete",
+    "GK Xprotect results:": "xprotect_result",
+    "GK Xprotect forced rule only results:": "xprotect_forced_result"
+  },
+  "predicate": "processIdentifier == 665 AND processImagePath == \"/usr/libexec/syspolicyd\" AND (composedMessage BEGINSWITH \"GK scan complete:\" OR composedMessage BEGINSWITH \"GK Xprotect results:\" OR composedMessage BEGINSWITH \"GK Xprotect forced rule only results:\") AND (composedMessage CONTAINS \"(path: 570203babb44f461)\" OR composedMessage CONTAINS \"(path: fee98f0b58761baf)\" OR composedMessage CONTAINS \"(path: 73b1d72ede21eefc)\" OR composedMessage CONTAINS \"(path: 36d5f2e5281c88ca)\" OR composedMessage CONTAINS \"(path: eb6a4b30261126cf)\" OR composedMessage CONTAINS \"(path: 8e5e4265fc04971d)\" OR composedMessage CONTAINS \"(path: f77a88a78368b05d)\" OR composedMessage CONTAINS \"(path: 780076033e3ad9ab)\" OR composedMessage CONTAINS \"(path: d49d7d0fff111f0)\" OR composedMessage CONTAINS \"(path: e0d6f00f0c9731be)\" OR composedMessage CONTAINS \"(path: ae3eef89559552a7)\" OR composedMessage CONTAINS \"(path: 6b59796c7968d6f5)\" OR composedMessage CONTAINS \"(path: 40a79ccee8aface0)\" OR composedMessage CONTAINS \"(path: ed0dfc1bdec454ae)\" OR composedMessage CONTAINS \"(path: d5799e4131ac1aa9)\" OR composedMessage CONTAINS \"(path: 855018541bdc1df7)\")",
+  "read_limit": "One fresh stored-log read, same historical3s interval/16owned hashes, only GKscan-complete/XProtect-result/forced-result stages. No test rerun, live sample,admin auth,security/config change or unbound fallback. Ordinary UID502,64KiB cap/12s watchdog. Export stage/hash/time only. Missing phase records remain unknown; hash collision/clock limits retained. This scope is distinct from consumed scan-start/evaluation-result read.",
+  "qualification": false,
+  "reader_sha256": "1a13cf145018f9889c852e85a46664b92cb040c5dae5d4b3f0d0a43275eee34a",
+  "approval_basis": "Human approved this finite stage-log read, without expanded scope."
+}

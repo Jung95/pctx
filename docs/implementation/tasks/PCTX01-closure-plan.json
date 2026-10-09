@@ -501,7 +501,11 @@
         "pctx01-startup-policy-forward-scope-plan.json",
         "pctx01-startup-policy-forward-read-verification.json",
         "pctx01-startup-policy-forward-joined.json",
-        "pctx01-startup-preserved-condition-review.md"
+        "pctx01-startup-preserved-condition-review.md",
+        "pctx01-startup-scan-cost-review.md",
+        "pctx01-startup-scan-cost-static.json",
+        "pctx01-startup-scan-cost-verification.json",
+        "pctx01-startup-scan-stage-read-result.json"
       ],
       "verification_environment": "Native macOS arm64 local common proof; all release platforms separately required by G09",
       "macOS_arm64": "failure",
@@ -509,7 +513,7 @@
       "Linux_x86_64": "unverified; G09-D03",
       "Linux_aarch64": "prior fixed-source full only; inspect linked manifest per contract",
       "Windows_x86_64": "unverified; G09-D04",
-      "documentation_evidence": "Corrected original-supervisor diagnostic retained:68 outcomes/4 original1s expiries, policy wait only in successful selected13700. Expired-child cause and original4 failures unresolved; no closure or further automatic privileged probe. Latest unchanged startup integration11PASS/3FAIL; separate final-return correction does not resolve zero-output pre-exit waits; approved service diagnostic3PASS/1FAIL,no causal correction;counter/clock/unknown-frame limits retained; approved exact target-log query0matches,inconclusive,no correction; latest originalsupervisor diagnostic98recorded/2TIMEOUT,each24latevalidwaiting3samples until3.6ms beforedeadline,no causalrepair;SystemTraceoptionmetadataonly,no target-onlyscopeproof; installed serial scan queue+historical16path hash join supports accumulated policy scan delay, current original diagnostic113outcomes/1TIMEOUT35071 with owned hashes/native-UTC anchors; approved finite read16events/8uniqueownedpairs; serial span1.092233s, failed35071 scan begins913.425ms afterbirth and result98.881\u201398.883ms afterdeadline, seven success results beforedeadline; no productrepair/closure; exact queuearrival/kernelreply/scan-cost cause unknown; original-condition repair review:subms parent cost insufficient,scan queue alreadyUSER_INTERACTIVE,no causalpatch established; next internal scan-cost/platform correction,not changed fixture/budget/security"
+      "documentation_evidence": "Corrected original-supervisor diagnostic retained:68 outcomes/4 original1s expiries, policy wait only in successful selected13700. Expired-child cause and original4 failures unresolved; no closure or further automatic privileged probe. Latest unchanged startup integration11PASS/3FAIL; separate final-return correction does not resolve zero-output pre-exit waits; approved service diagnostic3PASS/1FAIL,no causal correction;counter/clock/unknown-frame limits retained; approved exact target-log query0matches,inconclusive,no correction; latest originalsupervisor diagnostic98recorded/2TIMEOUT,each24latevalidwaiting3samples until3.6ms beforedeadline,no causalrepair;SystemTraceoptionmetadataonly,no target-onlyscopeproof; installed serial scan queue+historical16path hash join supports accumulated policy scan delay, current original diagnostic113outcomes/1TIMEOUT35071 with owned hashes/native-UTC anchors; approved finite read16events/8uniqueownedpairs; serial span1.092233s, failed35071 scan begins913.425ms afterbirth and result98.881\u201398.883ms afterdeadline, seven success results beforedeadline; no productrepair/closure; exact queuearrival/kernelreply/scan-cost cause unknown; original-condition repair review:subms parent cost insufficient,scan queue alreadyUSER_INTERACTIVE,no causalpatch established; next internal scan-cost/platform correction,not changed fixture/budget/security; static PolicyScanner/Security and asyncXProtect/semaphore path confirmed; approved finite stage-read0events inconclusive; no applicable public platformfix/actual185ms partition; no product/systemchange"
     },
     {
       "id": "PCTX01-G05-D06",

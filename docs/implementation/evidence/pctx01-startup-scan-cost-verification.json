@@ -1,0 +1,20 @@
+{
+  "task": "PCTX01-G05-D05",
+  "static_independent_review": "/root/work_control confirmed conditional call path and overlap limits",
+  "stage_query_exit": 0,
+  "admitted_stages": 0,
+  "absence_inconclusive": true,
+  "reader_reaped_absent": true,
+  "hashes_match": true,
+  "scope_consumed": true,
+  "private_static_files_removed": [
+    "pctx01-scan-cost-code.txt",
+    "pctx01-scan-cost-objc.txt",
+    "pctx01-scan-cost-map.py",
+    "pctx01-scan-cost-map-output.txt",
+    "pctx01-scan-cost-methods.json"
+  ],
+  "tests_reexecuted": false,
+  "product_changed": false,
+  "qualification": false
+}

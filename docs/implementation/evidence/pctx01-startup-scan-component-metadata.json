@@ -1,0 +1,26 @@
+{
+  "task": "PCTX01-G05-D05",
+  "installed_os": "26.7.1",
+  "build": "25G241",
+  "static_files_only": true,
+  "metadata": [
+    {
+      "path": "/Library/Apple/System/Library/CoreServices/XProtect.bundle/Contents/Info.plist",
+      "selected_metadata": {
+        "CFBundleIdentifier": "com.apple.XProtect",
+        "CFBundleShortVersionString": "5366",
+        "CFBundleVersion": "1"
+      }
+    },
+    {
+      "path": "/Library/Apple/System/Library/CoreServices/XProtect.app/Contents/Info.plist",
+      "selected_metadata": {
+        "CFBundleIdentifier": "com.apple.XProtectFramework.XProtect",
+        "CFBundleShortVersionString": "163",
+        "CFBundleVersion": "1"
+      }
+    }
+  ],
+  "limits": "Bundle version alone does not prove full ruleset, update eligibility or cause. No rules content,live service,update or configuration accessed.",
+  "qualification": false
+}

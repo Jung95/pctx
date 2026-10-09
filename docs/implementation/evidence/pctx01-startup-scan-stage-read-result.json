@@ -1,0 +1,19 @@
+{
+  "task": "PCTX01-G05-D05",
+  "plan_sha256": "7baa239305bf229670c211b1659011ce79c25076c42868b1dce73ffd354f277d",
+  "receipt": {
+    "pid": 37298,
+    "exit": 0,
+    "reaped": true,
+    "raw_bytes": 2
+  },
+  "failure_class": null,
+  "reduced": {
+    "events": [],
+    "rejected": 0
+  },
+  "qualification": false,
+  "administrator_authentication": false,
+  "raw_retained": false,
+  "limits": "One fresh stored-log read, same historical3s interval/16owned hashes, only GKscan-complete/XProtect-result/forced-result stages. No test rerun, live sample,admin auth,security/config change or unbound fallback. Ordinary UID502,64KiB cap/12s watchdog. Export stage/hash/time only. Missing phase records remain unknown; hash collision/clock limits retained. This scope is distinct from consumed scan-start/evaluation-result read."
+}

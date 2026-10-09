@@ -1,0 +1,558 @@
+000000010006b978	pacibsp
+000000010006b97c	sub	sp, sp, #0xa0
+000000010006b980	stp	d9, d8, [sp, #0x50]
+000000010006b984	stp	x24, x23, [sp, #0x60]
+000000010006b988	stp	x22, x21, [sp, #0x70]
+000000010006b98c	stp	x20, x19, [sp, #0x80]
+000000010006b990	stp	x29, x30, [sp, #0x90]
+000000010006b994	add	x29, sp, #0x90
+000000010006b998	mov	x20, x5
+000000010006b99c	mov	x19, x4
+000000010006b9a0	mov	x22, x3
+000000010006b9a4	mov	x23, x2
+000000010006b9a8	mov	x0, x4
+000000010006b9ac	bl	0x1000bc528 ; symbol stub for: _objc_retain
+000000010006b9b0	mov	x0, x20
+000000010006b9b4	bl	0x1000bc528 ; symbol stub for: _objc_retain
+000000010006b9b8	adrp	x8, 150 ; 0x100101000
+000000010006b9bc	ldr	x21, [x8, #0x9d8] ; literal pool symbol address: _OBJC_CLASS_$_XProtectScan
+000000010006b9c0	mov	x0, x23
+000000010006b9c4	bl	0x1000bc528 ; symbol stub for: _objc_retain
+000000010006b9c8	mov	x0, x21
+000000010006b9cc	bl	0x1000bc3d8 ; symbol stub for: _objc_alloc
+000000010006b9d0	mov	x2, x23
+000000010006b9d4	bl	0x1000c08e0 ; selector initWithURL:
+000000010006b9d8	mov	x21, x0
+000000010006b9dc	mov	x0, x23
+000000010006b9e0	bl	0x1000bc518 ; symbol stub for: _objc_release
+000000010006b9e4	mov	x0, x21
+000000010006b9e8	mov	x2, x22
+000000010006b9ec	bl	0x1000c4cc0 ; selector setOnlyForcedRules:
+000000010006b9f0	add	x8, sp, #0x28
+000000010006b9f4	adrp	x16, 150 ; 0x100101000
+000000010006b9f8	ldr	x16, [x16, #0xc28] ; literal pool symbol address: __NSConcreteStackBlock
+000000010006b9fc	mov	x17, x8
+000000010006ba00	movk	x17, #0x6ae1, lsl #48
+000000010006ba04	pacda	x16, x17
+000000010006ba08	str	x16, [sp, #0x28]
+000000010006ba0c	adrp	x9, 97 ; 0x1000cc000
+000000010006ba10	ldr	d8, [x9, #0x5e8]
+000000010006ba14	str	d8, [sp, #0x30]
+000000010006ba18	add	x8, x8, #0x10
+000000010006ba1c	adrp	x16, 0 ; 0x10006b000
+000000010006ba20	add	x16, x16, #0xb0c
+000000010006ba24	pacia	x16, x8
+000000010006ba28	adrp	x8, 152 ; 0x100103000
+000000010006ba2c	add	x8, x8, #0xd38
+000000010006ba30	stp	x16, x8, [sp, #0x38]
+000000010006ba34	str	x19, [sp, #0x48]
+000000010006ba38	mov	x0, x19
+000000010006ba3c	bl	0x1000bc528 ; symbol stub for: _objc_retain
+000000010006ba40	add	x0, sp, #0x28
+000000010006ba44	bl	0x1000bc558 ; symbol stub for: _objc_retainBlock
+000000010006ba48	mov	x22, x0
+000000010006ba4c	mov	x8, sp
+000000010006ba50	adrp	x16, 150 ; 0x100101000
+000000010006ba54	ldr	x16, [x16, #0xc28] ; literal pool symbol address: __NSConcreteStackBlock
+000000010006ba58	mov	x17, x8
+000000010006ba5c	movk	x17, #0x6ae1, lsl #48
+000000010006ba60	pacda	x16, x17
+000000010006ba64	str	x16, [sp]
+000000010006ba68	str	d8, [sp, #0x8]
+000000010006ba6c	add	x8, x8, #0x10
+000000010006ba70	adrp	x16, 0 ; 0x10006b000
+000000010006ba74	add	x16, x16, #0xc84
+000000010006ba78	pacia	x16, x8
+000000010006ba7c	adrp	x8, 152 ; 0x100103000
+000000010006ba80	add	x8, x8, #0xd68
+000000010006ba84	stp	x16, x8, [sp, #0x10]
+000000010006ba88	str	x20, [sp, #0x20]
+000000010006ba8c	mov	x0, x20
+000000010006ba90	bl	0x1000bc528 ; symbol stub for: _objc_retain
+000000010006ba94	mov	x0, sp
+000000010006ba98	bl	0x1000bc558 ; symbol stub for: _objc_retainBlock
+000000010006ba9c	mov	x23, x0
+000000010006baa0	mov	x0, x21
+000000010006baa4	mov	x2, x22
+000000010006baa8	mov	x3, x23
+000000010006baac	bl	0x1000bdd00 ; selector beginAnalysisWithResultsHandler:feedback:
+000000010006bab0	mov	x24, x0
+000000010006bab4	mov	x0, x23
+000000010006bab8	bl	0x1000bc518 ; symbol stub for: _objc_release
+000000010006babc	ldr	x0, [sp, #0x20]
+000000010006bac0	bl	0x1000bc518 ; symbol stub for: _objc_release
+000000010006bac4	mov	x0, x22
+000000010006bac8	bl	0x1000bc518 ; symbol stub for: _objc_release
+000000010006bacc	ldr	x0, [sp, #0x48]
+000000010006bad0	bl	0x1000bc518 ; symbol stub for: _objc_release
+000000010006bad4	mov	x0, x20
+000000010006bad8	bl	0x1000bc518 ; symbol stub for: _objc_release
+000000010006badc	mov	x0, x19
+000000010006bae0	bl	0x1000bc518 ; symbol stub for: _objc_release
+000000010006bae4	mov	x0, x21
+000000010006bae8	bl	0x1000bc518 ; symbol stub for: _objc_release
+000000010006baec	mov	x0, x24
+000000010006baf0	ldp	x29, x30, [sp, #0x90]
+000000010006baf4	ldp	x20, x19, [sp, #0x80]
+000000010006baf8	ldp	x22, x21, [sp, #0x70]
+000000010006bafc	ldp	x24, x23, [sp, #0x60]
+000000010006bb00	ldp	d9, d8, [sp, #0x50]
+000000010006bb04	add	sp, sp, #0xa0
+000000010006bb08	retab
+000000010006bb0c	pacibsp
+000000010006bb10	stp	x24, x23, [sp, #-0x40]!
+000000010006bb14	stp	x22, x21, [sp, #0x10]
+000000010006bb18	stp	x20, x19, [sp, #0x20]
+000000010006bb1c	stp	x29, x30, [sp, #0x30]
+000000010006bb20	add	x29, sp, #0x30
+000000010006bb24	mov	x21, x1
+000000010006bb28	mov	x19, x0
+000000010006bb2c	adrp	x8, 179 ; 0x10011e000
+000000010006bb30	add	x20, x8, #0x758
+000000010006bb34	mov	x0, x1
+000000010006bb38	bl	0x1000bc528 ; symbol stub for: _objc_retain
+000000010006bb3c	mov	x0, x20
+000000010006bb40	bl	0x1000bc4e8 ; symbol stub for: _objc_opt_new
+000000010006bb44	mov	x20, x0
+000000010006bb48	mov	x0, x21
+000000010006bb4c	bl	0x1000c5e80 ; selector signatureVersion
+000000010006bb50	mov	x29, x29
+000000010006bb54	bl	0x1000bc548 ; symbol stub for: _objc_retainAutoreleasedReturnValue
+000000010006bb58	mov	x22, x0
+000000010006bb5c	bl	0x1000c6b00 ; selector unsignedLongLongValue
+000000010006bb60	mov	x2, x0
+000000010006bb64	mov	x0, x20
+000000010006bb68	bl	0x1000c5200 ; selector setScanVersion:
+000000010006bb6c	mov	x0, x22
+000000010006bb70	bl	0x1000bc518 ; symbol stub for: _objc_release
+000000010006bb74	mov	x0, x21
+000000010006bb78	bl	0x1000bdb60 ; selector assessmentResult
+000000010006bb7c	mov	x2, x0
+000000010006bb80	mov	x0, x20
+000000010006bb84	bl	0x1000c5960 ; selector setXpResult:
+000000010006bb88	mov	x0, x21
+000000010006bb8c	bl	0x1000c3860 ; selector scanTime
+000000010006bb90	mov	x29, x29
+000000010006bb94	bl	0x1000bc548 ; symbol stub for: _objc_retainAutoreleasedReturnValue
+000000010006bb98	mov	x22, x0
+000000010006bb9c	mov	x0, x20
+000000010006bba0	mov	x2, x22
+000000010006bba4	bl	0x1000c51e0 ; selector setScanTime:
+000000010006bba8	mov	x0, x22
+000000010006bbac	bl	0x1000bc518 ; symbol stub for: _objc_release
+000000010006bbb0	mov	x0, x21
+000000010006bbb4	bl	0x1000c5e20 ; selector signatureName
+000000010006bbb8	mov	x29, x29
+000000010006bbbc	bl	0x1000bc548 ; symbol stub for: _objc_retainAutoreleasedReturnValue
+000000010006bbc0	mov	x22, x0
+000000010006bbc4	mov	x0, x20
+000000010006bbc8	mov	x2, x22
+000000010006bbcc	bl	0x1000c4a00 ; selector setMatchedRuleName:
+000000010006bbd0	mov	x0, x22
+000000010006bbd4	bl	0x1000bc518 ; symbol stub for: _objc_release
+000000010006bbd8	mov	x0, x21
+000000010006bbdc	bl	0x1000c1e80 ; selector matchedRule
+000000010006bbe0	mov	x29, x29
+000000010006bbe4	bl	0x1000bc548 ; symbol stub for: _objc_retainAutoreleasedReturnValue
+000000010006bbe8	mov	x22, x0
+000000010006bbec	bl	0x1000c37e0 ; selector samplingUUID
+000000010006bbf0	mov	x29, x29
+000000010006bbf4	bl	0x1000bc548 ; symbol stub for: _objc_retainAutoreleasedReturnValue
+000000010006bbf8	mov	x23, x0
+000000010006bbfc	mov	x0, x20
+000000010006bc00	mov	x2, x23
+000000010006bc04	bl	0x1000c51a0 ; selector setSamplingUUID:
+000000010006bc08	mov	x0, x23
+000000010006bc0c	bl	0x1000bc518 ; symbol stub for: _objc_release
+000000010006bc10	mov	x0, x22
+000000010006bc14	bl	0x1000bc518 ; symbol stub for: _objc_release
+000000010006bc18	mov	x0, x21
+000000010006bc1c	bl	0x1000bf760 ; selector fileURL
+000000010006bc20	mov	x29, x29
+000000010006bc24	bl	0x1000bc548 ; symbol stub for: _objc_retainAutoreleasedReturnValue
+000000010006bc28	mov	x22, x0
+000000010006bc2c	mov	x0, x21
+000000010006bc30	bl	0x1000bc518 ; symbol stub for: _objc_release
+000000010006bc34	mov	x0, x20
+000000010006bc38	mov	x2, x22
+000000010006bc3c	bl	0x1000c4a20 ; selector setMatchedURL:
+000000010006bc40	mov	x0, x22
+000000010006bc44	bl	0x1000bc518 ; symbol stub for: _objc_release
+000000010006bc48	ldr	x0, [x19, #0x20]
+000000010006bc4c	mov	x8, x0
+000000010006bc50	ldr	x9, [x8, #0x10]!
+000000010006bc54	mov	x1, x20
+000000010006bc58	blraa	x9, x8
+000000010006bc5c	mov	x0, x20
+000000010006bc60	ldp	x29, x30, [sp, #0x30]
+000000010006bc64	ldp	x20, x19, [sp, #0x20]
+000000010006bc68	ldp	x22, x21, [sp, #0x10]
+000000010006bc6c	ldp	x24, x23, [sp], #0x40
+000000010006bc70	autibsp
+000000010006bc74	eor	x16, x30, x30, lsl #1
+000000010006bc78	tbz	x16, #0x3e, 0x10006bc80
+000000010006bc7c	brk	#0xc471
+000000010006bc80	b	0x1000bc518 ; symbol stub for: _objc_release
+000000010006bc84	ldr	x0, [x0, #0x20]
+000000010006bc88	mov	x3, x0
+000000010006bc8c	ldr	x4, [x3, #0x10]!
+000000010006bc90	braa	x4, x3
+000000010006bc94	pacibsp
+000000010006bc98	sub	sp, sp, #0x60
+000000010006bc9c	stp	x22, x21, [sp, #0x30]
+000000010006bca0	stp	x20, x19, [sp, #0x40]
+000000010006bca4	stp	x29, x30, [sp, #0x50]
+000000010006bca8	add	x29, sp, #0x50
+000000010006bcac	mov	x20, x1
+000000010006bcb0	mov	x19, x0
+000000010006bcb4	adrp	x8, 150 ; 0x100101000
+000000010006bcb8	ldr	x8, [x8, #0xc30] ; literal pool symbol address: ___stack_chk_guard
+000000010006bcbc	ldr	x8, [x8]
+000000010006bcc0	str	x8, [sp, #0x28]
+000000010006bcc4	bl	0x1000bc528 ; symbol stub for: _objc_retain
+000000010006bcc8	str	xzr, [sp, #0x8]
+000000010006bccc	add	x2, sp, #0x8
+000000010006bcd0	mov	x0, x19
+000000010006bcd4	mov	x1, x20
+000000010006bcd8	bl	0x1000bb6f8 ; symbol stub for: _SecStaticCodeCreateWithPath
+000000010006bcdc	mov	x20, x0
+000000010006bce0	cbnz	w0, 0x10006bcec
+000000010006bce4	ldr	x21, [sp, #0x8]
+000000010006bce8	cbnz	x21, 0x10006bd3c
+000000010006bcec	adrp	x8, 179 ; 0x10011e000
+000000010006bcf0	add	x0, x8, #0x4b0
+000000010006bcf4	bl	0x1000bfba0 ; selector generic
+000000010006bcf8	mov	x29, x29
+000000010006bcfc	bl	0x1000bc548 ; symbol stub for: _objc_retainAutoreleasedReturnValue
+000000010006bd00	mov	x21, x0
+000000010006bd04	mov	w1, #0x10
+000000010006bd08	bl	0x1000bc5d8 ; symbol stub for: _os_log_type_enabled
+000000010006bd0c	cbz	w0, 0x10006bd30
+000000010006bd10	mov	x0, x19
+000000010006bd14	bl	0x1000c26c0 ; selector path
+000000010006bd18	mov	x29, x29
+000000010006bd1c	bl	0x1000bc548 ; symbol stub for: _objc_retainAutoreleasedReturnValue
+000000010006bd20	add	x1, sp, #0x10
+000000010006bd24	mov	x2, x20
+000000010006bd28	mov	x3, x21
+000000010006bd2c	bl	0x1000b717c
+000000010006bd30	mov	x0, x21
+000000010006bd34	bl	0x1000bc518 ; symbol stub for: _objc_release
+000000010006bd38	ldr	x21, [sp, #0x8]
+000000010006bd3c	mov	x0, x19
+000000010006bd40	bl	0x1000bc518 ; symbol stub for: _objc_release
+000000010006bd44	ldr	x8, [sp, #0x28]
+000000010006bd48	adrp	x9, 150 ; 0x100101000
+000000010006bd4c	ldr	x9, [x9, #0xc30] ; literal pool symbol address: ___stack_chk_guard
+000000010006bd50	ldr	x9, [x9]
+000000010006bd54	cmp	x9, x8
+000000010006bd58	b.ne	0x10006bd74
+000000010006bd5c	mov	x0, x21
+000000010006bd60	ldp	x29, x30, [sp, #0x50]
+000000010006bd64	ldp	x20, x19, [sp, #0x40]
+000000010006bd68	ldp	x22, x21, [sp, #0x30]
+000000010006bd6c	add	sp, sp, #0x60
+000000010006bd70	retab
+000000010006bd74	bl	0x1000bb9d8 ; symbol stub for: ___stack_chk_fail
+000000010006bd78	mov	x20, x0
+000000010006bd7c	mov	x0, x21
+000000010006bd80	bl	0x1000bc518 ; symbol stub for: _objc_release
+000000010006bd84	b	0x10006bd90
+000000010006bd88	b	0x10006bd8c
+000000010006bd8c	mov	x20, x0
+000000010006bd90	mov	x0, x19
+000000010006bd94	bl	0x1000bc518 ; symbol stub for: _objc_release
+000000010006bd98	b	0x10006bda0
+000000010006bd9c	mov	x20, x0
+000000010006bda0	mov	x0, x20
+000000010006bda4	bl	0x1000bb878 ; symbol stub for: __Unwind_Resume
+000000010006bda8	pacibsp
+000000010006bdac	sub	sp, sp, #0x20
+000000010006bdb0	stp	x29, x30, [sp, #0x10]
+000000010006bdb4	add	x29, sp, #0x10
+000000010006bdb8	str	xzr, [sp, #0x8]
+000000010006bdbc	add	x2, sp, #0x8
+000000010006bdc0	bl	0x1000bb638 ; symbol stub for: _SecCodeCopySigningInformation
+000000010006bdc4	ldr	x8, [sp, #0x8]
+000000010006bdc8	cmp	w0, #0x0
+000000010006bdcc	csel	x0, x8, xzr, eq
+000000010006bdd0	ldp	x29, x30, [sp, #0x10]
+000000010006bdd4	add	sp, sp, #0x20
+000000010006bdd8	autibsp
+000000010006bddc	eor	x16, x30, x30, lsl #1
+000000010006bde0	tbz	x16, #0x3e, 0x10006bde8
+000000010006bde4	brk	#0xc471
+000000010006bde8	b	0x1000bc438 ; symbol stub for: _objc_autoreleaseReturnValue
+000000010006bdec	pacibsp
+000000010006bdf0	sub	sp, sp, #0x90
+000000010006bdf4	stp	x26, x25, [sp, #0x40]
+000000010006bdf8	stp	x24, x23, [sp, #0x50]
+000000010006bdfc	stp	x22, x21, [sp, #0x60]
+000000010006be00	stp	x20, x19, [sp, #0x70]
+000000010006be04	stp	x29, x30, [sp, #0x80]
+000000010006be08	add	x29, sp, #0x80
+000000010006be0c	mov	x19, x2
+000000010006be10	mov	x24, x1
+000000010006be14	mov	x22, x0
+000000010006be18	mov	x0, x2
+000000010006be1c	bl	0x1000bc528 ; symbol stub for: _objc_retain
+000000010006be20	adrp	x8, 150 ; 0x100101000
+000000010006be24	ldr	x0, [x8, #0x6a8] ; literal pool symbol address: _OBJC_CLASS_$_NSMutableDictionary
+000000010006be28	bl	0x1000bee60 ; selector dictionary
+000000010006be2c	mov	x29, x29
+000000010006be30	bl	0x1000bc548 ; symbol stub for: _objc_retainAutoreleasedReturnValue
+000000010006be34	mov	x20, x0
+000000010006be38	adrp	x8, 150 ; 0x100101000
+000000010006be3c	ldr	x0, [x8, #0x6a0] ; literal pool symbol address: _OBJC_CLASS_$_NSMutableData
+000000010006be40	bl	0x1000bea40 ; selector data
+000000010006be44	mov	x29, x29
+000000010006be48	bl	0x1000bc548 ; symbol stub for: _objc_retainAutoreleasedReturnValue
+000000010006be4c	mov	x21, x0
+000000010006be50	str	xzr, [sp, #0x38]
+000000010006be54	adrp	x8, 150 ; 0x100101000
+000000010006be58	ldr	x8, [x8, #0x960] ; literal pool symbol address: _kSecCodeSignerIdentifier
+000000010006be5c	ldr	x3, [x8]
+000000010006be60	adrp	x2, 161 ; 0x10010c000
+000000010006be64	add	x2, x2, #0x9a0 ; Objc cfstring ref: @"bad cfstring ref"
+000000010006be68	mov	x0, x20
+000000010006be6c	bl	0x1000c4c60 ; selector setObject:forKey:
+000000010006be70	adrp	x8, 150 ; 0x100101000
+000000010006be74	ldr	x0, [x8, #0x6b8] ; literal pool symbol address: _OBJC_CLASS_$_NSNull
+000000010006be78	bl	0x1000c23a0 ; selector null
+000000010006be7c	mov	x29, x29
+000000010006be80	bl	0x1000bc548 ; symbol stub for: _objc_retainAutoreleasedReturnValue
+000000010006be84	mov	x23, x0
+000000010006be88	adrp	x8, 150 ; 0x100101000
+000000010006be8c	ldr	x8, [x8, #0x968] ; literal pool symbol address: _kSecCodeSignerIdentity
+000000010006be90	ldr	x3, [x8]
+000000010006be94	mov	x0, x20
+000000010006be98	mov	x2, x23
+000000010006be9c	bl	0x1000c4c60 ; selector setObject:forKey:
+000000010006bea0	mov	x0, x23
+000000010006bea4	bl	0x1000bc518 ; symbol stub for: _objc_release
+000000010006bea8	adrp	x8, 150 ; 0x100101000
+000000010006beac	ldr	x8, [x8, #0x950] ; literal pool symbol address: _kSecCodeSignerDetached
+000000010006beb0	ldr	x3, [x8]
+000000010006beb4	mov	x0, x20
+000000010006beb8	mov	x2, x21
+000000010006bebc	bl	0x1000c4c60 ; selector setObject:forKey:
+000000010006bec0	adrp	x8, 150 ; 0x100101000
+000000010006bec4	ldr	x8, [x8, #0x958] ; literal pool symbol address: _kSecCodeSignerDigestAlgorithm
+000000010006bec8	ldr	x3, [x8]
+000000010006becc	adrp	x2, 163 ; 0x10010e000
+000000010006bed0	add	x2, x2, #0xd30
+000000010006bed4	mov	x0, x20
+000000010006bed8	bl	0x1000c4c60 ; selector setObject:forKey:
+000000010006bedc	str	xzr, [sp, #0x30]
+000000010006bee0	add	x8, sp, #0x8
+000000010006bee4	adrp	x16, 150 ; 0x100101000
+000000010006bee8	ldr	x16, [x16, #0xc28] ; literal pool symbol address: __NSConcreteStackBlock
+000000010006beec	mov	x17, x8
+000000010006bef0	movk	x17, #0x6ae1, lsl #48
+000000010006bef4	pacda	x16, x17
+000000010006bef8	str	x16, [sp, #0x8]
+000000010006befc	adrp	x9, 97 ; 0x1000cc000
+000000010006bf00	ldr	d0, [x9, #0x5e8]
+000000010006bf04	str	d0, [sp, #0x10]
+000000010006bf08	add	x8, x8, #0x10
+000000010006bf0c	adrp	x16, 1 ; 0x10006c000
+000000010006bf10	add	x16, x16, #0x1bc
+000000010006bf14	pacia	x16, x8
+000000010006bf18	adrp	x8, 152 ; 0x100103000
+000000010006bf1c	add	x8, x8, #0xd98
+000000010006bf20	stp	x16, x8, [sp, #0x18]
+000000010006bf24	mov	x0, x19
+000000010006bf28	bl	0x1000bc528 ; symbol stub for: _objc_retain
+000000010006bf2c	str	x19, [sp, #0x28]
+000000010006bf30	add	x2, sp, #0x30
+000000010006bf34	add	x3, sp, #0x8
+000000010006bf38	mov	x0, x22
+000000010006bf3c	mov	w1, #0x0
+000000010006bf40	bl	0x1000bb708 ; symbol stub for: _SecStaticCodeSetCallback
+000000010006bf44	mov	x25, x0
+000000010006bf48	ldr	x23, [sp, #0x30]
+000000010006bf4c	mov	x0, x23
+000000010006bf50	bl	0x1000bc528 ; symbol stub for: _objc_retain
+000000010006bf54	cbz	w25, 0x10006bf8c
+000000010006bf58	adrp	x8, 179 ; 0x10011e000
+000000010006bf5c	add	x0, x8, #0x4b0
+000000010006bf60	bl	0x1000bfba0 ; selector generic
+000000010006bf64	mov	x29, x29
+000000010006bf68	bl	0x1000bc548 ; symbol stub for: _objc_retainAutoreleasedReturnValue
+000000010006bf6c	mov	x22, x0
+000000010006bf70	mov	w1, #0x10
+000000010006bf74	bl	0x1000bc5d8 ; symbol stub for: _os_log_type_enabled
+000000010006bf78	cbnz	w0, 0x10006c120
+000000010006bf7c	mov	x0, x22
+000000010006bf80	bl	0x1000bc518 ; symbol stub for: _objc_release
+000000010006bf84	mov	w24, #0x0
+000000010006bf88	b	0x10006bfe8
+000000010006bf8c	add	x2, sp, #0x38
+000000010006bf90	mov	x0, x20
+000000010006bf94	mov	w1, #0x8
+000000010006bf98	bl	0x1000bb668 ; symbol stub for: _SecCodeSignerCreate
+000000010006bf9c	mov	x25, x0
+000000010006bfa0	cbz	w0, 0x10006c040
+000000010006bfa4	adrp	x8, 179 ; 0x10011e000
+000000010006bfa8	add	x0, x8, #0x4b0
+000000010006bfac	bl	0x1000bfba0 ; selector generic
+000000010006bfb0	mov	x29, x29
+000000010006bfb4	bl	0x1000bc548 ; symbol stub for: _objc_retainAutoreleasedReturnValue
+000000010006bfb8	mov	x24, x0
+000000010006bfbc	mov	w1, #0x10
+000000010006bfc0	bl	0x1000bc5d8 ; symbol stub for: _os_log_type_enabled
+000000010006bfc4	cbnz	w0, 0x10006c138
+000000010006bfc8	mov	x0, x24
+000000010006bfcc	bl	0x1000bc518 ; symbol stub for: _objc_release
+000000010006bfd0	mov	w24, #0x0
+000000010006bfd4	mov	x0, x22
+000000010006bfd8	mov	w1, #0x0
+000000010006bfdc	mov	x2, #0x0
+000000010006bfe0	mov	x3, x23
+000000010006bfe4	bl	0x1000bb708 ; symbol stub for: _SecStaticCodeSetCallback
+000000010006bfe8	ldr	x0, [sp, #0x38]
+000000010006bfec	cbz	x0, 0x10006bff8
+000000010006bff0	bl	0x1000bb1a8 ; symbol stub for: _CFRelease
+000000010006bff4	str	xzr, [sp, #0x38]
+000000010006bff8	ldr	x0, [sp, #0x28]
+000000010006bffc	bl	0x1000bc518 ; symbol stub for: _objc_release
+000000010006c000	mov	x0, x23
+000000010006c004	bl	0x1000bc518 ; symbol stub for: _objc_release
+000000010006c008	mov	x0, x21
+000000010006c00c	bl	0x1000bc518 ; symbol stub for: _objc_release
+000000010006c010	mov	x0, x20
+000000010006c014	bl	0x1000bc518 ; symbol stub for: _objc_release
+000000010006c018	mov	x0, x19
+000000010006c01c	bl	0x1000bc518 ; symbol stub for: _objc_release
+000000010006c020	mov	x0, x24
+000000010006c024	ldp	x29, x30, [sp, #0x80]
+000000010006c028	ldp	x20, x19, [sp, #0x70]
+000000010006c02c	ldp	x22, x21, [sp, #0x60]
+000000010006c030	ldp	x24, x23, [sp, #0x50]
+000000010006c034	ldp	x26, x25, [sp, #0x40]
+000000010006c038	add	sp, sp, #0x90
+000000010006c03c	retab
+000000010006c040	ldr	x0, [sp, #0x38]
+000000010006c044	mov	x1, x22
+000000010006c048	mov	w2, #0x10000000
+000000010006c04c	bl	0x1000bb658 ; symbol stub for: _SecCodeSignerAddSignature
+000000010006c050	mov	x25, x0
+000000010006c054	cbz	w0, 0x10006c0a0
+000000010006c058	mov	w8, #0xfa42
+000000010006c05c	movk	w8, #0xfffe, lsl #16
+000000010006c060	cmp	w25, w8
+000000010006c064	b.ne	0x10006c0ec
+000000010006c068	mov	w8, #0x1
+000000010006c06c	strb	w8, [x24]
+000000010006c070	adrp	x8, 178 ; 0x10011e000
+000000010006c074	add	x0, x8, #0x4b0
+000000010006c078	bl	0x1000bfba0 ; selector generic
+000000010006c07c	mov	x29, x29
+000000010006c080	bl	0x1000bc548 ; symbol stub for: _objc_retainAutoreleasedReturnValue
+000000010006c084	mov	x24, x0
+000000010006c088	mov	w1, #0x2
+000000010006c08c	bl	0x1000bc5d8 ; symbol stub for: _os_log_type_enabled
+000000010006c090	cbz	w0, 0x10006bfc8
+000000010006c094	mov	x0, x24
+000000010006c098	bl	0x1000b72b4
+000000010006c09c	b	0x10006bfc8
+000000010006c0a0	mov	x0, x22
+000000010006c0a4	mov	x1, x21
+000000010006c0a8	mov	w2, #0x0
+000000010006c0ac	bl	0x1000bb648 ; symbol stub for: _SecCodeSetDetachedSignature
+000000010006c0b0	mov	x25, x0
+000000010006c0b4	cbz	w0, 0x10006c130
+000000010006c0b8	adrp	x8, 178 ; 0x10011e000
+000000010006c0bc	add	x0, x8, #0x4b0
+000000010006c0c0	bl	0x1000bfba0 ; selector generic
+000000010006c0c4	mov	x29, x29
+000000010006c0c8	bl	0x1000bc548 ; symbol stub for: _objc_retainAutoreleasedReturnValue
+000000010006c0cc	mov	x24, x0
+000000010006c0d0	mov	w1, #0x10
+000000010006c0d4	bl	0x1000bc5d8 ; symbol stub for: _os_log_type_enabled
+000000010006c0d8	cbz	w0, 0x10006bfc8
+000000010006c0dc	mov	x0, x25
+000000010006c0e0	mov	x1, x24
+000000010006c0e4	bl	0x1000b7270
+000000010006c0e8	b	0x10006bfc8
+000000010006c0ec	adrp	x8, 178 ; 0x10011e000
+000000010006c0f0	add	x0, x8, #0x4b0
+000000010006c0f4	bl	0x1000bfba0 ; selector generic
+000000010006c0f8	mov	x29, x29
+000000010006c0fc	bl	0x1000bc548 ; symbol stub for: _objc_retainAutoreleasedReturnValue
+000000010006c100	mov	x24, x0
+000000010006c104	mov	w1, #0x10
+000000010006c108	bl	0x1000bc5d8 ; symbol stub for: _os_log_type_enabled
+000000010006c10c	cbz	w0, 0x10006bfc8
+000000010006c110	mov	x0, x25
+000000010006c114	mov	x1, x24
+000000010006c118	bl	0x1000b72f8
+000000010006c11c	b	0x10006bfc8
+000000010006c120	mov	x0, x25
+000000010006c124	mov	x1, x22
+000000010006c128	bl	0x1000b71e8
+000000010006c12c	b	0x10006bf7c
+000000010006c130	mov	w24, #0x1
+000000010006c134	b	0x10006bfd4
+000000010006c138	mov	x0, x25
+000000010006c13c	mov	x1, x24
+000000010006c140	bl	0x1000b722c
+000000010006c144	b	0x10006bfc8
+000000010006c148	b	0x10006c180
+000000010006c14c	b	0x10006c180
+000000010006c150	b	0x10006c180
+000000010006c154	b	0x10006c180
+000000010006c158	b	0x10006c180
+000000010006c15c	mov	x22, x0
+000000010006c160	ldr	x0, [sp, #0x28]
+000000010006c164	b	0x10006c190
+000000010006c168	mov	x22, x0
+000000010006c16c	b	0x10006c18c
+000000010006c170	mov	x22, x0
+000000010006c174	b	0x10006c1a4
+000000010006c178	mov	x22, x0
+000000010006c17c	b	0x10006c1ac
+000000010006c180	mov	x22, x0
+000000010006c184	ldr	x0, [sp, #0x28]
+000000010006c188	bl	0x1000bc518 ; symbol stub for: _objc_release
+000000010006c18c	mov	x0, x23
+000000010006c190	bl	0x1000bc518 ; symbol stub for: _objc_release
+000000010006c194	b	0x10006c19c
+000000010006c198	mov	x22, x0
+000000010006c19c	mov	x0, x21
+000000010006c1a0	bl	0x1000bc518 ; symbol stub for: _objc_release
+000000010006c1a4	mov	x0, x20
+000000010006c1a8	bl	0x1000bc518 ; symbol stub for: _objc_release
+000000010006c1ac	mov	x0, x19
+000000010006c1b0	bl	0x1000bc518 ; symbol stub for: _objc_release
+000000010006c1b4	mov	x0, x22
+000000010006c1b8	bl	0x1000bb878 ; symbol stub for: __Unwind_Resume
+000000010006c1bc	pacibsp
+000000010006c1c0	stp	x20, x19, [sp, #-0x20]!
+000000010006c1c4	stp	x29, x30, [sp, #0x10]
+000000010006c1c8	add	x29, sp, #0x10
+000000010006c1cc	mov	x19, x1
+000000010006c1d0	mov	x20, x0
+000000010006c1d4	adrp	x1, 158 ; 0x10010a000
+000000010006c1d8	add	x1, x1, #0xb40 ; Objc cfstring ref: @"bad cfstring ref"
+000000010006c1dc	mov	x0, x2
+000000010006c1e0	bl	0x1000bb0e8 ; symbol stub for: _CFEqual
+000000010006c1e4	cbz	w0, 0x10006c208
+000000010006c1e8	ldr	x0, [x20, #0x20]
+000000010006c1ec	mov	x8, x0
+000000010006c1f0	ldr	x9, [x8, #0x10]!
+000000010006c1f4	blraa	x9, x8
+000000010006c1f8	cbz	w0, 0x10006c208
+000000010006c1fc	mov	x0, x19
+000000010006c200	mov	w1, #0x0
+000000010006c204	bl	0x1000bb6c8 ; symbol stub for: _SecStaticCodeCancelValidation
+000000010006c208	mov	x0, #0x0
+000000010006c20c	ldp	x29, x30, [sp, #0x10]
+000000010006c210	ldp	x20, x19, [sp], #0x20
+000000010006c214	retab
+000000010006c218	ldr	x1, [x1, #0x20]
+000000010006c21c	add	x0, x0, #0x20
+000000010006c220	mov	w2, #0x7
+000000010006c224	b	0x1000bb828 ; symbol stub for: __Block_object_assign
+000000010006c228	ldr	x0, [x0, #0x20]
+000000010006c22c	b	0x1000bc518 ; symbol stub for: _objc_release
