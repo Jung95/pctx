@@ -1,0 +1,47 @@
+{
+  "task": "PCTX01-G05-D05",
+  "images": [
+    {
+      "target": "syspolicyd",
+      "uuid_match": true,
+      "uuid": "C84F2522-57FD-3B0C-9E75-27039F9E39AB",
+      "static_text_vmaddr": "0x100000000",
+      "observed_code_addresses": [
+        "0x100008e6c",
+        "0x100009568",
+        "0x100032c18",
+        "0x10003da9c",
+        "0x10003dcc8",
+        "0x10003e298",
+        "0x1000487b0",
+        "0x100048de8",
+        "0x100049a04",
+        "0x10005a6d8",
+        "0x10005b3b0",
+        "0x10005b40c",
+        "0x1000651b0",
+        "0x100065570",
+        "0x10006a6a8",
+        "0x10006bcdc"
+      ]
+    },
+    {
+      "target": "XprotectService",
+      "uuid_match": true,
+      "uuid": "57DD6284-09FD-351F-A87A-F60ECFB75F70",
+      "static_text_vmaddr": "0x100000000",
+      "observed_code_addresses": [
+        "0x10000c59c",
+        "0x10000c9e0",
+        "0x10000c9f0",
+        "0x10000cce8",
+        "0x10000d20c",
+        "0x10000d220",
+        "0x10000f320",
+        "0x10000fdb4",
+        "0x100010cd4"
+      ]
+    }
+  ],
+  "qualification": false
+}

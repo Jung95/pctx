@@ -1,0 +1,14 @@
+{
+  "task": "PCTX01-G05-D05",
+  "alias_fixture_accepted": true,
+  "wrong_path_refused": true,
+  "fixed_integer_details": {
+    "image_rows": 1,
+    "recognized_rows": 1,
+    "target_label_rows": 1,
+    "exact_target_path_rows": 0
+  },
+  "raw_strings_retained": false,
+  "live_service_validation": false,
+  "qualification": false
+}

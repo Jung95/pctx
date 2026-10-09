@@ -1,0 +1,99 @@
+{
+  "task": "PCTX01-G05-D05",
+  "static_only": true,
+  "method_count": 211,
+  "observed_preceding_methods": [
+    {
+      "static_address": "0x10000c59c",
+      "preceding_objc_method": {
+        "class": "XPMalwareEvaluation",
+        "selector": "initWithPath:withExtraRules:forcedRulesOnly:assessmentClass:feedback:",
+        "imp": "0x10000c514"
+      },
+      "next_known_imp": "0x10000c5e0",
+      "limit": "Nearest preceding known ObjC IMP is not complete function-boundary proof."
+    },
+    {
+      "static_address": "0x10000c9e0",
+      "preceding_objc_method": {
+        "class": "XPMalwareEvaluation",
+        "selector": "initWithRuleString:withExtraRules:withURL:withData:forcedRulesOnly:withAssessmentClass:feedback:",
+        "imp": "0x10000c644"
+      },
+      "next_known_imp": "0x10000d1e0",
+      "limit": "Nearest preceding known ObjC IMP is not complete function-boundary proof."
+    },
+    {
+      "static_address": "0x10000c9f0",
+      "preceding_objc_method": {
+        "class": "XPMalwareEvaluation",
+        "selector": "initWithRuleString:withExtraRules:withURL:withData:forcedRulesOnly:withAssessmentClass:feedback:",
+        "imp": "0x10000c644"
+      },
+      "next_known_imp": "0x10000d1e0",
+      "limit": "Nearest preceding known ObjC IMP is not complete function-boundary proof."
+    },
+    {
+      "static_address": "0x10000cce8",
+      "preceding_objc_method": {
+        "class": "XPMalwareEvaluation",
+        "selector": "initWithRuleString:withExtraRules:withURL:withData:forcedRulesOnly:withAssessmentClass:feedback:",
+        "imp": "0x10000c644"
+      },
+      "next_known_imp": "0x10000d1e0",
+      "limit": "Nearest preceding known ObjC IMP is not complete function-boundary proof."
+    },
+    {
+      "static_address": "0x10000d20c",
+      "preceding_objc_method": {
+        "class": "XPMalwareEvaluation",
+        "selector": "dealloc",
+        "imp": "0x10000d1e0"
+      },
+      "next_known_imp": "0x10000d24c",
+      "limit": "Nearest preceding known ObjC IMP is not complete function-boundary proof."
+    },
+    {
+      "static_address": "0x10000d220",
+      "preceding_objc_method": {
+        "class": "XPMalwareEvaluation",
+        "selector": "dealloc",
+        "imp": "0x10000d1e0"
+      },
+      "next_known_imp": "0x10000d24c",
+      "limit": "Nearest preceding known ObjC IMP is not complete function-boundary proof."
+    },
+    {
+      "static_address": "0x10000f320",
+      "preceding_objc_method": {
+        "class": "XPAssessment",
+        "selector": "performAnalysisOnFileImpl:withLSProperties:malwareScanOnly:withReply:continueOnError:forcedRulesOnly:",
+        "imp": "0x10000efd8"
+      },
+      "next_known_imp": "0x10000fbac",
+      "limit": "Nearest preceding known ObjC IMP is not complete function-boundary proof."
+    },
+    {
+      "static_address": "0x10000fdb4",
+      "preceding_objc_method": {
+        "class": "XPAssessment",
+        "selector": "handleExecutableAssessment:forcedRulesOnly:",
+        "imp": "0x10000fc68"
+      },
+      "next_known_imp": "0x100010360",
+      "limit": "Nearest preceding known ObjC IMP is not complete function-boundary proof."
+    },
+    {
+      "static_address": "0x100010cd4",
+      "preceding_objc_method": {
+        "class": "XPAssessment",
+        "selector": ".cxx_destruct",
+        "imp": "0x100010ca8"
+      },
+      "next_known_imp": "0x100010d4c",
+      "limit": "Nearest preceding known ObjC IMP is not complete function-boundary proof."
+    }
+  ],
+  "discarded_initial_parser": "Initial ad-hoc otool fields misread relative IMP values; invalid map discarded before interpretation. Existing relative-pointer decoder used instead.",
+  "qualification": false
+}

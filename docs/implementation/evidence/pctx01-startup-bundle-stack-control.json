@@ -1,0 +1,78 @@
+{
+  "task": "PCTX01-G05-D05",
+  "controls": [
+    {
+      "mode": "partial_wait_failure",
+      "failure": "TimeoutExpired",
+      "failure_check": null,
+      "failure_stage": "sample_receipt",
+      "endpoint_poll_count": 1,
+      "spawned_fake_samplers": 2,
+      "private_removed_after_reap": true,
+      "no_attribution": true
+    },
+    {
+      "mode": "stale_trigger",
+      "failure": "AssertionError",
+      "failure_check": null,
+      "failure_stage": "owned_trigger_freshness",
+      "endpoint_poll_count": 0,
+      "spawned_fake_samplers": 0,
+      "private_removed_after_reap": true,
+      "no_attribution": true
+    },
+    {
+      "mode": "absent_endpoint",
+      "failure": "AssertionError",
+      "failure_check": null,
+      "failure_stage": "endpoint_discovery",
+      "endpoint_poll_count": 4,
+      "spawned_fake_samplers": 0,
+      "private_removed_after_reap": true,
+      "no_attribution": true
+    },
+    {
+      "mode": "ambiguous_endpoint",
+      "failure": "AssertionError",
+      "failure_check": null,
+      "failure_stage": "endpoint_discovery",
+      "endpoint_poll_count": 1,
+      "spawned_fake_samplers": 0,
+      "private_removed_after_reap": true,
+      "no_attribution": true
+    },
+    {
+      "mode": "wrong_endpoint_path",
+      "failure": "AdmissionFailure",
+      "failure_check": "executable_path_mismatch",
+      "failure_stage": "endpoint_identity",
+      "endpoint_poll_count": 1,
+      "spawned_fake_samplers": 0,
+      "private_removed_after_reap": true,
+      "no_attribution": true
+    },
+    {
+      "mode": "delayed_endpoint_success",
+      "failure": null,
+      "failure_check": null,
+      "failure_stage": null,
+      "endpoint_poll_count": 3,
+      "spawned_fake_samplers": 2,
+      "private_removed_after_reap": true,
+      "no_attribution": false
+    },
+    {
+      "mode": "endpoint_deadline_crossing",
+      "failure": "AssertionError",
+      "failure_check": null,
+      "failure_stage": "endpoint_discovery",
+      "endpoint_poll_count": 1,
+      "spawned_fake_samplers": 0,
+      "private_removed_after_reap": true,
+      "no_attribution": true
+    }
+  ],
+  "real_service_or_process_observation": false,
+  "administrator_authentication": false,
+  "qualification": false
+}

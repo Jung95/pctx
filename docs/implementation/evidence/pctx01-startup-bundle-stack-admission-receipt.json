@@ -1,0 +1,40 @@
+{
+  "ready": {
+    "collector_pid": 44224,
+    "targets": {
+      "syspolicyd": {
+        "pid": 665,
+        "uid": 0,
+        "start_sec": 1791224512,
+        "start_usec": 669319,
+        "path": "/usr/libexec/syspolicyd"
+      }
+    },
+    "deferred_target": "XprotectService",
+    "native_ns": 350368481763000
+  },
+  "trigger": {
+    "parent_pid": 44228,
+    "child_pid": 44249,
+    "trigger_ns": 350370222829000,
+    "admitted_ns": 350370232587000
+  },
+  "sampling": {
+    "samplers": [
+      {
+        "target": "syspolicyd",
+        "sampler_pid": 44254
+      },
+      {
+        "target": "XprotectService",
+        "sampler_pid": 44255
+      }
+    ]
+  },
+  "driver_cleanup": {
+    "pid": 44228,
+    "exit": 101,
+    "root_reaped": true,
+    "descendants": "Not independently proven by root reap; inspect owned records/log and liveness before attribution."
+  }
+}

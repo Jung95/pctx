@@ -1,0 +1,211 @@
+{
+  "task": "PCTX01-G05-D05",
+  "calls": [
+    {
+      "static_address": "0x10000c598",
+      "stub": "0x100014e00",
+      "selector_slot": "0x100026488",
+      "selector": "initWithRuleString:withExtraRules:withURL:withData:forcedRulesOnly:withAssessmentClass:feedback:"
+    },
+    {
+      "static_address": "0x10000c634",
+      "stub": "0x100014e00",
+      "selector_slot": "0x100026488",
+      "selector": "initWithRuleString:withExtraRules:withURL:withData:forcedRulesOnly:withAssessmentClass:feedback:"
+    },
+    {
+      "static_address": "0x10000c764",
+      "stub": "0x100014340",
+      "selector_slot": "0x1000261d8",
+      "selector": "assessmentClass"
+    },
+    {
+      "static_address": "0x10000c808",
+      "stub": "0x1000141e0",
+      "selector_slot": "0x100026180",
+      "selector": "addObject:"
+    },
+    {
+      "static_address": "0x10000c89c",
+      "stub": "0x100015b20",
+      "selector_slot": "0x1000267d0",
+      "selector": "sortedArrayUsingComparator:"
+    },
+    {
+      "static_address": "0x10000c994",
+      "stub": "0x100013dc0",
+      "selector_slot": "0x100026078",
+      "selector": "UTF8String"
+    },
+    {
+      "static_address": "0x10000c9a4",
+      "stub": "0x100013dc0",
+      "selector_slot": "0x100026078",
+      "selector": "UTF8String"
+    },
+    {
+      "static_address": "0x10000c9b4",
+      "stub": "0x100013dc0",
+      "selector_slot": "0x100026078",
+      "selector": "UTF8String"
+    },
+    {
+      "static_address": "0x10000c9dc",
+      "stub": "0x100013dc0",
+      "selector_slot": "0x100026078",
+      "selector": "UTF8String"
+    },
+    {
+      "static_address": "0x10000caa4",
+      "stub": "0x100014640",
+      "selector_slot": "0x100026298",
+      "selector": "countByEnumeratingWithState:objects:count:"
+    },
+    {
+      "static_address": "0x10000cb14",
+      "stub": "0x1000153e0",
+      "selector_slot": "0x100026600",
+      "selector": "path"
+    },
+    {
+      "static_address": "0x10000cb38",
+      "stub": "0x100014c60",
+      "selector_slot": "0x100026420",
+      "selector": "initWithContentsOfFile:encoding:error:"
+    },
+    {
+      "static_address": "0x10000cb60",
+      "stub": "0x100013dc0",
+      "selector_slot": "0x100026078",
+      "selector": "UTF8String"
+    },
+    {
+      "static_address": "0x10000cb70",
+      "stub": "0x100013dc0",
+      "selector_slot": "0x100026078",
+      "selector": "UTF8String"
+    },
+    {
+      "static_address": "0x10000cb98",
+      "stub": "0x100013dc0",
+      "selector_slot": "0x100026078",
+      "selector": "UTF8String"
+    },
+    {
+      "static_address": "0x10000cbd4",
+      "stub": "0x1000153e0",
+      "selector_slot": "0x100026600",
+      "selector": "path"
+    },
+    {
+      "static_address": "0x10000ccc4",
+      "stub": "0x100014640",
+      "selector_slot": "0x100026298",
+      "selector": "countByEnumeratingWithState:objects:count:"
+    },
+    {
+      "static_address": "0x10000cd94",
+      "stub": "0x1000148e0",
+      "selector_slot": "0x100026340",
+      "selector": "errorWithDomain:code:userInfo:"
+    },
+    {
+      "static_address": "0x10000ce58",
+      "stub": "0x100014340",
+      "selector_slot": "0x1000261d8",
+      "selector": "assessmentClass"
+    },
+    {
+      "static_address": "0x10000cfb8",
+      "stub": "0x100014180",
+      "selector_slot": "0x100026168",
+      "selector": "absoluteString"
+    },
+    {
+      "static_address": "0x10000cfcc",
+      "stub": "0x100014180",
+      "selector_slot": "0x100026168",
+      "selector": "absoluteString"
+    },
+    {
+      "static_address": "0x10000cfec",
+      "stub": "0x100014580",
+      "selector_slot": "0x100026268",
+      "selector": "compare:"
+    },
+    {
+      "static_address": "0x10000d180",
+      "stub": "0x100015de0",
+      "selector_slot": "0x100026880",
+      "selector": "xp_yara_rule_is_forced:"
+    },
+    {
+      "static_address": "0x10000d1c0",
+      "stub": "0x100015e20",
+      "selector_slot": "0x100026890",
+      "selector": "xp_yara_rule_is_open_scripting:"
+    },
+    {
+      "static_address": "0x10000f31c",
+      "stub": "0x100014b20",
+      "selector_slot": "0x1000263d0",
+      "selector": "handleExecutableAssessment:forcedRulesOnly:"
+    },
+    {
+      "static_address": "0x10000fdb0",
+      "stub": "0x100014de0",
+      "selector_slot": "0x100026480",
+      "selector": "initWithPath:withExtraRules:forcedRulesOnly:assessmentClass:feedback:"
+    }
+  ],
+  "near_observed_locations": [
+    "000000010000c590\tmov\tx6, x21",
+    "000000010000c594\tmov\tx7, x20",
+    "000000010000c598\tbl\t0x100014e00 ; selector initWithRuleString:withExtraRules:withURL:withData:forcedRulesOnly:withAssessmentClass:feedback:",
+    "000000010000c59c\tmov\tx20, x0",
+    "000000010000c5a0\tmov\tx0, x19",
+    "000000010000c5a4\tbl\t0x100013a5c ; symbol stub for: _objc_release",
+    "000000010000c5a8\tmov\tx0, x22",
+    "000000010000c9d4\tmov\tx0, x27",
+    "000000010000c9d8\tbl\t0x100013a7c ; symbol stub for: _objc_retainAutorelease",
+    "000000010000c9dc\tbl\t0x100013dc0 ; selector UTF8String",
+    "000000010000c9e0\tmov\tx1, x0",
+    "000000010000c9e4\tmov\tx0, x20",
+    "000000010000c9e8\tmov\tx2, #0x0",
+    "000000010000c9ec\tbl\t0x100013c1c ; symbol stub for: _yr_compiler_add_string",
+    "000000010000c9f0\tcbz\tw0, 0x10000ca7c",
+    "000000010000c9f4\tmov\tx23, x0",
+    "000000010000c9f8\tbl\t_xprotectGetLog",
+    "000000010000c9fc\tmov\tx29, x29",
+    "000000010000ccdc\tldr\tx20, [sp, #0x40]",
+    "000000010000cce0\tadd\tx1, x24, x20",
+    "000000010000cce4\tbl\t0x100013c4c ; symbol stub for: _yr_compiler_get_rules",
+    "000000010000cce8\tcbz\tw0, 0x10000ce14",
+    "000000010000ccec\tmov\tx23, x0",
+    "000000010000ccf0\tbl\t_xprotectGetLog",
+    "000000010000ccf4\tmov\tx29, x29",
+    "000000010000f314\tmov\tx2, x25",
+    "000000010000f318\tmov\tx3, x23",
+    "000000010000f31c\tbl\t0x100014b20 ; selector handleExecutableAssessment:forcedRulesOnly:",
+    "000000010000f320\tb\t0x10000f974",
+    "000000010000f324\tcbnz\tw26, 0x10000f334",
+    "000000010000f328\tldr\tx0, [x22, #0x20]",
+    "000000010000f32c\tbl\t_executableStillRequiresAnalysis",
+    "000000010000fda8\tmov\tw5, #0x0",
+    "000000010000fdac\tmov\tx6, x27",
+    "000000010000fdb0\tbl\t0x100014de0 ; selector initWithPath:withExtraRules:forcedRulesOnly:assessmentClass:feedback:",
+    "000000010000fdb4\tldr\tx8, [x20, #0x58]",
+    "000000010000fdb8\tstr\tx0, [x20, #0x58]",
+    "000000010000fdbc\tmov\tx0, x8",
+    "000000010000fdc0\tbl\t0x100013a5c ; symbol stub for: _objc_release",
+    "0000000100010cc8\tadd\tx0, x19, #0x58",
+    "0000000100010ccc\tmov\tx1, #0x0",
+    "0000000100010cd0\tbl\t0x100013abc ; symbol stub for: _objc_storeStrong",
+    "0000000100010cd4\tadd\tx0, x19, #0x50",
+    "0000000100010cd8\tmov\tx1, #0x0",
+    "0000000100010cdc\tbl\t0x100013abc ; symbol stub for: _objc_storeStrong",
+    "0000000100010ce0\tadd\tx0, x19, #0x48"
+  ],
+  "static_only": true,
+  "qualification": false
+}

@@ -1,0 +1,314 @@
+{
+  "task": "PCTX01-G05-D05",
+  "samples": [
+    {
+      "target": "syspolicyd",
+      "admitted_frames": 88,
+      "native_capture_begin_ns": 350370263111000,
+      "receipt_ns": 350372809087000,
+      "observed_target_offsets": [
+        {
+          "offset": "0x65570",
+          "weight": 176,
+          "thread_id": 4881,
+          "depth": 8
+        },
+        {
+          "offset": "0x32c18",
+          "weight": 176,
+          "thread_id": 10087926,
+          "depth": 22
+        },
+        {
+          "offset": "0x6a6a8",
+          "weight": 176,
+          "thread_id": 10087926,
+          "depth": 24
+        },
+        {
+          "offset": "0x6bcdc",
+          "weight": 176,
+          "thread_id": 10087926,
+          "depth": 26
+        },
+        {
+          "offset": "0x5a6d8",
+          "weight": 87,
+          "thread_id": 10088129,
+          "depth": 22
+        },
+        {
+          "offset": "0x5b40c",
+          "weight": 57,
+          "thread_id": 10088129,
+          "depth": 24
+        },
+        {
+          "offset": "0x5b3b0",
+          "weight": 30,
+          "thread_id": 10088129,
+          "depth": 24
+        },
+        {
+          "offset": "0x49a04",
+          "weight": 30,
+          "thread_id": 10088129,
+          "depth": 26
+        },
+        {
+          "offset": "0x48de8",
+          "weight": 30,
+          "thread_id": 10088129,
+          "depth": 28
+        },
+        {
+          "offset": "0x487b0",
+          "weight": 30,
+          "thread_id": 10088129,
+          "depth": 30
+        },
+        {
+          "offset": "0x651b0",
+          "weight": 30,
+          "thread_id": 10088129,
+          "depth": 38
+        },
+        {
+          "offset": "0x8e6c",
+          "weight": 30,
+          "thread_id": 10088129,
+          "depth": 40
+        },
+        {
+          "offset": "0x9568",
+          "weight": 30,
+          "thread_id": 10088129,
+          "depth": 42
+        },
+        {
+          "offset": "0x3da9c",
+          "weight": 30,
+          "thread_id": 10088129,
+          "depth": 44
+        },
+        {
+          "offset": "0x3dcc8",
+          "weight": 30,
+          "thread_id": 10088129,
+          "depth": 46
+        },
+        {
+          "offset": "0x3e298",
+          "weight": 30,
+          "thread_id": 10088129,
+          "depth": 48
+        }
+      ],
+      "native_cpu_delta": {
+        "user": 10384836,
+        "system": 49225349
+      },
+      "cpu_units": "Native task-info counters; no CPU-percent or request-cost attribution."
+    },
+    {
+      "target": "XprotectService",
+      "admitted_frames": 125,
+      "native_capture_begin_ns": 350370265507000,
+      "receipt_ns": 350372813582000,
+      "observed_target_offsets": [
+        {
+          "offset": "0xf320",
+          "weight": 57,
+          "thread_id": 10082941,
+          "depth": 20
+        },
+        {
+          "offset": "0xfdb4",
+          "weight": 57,
+          "thread_id": 10082941,
+          "depth": 22
+        },
+        {
+          "offset": "0xc59c",
+          "weight": 57,
+          "thread_id": 10082941,
+          "depth": 24
+        },
+        {
+          "offset": "0xc9f0",
+          "weight": 32,
+          "thread_id": 10082941,
+          "depth": 26
+        },
+        {
+          "offset": "0xcce8",
+          "weight": 24,
+          "thread_id": 10082941,
+          "depth": 26
+        },
+        {
+          "offset": "0xc9e0",
+          "weight": 1,
+          "thread_id": 10082941,
+          "depth": 26
+        },
+        {
+          "offset": "0x10cd4",
+          "weight": 3,
+          "thread_id": 10082941,
+          "depth": 38
+        },
+        {
+          "offset": "0xd220",
+          "weight": 2,
+          "thread_id": 10082941,
+          "depth": 40
+        },
+        {
+          "offset": "0xd20c",
+          "weight": 1,
+          "thread_id": 10082941,
+          "depth": 40
+        },
+        {
+          "offset": "0x10cd4",
+          "weight": 3,
+          "thread_id": 10082941,
+          "depth": 38
+        },
+        {
+          "offset": "0xd220",
+          "weight": 2,
+          "thread_id": 10082941,
+          "depth": 40
+        },
+        {
+          "offset": "0xd20c",
+          "weight": 1,
+          "thread_id": 10082941,
+          "depth": 40
+        },
+        {
+          "offset": "0x10cd4",
+          "weight": 2,
+          "thread_id": 10082941,
+          "depth": 38
+        },
+        {
+          "offset": "0xd20c",
+          "weight": 1,
+          "thread_id": 10082941,
+          "depth": 40
+        },
+        {
+          "offset": "0xd220",
+          "weight": 1,
+          "thread_id": 10082941,
+          "depth": 40
+        },
+        {
+          "offset": "0x10cd4",
+          "weight": 2,
+          "thread_id": 10082941,
+          "depth": 38
+        },
+        {
+          "offset": "0xd20c",
+          "weight": 1,
+          "thread_id": 10082941,
+          "depth": 40
+        },
+        {
+          "offset": "0xd220",
+          "weight": 1,
+          "thread_id": 10082941,
+          "depth": 40
+        },
+        {
+          "offset": "0x10cd4",
+          "weight": 2,
+          "thread_id": 10088061,
+          "depth": 38
+        },
+        {
+          "offset": "0xd20c",
+          "weight": 1,
+          "thread_id": 10088061,
+          "depth": 40
+        },
+        {
+          "offset": "0xd220",
+          "weight": 1,
+          "thread_id": 10088061,
+          "depth": 40
+        },
+        {
+          "offset": "0x10cd4",
+          "weight": 1,
+          "thread_id": 10082941,
+          "depth": 38
+        },
+        {
+          "offset": "0xd220",
+          "weight": 1,
+          "thread_id": 10082941,
+          "depth": 40
+        },
+        {
+          "offset": "0x10cd4",
+          "weight": 1,
+          "thread_id": 10082941,
+          "depth": 38
+        },
+        {
+          "offset": "0xd220",
+          "weight": 1,
+          "thread_id": 10082941,
+          "depth": 40
+        },
+        {
+          "offset": "0x10cd4",
+          "weight": 1,
+          "thread_id": 10082941,
+          "depth": 38
+        },
+        {
+          "offset": "0xd220",
+          "weight": 1,
+          "thread_id": 10082941,
+          "depth": 40
+        }
+      ],
+      "native_cpu_delta": {
+        "user": 18166934,
+        "system": 1108559
+      },
+      "cpu_units": "Native task-info counters; no CPU-percent or request-cost attribution."
+    }
+  ],
+  "mapped_calls": [
+    {
+      "target": "syspolicyd",
+      "sample_offset": "0x5b40c",
+      "preceding_call": "dispatch_semaphore_wait",
+      "static_call": "0x10005b408",
+      "inclusive_weight": 57
+    },
+    {
+      "target": "XprotectService",
+      "sample_offset": "0xc9f0",
+      "preceding_call": "yr_compiler_add_string",
+      "static_call": "0x10000c9ec",
+      "inclusive_weight": 32
+    },
+    {
+      "target": "XprotectService",
+      "sample_offset": "0xcce8",
+      "preceding_call": "yr_compiler_get_rules",
+      "static_call": "0x10000cce4",
+      "inclusive_weight": 24
+    }
+  ],
+  "independent_review": "Confirms service-level XP compilation and syspolicy wait; matching weights do not bind requests; required next observable is timestamped request-bound interval linked to expired child.",
+  "qualification": false
+}

@@ -1,5 +1,22 @@
 # Implementation plan
 
+## Bundle-label live validation — current, 2026-10-09
+
+PCTX01-G05-D05 remains product_failure,33/40 details,0/10 gates. Reducer fixed
+for real service:213 numeric frames retained(88syspolicyd/125XP),bothbinary UUIDs
+match installedfiles. Original1000ms/8×16 exit101:98 outcomes,96OUTPUT,
+2TIMEOUT44251/44252,30 planned calls censored. No product repair or qualification.
+Syspolicy0x5b40c follows semaphore wait; XP0xc9f0/0xcce8 follow
+YARA compiler-add-string/get-rules calls. Independent review confirms service-level
+rule preparation activity,not request-bound cause/duration. Matching weights57
+are not same-request evidence;2s sampling extends past1s deadline.
+Both samplers/root/driver/authwrapper terminal;104 known PIDs absent;raw/private
+source removed,product/test/lock unchanged. Normal-source rebuild before
+qualification;finite scope consumed,no generic-stack retry/Actions/task switch.
+Next within D05: static request/phase-observable review for timestamped XP compiler
+interval bound to failed owned child/path,or supported vendor correction.
+[Result and limits](evidence/pctx01-startup-bundle-stack-review.md).
+
 ## Reason-preserving stack diagnosis — current, 2026-10-09
 
 PCTX01-G05-D05 remains product_failure,33/40 details,0/10 gates. One original

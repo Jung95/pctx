@@ -1,0 +1,1838 @@
+{
+  "task": "PCTX01-G05-D05",
+  "failure_class": null,
+  "test_started": true,
+  "collector_terminal": true,
+  "service_capture": {
+    "task": "PCTX01-G05-D05",
+    "collector_pid": 44224,
+    "failure_class": null,
+    "failure_details": null,
+    "failure_check": null,
+    "failure_stage": null,
+    "target": null,
+    "last_candidate_count": 1,
+    "endpoint_poll_count": 1,
+    "samples": [
+      {
+        "target": "syspolicyd",
+        "identity": {
+          "pid": 665,
+          "uid": 0,
+          "start_sec": 1791224512,
+          "start_usec": 669319,
+          "path": "/usr/libexec/syspolicyd"
+        },
+        "begin_ns": 350370263111000,
+        "receipt_ns": 350372809087000,
+        "cpu_before": {
+          "user": 46694696708,
+          "system": 143610260314,
+          "threads": 12,
+          "running": 1
+        },
+        "cpu_after": {
+          "user": 46705081544,
+          "system": 143659485663,
+          "threads": 12,
+          "running": 1
+        },
+        "sample": {
+          "frames": [
+            {
+              "thread_id": 4881,
+              "depth": 8,
+              "inclusive_weight": 176,
+              "image": "syspolicyd",
+              "image_uuid": "C84F2522-57FD-3B0C-9E75-27039F9E39AB",
+              "code_offset": 415088
+            },
+            {
+              "thread_id": 4881,
+              "depth": 20,
+              "inclusive_weight": 176,
+              "image": "libsystem_kernel.dylib",
+              "image_uuid": "EE805B14-29F2-360D-9A2C-3221A1211833",
+              "code_offset": 4032
+            },
+            {
+              "thread_id": 4881,
+              "depth": 22,
+              "inclusive_weight": 176,
+              "image": "libsystem_kernel.dylib",
+              "image_uuid": "EE805B14-29F2-360D-9A2C-3221A1211833",
+              "code_offset": 39360
+            },
+            {
+              "thread_id": 4881,
+              "depth": 24,
+              "inclusive_weight": 176,
+              "image": "libsystem_kernel.dylib",
+              "image_uuid": "EE805B14-29F2-360D-9A2C-3221A1211833",
+              "code_offset": 79268
+            },
+            {
+              "thread_id": 4881,
+              "depth": 26,
+              "inclusive_weight": 176,
+              "image": "libsystem_kernel.dylib",
+              "image_uuid": "EE805B14-29F2-360D-9A2C-3221A1211833",
+              "code_offset": 3124
+            },
+            {
+              "thread_id": 35193,
+              "depth": 6,
+              "inclusive_weight": 176,
+              "image": "libsystem_pthread.dylib",
+              "image_uuid": "A58BEABD-7AC0-35F8-BCFF-E4FFBD79E938",
+              "code_offset": 7196
+            },
+            {
+              "thread_id": 35193,
+              "depth": 8,
+              "inclusive_weight": 176,
+              "image": "libsystem_pthread.dylib",
+              "image_uuid": "A58BEABD-7AC0-35F8-BCFF-E4FFBD79E938",
+              "code_offset": 27736
+            },
+            {
+              "thread_id": 35193,
+              "depth": 20,
+              "inclusive_weight": 176,
+              "image": "libsystem_kernel.dylib",
+              "image_uuid": "EE805B14-29F2-360D-9A2C-3221A1211833",
+              "code_offset": 4032
+            },
+            {
+              "thread_id": 35193,
+              "depth": 22,
+              "inclusive_weight": 176,
+              "image": "libsystem_kernel.dylib",
+              "image_uuid": "EE805B14-29F2-360D-9A2C-3221A1211833",
+              "code_offset": 39360
+            },
+            {
+              "thread_id": 35193,
+              "depth": 24,
+              "inclusive_weight": 176,
+              "image": "libsystem_kernel.dylib",
+              "image_uuid": "EE805B14-29F2-360D-9A2C-3221A1211833",
+              "code_offset": 79268
+            },
+            {
+              "thread_id": 35193,
+              "depth": 26,
+              "inclusive_weight": 176,
+              "image": "libsystem_kernel.dylib",
+              "image_uuid": "EE805B14-29F2-360D-9A2C-3221A1211833",
+              "code_offset": 3124
+            },
+            {
+              "thread_id": 10087732,
+              "depth": 6,
+              "inclusive_weight": 176,
+              "image": "libsystem_pthread.dylib",
+              "image_uuid": "A58BEABD-7AC0-35F8-BCFF-E4FFBD79E938",
+              "code_offset": 7184
+            },
+            {
+              "thread_id": 10087732,
+              "depth": 8,
+              "inclusive_weight": 176,
+              "image": "libsystem_pthread.dylib",
+              "image_uuid": "A58BEABD-7AC0-35F8-BCFF-E4FFBD79E938",
+              "code_offset": 12044
+            },
+            {
+              "thread_id": 10087732,
+              "depth": 10,
+              "inclusive_weight": 176,
+              "image": "libsystem_kernel.dylib",
+              "image_uuid": "EE805B14-29F2-360D-9A2C-3221A1211833",
+              "code_offset": 10736
+            },
+            {
+              "thread_id": 10087926,
+              "depth": 6,
+              "inclusive_weight": 176,
+              "image": "libsystem_pthread.dylib",
+              "image_uuid": "A58BEABD-7AC0-35F8-BCFF-E4FFBD79E938",
+              "code_offset": 7184
+            },
+            {
+              "thread_id": 10087926,
+              "depth": 8,
+              "inclusive_weight": 176,
+              "image": "libsystem_pthread.dylib",
+              "image_uuid": "A58BEABD-7AC0-35F8-BCFF-E4FFBD79E938",
+              "code_offset": 11968
+            },
+            {
+              "thread_id": 10087926,
+              "depth": 10,
+              "inclusive_weight": 176,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 83764
+            },
+            {
+              "thread_id": 10087926,
+              "depth": 12,
+              "inclusive_weight": 176,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 85556
+            },
+            {
+              "thread_id": 10087926,
+              "depth": 14,
+              "inclusive_weight": 176,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 43876
+            },
+            {
+              "thread_id": 10087926,
+              "depth": 16,
+              "inclusive_weight": 176,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 41008
+            },
+            {
+              "thread_id": 10087926,
+              "depth": 18,
+              "inclusive_weight": 176,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 111792
+            },
+            {
+              "thread_id": 10087926,
+              "depth": 20,
+              "inclusive_weight": 176,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 6696
+            },
+            {
+              "thread_id": 10087926,
+              "depth": 22,
+              "inclusive_weight": 176,
+              "image": "syspolicyd",
+              "image_uuid": "C84F2522-57FD-3B0C-9E75-27039F9E39AB",
+              "code_offset": 207896
+            },
+            {
+              "thread_id": 10087926,
+              "depth": 24,
+              "inclusive_weight": 176,
+              "image": "syspolicyd",
+              "image_uuid": "C84F2522-57FD-3B0C-9E75-27039F9E39AB",
+              "code_offset": 435880
+            },
+            {
+              "thread_id": 10087926,
+              "depth": 26,
+              "inclusive_weight": 176,
+              "image": "syspolicyd",
+              "image_uuid": "C84F2522-57FD-3B0C-9E75-27039F9E39AB",
+              "code_offset": 441564
+            },
+            {
+              "thread_id": 10087926,
+              "depth": 42,
+              "inclusive_weight": 86,
+              "image": "libsystem_kernel.dylib",
+              "image_uuid": "EE805B14-29F2-360D-9A2C-3221A1211833",
+              "code_offset": 10692
+            },
+            {
+              "thread_id": 10087926,
+              "depth": 40,
+              "inclusive_weight": 1,
+              "image": "libsystem_pthread.dylib",
+              "image_uuid": "A58BEABD-7AC0-35F8-BCFF-E4FFBD79E938",
+              "code_offset": 5208
+            },
+            {
+              "thread_id": 10087926,
+              "depth": 46,
+              "inclusive_weight": 58,
+              "image": "libsystem_kernel.dylib",
+              "image_uuid": "EE805B14-29F2-360D-9A2C-3221A1211833",
+              "code_offset": 10692
+            },
+            {
+              "thread_id": 10088054,
+              "depth": 6,
+              "inclusive_weight": 176,
+              "image": "libsystem_pthread.dylib",
+              "image_uuid": "A58BEABD-7AC0-35F8-BCFF-E4FFBD79E938",
+              "code_offset": 7184
+            },
+            {
+              "thread_id": 10088054,
+              "depth": 8,
+              "inclusive_weight": 176,
+              "image": "libsystem_pthread.dylib",
+              "image_uuid": "A58BEABD-7AC0-35F8-BCFF-E4FFBD79E938",
+              "code_offset": 12044
+            },
+            {
+              "thread_id": 10088054,
+              "depth": 10,
+              "inclusive_weight": 176,
+              "image": "libsystem_kernel.dylib",
+              "image_uuid": "EE805B14-29F2-360D-9A2C-3221A1211833",
+              "code_offset": 10736
+            },
+            {
+              "thread_id": 10088058,
+              "depth": 6,
+              "inclusive_weight": 176,
+              "image": "libsystem_pthread.dylib",
+              "image_uuid": "A58BEABD-7AC0-35F8-BCFF-E4FFBD79E938",
+              "code_offset": 7184
+            },
+            {
+              "thread_id": 10088058,
+              "depth": 8,
+              "inclusive_weight": 176,
+              "image": "libsystem_pthread.dylib",
+              "image_uuid": "A58BEABD-7AC0-35F8-BCFF-E4FFBD79E938",
+              "code_offset": 12044
+            },
+            {
+              "thread_id": 10088058,
+              "depth": 10,
+              "inclusive_weight": 176,
+              "image": "libsystem_kernel.dylib",
+              "image_uuid": "EE805B14-29F2-360D-9A2C-3221A1211833",
+              "code_offset": 10736
+            },
+            {
+              "thread_id": 10088125,
+              "depth": 6,
+              "inclusive_weight": 176,
+              "image": "libsystem_pthread.dylib",
+              "image_uuid": "A58BEABD-7AC0-35F8-BCFF-E4FFBD79E938",
+              "code_offset": 7184
+            },
+            {
+              "thread_id": 10088125,
+              "depth": 8,
+              "inclusive_weight": 176,
+              "image": "libsystem_pthread.dylib",
+              "image_uuid": "A58BEABD-7AC0-35F8-BCFF-E4FFBD79E938",
+              "code_offset": 12044
+            },
+            {
+              "thread_id": 10088125,
+              "depth": 10,
+              "inclusive_weight": 176,
+              "image": "libsystem_kernel.dylib",
+              "image_uuid": "EE805B14-29F2-360D-9A2C-3221A1211833",
+              "code_offset": 10736
+            },
+            {
+              "thread_id": 10088126,
+              "depth": 6,
+              "inclusive_weight": 176,
+              "image": "libsystem_pthread.dylib",
+              "image_uuid": "A58BEABD-7AC0-35F8-BCFF-E4FFBD79E938",
+              "code_offset": 7184
+            },
+            {
+              "thread_id": 10088126,
+              "depth": 8,
+              "inclusive_weight": 176,
+              "image": "libsystem_pthread.dylib",
+              "image_uuid": "A58BEABD-7AC0-35F8-BCFF-E4FFBD79E938",
+              "code_offset": 12044
+            },
+            {
+              "thread_id": 10088126,
+              "depth": 10,
+              "inclusive_weight": 176,
+              "image": "libsystem_kernel.dylib",
+              "image_uuid": "EE805B14-29F2-360D-9A2C-3221A1211833",
+              "code_offset": 10736
+            },
+            {
+              "thread_id": 10088127,
+              "depth": 6,
+              "inclusive_weight": 176,
+              "image": "libsystem_pthread.dylib",
+              "image_uuid": "A58BEABD-7AC0-35F8-BCFF-E4FFBD79E938",
+              "code_offset": 7184
+            },
+            {
+              "thread_id": 10088127,
+              "depth": 8,
+              "inclusive_weight": 176,
+              "image": "libsystem_pthread.dylib",
+              "image_uuid": "A58BEABD-7AC0-35F8-BCFF-E4FFBD79E938",
+              "code_offset": 12044
+            },
+            {
+              "thread_id": 10088127,
+              "depth": 10,
+              "inclusive_weight": 176,
+              "image": "libsystem_kernel.dylib",
+              "image_uuid": "EE805B14-29F2-360D-9A2C-3221A1211833",
+              "code_offset": 10736
+            },
+            {
+              "thread_id": 10088128,
+              "depth": 6,
+              "inclusive_weight": 176,
+              "image": "libsystem_pthread.dylib",
+              "image_uuid": "A58BEABD-7AC0-35F8-BCFF-E4FFBD79E938",
+              "code_offset": 7184
+            },
+            {
+              "thread_id": 10088128,
+              "depth": 8,
+              "inclusive_weight": 176,
+              "image": "libsystem_pthread.dylib",
+              "image_uuid": "A58BEABD-7AC0-35F8-BCFF-E4FFBD79E938",
+              "code_offset": 12044
+            },
+            {
+              "thread_id": 10088128,
+              "depth": 10,
+              "inclusive_weight": 176,
+              "image": "libsystem_kernel.dylib",
+              "image_uuid": "EE805B14-29F2-360D-9A2C-3221A1211833",
+              "code_offset": 10736
+            },
+            {
+              "thread_id": 10088055,
+              "depth": 6,
+              "inclusive_weight": 172,
+              "image": "libsystem_pthread.dylib",
+              "image_uuid": "A58BEABD-7AC0-35F8-BCFF-E4FFBD79E938",
+              "code_offset": 7184
+            },
+            {
+              "thread_id": 10088055,
+              "depth": 8,
+              "inclusive_weight": 172,
+              "image": "libsystem_pthread.dylib",
+              "image_uuid": "A58BEABD-7AC0-35F8-BCFF-E4FFBD79E938",
+              "code_offset": 12044
+            },
+            {
+              "thread_id": 10088055,
+              "depth": 10,
+              "inclusive_weight": 172,
+              "image": "libsystem_kernel.dylib",
+              "image_uuid": "EE805B14-29F2-360D-9A2C-3221A1211833",
+              "code_offset": 10736
+            },
+            {
+              "thread_id": 10088055,
+              "depth": 6,
+              "inclusive_weight": 3,
+              "image": "libsystem_pthread.dylib",
+              "image_uuid": "A58BEABD-7AC0-35F8-BCFF-E4FFBD79E938",
+              "code_offset": 7176
+            },
+            {
+              "thread_id": 10088129,
+              "depth": 6,
+              "inclusive_weight": 89,
+              "image": "libsystem_pthread.dylib",
+              "image_uuid": "A58BEABD-7AC0-35F8-BCFF-E4FFBD79E938",
+              "code_offset": 7184
+            },
+            {
+              "thread_id": 10088129,
+              "depth": 8,
+              "inclusive_weight": 89,
+              "image": "libsystem_pthread.dylib",
+              "image_uuid": "A58BEABD-7AC0-35F8-BCFF-E4FFBD79E938",
+              "code_offset": 12044
+            },
+            {
+              "thread_id": 10088129,
+              "depth": 10,
+              "inclusive_weight": 89,
+              "image": "libsystem_kernel.dylib",
+              "image_uuid": "EE805B14-29F2-360D-9A2C-3221A1211833",
+              "code_offset": 10736
+            },
+            {
+              "thread_id": 10088129,
+              "depth": 6,
+              "inclusive_weight": 87,
+              "image": "libsystem_pthread.dylib",
+              "image_uuid": "A58BEABD-7AC0-35F8-BCFF-E4FFBD79E938",
+              "code_offset": 7184
+            },
+            {
+              "thread_id": 10088129,
+              "depth": 8,
+              "inclusive_weight": 87,
+              "image": "libsystem_pthread.dylib",
+              "image_uuid": "A58BEABD-7AC0-35F8-BCFF-E4FFBD79E938",
+              "code_offset": 11968
+            },
+            {
+              "thread_id": 10088129,
+              "depth": 10,
+              "inclusive_weight": 87,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 83764
+            },
+            {
+              "thread_id": 10088129,
+              "depth": 12,
+              "inclusive_weight": 87,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 85556
+            },
+            {
+              "thread_id": 10088129,
+              "depth": 14,
+              "inclusive_weight": 87,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 43876
+            },
+            {
+              "thread_id": 10088129,
+              "depth": 16,
+              "inclusive_weight": 87,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 41008
+            },
+            {
+              "thread_id": 10088129,
+              "depth": 18,
+              "inclusive_weight": 87,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 111792
+            },
+            {
+              "thread_id": 10088129,
+              "depth": 20,
+              "inclusive_weight": 87,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 6696
+            },
+            {
+              "thread_id": 10088129,
+              "depth": 22,
+              "inclusive_weight": 87,
+              "image": "syspolicyd",
+              "image_uuid": "C84F2522-57FD-3B0C-9E75-27039F9E39AB",
+              "code_offset": 370392
+            },
+            {
+              "thread_id": 10088129,
+              "depth": 24,
+              "inclusive_weight": 57,
+              "image": "syspolicyd",
+              "image_uuid": "C84F2522-57FD-3B0C-9E75-27039F9E39AB",
+              "code_offset": 373772
+            },
+            {
+              "thread_id": 10088129,
+              "depth": 26,
+              "inclusive_weight": 57,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 15136
+            },
+            {
+              "thread_id": 10088129,
+              "depth": 28,
+              "inclusive_weight": 57,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 13456
+            },
+            {
+              "thread_id": 10088129,
+              "depth": 30,
+              "inclusive_weight": 57,
+              "image": "libsystem_kernel.dylib",
+              "image_uuid": "EE805B14-29F2-360D-9A2C-3221A1211833",
+              "code_offset": 2992
+            },
+            {
+              "thread_id": 10088129,
+              "depth": 24,
+              "inclusive_weight": 30,
+              "image": "syspolicyd",
+              "image_uuid": "C84F2522-57FD-3B0C-9E75-27039F9E39AB",
+              "code_offset": 373680
+            },
+            {
+              "thread_id": 10088129,
+              "depth": 26,
+              "inclusive_weight": 30,
+              "image": "syspolicyd",
+              "image_uuid": "C84F2522-57FD-3B0C-9E75-27039F9E39AB",
+              "code_offset": 301572
+            },
+            {
+              "thread_id": 10088129,
+              "depth": 28,
+              "inclusive_weight": 30,
+              "image": "syspolicyd",
+              "image_uuid": "C84F2522-57FD-3B0C-9E75-27039F9E39AB",
+              "code_offset": 298472
+            },
+            {
+              "thread_id": 10088129,
+              "depth": 30,
+              "inclusive_weight": 30,
+              "image": "syspolicyd",
+              "image_uuid": "C84F2522-57FD-3B0C-9E75-27039F9E39AB",
+              "code_offset": 296880
+            },
+            {
+              "thread_id": 10088129,
+              "depth": 38,
+              "inclusive_weight": 30,
+              "image": "syspolicyd",
+              "image_uuid": "C84F2522-57FD-3B0C-9E75-27039F9E39AB",
+              "code_offset": 414128
+            },
+            {
+              "thread_id": 10088129,
+              "depth": 40,
+              "inclusive_weight": 30,
+              "image": "syspolicyd",
+              "image_uuid": "C84F2522-57FD-3B0C-9E75-27039F9E39AB",
+              "code_offset": 36460
+            },
+            {
+              "thread_id": 10088129,
+              "depth": 42,
+              "inclusive_weight": 30,
+              "image": "syspolicyd",
+              "image_uuid": "C84F2522-57FD-3B0C-9E75-27039F9E39AB",
+              "code_offset": 38248
+            },
+            {
+              "thread_id": 10088129,
+              "depth": 44,
+              "inclusive_weight": 30,
+              "image": "syspolicyd",
+              "image_uuid": "C84F2522-57FD-3B0C-9E75-27039F9E39AB",
+              "code_offset": 252572
+            },
+            {
+              "thread_id": 10088129,
+              "depth": 46,
+              "inclusive_weight": 30,
+              "image": "syspolicyd",
+              "image_uuid": "C84F2522-57FD-3B0C-9E75-27039F9E39AB",
+              "code_offset": 253128
+            },
+            {
+              "thread_id": 10088129,
+              "depth": 48,
+              "inclusive_weight": 30,
+              "image": "syspolicyd",
+              "image_uuid": "C84F2522-57FD-3B0C-9E75-27039F9E39AB",
+              "code_offset": 254616
+            },
+            {
+              "thread_id": 10088129,
+              "depth": 50,
+              "inclusive_weight": 30,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 15136
+            },
+            {
+              "thread_id": 10088129,
+              "depth": 52,
+              "inclusive_weight": 30,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 13456
+            },
+            {
+              "thread_id": 10088129,
+              "depth": 54,
+              "inclusive_weight": 30,
+              "image": "libsystem_kernel.dylib",
+              "image_uuid": "EE805B14-29F2-360D-9A2C-3221A1211833",
+              "code_offset": 2992
+            },
+            {
+              "thread_id": 10088055,
+              "depth": 6,
+              "inclusive_weight": 1,
+              "image": "libsystem_pthread.dylib",
+              "image_uuid": "A58BEABD-7AC0-35F8-BCFF-E4FFBD79E938",
+              "code_offset": 7184
+            },
+            {
+              "thread_id": 10088055,
+              "depth": 8,
+              "inclusive_weight": 1,
+              "image": "libsystem_pthread.dylib",
+              "image_uuid": "A58BEABD-7AC0-35F8-BCFF-E4FFBD79E938",
+              "code_offset": 11968
+            },
+            {
+              "thread_id": 10088055,
+              "depth": 10,
+              "inclusive_weight": 1,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 83764
+            },
+            {
+              "thread_id": 10088055,
+              "depth": 12,
+              "inclusive_weight": 1,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 85556
+            },
+            {
+              "thread_id": 10088055,
+              "depth": 14,
+              "inclusive_weight": 1,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 48840
+            },
+            {
+              "thread_id": 10088055,
+              "depth": 16,
+              "inclusive_weight": 1,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 43876
+            },
+            {
+              "thread_id": 10088055,
+              "depth": 18,
+              "inclusive_weight": 1,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 41008
+            },
+            {
+              "thread_id": 10088055,
+              "depth": 20,
+              "inclusive_weight": 1,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 111792
+            },
+            {
+              "thread_id": 10088055,
+              "depth": 22,
+              "inclusive_weight": 1,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 69380
+            }
+          ],
+          "unpublished_rows": 100,
+          "raw_retained": false,
+          "symbols_or_queue_names_retained": false,
+          "absolute_addresses_retained": false,
+          "limit": "Inclusive stack weights, not CPU time or per-request attribution. UUID/offset require matching static image before symbolication."
+        }
+      },
+      {
+        "target": "XprotectService",
+        "identity": {
+          "pid": 43007,
+          "uid": 0,
+          "start_sec": 1791573447,
+          "start_usec": 719634,
+          "path": "/System/Library/PrivateFrameworks/XprotectFramework.framework/Versions/A/XPCServices/XprotectService.xpc/Contents/MacOS/XprotectService"
+        },
+        "begin_ns": 350370265507000,
+        "receipt_ns": 350372813582000,
+        "cpu_before": {
+          "user": 58951052,
+          "system": 43067867,
+          "threads": 5,
+          "running": 0
+        },
+        "cpu_after": {
+          "user": 77117986,
+          "system": 44176426,
+          "threads": 5,
+          "running": 0
+        },
+        "sample": {
+          "frames": [
+            {
+              "thread_id": 10070680,
+              "depth": 6,
+              "inclusive_weight": 181,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 86168
+            },
+            {
+              "thread_id": 10070680,
+              "depth": 8,
+              "inclusive_weight": 181,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 86216
+            },
+            {
+              "thread_id": 10070680,
+              "depth": 10,
+              "inclusive_weight": 181,
+              "image": "libsystem_kernel.dylib",
+              "image_uuid": "EE805B14-29F2-360D-9A2C-3221A1211833",
+              "code_offset": 34136
+            },
+            {
+              "thread_id": 10088060,
+              "depth": 6,
+              "inclusive_weight": 181,
+              "image": "libsystem_pthread.dylib",
+              "image_uuid": "A58BEABD-7AC0-35F8-BCFF-E4FFBD79E938",
+              "code_offset": 7184
+            },
+            {
+              "thread_id": 10088060,
+              "depth": 8,
+              "inclusive_weight": 181,
+              "image": "libsystem_pthread.dylib",
+              "image_uuid": "A58BEABD-7AC0-35F8-BCFF-E4FFBD79E938",
+              "code_offset": 12044
+            },
+            {
+              "thread_id": 10088060,
+              "depth": 10,
+              "inclusive_weight": 181,
+              "image": "libsystem_kernel.dylib",
+              "image_uuid": "EE805B14-29F2-360D-9A2C-3221A1211833",
+              "code_offset": 10736
+            },
+            {
+              "thread_id": 10088062,
+              "depth": 6,
+              "inclusive_weight": 181,
+              "image": "libsystem_pthread.dylib",
+              "image_uuid": "A58BEABD-7AC0-35F8-BCFF-E4FFBD79E938",
+              "code_offset": 7184
+            },
+            {
+              "thread_id": 10088062,
+              "depth": 8,
+              "inclusive_weight": 181,
+              "image": "libsystem_pthread.dylib",
+              "image_uuid": "A58BEABD-7AC0-35F8-BCFF-E4FFBD79E938",
+              "code_offset": 12044
+            },
+            {
+              "thread_id": 10088062,
+              "depth": 10,
+              "inclusive_weight": 181,
+              "image": "libsystem_kernel.dylib",
+              "image_uuid": "EE805B14-29F2-360D-9A2C-3221A1211833",
+              "code_offset": 10736
+            },
+            {
+              "thread_id": 10088061,
+              "depth": 6,
+              "inclusive_weight": 179,
+              "image": "libsystem_pthread.dylib",
+              "image_uuid": "A58BEABD-7AC0-35F8-BCFF-E4FFBD79E938",
+              "code_offset": 7184
+            },
+            {
+              "thread_id": 10088061,
+              "depth": 8,
+              "inclusive_weight": 179,
+              "image": "libsystem_pthread.dylib",
+              "image_uuid": "A58BEABD-7AC0-35F8-BCFF-E4FFBD79E938",
+              "code_offset": 12044
+            },
+            {
+              "thread_id": 10088061,
+              "depth": 10,
+              "inclusive_weight": 179,
+              "image": "libsystem_kernel.dylib",
+              "image_uuid": "EE805B14-29F2-360D-9A2C-3221A1211833",
+              "code_offset": 10736
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 6,
+              "inclusive_weight": 111,
+              "image": "libsystem_pthread.dylib",
+              "image_uuid": "A58BEABD-7AC0-35F8-BCFF-E4FFBD79E938",
+              "code_offset": 7184
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 8,
+              "inclusive_weight": 111,
+              "image": "libsystem_pthread.dylib",
+              "image_uuid": "A58BEABD-7AC0-35F8-BCFF-E4FFBD79E938",
+              "code_offset": 12044
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 10,
+              "inclusive_weight": 111,
+              "image": "libsystem_kernel.dylib",
+              "image_uuid": "EE805B14-29F2-360D-9A2C-3221A1211833",
+              "code_offset": 10736
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 6,
+              "inclusive_weight": 57,
+              "image": "libsystem_pthread.dylib",
+              "image_uuid": "A58BEABD-7AC0-35F8-BCFF-E4FFBD79E938",
+              "code_offset": 7184
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 8,
+              "inclusive_weight": 57,
+              "image": "libsystem_pthread.dylib",
+              "image_uuid": "A58BEABD-7AC0-35F8-BCFF-E4FFBD79E938",
+              "code_offset": 11908
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 10,
+              "inclusive_weight": 57,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 82208
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 12,
+              "inclusive_weight": 57,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 80604
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 14,
+              "inclusive_weight": 57,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 232812
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 16,
+              "inclusive_weight": 57,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 111792
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 18,
+              "inclusive_weight": 57,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 6696
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 20,
+              "inclusive_weight": 57,
+              "image": "XprotectService",
+              "image_uuid": "57DD6284-09FD-351F-A87A-F60ECFB75F70",
+              "code_offset": 62240
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 22,
+              "inclusive_weight": 57,
+              "image": "XprotectService",
+              "image_uuid": "57DD6284-09FD-351F-A87A-F60ECFB75F70",
+              "code_offset": 64948
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 24,
+              "inclusive_weight": 57,
+              "image": "XprotectService",
+              "image_uuid": "57DD6284-09FD-351F-A87A-F60ECFB75F70",
+              "code_offset": 50588
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 26,
+              "inclusive_weight": 32,
+              "image": "XprotectService",
+              "image_uuid": "57DD6284-09FD-351F-A87A-F60ECFB75F70",
+              "code_offset": 51696
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 36,
+              "inclusive_weight": 2,
+              "image": "libsystem_kernel.dylib",
+              "image_uuid": "EE805B14-29F2-360D-9A2C-3221A1211833",
+              "code_offset": 17368
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 42,
+              "inclusive_weight": 1,
+              "image": "libsystem_kernel.dylib",
+              "image_uuid": "EE805B14-29F2-360D-9A2C-3221A1211833",
+              "code_offset": 14768
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 26,
+              "inclusive_weight": 24,
+              "image": "XprotectService",
+              "image_uuid": "57DD6284-09FD-351F-A87A-F60ECFB75F70",
+              "code_offset": 52456
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 26,
+              "inclusive_weight": 1,
+              "image": "XprotectService",
+              "image_uuid": "57DD6284-09FD-351F-A87A-F60ECFB75F70",
+              "code_offset": 51680
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 42,
+              "inclusive_weight": 1,
+              "image": "libsystem_kernel.dylib",
+              "image_uuid": "EE805B14-29F2-360D-9A2C-3221A1211833",
+              "code_offset": 14768
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 6,
+              "inclusive_weight": 3,
+              "image": "libsystem_pthread.dylib",
+              "image_uuid": "A58BEABD-7AC0-35F8-BCFF-E4FFBD79E938",
+              "code_offset": 7184
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 8,
+              "inclusive_weight": 3,
+              "image": "libsystem_pthread.dylib",
+              "image_uuid": "A58BEABD-7AC0-35F8-BCFF-E4FFBD79E938",
+              "code_offset": 11968
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 10,
+              "inclusive_weight": 3,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 83764
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 12,
+              "inclusive_weight": 3,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 85556
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 14,
+              "inclusive_weight": 3,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 43876
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 16,
+              "inclusive_weight": 3,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 40600
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 18,
+              "inclusive_weight": 3,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 126404
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 20,
+              "inclusive_weight": 3,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 136964
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 22,
+              "inclusive_weight": 3,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 111864
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 38,
+              "inclusive_weight": 3,
+              "image": "XprotectService",
+              "image_uuid": "57DD6284-09FD-351F-A87A-F60ECFB75F70",
+              "code_offset": 68820
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 40,
+              "inclusive_weight": 2,
+              "image": "XprotectService",
+              "image_uuid": "57DD6284-09FD-351F-A87A-F60ECFB75F70",
+              "code_offset": 53792
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 40,
+              "inclusive_weight": 1,
+              "image": "XprotectService",
+              "image_uuid": "57DD6284-09FD-351F-A87A-F60ECFB75F70",
+              "code_offset": 53772
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 6,
+              "inclusive_weight": 3,
+              "image": "libsystem_pthread.dylib",
+              "image_uuid": "A58BEABD-7AC0-35F8-BCFF-E4FFBD79E938",
+              "code_offset": 7184
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 8,
+              "inclusive_weight": 3,
+              "image": "libsystem_pthread.dylib",
+              "image_uuid": "A58BEABD-7AC0-35F8-BCFF-E4FFBD79E938",
+              "code_offset": 11968
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 10,
+              "inclusive_weight": 3,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 83764
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 12,
+              "inclusive_weight": 3,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 85556
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 14,
+              "inclusive_weight": 3,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 43876
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 16,
+              "inclusive_weight": 3,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 40600
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 18,
+              "inclusive_weight": 3,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 126404
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 20,
+              "inclusive_weight": 3,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 136964
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 22,
+              "inclusive_weight": 3,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 111864
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 38,
+              "inclusive_weight": 3,
+              "image": "XprotectService",
+              "image_uuid": "57DD6284-09FD-351F-A87A-F60ECFB75F70",
+              "code_offset": 68820
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 40,
+              "inclusive_weight": 2,
+              "image": "XprotectService",
+              "image_uuid": "57DD6284-09FD-351F-A87A-F60ECFB75F70",
+              "code_offset": 53792
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 40,
+              "inclusive_weight": 1,
+              "image": "XprotectService",
+              "image_uuid": "57DD6284-09FD-351F-A87A-F60ECFB75F70",
+              "code_offset": 53772
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 6,
+              "inclusive_weight": 2,
+              "image": "libsystem_pthread.dylib",
+              "image_uuid": "A58BEABD-7AC0-35F8-BCFF-E4FFBD79E938",
+              "code_offset": 7184
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 8,
+              "inclusive_weight": 2,
+              "image": "libsystem_pthread.dylib",
+              "image_uuid": "A58BEABD-7AC0-35F8-BCFF-E4FFBD79E938",
+              "code_offset": 11968
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 10,
+              "inclusive_weight": 2,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 83764
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 12,
+              "inclusive_weight": 2,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 85556
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 14,
+              "inclusive_weight": 2,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 43876
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 16,
+              "inclusive_weight": 2,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 40600
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 18,
+              "inclusive_weight": 2,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 126404
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 20,
+              "inclusive_weight": 2,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 136964
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 22,
+              "inclusive_weight": 2,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 111864
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 38,
+              "inclusive_weight": 2,
+              "image": "XprotectService",
+              "image_uuid": "57DD6284-09FD-351F-A87A-F60ECFB75F70",
+              "code_offset": 68820
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 40,
+              "inclusive_weight": 1,
+              "image": "XprotectService",
+              "image_uuid": "57DD6284-09FD-351F-A87A-F60ECFB75F70",
+              "code_offset": 53772
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 40,
+              "inclusive_weight": 1,
+              "image": "XprotectService",
+              "image_uuid": "57DD6284-09FD-351F-A87A-F60ECFB75F70",
+              "code_offset": 53792
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 6,
+              "inclusive_weight": 2,
+              "image": "libsystem_pthread.dylib",
+              "image_uuid": "A58BEABD-7AC0-35F8-BCFF-E4FFBD79E938",
+              "code_offset": 7184
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 8,
+              "inclusive_weight": 2,
+              "image": "libsystem_pthread.dylib",
+              "image_uuid": "A58BEABD-7AC0-35F8-BCFF-E4FFBD79E938",
+              "code_offset": 11968
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 10,
+              "inclusive_weight": 2,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 83764
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 12,
+              "inclusive_weight": 2,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 85556
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 14,
+              "inclusive_weight": 2,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 43876
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 16,
+              "inclusive_weight": 2,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 40600
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 18,
+              "inclusive_weight": 2,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 126404
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 20,
+              "inclusive_weight": 2,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 136964
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 22,
+              "inclusive_weight": 2,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 111864
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 38,
+              "inclusive_weight": 2,
+              "image": "XprotectService",
+              "image_uuid": "57DD6284-09FD-351F-A87A-F60ECFB75F70",
+              "code_offset": 68820
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 40,
+              "inclusive_weight": 1,
+              "image": "XprotectService",
+              "image_uuid": "57DD6284-09FD-351F-A87A-F60ECFB75F70",
+              "code_offset": 53772
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 40,
+              "inclusive_weight": 1,
+              "image": "XprotectService",
+              "image_uuid": "57DD6284-09FD-351F-A87A-F60ECFB75F70",
+              "code_offset": 53792
+            },
+            {
+              "thread_id": 10088061,
+              "depth": 6,
+              "inclusive_weight": 2,
+              "image": "libsystem_pthread.dylib",
+              "image_uuid": "A58BEABD-7AC0-35F8-BCFF-E4FFBD79E938",
+              "code_offset": 7184
+            },
+            {
+              "thread_id": 10088061,
+              "depth": 8,
+              "inclusive_weight": 2,
+              "image": "libsystem_pthread.dylib",
+              "image_uuid": "A58BEABD-7AC0-35F8-BCFF-E4FFBD79E938",
+              "code_offset": 11968
+            },
+            {
+              "thread_id": 10088061,
+              "depth": 10,
+              "inclusive_weight": 2,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 83764
+            },
+            {
+              "thread_id": 10088061,
+              "depth": 12,
+              "inclusive_weight": 2,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 85556
+            },
+            {
+              "thread_id": 10088061,
+              "depth": 14,
+              "inclusive_weight": 2,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 43876
+            },
+            {
+              "thread_id": 10088061,
+              "depth": 16,
+              "inclusive_weight": 2,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 40600
+            },
+            {
+              "thread_id": 10088061,
+              "depth": 18,
+              "inclusive_weight": 2,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 126404
+            },
+            {
+              "thread_id": 10088061,
+              "depth": 20,
+              "inclusive_weight": 2,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 136964
+            },
+            {
+              "thread_id": 10088061,
+              "depth": 22,
+              "inclusive_weight": 2,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 111864
+            },
+            {
+              "thread_id": 10088061,
+              "depth": 38,
+              "inclusive_weight": 2,
+              "image": "XprotectService",
+              "image_uuid": "57DD6284-09FD-351F-A87A-F60ECFB75F70",
+              "code_offset": 68820
+            },
+            {
+              "thread_id": 10088061,
+              "depth": 40,
+              "inclusive_weight": 1,
+              "image": "XprotectService",
+              "image_uuid": "57DD6284-09FD-351F-A87A-F60ECFB75F70",
+              "code_offset": 53772
+            },
+            {
+              "thread_id": 10088061,
+              "depth": 40,
+              "inclusive_weight": 1,
+              "image": "XprotectService",
+              "image_uuid": "57DD6284-09FD-351F-A87A-F60ECFB75F70",
+              "code_offset": 53792
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 6,
+              "inclusive_weight": 1,
+              "image": "libsystem_pthread.dylib",
+              "image_uuid": "A58BEABD-7AC0-35F8-BCFF-E4FFBD79E938",
+              "code_offset": 7184
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 8,
+              "inclusive_weight": 1,
+              "image": "libsystem_pthread.dylib",
+              "image_uuid": "A58BEABD-7AC0-35F8-BCFF-E4FFBD79E938",
+              "code_offset": 11968
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 10,
+              "inclusive_weight": 1,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 83764
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 12,
+              "inclusive_weight": 1,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 85556
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 14,
+              "inclusive_weight": 1,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 43876
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 16,
+              "inclusive_weight": 1,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 40600
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 18,
+              "inclusive_weight": 1,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 126404
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 20,
+              "inclusive_weight": 1,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 136964
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 22,
+              "inclusive_weight": 1,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 111864
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 38,
+              "inclusive_weight": 1,
+              "image": "XprotectService",
+              "image_uuid": "57DD6284-09FD-351F-A87A-F60ECFB75F70",
+              "code_offset": 68820
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 40,
+              "inclusive_weight": 1,
+              "image": "XprotectService",
+              "image_uuid": "57DD6284-09FD-351F-A87A-F60ECFB75F70",
+              "code_offset": 53792
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 6,
+              "inclusive_weight": 1,
+              "image": "libsystem_pthread.dylib",
+              "image_uuid": "A58BEABD-7AC0-35F8-BCFF-E4FFBD79E938",
+              "code_offset": 7184
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 8,
+              "inclusive_weight": 1,
+              "image": "libsystem_pthread.dylib",
+              "image_uuid": "A58BEABD-7AC0-35F8-BCFF-E4FFBD79E938",
+              "code_offset": 11968
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 10,
+              "inclusive_weight": 1,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 83764
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 12,
+              "inclusive_weight": 1,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 85556
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 14,
+              "inclusive_weight": 1,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 43876
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 16,
+              "inclusive_weight": 1,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 40600
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 18,
+              "inclusive_weight": 1,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 126404
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 20,
+              "inclusive_weight": 1,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 136964
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 22,
+              "inclusive_weight": 1,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 111864
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 38,
+              "inclusive_weight": 1,
+              "image": "XprotectService",
+              "image_uuid": "57DD6284-09FD-351F-A87A-F60ECFB75F70",
+              "code_offset": 68820
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 40,
+              "inclusive_weight": 1,
+              "image": "XprotectService",
+              "image_uuid": "57DD6284-09FD-351F-A87A-F60ECFB75F70",
+              "code_offset": 53792
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 50,
+              "inclusive_weight": 1,
+              "image": "libsystem_kernel.dylib",
+              "image_uuid": "EE805B14-29F2-360D-9A2C-3221A1211833",
+              "code_offset": 14768
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 6,
+              "inclusive_weight": 1,
+              "image": "libsystem_pthread.dylib",
+              "image_uuid": "A58BEABD-7AC0-35F8-BCFF-E4FFBD79E938",
+              "code_offset": 7184
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 8,
+              "inclusive_weight": 1,
+              "image": "libsystem_pthread.dylib",
+              "image_uuid": "A58BEABD-7AC0-35F8-BCFF-E4FFBD79E938",
+              "code_offset": 11968
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 10,
+              "inclusive_weight": 1,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 83764
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 12,
+              "inclusive_weight": 1,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 85556
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 14,
+              "inclusive_weight": 1,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 43876
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 16,
+              "inclusive_weight": 1,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 40600
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 18,
+              "inclusive_weight": 1,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 126404
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 20,
+              "inclusive_weight": 1,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 136964
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 22,
+              "inclusive_weight": 1,
+              "image": "libdispatch.dylib",
+              "image_uuid": "80E75F3F-333F-38A8-A3DD-6279FCDB771B",
+              "code_offset": 111864
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 38,
+              "inclusive_weight": 1,
+              "image": "XprotectService",
+              "image_uuid": "57DD6284-09FD-351F-A87A-F60ECFB75F70",
+              "code_offset": 68820
+            },
+            {
+              "thread_id": 10082941,
+              "depth": 40,
+              "inclusive_weight": 1,
+              "image": "XprotectService",
+              "image_uuid": "57DD6284-09FD-351F-A87A-F60ECFB75F70",
+              "code_offset": 53792
+            }
+          ],
+          "unpublished_rows": 190,
+          "raw_retained": false,
+          "symbols_or_queue_names_retained": false,
+          "absolute_addresses_retained": false,
+          "limit": "Inclusive stack weights, not CPU time or per-request attribution. UUID/offset require matching static image before symbolication."
+        }
+      }
+    ],
+    "sampler_cleanup": [
+      {
+        "sampler_pid": 44254,
+        "reaped": true,
+        "exit": 0
+      },
+      {
+        "sampler_pid": 44255,
+        "reaped": true,
+        "exit": 0
+      }
+    ],
+    "raw_retained": false,
+    "private_directory": null,
+    "private_removed": true,
+    "qualification": false,
+    "limits": [
+      "Sampling briefly suspends service threads; timing and outcomes perturbed.",
+      "Endpoint polling begins only after owned trigger, at most50 exact-name queries, stops by original earliest deadline. No endpoint launch/warmup. Late/absent endpoint discards both captures.",
+      "Only temporal overlap with owned child; no request-specific CPU or rule-cost attribution.",
+      "Native pre/post and header checks retain narrow PID reuse race.",
+      "Unexpected collector death needs private-directory/process cleanup audit."
+    ]
+  },
+  "ordinary_tool_cleanup": [
+    {
+      "role": "test_driver",
+      "pid": 44227,
+      "exit": 0,
+      "reaped": true
+    },
+    {
+      "role": "authentication_wrapper",
+      "pid": 44191,
+      "exit": 0,
+      "reaped": true
+    }
+  ],
+  "cleanup_errors": [],
+  "qualification": false,
+  "limits": [
+    "Diagnostic interference; test outcomes not qualification.",
+    "Known PID absence/root reap do not prove universal descendant cleanup.",
+    "Service pre/post admission retains narrow PID reuse race.",
+    "Any timeout/identity/parser/cleanup failure invalidates attribution, no fallback/retry.",
+    "Unexpected root collector death requires minimal cleanup audit before reuse.",
+    "Late endpoint discovery can miss the relevant scan; absence after deadline gives no XProtect cost attribution.",
+    "Deadline admission is cooperative; native sampler spawn may finish after check.",
+    "Only syspolicyd must exist at readiness; transient XprotectService sought after owned trigger before original earliest deadline. No endpoint invocation."
+  ]
+}

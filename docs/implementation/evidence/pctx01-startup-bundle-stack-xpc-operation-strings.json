@@ -1,0 +1,16 @@
+{
+  "task": "PCTX01-G05-D05",
+  "static_only": true,
+  "selected_installed_binary_strings": [
+    "Call to yr_compiler_create() failed: %d",
+    "YARA scan failed with error: %@",
+    "^{_YR_COMPILER=^{YR_ARENA}IIIII^{YR_RULES}iiii[37i]^{YR_AC_AUTOMATON}^{_YR_HASH_TABLE}^{_YR_HASH_TABLE}^{_YR_HASH_TABLE}^{_YR_HASH_TABLE}^{_YR_FIXUP}i[4{_YR_LOOP_CONTEXT={YR_ARENA_REF=II}i[2{_YR_EXPRESSION=i(?=q^{YR_OBJECT}{YR_ARENA_REF=II}){?=*{YR_ARENA_REF=II}}}]i}]ii[16*]i[256c][8192c]*S[1024c]^v^v^v^?^?^?^?{YR_ATOMS_CONFIG=^?^{YR_ATOM_QUALITY_TABLE_ENTRY}iiB}}",
+    "^{_YR_COMPILER=^{YR_ARENA}IIIII^{YR_RULES}iiii[48i]^{YR_AC_AUTOMATON}^{_YR_HASH_TABLE}^{_YR_HASH_TABLE}^{_YR_HASH_TABLE}^{_YR_HASH_TABLE}^{_YR_FIXUP}i[4{_YR_LOOP_CONTEXT={YR_ARENA_REF=II}i[2{_YR_EXPRESSION=i(?=q^{YR_OBJECT}{YR_ARENA_REF=II}){?=*{YR_ARENA_REF=II}}}]i}]ii[16*]i[256c][8192c]*S[1024c]^v^v^v^?^?^?^?{YR_ATOMS_CONFIG=^?^{YR_ATOM_QUALITY_TABLE_ENTRY}iiB}}",
+    "_yr_compiler_add_string",
+    "_yr_compiler_create",
+    "_yr_compiler_destroy",
+    "_yr_compiler_get_rules"
+  ],
+  "limit": "Static strings do not prove emitted events or request-bound operation interval. No live logs read.",
+  "qualification": false
+}
