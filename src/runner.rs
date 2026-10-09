@@ -961,7 +961,8 @@ fn planned(p: &Project, task: &str, key: &str, run: Option<&str>) -> Result<(Bin
     p.check_deadline()?;
     let mut reasons = vec![];
     if let Err(error) = trusted(p, &b) {
-        if error.code == "TIMEOUT" {
+        // A missing or stale binding is plan input; a failed storage read is not.
+        if error.exit == 7 {
             return Err(error);
         }
         reasons.push("owner_binding_required");
@@ -2858,5 +2859,57 @@ mod auxiliary_deadline_tests {
         assert!(!project.data_dir.join("outputs").exists());
         assert!(!project.control_db().exists());
         assert!(!project.index_db().exists());
+    }
+}
+
+#[cfg(all(test, unix))]
+mod stored_slot_contract_tests {
+    use super::*;
+
+    #[test]
+    fn stored_slot_decode_failure_preserves_ownership_and_acknowledgement_intent() {
+        for phase in ["acknowledge", "release", "not_spawned"] {
+            for raw in ["{PCTX_STORED_SENTINEL", "{}"] {
+                let temp = tempfile::tempdir().unwrap();
+                let dir = temp.path();
+                private_dir(&dir.join("jobs")).unwrap();
+                private_dir(&dir.join("slots")).unwrap();
+                let mut job: Job = serde_json::from_value(json!({
+                    "schema_version":1,"job_id":"JOB-fixture","workspace":"fixture",
+                    "profile_fingerprint":"fixture","resources":["exclusive-compute"],
+                    "state":"prepared","process_group":i32::MAX as u32,
+                    "boot_id":"fixture","created_at":0,"updated_at":0
+                }))
+                .unwrap();
+                // Signal zero only observes absence; this test never launches or kills a group.
+                assert!(
+                    group_gone(&job),
+                    "Prepared nonexistent group must be proven absent"
+                );
+                publish(dir, &job).unwrap();
+                let receipt = job_path(dir, &job.job_id).unwrap();
+                let before = fs::read(&receipt).unwrap();
+                let slot = dir.join("slots/exclusive-compute.json");
+                fs::write(&slot, raw).unwrap();
+                let error = match phase {
+                    "acknowledge" => acknowledged_guardian(dir, &mut job),
+                    "release" => release(dir, &mut job).map(|_| ()),
+                    _ => release_not_spawned(dir, &mut job),
+                }
+                .unwrap_err();
+                assert_eq!((error.code.as_str(), error.exit), ("DB_CORRUPT", 7));
+                assert!(!error.message.contains("PCTX_STORED_SENTINEL"));
+                assert_eq!(fs::read(&slot).unwrap(), raw.as_bytes());
+                if phase == "acknowledge" {
+                    // Existing publication precedes decoding: retain truthful intent, not rollback.
+                    let saved: Job = serde_json::from_slice(&fs::read(&receipt).unwrap()).unwrap();
+                    assert!(saved.guardian_attached);
+                    assert_eq!(saved.state, "prepared");
+                } else {
+                    assert_eq!(fs::read(&receipt).unwrap(), before);
+                }
+                assert_eq!(fs::read_dir(dir.join("slots")).unwrap().count(), 1);
+            }
+        }
     }
 }

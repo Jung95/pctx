@@ -354,7 +354,10 @@ impl Fixture {
         self.assert_storage_refusal_state(args, false);
     }
     fn control_rows(&self) -> BTreeMap<String, Vec<Vec<String>>> {
-        let db = Connection::open(&self.db).unwrap();
+        Self::database_rows(&self.db)
+    }
+    fn database_rows(path: &Path) -> BTreeMap<String, Vec<Vec<String>>> {
+        let db = Connection::open(path).unwrap();
         let tables: Vec<String> = db
             .prepare("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name")
             .unwrap()
@@ -800,6 +803,7 @@ fn grouped_decision_payloads_preserve_caller_errors_and_safe_storage_refusal() {
         )
         .unwrap();
         f.assert_storage_refusal(&["decision", "show", &id]);
+        f.assert_storage_refusal(&["owner", "queue"]);
         f.update(
             &format!("UPDATE ops_decisions SET {field}=?1 WHERE id=?2"),
             rusqlite::params![original, id],
@@ -1115,4 +1119,604 @@ fn grouped_broker_saved_snapshot_preserves_parser_priority() {
         .execute("UPDATE broker_snapshots SET value=?1", [original])
         .unwrap();
     f.success(&["repo", "status"]);
+}
+
+fn assert_safe_error(out: &Output, exit: i32, code: &str) {
+    assert_eq!(out.status.code(), Some(exit));
+    let value: Value = serde_json::from_slice(&out.stdout).unwrap();
+    assert_eq!(value["errors"][0]["code"], code);
+    assert!(out.stderr.is_empty());
+    for bytes in [&out.stdout, &out.stderr] {
+        assert!(!String::from_utf8_lossy(bytes).contains("PCTX_STORED_SENTINEL"));
+    }
+}
+impl Fixture {
+    fn active_run(&self) -> (String, String, String) {
+        self.indexed();
+        let (_, task, _) = self.create_task("authority-task");
+        let agent = self.success(&["agent", "register", "--name", "authority-fixture"])["agent_id"]
+            .as_str()
+            .unwrap()
+            .to_owned();
+        self.success(&["task", "ready", &task]);
+        self.success(&["task", "assign", &task, "--agent", &agent]);
+        let run = self.success(&["task", "start", &task])["run_id"]
+            .as_str()
+            .unwrap()
+            .to_owned();
+        (task, agent, run)
+    }
+    fn actor_output(
+        &self,
+        format: &str,
+        args: &[&str],
+        agent: &str,
+        run: &str,
+        token: &str,
+    ) -> Output {
+        Command::new(env!("CARGO_BIN_EXE_pctx"))
+            .current_dir(&self.base)
+            .args(["--root"])
+            .arg(&self.root)
+            .args(["--format", format])
+            .args(args)
+            .env("PCTX_DATA_DIR", &self.data)
+            .env("PCTX_USER_CONFIG", self.base.join("absent-config"))
+            .env("PCTX_ACTOR", agent)
+            .env("PCTX_RUN_ID", run)
+            .env("PCTX_RUN_CAPABILITY", token)
+            .output()
+            .unwrap()
+    }
+    fn unchanged_after(&self, before: &(Snapshot, Snapshot)) {
+        let after = self.state();
+        // Never print snapshots: this fixture can contain synthetic private credentials.
+        assert!(after == *before, "Prepared filesystem state changed");
+    }
+}
+
+#[test]
+fn grouped_private_credentials_keep_missing_mismatch_and_revoked_priority() {
+    let f = Fixture::new();
+    let (_, agent, run) = f.active_run();
+    f.success(&["owner", "queue"]);
+    let paths: Vec<_> = snapshot(&f.data)
+        .keys()
+        .filter(|p| {
+            p.parent().is_some_and(|p| p.ends_with("credentials"))
+                && p.file_name()
+                    .is_some_and(|n| n == format!("{run}.json").as_str())
+        })
+        .map(|p| f.data.join(p))
+        .collect();
+    assert_eq!(paths.len(), 1);
+    let path = &paths[0];
+    let original = fs::read(path).unwrap();
+    let credential: Value = serde_json::from_slice(&original).unwrap();
+    let token = credential["capability"].as_str().unwrap();
+    let epoch = credential["lease_epoch"].to_string();
+    let input = f.base.join("authority-message.json");
+    fs::write(&input, json!({"schema_version":1,"type":"notice","topic":"fixture","body":"Synthetic","idempotency_key":"authority"}).to_string()).unwrap();
+    let report = [
+        "agent",
+        "report",
+        "--run",
+        &run,
+        "--lease-epoch",
+        &epoch,
+        "--report-seq",
+        "1",
+        "--idempotency-key",
+        "authority-report",
+        "--stage",
+        "implementing",
+        "--summary",
+        "fixture",
+    ];
+    let message = [
+        "message",
+        "send",
+        "--from-file",
+        input.to_str().unwrap(),
+        "--to-role",
+        "fixture",
+    ];
+    for raw in ["{PCTX_STORED_SENTINEL", "null", "{}"] {
+        fs::write(path, raw).unwrap();
+        let expected = if raw.starts_with('{') && raw != "{}" {
+            (7, "DB_CORRUPT")
+        } else {
+            (5, "POLICY_DENIED")
+        };
+        let before = f.state();
+        for args in [&report[..], &message[..]] {
+            for format in ["json", "compact"] {
+                let out = f.actor_output(format, args, &agent, &run, token);
+                assert_safe_error(&out, expected.0, expected.1);
+                assert!(!String::from_utf8_lossy(&out.stdout).contains(token));
+                f.unchanged_after(&before);
+            }
+        }
+    }
+    fs::remove_file(path).unwrap();
+    let before = f.state();
+    for args in [&report[..], &message[..]] {
+        assert_safe_error(
+            &f.actor_output("json", args, &agent, &run, token),
+            5,
+            "POLICY_DENIED",
+        );
+        f.unchanged_after(&before);
+    }
+    fs::write(path, "{PCTX_STORED_SENTINEL").unwrap();
+    f.update("UPDATE runs SET lease_until=0 WHERE id=?1", [&run])
+        .unwrap();
+    let before = f.state();
+    for (args, code) in [
+        (&report[..], "LEASE_EXPIRED"),
+        (&message[..], "LEASE_REVOKED"),
+    ] {
+        assert_safe_error(&f.actor_output("json", args, &agent, &run, token), 9, code);
+        f.unchanged_after(&before);
+    }
+    fs::write(path, &original).unwrap();
+}
+
+#[test]
+fn grouped_message_queue_payloads_and_receipts_keep_recipient_and_replay_priority() {
+    let f = Fixture::new();
+    let agent = f.success(&["agent", "register", "--name", "message-fixture"])["agent_id"]
+        .as_str()
+        .unwrap()
+        .to_owned();
+    let session = f.success(&[
+        "session",
+        "attach",
+        "--agent",
+        &agent,
+        "--runtime",
+        "manual",
+    ])["session_id"]
+        .as_str()
+        .unwrap()
+        .to_owned();
+    let other = f.success(&[
+        "session",
+        "attach",
+        "--agent",
+        &agent,
+        "--runtime",
+        "manual",
+    ])["session_id"]
+        .as_str()
+        .unwrap()
+        .to_owned();
+    let file = f.base.join("message.json");
+    let message = json!({"schema_version":1,"type":"notice","topic":"fixture","body":"Synthetic","idempotency_key":"message-replay"});
+    fs::write(&file, message.to_string()).unwrap();
+    let send = [
+        "message",
+        "send",
+        "--from-file",
+        file.to_str().unwrap(),
+        "--to-session",
+        &session,
+    ];
+    let first = f.success(&send);
+    let id = first["message_id"].as_str().unwrap();
+    let db = Connection::open(&f.db).unwrap();
+    let original: String = db
+        .query_row("SELECT payload FROM ops_messages WHERE id=?1", [id], |r| {
+            r.get(0)
+        })
+        .unwrap();
+    let receipt: String = db
+        .query_row("SELECT response FROM ops_receipts", [], |r| r.get(0))
+        .unwrap();
+    drop(db);
+    for raw in ["{PCTX_STORED_SENTINEL", "{}"] {
+        f.update(
+            "UPDATE ops_messages SET payload=?1 WHERE id=?2",
+            rusqlite::params![raw, id],
+        )
+        .unwrap();
+        for args in [
+            vec!["inbox", "read", "--session", &session],
+            vec!["message", "ack", id, "--session", &session],
+        ] {
+            f.assert_storage_refusal(&args);
+        }
+        let before = f.state();
+        assert_safe_error(
+            &f.run("json", &["message", "ack", id, "--session", &other]),
+            5,
+            "POLICY_DENIED",
+        );
+        f.unchanged_after(&before);
+    }
+    f.update(
+        "UPDATE ops_messages SET payload=?1 WHERE id=?2",
+        rusqlite::params![original, id],
+    )
+    .unwrap();
+    f.update(
+        "UPDATE ops_receipts SET response=?1",
+        ["{PCTX_STORED_SENTINEL"],
+    )
+    .unwrap();
+    f.assert_storage_refusal(&send);
+    let mut changed = message.clone();
+    changed["body"] = json!("Different");
+    fs::write(&file, changed.to_string()).unwrap();
+    let before = f.state();
+    assert_safe_error(&f.run("json", &send), 9, "IDEMPOTENCY_CONFLICT");
+    f.unchanged_after(&before);
+    fs::write(&file, message.to_string()).unwrap();
+    for value in [json!(null), json!([]), json!({"synthetic":true})] {
+        f.update("UPDATE ops_receipts SET response=?1", [value.to_string()])
+            .unwrap();
+        assert_eq!(f.success(&send), value);
+    }
+    // json_extract selects a valid JSON object whose typed Message decoding fails.
+    f.update("DELETE FROM ops_receipts", []).unwrap();
+    f.update(
+        "UPDATE ops_messages SET payload=?1",
+        [json!({"idempotency_key":"message-replay"}).to_string()],
+    )
+    .unwrap();
+    f.assert_storage_refusal(&send);
+    f.update("UPDATE ops_messages SET payload=?1", [message.to_string()])
+        .unwrap();
+    assert_eq!(f.success(&send), first);
+    f.update("UPDATE ops_receipts SET response=?1", [receipt])
+        .unwrap();
+}
+
+#[test]
+fn grouped_quota_receipt_and_prior_observation_decoders_preserve_conflict() {
+    let f = Fixture::new();
+    f.indexed();
+    let (_, task, _) = f.create_task("quota-attribution");
+    let agent = f.success(&["agent", "register", "--name", "quota-fixture"])["agent_id"]
+        .as_str()
+        .unwrap()
+        .to_owned();
+    let session = f.success(&[
+        "session",
+        "attach",
+        "--agent",
+        &agent,
+        "--runtime",
+        "manual",
+        "--account-pool",
+        "main",
+    ])["session_id"]
+        .as_str()
+        .unwrap()
+        .to_owned();
+    let file = f.base.join("observations.json");
+    let observation = json!({"observation_id":"first","pool_id":"main","provider":"fixture","model":"fixture","metric":"input_tokens","unit":"tokens","source":"provider_request","collector":"fixture","source_revision":"1","observed_at":"2026-01-01T01:00:00Z","window_id":"window","window_start":"2026-01-01T00:00:00Z","window_end":"2027-01-01T00:00:00Z","status":"actual","amount":10,"kind":"request","request_id":"request-fixture","task_id":task,"session_id":session,"context_epoch":1});
+    let batch = json!({"schema_version":1,"observations":[observation]});
+    fs::write(&file, batch.to_string()).unwrap();
+    let ingest = [
+        "quota",
+        "ingest",
+        "--from-file",
+        file.to_str().unwrap(),
+        "--idempotency-key",
+        "quota-replay",
+    ];
+    let first = f.success(&ingest);
+    f.update(
+        "UPDATE quota_receipts SET response=?1",
+        ["{PCTX_STORED_SENTINEL"],
+    )
+    .unwrap();
+    f.assert_storage_refusal(&ingest);
+    let mut changed = batch.clone();
+    changed["observations"][0]["amount"] = json!(11);
+    fs::write(&file, changed.to_string()).unwrap();
+    let before = f.state();
+    assert_safe_error(&f.run("json", &ingest), 9, "IDEMPOTENCY_CONFLICT");
+    f.unchanged_after(&before);
+    fs::write(&file, batch.to_string()).unwrap();
+    f.update("UPDATE quota_receipts SET response=?1", [first.to_string()])
+        .unwrap();
+    assert_eq!(f.success(&ingest), first);
+    let mut next = observation.clone();
+    next["observation_id"] = json!("second");
+    fs::write(
+        &file,
+        json!({"schema_version":1,"observations":[next]}).to_string(),
+    )
+    .unwrap();
+    f.update("DELETE FROM quota_receipts", []).unwrap();
+    f.update(
+        "UPDATE quota_observations SET payload=?1",
+        [json!({"request_id":"request-fixture"}).to_string()],
+    )
+    .unwrap();
+    f.assert_storage_refusal(&ingest);
+    f.update("DELETE FROM quota_observations", []).unwrap();
+    let mut cumulative = observation.clone();
+    cumulative["kind"] = json!("cumulative");
+    cumulative["source"] = json!("statusline");
+    cumulative["request_id"] = Value::Null;
+    cumulative["session_id"] = json!(session);
+    cumulative["context_epoch"] = json!(1);
+    cumulative["counter_epoch"] = json!("counter");
+    // The prior row is selected by columns, before decoding its typed payload.
+    f.update("INSERT INTO quota_observations VALUES('prior','main','fixture','fixture','input_tokens','tokens','statusline',?1,1,'counter',0,0,9999999999,?2,'synthetic')", rusqlite::params![session,"{}"]).unwrap();
+    fs::write(
+        &file,
+        json!({"schema_version":1,"observations":[cumulative]}).to_string(),
+    )
+    .unwrap();
+    f.assert_storage_refusal(&ingest);
+}
+
+#[cfg(unix)]
+#[test]
+fn grouped_private_execution_trust_refuses_corruption_before_spawn() {
+    let f = Fixture::new();
+    let plan = f.success(&[
+        "trust",
+        "plan",
+        "--",
+        "/usr/bin/printf",
+        "PCTX_CHILD_WAS_STARTED",
+    ]);
+    let fingerprint = plan["fingerprint"].as_str().unwrap();
+    f.success(&[
+        "trust",
+        "add",
+        "--expect-hash",
+        fingerprint,
+        "--",
+        "/usr/bin/printf",
+        "PCTX_CHILD_WAS_STARTED",
+    ]);
+    let path = f.data.join(format!("trust/executions/{fingerprint}.json"));
+    let original = fs::read(&path).unwrap();
+    let run = ["run", "--", "/usr/bin/printf", "PCTX_CHILD_WAS_STARTED"];
+    for raw in ["{PCTX_STORED_SENTINEL", "{}"] {
+        fs::write(&path, raw).unwrap();
+        let before = f.state();
+        for format in ["json", "compact"] {
+            let out = f.run(format, &run);
+            assert_safe_error(&out, 7, "DB_CORRUPT");
+            let value: Value = serde_json::from_slice(&out.stdout).unwrap();
+            assert_eq!(value["data"]["spawned"], false);
+            f.unchanged_after(&before);
+        }
+        assert!(
+            !String::from_utf8_lossy(&f.run("json", &run).stdout)
+                .contains("PCTX_CHILD_WAS_STARTED")
+        );
+    }
+    let mut binding: Value = serde_json::from_slice(&original).unwrap();
+    binding["workspace_id"] = json!("different-workspace");
+    fs::write(&path, binding.to_string()).unwrap();
+    let before = f.state();
+    assert_safe_error(&f.run("json", &run), 9, "CONFIG_CHANGED");
+    f.unchanged_after(&before);
+    fs::remove_file(&path).unwrap();
+    let before = f.state();
+    assert_safe_error(&f.run("json", &run), 5, "OWNER_DECISION_REQUIRED");
+    f.unchanged_after(&before);
+}
+
+#[cfg(unix)]
+#[test]
+fn grouped_runner_trust_and_task_decode_do_not_mask_storage_failure_as_owner_permission() {
+    let f = Fixture::new();
+    f.indexed();
+    fs::write(f.root.join("fixture.sh"), "touch launched\n").unwrap();
+    fs::write(f.root.join(".pctx/runner.toml"), "schema_version=1\n[checks.unit]\nargv=['/bin/sh','fixture.sh']\nreporter='pctx-json-v1'\nheavy=false\nresources=[]\n").unwrap();
+    let file = f.base.join("runner-task.json");
+    fs::write(&file, json!({"schema_version":1,"title":"Runner storage","scope":["code.rs","fixture.sh"],"checks":[{"key":"unit","kind":"test","allowed_sources":["runner_observed"],"output_paths":[]}],"acceptance":[]}).to_string()).unwrap();
+    let task = f.success(&["task", "create", "--from-file", file.to_str().unwrap()])["task_id"]
+        .as_str()
+        .unwrap()
+        .to_owned();
+    let args = ["runner", "check-plan", "--task-id", &task, "--key", "unit"];
+    let plan = f.success(&args);
+    assert!(
+        plan["blocked_reasons"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .any(|v| v == "owner_binding_required")
+    );
+    let fingerprint = plan["fingerprint"].as_str().unwrap();
+    f.success(&[
+        "runner",
+        "trust",
+        "--key",
+        "unit",
+        "--expect-hash",
+        fingerprint,
+    ]);
+    assert!(
+        f.success(&args)["blocked_reasons"]
+            .as_array()
+            .unwrap()
+            .is_empty()
+    );
+    let path = f.data.join(format!("trust/runners/{fingerprint}.json"));
+    let original = fs::read(&path).unwrap();
+    fs::write(&path, "{PCTX_STORED_SENTINEL").unwrap();
+    f.assert_storage_refusal(&args);
+    fs::write(&path, "null").unwrap();
+    assert!(
+        f.success(&args)["blocked_reasons"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .any(|v| v == "owner_binding_required")
+    );
+    fs::write(&path, &original).unwrap();
+    let definition: String = Connection::open(&f.db)
+        .unwrap()
+        .query_row("SELECT definition FROM tasks WHERE id=?1", [&task], |r| {
+            r.get(0)
+        })
+        .unwrap();
+    for raw in ["{PCTX_STORED_SENTINEL", "{}"] {
+        f.update(
+            "UPDATE tasks SET definition=?1 WHERE id=?2",
+            rusqlite::params![raw, task],
+        )
+        .unwrap();
+        f.assert_storage_refusal(&args);
+    }
+    f.update(
+        "UPDATE tasks SET definition=?1 WHERE id=?2",
+        rusqlite::params![definition, task],
+    )
+    .unwrap();
+    assert!(
+        f.success(&args)["blocked_reasons"]
+            .as_array()
+            .unwrap()
+            .is_empty()
+    );
+    assert!(!f.root.join("launched").exists());
+}
+
+#[test]
+fn grouped_job_and_helper_consumers_refuse_corrupt_metadata_without_releasing_slots() {
+    let f = Fixture::new();
+    f.indexed();
+    // Prepare all directories normally created by the mutation facade before snapshot.
+    let host = f.data.join("host-resources");
+    fs::create_dir_all(host.join("jobs")).unwrap();
+    fs::create_dir_all(host.join("slots")).unwrap();
+    let job = host.join("jobs/JOB-fixture.json");
+    let slot = host.join("slots/exclusive-compute.json");
+    let helper_dir = f.index_db().parent().unwrap().join("helpers");
+    let helper = helper_dir.join("HELP-fixture.json");
+    let workspace = f
+        .index_db()
+        .parent()
+        .unwrap()
+        .file_name()
+        .unwrap()
+        .to_str()
+        .unwrap()
+        .to_owned();
+    let h = json!({"schema_version":1,"helper_id":"HELP-fixture","task_id":"synthetic","run_id":"synthetic","mode":"local","scope":[],"workspace":workspace,"state":"prepared","job_id":"JOB-fixture","output_id":"OUT-fixture","started":false,"created_at":0});
+    for raw in ["{PCTX_STORED_SENTINEL", "{}"] {
+        f.prepare_file(&job, raw.as_bytes());
+        f.prepare_file(&slot, raw.as_bytes());
+        f.prepare_file(&helper, h.to_string().as_bytes());
+        for args in [
+            vec!["runner", "resource-status"],
+            vec!["runner", "job-cancel", "JOB-fixture"],
+            vec!["runner", "helper-status", "HELP-fixture"],
+            vec!["runner", "helper-cancel", "HELP-fixture"],
+            vec![
+                "runner",
+                "helper-release",
+                "HELP-fixture",
+                "--evidence",
+                "OUT-fixture",
+            ],
+        ] {
+            f.assert_storage_refusal(&args);
+            assert!(slot.exists());
+        }
+        // Existing evidence policy precedes reading corrupt job metadata.
+        let before = f.state();
+        assert_safe_error(
+            &f.run(
+                "json",
+                &[
+                    "runner",
+                    "helper-release",
+                    "HELP-fixture",
+                    "--evidence",
+                    "OUT-other",
+                ],
+            ),
+            5,
+            "POLICY_DENIED",
+        );
+        f.unchanged_after(&before);
+        f.prepare_file(&helper, raw.as_bytes());
+        f.assert_storage_refusal(&["runner", "helper-cancel", "HELP-fixture"]);
+    }
+}
+
+#[test]
+fn grouped_paired_index_cache_checkpoint_get_and_registry_shape_decoders() {
+    let f = Fixture::new();
+    f.indexed();
+    let checkpoint = f.success(&["checkpoint", "create", "--name", "paired"]);
+    let mut p = f.project();
+    p.workspace_dir = f.index_db().parent().unwrap().to_path_buf();
+    p.workspace_id = p
+        .workspace_dir
+        .file_name()
+        .unwrap()
+        .to_str()
+        .unwrap()
+        .to_owned();
+    let id = checkpoint["id"].as_str().unwrap();
+    let corrupt = "{PCTX_STORED_SENTINEL";
+    Connection::open(f.index_db())
+        .unwrap()
+        .execute(
+            "UPDATE checkpoints SET manifest=?1,manifest_hash=?2",
+            rusqlite::params![corrupt, pctx::domain::hash(corrupt)],
+        )
+        .unwrap();
+    let before = f.state();
+    let error = pctx::storage::checkpoint_get(&p, id).unwrap_err();
+    assert_eq!((error.code.as_str(), error.exit), ("DB_CORRUPT", 7));
+    f.unchanged_after(&before);
+    Connection::open(f.index_db())
+        .unwrap()
+        .execute("UPDATE checkpoints SET manifest_hash='different'", [])
+        .unwrap();
+    let error = pctx::storage::checkpoint_get(&p, id).unwrap_err();
+    assert_eq!((error.code.as_str(), error.exit), ("INVALID_ARCHIVE", 7));
+    for raw in [corrupt, "{}"] {
+        Connection::open(f.index_db())
+            .unwrap()
+            .execute("UPDATE file_versions SET metadata=?1", [raw])
+            .unwrap();
+        let index = f.index_db();
+        let state = || {
+            let mut state = f.state();
+            let relative = index.strip_prefix(&f.data).unwrap();
+            state.1.retain(|path, _| {
+                path != relative
+                    && path != &PathBuf::from(format!("{}-wal", relative.display()))
+                    && path != &PathBuf::from(format!("{}-shm", relative.display()))
+            });
+            state
+        };
+        let before_rows = Fixture::database_rows(&index);
+        let before = state();
+        for format in ["json", "compact"] {
+            assert_safe_error(&f.run(format, &["index", "update"]), 7, "DB_CORRUPT");
+            assert!(
+                Fixture::database_rows(&index) == before_rows,
+                "Logical index/schema changed"
+            );
+            assert!(state() == before, "Non-index files changed");
+        }
+    }
+    let registry = f.data.join("registry.json");
+    let original = fs::read(&registry).unwrap();
+    for raw in ["{}", "[]"] {
+        fs::write(&registry, raw).unwrap();
+        let before = f.state();
+        assert_safe_error(&f.run("json", &["status"]), 6, "NOT_INITIALIZED");
+        f.unchanged_after(&before);
+    }
+    fs::write(&registry, "null").unwrap();
+    f.assert_storage_refusal(&["status"]);
+    fs::write(&registry, original).unwrap();
 }

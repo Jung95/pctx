@@ -1082,3 +1082,17 @@ common INDEX_BUSY envelope metadata and Tick has no general query clock; no whol
 suite pass or causal hash-phase claim. Repeated full platform/mutation gates on
 every small patch are superseded by focused/static checks and justified grouped
 integration candidates. No current-slice Linux full rerun or Actions was started.
+
+## PCTX01 persisted-error proof reconciliation (2026-10-09)
+
+Fixed G05-D04 owns stored-error classification; it does not acquire producer
+acceptance scope. The two-plan-check rule led to one all48-site reconciliation
+before further changes. Runner check-plan had a reproduced common error-truth
+defect: DB_CORRUPT7 became successful owner_binding_required. Propagate errors7;
+retain missing5/stale9 blocked plan behavior. Registry defaults already accept
+{} and [] (missing-workspace6); null is incompatible7. Preserve that grammar.
+Compare logical SQL/schema and non-DB files for SQLite writer/checkpoint paths;
+do not claim physical DB/WAL/SHM immutability. Existing slot acknowledgement
+publishes intent before decoder failure; retain intent rather than manufacture
+rollback. Source and runtime residuals are in pctx01-storage-residual-
+reconciliation.json; no new fixed acceptance condition or platform exemption.

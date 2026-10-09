@@ -1,0 +1,36 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.57s
+     Running tests/persisted_error_contract.rs (target/debug/deps/persisted_error_contract-257962e0e1215410)
+
+running 13 tests
+test grouped_private_execution_trust_refuses_corruption_before_spawn ... FAILED
+test grouped_decision_payloads_preserve_caller_errors_and_safe_storage_refusal ... ok
+test grouped_index_metadata_and_checksum_matched_checkpoint_json_are_storage_errors ... ok
+test grouped_broker_saved_snapshot_preserves_parser_priority ... ok
+test grouped_quota_observation_syntax_and_shape_are_storage_errors ... ok
+test grouped_registry_pack_output_and_helper_metadata_refuse_without_publication ... ok
+test grouped_quota_receipt_and_prior_observation_decoders_preserve_conflict ... ok
+test grouped_job_and_helper_consumers_refuse_corrupt_metadata_without_releasing_slots ... ok
+test grouped_context_selection_and_capsule_keep_identity_conflict_before_storage_decode ... ok
+test grouped_message_queue_payloads_and_receipts_keep_recipient_and_replay_priority ... ok
+test grouped_private_credentials_keep_missing_mismatch_and_revoked_priority ... ok
+test grouped_runner_trust_and_task_decode_do_not_mask_storage_failure_as_owner_permission ... ok
+test grouped_schedule_stored_definition_and_receipt_preserve_replay_conflict ... ok
+
+failures:
+
+---- grouped_private_execution_trust_refuses_corruption_before_spawn stdout ----
+
+thread 'grouped_private_execution_trust_refuses_corruption_before_spawn' (9102719) panicked at tests/persisted_error_contract.rs:337:9:
+Output { status: ExitStatus(unix_wait_status(1536)), stdout: "{\"command\":\"trust\",\"coverage\":{\"reasons\":[\"CAPABILITY_UNAVAILABLE\"],\"status\":\"partial\"},\"data\":null,\"errors\":[{\"code\":\"CAPABILITY_UNAVAILABLE\",\"message\":\"Shells, opaque interpreters, compressors and heavy/operational runners need a registered execution profile\",\"retryable\":false}],\"generation_id\":null,\"project_id\":null,\"schema_version\":\"1.0\",\"status\":\"error\",\"truncation\":{\"reasons\":[],\"truncated\":false},\"validation\":{\"checked_at\":\"2026-10-08T23:53:09.046Z\",\"mode\":\"matched\",\"scope\":[],\"workspace_atomic\":false},\"warnings\":[],\"workspace_id\":null}\n", stderr: "" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    grouped_private_execution_trust_refuses_corruption_before_spawn
+
+test result: FAILED. 12 passed; 1 failed; 0 ignored; 0 measured; 7 filtered out; finished in 1.52s
+
+error: test failed, to rerun pass `--test persisted_error_contract`
+error: 1 target failed:
+    `--test persisted_error_contract`

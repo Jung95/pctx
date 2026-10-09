@@ -17,46 +17,41 @@ then next official task's finite list within the same Goal.
 
 ## Current source and verification
 
-Grouped G05-D04 candidate corrects persisted-origin JSON errors through shared
-storage7 decoding, preserving caller2, integrity/conflict/identity9 and original
-expiry ordering. Frozen91 origins classified in one batch (48 persisted); no
-new ID or feature. Source and binary hashes, all initial/final logs and scopes:
-evidence/pctx01-grouped-storage-verification.json and classification.json.
-Related127 PASS precedes behavior-equivalent schedule lint correction and two
-new fixtures. Final grouped7 PASS; current complete persisted target14 PASS;
-format and all-target Clippy PASS. Independent production/fixture review no
-scoped blocker. Initial SQLite physical-state premise failures, wrong broker
-fixture DB and Clippy failure remain preserved. Schedule asserts logical
-SQL/schema and non-DB state, not physical DB/WAL/SHM immutability. No heavy job
-live or new whole/platform run. Closed detail23/40, whole0/10 unchanged.
+G05-D04 residual candidate repairs actual check-plan masking of trust storage7
+as successful owner_binding_required. Missing5/stale9 plan reasons unchanged.
+Final persisted target21 PASS; Adapter10, Filter8, Runner29 PASS; internal slot1
+PASS covers six phase×syntax/shape cases, no actual callback/child claim.
+Format/Clippy PASS; independent scoped review no blocker. Source hashes, exact
+scope and all initial/final failures: evidence/pctx01-storage-residual-
+verification.json. All48 frozen persisted sites mapped in residual-
+reconciliation.json. No heavy job live. Detail23/40, whole0/10 unchanged.
+Registry {} and [] remain valid defaults/missing6; null typed corruption7.
+Index/Schedule compare logical SQL/schema and non-DB files, not physical DB/WAL/
+SHM immutability; slot acknowledgement preserves prior intent publication.
 
-Prior runtime00df0e2 full macOS71737:576 PASS/4 FAIL remains historical fixed-
-source evidence only. Original startup failures at unchanged budgets: captured
-PATH, relative PATH/child cwd, eight-worker1s, simultaneous streams. Product
-common-contract failures, cause unproven; no environmental exemption.
-
-Required §23: macOS arm64/x86_64, Linux x86_64, Windows x86_64. Prior Linux
-source-specific aarch64 proof is follow-up support only. Other required real
-hosts/architectures remain unverified. No Actions (monthly3000min); Node24
-pins retained. Normal main [skip ci] commit/push authorized.
+Prior runtime00df0e2 macOS full576 PASS/4 FAIL is historical source-bound only.
+Captured PATH, relative PATH/cwd, eight-worker1s and simultaneous streams remain
+original-budget product/common failures. Required §23 macOS arm64/x86_64,
+Linux x86_64 and Windows x86_64 qualification remains open; prior aarch64 Linux
+is supporting follow-up only. No Actions (3000min), Node24 pins retained.
 
 ## Next exact action and ownership
 
-Only PCTX01 active. Before further implementation expansion, reconcile the
-remaining fixed G05-D04 runtime proof classes against frozen inventory and
-ownership under the two-plan-check rule (23/40 unchanged). Residual: private
-trust/credential/job-slot and managed schedule/message/receipt variants with
-existing expiry/integrity/ownership priority. No incremental similar-path
-search or new denominator; then finish the existing bounded runtime matrix.
-Other fixed grouped candidate conditions G02-D04/G03-D03/D04/G05-D06 remain
-open. Do not claim source classification or14 tests closes G05-D04.
-
-Current PCTX01 must finish every fixed condition/platform before next official
-task. Unrelated defects remain inactive owner backlog. PCTX36 Tick concurrent
-occurrence failure retained; shared INDEX_BUSY metadata verified, no default
-finite Tick deadline and no independent algorithm expansion here. Whole suite
-must not be called passing. Original-clock startup and other existing response/
-phase items follow fixed plan order.
+Only PCTX01 active. Two-plan-check reconciliation performed before verification,
+no new IDs/denominator. Finish one remaining fixed G05-D04 Schedule batch:
+frozen520 decision action,706 mutation definition,761 reused occurrence,
+1893 installed metadata,2021 bridge binding,2492 recovery result. Preserve
+policy/identity/expiry/replay/intent and current absence/state errors; no repair
+of independent PCTX36 occurrence concurrency algorithm. Direct internal proof
+where public execution contains errors must not invent a top-level error claim.
+Then reconcile G05-D04 local closure against all48 sites and existing nonstored
+43 dispositions, retaining G09 platform and G05-D02 actual callback requirements.
+Other existing grouped candidate G02-D04/G03-D03/D04/G05-D06 remains next in
+fixed plan. Do not reopen closed rows without changed contract/new defect.
+PCTX01 whole completion requires every fixed item and mandatory platform before
+next official task. Normal main [skip ci] commit/push approved; no operational
+publish/install/account/model/schedule changes. PCTX36 failure retained, never
+report whole suite passing.
 
 ## Environment and operating constraints
 

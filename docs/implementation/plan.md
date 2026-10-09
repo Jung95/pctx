@@ -30,27 +30,33 @@ whole-local PCTX01 completion. Implementation, evidence and platform waits are
 recorded separately; required §23 targets are macOS arm64/x86_64, Linux x86_64,
 Windows x86_64. Linux aarch64 is supporting follow-up evidence only.
 
-Current grouped stored-error candidate classifies the frozen91 decode sites in one
-batch and corrects persisted-origin errors through the common decoder; caller,
-conflict, integrity and original-clock ordering remain. Related127PASS and
-expanded7PASS, format/ClippyPASS; final full-file contract result is recorded in
-evidence/pctx01-grouped-storage-verification.json. Initial fixture and static
-failures remain recorded. Schedule refusal asserts logical SQL/schema and non-DB
-state, not physical DB/WAL/SHM immutability. G05-D04 remains open: private
-trust/credential/job-slot and remaining managed schedule/message/receipt runtime
-coverage and precedence remain within the frozen inventory. No denominator or
-closed-count change:23/40, whole0/10. No new whole/platform run or Actions.
-Prior Task runtime00df0e2 macOS full576PASS4FAIL is historical fixed-source
-qualification only; all four startup failures still require repair.
+Current G05-D04 residual reconciliation maps all frozen48 persisted sites to
+bounded evidence or remaining runtime proof, without changing the fixed40
+conditions. A real check-plan defect masked trust storage failure as successful
+owner_binding_required; errors7 now propagate, preserving missing5/stale9 plan
+reasons. Final persisted target21 PASS; Adapter10, Filter8, Runner29 PASS; one
+library test covers six internal slot phase/shape cases. Format/Clippy PASS.
+Initial product and fixture failures remain recorded in
+[evidence](evidence/pctx01-storage-residual-verification.json). No heavy job live.
+Source/binary/scoped result identity and all48-site reconciliation are recorded.
 
-G10-D02/D03 review/document reconciliation remains closed. Current next action:
-reconcile the remaining G05-D04 proof categories and ownership against the fixed
-inventory before any further implementation expansion, then finish that bounded
-runtime matrix within the existing grouped admission/error candidate. Two plan
-checks without an item closure trigger this reconciliation; no new IDs or
-independent producer features. Other current fixed candidates remain
-G02-D04/G03-D03/D04/G05-D06. Independent PCTX36 schedule concurrency failure
-remains visible; do not report the whole suite passing.
+G05-D04 remains open: only frozen Schedule sites520/706/761/1893/2021/2492 still
+need bounded runtime proof (decision, mutation definition, occurrence,
+installation, binding, recovery result). This is one existing proof batch, no
+new ID/feature/denominator. Next execute that batch with original policy/state/
+expiry/intent precedence. The required two-plan-check reconciliation has been
+performed before resuming verification; do not repeat full discovery or invent
+another similar-path queue. Detail23/40 and whole0/10 unchanged. Registry
+accepted {} and [] still mean missing workspace6; null is typed corruption7.
+Index/Schedule comparisons assert logical SQL/schema plus non-DB files, not
+physical journal immutability. Acknowledgement retains prior intent publication;
+no universal rollback claim. Independent review found no scoped blocker.
+
+Other fixed grouped candidates G02-D04/G03-D03/D04/G05-D06 remain open. Prior
+macOS576 PASS/4 startup FAIL is historical source-bound evidence; current
+required macOS arm64/x86_64, Linux x86_64 and Windows x86_64 qualification remains
+open. Independent PCTX36 Tick concurrency failure remains separately owned;
+never report whole suite passing. No Actions or new whole/platform run.
 
 ## Ownership and common boundaries
 

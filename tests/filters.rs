@@ -420,3 +420,51 @@ fn saved_output_custom_render_preserves_observed_failure_without_rerun() {
     assert_eq!(rendered["test_result"], "not_evaluated");
     assert!(rendered.to_string().contains("error before illegal"));
 }
+
+#[test]
+fn stored_filter_authority_corruption_keeps_hash_priority_and_cannot_publish_binding() {
+    let (_t, p) = fixture();
+    write_filter(&p, "sample", &definition("sample"));
+    passing_suite(&p, "sample", "fixtures/sample");
+    activate(&p, "sample");
+    let binding_path = p.data_dir.join("filter-bindings/sample.json");
+    let report_path = p.data_dir.join("filter-fixture-reports/sample.json");
+    let original_binding = fs::read(&binding_path).unwrap();
+    let original_report = fs::read(&report_path).unwrap();
+    let preview = || filters::apply_records(&p, "sample", &records("error E42\n", "stdout"), 1);
+    let assert_corrupt = |error: pctx::domain::Error| {
+        assert_eq!((error.code.as_str(), error.exit), ("DB_CORRUPT", 7));
+        assert!(!error.message.contains("PCTX_STORED_SENTINEL"));
+    };
+    for raw in ["{PCTX_STORED_SENTINEL", "{}"] {
+        fs::write(&binding_path, raw).unwrap();
+        assert_corrupt(preview().unwrap_err());
+        assert_eq!(fs::read(&binding_path).unwrap(), raw.as_bytes());
+        assert_eq!(fs::read(&report_path).unwrap(), original_report);
+        fs::write(&binding_path, &original_binding).unwrap();
+        fs::write(&report_path, raw).unwrap();
+        let error = preview().unwrap_err();
+        assert_eq!((error.code.as_str(), error.exit), ("CONFIG_CHANGED", 9));
+        // Match the saved integrity binding, reaching the actual typed decoder.
+        let mut binding: Value = serde_json::from_slice(&original_binding).unwrap();
+        binding["fixture_report_hash"] = json!(hash(raw));
+        fs::write(&binding_path, binding.to_string()).unwrap();
+        assert_corrupt(preview().unwrap_err());
+        let before = fs::read(&binding_path).unwrap();
+        assert_corrupt(
+            filters::execute(
+                &p,
+                &FilterCommand::Activate {
+                    id: "sample".into(),
+                    expect_hash: hash(definition("sample")),
+                },
+            )
+            .unwrap_err(),
+        );
+        assert_eq!(fs::read(&binding_path).unwrap(), before);
+        assert_eq!(fs::read(&report_path).unwrap(), raw.as_bytes());
+        fs::write(&binding_path, &original_binding).unwrap();
+        fs::write(&report_path, &original_report).unwrap();
+    }
+    assert!(preview().is_ok());
+}

@@ -530,3 +530,38 @@ fn direct_adapter_corrupt_persisted_json_and_shapes_are_storage_errors() {
         assert_eq!(f.state(), before);
     }
 }
+
+#[test]
+fn checksum_matched_persisted_adapter_plan_corruption_is_not_caller_input() {
+    let f = Fixture::new();
+    let p = f.project();
+    call(
+        &p,
+        ClaudeCommand::Plan {
+            agent: "fixture".into(),
+        },
+    )
+    .unwrap();
+    fs::write(p.control_dir.join("adapter.lock"), []).unwrap();
+    for raw in ["{PCTX_STORED_SENTINEL", "{}"] {
+        let digest = pctx::domain::hash(raw);
+        let path = p
+            .control_dir
+            .join("adapter-plans")
+            .join(format!("{digest}.json"));
+        fs::write(&path, raw).unwrap();
+        let before = f.state();
+        let error = call(
+            &p,
+            ClaudeCommand::Install {
+                plan: digest.clone(),
+                expect_hash: digest,
+            },
+        )
+        .unwrap_err();
+        assert_eq!((error.code.as_str(), error.exit), ("DB_CORRUPT", 7));
+        assert!(!error.message.contains("PCTX_STORED_SENTINEL"));
+        assert!(f.state() == before, "Prepared adapter state changed");
+        assert!(!p.root.join(".claude").exists());
+    }
+}

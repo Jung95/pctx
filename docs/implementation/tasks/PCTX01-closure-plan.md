@@ -101,12 +101,11 @@ are optional when detection strength is unclear, not a per-change requirement.
 
 ## Current G05-D04 bounded evidence
 
-Frozen91 origins classified together; persisted decoder corrections implemented.
-Related127 and expanded7 passed, final format/Clippy passed. Runtime residuals
-(private trust/credential/job-slot, managed schedule/message/receipt variants and
-existing ownership/expiry/integrity precedence) stay inside G05-D04. No item
-closure:23/40 and whole0/10 unchanged. Schedule fixtures compare logical SQL and
-schema plus non-DB files; no physical DB/WAL/SHM immutability claim. Retained
-initial fixture/static failures and final source-bound results are in
-pctx01-grouped-storage-verification.json. Reconcile these residual proof classes
-before implementation expansion under the two-plan-check rule; no new ID.
+All48 persisted sites reconciled; fixed40 unchanged. Product check-plan trust
+storage masking repaired. Persisted21, Adapter10, Filter8, Runner29 and internal
+slot1 tests pass, format/Clippy pass. Initial failures retained. Only six frozen
+Schedule sites520/706/761/1893/2021/2492 remain common runtime proof. Execute
+that one batch next; no new producer features. See residual-reconciliation.json
+and residual-verification.json. No G05-D04 closure: detail23/40, whole0/10.
+Physical Index/Schedule DB/WAL/SHM and real callback/platform fault acceptance
+are not claimed by logical SQL or internal slot tests.

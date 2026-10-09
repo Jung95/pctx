@@ -1,0 +1,442 @@
+{
+  "task": "PCTX01",
+  "item": "PCTX01-G05-D04",
+  "status": "open",
+  "fixed_detail_closed": 23,
+  "fixed_detail_denominator": 40,
+  "whole_gate_closed": 0,
+  "whole_gate_denominator": 10,
+  "reconciliation_reason": "Two plan checks without closure: stop implementation expansion, map all existing48 persisted sites to evidence/remaining proof, preserve ownership and denominator before resuming existing verification",
+  "reconciliation_done_before_new_product_fix": true,
+  "source_baseline": "696b4212b395445bf00329716d9716eec27f47a7",
+  "site_denominator": 48,
+  "site_denominator_is_existing_inventory_not_new_acceptance_count": true,
+  "sites": [
+    {
+      "frozen_path": "src/adapter.rs",
+      "frozen_line": 932,
+      "frozen_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "state": "bounded_common_decode_qualified",
+      "evidence": "adapter_errors::checksum_matched_persisted_adapter_plan_corruption_is_not_caller_input",
+      "scope": "Common stored decode error/accepted-shape classification only; producer acceptance and release platforms separate"
+    },
+    {
+      "frozen_path": "src/broker.rs",
+      "frozen_line": 59,
+      "frozen_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "state": "bounded_common_decode_qualified",
+      "evidence": "persisted_error_contract::grouped_broker_saved_snapshot_preserves_parser_priority",
+      "scope": "Common stored decode error/accepted-shape classification only; producer acceptance and release platforms separate"
+    },
+    {
+      "frozen_path": "src/filters.rs",
+      "frozen_line": 923,
+      "frozen_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "state": "bounded_common_decode_qualified",
+      "evidence": "filters::stored_filter_authority_corruption_keeps_hash_priority_and_cannot_publish_binding",
+      "scope": "Common stored decode error/accepted-shape classification only; producer acceptance and release platforms separate"
+    },
+    {
+      "frozen_path": "src/filters.rs",
+      "frozen_line": 960,
+      "frozen_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "state": "bounded_common_decode_qualified",
+      "evidence": "filters::stored_filter_authority_corruption_keeps_hash_priority_and_cannot_publish_binding",
+      "scope": "Common stored decode error/accepted-shape classification only; producer acceptance and release platforms separate"
+    },
+    {
+      "frozen_path": "src/filters.rs",
+      "frozen_line": 1220,
+      "frozen_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "state": "bounded_common_decode_qualified",
+      "evidence": "filters::stored_filter_authority_corruption_keeps_hash_priority_and_cannot_publish_binding",
+      "scope": "Common stored decode error/accepted-shape classification only; producer acceptance and release platforms separate"
+    },
+    {
+      "frozen_path": "src/operations.rs",
+      "frozen_line": 353,
+      "frozen_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "state": "bounded_common_decode_qualified",
+      "evidence": "persisted_error_contract::grouped_decision_payloads + grouped_message_queue_payloads + grouped_private_credentials",
+      "scope": "Common stored decode error/accepted-shape classification only; producer acceptance and release platforms separate"
+    },
+    {
+      "frozen_path": "src/operations.rs",
+      "frozen_line": 884,
+      "frozen_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "state": "bounded_common_decode_qualified",
+      "evidence": "persisted_error_contract::grouped_decision_payloads + grouped_message_queue_payloads + grouped_private_credentials",
+      "scope": "Common stored decode error/accepted-shape classification only; producer acceptance and release platforms separate"
+    },
+    {
+      "frozen_path": "src/operations.rs",
+      "frozen_line": 1310,
+      "frozen_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "state": "bounded_common_decode_qualified",
+      "evidence": "persisted_error_contract::grouped_decision_payloads + grouped_message_queue_payloads + grouped_private_credentials",
+      "scope": "Common stored decode error/accepted-shape classification only; producer acceptance and release platforms separate"
+    },
+    {
+      "frozen_path": "src/operations.rs",
+      "frozen_line": 1405,
+      "frozen_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "state": "bounded_common_decode_qualified",
+      "evidence": "persisted_error_contract::grouped_decision_payloads + grouped_message_queue_payloads + grouped_private_credentials",
+      "scope": "Common stored decode error/accepted-shape classification only; producer acceptance and release platforms separate"
+    },
+    {
+      "frozen_path": "src/operations.rs",
+      "frozen_line": 1495,
+      "frozen_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "state": "bounded_common_decode_qualified",
+      "evidence": "persisted_error_contract::grouped_decision_payloads + grouped_message_queue_payloads + grouped_private_credentials",
+      "scope": "Common stored decode error/accepted-shape classification only; producer acceptance and release platforms separate"
+    },
+    {
+      "frozen_path": "src/operations.rs",
+      "frozen_line": 1661,
+      "frozen_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "state": "bounded_common_decode_qualified",
+      "evidence": "persisted_error_contract::grouped_decision_payloads + grouped_message_queue_payloads + grouped_private_credentials",
+      "scope": "Common stored decode error/accepted-shape classification only; producer acceptance and release platforms separate"
+    },
+    {
+      "frozen_path": "src/operations.rs",
+      "frozen_line": 1675,
+      "frozen_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "state": "bounded_common_decode_qualified",
+      "evidence": "persisted_error_contract::grouped_decision_payloads + grouped_message_queue_payloads + grouped_private_credentials",
+      "scope": "Common stored decode error/accepted-shape classification only; producer acceptance and release platforms separate"
+    },
+    {
+      "frozen_path": "src/output.rs",
+      "frozen_line": 671,
+      "frozen_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "state": "bounded_common_decode_qualified",
+      "evidence": "persisted_error_contract::grouped_private_execution_trust + grouped_registry_pack_output_and_helper",
+      "scope": "Common stored decode error/accepted-shape classification only; producer acceptance and release platforms separate"
+    },
+    {
+      "frozen_path": "src/output.rs",
+      "frozen_line": 1015,
+      "frozen_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "state": "bounded_common_decode_qualified",
+      "evidence": "persisted_error_contract::grouped_private_execution_trust + grouped_registry_pack_output_and_helper",
+      "scope": "Common stored decode error/accepted-shape classification only; producer acceptance and release platforms separate"
+    },
+    {
+      "frozen_path": "src/pack.rs",
+      "frozen_line": 457,
+      "frozen_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "state": "bounded_common_decode_qualified",
+      "evidence": "persisted_error_contract::grouped_registry_pack_output_and_helper",
+      "scope": "Common stored decode error/accepted-shape classification only; producer acceptance and release platforms separate"
+    },
+    {
+      "frozen_path": "src/project.rs",
+      "frozen_line": 733,
+      "frozen_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "state": "bounded_common_decode_qualified",
+      "evidence": "persisted_error_contract::grouped_paired_index_cache + grouped_registry_pack_output_and_helper",
+      "scope": "Common stored decode error/accepted-shape classification only; producer acceptance and release platforms separate"
+    },
+    {
+      "frozen_path": "src/quota.rs",
+      "frozen_line": 408,
+      "frozen_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "state": "bounded_common_decode_qualified",
+      "evidence": "persisted_error_contract::grouped_quota_receipt_and_prior_observation + grouped_quota_observation",
+      "scope": "Common stored decode error/accepted-shape classification only; producer acceptance and release platforms separate"
+    },
+    {
+      "frozen_path": "src/quota.rs",
+      "frozen_line": 447,
+      "frozen_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "state": "bounded_common_decode_qualified",
+      "evidence": "persisted_error_contract::grouped_quota_receipt_and_prior_observation + grouped_quota_observation",
+      "scope": "Common stored decode error/accepted-shape classification only; producer acceptance and release platforms separate"
+    },
+    {
+      "frozen_path": "src/quota.rs",
+      "frozen_line": 480,
+      "frozen_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "state": "bounded_common_decode_qualified",
+      "evidence": "persisted_error_contract::grouped_quota_receipt_and_prior_observation + grouped_quota_observation",
+      "scope": "Common stored decode error/accepted-shape classification only; producer acceptance and release platforms separate"
+    },
+    {
+      "frozen_path": "src/quota.rs",
+      "frozen_line": 531,
+      "frozen_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "state": "bounded_common_decode_qualified",
+      "evidence": "persisted_error_contract::grouped_quota_receipt_and_prior_observation + grouped_quota_observation",
+      "scope": "Common stored decode error/accepted-shape classification only; producer acceptance and release platforms separate"
+    },
+    {
+      "frozen_path": "src/runner.rs",
+      "frozen_line": 579,
+      "frozen_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "state": "bounded_common_decode_qualified",
+      "evidence": "persisted_error_contract::grouped_runner_trust_and_task + grouped_job_and_helper + grouped_registry_pack_output_and_helper; runner::stored_slot_contract_tests",
+      "scope": "Common stored decode error/accepted-shape classification only; producer acceptance and release platforms separate"
+    },
+    {
+      "frozen_path": "src/runner.rs",
+      "frozen_line": 846,
+      "frozen_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "state": "bounded_common_decode_qualified",
+      "evidence": "persisted_error_contract::grouped_runner_trust_and_task + grouped_job_and_helper + grouped_registry_pack_output_and_helper; runner::stored_slot_contract_tests",
+      "scope": "Common stored decode error/accepted-shape classification only; producer acceptance and release platforms separate"
+    },
+    {
+      "frozen_path": "src/runner.rs",
+      "frozen_line": 876,
+      "frozen_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "state": "bounded_common_decode_qualified",
+      "evidence": "persisted_error_contract::grouped_runner_trust_and_task + grouped_job_and_helper + grouped_registry_pack_output_and_helper; runner::stored_slot_contract_tests",
+      "scope": "Common stored decode error/accepted-shape classification only; producer acceptance and release platforms separate"
+    },
+    {
+      "frozen_path": "src/runner.rs",
+      "frozen_line": 915,
+      "frozen_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "state": "bounded_common_decode_qualified",
+      "evidence": "persisted_error_contract::grouped_runner_trust_and_task + grouped_job_and_helper + grouped_registry_pack_output_and_helper; runner::stored_slot_contract_tests",
+      "scope": "Common stored decode error/accepted-shape classification only; producer acceptance and release platforms separate"
+    },
+    {
+      "frozen_path": "src/runner.rs",
+      "frozen_line": 975,
+      "frozen_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "state": "bounded_common_decode_qualified",
+      "evidence": "persisted_error_contract::grouped_runner_trust_and_task + grouped_job_and_helper + grouped_registry_pack_output_and_helper; runner::stored_slot_contract_tests",
+      "scope": "Common stored decode error/accepted-shape classification only; producer acceptance and release platforms separate"
+    },
+    {
+      "frozen_path": "src/runner.rs",
+      "frozen_line": 1431,
+      "frozen_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "state": "bounded_common_decode_qualified",
+      "evidence": "persisted_error_contract::grouped_runner_trust_and_task + grouped_job_and_helper + grouped_registry_pack_output_and_helper; runner::stored_slot_contract_tests",
+      "scope": "Common stored decode error/accepted-shape classification only; producer acceptance and release platforms separate"
+    },
+    {
+      "frozen_path": "src/runner.rs",
+      "frozen_line": 1458,
+      "frozen_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "state": "bounded_common_decode_qualified",
+      "evidence": "persisted_error_contract::grouped_runner_trust_and_task + grouped_job_and_helper + grouped_registry_pack_output_and_helper; runner::stored_slot_contract_tests",
+      "scope": "Common stored decode error/accepted-shape classification only; producer acceptance and release platforms separate"
+    },
+    {
+      "frozen_path": "src/runner.rs",
+      "frozen_line": 2189,
+      "frozen_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "state": "bounded_common_decode_qualified",
+      "evidence": "persisted_error_contract::grouped_runner_trust_and_task + grouped_job_and_helper + grouped_registry_pack_output_and_helper; runner::stored_slot_contract_tests",
+      "scope": "Common stored decode error/accepted-shape classification only; producer acceptance and release platforms separate"
+    },
+    {
+      "frozen_path": "src/runner.rs",
+      "frozen_line": 2362,
+      "frozen_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "state": "bounded_common_decode_qualified",
+      "evidence": "persisted_error_contract::grouped_runner_trust_and_task + grouped_job_and_helper + grouped_registry_pack_output_and_helper; runner::stored_slot_contract_tests",
+      "scope": "Common stored decode error/accepted-shape classification only; producer acceptance and release platforms separate"
+    },
+    {
+      "frozen_path": "src/runner.rs",
+      "frozen_line": 2373,
+      "frozen_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "state": "bounded_common_decode_qualified",
+      "evidence": "persisted_error_contract::grouped_runner_trust_and_task + grouped_job_and_helper + grouped_registry_pack_output_and_helper; runner::stored_slot_contract_tests",
+      "scope": "Common stored decode error/accepted-shape classification only; producer acceptance and release platforms separate"
+    },
+    {
+      "frozen_path": "src/runner.rs",
+      "frozen_line": 2410,
+      "frozen_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "state": "bounded_common_decode_qualified",
+      "evidence": "persisted_error_contract::grouped_runner_trust_and_task + grouped_job_and_helper + grouped_registry_pack_output_and_helper; runner::stored_slot_contract_tests",
+      "scope": "Common stored decode error/accepted-shape classification only; producer acceptance and release platforms separate"
+    },
+    {
+      "frozen_path": "src/schedule.rs",
+      "frozen_line": 333,
+      "frozen_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "state": "bounded_common_decode_qualified",
+      "evidence": "persisted_error_contract::grouped_schedule_stored_definition_and_receipt",
+      "scope": "Common stored decode error/accepted-shape classification only; producer acceptance and release platforms separate"
+    },
+    {
+      "frozen_path": "src/schedule.rs",
+      "frozen_line": 520,
+      "frozen_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "state": "runtime_remaining",
+      "evidence": null,
+      "scope": "Common stored decode error/accepted-shape classification only; producer acceptance and release platforms separate"
+    },
+    {
+      "frozen_path": "src/schedule.rs",
+      "frozen_line": 706,
+      "frozen_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "state": "runtime_remaining",
+      "evidence": null,
+      "scope": "Common stored decode error/accepted-shape classification only; producer acceptance and release platforms separate"
+    },
+    {
+      "frozen_path": "src/schedule.rs",
+      "frozen_line": 761,
+      "frozen_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "state": "runtime_remaining",
+      "evidence": null,
+      "scope": "Common stored decode error/accepted-shape classification only; producer acceptance and release platforms separate"
+    },
+    {
+      "frozen_path": "src/schedule.rs",
+      "frozen_line": 1129,
+      "frozen_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "state": "bounded_common_decode_qualified",
+      "evidence": "persisted_error_contract::grouped_schedule_stored_definition_and_receipt",
+      "scope": "Common stored decode error/accepted-shape classification only; producer acceptance and release platforms separate"
+    },
+    {
+      "frozen_path": "src/schedule.rs",
+      "frozen_line": 1893,
+      "frozen_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "state": "runtime_remaining",
+      "evidence": null,
+      "scope": "Common stored decode error/accepted-shape classification only; producer acceptance and release platforms separate"
+    },
+    {
+      "frozen_path": "src/schedule.rs",
+      "frozen_line": 2021,
+      "frozen_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "state": "runtime_remaining",
+      "evidence": null,
+      "scope": "Common stored decode error/accepted-shape classification only; producer acceptance and release platforms separate"
+    },
+    {
+      "frozen_path": "src/schedule.rs",
+      "frozen_line": 2492,
+      "frozen_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "state": "runtime_remaining",
+      "evidence": null,
+      "scope": "Common stored decode error/accepted-shape classification only; producer acceptance and release platforms separate"
+    },
+    {
+      "frozen_path": "src/session.rs",
+      "frozen_line": 379,
+      "frozen_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "state": "bounded_common_decode_qualified",
+      "evidence": "persisted_error_contract::grouped_context_selection_and_capsule",
+      "scope": "Common stored decode error/accepted-shape classification only; producer acceptance and release platforms separate"
+    },
+    {
+      "frozen_path": "src/session.rs",
+      "frozen_line": 515,
+      "frozen_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "state": "bounded_common_decode_qualified",
+      "evidence": "persisted_error_contract::grouped_context_selection_and_capsule",
+      "scope": "Common stored decode error/accepted-shape classification only; producer acceptance and release platforms separate"
+    },
+    {
+      "frozen_path": "src/storage.rs",
+      "frozen_line": 146,
+      "frozen_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "state": "bounded_common_decode_qualified",
+      "evidence": "persisted_error_contract::grouped_paired_index_cache + grouped_index_metadata",
+      "scope": "Common stored decode error/accepted-shape classification only; producer acceptance and release platforms separate"
+    },
+    {
+      "frozen_path": "src/storage.rs",
+      "frozen_line": 255,
+      "frozen_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "state": "bounded_common_decode_qualified",
+      "evidence": "persisted_error_contract::grouped_paired_index_cache + grouped_index_metadata",
+      "scope": "Common stored decode error/accepted-shape classification only; producer acceptance and release platforms separate"
+    },
+    {
+      "frozen_path": "src/storage.rs",
+      "frozen_line": 410,
+      "frozen_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "state": "bounded_common_decode_qualified",
+      "evidence": "persisted_error_contract::grouped_paired_index_cache + grouped_index_metadata",
+      "scope": "Common stored decode error/accepted-shape classification only; producer acceptance and release platforms separate"
+    },
+    {
+      "frozen_path": "src/storage.rs",
+      "frozen_line": 437,
+      "frozen_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "state": "bounded_common_decode_qualified",
+      "evidence": "persisted_error_contract::grouped_paired_index_cache + grouped_index_metadata",
+      "scope": "Common stored decode error/accepted-shape classification only; producer acceptance and release platforms separate"
+    },
+    {
+      "frozen_path": "src/work.rs",
+      "frozen_line": 515,
+      "frozen_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "state": "bounded_common_decode_qualified",
+      "evidence": "persisted_error_contract existing Task/receipt/Activity and grouped_private_credentials; pctx01-task-storage-verification.json",
+      "scope": "Common stored decode error/accepted-shape classification only; producer acceptance and release platforms separate"
+    },
+    {
+      "frozen_path": "src/work.rs",
+      "frozen_line": 622,
+      "frozen_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "state": "bounded_common_decode_qualified",
+      "evidence": "persisted_error_contract existing Task/receipt/Activity and grouped_private_credentials; pctx01-task-storage-verification.json",
+      "scope": "Common stored decode error/accepted-shape classification only; producer acceptance and release platforms separate"
+    },
+    {
+      "frozen_path": "src/work.rs",
+      "frozen_line": 1688,
+      "frozen_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "state": "bounded_common_decode_qualified",
+      "evidence": "persisted_error_contract existing Task/receipt/Activity and grouped_private_credentials; pctx01-task-storage-verification.json",
+      "scope": "Common stored decode error/accepted-shape classification only; producer acceptance and release platforms separate"
+    }
+  ],
+  "remaining_frozen_sites": [
+    {
+      "path": "src/schedule.rs",
+      "line": 520
+    },
+    {
+      "path": "src/schedule.rs",
+      "line": 706
+    },
+    {
+      "path": "src/schedule.rs",
+      "line": 761
+    },
+    {
+      "path": "src/schedule.rs",
+      "line": 1893
+    },
+    {
+      "path": "src/schedule.rs",
+      "line": 2021
+    },
+    {
+      "path": "src/schedule.rs",
+      "line": 2492
+    }
+  ],
+  "next_one_batch": "Schedule stored mutation definition, decision action, reused occurrence, installation metadata, bridge binding, recovery result; syntax/accepted-shape/refusal-priority/intent-effect matrix only. No schedule algorithm expansion or Actions.",
+  "four_existing_proof_categories": {
+    "private_authority_metadata": "bounded local qualified",
+    "replay_and_prior_observation": "bounded local qualified",
+    "job_helper_schedule_metadata": "job/helper bounded qualified; six Schedule sites remain",
+    "paired_decoder_branches": "cache/checkpoint Get and registry accepted shape qualified; Schedule mutation decoder remains"
+  },
+  "ownership": "PCTX01 owns common error truth; independent scheduling correctness PCTX36 and process recovery/containment retain existing owners. Native callback faults G05-D02 and release platform G09 remain separate",
+  "known_dispositions": [
+    "Registry defaults accept {} and []; no root leads NOT_INITIALIZED6; null invalid typed value storage7",
+    "Credentials use Value; null/{} remain accepted JSON then capability mismatch5, not schema expansion",
+    "Runner plan missing5/stale9 remain blocked plan reasons; storage/timeout7 now propagate",
+    "Schedule/Index SQLite physical DB/WAL/SHM changes excluded only where all SQL/schema and non-DB content is compared",
+    "Slot acknowledgement publishes intent before decode; truthful intent retained, no universal rollback claim",
+    "Other43 frozen sites caller/internal/test/external/failclosed/explicit boundaries retain classification; no manufactured corruption obligation"
+  ]
+}

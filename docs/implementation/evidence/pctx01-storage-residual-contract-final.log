@@ -1,0 +1,29 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.56s
+     Running tests/persisted_error_contract.rs (target/debug/deps/persisted_error_contract-257962e0e1215410)
+
+running 21 tests
+test caller_json_syntax_remains_input_error_without_storage_effects ... ok
+test corrupted_activity_syntax_is_storage_failure_on_every_existing_transport ... ok
+test grouped_index_metadata_and_checksum_matched_checkpoint_json_are_storage_errors ... ok
+test grouped_decision_payloads_preserve_caller_errors_and_safe_storage_refusal ... ok
+test grouped_broker_saved_snapshot_preserves_parser_priority ... ok
+test grouped_paired_index_cache_checkpoint_get_and_registry_shape_decoders ... ok
+test grouped_private_execution_trust_refuses_corruption_before_spawn ... ok
+test grouped_job_and_helper_consumers_refuse_corrupt_metadata_without_releasing_slots ... ok
+test grouped_context_selection_and_capsule_keep_identity_conflict_before_storage_decode ... ok
+test grouped_message_queue_payloads_and_receipts_keep_recipient_and_replay_priority ... ok
+test grouped_registry_pack_output_and_helper_metadata_refuse_without_publication ... ok
+test grouped_quota_observation_syntax_and_shape_are_storage_errors ... ok
+test grouped_private_credentials_keep_missing_mismatch_and_revoked_priority ... ok
+test grouped_quota_receipt_and_prior_observation_decoders_preserve_conflict ... ok
+test stored_create_receipt_preserves_replay_conflict_and_original_expiry ... ok
+test grouped_schedule_stored_definition_and_receipt_preserve_replay_conflict ... ok
+test grouped_runner_trust_and_task_decode_do_not_mask_storage_failure_as_owner_permission ... ok
+test stored_report_receipt_preserves_exact_replay_before_lease_and_hash_conflict_before_decode ... ok
+test stored_task_fields_refuse_corruption_without_mutating_or_changing_input_errors ... ok
+test valid_stored_json_values_and_later_page_failure_preserve_events_and_cursors ... ok
+test busy_admission_is_retryable_but_original_request_expiry_is_not ... ok
+
+test result: ok. 21 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 10.89s
+

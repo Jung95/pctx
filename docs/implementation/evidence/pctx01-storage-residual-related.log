@@ -1,0 +1,99 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.27s
+     Running tests/filters.rs (target/debug/deps/filters-9e3df5656f93ef1c)
+
+running 8 tests
+test strict_keys_operations_and_regex_no_code_execution ... ok
+test structured_fields_grouping_and_excerpt_keep_protected_metadata ... ok
+test protect_beats_drop_dedup_keeps_occurrences_ranges_and_no_pass_claim ... ok
+test secrets_cr_and_unicode_are_safe_and_protected_survives_excerpt ... ok
+test changed_fixture_cannot_activate_old_report_and_bounds_are_explicit ... ok
+test stored_filter_authority_corruption_keeps_hash_priority_and_cannot_publish_binding ... ok
+test saved_output_custom_render_preserves_observed_failure_without_rerun ... ok
+test full_fixture_activation_hash_invalidation_and_exact_match_ambiguity ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.47s
+
+     Running tests/persisted_error_contract.rs (target/debug/deps/persisted_error_contract-257962e0e1215410)
+
+running 21 tests
+test caller_json_syntax_remains_input_error_without_storage_effects ... ok
+test grouped_paired_index_cache_checkpoint_get_and_registry_shape_decoders ... FAILED
+test corrupted_activity_syntax_is_storage_failure_on_every_existing_transport ... ok
+test grouped_decision_payloads_preserve_caller_errors_and_safe_storage_refusal ... ok
+test grouped_index_metadata_and_checksum_matched_checkpoint_json_are_storage_errors ... ok
+test grouped_broker_saved_snapshot_preserves_parser_priority ... ok
+test grouped_private_execution_trust_refuses_corruption_before_spawn ... FAILED
+test grouped_job_and_helper_consumers_refuse_corrupt_metadata_without_releasing_slots ... ok
+test grouped_quota_observation_syntax_and_shape_are_storage_errors ... ok
+test grouped_context_selection_and_capsule_keep_identity_conflict_before_storage_decode ... ok
+test grouped_registry_pack_output_and_helper_metadata_refuse_without_publication ... ok
+test grouped_quota_receipt_and_prior_observation_decoders_preserve_conflict ... ok
+test grouped_message_queue_payloads_and_receipts_keep_recipient_and_replay_priority ... ok
+test grouped_private_credentials_keep_missing_mismatch_and_revoked_priority ... ok
+test grouped_runner_trust_and_task_decode_do_not_mask_storage_failure_as_owner_permission ... ok
+test grouped_schedule_stored_definition_and_receipt_preserve_replay_conflict ... ok
+test stored_create_receipt_preserves_replay_conflict_and_original_expiry ... ok
+test stored_report_receipt_preserves_exact_replay_before_lease_and_hash_conflict_before_decode ... ok
+test stored_task_fields_refuse_corruption_without_mutating_or_changing_input_errors ... ok
+test valid_stored_json_values_and_later_page_failure_preserve_events_and_cursors ... ok
+test busy_admission_is_retryable_but_original_request_expiry_is_not ... ok
+
+failures:
+
+---- grouped_paired_index_cache_checkpoint_get_and_registry_shape_decoders stdout ----
+
+thread 'grouped_paired_index_cache_checkpoint_get_and_registry_shape_decoders' (9104109) panicked at tests/persisted_error_contract.rs:1646:51:
+called `Option::unwrap()` on a `None` value
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- grouped_private_execution_trust_refuses_corruption_before_spawn stdout ----
+
+thread 'grouped_private_execution_trust_refuses_corruption_before_spawn' (9104190) panicked at tests/persisted_error_contract.rs:409:13:
+assertion failed: value["data"].is_null()
+
+
+failures:
+    grouped_paired_index_cache_checkpoint_get_and_registry_shape_decoders
+    grouped_private_execution_trust_refuses_corruption_before_spawn
+
+test result: FAILED. 19 passed; 2 failed; 0 ignored; 0 measured; 0 filtered out; finished in 10.96s
+
+error: test failed, to rerun pass `--test persisted_error_contract`
+     Running tests/runner.rs (target/debug/deps/runner-262d46ab6960599b)
+
+running 29 tests
+test explicit_script_input_change_requires_new_trust ... ok
+test cloud_helper_is_only_durable_intent ... ok
+test changed_script_and_agent_forged_trust_are_denied ... ok
+test check_plan_with_finite_budget_inspects_registered_auxiliary_workspace_without_launch ... ok
+test legacy_lock_fixture ... ok
+test finite_auxiliary_plan_refuses_fifo_metadata_without_waiting_or_launching ... ok
+test check_alias_preserves_nested_timeout_processing_error ... ok
+test inherited_canonical_descriptor_retains_lock_after_invalid_proof_and_parent_close ... ok
+test legacy_bridge_absence_prevents_execution ... ok
+test check_capture_partial_is_not_wrapper_success_in_either_route ... ok
+test linked_slot_child_directory_cannot_redirect_state ... ok
+test native_pass_is_invalidated_by_external_executable_change_with_sources_unchanged ... ok
+test observed_failed_check_is_distinct_from_processing_failure ... ok
+test parent_exit_does_not_release_living_child ... ok
+test profile_change_during_execution_is_stale_at_report_recording ... ok
+test local_helper_preserves_nested_timeout_and_partial_capture ... ok
+test synthetic_low_memory_defers_heavy_admission ... ok
+test native_environment_change_or_missing_profile_invalidates_existing_pass ... ok
+test cross_project_heavy_capacity_is_one ... ok
+test trusted_typed_check_is_real_evidence ... ok
+test user_created_host_state_symlink_is_denied ... ok
+test timeout_is_observed_without_success_evidence ... ok
+test local_auxiliary_provider_needs_registered_linked_workspace_and_capacity ... ok
+test unknown_memory_requires_disclosed_exact_owner_override ... ok
+test source_mutation_during_check_is_stale ... ok
+test unknown_and_zero_tests_do_not_pass ... ok
+test canonical_mutex_survives_main_parent_death ... ok
+test killed_guardian_causes_negative_child_observation ... ok
+test canonical_legacy_and_pctx_exclude_each_other ... ok
+
+test result: ok. 29 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 25.27s
+
+error: 1 target failed:
+    `--test persisted_error_contract`

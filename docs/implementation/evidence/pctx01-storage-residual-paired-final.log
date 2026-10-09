@@ -1,0 +1,26 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.57s
+     Running tests/persisted_error_contract.rs (target/debug/deps/persisted_error_contract-257962e0e1215410)
+
+running 1 test
+test grouped_paired_index_cache_checkpoint_get_and_registry_shape_decoders ... FAILED
+
+failures:
+
+---- grouped_paired_index_cache_checkpoint_get_and_registry_shape_decoders stdout ----
+
+thread 'grouped_paired_index_cache_checkpoint_get_and_registry_shape_decoders' (9108324) panicked at tests/persisted_error_contract.rs:1125:5:
+assertion `left == right` failed
+  left: Some(7)
+ right: Some(6)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    grouped_paired_index_cache_checkpoint_get_and_registry_shape_decoders
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 20 filtered out; finished in 0.76s
+
+error: test failed, to rerun pass `--test persisted_error_contract`
+error: 1 target failed:
+    `--test persisted_error_contract`

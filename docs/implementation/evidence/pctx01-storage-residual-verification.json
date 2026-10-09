@@ -1,0 +1,162 @@
+{
+  "task": "PCTX01",
+  "item": "PCTX01-G05-D04",
+  "status": "open; remaining six frozen Schedule sites",
+  "baseline_revision": "696b4212b395445bf00329716d9716eec27f47a7",
+  "files_sha256": {
+    "src/runner.rs": "600aaee24adb4cc7169bd17909a181bf73fabe4a19902a0387a7e507d80fd708",
+    "tests/persisted_error_contract.rs": "983ab6926cbb01f13dd606778ce022e10d16b1a759d3fc54e0796bda959c95d6",
+    "tests/adapter_errors.rs": "e096d4cc1bbd16e83511fcb3cde5f18e4326525c7e8bc0bc1bb182eb0e186f21",
+    "tests/filters.rs": "1c7c381647f3b24056c97c9ec04454e01c43bf5804c2532953925a9d78ae600a"
+  },
+  "binary_sha256": "1817d45e10e1a71ee966407b964dd461040fad6330a8c2aa176929ca3c9acb29",
+  "environment": {
+    "host": "macOS-26.7.1-arm64-arm-64bit-Mach-O",
+    "architecture": "arm64",
+    "rust": "1.99.0",
+    "standard_sdk": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk"
+  },
+  "source_scope": "All product behavior tests share the final planned() correction. Internal slot test module appended after integration tests, excluded from product builds; no further runtime edits. Final static and unit compile current full source.",
+  "runner_sha256_before_test_only_module": "8bc349b5d2f8fd9f1088d8fba79e1726352632387bb1b8c35fe36d4ca839d506",
+  "results": [
+    {
+      "job": "63512",
+      "exit": 101,
+      "log": "pctx01-storage-residual-initial.log",
+      "outer_passed": 7,
+      "outer_failed": 3,
+      "scope_or_failure": "Fixture preparation: unsupported notify type; missing task/session usage attribution; unprepared operations schema"
+    },
+    {
+      "job": "57861",
+      "exit": 0,
+      "log": "pctx01-storage-residual-prepared.log",
+      "outer_passed": 10,
+      "outer_failed": 0,
+      "scope_or_failure": "Prepared attribution/message/operations schema; prior failures retained"
+    },
+    {
+      "job": "91410",
+      "exit": 101,
+      "log": "pctx01-storage-residual-trust-initial.log",
+      "outer_passed": 11,
+      "outer_failed": 2,
+      "scope_or_failure": "One actual product failure: check-plan swallowed DB_CORRUPT; one shell manual-trust fixture admission refusal"
+    },
+    {
+      "job": "85178",
+      "exit": 101,
+      "log": "pctx01-storage-residual-trust-corrected.log",
+      "outer_passed": 12,
+      "outer_failed": 1,
+      "scope_or_failure": "Runner product fix passes; multiline trust-add fixture still used forbidden manual shell"
+    },
+    {
+      "job": "48201",
+      "exit": 101,
+      "log": "pctx01-storage-residual-related.log",
+      "outer_passed": 56,
+      "outer_failed": 2,
+      "scope_or_failure": "Filters8 and runner29 passed; persisted19/2: wrong checkpoint field and Run error truth data wrongly assumed null"
+    },
+    {
+      "job": "88175",
+      "exit": 101,
+      "log": "pctx01-storage-residual-final.log",
+      "outer_passed": 29,
+      "outer_failed": 2,
+      "scope_or_failure": "Adapter lock first creation and index physical SQLite-byte premise; valid default registry mistaken for corrupt typed shape"
+    },
+    {
+      "job": "7752",
+      "exit": 101,
+      "log": "pctx01-storage-residual-final-prepared.log",
+      "outer_passed": 30,
+      "outer_failed": 1,
+      "scope_or_failure": "Adapter10 passed; registry [] accepted as default6 instead of test expected7"
+    },
+    {
+      "job": "52687",
+      "exit": 101,
+      "log": "pctx01-storage-residual-paired-final.log",
+      "outer_passed": 0,
+      "outer_failed": 1,
+      "scope_or_failure": "Registry null invalid7 instead of test expected6; SDKROOT accidentally command PATH, no qualification from this run"
+    },
+    {
+      "job": "85228",
+      "exit": 0,
+      "log": "pctx01-storage-residual-contract-final.log",
+      "outer_passed": 21,
+      "outer_failed": 0,
+      "scope_or_failure": "Complete current persisted error contract target; standard SDK environment"
+    },
+    {
+      "job": "47855",
+      "exit": 0,
+      "log": "pctx01-storage-residual-slot-final.log",
+      "outer_passed": 1,
+      "outer_failed": 0,
+      "scope_or_failure": "Library test, six internal phase\u00d7syntax/shape cases; no child/callback platform claim"
+    },
+    {
+      "job": "38012",
+      "exit": 0,
+      "log": "pctx01-storage-residual-static-final.log",
+      "outer_passed": null,
+      "outer_failed": null,
+      "scope_or_failure": "All-target Clippy -D warnings"
+    },
+    {
+      "job": "format",
+      "exit": 0,
+      "log": "pctx01-storage-residual-format-final.log",
+      "outer_passed": null,
+      "outer_failed": null,
+      "scope_or_failure": "cargo fmt --all -- --check"
+    }
+  ],
+  "logs_sha256": {
+    "pctx01-storage-residual-contract-final.log": "f3cbd5452ab08042e75c01208a040f94381c8a26e2ec56d965ea27c87bbdb1d3",
+    "pctx01-storage-residual-final-prepared.log": "9483c30aa7a360748e3c5b8256e95fbbad8e2d5354e59af8f0c14204dbfe3fe1",
+    "pctx01-storage-residual-final.log": "8ec87ec05f27c20aa0fcdaf75631fbf3d00f3e4eaffe4b6966a50a89a485caae",
+    "pctx01-storage-residual-format-final.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "pctx01-storage-residual-initial.log": "bfdb7fb1cbd531df1597a7e15e64606117a8bb9ad4f5d4ce1f1586163063f820",
+    "pctx01-storage-residual-paired-final.log": "9672a39497127d0f36f73211fc9259d0e9e282bd0343e2c1226be5e486d04148",
+    "pctx01-storage-residual-prepared.log": "e84027930a0f3d76221f7a1d1e674d722dc35657022c232ad216d03a6715093a",
+    "pctx01-storage-residual-related.log": "f06121a7a5e0eaa774ff4e02312c87bafa0527399f1d95acbceb4811e74a7e19",
+    "pctx01-storage-residual-slot-final.log": "6302838c34ab1ad04ac8849f0fee3aaf60032113f9d65bd27c15afa3f9f3c539",
+    "pctx01-storage-residual-static-final.log": "9a0defca9ab6222ab23ffe63cde25b720fd19c6fe3e039f472cd4457e5bbb14e",
+    "pctx01-storage-residual-trust-corrected.log": "da9dc187232a6bf42d3692d439d3d4282311c6c2865e5e74e000725d403cc7d4",
+    "pctx01-storage-residual-trust-initial.log": "ab79024ec4d3ba380a664124d11bd8e99bf6eb81b2624301a69aaeb9f3f24088"
+  },
+  "proof_register": "pctx01-storage-residual-reconciliation.json",
+  "initial_failures_retained": true,
+  "runtime_change": "check-plan propagates error.exit7 from trust storage rather than reporting successful owner_binding_required. Missing5/stale9 remain blocked plan reasons; no capability expansion.",
+  "bounded_proof": [
+    "Actual CLI private capability corruption7 without token disclosure; valid Value mismatch5; missing5 and expired/revoked9 priority",
+    "Actual CLI operations queue/inbox/ack and exact/different-request receipt priority; prior JSON-extracted typed message corruption7",
+    "Actual CLI quota exact receipt/different-request9, typed prior request/cumulative7",
+    "Actual CLI trust/run corruption7 retains spawnedfalse; typed task and job/helper consumers refuse without releasing slots",
+    "Direct filter binding/report7 with integrity9 priority; checksum-matched adapter plan7",
+    "Paired cache/snapshot and checkpoint Get/List decoders, typed registry null7 while existing {} and [] remain NOT_INITIALIZED6",
+    "Direct internal slot three-phase classification with truthful pre-decode ack publication and release refusal ownership"
+  ],
+  "limits": [
+    "Not entire PCTX01, G05-D04 or whole platform qualification",
+    "Six frozen Schedule sites520/706/761/1893/2021/2492 remain runtime coverage",
+    "Index physical DB/WAL/SHM bytes not compared; all SQL/schema cells and non-index files compared",
+    "Internal slot unit proof does not replace G05-D02 real post-spawn callback faults",
+    "No Actions, new full suite, new required-platform qualification, or source-independent schedule concurrency resolution"
+  ],
+  "independent_review": {
+    "agent": "/root/work_control",
+    "scoped_blocker": false,
+    "edits_or_tests": false,
+    "final_review": "Registry accepted-shape and six remaining Schedule sites reconciled; slot phases observe signal0 only and retain truthful intent"
+  },
+  "fixed_detail_closed": 23,
+  "fixed_detail_denominator": 40,
+  "whole_gates_closed": 0,
+  "whole_gates_denominator": 10
+}
