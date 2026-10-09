@@ -17,47 +17,50 @@ then next official task's finite list within the same Goal.
 
 ## Current source and verification
 
-Current **G05-D06 is closed as bounded local shared exit qualification**.
-The [exit matrix](evidence/pctx01-exit-matrix-verification.json) maps every fixed
-category0/2/3/4/5/6/7/8/9/10/130 plus the Run child exception to actual authored
-controls, source hashes and current native logs. Native matrix84, cancellation
-combinations5 and capacity1 PASS (**90 focused tests**). Format/locked all-target
-Clippy -D warnings PASS; independent review found no remaining local classification
-blocker. Broader producer acceptance and native platform integration are separate.
+Only **PCTX01** is active, lowest incomplete official ID/no prerequisite. The
+fixed [closure plan](tasks/PCTX01-closure-plan.md) and 40-item register remain
+**28/40** locally closed, **0/10** whole gates; 140 leaves/172 help paths/12
+historical R groups and required platforms are unchanged.
 
-Ctrl-C proof includes held stdin, NDJSON watch, owned finite queries, both Run exit
-policies, CheckRun/check alias, proven-unspawned SQL contention, local Helper and
-canonical guardian. A processing/publication error7 remains higher priority than
-wrapper cancellation130, while cancelled termination and actual native SIGKILL
-remain in execution data. Registered CheckRun now records non-gating supervision
-failure for known unpublished output instead of rereading an absent artifact and
-losing observed child truth. The initial3PASS2FAIL is retained alongside repairs;
-this is not a retry-only success claim or a passing whole suite.
+Current **PCTX01-G05-D02 remains open**. The registered spawn-observer refusal
+now flows through owned capture/reaping/publication rather than returning an
+outer error that discards native truth. The expanded native callback control
+covers spawn and monitor refusal, already-completed native exit23, and actual
+artifact-store lock contention combined with spawn refusal. It checks both
+available streams, direct-child reap, artifact/durable receipt native outcome,
+and exactly one invocation. Initial defect reproduction is retained separately.
+Evidence: [callback fault manifest](evidence/pctx01-postspawn-callback-verification.json).
+97 focused regressions PASS, plus the final reviewed four-case native control PASS;
+locked all-target Clippy -D warnings and format check PASS. The extra reviewed
+assertion is test-only; runtime source is unchanged from the 97-test run. These
+are not whole-suite or required-platform completion. All jobs are terminal.
 
-Helper's provider artifact is independently reread in its real workspace, without
-rerun. Caller-workspace metering still emits truthful OUTPUT_MEASUREMENT_UNRECORDED,
-delivery_written true/measurement_recorded unknown without replacing exit130.
-Actual metering routing remains inactive PCTX47 backlog; no mixed artifact contents,
-fabricated measurement or independent provider expansion is accepted.
+Independent read-only review grouped the remaining obligations within existing
+G05-D02: pipe setup, native wait observation, capture worker joins, job receipt
+publication, CheckRun backend-error cleanup, CheckRun completion, and Local Helper
+completion. No new condition IDs or denominator. Next exact action: implement
+and fault-test the pipe/wait/capture completion group, preserving known native
+status and surviving capture, explicit unknown ownership and incomplete streams;
+then qualify receipt/runner finalization before closing G05-D02. Other official
+tasks stay inactive; no next official task is selected.
 
-Detail **28/40**, whole gates **0/10**, unchanged140 leaves/172 help paths/12 Rgroups.
-The register's stale summary25 was reconciled against its authoritative27 item
-states, then this closure added one. No denominator or fixed-ID change. Original
-four macOS startup product failures and inactive PCTX36 Tick failure remain open.
-Required native macOS x86_64/Linux x86_64/Windows x86_64 integration is unverified;
-Windows cancellation source is not native console proof. No whole/platform rerun
-or Actions. All candidate test jobs are terminal.
+Prior **G05-D06 remains locally closed** with its source-bound
+[exit matrix](evidence/pctx01-exit-matrix-verification.json), 90 focused tests and
+static proof; this callback repair does not replace that historical evidence.
+Processing/publication failures retain precedence over cancellation while native
+termination remains independent. Helper caller-workspace metering routing remains
+inactive PCTX47 backlog with honest measurement-unknown diagnostics.
 
-Next exact action is **PCTX01-G05-D02**: finish existing native callback/postspawn
-fault controls with already-observed child/capture/artifact/no-rerun truth. Then
-complete the remaining frozen response, empty/control, phase/startup and integration
-conditions. PCTX01 remains the only active official task; no next official task is
-selected until every mandatory condition and required platform is qualified.
+Original four macOS 1s-budget startup product failures remain open, as does the
+separately owned inactive PCTX36 Tick failure. Required macOS x86_64, Linux x86_64
+and Windows x86_64 native integration remains unverified; Linux aarch64 is supporting
+evidence only. No Actions dispatch or whole/platform rerun. Normal main skip-ci
+commit/push is authorized; Node24 pins remain.
 
 ## Resume checks
 
-Inspect Git and exact live handles before resuming. The integrated cancellation candidate
-changes PCTX01 common code only. Read the cancellation evidence manifest for logs,
+Inspect Git and exact live handles before resuming. The integrated callback candidate
+changes PCTX01 common code only. Read the callback evidence manifest for logs,
 source hashes, failed attempts and qualification limits; do not reopen closed
 grammar/input/storage without changed code or an actual common defect.
 Normal main [skip ci] commit/push authorized; no Actions (3000min), Node24 retained.
@@ -67,7 +70,7 @@ Normal main [skip ci] commit/push authorized; no Actions (3000min), Node24 retai
 /Users/dev/PCTX, main, origin https://github.com/Jung95/pctx.git. macOS arm64,
 Rust1.99 in ignored .toolchain;10CPU/16GiB. No project AGENTS instruction. Parent
 owns all edits/builds/common schema/Cargo. At most one active read-only review
-agent; /root/work_control completed fixed-plan review, no edits/tests.
+agent; /root/work_control read-only callback/phase review, no edits/tests.
 One heavy build/test at a time; do not edit product/test/harness during live job.
 Poll exact handle; timeout is not terminal. Original specification stays local
 unchanged. All public docs English; user reports Korean.

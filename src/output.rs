@@ -1475,15 +1475,10 @@ fn run_inner(
                 None => Ok(()),
             }
         };
-        if let Err(e) = spawn_observation {
-            #[cfg(unix)]
-            unsafe {
-                libc::kill(-(pid as i32), libc::SIGKILL);
-            }
-            let _ = child.kill();
-            let _ = child.wait();
-            return Err(e);
-        }
+        // Observer refusal is a processing failure after admission. Keep the
+        // pipes and native child under supervision so cleanup still publishes
+        // already-observed output and exit truth, without executing again.
+        let mut monitor_error = spawn_observation.err();
         // If this parent dies, this durable receipt remains active_or_unknown; TTL never frees resources.
         let _ = atomic_write(
             &job_path,
@@ -1518,8 +1513,16 @@ fn run_inner(
         let err_thread = capture_framed(stderr, "stderr", stop.clone(), false);
         let start = Instant::now();
         let mut timed_out = false;
-        let mut monitor_error = None;
         let status = loop {
+            if monitor_error.is_some() {
+                // Ownership attachment failed: never invoke another callback,
+                // but reap the owned process group through the capture path.
+                unsafe {
+                    libc::kill(-(pid as i32), libc::SIGKILL);
+                }
+                let _ = child.kill();
+                break child.wait()?;
+            }
             if let Some(status) = child.try_wait()? {
                 break status;
             }
@@ -2011,7 +2014,12 @@ mod capture_tests {
                 }
             }
         }
-        for spawn_failure in [true, false] {
+        for (spawn_failure, completed_before_refusal, publication_failure) in [
+            (true, false, false),
+            (false, false, false),
+            (true, true, false),
+            (true, false, true),
+        ] {
             let temp = tempfile::tempdir().unwrap();
             let base = fs::canonicalize(temp.path()).unwrap();
             let root = base.join("project");
@@ -2042,11 +2050,29 @@ mod capture_tests {
             };
             fs::create_dir_all(&p.workspace_dir).unwrap();
             fs::create_dir_all(&p.control_dir).unwrap();
-            fs::write(
-                p.root.join("fixture.sh"),
-                "printf x >> invocation\nexec /bin/sleep 30\n",
-            )
-            .unwrap();
+            let end = if completed_before_refusal {
+                "exit 23"
+            } else {
+                "exec /bin/sleep 30"
+            };
+            fs::write(p.root.join("fixture.sh"), format!(
+                "printf 'observed stdout\n'\nprintf 'observed stderr\n' >&2\nprintf x >> invocation\n{end}\n"
+            )).unwrap();
+            let publication_lock = if publication_failure {
+                let top = p.data_dir.join("outputs");
+                private_dir(&top).unwrap();
+                let lock = fs::OpenOptions::new()
+                    .create(true)
+                    .truncate(false)
+                    .read(true)
+                    .write(true)
+                    .open(top.join("store.lock"))
+                    .unwrap();
+                fs2::FileExt::lock_exclusive(&lock).unwrap();
+                Some(lock)
+            } else {
+                None
+            };
             let r = RunRequest {
                 task_id: None,
                 session: None,
@@ -2081,6 +2107,28 @@ mod capture_tests {
                         }
                         std::thread::sleep(Duration::from_millis(1));
                     }
+                    if completed_before_refusal {
+                        // Observe actual native exit without consuming the supervisor's wait status.
+                        loop {
+                            let mut info: libc::siginfo_t = unsafe { std::mem::zeroed() };
+                            assert_eq!(
+                                unsafe {
+                                    libc::waitid(
+                                        libc::P_PID,
+                                        native_pid,
+                                        &mut info,
+                                        libc::WEXITED | libc::WNOHANG | libc::WNOWAIT,
+                                    )
+                                },
+                                0
+                            );
+                            if unsafe { info.si_pid() } == native_pid as i32 {
+                                break;
+                            }
+                            assert!(Instant::now() < end, "Fixture did not exit");
+                            std::thread::sleep(Duration::from_millis(1));
+                        }
+                    }
                     if spawn_failure {
                         Err(err("IO_ERROR", "Spawn observer publication refused", 7))
                     } else {
@@ -2104,23 +2152,90 @@ mod capture_tests {
                 Some(libc::ECHILD)
             );
             assert_eq!(fs::read(p.root.join("invocation")).unwrap(), b"x");
-            if spawn_failure {
-                let error = result.unwrap_err();
-                assert_eq!(error.code, "IO_ERROR");
-                assert_eq!(error.exit, 7);
-                assert_eq!(polls.get(), 0);
+            let data = result.unwrap();
+            assert_eq!(data["spawned"], true);
+            assert_eq!(
+                data["termination"],
+                if completed_before_refusal {
+                    "exited"
+                } else {
+                    "signaled"
+                }
+            );
+            if completed_before_refusal {
+                assert_eq!(data["child_exit_code"], 23);
+                assert!(data["signal"].is_null());
             } else {
-                let data = result.unwrap();
-                assert_eq!(data["spawned"], true);
-                assert_eq!(data["termination"], "signaled");
                 assert_eq!(data["signal"], libc::SIGKILL);
                 assert!(data["child_exit_code"].is_null());
-                let error = execution_error(&data).unwrap();
-                assert_eq!(error.code, "CONFIG_CHANGED");
-                assert_eq!(error.exit, 9);
-                assert_eq!(error.message, "Monitor binding changed");
-                assert_eq!(polls.get(), 1);
             }
+            let error = execution_error(&data).unwrap();
+            assert_eq!(
+                error.code,
+                if publication_failure {
+                    "RESOURCE_BUSY"
+                } else if spawn_failure {
+                    "IO_ERROR"
+                } else {
+                    "CONFIG_CHANGED"
+                }
+            );
+            assert_eq!(error.exit, if spawn_failure { 7 } else { 9 });
+            assert_eq!(polls.get(), if spawn_failure { 0 } else { 1 });
+            assert_eq!(data["capture_complete"], true);
+            for stream in ["stdout", "stderr"] {
+                assert!(
+                    data["records"]
+                        .as_array()
+                        .unwrap()
+                        .iter()
+                        .any(|record| record["stream"] == stream
+                            && record["text"] == format!("observed {stream}"))
+                );
+            }
+            let output_id = data["output_id"].as_str().unwrap();
+            if publication_failure {
+                assert_eq!(data["raw_available"], false);
+                assert_eq!(load(&p, output_id).err().unwrap().code, "OUTPUT_EXPIRED");
+            } else {
+                let artifact = load(&p, output_id).unwrap();
+                assert_eq!(
+                    artifact.child_exit_code,
+                    if completed_before_refusal {
+                        Some(23)
+                    } else {
+                        None
+                    }
+                );
+                assert_eq!(
+                    artifact.signal,
+                    if completed_before_refusal {
+                        None
+                    } else {
+                        Some(libc::SIGKILL)
+                    }
+                );
+                assert_eq!(artifact.pctx_error.as_deref(), Some(error.code.as_str()));
+                assert!(artifact.capture_complete);
+                for stream in ["stdout", "stderr"] {
+                    assert!(artifact.records.iter().any(|record| record.stream == stream
+                        && record.text == format!("observed {stream}")));
+                }
+            }
+            let receipt: Value = serde_json::from_slice(
+                &fs::read(
+                    p.data_dir
+                        .join("output-jobs")
+                        .join(format!("{}.json", data["execution_id"].as_str().unwrap())),
+                )
+                .unwrap(),
+            )
+            .unwrap();
+            assert_eq!(receipt["signal"], data["signal"]);
+            assert_eq!(receipt["child_exit_code"], data["child_exit_code"]);
+            assert_eq!(receipt["termination"], data["termination"]);
+            drop(publication_lock);
+            assert_eq!(fs::read(p.root.join("invocation")).unwrap(), b"x");
         }
     }
     struct Fragmented {

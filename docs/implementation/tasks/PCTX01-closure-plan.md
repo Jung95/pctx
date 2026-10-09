@@ -32,7 +32,7 @@ Current bounded detail closure: **28/40**; whole gates **0/10**.
 | PCTX01-G04-D03 | open | Complete success/partial/error envelope required fields and exact final bytes for all supported representation/destination classes; no interrupted JSON or fabricated omitted count | main.rs,domain.rs,render.rs | §8/14/38 | pctx01-run-final-bytes-verification.json, pctx01-representation-admission-verification.json |
 | PCTX01-G04-D04 | closed | Existing NDJSON and native-hook exceptions use their own framing and pre-effect unsupported-format refusal | main.rs,watch.rs,adapter.rs | §14/38 | pctx01-delivery-verification.json, pctx01-nested-execution-verification.json |
 | PCTX01-G05-D01 | closed | Actual child0/1/2/signal and prelaunch/not-spawned truth stay distinct from PCTX status on native Unix | main.rs,output.rs,query_process.rs | §14/38 | pctx01-run-exit-verification.json |
-| PCTX01-G05-D02 | open | Complete native callback/post-spawn fault injection while retaining already observed capture/publication child outcome, artifact and no-rerun truth | main.rs,output.rs,runner.rs | §14/38 | pctx01-nested-execution-verification.json, pctx01-run-exit-verification.json |
+| PCTX01-G05-D02 | open | Complete native callback/post-spawn fault injection while retaining already observed capture/publication child outcome, artifact and no-rerun truth | main.rs,output.rs,runner.rs | §14/38 | pctx01-nested-execution-verification.json, pctx01-run-exit-verification.json, pctx01-postspawn-callback-verification.json |
 | PCTX01-G05-D03 | closed | Checked help/parser/stream/hook/response writes return IO7 on actual Unix closed delivery; failed metering preserves delivered outcome | main.rs,watch.rs,adapter.rs | §14/38 | pctx01-delivery-verification.json |
 | PCTX01-G05-D04 | closed | One grouped persisted-data error matrix: known repaired Work/Adapter plus all frozen DB/artifact/credential decoders; caller/config2 versus storage7, original expiry, conflict9 and replay precedence; safe fixed errors/no corrupt bytes | domain.rs,work.rs,adapter.rs,quota.rs,session.rs,operations.rs,storage.rs,broker.rs,schedule.rs,output.rs,pack.rs,filters.rs,project.rs,runner.rs,windows_guardian.rs | §14/27/38 | pctx01-adapter-errors-verification.json, pctx01-persisted-errors-verification.json, pctx01-task-storage-verification.json, pctx01-grouped-storage-verification.json, pctx01-storage-schedule-verification.json |
 | PCTX01-G05-D05 | product_failure | Resolve four original macOS query startup failures at original1s/8x16/stream/group conditions; direct reproduction is evidence, not exemption or root-cause proof | query_process.rs,project.rs; tests/project_deadline.rs | §14/38 | pctx01-startup-isolation-verification.json, pctx01-task-storage-verification.json |
@@ -215,3 +215,16 @@ condition. Detail28/40, whole0/10. Register summary25 was stale against27 existi
 item states; derive corrected count and add one, with no denominator/ID change.
 Next existing G05-D02 remains open; G08/G09 and original startup failures remain.
 [Current matrix](../evidence/pctx01-exit-matrix-verification.json).
+
+## G05-D02 current bounded callback proof
+
+Native callback refusal now preserves captured output, reaped native status,
+artifact identity and durable native receipt without rerun. Four scenarios include
+already-completed exit23 and actual artifact-store lock refusal; the reviewed control
+also verifies available streams in the response when no raw artifact was published.
+The initial failing strengthened control is retained. G05-D02 remains open; its
+existing postspawn contract has seven remaining phase groups in the linked manifest.
+This records execution substructure, not another reorganization, new ID or denominator.
+Detail28/40 and whole gates0/10 remain unchanged. Next exact action is the grouped
+pipe/wait/capture completion repair and fault proof, followed by receipt/runner
+finalization proof under the same condition.

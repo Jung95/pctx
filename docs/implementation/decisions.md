@@ -1184,3 +1184,21 @@ closed conditions proved27. Derive closed_details from item states, then add thi
 one closure to28/40; correct its execution cursor to existing open G05-D02. Frozen
 IDs/denominator/help/leaves/Rgroups are unchanged. Evidence:
 [exit matrix](evidence/pctx01-exit-matrix-verification.json).
+
+## PCTX01-G05-D02 callback truth — 2026-10-09
+
+A registered spawn-observer error happens after child admission. Killing and
+waiting then returning only the callback error loses an actually observed native
+outcome and captured output. Route that error through the existing common capture,
+reap and artifact finalization path; suppress further callbacks, keep the processing
+error independent from native exit/signal, and never run the command again. Actual
+artifact publication refusal can replace the processing error while retaining child
+truth and raw-unavailable status. Native exit23 observed without consuming wait status
+must remain exit23 rather than be fabricated as SIGKILL.
+
+This bounded repair does not close G05-D02. The read-only review's seven remaining
+phase groups are substructure of its original postspawn contract, not new requirements
+or IDs. Pipe/wait/join and receipt/runner completion faults still need implementation
+and fault proof. Denominator40/local closed28/whole gates0 are unchanged. Initial
+callback failure reproduction remains in evidence; focused passes do not qualify
+Windows, full platform integration or retained startup/Schedule Tick failures.
