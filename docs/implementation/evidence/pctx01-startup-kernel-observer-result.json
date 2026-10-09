@@ -1,0 +1,95 @@
+{
+  "driver_exit": 0,
+  "driver_stderr": "",
+  "root": "/private/tmp/pctx01-kernel-owned-5hi1j_1n",
+  "parent": 2672,
+  "selected": {
+    "kind": "snapshot",
+    "worker": 0,
+    "wave": 0,
+    "pid": 2673,
+    "start_sec": 1791524433,
+    "start_usec": 773391,
+    "identity": true,
+    "at_us": 250089,
+    "end_us": 250117,
+    "observer_us": 28,
+    "pre_expiry": true,
+    "status": 2,
+    "flags": 20987920,
+    "task_bytes": 96,
+    "user_cpu": 0,
+    "system_cpu": 2006,
+    "mach_calls": 0,
+    "unix_calls": 0,
+    "context_switches": 2,
+    "thread_list_bytes": 8,
+    "task_name_result": 0,
+    "task_basic_result": 0,
+    "task_suspend_count": 0,
+    "threads": [
+      {
+        "id": 0,
+        "bytes": 112,
+        "run_state": 3,
+        "flags": 0,
+        "sleep_time": 0,
+        "user_cpu": 0,
+        "system_cpu": 83000
+      }
+    ]
+  },
+  "observers": [
+    {
+      "kind": "observer",
+      "selected": {
+        "kind": "snapshot",
+        "worker": 0,
+        "wave": 0,
+        "pid": 2673,
+        "start_sec": 1791524433,
+        "start_usec": 773391,
+        "identity": true,
+        "at_us": 250089,
+        "end_us": 250117,
+        "observer_us": 28,
+        "pre_expiry": true,
+        "status": 2,
+        "flags": 20987920,
+        "task_bytes": 96,
+        "user_cpu": 0,
+        "system_cpu": 2006,
+        "mach_calls": 0,
+        "unix_calls": 0,
+        "context_switches": 2,
+        "thread_list_bytes": 8,
+        "task_name_result": 0,
+        "task_basic_result": 0,
+        "task_suspend_count": 0,
+        "threads": [
+          {
+            "id": 0,
+            "bytes": 112,
+            "run_state": 3,
+            "flags": 0,
+            "sleep_time": 0,
+            "user_cpu": 0,
+            "system_cpu": 83000
+          }
+        ]
+      },
+      "parent": 2672,
+      "uid": 502,
+      "trace": "/private/tmp/pctx01-kernel-owned-5hi1j_1n/kernel.txt",
+      "start_monotonic_ns": 300022542984125,
+      "end_monotonic_ns": 300364832072791,
+      "command": "/private/tmp/pctx01-startup-kernel-owned --verify 2673 2672 1791524433 773391 502 owned && /usr/sbin/spindump 2673 1 5 -onlyTarget -noBinary -noIPC -timelimit 2 -o /private/tmp/pctx01-kernel-owned-5hi1j_1n/kernel.txt",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "0:264: execution error: \uba85\ub839\uc774 0\uc774 \uc544\ub2cc \uc0c1\ud0dc\ub85c \uc885\ub8cc\ub418\uc5c8\uc2b5\ub2c8\ub2e4. (1)\n",
+      "post_identity_exit": 1
+    }
+  ],
+  "trace_exists": false,
+  "scope": "one validated owned child only; no original regression qualification"
+}

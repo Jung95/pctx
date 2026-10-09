@@ -1,0 +1,38 @@
+import json,os,shlex,subprocess,tempfile,threading,time
+from pathlib import Path
+base=Path('/Users/dev/PCTX/docs/implementation/evidence')
+root=Path(tempfile.mkdtemp(prefix='pctx01-kernel-owned-',dir='/private/tmp'))
+binary='/private/tmp/pctx01-startup-kernel-owned'
+trace=str(root/'kernel.txt')
+records=[]; observer=None; selected=None
+p=subprocess.Popen([binary,str(root)],stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True)
+def observe(row):
+    start=time.monotonic_ns()
+    ack=root/'capture-ack'
+    until=time.monotonic()+3
+    while not ack.exists() and time.monotonic()<until:time.sleep(0.001)
+    if not ack.exists() or ack.read_text().strip()!=str(row['pid']):
+        records.append({'kind':'observer','exit':'not_started','reason':'retention acknowledgement unavailable','selected':row})
+        (root/'capture-done').write_text('not started\n');return
+    verify=[binary,'--verify',str(row['pid']),str(p.pid),str(row['start_sec']),str(row['start_usec']),str(os.getuid()),'owned']
+    command=shlex.join(verify)+' && '+shlex.join(['/usr/sbin/spindump',str(row['pid']),'1','5','-onlyTarget','-noBinary','-noIPC','-timelimit','2','-o',trace])
+    script='do shell script '+json.dumps(command)+' with administrator privileges'
+    result=subprocess.run(['/usr/bin/osascript','-e',script],capture_output=True,text=True)
+    after=subprocess.run(verify,capture_output=True,text=True)
+    records.append({'kind':'observer','selected':row,'parent':p.pid,'uid':os.getuid(),'trace':trace,'start_monotonic_ns':start,'end_monotonic_ns':time.monotonic_ns(),'command':command,'exit':result.returncode,'stdout':result.stdout,'stderr':result.stderr,'post_identity_exit':after.returncode})
+    (root/'capture-done').write_text('terminal\n')
+with (base/'pctx01-startup-kernel-owned.jsonl').open('w') as f:
+    for line in p.stdout:
+        f.write(line);f.flush();row=json.loads(line)
+        if selected is None and row.get('kind')=='snapshot' and row.get('identity') and row.get('pre_expiry'):
+            selected=row
+            (root/'capture-target').write_text(str(row['pid'])+'\n')
+            observer=threading.Thread(target=observe,args=(row,));observer.start()
+    code=p.wait()
+if observer:observer.join()
+result={'driver_exit':code,'driver_stderr':p.stderr.read(),'root':str(root),'parent':p.pid,'selected':selected,'observers':records,'trace_exists':Path(trace).exists(),'scope':'one validated owned child only; no original regression qualification'}
+(base/'pctx01-startup-kernel-observer-result.json').write_text(json.dumps(result,indent=2)+'\n')
+if Path(trace).exists():
+    (base/'pctx01-startup-kernel-trace.txt').write_bytes(Path(trace).read_bytes())
+print(json.dumps({k:v for k,v in result.items() if k not in ('observers','selected')}))
+print(json.dumps(records))

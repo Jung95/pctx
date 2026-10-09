@@ -15,6 +15,36 @@ not all-local completion. Other official tasks remain inactive. Do not repeat
 this initial reorganization; execute fixed conditions to closure. PCTX01 done
 then next official task's finite list within the same Goal.
 
+## Authorized kernel observation — terminal session33313
+
+Human target-only administrator authorization granted2026-10-09. Session33313
+is terminal0 for the diagnostic driver, not a test PASS. Exact parent/driver/
+observer PIDs2671/2672/2681 absent on terminal inspection; all wave reaps returned.
+[Terminal manifest](evidence/pctx01-startup-kernel-observation-verification.json)
+binds source/binary/results. Raw128:126 recorded pre-probe within-budget,2 actual
+original1s expiries,12 snapshots, no cleanup failures. Original four tests unchanged.
+
+Administrator command returned1 after342289ms; no kernel file generated. Selected
+PID2673 exited0 at recorded329750us and was not either expired child. Native post
+identity verification returned1; generic command error does not identify its exact
+inner failing stage. Unreaped identity hold341537104us is observation/auth wait,
+not execution admission. No startup cause, repair or environment exemption follows.
+
+Independent review found two initial PID reuse races, corrected before execution:
+matching retention acknowledgement before privileged launch and no selected reaping
+until observer terminal. Observer failure can wait fail-closed indefinitely; driver
+death invalidates its liveness assumption. Initial sudo -n required a password;
+normal macOS capability-auth session66621 completed0, but separate capture-process
+authentication was not guaranteed reusable. No passwords recorded.
+
+Next action within G05-D05: prepare a single administrator collector which signals
+readiness before the ordinary-user diagnostic children start, then consumes only
+one exact owned PID/start-identity request. Keep approved single-target scope,
+original1000ms/8x16/stream/group criteria and no unchanged rerun. All jobs terminal.
+PCTX01 remains implementing/product_failure, details33/40 and whole gates0/10.
+Main publication succeeded throughc379d7c. Authorization-pending text below is
+historical, superseded by explicit human approval and this terminal evidence.
+
 ## Publication boundary — current
 
 The human explicitly authorized main push on2026-10-09. A normal fast-forward

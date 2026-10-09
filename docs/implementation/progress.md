@@ -19,6 +19,17 @@ whole goal. Target-only administrator diagnostic authorization remains pending.
 
 The pre-existing eleventh M30 has finished and remains historical evidence. Packaging target-directory repair and approval-memory integration are backlog. No unrelated implementation or verification is active.
 
+## Latest authorized kernel observation — 2026-10-09
+
+[Terminal administrator diagnostic](evidence/pctx01-startup-kernel-observation-verification.json)
+records128 raw results/2 original1s expiries, no kernel file and administrator
+command exit1 after342289ms. Selected child was a later successful execution;
+no root cause or repair is established. Session33313/all children terminal and
+reaped. Human authorization granted; next same-condition action is authentication
+and collector readiness before child startup, with only one target capture.
+PCTX01-G05-D05 stays product_failure, detail33/40 and whole gates0/10 unchanged.
+Older authorization-pending statements below are superseded; no other task starts.
+
 ## Current G05-D05 diagnostic — 2026-10-09
 
 Only **PCTX01** remains active (`implementing`); **G05-D05 remains a product

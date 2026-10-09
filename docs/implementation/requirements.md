@@ -10,6 +10,17 @@ Logical module names below describe Application/Domain boundaries; current flat 
 
 Only **PCTX01** is active. It is the lowest-numbered incomplete official development item and has no prerequisites. All other incomplete rows are backlog status, not concurrent active work. D-series records describe historical implementation slices; they are not substitutes for whole official-task completion. Finish all PCTX01-owned required CLI/help/version/argument/envelope/error/budget/exit/common-timeout contracts and required platform qualification before selecting PCTX02. Shared acceptance IDs retain their full conditions; record which common contract PCTX01 owns and which independent feature belongs to a later task. Do not mark a whole shared AC verified from PCTX01-only proof.
 
+## Latest authorized kernel observation — 2026-10-09
+
+[Terminal administrator diagnostic](evidence/pctx01-startup-kernel-observation-verification.json)
+records128 raw results/2 original1s expiries, no kernel file and administrator
+command exit1 after342289ms. Selected child was a later successful execution;
+no root cause or repair is established. Session33313/all children terminal and
+reaped. Human authorization granted; next same-condition action is authentication
+and collector readiness before child startup, with only one target capture.
+PCTX01-G05-D05 stays product_failure, detail33/40 and whole gates0/10 unchanged.
+Older authorization-pending statements below are superseded; no other task starts.
+
 ## Current G05-D05 diagnostic — 2026-10-09
 
 Only **PCTX01** remains active (`implementing`); **G05-D05 remains a product

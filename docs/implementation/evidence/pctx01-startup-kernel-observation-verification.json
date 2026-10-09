@@ -1,0 +1,73 @@
+{
+  "task": "PCTX01",
+  "condition": "PCTX01-G05-D05",
+  "status": "product_failure unresolved; administrator observation unsuccessful",
+  "base_revision": "c379d7c",
+  "human_authorization": "Explicit target-only administrator observation approved2026-10-09",
+  "session": 33313,
+  "driver_exit": 0,
+  "raw_results": 128,
+  "raw_within_preprobe_criterion": 126,
+  "raw_expired": 2,
+  "cleanup_failures": 0,
+  "snapshots": 12,
+  "retention": {
+    "kind": "identity_retention",
+    "wave": 0,
+    "target": 2673,
+    "selected": true,
+    "hold_us": 341537104,
+    "capture_done": true
+  },
+  "selected_result": {
+    "kind": "result",
+    "worker": 0,
+    "wave": 0,
+    "pid": 2673,
+    "spawn_us": 524,
+    "observation_us": 329750,
+    "expired": false,
+    "within_budget": true,
+    "stdout_bytes": 6,
+    "stderr_bytes": 6,
+    "actual_signal": 0,
+    "exit_code": 0,
+    "kill_rc": 0,
+    "cleanup_us": 3,
+    "cleanup_failed": false,
+    "snapshots": 1
+  },
+  "observer_exit": 1,
+  "observer_elapsed_ms": 342289.088666,
+  "trace_generated": false,
+  "evidence_sha256": {
+    "pctx01-startup-kernel-owned.c.txt": "981b6a52f4883500d532ae18f263c0bcf5266d92b255402674975fc71488ecb7",
+    "pctx01-startup-kernel-observer.py.txt": "7d2c14f85be88de84fd1b302563391d2be8e8120c12f799feed72aa029b0c4bd",
+    "pctx01-startup-kernel-owned.jsonl": "e6e116d2a60606aaa1545f6306abcde37ea9586ea4740a7bce50873eef6a7f0e",
+    "pctx01-startup-kernel-observer-result.json": "cb1feaec7173ee9cf0f4c707d87da8e87d6b2e3bee02430f82cdc0e320bdffde"
+  },
+  "binary_sha256": "c8845f5b18336d8969817d9f88a0494869d78b6f4605d9b9ce4b6cf485764660",
+  "independent_review": {
+    "agent": "/root/work_control",
+    "result": "Two initial PID races corrected before execution; acknowledgement before privileged launch, retention until observer terminal; cooperative driver/observer liveness assumption remains."
+  },
+  "findings": [
+    "Raw workload128 results,126 recorded within-budget,2 actual original1s expiries; no original product regression qualification.",
+    "Selected PID2673 exited0 with6 stdout/6 stderr bytes at recorded329750us; it was not either expired child.",
+    "Administrator command returned1 after342289ms, no trace file. Exact inner failing command is not identified by the generic AppleScript error. Post native identity verifier returned1.",
+    "Identity retained unreaped341537104us after wave completion, separate from original execution deadline. Driver exited0 after all wave reaps; exact parent/driver/observer PIDs2671/2672/2681 absent on terminal inspection."
+  ],
+  "limitations": [
+    "Authentication/observation was requested after child spawn, so user response delay outlasted selected execution; no pre-expiry kernel stack obtained.",
+    "within_budget remains recorded pre-waitid criterion; no precise exit latency claim.",
+    "Observer crash can retain identities indefinitely; driver death breaks acknowledgement guarantee.",
+    "No Rust source/original test changes, Actions, whole/platform qualification or failure exemption."
+  ],
+  "fixed_status": {
+    "closed_details": 33,
+    "denominator": 40,
+    "closed_whole_gates": 0,
+    "whole_gate_denominator": 10
+  },
+  "next_action": "Prepare one administrator collector that becomes ready before the unprivileged child workload starts; retain exact owned identity and only one approved target capture. No repeated unchanged workload."
+}
