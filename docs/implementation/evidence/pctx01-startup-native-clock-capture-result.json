@@ -1,0 +1,152 @@
+{
+  "revision": "8f94269345b19b3077d81d4571235e7ee617535d",
+  "scope": "one exact original concurrent8x16 test in isolated instrumented source; one target/collector/auth session, no retry",
+  "test_parent": 13690,
+  "test_binary": "/private/tmp/pctx01-original-observation-jsldqf8s/target/debug/deps/project_deadline-f7e8b9d913251d84",
+  "test_sha256": "b3e168f6d0e6845997a177226176db9d6ff0df75e117d587f4f814e211323a63",
+  "test_exit": 101,
+  "collector_exit": 0,
+  "collector_stdout": "{\"kind\":\"collector\",\"pid\":13700,\"ppid\":13690,\"identity\":true,\"pre_launch_us\":785723,\"tool_exit\":0,\"tool_signal\":0,\"trace_copied\":true,\"observation_us\":2266808}\n",
+  "collector_stderr": "",
+  "selected": {
+    "deadline_lower_us": 308203316400,
+    "deadline_upper_us": 308203316400,
+    "origin_us": 308202316400,
+    "pid": 13700,
+    "ppid": 13690,
+    "record_us": 308202318068,
+    "start_sec": 1791532616,
+    "start_usec": 2608,
+    "uid": 502
+  },
+  "retention_ack": true,
+  "batch": [
+    {
+      "receipt_ns": 308203068326000,
+      "row": {
+        "deadline_lower_us": 308203316400,
+        "deadline_upper_us": 308203316400,
+        "origin_us": 308202316400,
+        "pid": 13693,
+        "ppid": 13690,
+        "record_us": 308202317550,
+        "start_sec": 1791532616,
+        "start_usec": 2513,
+        "uid": 502
+      }
+    },
+    {
+      "receipt_ns": 308203068326000,
+      "row": {
+        "deadline_lower_us": 308203316399,
+        "deadline_upper_us": 308203316399,
+        "origin_us": 308202316399,
+        "pid": 13694,
+        "ppid": 13690,
+        "record_us": 308202317547,
+        "start_sec": 1791532616,
+        "start_usec": 2514,
+        "uid": 502
+      }
+    },
+    {
+      "receipt_ns": 308203068326000,
+      "row": {
+        "deadline_lower_us": 308203316402,
+        "deadline_upper_us": 308203316402,
+        "origin_us": 308202316402,
+        "pid": 13695,
+        "ppid": 13690,
+        "record_us": 308202317548,
+        "start_sec": 1791532616,
+        "start_usec": 2518,
+        "uid": 502
+      }
+    },
+    {
+      "receipt_ns": 308203068326000,
+      "row": {
+        "deadline_lower_us": 308203316401,
+        "deadline_upper_us": 308203316401,
+        "origin_us": 308202316401,
+        "pid": 13696,
+        "ppid": 13690,
+        "record_us": 308202317553,
+        "start_sec": 1791532616,
+        "start_usec": 2527,
+        "uid": 502
+      }
+    },
+    {
+      "receipt_ns": 308203068326000,
+      "row": {
+        "deadline_lower_us": 308203316399,
+        "deadline_upper_us": 308203316400,
+        "origin_us": 308202316399,
+        "pid": 13697,
+        "ppid": 13690,
+        "record_us": 308202317547,
+        "start_sec": 1791532616,
+        "start_usec": 2530,
+        "uid": 502
+      }
+    },
+    {
+      "receipt_ns": 308203068326000,
+      "row": {
+        "deadline_lower_us": 308203316401,
+        "deadline_upper_us": 308203316401,
+        "origin_us": 308202316401,
+        "pid": 13698,
+        "ppid": 13690,
+        "record_us": 308202317546,
+        "start_sec": 1791532616,
+        "start_usec": 2534,
+        "uid": 502
+      }
+    },
+    {
+      "receipt_ns": 308203068326000,
+      "row": {
+        "deadline_lower_us": 308203316400,
+        "deadline_upper_us": 308203316400,
+        "origin_us": 308202316400,
+        "pid": 13699,
+        "ppid": 13690,
+        "record_us": 308202317958,
+        "start_sec": 1791532616,
+        "start_usec": 2544,
+        "uid": 502
+      }
+    },
+    {
+      "receipt_ns": 308203068326000,
+      "row": {
+        "deadline_lower_us": 308203316400,
+        "deadline_upper_us": 308203316400,
+        "origin_us": 308202316400,
+        "pid": 13700,
+        "ppid": 13690,
+        "record_us": 308202318068,
+        "start_sec": 1791532616,
+        "start_usec": 2608,
+        "uid": 502
+      }
+    }
+  ],
+  "checks": [
+    {
+      "pid": 13700,
+      "age_us": 773446,
+      "live_exit": 0
+    }
+  ],
+  "trace_exists": true,
+  "limits": [
+    "Instrumented execution is diagnostic only, not unchanged original product qualification.",
+    "Deadline bounds use truncated microseconds: upper carries <1us rounding tolerance.",
+    "Outcome timestamp precedes diagnostic publication and signal; samples ending before outcome are pre-cancel, not exact signal latency.",
+    "Native/file observer calls and retention remain cooperative; unexpected parent/observer death invalidates pin assumptions.",
+    "Candidate ordering is polling receipt order; filename order breaks same-scan ties. Test logs go directly to private files to avoid blocked output pipes; this finite fixture supplies no universal log-size guarantee."
+  ]
+}

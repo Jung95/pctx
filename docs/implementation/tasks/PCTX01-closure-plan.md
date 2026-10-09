@@ -457,3 +457,12 @@ Next action stays **G05-D05**: identify the exact owned child's pre-expiry wait
 reason with an authorized read-only capability, or establish a concrete supervisor
 defect. Do not repeat unchanged startup attempts or switch official tasks. Required
 native-platform gaps and PCTX36/PCTX47 backlog remain separate and unresolved.
+
+## Corrected original-supervisor observation — terminal80102
+
+[Manifest](../evidence/pctx01-startup-native-clock-capture-verification.json) records
+68 outcomes/64 successes/4 zero-output original1s expiries. Traced13700 succeeds;
+11/12 policy-wait samples cannot qualify untraced expired children. Native-clock
+correction and one capture succeeded, original test failed. No further automatic
+privileged probe or unchanged retry. Only PCTX01/G05-D05 remains active and
+product_failure;33/40 details,0/10 whole gates and all fixed denominators unchanged.

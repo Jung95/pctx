@@ -480,7 +480,8 @@
       "evidence": [
         "pctx01-startup-isolation-verification.json",
         "pctx01-task-storage-verification.json",
-        "pctx01-startup-thread-snapshot-verification.json"
+        "pctx01-startup-thread-snapshot-verification.json",
+        "pctx01-startup-native-clock-capture-verification.json"
       ],
       "verification_environment": "Native macOS arm64 local common proof; all release platforms separately required by G09",
       "macOS_arm64": "failure",
@@ -488,7 +489,7 @@
       "Linux_x86_64": "unverified; G09-D03",
       "Linux_aarch64": "prior fixed-source full only; inspect linked manifest per contract",
       "Windows_x86_64": "unverified; G09-D04",
-      "documentation_evidence": "Pre-expiry task/thread snapshot diagnostic retained; cause/original4 failures remain unresolved. No closure."
+      "documentation_evidence": "Corrected original-supervisor diagnostic retained:68 outcomes/4 original1s expiries, policy wait only in successful selected13700. Expired-child cause and original4 failures unresolved; no closure or further automatic privileged probe."
     },
     {
       "id": "PCTX01-G05-D06",

@@ -1,0 +1,106 @@
+{
+  "task": "PCTX01",
+  "condition": "PCTX01-G05-D05",
+  "status": "product failure unresolved; exact original-supervisor successful-target policy wait captured",
+  "session": 80102,
+  "source_revision": "8f94269345b19b3077d81d4571235e7ee617535d",
+  "test_exit": 101,
+  "wrapper_exit": 0,
+  "collector_exit": 0,
+  "tool_exit": 0,
+  "capture": true,
+  "counts": {
+    "spawns": 68,
+    "outcomes": 68,
+    "success": 64,
+    "TIMEOUT": 4
+  },
+  "expired_original_child_outcomes": [
+    {
+      "at_us": 308203316707,
+      "code": "TIMEOUT",
+      "pid": 13699,
+      "stderr_bytes": 0,
+      "stdout_bytes": 0
+    },
+    {
+      "at_us": 308203316597,
+      "code": "TIMEOUT",
+      "pid": 13693,
+      "stderr_bytes": 0,
+      "stdout_bytes": 0
+    },
+    {
+      "at_us": 308203316824,
+      "code": "TIMEOUT",
+      "pid": 13694,
+      "stderr_bytes": 0,
+      "stdout_bytes": 0
+    },
+    {
+      "at_us": 308203316597,
+      "code": "TIMEOUT",
+      "pid": 13696,
+      "stderr_bytes": 0,
+      "stdout_bytes": 0
+    }
+  ],
+  "selected_identity": {
+    "deadline_lower_us": 308203316400,
+    "deadline_upper_us": 308203316400,
+    "origin_us": 308202316400,
+    "pid": 13700,
+    "ppid": 13690,
+    "record_us": 308202318068,
+    "start_sec": 1791532616,
+    "start_usec": 2608,
+    "uid": 502
+  },
+  "selected_outcome": {
+    "at_us": 308203194007,
+    "code": "success",
+    "pid": 13700,
+    "stderr_bytes": 6,
+    "stdout_bytes": 6
+  },
+  "selected_outcome_age_us": 877607,
+  "selected_retention": {
+    "begin_us": 308203194214,
+    "end_us": 308205371310,
+    "pid": 13700
+  },
+  "policy_stack": "AppleSystemPolicy::procNotifyExecComplete -> evaluateScript -> waitForEvaluation -> ASPEvaluationManager::waitOnEvaluation -> lck_mtx_sleep",
+  "samples": {
+    "total": 12,
+    "policy_wait": 11,
+    "running": 1
+  },
+  "trace_wall_interval": {
+    "start": "2026-10-09 09:56:56.814 +0200",
+    "end": "2026-10-09 09:56:56.871 +0200",
+    "after_native_fork_start_us": 811392,
+    "after_native_fork_end_us": 868392
+  },
+  "clock_limits": "Native fork wall time is identity-bound; post-spawn record_us is an upper bound on native fork time, not exact mapping. With stable wall mapping, adding1668us post-spawn bound leaves final sample7547us before success outcome, before timestamp resolution tolerance. No cancellation occurred for selected successful target.",
+  "cleanup": "Parent observed all68 event PIDs plus13586/13690 absent; no remaining auth/tool process or root-private trace directory.",
+  "independent_review": "/root/work_control verified counts/identity/success-only policy wait, timing/tie-selection limits and no original repair inference.",
+  "limits": [
+    "Four successful workers complete16 each; four stop on first failure,68 is censored, not fixed128-trial failure rate.",
+    "All eight candidates have same polling receipt; selected last filename is not established slowest child.",
+    "Instrumented IO/retention changes scheduling; no unchanged-original qualification.",
+    "Unsampled original expired PIDs13693/13694/13696/13699 remain undiagnosed; no root cause or environment exemption from this trace.",
+    "One authorized batch ended; stop automatic privileged probes and unchanged reruns."
+  ],
+  "details_closed": 33,
+  "detail_denominator": 40,
+  "whole_gates_closed": 0,
+  "whole_gate_denominator": 10,
+  "files": {
+    "pctx01-startup-native-clock-capture-cleanup.json": "4676ef0e30c6e83fd40e55586b6a2ef58723973809c537d3ebb588f6459f857e",
+    "pctx01-startup-native-clock-capture-events.json": "6b5174cf8f6225637281ec131db11d624e8e94c6b691a65c085e83fde97c95a6",
+    "pctx01-startup-native-clock-capture-result.json": "9288fcda4eed850e496222a0e1fd1970a230dfe8bc2ba77d2e25184f9e732ca6",
+    "pctx01-startup-native-clock-capture-test.log": "3c30fbfa61335f50d9d433fbaa21049c7b7571c2b8ff3726543d1a67181e510a",
+    "pctx01-startup-native-clock-capture-trace.txt": "ca4dd81c1539d35dc9c41f6ae3e2997d3852b489dd94e8687403c7e1c5856001"
+  },
+  "readiness_manifest_sha256": "b722c8a93462f1c5b5d19a32e6afc5b4aedac55da9173a49974f08cd96feec7f"
+}

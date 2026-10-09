@@ -15,6 +15,32 @@ not all-local completion. Other official tasks remain inactive. Do not repeat
 this initial reorganization; execute fixed conditions to closure. PCTX01 done
 then next official task's finite list within the same Goal.
 
+## Corrected diagnostic — terminal80102
+
+One authentication completed; native-clock collector/tool terminal0 and trace
+copied. Isolated original test FAILED101; wrapper0 is bookkeeping, not PASS.
+[Manifest](evidence/pctx01-startup-native-clock-capture-verification.json) binds
+source8f94269/build/selection/trace/outcomes/cleanup and independent review.
+68 spawns/outcomes:64 successes,4 zero-output TIMEOUTs13693/13694/13696/13699.
+Four workers complete16, four stop at first failure;68 is censored, not128 trials.
+
+Selected13700/parent13690/UID502/native start1791532616.002608 succeeds6/6bytes
+at877607us, followed by2177096us post-outcome identity retention. Trace12 samples:
+11 AppleSystemPolicy script-evaluation waits,1 running. Wall samples09:56:56.814–
+.871+0200 are811392–868392us after native fork. Native fork mapping is bounded,
+not exact; assuming stable wall mapping, conservative post-spawn1668us bound puts
+last sample7547us before successful outcome, before wall resolution tolerance.
+This proves wait in the successful target only; no selected cancellation or
+expired-child kernel wait proof. All8 candidates share one receipt timestamp;
+reverse selection is filename tie order, not evidence of the slowest target.
+
+All68 event PIDs and known observer/test parent13586/13690 absent, no live auth/tool
+or root-private trace directory. No live job. Repeated successful-target captures
+end here: no further automatic privileged probe, unchanged test rerun or scope
+expansion. Exact eventual-expired child's pre-cancel wait remains missing; no
+supervisor repair or environment exemption. Current user one-batch authorization
+is exhausted. Only PCTX01/G05-D05 active, product_failure;33/40 and0/10 unchanged.
+
 ## Native-clock correction — prepared, not executed
 
 [Ordinary-user clock control](evidence/pctx01-startup-clock-control.json) verifies
