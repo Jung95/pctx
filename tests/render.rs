@@ -184,6 +184,63 @@ fn terminal_hidden_unicode_is_json_escaped_without_changing_values() {
 }
 
 #[test]
+fn fixed_control_inventory_preserves_success_partial_error_and_hook_values() {
+    let controls: String = (0..=31)
+        .chain(127..=159)
+        .chain([0x200e, 0x200f])
+        .chain(0x2028..=0x202e)
+        .chain(0x2066..=0x2069)
+        .map(|n| char::from_u32(n).unwrap())
+        .collect();
+    for status in ["ok", "partial", "error"] {
+        let mut original = envelope(
+            "read",
+            json!({"text":format!("서울 🌿 ``` </code>\n{controls}"),controls.clone():controls.clone()}),
+        );
+        original["status"] = json!(status);
+        original["warnings"] = json!([controls]);
+        if status == "error" {
+            original["errors"] =
+                json!([{"code":"FIXTURE_ERROR","message":controls,"retryable":false}]);
+        }
+        for format in [Format::Json, Format::Compact, Format::Markdown] {
+            let bytes = render::render(&original, format).unwrap();
+            let text = std::str::from_utf8(&bytes).unwrap();
+            for c in controls.chars().filter(|c| *c != '\n' && *c != '\t') {
+                assert!(
+                    !text.contains(c),
+                    "{status}/{format:?}: raw U+{:04x}",
+                    c as u32
+                );
+            }
+            if format == Format::Markdown {
+                assert_eq!(metadata(text), original);
+            } else {
+                assert_eq!(text.bytes().filter(|b| *b == b'\n').count(), 1);
+                assert_eq!(serde_json::from_slice::<Value>(&bytes).unwrap(), original);
+            }
+            let temp = tempfile::tempdir().unwrap();
+            let path = temp.path().join("response");
+            pctx::project::atomic_write(&path, &bytes, false).unwrap();
+            assert_eq!(std::fs::read(path).unwrap(), bytes);
+        }
+    }
+    // Hook wire objects intentionally have no standard envelope. This synthetic
+    // payload qualifies the same renderer called by main's native-hook branch.
+    let hook = json!({"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"ask","permissionDecisionReason":controls}});
+    let bytes = render::render(&hook, Format::Json).unwrap();
+    assert_eq!(serde_json::from_slice::<Value>(&bytes).unwrap(), hook);
+    assert_eq!(bytes.iter().filter(|b| **b == b'\n').count(), 1);
+    for c in controls.chars() {
+        assert!(
+            !std::str::from_utf8(&bytes[..bytes.len() - 1])
+                .unwrap()
+                .contains(c)
+        );
+    }
+}
+
+#[test]
 fn signatures_and_outlines_are_visible_with_ranges_and_literal_control_escaping() {
     let original = envelope(
         "build",

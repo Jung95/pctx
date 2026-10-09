@@ -4,8 +4,8 @@
 
 Verified Runner finalization changes are committed locally as
 `9e2e0b52fb71e2f238cc12fd8eb6e4d77829776e` with `[skip ci]`; that is a historical publication attempt. Additional local commits through
-d2b0cc7 and current G06-D03 changes remain unpublished. Source/binary/log hashes and the fixed40-item register
-were checked (29 closed, whole gates0/10). Normal push to the verified configured
+2b8391b and current G07-D03 evidence changes remain unpublished. Source/binary/log hashes and the fixed40-item register
+were checked (32 closed, whole gates0/10). Normal push to the verified configured
 origin `https://github.com/Jung95/pctx.git`, branch `main`, was rejected by automatic
 approval review: explicit authorization for the destination/default-branch side
 effect was judged insufficient. No push occurred and no retry or workaround was
@@ -13,7 +13,7 @@ attempted. `origin/main` remains `17298fcb4eed7af5ddab2dd5da81ac2800e085ee` loca
 The objective file explicitly requests commit/push to this repository; publication
 now awaits the user's explicit approval for `main` to resolve the review boundary.
 No Actions were dispatched. PCTX01 remains the only active official task and is
-incomplete; G07-D03 is next within that same task.
+incomplete; G08-D04 is next within that same task.
 
 
 Baseline: specification 0.6, all 45 sections read; 2026-10-08. The repository began with the owner's source specification only. Original input remains unchanged locally. Full required scope, including concrete follow-ups, remains active.
@@ -24,7 +24,32 @@ Baseline: specification 0.6, all 45 sections read; 2026-10-08. The repository be
 
 The pre-existing eleventh M30 has finished and remains historical evidence. Packaging target-directory repair and approval-memory integration are backlog. No unrelated implementation or verification is active.
 
-## Current G06-D03 closure — 2026-10-09
+## Current G07-D03 closure — 2026-10-09
+
+Only **PCTX01** is active and remains `implementing`. **G07-D03 is closed for
+its bounded local transport contract**: **32/40** details, **0/10** whole gates;
+all fixed denominators unchanged. [Evidence](evidence/pctx01-transport-controls-verification.json)
+binds source, executables and logs: final172 focused tests across13 suites,
+locked all-target Clippy -D warnings, format and independent read-only review PASS.
+No production behavior change was necessary; test fixtures complete existing proof.
+
+The [fixed transport crosswalk](evidence/pctx01-transport-controls-crosswalk.json)
+covers78 controls. Synthetic9 success/partial/error documents preserve exact values
+and atomic storage; native12 JSON/compact/Markdown success/error stdout/file cases
+use77 controls (NUL is separately binary/path admission). Injected workspace metadata
+is not generated-ID proof. Native4 hook success/refusal paths use untrusted controlled
+input; success output is generated, controlled wire-output values are synthetic.
+Injected SQLite event/stage fixtures qualify NDJSON and compact watch transport,
+not ordinary domain publication. Per-control short Board/activity rows prevent
+70-character projection masking. Corrupt SQLite produces one stderr JSON error
+and no stdout. Existing parser diagnostics and real no-color PTY checks pass.
+
+Next: **G08-D04 within PCTX01**, then G05-D05, one condition at a time. Required
+Windows console proof remains G09-D04. Original four macOS1s startup product failures,
+other required-platform gaps and inactive PCTX36/PCTX47 backlog remain open.
+No Actions, whole/platform rerun or push retry. All validation jobs terminal.
+
+## Historical G06-D03 closure — 2026-10-09
 
 Only **PCTX01** is active and remains `implementing`. **G06-D03 is closed for
 its bounded local common contract**: detail31/40, whole gates0/10, unchanged
@@ -51,13 +76,13 @@ not those expectations. One unchanged duplicate failure followed a failed fixtur
 edit script and is retained without treating it as improvement. Final229PASS is
 focused common evidence, not whole-suite/all-producer/platform qualification.
 
-Next: **G07-D03 within PCTX01**, remaining success/error control-character cases
+Historical next (now closed): **G07-D03 within PCTX01**, remaining success/error control-character cases
 for the already frozen representation/transport classes. No other official task
 starts. Original four macOS1s startup failures and required-platform gaps remain
 open; inactive PCTX36/PCTX47 backlog unchanged. No Actions, whole/platform rerun
 or push retry. All jobs terminal; local integration only.
 
-## Current G04-D03 closure — 2026-10-09
+## Historical G04-D03 closure — 2026-10-09
 
 Only **PCTX01** is active and remains `implementing`. **G04-D03 is closed for
 its bounded local common contract**: detail30/40; whole gates0/10. Scope and
@@ -79,7 +104,7 @@ with their existing owners. Initial product/test-fixture/invocation failures are
 retained in logs, including Markdown diagnostic precedence and self-indexed SQLite.
 
 Historical next was G06-D03, now closed by the current section above.
-The next condition is G07-D03, within the same official task. Original four macOS1s startup
+The next condition is G08-D04, within the same official task. Original four macOS1s startup
 product failures, required-platform gaps and inactive PCTX36/PCTX47 backlog
 remain open. No Actions, whole/platform rerun or push retry. All jobs terminal.
 
@@ -88,7 +113,7 @@ remain open. No Actions, whole/platform rerun or push retry. All jobs terminal.
 
 Only **PCTX01** is active, lowest incomplete official ID/no prerequisite. The
 fixed [closure plan](tasks/PCTX01-closure-plan.md) and 40-item register now have
-**31/40** locally closed, **0/10** whole gates; denominator40, 140 leaves/172 help
+**32/40** locally closed, **0/10** whole gates; denominator40, 140 leaves/172 help
 paths/12 historical R groups and required platforms are unchanged.
 
 **PCTX01-G05-D02 is closed as bounded local native postspawn qualification**.

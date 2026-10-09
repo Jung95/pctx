@@ -159,6 +159,52 @@ mod tests {
         assert!(plain.contains("\\u{202e}") && plain.contains("\\n"));
     }
     #[test]
+    fn fixed_controls_in_event_error_and_board_frames_remain_safe() {
+        let controls: String = (0..=31)
+            .chain(127..=159)
+            .chain([0x200e, 0x200f])
+            .chain(0x2028..=0x202e)
+            .chain(0x2066..=0x2069)
+            .map(|n| char::from_u32(n).unwrap())
+            .collect();
+        for kind in ["event", "error"] {
+            let frame = json!({"schema_version":"1.0","type":controls,"event_seq":1,"entity_id":controls,"data":{"kind":kind,"message":controls}});
+            let mut bytes = Vec::new();
+            emit(&mut bytes, &frame, true, false).unwrap();
+            assert_eq!(serde_json::from_slice::<Value>(&bytes).unwrap(), frame);
+            assert_eq!(bytes.iter().filter(|b| **b == b'\n').count(), 1);
+            let mut plain = Vec::new();
+            emit(&mut plain, &frame, false, false).unwrap();
+            assert_eq!(plain.iter().filter(|b| **b == b'\n').count(), 1);
+            for c in controls.chars().filter(|c| *c != '\n') {
+                assert!(!std::str::from_utf8(&plain).unwrap().contains(c));
+            }
+        }
+        for c in controls.chars() {
+            // One control per short value prevents the row's deliberate70-char
+            // projection from hiding an untested control later in the fixture.
+            let value = format!("value{c}tail");
+            let frame = json!({"data":{"coordination_id":value,"done_count":0,"valid_done_count":0,"tasks":[{"display_id":value,"state":value,"agent_id":value,"run":{"stage":value,"activity_status":value},"checks":[{"key":value,"result":value}]}]}});
+            let mut plain = Vec::new();
+            emit(&mut plain, &frame, false, true).unwrap();
+            let text = std::str::from_utf8(&plain).unwrap();
+            assert_eq!(text.lines().count(), 3);
+            assert!(text.contains("tail"));
+            if c != '\n' {
+                assert!(!text.contains(c));
+            }
+            let event = json!({"event_seq":1,"type":value,"entity_id":value});
+            let mut row = Vec::new();
+            emit(&mut row, &event, false, false).unwrap();
+            let text = std::str::from_utf8(&row).unwrap();
+            assert_eq!(text.lines().count(), 1);
+            assert!(text.contains("tail"));
+            if c != '\n' {
+                assert!(!text.contains(c));
+            }
+        }
+    }
+    #[test]
     fn frame_delivery_and_flush_failures_propagate_io_errors() {
         struct Fail {
             flush: bool,

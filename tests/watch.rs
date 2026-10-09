@@ -158,6 +158,85 @@ impl Drop for Running {
 // Environment is read only when Project::open resolves fixture paths; the lock serializes it.
 static ENV: std::sync::Mutex<()> = std::sync::Mutex::new(());
 #[test]
+fn native_stream_control_values_preserve_frames_and_escape_compact_rows() {
+    let _guard = ENV.lock().unwrap();
+    let f = Fixture::new();
+    let (run, _) = f.active();
+    let controls: String = (0..=31)
+        .chain(127..=159)
+        .chain([0x200e, 0x200f])
+        .chain(0x2028..=0x202e)
+        .chain(0x2066..=0x2069)
+        .map(|n| char::from_u32(n).unwrap())
+        .collect();
+    let stage = "phase\u{1b}\u{85}\u{202e}\u{2028}\n\ttail";
+    let p = f.project();
+    let db = pctx::work::connect(&p).unwrap();
+    db.execute(
+        "UPDATE runs SET stage=?1 WHERE id=?2",
+        rusqlite::params![stage, run],
+    )
+    .unwrap();
+    // Controlled persisted event, not a claim of normal domain publication.
+    db.execute(
+        "INSERT INTO events(entity,type,payload,created) VALUES(?1,?2,?3,1)",
+        rusqlite::params![controls, controls, json!({"message":controls}).to_string()],
+    )
+    .unwrap();
+    drop(db);
+    for route in ["board", "activity"] {
+        let out = f
+            .command(&[route, "--format", "ndjson", "--no-color"])
+            .output()
+            .unwrap();
+        assert!(out.status.success(), "{out:?}");
+        assert!(out.stderr.is_empty());
+        let frames: Vec<Value> = out
+            .stdout
+            .split(|b| *b == b'\n')
+            .filter(|s| !s.is_empty())
+            .map(|s| {
+                let text = std::str::from_utf8(s).unwrap();
+                for c in controls.chars() {
+                    assert!(!text.contains(c));
+                }
+                serde_json::from_slice(s).unwrap()
+            })
+            .collect();
+        if route == "board" {
+            assert_eq!(frames[0]["data"]["tasks"][0]["run"]["stage"], stage);
+        } else {
+            assert!(frames.iter().any(|v| v["type"] == controls
+                && v["entity_id"] == controls
+                && v["data"]["message"] == controls));
+        }
+    }
+    {
+        let watch = f.watch(false);
+        assert!(watch.line().starts_with("PCTX "));
+        let _columns = watch.line();
+        let row = watch.line();
+        assert!(row.contains("phase") && row.contains("tail"));
+        assert!(
+            row.contains("\\u{001b}") && row.contains("\\u{0085}") && row.contains("\\u{202e}")
+        );
+        for c in controls.chars() {
+            assert!(!row.contains(c));
+        }
+    }
+    fs::write(p.control_db(), b"not sqlite").unwrap();
+    let out = f
+        .command(&["activity", "--format", "ndjson"])
+        .output()
+        .unwrap();
+    assert_eq!(out.status.code(), Some(7));
+    assert!(out.stdout.is_empty());
+    assert_eq!(out.stderr.iter().filter(|b| **b == b'\n').count(), 1);
+    let error: Value = serde_json::from_slice(&out.stderr).unwrap();
+    assert_eq!(error["type"], "error");
+    assert!(error["data"]["code"].is_string());
+}
+#[test]
 fn heartbeat_and_expiry_appear_as_ephemeral_observations() {
     let _guard = ENV.lock().unwrap();
     let f = Fixture::new();

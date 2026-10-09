@@ -1,0 +1,53 @@
+{
+  "task": "PCTX01",
+  "condition": "PCTX01-G07-D03",
+  "spec_sections": [
+    "8",
+    "14"
+  ],
+  "frozen_transport_classes": [
+    {
+      "class": "standard JSON/compact success, partial, error",
+      "proof": "tests/render.rs::fixed_control_inventory_preserves_success_partial_error_and_hook_values; tests/cli_frontend.rs::native_control_values_survive_success_errors_and_document_destinations",
+      "qualification": "9 synthetic status/format documents and direct atomic storage; 12 native format/destination/success-error cases including Markdown"
+    },
+    {
+      "class": "Markdown readable source and full appendix",
+      "proof": "same renderer/native document tests",
+      "qualification": "Exact appendix/source value roundtrip; intentional LF/TAB layout permitted"
+    },
+    {
+      "class": "NDJSON event and error",
+      "proof": "src/watch.rs::fixed_controls_in_event_error_and_board_frames_remain_safe; tests/watch.rs::native_stream_control_values_preserve_frames_and_escape_compact_rows",
+      "qualification": "All78 synthetic; persisted all78 event injected into isolated SQLite, actual Board/Activity frames; corrupt SQLite one stderr error frame with stdout empty"
+    },
+    {
+      "class": "compact Board/activity/watch rows",
+      "proof": "same watch tests",
+      "qualification": "Each of78 controls in short Board/activity value prevents70-character projection masking; actual compact watch stage uses representative controls"
+    },
+    {
+      "class": "native hook success wire object and refusal envelope",
+      "proof": "renderer/native document tests",
+      "qualification": "Controlled output value synthetic; four native JSON/compact success/refusal paths have generated ask output or controlled configured workspace metadata"
+    },
+    {
+      "class": "plain parser diagnostics/help/no-color real PTY",
+      "proof": "tests/cli_frontend.rs::parser_diagnostics_mask_secrets_and_escape_control_characters; plain_parser_diagnostics_escape_bidi_c1_and_line_controls; no_color_suppresses_help_on_a_real_terminal_including_nested_help",
+      "qualification": "Existing native/parser/PTY controls included in final suite; intentional diagnostic LF/TAB layout retained"
+    }
+  ],
+  "inventory": {
+    "count": 78,
+    "ranges": [
+      "U+0000..001F",
+      "U+007F..009F",
+      "U+200E..200F",
+      "U+2028..202E",
+      "U+2066..2069"
+    ],
+    "native_document_inventory": 77,
+    "native_document_exclusion": "NUL belongs to binary/path admission; synthetic Value and persisted event include NUL"
+  },
+  "scope": "Existing transport classes only; no new IDs, leaf enumeration or Unicode category expansion. Windows console belongs to G09-D04."
+}

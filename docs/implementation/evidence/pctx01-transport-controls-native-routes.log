@@ -1,0 +1,18 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.47s
+     Running tests/cli_frontend.rs (target/debug/deps/cli_frontend-4948844b4d514170)
+
+running 3 tests
+test native_hook_invalid_transports_refuse_before_project_or_output_access ... ok
+test native_metadata_overflow_keeps_prelaunch_truth_and_declares_omitted_identity ... ok
+test native_control_values_survive_success_errors_and_document_destinations ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 26 filtered out; finished in 1.15s
+
+     Running tests/watch.rs (target/debug/deps/watch-0aa3808534cf4f9e)
+
+running 1 test
+test native_stream_control_values_preserve_frames_and_escape_compact_rows ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 4 filtered out; finished in 0.16s
+

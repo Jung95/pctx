@@ -10,7 +10,32 @@ Logical module names below describe Application/Domain boundaries; current flat 
 
 Only **PCTX01** is active. It is the lowest-numbered incomplete official development item and has no prerequisites. All other incomplete rows are backlog status, not concurrent active work. D-series records describe historical implementation slices; they are not substitutes for whole official-task completion. Finish all PCTX01-owned required CLI/help/version/argument/envelope/error/budget/exit/common-timeout contracts and required platform qualification before selecting PCTX02. Shared acceptance IDs retain their full conditions; record which common contract PCTX01 owns and which independent feature belongs to a later task. Do not mark a whole shared AC verified from PCTX01-only proof.
 
-## Current G06-D03 closure — 2026-10-09
+## Current G07-D03 closure — 2026-10-09
+
+Only **PCTX01** is active and remains `implementing`. **G07-D03 is closed for
+its bounded local transport contract**: **32/40** details, **0/10** whole gates;
+all fixed denominators unchanged. [Evidence](evidence/pctx01-transport-controls-verification.json)
+binds source, executables and logs: final172 focused tests across13 suites,
+locked all-target Clippy -D warnings, format and independent read-only review PASS.
+No production behavior change was necessary; test fixtures complete existing proof.
+
+The [fixed transport crosswalk](evidence/pctx01-transport-controls-crosswalk.json)
+covers78 controls. Synthetic9 success/partial/error documents preserve exact values
+and atomic storage; native12 JSON/compact/Markdown success/error stdout/file cases
+use77 controls (NUL is separately binary/path admission). Injected workspace metadata
+is not generated-ID proof. Native4 hook success/refusal paths use untrusted controlled
+input; success output is generated, controlled wire-output values are synthetic.
+Injected SQLite event/stage fixtures qualify NDJSON and compact watch transport,
+not ordinary domain publication. Per-control short Board/activity rows prevent
+70-character projection masking. Corrupt SQLite produces one stderr JSON error
+and no stdout. Existing parser diagnostics and real no-color PTY checks pass.
+
+Next: **G08-D04 within PCTX01**, then G05-D05, one condition at a time. Required
+Windows console proof remains G09-D04. Original four macOS1s startup product failures,
+other required-platform gaps and inactive PCTX36/PCTX47 backlog remain open.
+No Actions, whole/platform rerun or push retry. All validation jobs terminal.
+
+## Historical G06-D03 closure — 2026-10-09
 
 Only **PCTX01** is active and remains `implementing`. **G06-D03 is closed for
 its bounded local common contract**: detail31/40, whole gates0/10, unchanged
@@ -37,13 +62,13 @@ not those expectations. One unchanged duplicate failure followed a failed fixtur
 edit script and is retained without treating it as improvement. Final229PASS is
 focused common evidence, not whole-suite/all-producer/platform qualification.
 
-Next: **G07-D03 within PCTX01**, remaining success/error control-character cases
+Historical next (now closed): **G07-D03 within PCTX01**, remaining success/error control-character cases
 for the already frozen representation/transport classes. No other official task
 starts. Original four macOS1s startup failures and required-platform gaps remain
 open; inactive PCTX36/PCTX47 backlog unchanged. No Actions, whole/platform rerun
 or push retry. All jobs terminal; local integration only.
 
-## Current G04-D03 closure — 2026-10-09
+## Historical G04-D03 closure — 2026-10-09
 
 Only **PCTX01** is active and remains `implementing`. **G04-D03 is closed for
 its bounded local common contract**: detail30/40; whole gates0/10. Scope and
@@ -65,7 +90,7 @@ with their existing owners. Initial product/test-fixture/invocation failures are
 retained in logs, including Markdown diagnostic precedence and self-indexed SQLite.
 
 Historical next was G06-D03, now closed by the current section above.
-The next condition is G07-D03, within the same official task. Original four macOS1s startup
+The next condition is G08-D04, within the same official task. Original four macOS1s startup
 product failures, required-platform gaps and inactive PCTX36/PCTX47 backlog
 remain open. No Actions, whole/platform rerun or push retry. All jobs terminal.
 
@@ -74,7 +99,7 @@ remain open. No Actions, whole/platform rerun or push retry. All jobs terminal.
 
 Only **PCTX01** is active, lowest incomplete official ID/no prerequisite. The
 fixed [closure plan](tasks/PCTX01-closure-plan.md) and 40-item register now have
-**31/40** locally closed, **0/10** whole gates; denominator40, 140 leaves/172 help
+**32/40** locally closed, **0/10** whole gates; denominator40, 140 leaves/172 help
 paths/12 historical R groups and required platforms are unchanged.
 
 **PCTX01-G05-D02 is closed as bounded local native postspawn qualification**.

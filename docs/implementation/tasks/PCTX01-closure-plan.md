@@ -13,7 +13,7 @@ R01–R12 local12/12 qualifies only that pure-admission subset. Closed rows belo
 are deliberately bounded subconditions; G09 independently retains every required
 release-platform condition. A closed local row does not qualify an untested OS.
 
-Current bounded detail closure: **31/40**; whole gates **0/10**.
+Current bounded detail closure: **32/40**; whole gates **0/10**.
 
 | Fixed ID | State | Completion condition | Source | Spec | Evidence prefix |
 | --- | --- | --- | --- | --- | --- |
@@ -42,7 +42,7 @@ Current bounded detail closure: **31/40**; whole gates **0/10**.
 | PCTX01-G06-D03 | closed | For frozen producer families, verify successful-empty versus missing-capability/resource6 and incomplete3, including repo/cache/output/status/coordination/pack/filter/schedule/inventory; no new producer features | main.rs and existing producers | §8/14 | pctx01-outline-coverage-verification.json, pctx01-repo-admission-verification.json |
 | PCTX01-G07-D01 | closed | Native Unix PTY positive color control and root/nested no-color obey request before help | cli_help.rs,main.rs | §14 | pctx01-help-color-verification.json |
 | PCTX01-G07-D02 | closed | Parser bidi/C1/newline/tab/secrets and compact columns/hook/stream strings escape unsafe controls while preserving values | main.rs,render.rs,watch.rs,adapter.rs | §8/14 | pctx01-refusal-rendering-verification.json, pctx01-delivery-verification.json |
-| PCTX01-G07-D03 | open | Complete remaining success/error representation control-character cases against frozen transport classes; Windows console is separately G09-D04 | render.rs,main.rs | §8/14 | pctx01-representation-admission-verification.json |
+| PCTX01-G07-D03 | closed | Complete remaining success/error representation control-character cases against frozen transport classes; Windows console is separately G09-D04 | render.rs,main.rs | §8/14 | pctx01-representation-admission-verification.json |
 | PCTX01-G08-D01 | closed | Existing finite-route/default/supplied budget classifier and unsupported timeout/child/watch exceptions are audited against visible command registry | main.rs::query_deadline; tests in main.rs | §14/38 | pctx01-work-quota-verification.json, pctx01-admission-registry.json |
 | PCTX01-G08-D02 | closed | SQLite busy/VM interruption/row phases use original remaining budget and reused connections do not inherit stale callbacks | project.rs,work.rs,quota.rs | §9/14 | pctx01-cpu-sql-verification.json, pctx01-work-quota-verification.json |
 | PCTX01-G08-D03 | closed | Nested index/auxiliary source and aggregation propagation preserves supplied Instant and no renewed default; retained bounded phase proofs | project.rs,query_process.rs,storage.rs,quota.rs | §14/38 | pctx01-auxiliary-deadline-verification.json, pctx01-auxiliary-phase-verification.json, pctx01-aggregation-deadline-verification.json |
@@ -326,7 +326,32 @@ before G07-D03. No other official task starts. Original four macOS1s startup
 product failures, required-platform gaps and inactive PCTX36/PCTX47 backlog
 remain open. No Actions, whole/platform rerun or push retry. All jobs terminal.
 
-## Current G06-D03 closure — 2026-10-09
+## Current G07-D03 closure — 2026-10-09
+
+Only **PCTX01** is active and remains `implementing`. **G07-D03 is closed for
+its bounded local transport contract**: **32/40** details, **0/10** whole gates;
+all fixed denominators unchanged. [Evidence](evidence/pctx01-transport-controls-verification.json)
+binds source, executables and logs: final172 focused tests across13 suites,
+locked all-target Clippy -D warnings, format and independent read-only review PASS.
+No production behavior change was necessary; test fixtures complete existing proof.
+
+The [fixed transport crosswalk](evidence/pctx01-transport-controls-crosswalk.json)
+covers78 controls. Synthetic9 success/partial/error documents preserve exact values
+and atomic storage; native12 JSON/compact/Markdown success/error stdout/file cases
+use77 controls (NUL is separately binary/path admission). Injected workspace metadata
+is not generated-ID proof. Native4 hook success/refusal paths use untrusted controlled
+input; success output is generated, controlled wire-output values are synthetic.
+Injected SQLite event/stage fixtures qualify NDJSON and compact watch transport,
+not ordinary domain publication. Per-control short Board/activity rows prevent
+70-character projection masking. Corrupt SQLite produces one stderr JSON error
+and no stdout. Existing parser diagnostics and real no-color PTY checks pass.
+
+Next: **G08-D04 within PCTX01**, then G05-D05, one condition at a time. Required
+Windows console proof remains G09-D04. Original four macOS1s startup product failures,
+other required-platform gaps and inactive PCTX36/PCTX47 backlog remain open.
+No Actions, whole/platform rerun or push retry. All validation jobs terminal.
+
+## Historical G06-D03 closure — 2026-10-09
 
 Only **PCTX01** is active and remains `implementing`. **G06-D03 is closed for
 its bounded local common contract**: detail31/40, whole gates0/10, unchanged
@@ -353,7 +378,7 @@ not those expectations. One unchanged duplicate failure followed a failed fixtur
 edit script and is retained without treating it as improvement. Final229PASS is
 focused common evidence, not whole-suite/all-producer/platform qualification.
 
-Next: **G07-D03 within PCTX01**, remaining success/error control-character cases
+Historical next (now closed): **G07-D03 within PCTX01**, remaining success/error control-character cases
 for the already frozen representation/transport classes. No other official task
 starts. Original four macOS1s startup failures and required-platform gaps remain
 open; inactive PCTX36/PCTX47 backlog unchanged. No Actions, whole/platform rerun

@@ -1176,6 +1176,146 @@ fn all_markdown_leaf_classes_keep_complete_envelopes_on_stdout_and_files() {
     }
 }
 
+#[cfg(unix)]
+#[test]
+fn native_control_values_survive_success_errors_and_document_destinations() {
+    let f = Fixture::new();
+    let controls: String = (1..=31)
+        .chain(127..=159)
+        .chain([0x200e, 0x200f])
+        .chain(0x2028..=0x202e)
+        .chain(0x2066..=0x2069)
+        .map(|n| char::from_u32(n).unwrap())
+        .collect();
+    let init = f.run(&args(&["--format", "json", "init"]));
+    assert!(init.status.success());
+    // An explicit isolated binding supplies observed control-bearing metadata
+    // to both success and real missing-source failure; it is not a generated ID.
+    let registry_path = f.temp.path().join("data/registry.json");
+    let mut registry: Value = serde_json::from_slice(&fs::read(&registry_path).unwrap()).unwrap();
+    let binding = registry["roots"]
+        .as_object_mut()
+        .unwrap()
+        .values_mut()
+        .next()
+        .unwrap();
+    let old = binding["workspace_id"].as_str().unwrap().to_owned();
+    let workspace = format!("WS-{controls}");
+    fs::rename(
+        f.temp.path().join("data/workspaces").join(old),
+        f.temp.path().join("data/workspaces").join(&workspace),
+    )
+    .unwrap();
+    binding["workspace_id"] = serde_json::json!(workspace);
+    fs::write(registry_path, serde_json::to_vec(&registry).unwrap()).unwrap();
+    let body = format!("서울 🌿 ``` </code>\n{controls}\n");
+    fs::write(f.temp.path().join("body.txt"), &body).unwrap();
+    for format in ["json", "compact", "markdown"] {
+        for to_file in [false, true] {
+            for missing in [false, true] {
+                let path = if missing { "absent.txt" } else { "body.txt" };
+                let destination = f.temp.path().join("control-response");
+                let mut request = args(&["--format", format, "--no-color", "read", path]);
+                if to_file {
+                    request.extend([OsString::from("--output"), destination.clone().into()]);
+                }
+                let mut out = f.run(&request);
+                assert_eq!(
+                    out.status.code(),
+                    Some(if missing { 6 } else { 0 }),
+                    "{format}/{missing}: {out:?}"
+                );
+                assert!(out.stderr.is_empty());
+                if to_file {
+                    assert!(out.stdout.is_empty());
+                    out.stdout = fs::read(&destination).unwrap();
+                    fs::remove_file(destination).unwrap();
+                }
+                let v = outline_document(&out, format);
+                assert_eq!(v["workspace_id"], workspace);
+                assert_eq!(v["status"], if missing { "error" } else { "ok" });
+                if missing {
+                    assert_eq!(v["errors"][0]["code"], "RESOURCE_NOT_FOUND");
+                } else {
+                    assert_eq!(v["data"]["text"], body);
+                }
+                let text = std::str::from_utf8(&out.stdout).unwrap();
+                assert!(out.stdout.ends_with(b"\n"));
+                if format != "markdown" {
+                    assert_eq!(out.stdout.iter().filter(|b| **b == b'\n').count(), 1);
+                    assert!(!text.contains('\t'));
+                }
+                for c in controls.chars().filter(|c| *c != '\n' && *c != '\t') {
+                    assert!(!text.contains(c), "raw U+{:04x}", c as u32);
+                }
+                assert!(!text.contains('\u{1b}'));
+            }
+        }
+    }
+    // Native hook decisions have fixed/generated output fields. Controlled
+    // wire-output values are covered by the synthetic renderer fixture above;
+    // this exercises the actual hook route with untrusted controlled input.
+    for format in ["json", "compact"] {
+        for invalid in [false, true] {
+            let raw = if invalid {
+                serde_json::json!({"hook_event_name":"SessionStart","session_id":controls,"source":"startup"})
+            } else {
+                serde_json::json!({"hook_event_name":"PreToolUse","session_id":"native","tool_name":"Bash","tool_input":{"command":controls}})
+            };
+            use std::io::Write;
+            let mut child = Command::new(env!("CARGO_BIN_EXE_pctx"))
+                .current_dir(f.temp.path())
+                .args([
+                    "--format",
+                    format,
+                    "--no-color",
+                    "adapter",
+                    "claude",
+                    "event",
+                    "--agent",
+                    "fixture",
+                    "--hook",
+                ])
+                .env("PCTX_DATA_DIR", f.temp.path().join("data"))
+                .env("PCTX_USER_CONFIG", f.temp.path().join("absent-config"))
+                .env("PCTX_ACTOR", "owner")
+                .stdin(std::process::Stdio::piped())
+                .stdout(std::process::Stdio::piped())
+                .stderr(std::process::Stdio::piped())
+                .spawn()
+                .unwrap();
+            child
+                .stdin
+                .take()
+                .unwrap()
+                .write_all(&serde_json::to_vec(&raw).unwrap())
+                .unwrap();
+            let out = child.wait_with_output().unwrap();
+            assert_eq!(
+                out.status.code(),
+                Some(if invalid { 2 } else { 0 }),
+                "{out:?}"
+            );
+            assert!(out.stderr.is_empty());
+            assert_eq!(out.stdout.iter().filter(|b| **b == b'\n').count(), 1);
+            let v: Value = serde_json::from_slice(&out.stdout).unwrap();
+            if invalid {
+                assert_eq!(v["status"], "error");
+                assert_eq!(v["workspace_id"], workspace);
+                assert_eq!(v["errors"][0]["code"], "INVALID_ARGUMENT");
+            } else {
+                assert!(v.get("schema_version").is_none());
+                assert_eq!(v["hookSpecificOutput"]["permissionDecision"], "ask");
+                assert!(v["hookSpecificOutput"]["permissionDecisionReason"].is_string());
+            }
+            let text = std::str::from_utf8(&out.stdout[..out.stdout.len() - 1]).unwrap();
+            for c in controls.chars() {
+                assert!(!text.contains(c));
+            }
+        }
+    }
+}
+
 #[test]
 fn read_final_document_budget_uses_emitted_format_and_preserves_excerpt_truth() {
     for source in ["\u{202e}".repeat(12000), "a".repeat(48000)] {

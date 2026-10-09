@@ -636,8 +636,8 @@
     {
       "id": "PCTX01-G07-D03",
       "gate": "G07",
-      "status": "open",
-      "local_implementation": "remaining",
+      "status": "closed",
+      "local_implementation": "qualified_bounded_contract",
       "completion_condition": "Complete remaining success/error representation control-character cases against frozen transport classes; Windows console is separately G09-D04",
       "spec_sections": [
         "8",
@@ -646,15 +646,17 @@
       "owner": "PCTX01 common boundary; independent producer semantics retain requirement/task owner",
       "paths": "render.rs,main.rs",
       "evidence": [
-        "pctx01-representation-admission-verification.json"
+        "pctx01-representation-admission-verification.json",
+        "pctx01-transport-controls-verification.json",
+        "pctx01-transport-controls-crosswalk.json"
       ],
       "verification_environment": "Native macOS arm64 local common proof; all release platforms separately required by G09",
-      "macOS_arm64": "remaining",
+      "macOS_arm64": "bounded_verified",
       "macOS_x86_64": "unverified; G09-D02",
       "Linux_x86_64": "unverified; G09-D03",
       "Linux_aarch64": "prior fixed-source full only; inspect linked manifest per contract",
       "Windows_x86_64": "unverified; G09-D04",
-      "documentation_evidence": "closure plan recorded; execution gaps retained"
+      "documentation_evidence": "pctx01-transport-controls-verification.json"
     },
     {
       "id": "PCTX01-G08-D01",
@@ -997,10 +999,10 @@
       "documentation_evidence": "closure plan recorded; execution gaps retained"
     }
   ],
-  "closed_details": 31,
+  "closed_details": 32,
   "execution_order": [
-    "G07-D03 (remaining frozen representation/control-character matrix)",
-    "G08-D04 + G05-D05 (remaining phase/startup conditions, original budgets)",
+    "G08-D04 (remaining frozen route-by-phase, metadata/input races and expiry)",
+    "G05-D05 (four original startup failures, original budgets)",
     "G10-D04 (candidate checks)",
     "G09-D01..D04 (required real platform matrix; no Actions without existing authorization)",
     "G10-D05 (whole PCTX01 closure/publication), then select next official task"
@@ -1016,13 +1018,13 @@
     "PCTX01-G10-D03"
   ],
   "latest_condition_closure": {
-    "id": "PCTX01-G06-D03",
-    "detail_before": 30,
-    "detail_after": 31,
+    "id": "PCTX01-G07-D03",
+    "detail_before": 31,
+    "detail_after": 32,
     "denominator_before": 40,
     "denominator_after": 40,
-    "scope": "bounded local common nine-family applicable empty/resource/incomplete distinction; original failures/required platforms/independent algorithms remain separate",
-    "independent_review": "/root/work_control; pctx01-producer-coverage-verification.json"
+    "scope": "bounded local existing transport/control-character matrix; required platform/domain qualification remains separate",
+    "independent_review": "/root/work_control; pctx01-transport-controls-verification.json"
   },
   "summary_reconciliation": {
     "previous_summary": 25,
