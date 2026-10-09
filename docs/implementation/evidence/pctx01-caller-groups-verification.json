@@ -1,0 +1,125 @@
+{
+  "task": "PCTX01",
+  "item": "PCTX01-G03-D04",
+  "status": "closed bounded local common-input condition; whole task and platforms incomplete",
+  "baseline_revision": "8fbc5f167cf5ccc8ba6472b52f2fbc4cf5a97fc4",
+  "runtime_changed": false,
+  "fixed_detail_closed": 26,
+  "fixed_detail_denominator": 40,
+  "whole_gates_closed": 0,
+  "whole_gates_denominator": 10,
+  "paths_sha256": {
+    "src/adapter.rs": "41f18fda7ee7f3852e5ad49e5d9098f21474d5a1915ba6d48db52cfbcabf9def",
+    "src/filters.rs": "2d24ede383d1779e2d9fe8d97fa005c0bdd3ab454ea2267d5bc0d09f7415f542",
+    "src/input.rs": "fc3f17b70ee1485e6fa9ae9d18d408a9212e0c56831a86529e3fda2d52033dfb",
+    "src/inventory.rs": "b5508410b77fabe332beb3bb7b793bd94908a6f2b1249fe542cf391078b78612",
+    "src/main.rs": "11a1cba15057735d5a5a9cd44c0b6be4ee1b0a79513d33b91dcd49f9e8cb5f9c",
+    "src/operations.rs": "37393df0108ee918b3680ab2d3c45905ea95c38fef1c384cafdc8281538a366f",
+    "src/pack.rs": "a6fa74d6ae0ab46f57b32a3bd03cd3a8e5b69da17cc091c9abb81a5596f76d4c",
+    "src/quota.rs": "4ba68daf5ab85ab3c3676848646f05896f72c072581a8d3fefcee387ce737fe7",
+    "src/runner.rs": "600aaee24adb4cc7169bd17909a181bf73fabe4a19902a0387a7e507d80fd708",
+    "src/schedule.rs": "fdd6d8f8c1b34d51ab62ad6790270e9ef700b1f282d2eb48455092e5e569ca9f",
+    "src/storage.rs": "64d8aa5e4913cc632d66f261cc2773f9988efa78cddb3c6b72014a505afa2e64",
+    "src/work.rs": "a5c89c59fb012d871a9a9ea335d698b6b4fd05e4e549236c8b1a6835d4bd8170",
+    "tests/caller_input_contract.rs": "eff52b2931d8e9dd142abd19a9c0fff5b30b23a73099f4fb98e52feb5b709d47",
+    "tests/runner.rs": "3cd1559cd53e50c8d60f6d3afd98bd5c4e06d3e74afea2f297ab1c3851cf5609"
+  },
+  "binary_sha256": "e2f84cdc4ea9f6d7f511a01397e5e831eae3e21d5a0b9b7e33988bcc31ceb5ab",
+  "environment": {
+    "system": "macOS-26.7.1-arm64-arm-64bit-Mach-O",
+    "architecture": "arm64",
+    "rust": "1.99.0"
+  },
+  "site_reconciliation": "pctx01-caller-input-matrix.json",
+  "site_reconciliation_sha256": "3b27a1dda901a960f09f7d0081a4b5e14cc464405d15791ed0c7dc83c3e9eae4",
+  "results": [
+    {
+      "job": "13680",
+      "exit": 101,
+      "passed": 6,
+      "failed": 2,
+      "log": "pctx01-caller-groups-first.log",
+      "meaning": "Test expectations wrongly collapsed UTF8 source classes; retained and corrected without product changes."
+    },
+    {
+      "job": "85309",
+      "exit": 0,
+      "passed": 10,
+      "failed": 0,
+      "log": "pctx01-caller-groups-final.log"
+    },
+    {
+      "job": "18148",
+      "exit": 0,
+      "passed": 40,
+      "failed": 0,
+      "log": "pctx01-caller-groups-related.log"
+    },
+    {
+      "job": "19800",
+      "exit": 101,
+      "passed": 10,
+      "failed": 1,
+      "log": "pctx01-caller-groups-artifacts.log",
+      "meaning": "Absolute Pack path refused policy5 before JSON; Runner suite not executed. Fixture now uses admitted project-relative path."
+    },
+    {
+      "job": "63061",
+      "exit": 101,
+      "passed": 40,
+      "failed": 1,
+      "log": "pctx01-caller-groups-artifacts-final.log",
+      "meaning": "Caller11 PASS, existing Runner29 PASS, new memory test wrongly expected empty stderr while fixture explicitly enabled phase diagnostics."
+    },
+    {
+      "job": "11497",
+      "exit": 0,
+      "passed": 1,
+      "failed": 0,
+      "log": "pctx01-caller-groups-memory.log",
+      "meaning": "Only changed test rerun with phase diagnostic mode disabled; exact cap classification and no child/heavy grant confirmed."
+    },
+    {
+      "job": "19289",
+      "exit": 0,
+      "passed": 13,
+      "failed": 0,
+      "log": "pctx01-caller-groups-qualified.log",
+      "meaning": "Final caller target includes valid-lease Check Report7x2 and quota10000/10001 cap-first controls."
+    },
+    {
+      "exit": 0,
+      "log": "pctx01-caller-groups-static.log",
+      "meaning": "Locked all-target Clippy warnings denied."
+    },
+    {
+      "exit": 0,
+      "log": "pctx01-caller-groups-format.log",
+      "meaning": "Format check."
+    }
+  ],
+  "review": "work_control independent read-only audit found no remaining mandatory common-input gap in frozen18sites/7groups; corrected its own disproved Operations owner-priority observation against current source and actual PASS. No edits/builds by reviewer.",
+  "limits": [
+    "No producer task completed by common-input proof",
+    "Prepared logical SQL/schema/nonDB snapshots do not claim WAL bytes or first-use rollback",
+    "Archive256MiB oversize admission proof, not allocated exactcap/growth",
+    "Quota10000/10001 capfirst2 is not accepted-count semantics; original1MiB preserved",
+    "Source encoding3 and unsupported6 intentionally not collapsed to2",
+    "G03-D03/G05-D06/G08/G09/G04-D03 remain open",
+    "Historical four macOS startup product failures and inactive PCTX36 Tick failure retained",
+    "No Actions, required platform or full run"
+  ],
+  "next": "Same PCTX01: G03-D03 frozen140 grammar crosswalk and G05-D06 sharedexit/cancellation matrix.",
+  "prior_proof_scope": "Earlier source-bound results are reused only for unchanged caller branches, with current source read/review reconciliation; they are not current full/platform passes.",
+  "logs_sha256": {
+    "pctx01-caller-groups-first.log": "8280ad088c6e2fe81e09e898bafeb779aca85644a102fc8bc3ee679cb99abae5",
+    "pctx01-caller-groups-final.log": "2bb9ead6ea11a150ddb8f37d69421a59f512329dd2e1c1d710b50b304bcfd8c4",
+    "pctx01-caller-groups-related.log": "5bcc72c32f454aedb705068bb59bd0f1f6fd56af3d0e776d0a7f66e7f7e6088b",
+    "pctx01-caller-groups-artifacts.log": "1efefb9636145a885d78e1389ae6db3f061ec30b87012e00e61e1b0c5d3e31fc",
+    "pctx01-caller-groups-artifacts-final.log": "09dd1b142d42231925a28fa4127cf9b101bf18e17e6096b8b6c631030f792215",
+    "pctx01-caller-groups-memory.log": "97e106d3704f1d177c63938e336b7f4ece18ae45e14f8a428cadc89b9357b9f4",
+    "pctx01-caller-groups-qualified.log": "2d64dac0a419fce3d044d236c14f22e7b8d57c38b2344d9da0dbb5cf7abf17d5",
+    "pctx01-caller-groups-static.log": "3cad619eeb5835e3443280b3da61207d6602bf0be3165cae65f55635008fbd51",
+    "pctx01-caller-groups-format.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

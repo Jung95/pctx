@@ -1,0 +1,36 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.13s
+     Running tests/caller_input_contract.rs (target/debug/deps/caller_input_contract-08b980fca1808cc1)
+
+running 8 tests
+
+thread 'authored_inventory_profile_and_registry_refuse_schema_before_publication' (9177037) panicked at tests/caller_input_contract.rs:225:5:
+assertion `left == right` failed: Output { status: ExitStatus(unix_wait_status(768)), stdout: "{\"command\":\"inventory\",\"coverage\":{\"reasons\":[\"UNSUPPORTED_ENCODING\"],\"status\":\"partial\"},\"data\":null,\"errors\":[{\"code\":\"UNSUPPORTED_ENCODING\",\"message\":\"Only UTF-8 text is supported\",\"retryable\":false}],\"generation_id\":null,\"project_id\":null,\"schema_version\":\"1.0\",\"status\":\"error\",\"truncation\":{\"reasons\":[],\"truncated\":false},\"validation\":{\"checked_at\":\"2026-10-09T00:47:44.565Z\",\"mode\":\"matched\",\"scope\":[],\"workspace_atomic\":false},\"warnings\":[],\"workspace_id\":null}\n", stderr: "" }
+  left: Some(3)
+ right: Some(2)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test authored_inventory_profile_and_registry_refuse_schema_before_publication ... FAILED
+test caller_owner_and_task_revision_priorities_do_not_become_universal_input_first ... ok
+test exact_file_caps_reach_json_decoder_and_overflow_preserves_existing_input_errors ... ok
+test hook_required_shapes_and_unsupported_protocol_keep_distinct_refusals ... ok
+test quota_batch_schema_and_restore_identity_refusals_are_safe_input_errors ... ok
+Caller syntax/shape native combinations:80
+test caller_json_syntax_and_typed_shape_are_input_two_and_preserve_prepared_state ... ok
+Authored Task/Schedule schema native combinations:72
+test authored_task_and_schedule_schema_refusals_preserve_prepared_state ... ok
+
+thread 'operations_raw_and_sanitized_consumers_reject_bad_json_before_effects' (9177043) panicked at tests/caller_input_contract.rs:229:5:
+assertion `left == right` failed
+  left: String("UNSUPPORTED_ENCODING")
+ right: "INVALID_ARGUMENT"
+test operations_raw_and_sanitized_consumers_reject_bad_json_before_effects ... FAILED
+
+failures:
+
+failures:
+    authored_inventory_profile_and_registry_refuse_schema_before_publication
+    operations_raw_and_sanitized_consumers_reject_bad_json_before_effects
+
+test result: FAILED. 6 passed; 2 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.92s
+
+error: test failed, to rerun pass `--test caller_input_contract`

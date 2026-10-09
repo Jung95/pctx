@@ -500,6 +500,68 @@ fn synthetic_low_memory_defers_heavy_admission() {
     assert!(String::from_utf8_lossy(&o.stdout).contains("MEMORY_PRESSURE"));
     assert!(!f.slot().exists());
 }
+
+#[test]
+fn invalid_memory_fixture_never_spawns_or_grants_heavy_resources() {
+    let f = Fixture::new("touch caller-child-started\nexit 0\n", true, None);
+    let path = f.root.join("memory.json");
+    fs::write(&path,json!({"schema_version":1,"source":"fixture","available_bytes":u64::MAX,"pressure":"normal","sampled_at":chrono::Utc::now().timestamp()}).to_string()).unwrap();
+    let profile = f.root.join(".pctx/runner.toml");
+    let text = fs::read_to_string(&profile).unwrap()
+        + "[checks.unit.memory]\nsource = 'fixture'\nfixture_path = 'memory.json'\nminimum_available_bytes = 1024\n";
+    fs::write(profile, text).unwrap();
+    f.trust();
+    for bytes in [
+        b"{PCTX_MEMORY_SENTINEL".to_vec(),
+        b"null".to_vec(),
+        b"[]".to_vec(),
+        b"{}".to_vec(),
+        {
+            let mut v = vec![b' '; 4096];
+            v[0] = b'{';
+            v
+        },
+        {
+            let mut v = vec![b' '; 4097];
+            v[0] = b'{';
+            v
+        },
+    ] {
+        let length = bytes.len();
+        fs::write(&path, bytes).unwrap();
+        let output = f
+            .command(&f.run_args())
+            .env_remove("PCTX_RUNNER_DIAGNOSTICS")
+            .output()
+            .unwrap();
+        assert_eq!(output.status.code(), Some(2), "{output:?}");
+        let value: Value = serde_json::from_slice(&output.stdout).unwrap();
+        assert_eq!(value["status"], "error");
+        assert_eq!(
+            value["errors"][0]["code"],
+            if length > 4096 {
+                "INVALID_CONFIG"
+            } else {
+                "INVALID_ARGUMENT"
+            }
+        );
+        if length >= 4096 {
+            assert_eq!(
+                value["errors"][0]["message"],
+                if length > 4096 {
+                    "Memory fixture exceeds bound"
+                } else {
+                    "Invalid JSON data"
+                }
+            );
+        }
+        assert!(!String::from_utf8_lossy(&output.stdout).contains("PCTX_MEMORY_SENTINEL"));
+        assert!(!f.root.join("caller-child-started").exists());
+        assert!(!f.slot().exists());
+        assert!(!f.root.join("reports").exists());
+        assert!(output.stderr.is_empty(), "{output:?}");
+    }
+}
 fn linked_provider(f: &Fixture) -> PathBuf {
     let git = |args: &[&str]| {
         assert!(

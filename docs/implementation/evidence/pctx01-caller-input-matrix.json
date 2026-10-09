@@ -1,8 +1,8 @@
 {
   "task": "PCTX01",
   "item": "PCTX01-G03-D04",
-  "status": "open; current bounded transport repair does not close full input matrix",
-  "fixed_detail_closed": 25,
+  "status": "G03-D04 bounded local common-input condition closed; whole PCTX01 incomplete",
+  "fixed_detail_closed": 26,
   "fixed_detail_denominator": 40,
   "existing_caller_site_count": 18,
   "groups_are_case_inventory_not_new_task_or_condition_ids": true,
@@ -15,7 +15,10 @@
       "frozen_text": "serde_json::from_slice(&bytes)",
       "group": "adapter config/event/protocol/statusline",
       "frozen_source_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
-      "current_cap_candidate": false
+      "current_cap_candidate": false,
+      "common_boundary": "qualified local; release platforms separately G09",
+      "current_source_sha256": "41f18fda7ee7f3852e5ad49e5d9098f21474d5a1915ba6d48db52cfbcabf9def",
+      "proof_group": "adapter config/event/protocol/statusline"
     },
     {
       "path": "src/adapter.rs",
@@ -23,7 +26,10 @@
       "frozen_text": "let raw: Value = serde_json::from_slice(bytes)",
       "group": "adapter config/event/protocol/statusline",
       "frozen_source_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
-      "current_cap_candidate": false
+      "current_cap_candidate": false,
+      "common_boundary": "qualified local; release platforms separately G09",
+      "current_source_sha256": "41f18fda7ee7f3852e5ad49e5d9098f21474d5a1915ba6d48db52cfbcabf9def",
+      "proof_group": "adapter config/event/protocol/statusline"
     },
     {
       "path": "src/adapter.rs",
@@ -31,7 +37,10 @@
       "frozen_text": "let raw: Value = serde_json::from_slice(&bytes)?;",
       "group": "adapter config/event/protocol/statusline",
       "frozen_source_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
-      "current_cap_candidate": false
+      "current_cap_candidate": false,
+      "common_boundary": "qualified local; release platforms separately G09",
+      "current_source_sha256": "41f18fda7ee7f3852e5ad49e5d9098f21474d5a1915ba6d48db52cfbcabf9def",
+      "proof_group": "adapter config/event/protocol/statusline"
     },
     {
       "path": "src/adapter.rs",
@@ -39,7 +48,10 @@
       "frozen_text": "let raw: Value = serde_json::from_slice(&bounded(Some(path))?)",
       "group": "adapter config/event/protocol/statusline",
       "frozen_source_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
-      "current_cap_candidate": false
+      "current_cap_candidate": false,
+      "common_boundary": "qualified local; release platforms separately G09",
+      "current_source_sha256": "41f18fda7ee7f3852e5ad49e5d9098f21474d5a1915ba6d48db52cfbcabf9def",
+      "proof_group": "adapter config/event/protocol/statusline"
     },
     {
       "path": "src/filters.rs",
@@ -47,7 +59,10 @@
       "frozen_text": "let suite: Suite = serde_json::from_str(&manifest.text)",
       "group": "project/external authored artifacts",
       "frozen_source_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
-      "current_cap_candidate": false
+      "current_cap_candidate": false,
+      "common_boundary": "qualified local; release platforms separately G09",
+      "current_source_sha256": "2d24ede383d1779e2d9fe8d97fa005c0bdd3ab454ea2267d5bc0d09f7415f542",
+      "proof_group": "project/external authored artifacts"
     },
     {
       "path": "src/inventory.rs",
@@ -55,7 +70,10 @@
       "frozen_text": "serde_json::from_str(text)",
       "group": "project/external authored artifacts",
       "frozen_source_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
-      "current_cap_candidate": false
+      "current_cap_candidate": false,
+      "common_boundary": "qualified local; release platforms separately G09",
+      "current_source_sha256": "b5508410b77fabe332beb3bb7b793bd94908a6f2b1249fe542cf391078b78612",
+      "proof_group": "project/external authored artifacts"
     },
     {
       "path": "src/inventory.rs",
@@ -63,7 +81,10 @@
       "frozen_text": "serde_json::from_str(&file.text).map_err(|_| invalid(\"Invalid explicit profile schema\"))?;",
       "group": "project/external authored artifacts",
       "frozen_source_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
-      "current_cap_candidate": false
+      "current_cap_candidate": false,
+      "common_boundary": "qualified local; release platforms separately G09",
+      "current_source_sha256": "b5508410b77fabe332beb3bb7b793bd94908a6f2b1249fe542cf391078b78612",
+      "proof_group": "project/external authored artifacts"
     },
     {
       "path": "src/inventory.rs",
@@ -71,7 +92,10 @@
       "frozen_text": "let registry: Registry = serde_json::from_str(&file.text)",
       "group": "project/external authored artifacts",
       "frozen_source_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
-      "current_cap_candidate": false
+      "current_cap_candidate": false,
+      "common_boundary": "qualified local; release platforms separately G09",
+      "current_source_sha256": "b5508410b77fabe332beb3bb7b793bd94908a6f2b1249fe542cf391078b78612",
+      "proof_group": "project/external authored artifacts"
     },
     {
       "path": "src/operations.rs",
@@ -79,7 +103,10 @@
       "frozen_text": "Ok(serde_json::from_str(&input_text(p, path)?)?)",
       "group": "operations raw/sanitized JSON",
       "frozen_source_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
-      "current_cap_candidate": false
+      "current_cap_candidate": false,
+      "common_boundary": "qualified local; release platforms separately G09",
+      "current_source_sha256": "37393df0108ee918b3680ab2d3c45905ea95c38fef1c384cafdc8281538a366f",
+      "proof_group": "operations raw/sanitized JSON"
     },
     {
       "path": "src/operations.rs",
@@ -87,7 +114,10 @@
       "frozen_text": "let mut v: Value = serde_json::from_str(&input_text(p, path)?)?;",
       "group": "operations raw/sanitized JSON",
       "frozen_source_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
-      "current_cap_candidate": false
+      "current_cap_candidate": false,
+      "common_boundary": "qualified local; release platforms separately G09",
+      "current_source_sha256": "37393df0108ee918b3680ab2d3c45905ea95c38fef1c384cafdc8281538a366f",
+      "proof_group": "operations raw/sanitized JSON"
     },
     {
       "path": "src/pack.rs",
@@ -95,7 +125,10 @@
       "frozen_text": "serde_json::from_slice(bytes).map_err(Into::into)",
       "group": "project/external authored artifacts",
       "frozen_source_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
-      "current_cap_candidate": false
+      "current_cap_candidate": false,
+      "common_boundary": "qualified local; release platforms separately G09",
+      "current_source_sha256": "a6fa74d6ae0ab46f57b32a3bd03cd3a8e5b69da17cc091c9abb81a5596f76d4c",
+      "proof_group": "project/external authored artifacts"
     },
     {
       "path": "src/quota.rs",
@@ -103,7 +136,10 @@
       "frozen_text": "let batch: UsageBatch = serde_json::from_slice(&std::fs::read(path)?)?;",
       "group": "quota UsageBatch",
       "frozen_source_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
-      "current_cap_candidate": true
+      "current_cap_candidate": true,
+      "common_boundary": "qualified local; release platforms separately G09",
+      "current_source_sha256": "4ba68daf5ab85ab3c3676848646f05896f72c072581a8d3fefcee387ce737fe7",
+      "proof_group": "quota UsageBatch"
     },
     {
       "path": "src/runner.rs",
@@ -111,7 +147,10 @@
       "frozen_text": "let mut observation: MemoryObservation = serde_json::from_str(&f.text)?;",
       "group": "project/external authored artifacts",
       "frozen_source_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
-      "current_cap_candidate": false
+      "current_cap_candidate": false,
+      "common_boundary": "qualified local; release platforms separately G09",
+      "current_source_sha256": "600aaee24adb4cc7169bd17909a181bf73fabe4a19902a0387a7e507d80fd708",
+      "proof_group": "project/external authored artifacts"
     },
     {
       "path": "src/schedule.rs",
@@ -119,7 +158,10 @@
       "frozen_text": "let value: ScheduleDefinition = serde_json::from_slice(&std::fs::read(path)?)?;",
       "group": "schedule definition/reviewed plan",
       "frozen_source_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
-      "current_cap_candidate": true
+      "current_cap_candidate": true,
+      "common_boundary": "qualified local; release platforms separately G09",
+      "current_source_sha256": "fdd6d8f8c1b34d51ab62ad6790270e9ef700b1f282d2eb48455092e5e569ca9f",
+      "proof_group": "schedule definition/reviewed plan"
     },
     {
       "path": "src/schedule.rs",
@@ -127,7 +169,10 @@
       "frozen_text": "let value: Value = serde_json::from_slice(&fs::read(path)?)?;",
       "group": "schedule definition/reviewed plan",
       "frozen_source_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
-      "current_cap_candidate": true
+      "current_cap_candidate": true,
+      "common_boundary": "qualified local; release platforms separately G09",
+      "current_source_sha256": "fdd6d8f8c1b34d51ab62ad6790270e9ef700b1f282d2eb48455092e5e569ca9f",
+      "proof_group": "schedule definition/reviewed plan"
     },
     {
       "path": "src/storage.rs",
@@ -135,7 +180,10 @@
       "frozen_text": "let meta: Value = serde_json::from_str(parts.get(1).unwrap_or(&\"\").trim())?;",
       "group": "shared text/file/stdin and authored handoff metadata",
       "frozen_source_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
-      "current_cap_candidate": false
+      "current_cap_candidate": false,
+      "common_boundary": "qualified local; release platforms separately G09",
+      "current_source_sha256": "64d8aa5e4913cc632d66f261cc2773f9988efa78cddb3c6b72014a505afa2e64",
+      "proof_group": "shared text/file/stdin and authored handoff metadata"
     },
     {
       "path": "src/work.rs",
@@ -143,7 +191,10 @@
       "frozen_text": "let mut value: Value = serde_json::from_slice(&std::fs::read(p)?)?;",
       "group": "work typed JSON/restore archive",
       "frozen_source_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
-      "current_cap_candidate": true
+      "current_cap_candidate": true,
+      "common_boundary": "qualified local; release platforms separately G09",
+      "current_source_sha256": "a5c89c59fb012d871a9a9ea335d698b6b4fd05e4e549236c8b1a6835d4bd8170",
+      "proof_group": "work typed JSON/restore archive"
     },
     {
       "path": "src/work.rs",
@@ -151,45 +202,149 @@
       "frozen_text": "let archive: BackupArchive = serde_json::from_slice(&std::fs::read(input)?)?;",
       "group": "work typed JSON/restore archive",
       "frozen_source_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
-      "current_cap_candidate": true
+      "current_cap_candidate": true,
+      "common_boundary": "qualified local; release platforms separately G09",
+      "current_source_sha256": "a5c89c59fb012d871a9a9ea335d698b6b4fd05e4e549236c8b1a6835d4bd8170",
+      "proof_group": "work typed JSON/restore archive"
     }
   ],
   "groups": [
     {
       "group": "shared text/file/stdin and authored handoff metadata",
       "prior": "pctx01-handoff-input-verification.json; tests/task_input_source.rs; tests/context_input_deadline.rs; tests/handoff_preflight.rs",
-      "remaining": "Explicit malformed authored metadata validation separated from permitted raw text storage; stdin remains consumer-specific"
+      "remaining": "Independent producer semantics remain with PCTX11/PCTX14; G08 races and G09 platforms remain separately open.",
+      "common_boundary": "qualified local",
+      "proof": {
+        "current": [
+          "caller_input_contract::handoff_metadata_syntax_is_distinct_from_permitted_raw_body_and_unvalidated_shape",
+          "handoff_preflight (5 current PASS)"
+        ],
+        "prior": [
+          "pctx01-handoff-input-verification.json",
+          "tests/task_input_source.rs::bounds_encoding_and_original_deadline_are_enforced",
+          "tests/context_input_deadline.rs::held_open_task_stdin_times_out_without_index_publication",
+          "pctx-handoff-targeted-repaired.log:54 PASS includes task_input_source/context_input_deadline"
+        ],
+        "contract": "Malformed metadata JSON2; arbitrary JSON metadata without validation and raw prose remain permitted. Explicit files/stdin bounds, regular/FIFO/encoding and original clocks reuse unchanged source-bound proof.",
+        "owner": "PCTX11/PCTX14"
+      }
     },
     {
       "group": "work typed JSON/restore archive",
       "current": "Prior cap proof; current Task Create/Edit authored schema40 native combinations and Restore schema/project/checksum6; Backup stdout/archive routing repaired.",
-      "remaining": "Check Record source/task/check/lease-dependent validation; broader archive state acceptance uses existing producer evidence."
+      "remaining": "Independent producer semantics remain with PCTX19/PCTX22/PCTX23/PCTX26; G08 races and G09 platforms remain separately open.",
+      "common_boundary": "qualified local",
+      "proof": {
+        "current": [
+          "caller_input_contract syntax/shape/cap/owner/revision controls",
+          "typed_check_report_schema_is_validated_after_existing_check_and_lease",
+          "quota_batch_schema_and_restore_identity_refusals_are_safe_input_errors"
+        ],
+        "prior": [
+          "pctx01-caller-bound-verification.json",
+          "pctx01-caller-schema-verification.json",
+          "pctx01-caller-bound-related-final.log:work_control11 PASS"
+        ],
+        "contract": "Caller2 after typeddecode; owner5/revision9 precede input where existing contract requires. Report semantic schema/count2 tested under real active check/lease. Archive schema/project/checksum2 precede destination. Existing lease/evidence/restore checks remain producer-owned.",
+        "owner": "PCTX19/PCTX22/PCTX23/PCTX26"
+      }
     },
     {
       "group": "operations raw/sanitized JSON",
       "prior": "tests/operations.rs decision dedup/mailbox policy and control_preflight pure admission",
-      "remaining": "Shared raw/sanitized syntax/typed-shape/64KiB payload controls with prepared snapshots; metadata precheck means no invented universal stdin"
+      "remaining": "Independent producer semantics remain with PCTX30/PCTX33; G08 races and G09 platforms remain separately open.",
+      "common_boundary": "qualified local",
+      "proof": {
+        "current": [
+          "operations_raw_and_sanitized_consumers_reject_bad_json_before_effects",
+          "pctx01-caller-groups-related.log:operations11 PASS"
+        ],
+        "prior": [
+          "pctx01-argument-preflight-verification.json"
+        ],
+        "contract": "All10 consumers share raw/sanitized readers: syntax/shape/encoding100 combinations, exact/overflow64KiB20, two owner5 controls. Prepared schema exists before snapshots. Recipient/replay/policy order reuses exact_decisions_deduplicate_but_changed_environment_amount_artifact_do_not and mailbox_retry_is_queued_once_and_ack_is_recipient_bound.",
+        "owner": "PCTX30/PCTX33"
+      }
     },
     {
       "group": "quota UsageBatch",
       "current": "Prior cap/owner proof plus12 native schema/shape/empty-batch controls.",
-      "remaining": "Observation semantics, count/cap precedence and normalized replay/hash controls;12 combinations do not prove valid count boundary."
+      "remaining": "Independent producer semantics remain with PCTX31; G08 races and G09 platforms remain separately open.",
+      "common_boundary": "qualified local",
+      "proof": {
+        "current": [
+          "quota_batch_schema_and_restore_identity_refusals_are_safe_input_errors",
+          "quota_count_ceiling_remains_subordinate_to_original_one_mib_file_cap"
+        ],
+        "prior": [
+          "pctx01-caller-bound-verification.json",
+          "pctx01-caller-bound-related-final.log:quota7 PASS"
+        ],
+        "contract": "Schema/shape/empty-batch2; minimum required-key observation217bytes means10000 and10001 cannot fit1MiB. Both actual requests refuse at original cap before count/observation semantics. This is cap precedence, not positive10000 acceptance. Replay/counter normalization from unchanged quota tests.",
+        "owner": "PCTX31"
+      }
     },
     {
       "group": "schedule definition/reviewed plan",
       "current": "Prior cap/owner proof plus32 native authored definition schema combinations on Add/Update.",
-      "remaining": "Reviewed-plan identity/state and definition revision/identity precedence; no installation algorithm expansion."
+      "remaining": "Independent producer semantics remain with PCTX36; G08 races and G09 platforms remain separately open.",
+      "common_boundary": "qualified local",
+      "proof": {
+        "current": [
+          "authored_task_and_schedule_schema_refusals_preserve_prepared_state",
+          "caller syntax/shape/caps/owner controls"
+        ],
+        "prior": [
+          "pctx01-caller-bound-verification.json",
+          "pctx01-caller-schema-verification.json",
+          "pctx01-caller-bound-related-final.log:schedule17 PASS: managed_bridge_requires_current_reviewed_plan_and_preserves_user_changes; namespaces_and_cas_pause_updates_are_independent"
+        ],
+        "contract": "Definition schema/shape2 plus reviewedplan boundedobject input; existing namespace/revision/hash/state priorities retained. Prior Tick incidental pass does not resolve historical PCTX36 failure.",
+        "owner": "PCTX36"
+      }
     },
     {
       "group": "adapter config/event/protocol/statusline",
       "prior": "tests/adapter_errors.rs cap/config2, unsupported6, policy5; adapter_preflight input-dependent Event key",
-      "remaining": "Malformed hook/statusline JSON and required-field shapes, PreToolUse key exemption and protocol6 retained"
+      "remaining": "Independent producer semantics remain with PCTX37; G08 races and G09 platforms remain separately open.",
+      "common_boundary": "qualified local",
+      "proof": {
+        "current": [
+          "hook_required_shapes_and_unsupported_protocol_keep_distinct_refusals",
+          "statusline_shape_and_version_refusals_precede_session_binding",
+          "pctx01-caller-groups-related.log:adapter_errors10+adapter_preflight6 PASS"
+        ],
+        "prior": [
+          "pctx01-adapter-errors-verification.json"
+        ],
+        "contract": "Syntax/requiredfields2 vs unsupported event/version6; owner5 earlier on imports; config128KiB/shape2 and event key/PreToolUse exemption/replay priorities qualified by existing native tests.",
+        "owner": "PCTX37"
+      }
     },
     {
       "group": "project/external authored artifacts",
       "prior": "tests/filters.rs, inventory.rs, pack_preflight.rs, runner.rs existing integrity/partial/policy proof",
-      "remaining": "Filter Suite JSON/schema/case-set before report publication; Profile/Audit syntax/shape; external Pack JSON syntax safe no-publication; Runner memory malformed/shape/4096byte cap without child/resource grant; discovered malformed configs remain truthful observations"
+      "remaining": "Independent producer semantics remain with PCTX38/PCTX42/PCTX46/PCTX34; G08 races and G09 platforms remain separately open.",
+      "common_boundary": "qualified local",
+      "proof": {
+        "current": [
+          "authored_inventory_profile_and_registry_refuse_schema_before_publication",
+          "filter_manifest_refusals_precede_reports_and_external_pack_syntax_is_input_two",
+          "runner::invalid_memory_fixture_never_spawns_or_grants_heavy_resources",
+          "pctx01-caller-groups-related.log:inventory8 PASS"
+        ],
+        "prior": [
+          "pctx01-storage-residual-verification.json",
+          "tests/filters.rs::full_fixture_activation_hash_invalidation_and_exact_match_ambiguity",
+          "tests/pack.rs::forged_budgets_parts_and_json_complexity_are_rejected_before_load",
+          "pctx01-storage-residual-related.log:filters8 PASS (separate stored-test failures retained)",
+          "pctx01-task-storage-verification.json; pctx01-task-storage-full-macos.log:Pack11 PASS within retained full576PASS4FAIL"
+        ],
+        "contract": "Explicit Profile/Audit syntax/typedshape/schema2; project UTF8 source3 retained. Discovered malformed configs remain partialobservations (dynamic_invalid_and_unsupported_configs_are_explicit). Filter6x2 malformed/shape/schema/case-set2 before reports; project-relative external Pack syntax2 no writes. Memory typedshape/malformed/exact4096/overflow4097 input2 with no child/heavy grant.",
+        "owner": "PCTX38/PCTX42/PCTX46/PCTX34"
+      }
     }
   ],
-  "execution_rule": "Finish this finite caller matrix plus existing G03-D03/G05-D06 candidate; reuse qualified A/R/C/G02/G05 evidence, no independent producer features or new IDs"
+  "execution_rule": "Finish this finite caller matrix plus existing G03-D03/G05-D06 candidate; reuse qualified A/R/C/G02/G05 evidence, no independent producer features or new IDs",
+  "closure_evidence": "pctx01-caller-groups-verification.json"
 }

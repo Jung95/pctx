@@ -477,3 +477,438 @@ fn quota_batch_schema_and_restore_identity_refusals_are_safe_input_errors() {
         }
     }
 }
+
+#[test]
+fn operations_raw_and_sanitized_consumers_reject_bad_json_before_effects() {
+    let f = Fixture::new();
+    let prepared = f.run("json", "owner", &["role", "list"]);
+    assert!(prepared.status.success(), "{prepared:?}");
+    let before = f.state();
+    let routes: [&[&str]; 10] = [
+        &["policy", "evaluate", "--action-file", "caller.json"],
+        &["policy", "attest-owner", "--from-file", "caller.json"],
+        &["policy", "release", "--from-file", "caller.json"],
+        &["policy", "exception-record", "--from-file", "caller.json"],
+        &["policy", "exception-revoke", "--from-file", "caller.json"],
+        &["policy", "report-evaluate", "--from-file", "caller.json"],
+        &["policy", "report-fingerprint", "--from-file", "caller.json"],
+        &["decision", "request", "--from-file", "caller.json"],
+        &[
+            "decision",
+            "record",
+            "missing",
+            "--from-file",
+            "caller.json",
+        ],
+        &[
+            "message",
+            "send",
+            "--to-role",
+            "assistant",
+            "--from-file",
+            "caller.json",
+        ],
+    ];
+    let mut combinations = 0;
+    for body in [
+        b"{PCTX_CALLER_SENTINEL".as_slice(),
+        b"null",
+        b"[]",
+        b"{}",
+        b"\xff",
+    ] {
+        fs::write(f.base.join("caller.json"), body).unwrap();
+        for args in routes {
+            for format in ["json", "compact"] {
+                let code = if body == b"\xff" {
+                    "UNSUPPORTED_ENCODING"
+                } else {
+                    "INVALID_ARGUMENT"
+                };
+                refusal(&f.run(format, "owner", args), 2, code);
+                assert_eq!(f.state(), before, "{args:?}");
+                combinations += 1;
+            }
+        }
+    }
+    for length in [65536, 65537] {
+        let mut bytes = vec![b' '; length];
+        bytes[0] = b'{';
+        fs::write(f.base.join("caller.json"), bytes).unwrap();
+        for args in routes {
+            let value = refusal(&f.run("json", "owner", args), 2, "INVALID_ARGUMENT");
+            assert_eq!(
+                value["errors"][0]["message"],
+                if length == 65536 {
+                    "Invalid JSON data"
+                } else {
+                    "Operations input exceeds 64 KiB"
+                }
+            );
+            assert_eq!(f.state(), before, "{args:?}");
+        }
+    }
+    // Owner authority precedes the file read only on owner-dependent routes.
+    for route in [5, 8] {
+        refusal(&f.run("json", "agent", routes[route]), 5, "POLICY_DENIED");
+        assert_eq!(f.state(), before);
+    }
+    eprintln!("Operations raw/sanitized native combinations:{combinations}; cap20; owner2");
+}
+
+#[test]
+fn hook_required_shapes_and_unsupported_protocol_keep_distinct_refusals() {
+    let f = Fixture::new();
+    let before = f.state();
+    let routes: [&[&str]; 2] = [
+        &[
+            "adapter",
+            "claude",
+            "event",
+            "--agent",
+            "fixture",
+            "--from-file",
+            "caller.json",
+        ],
+        &[
+            "adapter",
+            "claude",
+            "protocol-fixture",
+            "--from-file",
+            "caller.json",
+        ],
+    ];
+    let cases = [
+        (json!(null), 2, "INVALID_ARGUMENT"),
+        (json!([]), 2, "INVALID_ARGUMENT"),
+        (json!({}), 2, "INVALID_ARGUMENT"),
+        (json!({"hook_event_name":2}), 2, "INVALID_ARGUMENT"),
+        (json!({"hook_event_name":"Stop"}), 2, "INVALID_ARGUMENT"),
+        (
+            json!({"hook_event_name":"Stop","session_id":2}),
+            2,
+            "INVALID_ARGUMENT",
+        ),
+        (
+            json!({"hook_event_name":"Unknown","session_id":"native"}),
+            6,
+            "CAPABILITY_UNAVAILABLE",
+        ),
+        (
+            json!({"hook_event_name":"SessionStart","session_id":"native","source":"unknown"}),
+            6,
+            "CAPABILITY_UNAVAILABLE",
+        ),
+        (
+            json!({"hook_event_name":"PreCompact","session_id":"native","trigger":"unknown"}),
+            6,
+            "CAPABILITY_UNAVAILABLE",
+        ),
+    ];
+    for (body, exit, code) in cases {
+        fs::write(f.base.join("caller.json"), body.to_string()).unwrap();
+        for args in routes {
+            for format in ["json", "compact"] {
+                refusal(&f.run(format, "owner", args), exit, code);
+                assert_eq!(f.state(), before, "{body} {args:?}");
+            }
+        }
+    }
+    fs::write(f.base.join("caller.json"), b"{PCTX_CALLER_SENTINEL").unwrap();
+    for args in routes {
+        refusal(&f.run("json", "owner", args), 2, "INVALID_ARGUMENT");
+        assert_eq!(f.state(), before);
+    }
+}
+
+#[test]
+fn authored_inventory_profile_and_registry_refuse_schema_before_publication() {
+    let f = Fixture::new();
+    let routes: [&[&str]; 2] = [
+        &["inventory", "profile", "--path", "caller.json"],
+        &["inventory", "audit", "--registry", "caller.json"],
+    ];
+    for body in [
+        b"{PCTX_CALLER_SENTINEL".as_slice(),
+        b"null",
+        b"[]",
+        b"{}",
+        b"\xff",
+    ] {
+        fs::write(f.root.join("caller.json"), body).unwrap();
+        let before = f.state();
+        for args in routes {
+            for format in ["json", "compact"] {
+                // reader classifies invalid UTF-8 independently of JSON shape.
+                let code = if body == b"\xff" {
+                    "UNSUPPORTED_ENCODING"
+                } else {
+                    "INVALID_ARGUMENT"
+                };
+                let exit = if body == b"\xff" { 3 } else { 2 };
+                refusal(&f.run(format, "owner", args), exit, code);
+                assert_eq!(f.state(), before, "{args:?}");
+            }
+        }
+    }
+    for (args, body) in routes.into_iter().zip([
+        json!({"schema_version":2,"id":"fixture","expectations":[]}),
+        json!({"schema_version":2,"source_refs":[]}),
+    ]) {
+        fs::write(f.root.join("caller.json"), body.to_string()).unwrap();
+        let before = f.state();
+        for format in ["json", "compact"] {
+            let value = refusal(&f.run(format, "owner", args), 2, "INVALID_ARGUMENT");
+            assert!(
+                value["errors"][0]["message"]
+                    .as_str()
+                    .unwrap()
+                    .contains("schema")
+            );
+            assert_eq!(f.state(), before);
+        }
+    }
+}
+
+#[test]
+fn statusline_shape_and_version_refusals_precede_session_binding() {
+    let f = Fixture::new();
+    let args = [
+        "adapter",
+        "claude",
+        "statusline",
+        "--task-id",
+        &f.task,
+        "--from-file",
+        "caller.json",
+        "--pool",
+        "main",
+        "--session",
+        "missing",
+        "--epoch",
+        "1",
+        "--observed-at",
+        "2026-10-09T00:00:00Z",
+        "--window-start",
+        "2026-10-09T00:00:00Z",
+        "--window-end",
+        "2026-10-10T00:00:00Z",
+        "--counter-epoch",
+        "fixture",
+        "--idempotency-key",
+        "fixture",
+    ];
+    let before = f.state();
+    for (body, exit, code) in [
+        ("{PCTX_CALLER_SENTINEL", 2, "INVALID_ARGUMENT"),
+        ("null", 6, "CAPABILITY_UNAVAILABLE"),
+        ("[]", 6, "CAPABILITY_UNAVAILABLE"),
+        ("{}", 6, "CAPABILITY_UNAVAILABLE"),
+        (r#"{"version":2}"#, 6, "CAPABILITY_UNAVAILABLE"),
+        (r#"{"version":"unverified"}"#, 6, "CAPABILITY_UNAVAILABLE"),
+        (r#"{"version":"2.1.211"}"#, 2, "INVALID_ARGUMENT"),
+        (
+            r#"{"version":"2.1.211","session_id":2}"#,
+            2,
+            "INVALID_ARGUMENT",
+        ),
+    ] {
+        fs::write(f.base.join("caller.json"), body).unwrap();
+        for format in ["json", "compact"] {
+            refusal(&f.run(format, "owner", &args), exit, code);
+            assert_eq!(f.state(), before, "{body}");
+        }
+    }
+    // Policy remains earlier than protocol parsing on this owner-only import.
+    refusal(&f.run("json", "agent", &args), 5, "POLICY_DENIED");
+    assert_eq!(f.state(), before);
+}
+
+#[test]
+fn handoff_metadata_syntax_is_distinct_from_permitted_raw_body_and_unvalidated_shape() {
+    let f = Fixture::new();
+    let directory = f.root.join(".pctx/handoffs");
+    fs::create_dir_all(&directory).unwrap();
+    for metadata in ["{PCTX_CALLER_SENTINEL", ""] {
+        fs::write(
+            directory.join("caller.md"),
+            format!("---\n{metadata}\n---\nRaw body"),
+        )
+        .unwrap();
+        let before = f.state();
+        for format in ["json", "compact"] {
+            refusal(
+                &f.run(format, "owner", &["handoff", "show", "caller"]),
+                2,
+                "INVALID_ARGUMENT",
+            );
+            assert_eq!(f.state(), before);
+        }
+    }
+    // Show without --validate permits arbitrary JSON metadata; do not invent
+    // a schema restriction or reject arbitrary prose in the user-authored body.
+    for metadata in [json!(null), json!([]), json!({})] {
+        fs::write(
+            directory.join("caller.md"),
+            format!("---\n{metadata}\n---\n{{raw non-JSON body"),
+        )
+        .unwrap();
+        let before = f.state();
+        let output = f.run("json", "owner", &["handoff", "show", "caller"]);
+        assert!(output.status.success(), "{output:?}");
+        let value: Value = serde_json::from_slice(&output.stdout).unwrap();
+        assert_eq!(value["data"]["metadata"], metadata);
+        assert_eq!(f.state(), before);
+    }
+}
+
+#[test]
+fn filter_manifest_refusals_precede_reports_and_external_pack_syntax_is_input_two() {
+    let f = Fixture::new();
+    let directory = f.root.join(".pctx/filters");
+    fs::create_dir_all(&directory).unwrap();
+    fs::write(
+        directory.join("caller.toml"),
+        r#"schema_version = 1
+id = "caller"
+version = "1.0.0"
+priority = 100
+[match]
+program = "/usr/bin/printf"
+argv_prefix = ["status"]
+stream = "both"
+[parse]
+kind = "lines"
+[render]
+max_bytes = 8192
+keep_head_lines = 12
+keep_tail_lines = 20
+show_omission_counts = true
+[[rules]]
+op = "protect"
+pattern = "error"
+"#,
+    )
+    .unwrap();
+    fs::create_dir(f.root.join("fixtures")).unwrap();
+    let args = [
+        "filter",
+        "test",
+        ".pctx/filters/caller.toml",
+        "--fixtures",
+        "fixtures",
+    ];
+    for body in [
+        "{PCTX_CALLER_SENTINEL",
+        "null",
+        "[]",
+        "{}",
+        r#"{"schema_version":2,"executable":"/usr/bin/printf","cases":[]}"#,
+        r#"{"schema_version":1,"executable":"/usr/bin/printf","cases":[]}"#,
+    ] {
+        fs::write(f.root.join("fixtures/manifest.json"), body).unwrap();
+        let before = f.state();
+        for format in ["json", "compact"] {
+            refusal(&f.run(format, "owner", &args), 2, "FILTER_INVALID");
+            assert_eq!(f.state(), before);
+        }
+    }
+    let artifact = f.root.join("external.json");
+    fs::write(&artifact, b"{PCTX_CALLER_SENTINEL").unwrap();
+    let before = f.state();
+    let bytes = fs::read(&artifact).unwrap();
+    for format in ["json", "compact"] {
+        refusal(
+            &f.run(format, "owner", &["pack", "inspect", "external.json"]),
+            2,
+            "INVALID_ARGUMENT",
+        );
+        assert_eq!(f.state(), before);
+        assert_eq!(fs::read(&artifact).unwrap(), bytes);
+    }
+}
+
+#[test]
+fn typed_check_report_schema_is_validated_after_existing_check_and_lease() {
+    let f = Fixture::new();
+    for args in [
+        vec!["agent", "register", "--name", "worker", "--kind", "agent"],
+        vec!["task", "ready", &f.task],
+        vec!["task", "assign", &f.task, "--agent", "worker"],
+    ] {
+        let output = f.run("json", "owner", &args);
+        assert!(output.status.success(), "{output:?}");
+    }
+    let output = f.run("json", "owner", &["task", "start", &f.task]);
+    assert!(output.status.success(), "{output:?}");
+    let started: Value = serde_json::from_slice(&output.stdout).unwrap();
+    let run = started["data"]["run_id"].as_str().unwrap();
+    let output = f.run(
+        "json",
+        "owner",
+        &["check", "begin", &f.task, "--key", "unit", "--run", run],
+    );
+    assert!(output.status.success(), "{output:?}");
+    let begun: Value = serde_json::from_slice(&output.stdout).unwrap();
+    let check = begun["data"]["check_id"].as_str().unwrap();
+    let report = json!({"schema_version":1,"check_key":"unit","producer":"fixture","source":"external_report","exit_code":0,"tests":1,"passed":1,"failed":0,"errors":0,"skipped":0,"result":"passed","started_at":1,"finished_at":2});
+    let before = f.state();
+    for (key, value) in [
+        ("schema_version", json!(2)),
+        ("check_key", json!("other")),
+        ("producer", json!(" ")),
+        ("finished_at", json!(0)),
+        ("result", json!("unknown")),
+        ("tests", json!(2)),
+        ("passed", json!(u64::MAX)),
+    ] {
+        let mut body = report.clone();
+        body[key] = value;
+        fs::write(f.base.join("caller.json"), body.to_string()).unwrap();
+        for format in ["json", "compact"] {
+            let value = refusal(
+                &f.run(
+                    format,
+                    "owner",
+                    &["check", "record", check, "--from-file", "caller.json"],
+                ),
+                2,
+                "INVALID_ARGUMENT",
+            );
+            assert_eq!(
+                value["errors"][0]["message"],
+                "Invalid check report schema or counts"
+            );
+            assert_eq!(f.state(), before, "{key}");
+        }
+    }
+}
+
+#[test]
+fn quota_count_ceiling_remains_subordinate_to_original_one_mib_file_cap() {
+    let f = Fixture::new();
+    // These required string keys have no aliases. Empty strings and omitted
+    // optional/defaulted fields are the shortest typed observation encoding.
+    let minimum = json!({"observation_id":"","pool_id":"","provider":"","model":"","metric":"","unit":"","source":"","collector":"","source_revision":"","observed_at":"","window_id":"","window_start":"","window_end":"","status":"","kind":""});
+    let _: pctx::quota::Observation = serde_json::from_value(minimum.clone()).unwrap();
+    let minimum_bytes = minimum.to_string().len();
+    assert!(10000 * (minimum_bytes + 1) > 1048576);
+    let before = f.state();
+    for count in [10000, 10001] {
+        let batch = json!({"schema_version":1,"observations":vec![minimum.clone(); count]});
+        fs::write(f.base.join("caller.json"), batch.to_string()).unwrap();
+        let value = refusal(
+            &f.run("json", "owner", &f.routes()[4].0),
+            2,
+            "INVALID_ARGUMENT",
+        );
+        assert_eq!(
+            value["errors"][0]["message"],
+            "Usage import must be regular JSON at most one MiB"
+        );
+        assert_eq!(f.state(), before);
+    }
+    eprintln!(
+        "Quota required-key minimum bytes:{minimum_bytes};10000/10001 bounded transport refuses before observation/count semantics"
+    );
+}

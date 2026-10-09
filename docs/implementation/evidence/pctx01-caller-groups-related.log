@@ -1,0 +1,72 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.96s
+     Running tests/adapter_errors.rs (target/debug/deps/adapter_errors-c6d5fa4673ac7e39)
+
+running 10 tests
+test checksum_matched_persisted_adapter_plan_corruption_is_not_caller_input ... ok
+test direct_adapter_plan_input_source_and_binding_are_distinct ... ok
+test direct_adapter_receipt_conflicts_and_reconciliation_retain_nine ... ok
+test direct_adapter_schema_and_ownership_integrity_are_storage_seven ... ok
+test direct_adapter_corrupt_persisted_json_and_shapes_are_storage_errors ... ok
+test native_adapter_symlink_refusal_is_access_five ... ok
+test native_adapter_hook_error_and_io_keep_envelope_and_state ... ok
+test native_adapter_owner_refusal_is_policy_five_in_both_formats ... ok
+test native_adapter_unsupported_protocol_is_capability_six ... ok
+test native_adapter_input_cap_and_configuration_shape_are_input_two ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.88s
+
+     Running tests/adapter_preflight.rs (target/debug/deps/adapter_preflight-6aa1789fcd433973)
+
+running 6 tests
+test direct_adapter_labels_keep_original_expiry_and_no_effects ... ok
+test adapter_label_boundaries_preserve_existing_grammar ... ok
+test isolated_nonowner_adapter_admission_precedes_authority ... ok
+test native_accepted_plan_labels_preserve_owner_authority ... ok
+test native_event_keys_remain_input_dependent_and_replay_is_stable ... ok
+test adapter_labels_precede_project_and_response_effects ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.30s
+
+     Running tests/handoff_preflight.rs (target/debug/deps/handoff_preflight-00ee29a516bfb75e)
+
+running 5 tests
+test library_invalid_name_and_original_expiry_refuse_before_input_or_artifacts ... ok
+test fifo_input_is_refused_without_blocking_or_creating_checkpoints ... ok
+test oversize_and_invalid_utf8_inputs_preserve_every_index_checkpoint_and_file ... ok
+test invalid_names_on_every_leaf_refuse_before_discovery_or_response_writes ... ok
+test explicit_regular_file_semantics_and_create_update_show_are_preserved ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.19s
+
+     Running tests/inventory.rs (target/debug/deps/inventory-3ccb113965ac776c)
+
+running 8 tests
+test dynamic_invalid_and_unsupported_configs_are_explicit ... ok
+test symlinks_and_budgets_are_not_traversed ... ok
+test stale_documents_and_changed_source_only_need_review ... ok
+test static_workspace_packages_and_checks_have_current_proof_without_execution ... ok
+test audit_proposals_are_deterministic_hash_bound_and_do_not_write ... ok
+test exclusions_and_redaction_apply_to_scan_and_current_audit ... ok
+test unknown_selectors_and_code_structure_do_not_invent_facts ... ok
+test profile_confirms_observation_not_owner_authority_and_detects_conflict_and_stale ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/operations.rs (target/debug/deps/operations-530607f06d0857bd)
+
+running 11 tests
+test forged_agent_owner_decision_does_not_generate_grant ... ok
+test silence_hides_topic_and_body_before_inbox_ranking ... ok
+test omitted_action_role_cannot_bypass_registered_actor_pause ... ok
+test owner_queue_honors_specific_recipients_and_owner_destination_without_globalizing_silence ... ok
+test owner_queue_filters_oldest_hidden_actions_before_limit_without_disclosing_details ... ok
+test role_pause_blocks_claim_without_mutating_task_or_run ... ok
+test exact_decisions_deduplicate_but_changed_environment_amount_artifact_do_not ... ok
+test mailbox_retry_is_queued_once_and_ack_is_recipient_bound ... ok
+test unknown_cost_pause_and_silence_override_valid_grant ... ok
+test owner_queue_delivery_barriers_survive_control_restore ... ok
+test backup_restore_preserves_pause_silence_and_messages_but_revokes_grants ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.23s
+

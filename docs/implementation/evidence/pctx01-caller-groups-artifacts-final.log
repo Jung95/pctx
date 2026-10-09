@@ -1,0 +1,68 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.44s
+     Running tests/caller_input_contract.rs (target/debug/deps/caller_input_contract-08b980fca1808cc1)
+
+running 11 tests
+test handoff_metadata_syntax_is_distinct_from_permitted_raw_body_and_unvalidated_shape ... ok
+test filter_manifest_refusals_precede_reports_and_external_pack_syntax_is_input_two ... ok
+test caller_owner_and_task_revision_priorities_do_not_become_universal_input_first ... ok
+test exact_file_caps_reach_json_decoder_and_overflow_preserves_existing_input_errors ... ok
+test authored_inventory_profile_and_registry_refuse_schema_before_publication ... ok
+test statusline_shape_and_version_refusals_precede_session_binding ... ok
+test hook_required_shapes_and_unsupported_protocol_keep_distinct_refusals ... ok
+test quota_batch_schema_and_restore_identity_refusals_are_safe_input_errors ... ok
+Caller syntax/shape native combinations:80
+test caller_json_syntax_and_typed_shape_are_input_two_and_preserve_prepared_state ... ok
+Authored Task/Schedule schema native combinations:72
+test authored_task_and_schedule_schema_refusals_preserve_prepared_state ... ok
+Operations raw/sanitized native combinations:100; cap20; owner2
+test operations_raw_and_sanitized_consumers_reject_bad_json_before_effects ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.39s
+
+     Running tests/runner.rs (target/debug/deps/runner-262d46ab6960599b)
+
+running 30 tests
+test explicit_script_input_change_requires_new_trust ... ok
+test changed_script_and_agent_forged_trust_are_denied ... ok
+test cloud_helper_is_only_durable_intent ... ok
+test check_plan_with_finite_budget_inspects_registered_auxiliary_workspace_without_launch ... ok
+test finite_auxiliary_plan_refuses_fifo_metadata_without_waiting_or_launching ... ok
+test legacy_lock_fixture ... ok
+test inherited_canonical_descriptor_retains_lock_after_invalid_proof_and_parent_close ... ok
+
+thread 'invalid_memory_fixture_never_spawns_or_grants_heavy_resources' (9182053) panicked at tests/runner.rs:543:9:
+Output { status: ExitStatus(unix_wait_status(512)), stdout: "{\"command\":\"runner\",\"coverage\":{\"reasons\":[\"INVALID_ARGUMENT\"],\"status\":\"partial\"},\"data\":null,\"errors\":[{\"code\":\"INVALID_ARGUMENT\",\"message\":\"Invalid JSON data\",\"retryable\":false}],\"generation_id\":null,\"project_id\":null,\"schema_version\":\"1.0\",\"status\":\"error\",\"truncation\":{\"reasons\":[],\"truncated\":false},\"validation\":{\"checked_at\":\"2026-10-09T00:50:49.491Z\",\"mode\":\"matched\",\"scope\":[],\"workspace_atomic\":false},\"warnings\":[],\"workspace_id\":null}\n", stderr: "PCTX-RUNNER-PHASE-v1 pid=50897 elapsed_ms=0 phase=planned_profile_begin\nPCTX-RUNNER-PHASE-v1 pid=50897 elapsed_ms=34 phase=planned_profile_ready\nPCTX-RUNNER-PHASE-v1 pid=50897 elapsed_ms=34 phase=current_profile_begin\nPCTX-RUNNER-PHASE-v1 pid=50897 elapsed_ms=45 phase=current_profile_ready\n" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test check_alias_preserves_nested_timeout_processing_error ... ok
+test invalid_memory_fixture_never_spawns_or_grants_heavy_resources ... FAILED
+test legacy_bridge_absence_prevents_execution ... ok
+test check_capture_partial_is_not_wrapper_success_in_either_route ... ok
+test linked_slot_child_directory_cannot_redirect_state ... ok
+test native_pass_is_invalidated_by_external_executable_change_with_sources_unchanged ... ok
+test observed_failed_check_is_distinct_from_processing_failure ... ok
+test parent_exit_does_not_release_living_child ... ok
+test profile_change_during_execution_is_stale_at_report_recording ... ok
+test synthetic_low_memory_defers_heavy_admission ... ok
+test native_environment_change_or_missing_profile_invalidates_existing_pass ... ok
+test local_helper_preserves_nested_timeout_and_partial_capture ... ok
+test cross_project_heavy_capacity_is_one ... ok
+test trusted_typed_check_is_real_evidence ... ok
+test user_created_host_state_symlink_is_denied ... ok
+test timeout_is_observed_without_success_evidence ... ok
+test unknown_memory_requires_disclosed_exact_owner_override ... ok
+test local_auxiliary_provider_needs_registered_linked_workspace_and_capacity ... ok
+test source_mutation_during_check_is_stale ... ok
+test unknown_and_zero_tests_do_not_pass ... ok
+test canonical_mutex_survives_main_parent_death ... ok
+test killed_guardian_causes_negative_child_observation ... ok
+test canonical_legacy_and_pctx_exclude_each_other ... ok
+
+failures:
+
+failures:
+    invalid_memory_fixture_never_spawns_or_grants_heavy_resources
+
+test result: FAILED. 29 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 25.24s
+
+error: test failed, to rerun pass `--test runner`

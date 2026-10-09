@@ -13,7 +13,7 @@ R01–R12 local12/12 qualifies only that pure-admission subset. Closed rows belo
 are deliberately bounded subconditions; G09 independently retains every required
 release-platform condition. A closed local row does not qualify an untested OS.
 
-Current bounded detail closure: **25/40**; whole gates **0/10**.
+Current bounded detail closure: **26/40**; whole gates **0/10**.
 
 | Fixed ID | State | Completion condition | Source | Spec | Evidence prefix |
 | --- | --- | --- | --- | --- | --- |
@@ -26,7 +26,7 @@ Current bounded detail closure: **25/40**; whole gates **0/10**.
 | PCTX01-G03-D01 | closed | Historical A01-A11 and R01-R12 pure admission contracts are locally qualified, with exact exceptions and producer state boundaries | main.rs and shared producer validators | §14/27/38 | pctx01-report-admission-verification.json |
 | PCTX01-G03-D02 | closed | Activity nonnegative cursor and Install explicit hash grammar precede discovery/lock/output effects | main.rs,work.rs,adapter.rs | §14/38 | pctx01-activity-admission-verification.json, pctx01-install-admission-verification.json |
 | PCTX01-G03-D03 | open | Freeze and execute remaining source-independent grammar/no-effect cases for all 140 leaves; reuse closed A/R/C cases, do not invent lookup grammar | main.rs and shared producer validators | §14/27/38 | pctx01-admission-registry.json |
-| PCTX01-G03-D04 | open | Group explicit input/stdin schema and size failures with producer-dependent checks; prove common refusal precedence and effects for admitted inputs, preserving policy5/state9 | main.rs,input.rs,work.rs,quota.rs,operations.rs,pack.rs,filters.rs | §14/27/33/38 | pctx01-handoff-input-verification.json, pctx01-argument-preflight-verification.json |
+| PCTX01-G03-D04 | closed | Group explicit input/stdin schema and size failures with producer-dependent checks; prove common refusal precedence and effects for admitted inputs, preserving policy5/state9 | main.rs,input.rs,work.rs,quota.rs,operations.rs,pack.rs,filters.rs | §14/27/33/38 | pctx01-handoff-input-verification.json, pctx01-argument-preflight-verification.json |
 | PCTX01-G04-D01 | closed | One complete safe JSON refusal document for semantic/parser/timeout errors across admitted refusal representations | domain.rs,main.rs | §8/14 | pctx01-refusal-envelope-verification.json, pctx01-refusal-rendering-verification.json |
 | PCTX01-G04-D02 | closed | Shared final-byte minimum/error budget and execution fallback preserve child truth and durable reread handles; bounded tested fallback cases only, universal serialization/destination bounds remain G04-D03 | main.rs,render.rs | §8/14/38 | pctx01-budget-fallback-verification.json |
 | PCTX01-G04-D03 | open | Complete success/partial/error envelope required fields and exact final bytes for all supported representation/destination classes; no interrupted JSON or fabricated omitted count | main.rs,domain.rs,render.rs | §8/14/38 | pctx01-run-final-bytes-verification.json, pctx01-representation-admission-verification.json |
@@ -149,3 +149,27 @@ and locked all-target Clippy PASS. Independent review accepted the bounded repai
 [Current schema/output evidence](../evidence/pctx01-caller-schema-verification.json).
 Prior cap repair remains qualified by its own source-bound evidence; whole input
 and output conditions are not closed. Detail25/40 and whole0/10 are unchanged.
+
+## Current G03-D04 bounded common-input closure
+
+Current **G03-D04 is closed as a bounded local common-input condition**.
+All18 frozen caller/config/external JSON sites in seven existing groups now map
+to named current or unchanged-branch prior proof. Current actual caller13 PASS,
+related40 PASS, preceding caller11 PASS and Runner29 PASS; the new memory control
+passes1 after disabling fixture diagnostics. Initial encoding, absolute Pack path
+and diagnostics-mode test premise failures are retained without product changes.
+Operations10 readers cover100 syntax/shape/encoding combinations plus20 cap and
+2 owner controls; Adapter required shapes/unsupported6 and Statusline version
+priorities remain distinct. Inventory explicit schema2, source UTF8 class3 and
+partial discovered-config observations are not conflated. Filter manifest refusal,
+Pack project-relative external syntax, Handoff permitted metadata/body, real-lease
+Check Report14 controls and memory4096/4097 no-child/no-heavy-grant are qualified.
+Quota10000/10001 cannot fit the original1MiB cap: minimum required-key encoding is
+217bytes; actual cap-first2 is proved, not accepted-count semantics. Archive256MiB
+proof remains oversize admission, not allocated exact-cap/growth. Prepared logical
+SQL/schema and non-DB comparisons do not claim physical WAL or first-use rollback.
+Format/locked all-target Clippy PASS; independent fixed-site audit found no common
+input gap. [Closure evidence](../evidence/pctx01-caller-groups-verification.json) and
+[18-site crosswalk](../evidence/pctx01-caller-input-matrix.json) preserve producer
+ownership and required-platform limits. Detail **26/40**, whole gates **0/10**.
+G04-D03 remains open; the prior Backup output repair remains qualified.

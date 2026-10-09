@@ -229,8 +229,8 @@
     {
       "id": "PCTX01-G03-D04",
       "gate": "G03",
-      "status": "open",
-      "local_implementation": "implementing; bounded caller-file cap candidate qualified, full payload/input matrix remains",
+      "status": "closed",
+      "local_implementation": "qualified_bounded_common_input_contract",
       "completion_condition": "Group explicit input/stdin schema and size failures with producer-dependent checks; prove common refusal precedence and effects for admitted inputs, preserving policy5/state9",
       "spec_sections": [
         "14",
@@ -239,21 +239,22 @@
         "38"
       ],
       "owner": "PCTX01 common boundary; independent producer semantics retain requirement/task owner",
-      "paths": "main.rs,input.rs,work.rs,quota.rs,operations.rs,pack.rs,filters.rs",
+      "paths": "main.rs,input.rs,work.rs,quota.rs,operations.rs,pack.rs,filters.rs,adapter.rs,inventory.rs,runner.rs,storage.rs",
       "evidence": [
         "pctx01-handoff-input-verification.json",
         "pctx01-argument-preflight-verification.json",
         "pctx01-caller-bound-verification.json",
         "pctx01-caller-input-matrix.json",
-        "pctx01-caller-schema-verification.json"
+        "pctx01-caller-schema-verification.json",
+        "pctx01-caller-groups-verification.json"
       ],
       "verification_environment": "Native macOS arm64 local common proof; all release platforms separately required by G09",
-      "macOS_arm64": "partial_bounded_proof",
+      "macOS_arm64": "qualified_bounded_local",
       "macOS_x86_64": "unverified; G09-D02",
       "Linux_x86_64": "unverified; G09-D03",
       "Linux_aarch64": "prior fixed-source full only; inspect linked manifest per contract",
       "Windows_x86_64": "unverified; G09-D04",
-      "documentation_evidence": "Current cap proof and fixed seven-group/18-site input map; condition open"
+      "documentation_evidence": "Frozen18-site/seven-group common-input crosswalk reconciled; independent producer and G08/G09 obligations remain separate"
     },
     {
       "id": "PCTX01-G04-D01",

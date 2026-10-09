@@ -1,0 +1,9 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.55s
+     Running tests/runner.rs (target/debug/deps/runner-262d46ab6960599b)
+
+running 1 test
+test invalid_memory_fixture_never_spawns_or_grants_heavy_resources ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 29 filtered out; finished in 0.96s
+
