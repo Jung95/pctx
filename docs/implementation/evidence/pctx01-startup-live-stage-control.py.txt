@@ -1,0 +1,60 @@
+"""Owned-only live subscriber readiness control; NEVER observes a service."""
+import subprocess,selectors,time,os,json,tempfile,hashlib,uuid
+from pathlib import Path
+B=Path('/Users/dev/PCTX/docs/implementation/evidence')
+def service_stage(row,pid):
+ if row.get('processID')!=pid or row.get('processImagePath')!='/usr/libexec/syspolicyd' or row.get('eventType')!='logEvent':return None
+ import re,datetime
+ message=row.get('eventMessage','');stages={'GK scan complete:':'scan_complete','GK Xprotect results:':'xprotect_result','GK Xprotect forced rule only results:':'xprotect_forced_result'}
+ stage=next((v for k,v in stages.items() if isinstance(message,str) and message.startswith(k)),None);hs=re.findall(r'\(path: ([0-9a-f]{1,16})\)',message) if isinstance(message,str) else []
+ if not stage or len(hs)!=1:return None
+ try:
+  stamp=datetime.datetime.fromisoformat(row['timestamp']);assert stamp.tzinfo is not None
+ except (KeyError,ValueError,TypeError,AssertionError):return None
+ return {'timestamp_utc':stamp.astimezone(datetime.timezone.utc).isoformat(),'stage':stage,'path_hash':hs[0]}
+def run():
+ assert os.getuid()==os.geteuid()==502
+ nonce=uuid.uuid4().hex;helper=None;listener=None;sel=selectors.DefaultSelector();received=False;raw_bytes=0;sequence=0;line_buffer=bytearray();failure=None;receipts={}
+ with tempfile.TemporaryDirectory(prefix='pctx01-live-stage-control-',dir='/private/tmp') as d:
+  binary=Path(d)/'pulse';os.chmod(d,0o700)
+  subprocess.run(['/Library/Developer/CommandLineTools/usr/bin/clang','-isysroot','/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk','-x','c',str(B/'pctx01-startup-live-stage-pulse.c.txt'),'-o',str(binary)],check=True,capture_output=True,timeout=15)
+  try:
+   helper=subprocess.Popen([str(binary),nonce],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,text=True)
+   sel.register(helper.stdout,selectors.EVENT_READ)
+   if not sel.select(3):raise RuntimeError('helper readiness timeout')
+   assert helper.stdout.readline().strip()==f'ready {helper.pid}';sel.unregister(helper.stdout)
+   predicate=f'processIdentifier == {helper.pid} AND subsystem == "org.pctx.diagnostic.stage-readiness"'
+   listener=subprocess.Popen(['/usr/bin/log','stream','--predicate',predicate,'--style','ndjson','--level','info','--timeout','4','--no-backtrace'],stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+   for stream in [listener.stdout,listener.stderr]:os.set_blocking(stream.fileno(),False);sel.register(stream,selectors.EVENT_READ)
+   begin=time.clock_gettime_ns(time.CLOCK_MONOTONIC);deadline=time.monotonic()+3;next_pulse=0
+   while time.monotonic()<deadline and not received:
+    now=time.monotonic()
+    if now>=next_pulse:helper.stdin.write('p\n');helper.stdin.flush();sequence+=1;next_pulse=now+.1
+    for key,_ in sel.select(.05):
+     data=os.read(key.fd,8192);raw_bytes+=len(data)
+     if raw_bytes>65536:raise RuntimeError('byte cap')
+     if not data:sel.unregister(key.fileobj);continue
+     if key.fileobj is listener.stdout:
+      line_buffer.extend(data)
+      while b'\n' in line_buffer:
+       line,_,line_buffer=line_buffer.partition(b'\n')
+       try:row=json.loads(line)
+       except (ValueError,TypeError):continue
+       if isinstance(row,dict) and row.get('processID')==helper.pid and row.get('subsystem')=='org.pctx.diagnostic.stage-readiness' and row.get('eventType')=='logEvent' and row.get('eventMessage')=='PCTXStageReady '+nonce:received=True;break
+   latency=time.clock_gettime_ns(time.CLOCK_MONOTONIC)-begin
+   if not received:failure='readiness_unknown_no_test_permitted'
+  except Exception as e:failure=type(e).__name__;latency=None
+  finally:
+   sel.close();line_buffer.clear()
+   for name,proc in [('listener',listener),('helper',helper)]:
+    if proc:
+     if proc.poll() is None:
+      proc.terminate()
+      try:proc.wait(timeout=1)
+      except subprocess.TimeoutExpired:proc.kill();proc.wait(timeout=1)
+     receipts[name]={'pid':proc.pid,'exit':proc.returncode,'reaped':True}
+     for stream in [proc.stdin,proc.stdout,proc.stderr]:
+      if stream:stream.close()
+ out={'task':'PCTX01-G05-D05','received_own_marker':received,'latency_ns':latency,'pulses_sent':sequence,'raw_bytes':raw_bytes,'failure':failure,'receipts':receipts,'temporary_binary_removed':True,'service_observed':False,'product_test_executed':False,'raw_retained':False,'administrator_authentication':False,'qualification':False,'limit':'Own marker proves this subscriber received a known normal log; not service stage emission,info enablement,causal timing or complete capture.'}
+ (B/'pctx01-startup-live-stage-control-result.json').write_text(json.dumps(out,indent=2)+'\n');print(json.dumps(out))
+if __name__=='__main__':run()

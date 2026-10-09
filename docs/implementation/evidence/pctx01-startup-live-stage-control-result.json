@@ -1,0 +1,27 @@
+{
+  "task": "PCTX01-G05-D05",
+  "received_own_marker": true,
+  "latency_ns": 1048376000,
+  "pulses_sent": 11,
+  "raw_bytes": 986,
+  "failure": null,
+  "receipts": {
+    "listener": {
+      "pid": 38068,
+      "exit": -15,
+      "reaped": true
+    },
+    "helper": {
+      "pid": 38067,
+      "exit": -15,
+      "reaped": true
+    }
+  },
+  "temporary_binary_removed": true,
+  "service_observed": false,
+  "product_test_executed": false,
+  "raw_retained": false,
+  "administrator_authentication": false,
+  "qualification": false,
+  "limit": "Own marker proves this subscriber received a known normal log; not service stage emission,info enablement,causal timing or complete capture."
+}

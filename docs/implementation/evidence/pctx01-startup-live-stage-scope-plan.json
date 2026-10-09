@@ -1,0 +1,38 @@
+{
+  "task": "PCTX01-G05-D05",
+  "human_scope_approval": "approved",
+  "pre_execution_review": "approved",
+  "service": {
+    "pid": 665,
+    "start_sec": 1791224512,
+    "start_usec": 669319,
+    "path": "/usr/libexec/syspolicyd"
+  },
+  "file_hashes": {
+    "pctx01-startup-live-stage-capture.py.txt": "3e24a498c94f1436920b8d781d2923295208d4ebb23097fda8a8785e48cd0bb9",
+    "pctx01-startup-live-stage-pulse.c.txt": "0a80ccac37e82678569cff016fbcb9ecb01fc72711f5f916f48ca000fc7e5afc",
+    "pctx01-startup-live-stage-forward-run.py.txt": "c5fcb3d23526cab99421ef1792dd6b6e15cc8f06dc2d602badbf6eb98a9ffffd",
+    "pctx01-startup-live-stage-forward-prepared.json": "0080ae0c1cf0fbae53ad76828a30fe3f52d172e6f97e5a6f71b806821a5ef033",
+    "pctx01-startup-live-stage-identity.c.txt": "fb5810d6f7e2e76c633a5278e678c8f549c6c0c36c6e47e64f55b87246fe2d7e"
+  },
+  "test_binary": "/Users/dev/PCTX/target/debug/deps/project_deadline-f7e8b9d913251d84",
+  "test_binary_sha256": "291d55fbd512aa3155a53995b42394aad07b3badce20abbf76e85e1192fc56eb",
+  "original_test": "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget",
+  "scope": "One live log stream,exact syspolicyd identity and GK scan complete/GK Xprotect results/GK Xprotect forced rule only results prefixes plus one owned nonce readiness pulse. Total7seconds from subscriber launch,128KiB/256parsed events; no fallback or retry. One unchanged original1000ms/8x16 test after readiness; no prewarming or deadline renewal.",
+  "privacy": "Future fixture hashes unknown before test. Same-stage events from other requests may be transiently read. Immediately reduce to anchored hash/stage/time tuples in bounded memory. After original cleanup, export only tuples matching admitted owned fixture hashes. Destroy unmatched tuples and raw bodies; no paths,result bodies,other hashes retained.",
+  "privilege": "Ordinary UID502,no admin authentication,only minimal source identity checks, no stack sample,process pause,configuration/security change,service restart,OS update or vendor message.",
+  "limits": [
+    "Own readiness does not prove service info events enabled/delivered.",
+    "Earlier/later uncaptured stages and cap/watchdog failures remain unknown.",
+    "XP can overlap PolicyScanner; callbacks do not partition all elapsed work or reveal rule/kernel reply cost.",
+    "Noncryptographic hash collisions, endpoint clock conversion and narrow PID identity race remain limits.",
+    "Listener/helper/diagnostic recording perturb scheduling; diagnostic success is not product qualification.",
+    "Original driver has existing30s watchdog; any driver timeout needs cleanup audit and prevents attribution."
+  ],
+  "qualification": false,
+  "review_basis": "Independent /root/work_control review; lifecycle/coverage corrections applied,50ms receipt tolerance removed; required explicit post-run root/named-PID audit added. Independent identity revision review passed: fixed PID/own parent only; exact identity and helper hash checks before consumption and after capture. Separate native observations retain PID race limitation.",
+  "approval_basis": "Human explicitly approved this one finite live-service scope including transient same-stage messages from other requests.",
+  "identity_binary": "/private/tmp/pctx01-live-stage-forward-nhw2akig/identity-helper",
+  "identity_binary_sha256": "7095de64bb9e26722542652c3f9b9f5812db399645d149ba8a3a9f7ae496694b",
+  "identity_method": "Ordinary-user sysctl KERN_PROC_PID plus proc_pidpath; exact665 or own caller PID only. Original proc_pidinfo BSD preflight returned insufficient bytes; no listener/test launched. New method verified own caller then exact service identity successfully; same already-approved minimal identity scope."
+}

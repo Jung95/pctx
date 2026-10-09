@@ -1,0 +1,13 @@
+#include <os/log.h>
+#include <stdio.h>
+#include <unistd.h>
+int main(int argc,char **argv) {
+ if(argc!=2)return 2;
+ os_log_t log=os_log_create("org.pctx.diagnostic.stage-readiness","control");
+ char input[8];setvbuf(stdout,NULL,_IONBF,0);printf("ready %d\n",getpid());
+ while(fgets(input,sizeof(input),stdin)) {
+  if(input[0]=='q')break;
+  os_log(log,"PCTXStageReady %{public}s",argv[1]);
+ }
+ return 0;
+}

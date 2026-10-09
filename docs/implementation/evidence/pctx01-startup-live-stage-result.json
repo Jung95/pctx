@@ -1,0 +1,84 @@
+{
+  "task": "PCTX01-G05-D05",
+  "ready_own_marker": true,
+  "raw_bytes": 8773,
+  "parsed_events": 10,
+  "failure_class": null,
+  "events": [
+    {
+      "timestamp_utc": "2026-10-09T16:27:29.703519+00:00",
+      "stage": "xprotect_result",
+      "path_hash": "2c28cfb2cd7c21e0"
+    },
+    {
+      "timestamp_utc": "2026-10-09T16:27:29.703535+00:00",
+      "stage": "scan_complete",
+      "path_hash": "2c28cfb2cd7c21e0"
+    },
+    {
+      "timestamp_utc": "2026-10-09T16:27:29.889900+00:00",
+      "stage": "xprotect_result",
+      "path_hash": "6f71524260493edd"
+    },
+    {
+      "timestamp_utc": "2026-10-09T16:27:29.889924+00:00",
+      "stage": "scan_complete",
+      "path_hash": "6f71524260493edd"
+    },
+    {
+      "timestamp_utc": "2026-10-09T16:27:29.996207+00:00",
+      "stage": "xprotect_result",
+      "path_hash": "92f40e98b2a32b32"
+    },
+    {
+      "timestamp_utc": "2026-10-09T16:27:29.996223+00:00",
+      "stage": "scan_complete",
+      "path_hash": "92f40e98b2a32b32"
+    }
+  ],
+  "unmatched_tuples_discarded": 2,
+  "receipts": {
+    "listener": {
+      "pid": 38944,
+      "exit": 0,
+      "reaped": true
+    },
+    "helper": {
+      "pid": 38943,
+      "exit": -15,
+      "reaped": true
+    },
+    "test_driver": {
+      "pid": 38952,
+      "exit": 0,
+      "reaped": true
+    }
+  },
+  "cleanup_errors": [],
+  "coverage_unknowns": [
+    "early_listener_eof",
+    "test_active_at_capture_end"
+  ],
+  "capture_elapsed_ns": 6472017374,
+  "audit": {
+    "root_receipt_matches": true,
+    "known_pids_absent": true,
+    "present_or_reused_not_inspected": [],
+    "no_dropped_points": true,
+    "original_test_exit": 101,
+    "universal_descendant_cleanup_claim": false
+  },
+  "capture_window_completed": false,
+  "complete_coverage_claim": false,
+  "scope_seconds": 7,
+  "raw_retained": false,
+  "qualification": false,
+  "limits": [
+    "Own readiness does not prove service info events enabled/delivered.",
+    "Earlier/later uncaptured stages and cap/watchdog failures remain unknown.",
+    "XP can overlap PolicyScanner; callbacks do not partition all elapsed work or reveal rule/kernel reply cost.",
+    "Noncryptographic hash collisions, endpoint clock conversion and narrow PID identity race remain limits.",
+    "Listener/helper/diagnostic recording perturb scheduling; diagnostic success is not product qualification.",
+    "Original driver has existing30s watchdog; any driver timeout needs cleanup audit and prevents attribution."
+  ]
+}

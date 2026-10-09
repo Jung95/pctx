@@ -1,5 +1,19 @@
 # Implementation plan
 
+## Live policy-stage capture — current, 2026-10-09
+
+PCTX01-G05-D05 remains product_failure; 33/40 details,0/10 whole gates.
+Approved one-shot ordinary-user live capture and unchanged1000ms/8×16 test
+ran: exit101,98 observed outcomes/96OUTPUT/2TIMEOUT,30 planned calls censored.
+Six owned stage events cover three successful fixture paths; none matches the
+failed paths. Repeated per-worker paths prevent unique PID/evaluation pairing.
+Early listener EOF6.472s/test-active limit coverage;16/24/16us adjacent stage
+gaps do not measure XP cost. Scope consumed,102 known PIDs absent,private
+source/helper removed; no administrator prompt/product fix/Actions.
+Next stays G05-D05: new operation-level evidence or vendor-confirmed supported
+correction; no unchanged rerun or next official task.
+[Result, controls and limits](evidence/pctx01-startup-live-stage-review.md).
+
 ## Internal policy scan review — current, 2026-10-09
 
 PCTX01-G05-D05 remains product_failure; fixed33/40 details,0/10 whole gates.

@@ -1,0 +1,79 @@
+"""Priority2 once-only owned-parent timing; never qualifies repair."""
+from pathlib import Path
+import subprocess,hashlib,json,os,time,signal,statistics,datetime
+child=None
+cleanup_receipt=None
+def interrupted(signum,frame):raise KeyboardInterrupt('owned diagnostic interrupted')
+signal.signal(signal.SIGTERM,interrupted)
+signal.signal(signal.SIGINT,interrupted)
+def run():
+    global child,cleanup_receipt,BASE
+    REPO=Path('/Users/dev/PCTX');BASE=REPO/'docs/implementation/evidence';meta=json.loads((BASE/'pctx01-startup-live-stage-forward-prepared.json').read_text());root=Path(meta['root']);records=Path(meta['records']);source=Path(meta['source']);assert os.getuid()==502 and os.geteuid()==502
+    for relative,sha in meta['hashes'].items():assert hashlib.sha256((REPO/relative).read_bytes()).hexdigest()==sha
+    assert (source/'tests/project_deadline.rs').read_bytes()==(REPO/'tests/project_deadline.rs').read_bytes()
+    assert hashlib.sha256((source/'src/query_process.rs').read_bytes()).hexdigest()==meta['instrumented_query_sha256']
+    artifacts=[json.loads(s) for s in (root/'build.jsonl').read_text().splitlines() if s.startswith('{')];binaries=[r['executable'] for r in artifacts if r.get('reason')=='compiler-artifact' and r.get('target',{}).get('name')=='project_deadline' and r.get('executable')];assert len(binaries)==1;binary=Path(binaries[0]);binarysha=hashlib.sha256(binary.read_bytes()).hexdigest();(root/'consumed').open('x').close()
+    def anchor():
+        low=time.clock_gettime_ns(time.CLOCK_MONOTONIC);wall=time.clock_gettime_ns(time.CLOCK_REALTIME);high=time.clock_gettime_ns(time.CLOCK_MONOTONIC)
+        return {'native_low_ns':low,'wall_ns':wall,'native_high_ns':high,'offset_low_ns':wall-high,'offset_high_ns':wall-low}
+    clock_before=anchor()
+    log=BASE/'pctx01-startup-live-stage-forward-test.log';start=datetime.datetime.now(datetime.timezone.utc).isoformat();watchdog=False
+    with log.open('xb') as out:
+        child=subprocess.Popen([str(binary),'--exact',meta['test'],'--nocapture','--test-threads=1'],stdout=out,stderr=subprocess.STDOUT,cwd=REPO)
+        (root/'test-root-pid.json').write_text(json.dumps({'pid':child.pid,'test_binary_sha256':binarysha})+'\n')
+        try:code=child.wait(timeout=30)
+        except subprocess.TimeoutExpired:
+            watchdog=True;child.send_signal(signal.SIGINT)
+            try:code=child.wait(timeout=3)
+            except subprocess.TimeoutExpired:child.kill();code=child.wait()
+    clock_after=anchor()
+    finish=datetime.datetime.now(datetime.timezone.utc).isoformat()
+    if watchdog:raise SystemExit('outerwatchdog;originaloutcomeunknown;no retry;cleanup audit required')
+    parsed=[]
+    def durations(points,begin,end):
+        found=[];pending=None
+        for tick,name,arg in points:
+            if name==begin:pending=tick
+            elif name==end and pending is not None:found.append(tick-pending);pending=None
+        return found
+    for path in sorted(records.glob('*.json')):
+        assert path.stat().st_uid==502 and path.stat().st_mode&0o777==0o600 and path.stat().st_size<=600000
+        raw=path.read_bytes();row=json.loads(raw);points=row['points'];assert len(points)<=4096
+        monotonic=all(points[i][0]<=points[i+1][0] for i in range(len(points)-1));assert monotonic
+        identity=row['identity'];assert identity is None or identity[:3]==[row['pid'],child.pid,502]
+        marks={}
+        for tick,name,arg in points:marks.setdefault(name,[]).append((tick,arg))
+        intervals={name:durations(points,begin,end) for name,begin,end in [('spawn','spawn_begin','spawn_returned'),('validation','validation_begin','validation_end'),('native_probe','native_observation_begin','native_observation_end'),('stdout_drain','stdout_drain_begin','stdout_drain_end'),('stderr_drain','stderr_drain_begin','stderr_drain_end'),('waitid','waitid_begin','waitid_end'),('sleep','sleep_begin','sleep_end')]}
+        sleep_pairs=[];pending=None
+        for tick,name,arg in points:
+            if name=='sleep_begin':pending=(tick,arg)
+            elif name=='sleep_end' and pending:sleep_pairs.append({'actual_ns':tick-pending[0],'requested_ns':pending[1],'overshoot_ns':tick-pending[0]-pending[1]});pending=None
+        maxgap=max((points[i+1][0]-points[i][0] for i in range(len(points)-1)),default=0)
+        terminal=marks.get('collection_terminal',[(None,0)])[0][0];kill=marks.get('group_kill_begin',[(None,0)])[0][0]
+        info={'pid':row['pid'],'identity':identity,'outcome':row['outcome'],'clock_ok':row['clock_ok'],'deadline_low_ns':row['deadline_low_ns'],'deadline_high_ns':row['deadline_high_ns'],'path_hashes':row.get('path_hashes',[]),'point_count':len(points),'dropped':row['dropped'],'monotonic_points':monotonic,'interval_max_ns':{k:max(v,default=None) for k,v in intervals.items()},'total_entry_to_terminal_ns':terminal-points[0][0] if terminal is not None and points else None,'max_adjacent_gap_ns':maxgap,'max_sleep_overshoot_ns':max((p['overshoot_ns'] for p in sleep_pairs),default=None),'total_requested_sleep_ns':sum(p['requested_ns'] for p in sleep_pairs),'total_observed_sleep_ns':sum(p['actual_ns'] for p in sleep_pairs),'terminal_to_group_kill_ns':kill-terminal if terminal is not None and kill is not None else None,'group_kill_end_to_root_kill_begin_ns':marks['root_kill_begin'][0][0]-marks['group_kill_end'][0][0] if 'root_kill_begin' in marks and 'group_kill_end' in marks else None,'raw_sha256':hashlib.sha256(raw).hexdigest()}
+        try:os.kill(row['pid'],0);info['liveness']='present_or_reused;not inspected'
+        except ProcessLookupError:info['liveness']='absent'
+        parsed.append((info,path,raw))
+    failed=[r for r in parsed if r[0]['outcome']['code']!='OUTPUT'];success=[r for r in parsed if r[0]['outcome']['code']=='OUTPUT'];selected=list(failed)
+    complete_success=[r for r in success if r[0]['total_entry_to_terminal_ns'] is not None and r[0]['dropped']==0]
+    if complete_success:
+        selected+=[min(complete_success,key=lambda r:r[0]['total_entry_to_terminal_ns']),max(complete_success,key=lambda r:r[0]['total_entry_to_terminal_ns'])]
+    kept=set()
+    for info,path,raw in selected:
+        if info['pid'] in kept:continue
+        kept.add(info['pid']);(BASE/f'pctx01-startup-live-stage-forward-pid-{info["pid"]}-events.json').write_bytes(raw)
+    result={'task':'PCTX01-G05-D05','priority':3,'meta':meta,'clock_before':clock_before,'clock_after':clock_after,'parent_pid':child.pid,'start_utc':start,'finish_utc':finish,'test_exit':code,'outer_watchdog':watchdog,'binary_sha256':binarysha,'log_sha256':hashlib.sha256(log.read_bytes()).hexdigest(),'observed_outcomes':len(parsed),'success_outcomes':len(success),'failed_outcomes':len(failed),'observed_attempts_censored':code!=0,'retained_raw_pids':sorted(kept),'records':[r[0] for r in parsed],'qualification':False,'interpretation_limits':meta['limits'],'no_authentication':True,'no_service_observation':True,'no_test_source_change':True}
+    (BASE/'pctx01-startup-live-stage-forward-result.json').write_text(json.dumps(result,indent=2)+'\n')
+    print(json.dumps({'test_exit':code,'observed_outcomes':len(parsed),'success':len(success),'failed_pids':[r[0]['pid'] for r in failed],'dropped_points':sum(r[0]['dropped'] for r in parsed),'retained_raw_pids':sorted(kept),'all_known_children_absent':all(r[0]['liveness']=='absent' for r in parsed),'qualification':False}))
+try:
+    run()
+finally:
+    if child is not None:
+        if child.poll() is None:
+            child.kill()
+            child.wait(timeout=3)
+        cleanup_receipt={'pid':child.pid,'exit':child.returncode,'root_reaped':True,'descendants':'Not independently proven by root reap; inspect owned records/log and liveness before attribution.'}
+        meta_path=BASE/'pctx01-startup-live-stage-forward-prepared.json'
+        if meta_path.exists():
+            m=json.loads(meta_path.read_text())
+            (Path(m['root'])/'driver-cleanup.json').write_text(json.dumps(cleanup_receipt)+'\n')

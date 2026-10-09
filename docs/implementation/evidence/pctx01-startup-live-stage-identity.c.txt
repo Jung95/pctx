@@ -1,0 +1,25 @@
+#include <sys/types.h>
+#include <sys/sysctl.h>
+#include <sys/proc.h>
+#include <libproc.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <errno.h>
+#include <unistd.h>
+int main(int argc,char **argv) {
+ if(argc!=2)return 2;
+ char *end=NULL;long wanted=strtol(argv[1],&end,10);
+ if(!end||*end||wanted<=0||wanted>2147483647)return 2;
+ if(wanted!=665 && wanted!=getppid())return 2;
+ int mib[4]={CTL_KERN,KERN_PROC,KERN_PROC_PID,(int)wanted};
+ struct kinfo_proc info;memset(&info,0,sizeof(info));size_t length=sizeof(info);
+ if(sysctl(mib,4,&info,&length,NULL,0)!=0||length!=sizeof(info)) {
+  fprintf(stderr,"identity_sysctl_unavailable errno=%d size=%zu\n",errno,length);return 3;
+ }
+ char path[PROC_PIDPATHINFO_MAXSIZE];memset(path,0,sizeof(path));
+ if(proc_pidpath((int)wanted,path,sizeof(path))<=0){fprintf(stderr,"identity_path_unavailable errno=%d\n",errno);return 4;}
+ if(info.kp_proc.p_pid!=wanted)return 5;
+ printf("{\"pid\":%d,\"uid\":%u,\"start_sec\":%lld,\"start_usec\":%d,\"path\":\"%s\"}\n",info.kp_proc.p_pid,info.kp_eproc.e_ucred.cr_uid,(long long)info.kp_proc.p_starttime.tv_sec,info.kp_proc.p_starttime.tv_usec,path);
+ memset(&info,0,sizeof(info));memset(path,0,sizeof(path));return 0;
+}

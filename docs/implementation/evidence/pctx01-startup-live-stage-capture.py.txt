@@ -1,0 +1,130 @@
+"""Prepared once-only live phase capture; fresh broader scope approval required."""
+from pathlib import Path
+import json,hashlib,os,subprocess,tempfile,time,selectors,uuid,re,datetime,ctypes,argparse,importlib.machinery
+B=Path('/Users/dev/PCTX/docs/implementation/evidence');PLAN=B/'pctx01-startup-live-stage-scope-plan.json'
+PREFIXES={'GK scan complete:':'scan_complete','GK Xprotect results:':'xprotect_result','GK Xprotect forced rule only results:':'xprotect_forced_result'}
+def stage(row,pid):
+ if not isinstance(row,dict) or row.get('processID')!=pid or row.get('processImagePath')!='/usr/libexec/syspolicyd' or row.get('eventType')!='logEvent':return None
+ msg=row.get('eventMessage','')
+ if not isinstance(msg,str):return None
+ kind=next((v for k,v in PREFIXES.items() if msg.startswith(k+' PST: (path: ')),None);hs=re.findall(r'\(path: ([0-9a-f]{1,16})\)',msg)
+ if not kind or len(hs)!=1:return None
+ try:
+  t=datetime.datetime.fromisoformat(row['timestamp']);assert t.tzinfo is not None
+ except (KeyError,ValueError,TypeError,AssertionError):return None
+ return {'timestamp_utc':t.astimezone(datetime.timezone.utc).isoformat(),'stage':kind,'path_hash':hs[0]}
+def selftest():
+ row={'processID':665,'processImagePath':'/usr/libexec/syspolicyd','eventType':'logEvent','timestamp':'2026-10-09T12:00:00+00:00','eventMessage':'GK Xprotect results: PST: (path: abc), SECRET_RESULT'}
+ x=stage(row,665);assert x['path_hash']=='abc' and 'SECRET' not in json.dumps(x)
+ for bad in [dict(row,processID=666),dict(row,processImagePath='/other'),dict(row,eventMessage='GK Xprotect results: OTHER (path: abc)'),dict(row,eventMessage=row['eventMessage']+' (path: def)'),dict(row,timestamp='invalid')]:assert stage(bad,665) is None
+ print('PASS: anchored stage reduction; wrong source,shape,multiple hashes,time refused; result bodies discarded; no live observation')
+def service_identity(p):
+ plan=json.loads(PLAN.read_text());binary=Path(plan['identity_binary'])
+ assert binary.stat().st_uid==502 and binary.stat().st_mode&0o777==0o700
+ assert hashlib.sha256(binary.read_bytes()).hexdigest()==plan['identity_binary_sha256']
+ proc=subprocess.run([str(binary),str(p['pid'])],capture_output=True,text=True,timeout=3,check=True)
+ assert len(proc.stdout.encode())<=4096 and not proc.stderr
+ row=json.loads(proc.stdout)
+ assert [row['pid'],row['uid'],row['start_sec'],row['start_usec'],row['path']]==[p['pid'],0,p['start_sec'],p['start_usec'],'/usr/libexec/syspolicyd']
+
+def stop(proc):
+ if not proc:return None
+ if proc.poll() is None:
+  proc.terminate()
+  try:proc.wait(timeout=4)
+  except subprocess.TimeoutExpired:proc.kill();proc.wait(timeout=1)
+ for s in [proc.stdin,proc.stdout,proc.stderr]:
+  if s:s.close()
+ return {'pid':proc.pid,'exit':proc.returncode,'reaped':True}
+def execute():
+ p=json.loads(PLAN.read_text());assert os.getuid()==os.geteuid()==502
+ if p['human_scope_approval']!='approved' or p['pre_execution_review']!='approved':raise SystemExit('Fresh live service scope not approved')
+ for name,sha in p['file_hashes'].items():assert hashlib.sha256((B/name).read_bytes()).hexdigest()==sha
+ assert hashlib.sha256(Path(p['test_binary']).read_bytes()).hexdigest()==p['test_binary_sha256']
+ meta=json.loads((B/'pctx01-startup-live-stage-forward-prepared.json').read_text());root=Path(meta['root']);assert root.stat().st_uid==502 and root.stat().st_mode&0o777==0o700
+ for name,sha in meta['hashes'].items():assert hashlib.sha256((Path('/Users/dev/PCTX')/name).read_bytes()).hexdigest()==sha
+ assert hashlib.sha256((Path(meta['source'])/'src/query_process.rs').read_bytes()).hexdigest()==meta['instrumented_query_sha256']
+ service_identity(p['service']);(B/'pctx01-startup-live-stage-consumed.json').open('x').close()
+ candidates=[];helper=listener=test=None;sel=selectors.DefaultSelector();buffer=bytearray();ready=False;raw_bytes=0;event_count=0;failure=None;receipts={};coverage=[];cleanup_errors=[];window_complete=False;capture_elapsed_ns=None;audit={};nonce=uuid.uuid4().hex
+ try:
+  with tempfile.TemporaryDirectory(prefix='pctx01-live-stage-pulse-',dir='/private/tmp') as d:
+   binary=Path(d)/'pulse';os.chmod(d,0o700);subprocess.run(['/Library/Developer/CommandLineTools/usr/bin/clang','-isysroot','/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk','-x','c',str(B/'pctx01-startup-live-stage-pulse.c.txt'),'-o',str(binary)],check=True,capture_output=True,timeout=15)
+   helper=subprocess.Popen([str(binary),nonce],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,text=True);sel.register(helper.stdout,selectors.EVENT_READ)
+   if not sel.select(3):raise RuntimeError('helper readiness timeout')
+   assert helper.stdout.readline().strip()==f'ready {helper.pid}';sel.unregister(helper.stdout)
+   service='processIdentifier == '+str(p['service']['pid'])+' AND processImagePath == "/usr/libexec/syspolicyd" AND ('+' OR '.join('composedMessage BEGINSWITH '+json.dumps(x) for x in PREFIXES)+')'
+   predicate=f'(processIdentifier == {helper.pid} AND subsystem == "org.pctx.diagnostic.stage-readiness") OR ('+service+')'
+   begin=time.monotonic();listener=subprocess.Popen(['/usr/bin/log','stream','--predicate',predicate,'--style','ndjson','--level','info','--timeout','7','--no-backtrace'],stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+   for s in [listener.stdout,listener.stderr]:os.set_blocking(s.fileno(),False);sel.register(s,selectors.EVENT_READ)
+   deadline=begin+7;next_pulse=0
+   while time.monotonic()<deadline:
+    now=time.monotonic()
+    if not ready and now-begin>=3:raise RuntimeError('subscriber readiness unknown; no test')
+    if not ready and now>=next_pulse:helper.stdin.write('p\n');helper.stdin.flush();next_pulse=now+.1
+    for key,_ in sel.select(min(.05,max(0,deadline-now))):
+     data=os.read(key.fd,8192);raw_bytes+=len(data)
+     if raw_bytes>131072:raise RuntimeError('128KiB cap; incomplete capture')
+     if not data:sel.unregister(key.fileobj);continue
+     if key.fileobj is not listener.stdout:continue
+     buffer.extend(data)
+     while b'\n' in buffer:
+      line,_,buffer=buffer.partition(b'\n')
+      try:row=json.loads(line)
+      except (ValueError,TypeError):
+       if line.lstrip().startswith(b'{'):coverage.append('malformed_json_record')
+       elif line.strip() and not line.startswith(b'Filtering the log data'):coverage.append('unrecognized_non_json_line')
+       line=b'';continue
+      if not isinstance(row,dict):
+       coverage.append('unexpected_json_shape');row=None;line=b'';continue
+      event_count+=1
+      if event_count>256:raise RuntimeError('256 event cap; incomplete capture')
+      own=row.get('processID')==helper.pid and row.get('subsystem')=='org.pctx.diagnostic.stage-readiness' and row.get('eventType')=='logEvent' and row.get('eventMessage')=='PCTXStageReady '+nonce
+      if own and not ready:
+       ready=True
+       test=subprocess.Popen(['/opt/homebrew/bin/python3',str(B/'pctx01-startup-live-stage-forward-run.py.txt')],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,cwd='/Users/dev/PCTX')
+      else:
+       item=stage(row,p['service']['pid'])
+       if item:candidates.append(item)
+      row.clear();line=b''
+     data=b''
+    if not sel.get_map():
+     if time.monotonic()<deadline:coverage.append('early_listener_eof')
+     break
+   capture_elapsed_ns=int((time.monotonic()-begin)*10**9)
+   window_complete=time.monotonic()>=deadline
+   if buffer.strip():coverage.append('unterminated_final_record')
+   if listener.poll() is not None and listener.returncode!=0:coverage.append('listener_nonzero_exit')
+   if test and test.poll() is None:coverage.append('test_active_at_capture_end')
+  service_identity(p['service'])
+ except Exception as e:failure=type(e).__name__
+ finally:
+  sel.close();buffer.clear();row=None;line=b'';data=b''
+  for name,proc in [('listener',listener),('helper',helper)]:
+   try:receipts[name]=stop(proc)
+   except Exception as e:cleanup_errors.append(name+':'+type(e).__name__)
+  if test:
+   try:test.wait(timeout=35);receipts['test_driver']={'pid':test.pid,'exit':test.returncode,'reaped':True}
+   except subprocess.TimeoutExpired:
+    failure='DriverWatchdogNeedsCleanupAudit'
+    try:receipts['test_driver']=stop(test)
+    except Exception as e:cleanup_errors.append('test_driver:'+type(e).__name__)
+ if cleanup_errors and failure is None:failure='CleanupErrorsRequireAudit'
+ result_file=B/'pctx01-startup-live-stage-forward-result.json'
+ if test and (test.returncode!=0 or not result_file.exists()) and failure is None:failure='MissingOrFailedOwnedDriverResult'
+ matched=[];discarded=len(candidates)
+ if failure is None and test and test.returncode==0 and result_file.exists():
+  result=json.loads(result_file.read_text());cleanup_file=root/'driver-cleanup.json'
+  cleanup=json.loads(cleanup_file.read_text()) if cleanup_file.exists() else {}
+  named=[result['parent_pid']]+[x['pid'] for x in result['records']]+[x['pid'] for x in receipts.values() if isinstance(x,dict) and 'pid' in x];present=[]
+  for pid in named:
+   try:os.kill(pid,0);present.append(pid)
+   except ProcessLookupError:pass
+  audit={'root_receipt_matches':cleanup.get('root_reaped') is True and cleanup.get('pid')==result['parent_pid'],'known_pids_absent':not present,'present_or_reused_not_inspected':present,'no_dropped_points':all(x['dropped']==0 and x['clock_ok'] for x in result['records']),'original_test_exit':result['test_exit'],'universal_descendant_cleanup_claim':False}
+  if not all(audit[x] for x in ['root_receipt_matches','known_pids_absent','no_dropped_points']):failure='OwnedCleanupOrTimingAuditUnknown'
+  else:
+   known={h for x in result['records'] for h in x['path_hashes']};matched=[x for x in candidates if x['path_hash'] in known];discarded-=len(matched)
+ candidates.clear()
+ out={'task':'PCTX01-G05-D05','ready_own_marker':ready,'raw_bytes':raw_bytes,'parsed_events':event_count,'failure_class':failure,'events':matched,'unmatched_tuples_discarded':discarded,'receipts':receipts,'cleanup_errors':cleanup_errors,'coverage_unknowns':sorted(set(coverage)),'capture_elapsed_ns':capture_elapsed_ns,'audit':audit,'capture_window_completed':window_complete,'complete_coverage_claim':False,'scope_seconds':7,'raw_retained':False,'qualification':False,'limits':p['limits']}
+ (B/'pctx01-startup-live-stage-result.json').write_text(json.dumps(out,indent=2)+'\n');print(json.dumps({'ready':ready,'failure':failure,'matched_events':len(matched),'test_started':test is not None}))
+if __name__=='__main__':
+ ap=argparse.ArgumentParser();ap.add_argument('--execute',action='store_true');a=ap.parse_args();execute() if a.execute else selftest()

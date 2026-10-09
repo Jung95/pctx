@@ -1,0 +1,8 @@
+{
+  "task": "PCTX01-G05-D05",
+  "own_pid_identity_control": true,
+  "uid": 502,
+  "service_observed": false,
+  "native_start_fields_present": true,
+  "qualification": false
+}

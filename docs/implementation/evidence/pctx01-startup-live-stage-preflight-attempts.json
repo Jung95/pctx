@@ -1,0 +1,20 @@
+{
+  "task": "PCTX01-G05-D05",
+  "attempts": [
+    {
+      "method": "PROC_PIDTBSDINFO ordinary UID",
+      "result": "Returned size did not match BSD structure; errno not captured,permission cause unproven",
+      "listener_started": false,
+      "original_test_started": false,
+      "scope_consumed": false
+    },
+    {
+      "method": "sysctl KERN_PROC_PID and proc_pidpath",
+      "result": "Exact service pid665 uid0 birth1791224512.669319 path/usr/libexec/syspolicyd match",
+      "new_method_reason": "Native birth/path binding needed without admin authentication",
+      "listener_started": false,
+      "original_test_started": false
+    }
+  ],
+  "qualification": false
+}

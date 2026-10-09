@@ -1,0 +1,32 @@
+"""Exercise the actual driver's signal/finally cleanup with owned synthetic sleep only."""
+from pathlib import Path
+import ast,tempfile,json,subprocess,os,time,signal,hashlib
+B=Path('/Users/dev/PCTX/docs/implementation/evidence');source=B/'pctx01-startup-live-stage-forward-run.py.txt';tree=ast.parse(source.read_text())
+replacement=ast.parse('''def run():
+ global child,BASE
+ BASE=Path(__import__('sys').argv[1])
+ child=subprocess.Popen(['/opt/homebrew/bin/python3','-c','import time;time.sleep(30)'])
+ (BASE/'owned-root.json').write_text(json.dumps({'pid':child.pid}))
+ time.sleep(30)
+''').body[0]
+for index,node in enumerate(tree.body):
+ if isinstance(node,ast.FunctionDef) and node.name=='run':tree.body[index]=replacement;break
+else:raise ValueError('driver run function missing')
+program=ast.unparse(ast.fix_missing_locations(tree));driver=None;out={}
+with tempfile.TemporaryDirectory(prefix='pctx01-live-stage-lifecycle-',dir='/private/tmp') as d:
+ root=Path(d);os.chmod(d,0o700);(root/'pctx01-startup-live-stage-forward-prepared.json').write_text(json.dumps({'root':d}));p=root/'driver.py';p.write_text(program)
+ try:
+  driver=subprocess.Popen(['/opt/homebrew/bin/python3',str(p),d],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL);deadline=time.monotonic()+3
+  while not (root/'owned-root.json').exists():
+   if driver.poll() is not None or time.monotonic()>deadline:raise RuntimeError('synthetic readiness failed')
+   time.sleep(.01)
+  child=json.loads((root/'owned-root.json').read_text())['pid'];driver.send_signal(signal.SIGTERM);code=driver.wait(timeout=4);receipt=json.loads((root/'driver-cleanup.json').read_text());assert receipt['pid']==child and receipt['root_reaped']
+  absent=[]
+  for pid in [driver.pid,child]:
+   try:os.kill(pid,0);absent.append(False)
+   except ProcessLookupError:absent.append(True)
+  assert all(absent)
+  out={'task':'PCTX01-G05-D05','actual_driver_sha256':hashlib.sha256(source.read_bytes()).hexdigest(),'real_signal_handler_finally_exercised':True,'synthetic_run_body_only':True,'driver_pid':driver.pid,'root_pid':child,'driver_exit':code,'root_cleanup_receipt':receipt,'both_known_pids_absent':True,'service_observed':False,'original_test_executed':False,'qualification':False,'limit':'No descendant/workload fault coverage; this control tests signal-handler/finally root reap only.'}
+ finally:
+  if driver and driver.poll() is None:driver.kill();driver.wait(timeout=1)
+(B/'pctx01-startup-live-stage-lifecycle-control-result.json').write_text(json.dumps(out,indent=2)+'\n');print(json.dumps(out))

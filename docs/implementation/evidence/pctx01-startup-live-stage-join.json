@@ -1,0 +1,100 @@
+{
+  "task": "PCTX01-G05-D05",
+  "original_test_exit": 101,
+  "observed_outcomes": 98,
+  "output": 96,
+  "timeouts": [
+    38966,
+    38967
+  ],
+  "planned_unobserved": 30,
+  "owned_fixture_stage_pairs": [
+    {
+      "owned_fixture_hash": "2c28cfb2cd7c21e0",
+      "matching_invocations": 16,
+      "first_invocation_pid": 38965,
+      "first_invocation_outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "events": [
+        {
+          "timestamp_utc": "2026-10-09T16:27:29.703519+00:00",
+          "stage": "xprotect_result",
+          "path_hash": "2c28cfb2cd7c21e0"
+        },
+        {
+          "timestamp_utc": "2026-10-09T16:27:29.703535+00:00",
+          "stage": "scan_complete",
+          "path_hash": "2c28cfb2cd7c21e0"
+        }
+      ],
+      "unique_pid_attribution": false,
+      "adjacent_same_fixture_event_gap_us": 16,
+      "unique_evaluation_pairing": false
+    },
+    {
+      "owned_fixture_hash": "6f71524260493edd",
+      "matching_invocations": 16,
+      "first_invocation_pid": 38962,
+      "first_invocation_outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "events": [
+        {
+          "timestamp_utc": "2026-10-09T16:27:29.889900+00:00",
+          "stage": "xprotect_result",
+          "path_hash": "6f71524260493edd"
+        },
+        {
+          "timestamp_utc": "2026-10-09T16:27:29.889924+00:00",
+          "stage": "scan_complete",
+          "path_hash": "6f71524260493edd"
+        }
+      ],
+      "unique_pid_attribution": false,
+      "adjacent_same_fixture_event_gap_us": 24,
+      "unique_evaluation_pairing": false
+    },
+    {
+      "owned_fixture_hash": "92f40e98b2a32b32",
+      "matching_invocations": 16,
+      "first_invocation_pid": 38963,
+      "first_invocation_outcome": {
+        "code": "OUTPUT",
+        "stderr_bytes": 6,
+        "stdout_bytes": 6,
+        "success": true
+      },
+      "events": [
+        {
+          "timestamp_utc": "2026-10-09T16:27:29.996207+00:00",
+          "stage": "xprotect_result",
+          "path_hash": "92f40e98b2a32b32"
+        },
+        {
+          "timestamp_utc": "2026-10-09T16:27:29.996223+00:00",
+          "stage": "scan_complete",
+          "path_hash": "92f40e98b2a32b32"
+        }
+      ],
+      "unique_pid_attribution": false,
+      "adjacent_same_fixture_event_gap_us": 16,
+      "unique_evaluation_pairing": false
+    }
+  ],
+  "failed_pid_stage_matches": 0,
+  "limits": [
+    "Hash identifies fixture path reused by original worker; not unique process invocation.",
+    "Live window ended early and test still active; missing stages remain unknown.",
+    "Callback to scan-complete gaps16/24/16us do not measure preceding XP analysis or distinguish overlap with PolicyScanner.",
+    "Driver no_service_observation describes driver alone; companion collector observed approved service scope."
+  ],
+  "qualification": false,
+  "review": "Independent read-only review confirms fixture-level only, no failed-PID stage match or unique evaluation pair."
+}

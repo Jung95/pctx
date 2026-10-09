@@ -1,0 +1,34 @@
+{
+  "task": "PCTX01-G05-D05",
+  "scope_consumed": true,
+  "original_test_runs": 1,
+  "service_streams": 1,
+  "administrator_authentication": false,
+  "known_pid_count": 102,
+  "known_pids_absent": true,
+  "root_cleanup_receipt": {
+    "pid": 38953,
+    "exit": 101,
+    "root_reaped": true,
+    "descendants": "Not independently proven by root reap; inspect owned records/log and liveness before attribution."
+  },
+  "source_hashes_unchanged": {
+    "src/query_process.rs": "bf661f4b8d0ed472585244ada4ac0e946221de364c100039cd20aee56fd8d0d2",
+    "tests/project_deadline.rs": "8b9fbc97fbd5acaf612b2d75b94cf810faa2b61614b654495082462b1941a8dc",
+    "Cargo.lock": "f96362897990caba560793601bc9fca08cef5c977907bb06889d5595d2acd7b0"
+  },
+  "private_root_removed": "/private/tmp/pctx01-live-stage-forward-nhw2akig",
+  "private_root_absent": true,
+  "private_root_file_sha256": {
+    "prepared.json": "0080ae0c1cf0fbae53ad76828a30fe3f52d172e6f97e5a6f71b806821a5ef033",
+    "identity-helper": "7095de64bb9e26722542652c3f9b9f5812db399645d149ba8a3a9f7ae496694b",
+    "consumed": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "test-root-pid.json": "de2490292d091a2e5494c874f3ba292dcf23a78c9f2f0e83b3310e9313ae8f87",
+    "driver-cleanup.json": "cb64d686512d57b332505f94426339eaaf3c567ad7aa76823e98f28664d7786b",
+    "build.jsonl": "0629d804592b84122c17f3120ec5ddeb1f174a7c826a0e11a8f880ac2add8c3b"
+  },
+  "raw_service_bodies_retained": false,
+  "unmatched_hashes_retained": false,
+  "qualification": false,
+  "review": "Independent review confirms fixture-level observation only; no failed PID phase match; no unique evaluation pairing."
+}
