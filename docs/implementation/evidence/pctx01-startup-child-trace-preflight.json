@@ -1,0 +1,25 @@
+{
+  "syntax_valid": true,
+  "no_recording": true,
+  "control_only": true,
+  "token_controls": [
+    true,
+    true,
+    true
+  ],
+  "pending_scope_refused": true,
+  "no_consumed_marker": true,
+  "no_trace": true,
+  "product_pins_unchanged": {
+    "src/query_process.rs": true,
+    "tests/project_deadline.rs": true,
+    "Cargo.lock": true
+  },
+  "independent_preparation_review": "approved",
+  "scope_still_refused": true,
+  "file_pins_match": {
+    "pctx01-startup-child-trace-run.py.txt": true,
+    "pctx01-startup-instruments-system-trace-target.py.txt": true,
+    "pctx01-startup-instruments-system-trace-options.json": true
+  }
+}

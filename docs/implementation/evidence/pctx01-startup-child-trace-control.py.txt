@@ -1,0 +1,111 @@
+"""Coordinator fault controls. No recorder, product test or service is run."""
+from pathlib import Path
+import json, runpy, tempfile, shutil
+from types import SimpleNamespace
+
+B = Path('/Users/dev/PCTX/docs/implementation/evidence')
+results = []
+for case in ['normal', 'no_notification', 'recorder_early_exit', 'listener_cleanup_error',
+             'wrapper_wait_error', 'recorder_cleanup_error']:
+    root = Path(tempfile.mkdtemp(prefix='pctx01-system-trace-control-', dir='/private/tmp'))
+    private_b = root / 'evidence'
+    private_b.mkdir()
+    shutil.copyfile(B / 'pctx01-startup-instruments-system-trace-target.py.txt',
+                    private_b / 'pctx01-startup-instruments-system-trace-target.py.txt')
+    plan = json.loads((B / 'pctx01-startup-child-trace-plan.json').read_text())
+    plan.update(private_root=str(root), human_scope_approval='approved', independent_review='approved')
+    plan['limits']['readiness_wait_seconds'] = 1
+    planpath = private_b / 'plan.json'
+    planpath.write_text(json.dumps(plan))
+    module = runpy.run_path(str(B / 'pctx01-startup-child-trace-run.py.txt'))
+    g = module['execute'].__globals__
+    g.update(B=private_b, PLAN=planpath, validate=lambda p: None)
+    clock = [0]
+    calls = []
+    cancelled = [False]
+
+    class Listener:
+        def __init__(self, name):
+            self.reads = 0
+
+        def ready(self):
+            self.reads += 1
+            return self.reads > 1 and case not in ['no_notification', 'recorder_cleanup_error']
+
+        def close(self):
+            cancelled[0] = True
+            if case == 'listener_cleanup_error':
+                raise RuntimeError('private-path-must-not-leak')
+            return {'cancel_status': 0}
+
+    class Process:
+        def __init__(self, args, **kwargs):
+            self.recorder = 'record' in args
+            calls.append('recorder' if self.recorder else 'target')
+            self.pid = 100 if self.recorder else 101
+            self.returncode = None
+            self.polls = 0
+            if not self.recorder:
+                (root / 'target-result.json').write_text(json.dumps({'root_reaped': True}))
+
+        def poll(self):
+            self.polls += 1
+            if self.recorder and case != 'no_notification' and case != 'recorder_cleanup_error':
+                if self.polls > (0 if case == 'recorder_early_exit' else 2):
+                    self.returncode = 0
+            return self.returncode
+
+        def wait(self, timeout=None):
+            if not self.recorder and case == 'wrapper_wait_error':
+                raise OSError('private-path-must-not-leak')
+            if self.recorder and case == 'recorder_cleanup_error':
+                raise OSError('private-path-must-not-leak')
+            self.returncode = 0
+            return 0
+
+        def send_signal(self, sig):
+            if case == 'recorder_cleanup_error':
+                raise OSError('private-path-must-not-leak')
+            self.returncode = 0
+
+        def terminate(self):
+            if case == 'wrapper_wait_error':
+                raise OSError('private-path-must-not-leak')
+            self.returncode = 0
+
+    def sleep(seconds):
+        clock[0] += 2
+
+    g.update(ReadyListener=Listener, subprocess=SimpleNamespace(Popen=Process, STDOUT=-2, DEVNULL=-3),
+             time=SimpleNamespace(monotonic=lambda: clock[0],
+                                  monotonic_ns=lambda: int(clock[0] * 1e9), sleep=sleep))
+    # Normal readiness must fit; the no-notification case deliberately expires.
+    if case not in ['no_notification', 'recorder_cleanup_error']:
+        plan['limits']['readiness_wait_seconds'] = 30
+        planpath.write_text(json.dumps(plan))
+    try:
+        g['execute']()
+        saved = json.loads((private_b / plan['result_receipt']).read_text())
+        assert cancelled[0]
+        assert 'private-path-must-not-leak' not in json.dumps(saved)
+        assert (private_b / plan['consumed_receipt']).exists()
+        if case in ['no_notification', 'recorder_early_exit', 'recorder_cleanup_error']:
+            assert 'target' not in calls
+        if case == 'normal':
+            assert calls == ['recorder', 'target'] and saved['failure'] is None
+        if case == 'wrapper_wait_error':
+            assert saved['failure'] == 'TargetCleanupUnknown'
+        if case == 'listener_cleanup_error':
+            assert saved['failure'] == 'ListenerCleanupUnknown'
+        if case == 'recorder_cleanup_error':
+            assert not saved['recorder_reaped'] and saved['failure'] is not None
+        results.append({'case': case, 'pass': True, 'listener_cleanup_attempted': cancelled[0],
+                        'target_launches': calls.count('target'), 'failure_recorded': saved['failure']})
+    finally:
+        shutil.rmtree(root)
+
+receipt = {'task': 'PCTX01-G05-D05', 'mocked_coordinator_only': True,
+           'recording_started': False, 'original_test_run': False, 'cases': results,
+           'qualification': False}
+(B / 'pctx01-startup-child-trace-coordinator-control.json').write_text(json.dumps(receipt, indent=2) + '\n')
+print(json.dumps(receipt))

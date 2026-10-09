@@ -1,0 +1,43 @@
+{
+  "task": "PCTX01-G05-D05",
+  "status": "prepared only; changed scope approval pending",
+  "human_scope_approval": "pending",
+  "independent_review": "approved",
+  "private_root": "/private/tmp/pctx01-system-trace-child-2d65t63g",
+  "xctrace": "/Applications/Xcode.app/Contents/Developer/usr/bin/xctrace",
+  "test_binary": "/Users/dev/PCTX/target/debug/deps/project_deadline-f7e8b9d913251d84",
+  "test_binary_sha256": "a35909766c54e7b07642a8e21d6629e1c0130ad87ee6e9b55d346542ee078942",
+  "test_name": "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget",
+  "options_file": "pctx01-startup-instruments-system-trace-options.json",
+  "limits": {
+    "recordings": 1,
+    "recording_seconds": 7,
+    "readiness_wait_seconds": 30,
+    "recorder_wall_seconds": 60,
+    "target_watchdog_seconds": 35,
+    "target_receipt_wait_seconds": 40,
+    "private_output_stop_threshold_bytes": 1073741824
+  },
+  "original_contract": "Normal-source original test unchanged1000ms8x16/native/cwd/env/group/stdout/stderr/overflow/cancel. Trace overhead is diagnostic perturbation; success is not repair. No warmup/budget renewal/fixture substitution.",
+  "purpose": "Different target-selection hypothesis: all-process detailed wait/kernel/user stacks may expose owned native child wait channel; prior launch-wrapper-only tables did not. No wait reason or cause guaranteed.",
+  "collection_scope": "System Trace --all-processes7seconds; may collect unrelated apps user/kernel stacks, symbols, process identities, paths, VM, file and scheduling metadata in private raw. Ordinary OSLogs excluded. This broader stack collection requires explicit new approval.",
+  "retention": "Raw mode0700 private directory, no sharing/commit; only exact owned root/child and approved syspolicyd/XprotectService numeric intervals/frames retained. Unrelated frames/symbols discarded. Bind trace-local process identity and TID, failed root receipt, and actual capture coverage before attribution. Missing stacks means unknown. No absolute kernel addresses, unrelated image names/paths/symbols or syscall arguments in public artifacts; approved frames normalized to image identity and offsets where safely possible.",
+  "authentication": "Real macOS authentication if required; no bypass/no-prompt/password storage/service installation/security change.",
+  "readiness": "Register unique owned Darwin FD listener before xctrace; launch original test once only after matching4byte big-endian token; missing signal/recorder exit/30s limit means no test. Notification itself does not prove full capture coverage.",
+  "size_limit_caveat": "Outputstop checked every50ms; transient overshoot and Instruments-managed cache outside private output cannot be strictly byte-capped by this script.",
+  "cleanup": "Recorder and listener terminal receipts; owned root watchdog/reap; exact known child and helper audit before raw deletion. Unknown full descendant enumeration remains unknown; no generic process kill. External Instruments cache not inspected/deleted.",
+  "source_hashes": {
+    "src/query_process.rs": "bf661f4b8d0ed472585244ada4ac0e946221de364c100039cd20aee56fd8d0d2",
+    "tests/project_deadline.rs": "8b9fbc97fbd5acaf612b2d75b94cf810faa2b61614b654495082462b1941a8dc",
+    "Cargo.lock": "f96362897990caba560793601bc9fca08cef5c977907bb06889d5595d2acd7b0"
+  },
+  "file_hashes": {
+    "pctx01-startup-child-trace-run.py.txt": "b2924ed81a564bb77e1275c861c271ccc8107adf9c5681a310867cabcebafe40",
+    "pctx01-startup-instruments-system-trace-target.py.txt": "6524b3db448b9537990f65f62655f10291e06ffa41c637f837a083f5e517a377",
+    "pctx01-startup-instruments-system-trace-options.json": "2f8fd331e167441c159efcbe42d29e3db4af873a75c3d244aa738e6c89be5433"
+  },
+  "consumed_receipt": "pctx01-startup-child-trace-consumed.json",
+  "result_receipt": "pctx01-startup-child-trace-result.json",
+  "qualification": false,
+  "review_evidence": "Passive independent review approved after cleanup guards, explicit reaped/unknown states, exception-text masking and50ms caveat corrections. Six mocked coordinator fault controls subsequently passed; no real recording/test."
+}

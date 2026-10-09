@@ -1,0 +1,14 @@
+{
+  "owned_notification_only": true,
+  "recording_started": false,
+  "test_run": false,
+  "predecessor": "polling registration refused in sandbox; first FD control cleanup attempted double close after successful cancellation; repeat validates cancellation ownership",
+  "register": 0,
+  "empty_before_post": true,
+  "post": 0,
+  "four_byte_delivery": true,
+  "big_endian_token_match": true,
+  "native_token_match": false,
+  "cancel": 0,
+  "fd_closed_by_cancel": true
+}

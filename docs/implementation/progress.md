@@ -1,6 +1,19 @@
 # Implementation progress
 
-## Valid System Trace retry — current, 2026-10-09
+## Child-inclusive trace preparation — current, 2026-10-09
+
+Only PCTX01-G05-D05 active/product_failure; PCTX01 stays33/40 details,0/10 gates.
+Previous detailed tables tracked wrapper only. Prepared all-process7s/1GiB trace
+with a unique token-matched Darwin readiness listener before one unchanged original
+test invocation. Owned notification control and six mocked coordinator fault cases
+passed; passive review corrections applied. No new recording/product test/repair.
+All-process user/kernel stacks can include other apps, so explicit changed-scope
+approval remains pending. Raw private only; exact-approved numeric reduction and
+known-owned cleanup required. Empty prepared root retained; no live job/consumed marker.
+Next same D05: approved once-only capture, actual child-stack/coverage verification.
+[Plan, controls and limits](evidence/pctx01-startup-child-trace-preparation-review.md).
+
+## Valid System Trace retry — historical, 2026-10-09
 
 Only PCTX01-G05-D05 remains active/product_failure; PCTX01 stays33/40 details,0/10 gates.
 Approved once-only1GiB/7s retry recorded/exported successfully. Original1000ms/8x16

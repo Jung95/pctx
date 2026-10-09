@@ -1,0 +1,51 @@
+{
+  "task": "PCTX01-G05-D05",
+  "mocked_coordinator_only": true,
+  "recording_started": false,
+  "original_test_run": false,
+  "cases": [
+    {
+      "case": "normal",
+      "pass": true,
+      "listener_cleanup_attempted": true,
+      "target_launches": 1,
+      "failure_recorded": null
+    },
+    {
+      "case": "no_notification",
+      "pass": true,
+      "listener_cleanup_attempted": true,
+      "target_launches": 0,
+      "failure_recorded": "TimeoutError"
+    },
+    {
+      "case": "recorder_early_exit",
+      "pass": true,
+      "listener_cleanup_attempted": true,
+      "target_launches": 0,
+      "failure_recorded": "NoReadyTargetLaunch"
+    },
+    {
+      "case": "listener_cleanup_error",
+      "pass": true,
+      "listener_cleanup_attempted": true,
+      "target_launches": 1,
+      "failure_recorded": "ListenerCleanupUnknown"
+    },
+    {
+      "case": "wrapper_wait_error",
+      "pass": true,
+      "listener_cleanup_attempted": true,
+      "target_launches": 1,
+      "failure_recorded": "TargetCleanupUnknown"
+    },
+    {
+      "case": "recorder_cleanup_error",
+      "pass": true,
+      "listener_cleanup_attempted": true,
+      "target_launches": 0,
+      "failure_recorded": "TimeoutError"
+    }
+  ],
+  "qualification": false
+}

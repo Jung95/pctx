@@ -1,0 +1,212 @@
+"""One scope-gated child-inclusive System Trace; preparation is the default."""
+from pathlib import Path
+import argparse, ctypes, hashlib, json, os, select, shutil
+import signal, struct, subprocess, time, uuid
+
+B = Path('/Users/dev/PCTX/docs/implementation/evidence')
+PLAN = B / 'pctx01-startup-child-trace-plan.json'
+
+
+def publish(path, value):
+    tmp = path.with_suffix('.tmp')
+    tmp.write_text(json.dumps(value, indent=2) + '\n')
+    os.replace(tmp, path)
+
+
+def matching_delivery(raw, token):
+    return len(raw) == 4 and struct.unpack('!I', raw)[0] == token
+
+
+class ReadyListener:
+    def __init__(self, name):
+        self.lib = ctypes.CDLL('/usr/lib/libSystem.B.dylib')
+        self.lib.notify_register_file_descriptor.argtypes = [
+            ctypes.c_char_p, ctypes.POINTER(ctypes.c_int), ctypes.c_int,
+            ctypes.POINTER(ctypes.c_int)]
+        self.lib.notify_register_file_descriptor.restype = ctypes.c_uint32
+        self.lib.notify_cancel.argtypes = [ctypes.c_int]
+        self.lib.notify_cancel.restype = ctypes.c_uint32
+        self.token, self.fd = ctypes.c_int(-1), ctypes.c_int(-1)
+        status = self.lib.notify_register_file_descriptor(
+            name.encode(), ctypes.byref(self.fd), 0, ctypes.byref(self.token))
+        if status != 0:
+            raise RuntimeError('ReadinessRegistrationRefused')
+        self.pending = b''
+
+    def ready(self):
+        if not select.select([self.fd.value], [], [], 0)[0]:
+            return False
+        raw = os.read(self.fd.value, 4 - len(self.pending))
+        if not raw:
+            raise RuntimeError('ReadinessChannelClosed')
+        self.pending += raw
+        if len(self.pending) < 4:
+            return False
+        match = matching_delivery(self.pending, self.token.value)
+        self.pending = b''
+        if not match:
+            raise RuntimeError('ReadinessTokenMismatch')
+        return True
+
+    def close(self):
+        status = self.lib.notify_cancel(self.token.value)
+        # On the installed libnotify, cancel closes the uniquely owned FD.
+        # Do not close its numeric value again: another thread may reuse it.
+        return {'cancel_status': status, 'cancel_owns_fd': True}
+
+
+def validate(plan):
+    assert plan['human_scope_approval'] == 'approved', 'ScopeApprovalRequired'
+    assert plan['independent_review'] == 'approved', 'IndependentReviewRequired'
+    assert os.getuid() == os.geteuid() == 502
+    for name, digest in plan['file_hashes'].items():
+        assert hashlib.sha256((B / name).read_bytes()).hexdigest() == digest
+    for name, digest in plan['source_hashes'].items():
+        assert hashlib.sha256((Path('/Users/dev/PCTX') / name).read_bytes()).hexdigest() == digest
+    assert hashlib.sha256(Path(plan['test_binary']).read_bytes()).hexdigest() == plan['test_binary_sha256']
+    assert plan['limits']['recording_seconds'] == 7
+    assert plan['limits']['recordings'] == 1
+
+
+def stop_owned(process, errors, label):
+    if process is None or process.poll() is not None:
+        return
+    for sig, wait in [(signal.SIGINT, 5), (signal.SIGTERM, 3), (signal.SIGKILL, 2)]:
+        if process.poll() is not None:
+            break
+        try:
+            process.send_signal(sig)
+            process.wait(timeout=wait)
+        except BaseException as exc:
+            errors.append(label + ':' + type(exc).__name__)
+
+
+def execute():
+    plan = json.loads(PLAN.read_text())
+    validate(plan)  # Refuse before marker, notification or recording.
+    os.umask(0o077)
+    root = Path(plan['private_root'])
+    assert root.parent == Path('/private/tmp') and root.name.startswith('pctx01-system-trace-')
+    assert not root.is_symlink() and root.stat().st_uid == 502 and root.stat().st_mode & 0o777 == 0o700
+    marker = B / plan['consumed_receipt']
+    with marker.open('x') as out:
+        out.write(json.dumps({'task': plan['task'], 'scope_consumed': True,
+                              'status': 'attempt started; terminal receipt pending'}) + '\n')
+    publish(root / 'approved-plan.json', plan)
+    shutil.copyfile(B / 'pctx01-startup-instruments-system-trace-target.py.txt', root / 'target.py')
+    name = 'org.pctx.child-trace.ready.' + str(uuid.uuid4())
+    recorder = target = listener = None
+    failure = None
+    errors = []
+    notification_ns = target_launch_ns = None
+    listener_cleanup = None
+    size = 0
+    started = time.monotonic()
+    try:
+        listener = ReadyListener(name)
+        # A registration must have no queued delivery before recorder launch.
+        if listener.ready():
+            raise RuntimeError('UnexpectedPrelaunchNotification')
+        args = [plan['xctrace'], 'record', '--template', 'System Trace',
+                '--all-processes', '--time-limit', '7s', '--output', str(root / 'capture.trace'),
+                '--recording-options', str(B / plan['options_file']),
+                '--notify-tracing-started', name]
+        with (root / 'recorder.log').open('xb') as log:
+            recorder = subprocess.Popen(args, stdout=log, stderr=subprocess.STDOUT,
+                                        stdin=subprocess.DEVNULL, start_new_session=True)
+            while recorder.poll() is None:
+                elapsed = time.monotonic() - started
+                size = sum(p.stat().st_size for p in root.rglob('*')
+                           if p.is_file() and not p.is_symlink())
+                if size > plan['limits']['private_output_stop_threshold_bytes']:
+                    raise RuntimeError('PrivateOutputCap')
+                if elapsed > plan['limits']['recorder_wall_seconds']:
+                    raise TimeoutError('RecorderWallLimit')
+                if notification_ns is None:
+                    if elapsed > plan['limits']['readiness_wait_seconds']:
+                        raise TimeoutError('ReadinessWaitLimit')
+                    if listener.ready():
+                        notification_ns = time.monotonic_ns()
+                        if recorder.poll() is not None:
+                            raise RuntimeError('RecorderExitedBeforeTarget')
+                        target_launch_ns = time.monotonic_ns()
+                        with (root / 'wrapper.log').open('xb') as target_log:
+                            target = subprocess.Popen(
+                                ['/opt/homebrew/bin/python3', str(root / 'target.py'), str(root)],
+                                stdout=target_log, stderr=subprocess.STDOUT,
+                                stdin=subprocess.DEVNULL, cwd='/Users/dev/PCTX')
+                time.sleep(.05)
+            if recorder.returncode != 0:
+                failure = 'RecorderNonzero'
+            elif target is None:
+                failure = 'NoReadyTargetLaunch'
+    except BaseException as exc:
+        # Exception text may include paths; retain the fixed exception class only.
+        failure = type(exc).__name__
+    finally:
+        try:
+            stop_owned(recorder, errors, 'recorder')
+        except BaseException as exc:
+            errors.append('recorder_cleanup:' + type(exc).__name__)
+        recorder_reaped = recorder is not None and recorder.returncode is not None
+        if recorder is not None and not recorder_reaped:
+            failure = failure or 'RecorderCleanupUnknown'
+        # The unchanged owned launcher has a 35s root watchdog and reaps root.
+        # Do not SIGKILL that launcher and orphan its root.
+        if target is not None:
+            try:
+                target.wait(timeout=40)
+            except BaseException as exc:
+                errors.append('target_wait:' + type(exc).__name__)
+                try:
+                    if target.poll() is None:
+                        target.terminate()
+                    target.wait(timeout=5)
+                except BaseException as cleanup_exc:
+                    errors.append('target_cleanup:' + type(cleanup_exc).__name__)
+        target_reaped = target is not None and target.returncode is not None
+        if target is not None and not target_reaped:
+            failure = 'TargetCleanupUnknown'
+        if listener is not None:
+            try:
+                listener_cleanup = listener.close()
+            except BaseException as exc:
+                errors.append('listener_cleanup:' + type(exc).__name__)
+            if listener_cleanup is None or listener_cleanup['cancel_status'] != 0:
+                failure = failure or 'ListenerCleanupUnknown'
+        receipt = None
+        if (root / 'target-result.json').exists():
+            try:
+                receipt = json.loads((root / 'target-result.json').read_text())
+            except (ValueError, OSError):
+                failure = 'TargetReceiptUnknown'
+        if target is not None and (receipt is None or not receipt.get('root_reaped')):
+            failure = failure or 'RootCleanupUnknown'
+        result = {'task': plan['task'], 'scope_consumed': True, 'failure': failure,
+                  'recorder_pid': recorder.pid if recorder else None,
+                  'recorder_exit': recorder.returncode if recorder else None,
+                  'recorder_reaped': recorder_reaped,
+                  'target_wrapper_pid': target.pid if target else None,
+                  'target_wrapper_exit': target.returncode if target else None,
+                  'target_wrapper_reaped': target_reaped,
+                  'notification_monotonic_ns': notification_ns,
+                  'target_launch_monotonic_ns': target_launch_ns,
+                  'readiness_proves': 'matching unique notification, not child-stack coverage',
+                  'listener_cleanup': listener_cleanup, 'target': receipt,
+                  'observed_private_bytes': size, 'cleanup_errors': errors,
+                  'private_root': str(root), 'qualification': False,
+                  'limits': 'Actual trace coverage and exact owned child identities require reduction; unknown descendants remain unknown.'}
+        publish(B / plan['result_receipt'], result)
+        publish(marker, {'task': plan['task'], 'scope_consumed': True,
+                         'result_receipt': plan['result_receipt'], 'status': 'attempt ended'})
+        print(json.dumps({'failure': failure, 'recorder_exit': result['recorder_exit'],
+                          'target_started': target is not None, 'qualification': False}))
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--execute', action='store_true')
+    if parser.parse_args().execute:
+        execute()
+    else:
+        print('Prepared only; changed collection scope approval and independent review required.')
