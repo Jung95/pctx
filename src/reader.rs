@@ -90,6 +90,30 @@ fn checked_fs<T>(p: &Project, operation: impl FnOnce() -> std::io::Result<T>) ->
     p.check_deadline()?;
     Ok(result?)
 }
+/// Required descendant lookup retains the native absence distinction. Root
+/// validation and optional search-candidate admission use their own contracts.
+fn checked_required_source<T>(
+    p: &Project,
+    operation: impl FnOnce() -> std::io::Result<T>,
+) -> Result<T> {
+    p.check_deadline()?;
+    let result = operation();
+    p.check_deadline()?;
+    result.map_err(|e| {
+        if e.kind() == std::io::ErrorKind::NotFound {
+            Error::new("RESOURCE_NOT_FOUND", "Requested source is unavailable", 6)
+        } else {
+            e.into()
+        }
+    })
+}
+fn admitted_source_error(error: Error) -> Error {
+    if error.code == "RESOURCE_NOT_FOUND" {
+        Error::new("IO_ERROR", "Admitted source became unavailable", 7)
+    } else {
+        error
+    }
+}
 /// Pure lexical admission shared by CLI preflight and the policy reader.
 pub fn validate_relative_path(path: &str) -> Result<()> {
     let rel = Path::new(path);
@@ -154,14 +178,14 @@ pub fn authorize(p: &Project, path: &str) -> Result<PathBuf> {
     let mut resolved = p.root.clone();
     for c in rel.components() {
         resolved.push(c);
-        if checked_fs(p, || fs::symlink_metadata(&resolved))?
+        if checked_required_source(p, || fs::symlink_metadata(&resolved))?
             .file_type()
             .is_symlink()
         {
             return Err(Error::new("POLICY_DENIED", "Symlink traversal denied", 5));
         }
     }
-    if !checked_fs(p, || fs::canonicalize(&resolved))?
+    if !checked_required_source(p, || fs::canonicalize(&resolved))?
         .starts_with(checked_fs(p, || fs::canonicalize(&p.root))?)
     {
         return Err(Error::new("PATH_OUTSIDE_ROOT", "Path outside project", 5));
@@ -219,15 +243,27 @@ fn read_from_initial(
 ) -> Result<(VerifiedFile, same_file::Handle)> {
     let strict_admission = initial.is_some();
     p.check_deadline()?;
-    for _ in 0..3 {
+    for attempt in 0..3 {
         p.check_deadline()?;
         #[cfg(unix)]
         policy_allows(p, path)?;
         #[cfg(not(unix))]
-        authorize(p, path)?;
+        authorize(p, path).map_err(|error| {
+            if strict_admission || attempt > 0 {
+                admitted_source_error(error)
+            } else {
+                error
+            }
+        })?;
         let mut f = match initial.take() {
             Some(file) => file,
-            None => secure_open(p, path)?,
+            None => secure_open(p, path).map_err(|error| {
+                if attempt > 0 {
+                    admitted_source_error(error)
+                } else {
+                    error
+                }
+            })?,
         };
         let before = checked_fs(p, || f.metadata())?;
         if !before.is_file() {
@@ -260,8 +296,8 @@ fn read_from_initial(
         #[cfg(unix)]
         policy_allows(p, path)?;
         #[cfg(not(unix))]
-        authorize(p, path)?;
-        let reopened_file = secure_open(p, path)?;
+        authorize(p, path).map_err(admitted_source_error)?;
+        let reopened_file = secure_open(p, path).map_err(admitted_source_error)?;
         let reopened = checked_fs(p, || reopened_file.metadata())?;
         let identity = same_file::Handle::from_file(checked_fs(p, || f.try_clone())?)?;
         let same_instance = identity == same_file::Handle::from_file(reopened_file)?;
@@ -813,7 +849,11 @@ fn anchored_open_admission(
                     return Ok(None);
                 }
                 if error.kind() == std::io::ErrorKind::NotFound {
-                    return Err(error.into());
+                    return Err(Error::new(
+                        "RESOURCE_NOT_FOUND",
+                        "Requested source is unavailable",
+                        6,
+                    ));
                 }
                 return Err(Error::new(
                     "POLICY_DENIED",

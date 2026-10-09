@@ -1293,6 +1293,13 @@ fn open_artifact(p: &Project, path: &Path) -> Result<fs::File> {
             };
         let fd = unsafe { libc::openat(current.as_raw_fd(), name.as_ptr(), flags) };
         if fd < 0 {
+            if std::io::Error::last_os_error().kind() == std::io::ErrorKind::NotFound {
+                return Err(Error::new(
+                    "PACK_NOT_FOUND",
+                    "Requested pack artifact is unavailable",
+                    6,
+                ));
+            }
             return Err(Error::new(
                 "POLICY_DENIED",
                 "Pinned artifact open denied",
@@ -1642,6 +1649,7 @@ fn inspect(p: &Project, path: &Path, against: bool) -> Result<Value> {
     }
     let mut statuses = Vec::new();
     let mut freshness = "unknown";
+    let mut validation_incomplete = false;
     if against {
         let mut changed = false;
         let mut unknown = false;
@@ -1712,9 +1720,10 @@ fn inspect(p: &Project, path: &Path, against: bool) -> Result<Value> {
         } else {
             "current"
         };
+        validation_incomplete = unknown;
     }
     Ok(
-        json!({"manifest":inspection_metadata(artifact.manifest),"integrity":"verified","freshness":freshness,"source_validation":sanitized(json!(statuses)),"actual_bytes":artifact.actual_bytes,"acknowledged":false,"author_authenticated":false,"restores_authority":false}),
+        json!({"manifest":inspection_metadata(artifact.manifest),"integrity":"verified","freshness":freshness,"source_validation":sanitized(json!(statuses)),"coverage":{"status":if validation_incomplete{"partial"}else{"complete"},"reasons":if validation_incomplete{vec!["current_source_validation_incomplete"]}else{vec![]}},"actual_bytes":artifact.actual_bytes,"acknowledged":false,"author_authenticated":false,"restores_authority":false}),
     )
 }
 pub fn execute(p: &Project, c: &PackCommand) -> Result<Value> {

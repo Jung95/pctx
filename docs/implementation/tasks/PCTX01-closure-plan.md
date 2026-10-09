@@ -13,7 +13,7 @@ R01–R12 local12/12 qualifies only that pure-admission subset. Closed rows belo
 are deliberately bounded subconditions; G09 independently retains every required
 release-platform condition. A closed local row does not qualify an untested OS.
 
-Current bounded detail closure: **30/40**; whole gates **0/10**.
+Current bounded detail closure: **31/40**; whole gates **0/10**.
 
 | Fixed ID | State | Completion condition | Source | Spec | Evidence prefix |
 | --- | --- | --- | --- | --- | --- |
@@ -39,7 +39,7 @@ Current bounded detail closure: **30/40**; whole gates **0/10**.
 | PCTX01-G05-D06 | closed | Finish one existing error-to-exit matrix (0,2,3,4,5,6,7,8,9,10,130 and child exception) across shared/frontend facades, including cancelled and source-dependent refusals | main.rs,domain.rs and producer facades | §14/27/38 | pctx01-adapter-errors-verification.json, pctx01-run-exit-verification.json |
 | PCTX01-G06-D01 | closed | Outline valid-empty0, wholly unsupported6, mixed/parse partial3 and refresh uncertainty preserve coverage in admitted representations | main.rs,search.rs | §8/14 | pctx01-outline-coverage-verification.json |
 | PCTX01-G06-D02 | closed | Supported search with zero matches returns successful empty items and truthful coverage | main.rs,search.rs; tests/cli_contract.rs | §8/14 | pctx01-frontend-verification.json |
-| PCTX01-G06-D03 | open | For frozen producer families, verify successful-empty versus missing-capability/resource6 and incomplete3, including repo/cache/output/status/coordination/pack/filter/schedule/inventory; no new producer features | main.rs and existing producers | §8/14 | pctx01-outline-coverage-verification.json, pctx01-repo-admission-verification.json |
+| PCTX01-G06-D03 | closed | For frozen producer families, verify successful-empty versus missing-capability/resource6 and incomplete3, including repo/cache/output/status/coordination/pack/filter/schedule/inventory; no new producer features | main.rs and existing producers | §8/14 | pctx01-outline-coverage-verification.json, pctx01-repo-admission-verification.json |
 | PCTX01-G07-D01 | closed | Native Unix PTY positive color control and root/nested no-color obey request before help | cli_help.rs,main.rs | §14 | pctx01-help-color-verification.json |
 | PCTX01-G07-D02 | closed | Parser bidi/C1/newline/tab/secrets and compact columns/hook/stream strings escape unsafe controls while preserving values | main.rs,render.rs,watch.rs,adapter.rs | §8/14 | pctx01-refusal-rendering-verification.json, pctx01-delivery-verification.json |
 | PCTX01-G07-D03 | open | Complete remaining success/error representation control-character cases against frozen transport classes; Windows console is separately G09-D04 | render.rs,main.rs | §8/14 | pctx01-representation-admission-verification.json |
@@ -325,3 +325,36 @@ and incomplete3 for the already frozen producer families. Finish that condition
 before G07-D03. No other official task starts. Original four macOS1s startup
 product failures, required-platform gaps and inactive PCTX36/PCTX47 backlog
 remain open. No Actions, whole/platform rerun or push retry. All jobs terminal.
+
+## Current G06-D03 closure — 2026-10-09
+
+Only **PCTX01** is active and remains `implementing`. **G06-D03 is closed for
+its bounded local common contract**: detail31/40, whole gates0/10, unchanged
+scope/denominators. [Evidence](../evidence/pctx01-producer-coverage-verification.json)
+records final229 focused tests across18 suites, locked all-target Clippy -D warnings,
+format and independent read-only review PASS. Source/binary/log hashes bind proof.
+
+The frozen9-family [crosswalk](../evidence/pctx01-producer-coverage-crosswalk.json)
+separates successful empty0, required capability/resource absent6 and incomplete3.
+Actual native JSON/compact controls cover applicable states. No-index Status null
+is an optional inspection; real DB/policy failures propagate. Required source absence
+is RESOURCE_NOT_FOUND6; already-admitted disappearance remains IO_ERROR7 and
+project initialization absence remains NOT_INITIALIZED6. Both original regression
+assertions stay strict. Filter requested JSON parsing partial and saved Output
+incomplete capture now yield3. Native empty and140000-line bounded captures
+preserve child0/no-rerun truth. Pack optional source validation remains inspection0;
+requested current validation unknown is partial3, wholeartifact absence6, inner
+integrity9/policy5 retained. Empty Pack scope still refuses2; no new empty-pack feature.
+
+Initial syntax/schema/count/TTL fixture errors and actual product regressions are
+retained separately. First related run48PASS1FAIL caught admitted-source priority;
+second78PASS1FAIL caught missing-project classification. Corrections changed code,
+not those expectations. One unchanged duplicate failure followed a failed fixture
+edit script and is retained without treating it as improvement. Final229PASS is
+focused common evidence, not whole-suite/all-producer/platform qualification.
+
+Next: **G07-D03 within PCTX01**, remaining success/error control-character cases
+for the already frozen representation/transport classes. No other official task
+starts. Original four macOS1s startup failures and required-platform gaps remain
+open; inactive PCTX36/PCTX47 backlog unchanged. No Actions, whole/platform rerun
+or push retry. All jobs terminal; local integration only.

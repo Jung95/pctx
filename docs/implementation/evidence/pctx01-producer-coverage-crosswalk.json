@@ -1,0 +1,61 @@
+{
+  "task": "PCTX01",
+  "condition": "PCTX01-G06-D03",
+  "status": "bounded local common contract verified; final229 focused tests/static/format pass",
+  "families": 9,
+  "new_ids": [],
+  "rows": [
+    {
+      "family": "repo",
+      "fixed_boundary": "Clean isolated Git workspace dirty=false/untracked0, complete; no-Git unsupported6; pending broker snapshot3 covered by existing broker suite",
+      "route": "existing broker producer / main post-success mapping"
+    },
+    {
+      "family": "cache",
+      "fixed_boundary": "Zero snapshots0 with explicit external_provider=not_implemented; optional provider metadata is not a failed requested operation; storage errors preserve7",
+      "route": "broker::stats"
+    },
+    {
+      "family": "output",
+      "fixed_boundary": "Actual native empty retained capture gives no matches0; missing retention6; actual native bounded large capture, saved Find/Show/Render partial3 without rerun; integrity partial3 remains",
+      "route": "output::output; main saved-Output scope"
+    },
+    {
+      "family": "status",
+      "fixed_boundary": "Initialized no-index status0 has indexed_files=null; indexed count matches actual update files; corrupt index7 not successful null",
+      "route": "main::execute Status exception only NOT_INITIALIZED6"
+    },
+    {
+      "family": "coordination",
+      "fixed_boundary": "Empty board tasks0, missing task6; blocked/pending/lease states remain inspections, not synthetic incomplete execution",
+      "route": "work::board/task plus existing work/session suites"
+    },
+    {
+      "family": "pack",
+      "fixed_boundary": "Empty explicit source scope refuses2; unrequested validation0/unknown and empty source_validation; requested current0/current or missing sources3/unknown; missing wholeartifact6; inner integrity9 and policy5 retained",
+      "route": "pack::inspect/read_artifact and existing pack suite"
+    },
+    {
+      "family": "filter",
+      "fixed_boundary": "Empty JSON preview0 with records=[]; requested JSON parsing partial3; missing definition6; Explain selected=null is valid optional absence; activation policy5 unchanged",
+      "route": "filters::Apply; main parsepartial scope"
+    },
+    {
+      "family": "schedule",
+      "fixed_boundary": "Empty schedules0; absent exact namespace/id6; unknown OS bridge observation and blocked plan remain truthful state inspections; original Tick failure remains inactive PCTX36 backlog",
+      "route": "schedule::List/Inspect; no schedule feature changes"
+    },
+    {
+      "family": "inventory",
+      "fixed_boundary": "No packages0 complete_for_static_subset; malformed manifest per-item partial3; missing required profile6; unknown profile claims are inspection states, not invented operations",
+      "route": "inventory::scan/profile; shared required-source reader"
+    }
+  ],
+  "classification_rules": [
+    "\u00a714 successful empty0, required resource/capability missing6, requested scope incomplete3",
+    "Initial requested source absence6; already-admitted source disappearance retainsIO_ERROR7; candidate rejection/root/error ordering unchanged",
+    "Run child-policy is separate and unchanged; saved source capture missing is not optional presentation selection",
+    "Do not add an outcome to a family lacking that producer operation; independent feature algorithms remain with their owner",
+    "Native macOS arm64 only; other required platforms unverified; no Actions/whole-platform claim"
+  ]
+}

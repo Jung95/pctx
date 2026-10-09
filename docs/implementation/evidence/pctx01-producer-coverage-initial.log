@@ -1,0 +1,51 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.10s
+     Running tests/cli_coverage_contract.rs (target/debug/deps/cli_coverage_contract-6a1b71a32123ed05)
+
+running 4 tests
+test requested_json_filter_parse_failure_is_incomplete ... FAILED
+test frozen_families_empty_and_missing_are_distinct ... FAILED
+test known_incomplete_inventory_and_corrupt_status_are_not_successful_empty ... FAILED
+test saved_output_zero_matches_and_incomplete_capture_are_distinct_without_rerun ... FAILED
+
+failures:
+
+---- requested_json_filter_parse_failure_is_incomplete stdout ----
+
+thread 'requested_json_filter_parse_failure_is_incomplete' (9340596) panicked at tests/cli_coverage_contract.rs:39:9:
+assertion `left == right` failed: ["filter", "apply", "fixture", "--input", "input.txt"]/json: Output { status: ExitStatus(unix_wait_status(512)), stdout: "{\"command\":\"arguments\",\"coverage\":{\"reasons\":[\"INVALID_ARGUMENT\"],\"status\":\"partial\"},\"data\":null,\"errors\":[{\"code\":\"INVALID_ARGUMENT\",\"message\":\"Invalid command or option; see pctx --help\",\"retryable\":false}],\"generation_id\":null,\"project_id\":null,\"schema_version\":\"1.0\",\"status\":\"error\",\"truncation\":{\"reasons\":[],\"truncated\":false},\"validation\":{\"checked_at\":\"2026-10-09T03:18:26.015Z\",\"mode\":\"matched\",\"scope\":[],\"workspace_atomic\":false},\"warnings\":[],\"workspace_id\":null}\n", stderr: "" }
+  left: Some(2)
+ right: Some(0)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- frozen_families_empty_and_missing_are_distinct stdout ----
+
+thread 'frozen_families_empty_and_missing_are_distinct' (9340594) panicked at tests/cli_coverage_contract.rs:107:9:
+assertion `left == right` failed
+  left: Number(1)
+ right: 0
+
+---- known_incomplete_inventory_and_corrupt_status_are_not_successful_empty stdout ----
+
+thread 'known_incomplete_inventory_and_corrupt_status_are_not_successful_empty' (9340595) panicked at tests/cli_coverage_contract.rs:39:9:
+assertion `left == right` failed: ["status"]/json: Output { status: ExitStatus(unix_wait_status(0)), stdout: "{\"command\":\"status\",\"coverage\":{\"reasons\":[],\"status\":\"complete\"},\"data\":{\"capabilities\":null,\"generation_id\":null,\"indexed_files\":null,\"local_storage\":{\"control\":\"/private/var/folders/dh/vzwzck1n4rx_bntdyff83ssc0000gp/T/.tmpLMEzGx/data/controls/COORD-ef2aea72-e5ed-4b52-bd41-a3b2d5cbd96b/control.sqlite3\",\"index\":\"/private/var/folders/dh/vzwzck1n4rx_bntdyff83ssc0000gp/T/.tmpLMEzGx/data/workspaces/WS-74701ced-9e1f-4131-8124-ebffa89a63cc/index.sqlite3\"},\"sqlite_version\":\"3.53.2\"},\"errors\":[],\"generation_id\":null,\"project_id\":\"01c42e24-c3dd-4100-af6c-f8eb65251948\",\"schema_version\":\"1.0\",\"status\":\"ok\",\"truncation\":{\"reasons\":[],\"truncated\":false},\"validation\":{\"checked_at\":\"2026-10-09T03:18:26.069Z\",\"mode\":\"matched\",\"scope\":[],\"workspace_atomic\":false},\"warnings\":[],\"workspace_id\":\"WS-74701ced-9e1f-4131-8124-ebffa89a63cc\"}\n", stderr: "" }
+  left: Some(0)
+ right: Some(7)
+
+---- saved_output_zero_matches_and_incomplete_capture_are_distinct_without_rerun stdout ----
+
+thread 'saved_output_zero_matches_and_incomplete_capture_are_distinct_without_rerun' (9340597) panicked at tests/cli_coverage_contract.rs:39:9:
+assertion `left == right` failed: ["output", "find", "OUT-612cdf44-b5da-4193-beaa-b3996ac1f750", "absent"]/json: Output { status: ExitStatus(unix_wait_status(512)), stdout: "{\"command\":\"arguments\",\"coverage\":{\"reasons\":[\"INVALID_ARGUMENT\"],\"status\":\"partial\"},\"data\":null,\"errors\":[{\"code\":\"INVALID_ARGUMENT\",\"message\":\"Invalid command or option; see pctx --help\",\"retryable\":false}],\"generation_id\":null,\"project_id\":null,\"schema_version\":\"1.0\",\"status\":\"error\",\"truncation\":{\"reasons\":[],\"truncated\":false},\"validation\":{\"checked_at\":\"2026-10-09T03:18:26.152Z\",\"mode\":\"matched\",\"scope\":[],\"workspace_atomic\":false},\"warnings\":[],\"workspace_id\":null}\n", stderr: "" }
+  left: Some(2)
+ right: Some(0)
+
+
+failures:
+    frozen_families_empty_and_missing_are_distinct
+    known_incomplete_inventory_and_corrupt_status_are_not_successful_empty
+    requested_json_filter_parse_failure_is_incomplete
+    saved_output_zero_matches_and_incomplete_capture_are_distinct_without_rerun
+
+test result: FAILED. 0 passed; 4 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.01s
+
+error: test failed, to rerun pass `--test cli_coverage_contract`

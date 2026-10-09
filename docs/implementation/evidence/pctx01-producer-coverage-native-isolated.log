@@ -1,0 +1,13 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.59s
+     Running tests/cli_coverage_contract.rs (target/debug/deps/cli_coverage_contract-6a1b71a32123ed05)
+
+running 5 tests
+test requested_json_filter_parse_failure_is_incomplete ... ok
+test known_incomplete_inventory_and_corrupt_status_are_not_successful_empty ... ok
+test pack_optional_validation_differs_from_requested_but_unavailable_sources ... ok
+test frozen_families_empty_and_missing_are_distinct ... ok
+test saved_output_zero_matches_and_incomplete_capture_are_distinct_without_rerun ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 6.69s
+

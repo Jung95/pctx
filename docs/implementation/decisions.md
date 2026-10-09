@@ -1322,3 +1322,18 @@ it does not lower producer acceptance or required-platform conditions. A greedy
 metadata reducer is finite but is not proven to maximize actual byte savings.
 Stream transports require stdout; reject --output before effects after existing
 hook/Markdown representation checks to retain diagnostic precedence.
+
+## Empty, absent and incomplete producer states (PCTX01 G06-D03)
+
+Apply §14 to existing requested operations: complete empty0, required resource
+or capability absent6, incomplete requested scope3. Unknown optional capability,
+not-yet-indexed status, blocked plans and unconfirmed claims can be successful
+inspections with explicit state; they are not fabricated successful operations.
+Required source ENOENT maps6 only at initial admission. After a pinned source
+exists, disappearance remains IO_ERROR7. Project configuration absence maps to
+NOT_INITIALIZED6; other I/O failures remain7. Candidate search rejection and
+root/policy/deadline priorities are unchanged. Saved Output capture incompleteness
+and requested Filter JSON parse partial affect query completeness, not child exit
+policy or deliberate presentation omission. Requested Pack current validation
+unknown is partial3; optional inspection unknown is0. Do not add empty-export
+support or relax inner integrity9 merely to make a uniform test matrix.

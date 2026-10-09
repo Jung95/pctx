@@ -510,8 +510,10 @@ fn execute(
         Command::Status { capabilities } => {
             let snapshot = match storage::snapshot(&p) {
                 Ok(snapshot) => Some(snapshot),
-                Err(e) if e.code == "TIMEOUT" => return Err(e),
-                Err(_) => None,
+                // Status can inspect an initialized workspace before its first
+                // index. Storage/policy failures are not that optional absence.
+                Err(e) if e.code == "NOT_INITIALIZED" && e.exit == 6 => None,
+                Err(e) => return Err(e),
             };
             (
                 "status",
@@ -1059,7 +1061,17 @@ fn main() {
                 .unwrap_or(0);
             let source_incomplete = out["data"]["coverage"] == "partial"
                 || out["data"]["coverage"]["status"] == "partial"
-                || out["data"]["completeness"] == "partial";
+                || out["data"]["completeness"] == "partial"
+                || (matches!(&cli.command, Command::Output { .. })
+                    && out["data"]["capture_complete"] == false)
+                || (matches!(
+                    &cli.command,
+                    Command::Filter {
+                        command: filters::FilterCommand::Apply { .. }
+                    } | Command::Output {
+                        command: output::OutputCommand::Render { .. }
+                    }
+                ) && out["data"]["parse_status"] == "partial");
             let wholly_unsupported = !source_incomplete
                 && outline_files
                     .is_some_and(|files| !files.is_empty() && unsupported == files.len());

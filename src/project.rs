@@ -618,7 +618,7 @@ impl Project {
             deadline,
         )
         .map_err(|e| {
-            if e.code == "IO_ERROR" {
+            if e.code == "RESOURCE_NOT_FOUND" {
                 Error::new("NOT_INITIALIZED", "Run pctx init first", 6)
             } else {
                 e

@@ -955,7 +955,7 @@ fn initialized_producer_errors_keep_identity_in_each_document_and_destination() 
                 request.extend([OsString::from("--output"), destination.clone().into()]);
             }
             let mut out = f.run(&request);
-            assert_eq!(out.status.code(), Some(7), "{out:?}");
+            assert_eq!(out.status.code(), Some(6), "{out:?}");
             assert!(out.stderr.is_empty());
             if to_file {
                 assert!(out.stdout.is_empty());
@@ -964,7 +964,7 @@ fn initialized_producer_errors_keep_identity_in_each_document_and_destination() 
             }
             let response = outline_document(&out, format);
             assert_eq!(response["status"], "error");
-            assert_eq!(response["errors"][0]["code"], "IO_ERROR");
+            assert_eq!(response["errors"][0]["code"], "RESOURCE_NOT_FOUND");
             for key in ["project_id", "workspace_id"] {
                 assert_eq!(response[key], established[key], "{format}: lost {key}");
             }

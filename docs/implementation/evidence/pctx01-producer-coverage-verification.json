@@ -1,0 +1,217 @@
+{
+  "task": "PCTX01",
+  "condition": "PCTX01-G06-D03",
+  "status": "bounded local common contract verified; official task remains implementing",
+  "base_revision": "d2b0cc7",
+  "environment": {
+    "os": "macOS",
+    "architecture": "arm64",
+    "rust": "1.99.0"
+  },
+  "fixed_register": {
+    "closed_details": 31,
+    "detail_denominator": 40,
+    "closed_gates": 0,
+    "gate_denominator": 10,
+    "new_ids": []
+  },
+  "source_sha256": {
+    "src/adapter.rs": "41f18fda7ee7f3852e5ad49e5d9098f21474d5a1915ba6d48db52cfbcabf9def",
+    "src/broker.rs": "252c56c96599a5b4b0795e3fc4283bb35563742ea8ba61cfea790f262feebce1",
+    "src/cancellation.rs": "4901638803bb82894b3211d0f9a8f9537850c4bfed3ac178489ec20780114d4f",
+    "src/cli_args.rs": "2ae3676485714fc79c19ceed1f96c94347d7458286a0ae07e9096af308576d39",
+    "src/cli_help.rs": "f4c61a04d434835ca57bb6f53353bff36718cec4d43585b9d219448167805d97",
+    "src/context.rs": "faa1b3c76ffc53e7240a809ae226d229252ec056d0b985b4adecd62df6a4dcb9",
+    "src/deadline.rs": "acf760efe2ef92e058dbd3b16438acdee9c91fbdabe39e859cd75a835373ea17",
+    "src/documents.rs": "0ae1965d81a09cb5cd20c7dc33a7e5b287929d1d4424796b092ead36151ca953",
+    "src/domain.rs": "9cd872bc33dcccf77c2a40892bc95fa375f9655744339cf09e716b489fa24bd5",
+    "src/extract.rs": "76e36421efa026822cd551a3c5cd51d8c58c1263c966b92dcc5a15ec269b4f4b",
+    "src/filters.rs": "2d24ede383d1779e2d9fe8d97fa005c0bdd3ab454ea2267d5bc0d09f7415f542",
+    "src/graph.rs": "54da586daa91a3c7f2e97534fa68824ff0e0d796dd69054be27960799d94e2c7",
+    "src/input.rs": "fc3f17b70ee1485e6fa9ae9d18d408a9212e0c56831a86529e3fda2d52033dfb",
+    "src/inventory.rs": "b5508410b77fabe332beb3bb7b793bd94908a6f2b1249fe542cf391078b78612",
+    "src/lib.rs": "5c6e64e886b188169ba708b43d0657a2e96a526c1bc7b533f48c5c59460d4eaf",
+    "src/main.rs": "93d4ed2c42084f430b9c519dbf8c5b19b309a00946f8ca0b849dc2ed7b04744d",
+    "src/operations.rs": "37393df0108ee918b3680ab2d3c45905ea95c38fef1c384cafdc8281538a366f",
+    "src/output.rs": "e9c86b6d90a4f3fa311f74bc59fe6c9a3eb2a801a7f98852c8105fda86cc6493",
+    "src/pack.rs": "e46e534dca5a562b38ba49f146f9f7666775a1dd2ac02820ad1ef34eb411b368",
+    "src/parser_contract_tests.rs": "dd3b117226b48bf3f7e76159a17767edbb6ce6aa80b96c6b00a5604e9b9fb576",
+    "src/parsers.rs": "4134e27817423a4718348da1ad15e22304caaa1b9f9ff0e6bb6c98f37cdc1455",
+    "src/policy_controls.rs": "20b5426e447360199584ad0b8e5cf82ea26339d44d7fef384bddd9b1a6c406d9",
+    "src/project.rs": "46f92ba5721890aff661150da1436d4af1bf713d6ed53f3d8c0e5cdbb1aa1002",
+    "src/query_process.rs": "74c4c46c6b224563c63e9e2d7a9beac7996ef69735b072a39ee22c9aa989d6cb",
+    "src/quota.rs": "4ba68daf5ab85ab3c3676848646f05896f72c072581a8d3fefcee387ce737fe7",
+    "src/reader.rs": "07dce449cb960f0bbb1d1a82988572f1ffc16de24160280208a28361651bb3ee",
+    "src/render.rs": "624636785b62c9e95a1b383e43396f9f61c35d1b46766e5c0570dd794f770338",
+    "src/runner.rs": "9ff632504adb29c2143c4eb3945b59c1ac2795e2e9b7a0272095d6a083a29b65",
+    "src/schedule.rs": "fdd6d8f8c1b34d51ab62ad6790270e9ef700b1f282d2eb48455092e5e569ca9f",
+    "src/search.rs": "15483186930d9c818e56ea96b15585e7912af4cb759850b7d1c766d86a1588a8",
+    "src/session.rs": "ca151ac9451579726d149490ab6c48a9e796143327208c9fb855ab5734ae5612",
+    "src/source_delivery.rs": "947c4ae8dafdd685449d49b4b4dcd267426374dae3bb6e29276fdde667356d47",
+    "src/storage.rs": "64d8aa5e4913cc632d66f261cc2773f9988efa78cddb3c6b72014a505afa2e64",
+    "src/watch.rs": "caa0c72c871147551ff42dcf4c0a8876d014c33ed72f642c7fa5ede92c7e37ca",
+    "src/windows_guardian.rs": "d2d672f29e43b603482b44c195d5e702990d2d0416a2a6bb9add138139b312d7",
+    "src/windows_process.rs": "ae4ed108587e66489ade743ad25e3e6c68b3c14547eaaf6e963162af3d29030e",
+    "src/work.rs": "a5c89c59fb012d871a9a9ea335d698b6b4fd05e4e549236c8b1a6835d4bd8170",
+    "tests/cli_coverage_contract.rs": "69c9372ebb2268640c67ee228b9b1e8815877f7f80f765079392073577f2faff",
+    "tests/cli_frontend.rs": "75b94322ea93d0f89f5ec857a4e0c275c4e1deb4866765e416cd1b57806fdd63",
+    "Cargo.toml": "179b02f69bdd7c61adc41ed5f71f8737ee692655b46b0bfeb9c1ffe165d8e97f",
+    "Cargo.lock": "f96362897990caba560793601bc9fca08cef5c977907bb06889d5595d2acd7b0"
+  },
+  "artifacts_sha256": {
+    "target/debug/pctx": "0b71e90d91fd814f0a5ae4deb7660dd3b7fa209a183425087aa29a5b4270c23d",
+    "target/debug/deps/pctx-ae897bec01e143c7": "066fc4921a76c645c6bd22c967551b4ae02d922ef4e515c1457e03de6b1dca01",
+    "target/debug/deps/pctx-5861ab217462b7f0": "dce7deabff59719c5c3af5bcd8417c4c9a201f8fc9f8007abfa4068d5b6e3e2d",
+    "target/debug/deps/broker-9f124a6ad706c742": "a48b38cb6691764fd6084a6747e6b873cc97f9bb891f547061d71516a264062a",
+    "target/debug/deps/cli_contract-7fe808194ea4872f": "32b78430d7a00680cfd3234721715b6368cb810d952044fc1a968c7728d655e0",
+    "target/debug/deps/cli_coverage_contract-6a1b71a32123ed05": "7d768e55b0265e3f448784ee0503c8f2233750f72f3e90ef314f6e99552549e3",
+    "target/debug/deps/cli_frontend-4948844b4d514170": "81199bf2646714544e4b82f0a10fc37576f460ff30cfb8844504e41338c9e264",
+    "target/debug/deps/cli_refusal_envelope-e0fa1efd013109e3": "c43175ac22ed719d03a25c155735a7246bfa76aeea17e30c38e7185c990fbe58",
+    "target/debug/deps/cli_run_exit-6950b2b7b4cecebc": "7cb0d5e35dda3d6eed0cb53c7cd15d976672ad9ec8234a8f73a661d0222a75ce",
+    "target/debug/deps/core_security-7b0e487db632e698": "887fa5bc8e0238928a9d9466f4ca71868e6fa0b4702015e558ff519e4444b91a",
+    "target/debug/deps/filters-9e3df5656f93ef1c": "34ef0f2e802df74d2ec3e3f346ddcc3f04314239de9be7a807a1071fdebcd664",
+    "target/debug/deps/inventory-3ccb113965ac776c": "57cae035188c2e19a33079171009c6c332572c2b5cfb784b14184647bee40cfb",
+    "target/debug/deps/output-6e0a106d5d0b7325": "53230aca8456d21e0cfeb2fb8cf5d332ec0e996e61c07e73a14b8def94cc9c39",
+    "target/debug/deps/pack-8d09189cdcc06191": "95cae994d8efe5232cf7d18e6508fbf70b70aaca0b7b062515ee3d78ff005f02",
+    "target/debug/deps/persisted_error_contract-257962e0e1215410": "97d72be19f0c6568fa31e5ec488858272286d55d87d1be4ecb4eb746e1591adb",
+    "target/debug/deps/reader_deadline-d7b5d7001a3131cd": "f02e4b590e6849f06440ed5a9a463e7d318ea4ce395092aec928c1b488e92c0b",
+    "target/debug/deps/reader_policy_cache-c10dd914991c07d2": "f75dd4df7145b74bc0820e3da88e8b78ec7e33d4bf5687140c73b5936b3801ce",
+    "target/debug/deps/session-e37e24e280aa64af": "f2f72e386fab8ddb0314633026d816c336c5a34b9e9950d79c5b72abe2d3e2a1",
+    "target/debug/deps/work_control-8112bcadab3f8486": "86bdd329dea965d226a814bf05d0a9a803309b6e626b0fd6c0b089dd781f31b6"
+  },
+  "runs": [
+    {
+      "log": "pctx01-producer-coverage-clippy.log",
+      "passed": 0,
+      "failed": 0,
+      "terminal_result": "passed",
+      "sha256": "1999a8ecd2fe0ad3e2ab1db9865f464c0b65bbf921d32f77e04bfd8f03946182"
+    },
+    {
+      "log": "pctx01-producer-coverage-final.log",
+      "passed": 229,
+      "failed": 0,
+      "terminal_result": "passed",
+      "sha256": "a748b76a99e146d41e610df06a215b7efa2f1cf7ac9210a4a98046f02d330a95"
+    },
+    {
+      "log": "pctx01-producer-coverage-format.log",
+      "passed": 0,
+      "failed": 0,
+      "terminal_result": "passed",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "log": "pctx01-producer-coverage-initial.log",
+      "passed": 0,
+      "failed": 4,
+      "terminal_result": "failed",
+      "sha256": "f1f78cebf2f799382724d3b8aac54fcbe987830d07d110ee984a278ac0e3cbfc"
+    },
+    {
+      "log": "pctx01-producer-coverage-native-isolated.log",
+      "passed": 5,
+      "failed": 0,
+      "terminal_result": "passed",
+      "sha256": "483aab602c03ad93052a918fdb458f52e0f47136927e2158f28edd7c95459216"
+    },
+    {
+      "log": "pctx01-producer-coverage-native.log",
+      "passed": 4,
+      "failed": 1,
+      "terminal_result": "failed",
+      "sha256": "ea43d782565eb37e7388300109d89afa78c450a8f8818194f7bb45495e2f71c5"
+    },
+    {
+      "log": "pctx01-producer-coverage-qualified-initial.log",
+      "passed": 0,
+      "failed": 4,
+      "terminal_result": "failed",
+      "sha256": "f75c6816aee25bbd1c849f34e89aa90491efd2c6e401835fcab17e83970e11f2"
+    },
+    {
+      "log": "pctx01-producer-coverage-related-qualified.log",
+      "passed": 78,
+      "failed": 1,
+      "terminal_result": "failed",
+      "sha256": "27a4c2d8e656d64ee7f8e5f6d0234354965b240d272b21d6684d72b1718d4602"
+    },
+    {
+      "log": "pctx01-producer-coverage-related.log",
+      "passed": 48,
+      "failed": 1,
+      "terminal_result": "failed",
+      "sha256": "ea454e977c7611002f37ee47799292387076f1384d9dbdd420c5178e66523ec7"
+    },
+    {
+      "log": "pctx01-producer-coverage-repaired.log",
+      "passed": 4,
+      "failed": 1,
+      "terminal_result": "failed",
+      "sha256": "f52780d846acf844904dd457c7f96f9da86cb953b3b285e97f1ae93694cea5bf"
+    }
+  ],
+  "final_regression": {
+    "session": 96088,
+    "exit": 0,
+    "passed": 229,
+    "failed": 0,
+    "suites": 18,
+    "log": "pctx01-producer-coverage-final.log",
+    "scope": "Focused library/binary and named affected producer/CLI/reader/security/persisted/session/work suites; not whole suite/platform qualification"
+  },
+  "static": {
+    "clippy": {
+      "session": 47085,
+      "exit": 0,
+      "locked_all_targets_warnings_denied": true
+    },
+    "format": {
+      "exit": 0
+    }
+  },
+  "native_controls": {
+    "tests": 5,
+    "formats": [
+      "json",
+      "compact"
+    ],
+    "families": 9,
+    "driver": "tests/cli_coverage_contract.rs",
+    "actual_processes": "Native retained empty /bin/cat capture and bounded large140000-line capture, child0; savedFind/Show/Render do not rerun. Native Git fixture is separate from non-Git TTL cache. Pack created/verified against actual source file then source removed. Status actual SQLite bytes corrupted. Filter explicit malformed JSON fixture. Inventory malformed static manifest."
+  },
+  "criteria": {
+    "successful_empty": "Zero cache snapshots, unindexed optional Status null/known measured count, board tasks[], schedule schedules[], Inventory packages[], Filter records[], Output no matches, clean Git dirtyfalse/untracked0. Pack has no empty-export contract: scope empty refuses2 instead of invented support.",
+    "resource_absence": "Exact registered task/schedule missing6, expired/missing output6, missing required profile/filter source6, wholepack missing6, nonGit required capability6; missing project initialization stays NOT_INITIALIZED6. Actual storage corruption7.",
+    "incomplete": "Inventory per-item partial3; Filter requested JSON parsing partial3; native incomplete retained source capture on savedFind/Show/Render partial3; requested Pack current validation unknownpartial3 while optional inspectionunknown0. Existing broker pending controls qualify repo partial.",
+    "priority": "Candidate source skips unchanged; first required-source absence6 vs already-admitted/retried disappearanceIO_ERROR7. Original deletion/identical-replacement unit assertion retained. Policy/root/deadline, Run childpolicy, optional selection omissions and Pack innerintegrity9 preserved."
+  },
+  "crosswalk": {
+    "path": "pctx01-producer-coverage-crosswalk.json",
+    "sha256": "a64c7a3747d496059bb4d36a7dc4ecf7fc4f9e5506c56ea82625c2b6a1e260ee",
+    "scope": "Nine existing family classes, applicable outcomes only; not all coordination routes/independent producer algorithms"
+  },
+  "failures_retained": [
+    "Initial test syntax/Index count assumption errors preserved; corrected to actual CLI flags and count returned by Index update",
+    "Invalid Filter definition lacked required rules array; corrected fixture schema, then parserpartialcontrol passed with strict exit3",
+    "Actual Status corruption0 and Output incompleteFind0 preserved in initial native logs",
+    "Inventory required profile absenceIO7 corrected required-source contract to6",
+    "Native Git control reused non-Git TTL snapshot; separate Git fixture used, assertions strengthened dirtyfalse/untracked0",
+    "Fixture-edit script failed before a duplicate run; unchanged failure log retained as native.log, not a new product failure or proof of improvement",
+    "First related48PASS1FAIL: already-admitted deletion misclassified6; code restricted to initial lookup, original assertion untouched",
+    "Second related78PASS1FAIL: missing project config code no longer NOT_INITIALIZED; Project config mapping corrected only for explicit absence, original assertion untouched"
+  ],
+  "review": {
+    "agent": "/root/work_control",
+    "read_only": true,
+    "no_edits_builds_tests": true,
+    "result": "No blocker to bounded local closure; reviewed initial/admitted source distinction, narrow Project absentconfig mapping, nine-family applicability, unchanged Run/selection/integrity priorities; final229/static/format pass"
+  },
+  "remaining": [
+    "Only PCTX01 active; G07-D03 next, whole0/10",
+    "Original four macOS1s startup failures retained; no inferred fix or whole suite pass",
+    "macOS x86_64/Linux x86_64/Windows x86_64 native unverified; Linuxaarch64 supporting only",
+    "Inactive original PCTX36 Tick failure and PCTX47 Helper metering routing remain backlog",
+    "No Actions, account/issue/deployment/paid/globalhook/schedule effects; push rejection unchanged, no retry"
+  ]
+}
