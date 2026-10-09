@@ -1,0 +1,8 @@
+{
+  "task": "PCTX01-G05-D05",
+  "scope_consumed": true,
+  "recordings": 1,
+  "recorder_exit": 0,
+  "result_receipt": "pctx01-startup-instruments-system-trace-retry-result.json",
+  "no_further_recording_authorized_by_this_receipt": true
+}

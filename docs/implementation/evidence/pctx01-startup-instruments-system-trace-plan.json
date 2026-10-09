@@ -1,7 +1,7 @@
 {
   "task": "PCTX01-G05-D05",
-  "status": "retry preparation after output-stop failure; not executed",
-  "human_scope_approval": "pending retry count; user approved threshold increase",
+  "status": "once-only retry consumed; recording valid; original test failed; numeric reduction complete",
+  "human_scope_approval": "approved",
   "independent_review": "approved",
   "private_root": "/private/tmp/pctx01-system-trace-z3dg_9xh",
   "xctrace": "/Applications/Xcode.app/Contents/Developer/usr/bin/xctrace",
@@ -33,8 +33,8 @@
     "Cargo.lock": "f96362897990caba560793601bc9fca08cef5c977907bb06889d5595d2acd7b0"
   },
   "qualification": false,
-  "approval_evidence": "First7second scope consumed. User subsequently requested threshold increase to1GiB; second recording requires confirmation of once-only retry.",
-  "review_evidence": "Final passive review verified1GiB parameter,distinct retry receipts,firstmarker preservation,file pins; human retry approval pending.",
+  "approval_evidence": "User explicitly approved one SystemTrace retry in same scope,allowing longer if necessary. Reviewed7seconds retained for this attempt; no further recording count authorized.",
+  "review_evidence": "Preparation review approved; human approval subsequently granted. Post-run passive review requires timeout evidence and cleanup, now being completed.",
   "output_threshold_change_evidence": "User explicitly requested raising logical-size stop threshold via annotation1; recording duration/original test contracts unchanged.",
   "consumed_receipt": "pctx01-startup-instruments-system-trace-retry-consumed.json",
   "result_receipt": "pctx01-startup-instruments-system-trace-retry-result.json"

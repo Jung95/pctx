@@ -1,6 +1,19 @@
 # Implementation progress
 
-## Instruments System Trace capacity failure — current, 2026-10-09
+## Valid System Trace retry — current, 2026-10-09
+
+Only PCTX01-G05-D05 remains active/product_failure; PCTX01 stays33/40 details,0/10 gates.
+Approved once-only1GiB/7s retry recorded/exported successfully. Original1000ms/8x16
+test101 with3TIMEOUT47992/47994/47995. Exact owned scheduler block-to-next-dispatch
+spans999.330584/999.345250/999.428500ms; not exact wait duration or cause attribution.
+Detailed tables target wrapper only; child wait stacks absent. OSLog export0rows.
+Independent arithmetic/limits review passed. Known22PIDs absent; private raw removed.
+No product repair/qualification or task switch. Scope consumed; longer wrapper-only
+capture cannot fix target selection. Next within D05: prepare bounded child-inclusive
+wait-stack capture before any further recording; retain original four-test conditions.
+[Evidence and limits](evidence/pctx01-startup-instruments-system-trace-retry-review.md).
+
+## Instruments System Trace capacity failure — historical, 2026-10-09
 
 PCTX01-G05-D05 remains product_failure;whole PCTX01 totals33/40 details,0/10 gates.
 Approved7s trace attempted once;original1000ms8x16 test101/TIMEOUT47364.

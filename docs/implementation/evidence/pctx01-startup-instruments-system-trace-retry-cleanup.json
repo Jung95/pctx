@@ -1,0 +1,98 @@
+{
+  "task": "PCTX01-G05-D05",
+  "known_pid_checks": [
+    {
+      "pid": 47974,
+      "state": "absent"
+    },
+    {
+      "pid": 47986,
+      "state": "absent"
+    },
+    {
+      "pid": 47987,
+      "state": "absent"
+    },
+    {
+      "pid": 47992,
+      "state": "absent"
+    },
+    {
+      "pid": 47994,
+      "state": "absent"
+    },
+    {
+      "pid": 47995,
+      "state": "absent"
+    },
+    {
+      "pid": 48086,
+      "state": "absent"
+    },
+    {
+      "pid": 48114,
+      "state": "absent"
+    },
+    {
+      "pid": 48115,
+      "state": "absent"
+    },
+    {
+      "pid": 48116,
+      "state": "absent"
+    },
+    {
+      "pid": 48117,
+      "state": "absent"
+    },
+    {
+      "pid": 48118,
+      "state": "absent"
+    },
+    {
+      "pid": 48185,
+      "state": "absent"
+    },
+    {
+      "pid": 48303,
+      "state": "absent"
+    },
+    {
+      "pid": 48304,
+      "state": "absent"
+    },
+    {
+      "pid": 48305,
+      "state": "absent"
+    },
+    {
+      "pid": 48306,
+      "state": "absent"
+    },
+    {
+      "pid": 48307,
+      "state": "absent"
+    },
+    {
+      "pid": 48317,
+      "state": "absent"
+    },
+    {
+      "pid": 48320,
+      "state": "absent"
+    },
+    {
+      "pid": 48322,
+      "state": "absent"
+    },
+    {
+      "pid": 48323,
+      "state": "absent"
+    }
+  ],
+  "known_pid_count": 22,
+  "private_raw_removed": true,
+  "removed_logical_bytes": 314483374,
+  "limits": "Known recorder/wrapper/root/three reported failed children/exporters absent. Not a universal descendant proof; successful child identities were not all retained. No unrelated process signalled. Instruments-managed caches outside this private output were not inspected or deleted.",
+  "qualification": false
+}

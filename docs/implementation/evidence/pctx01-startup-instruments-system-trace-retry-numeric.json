@@ -1,0 +1,1222 @@
+{
+  "task": "PCTX01-G05-D05",
+  "qualification": false,
+  "timeout_count": 3,
+  "original_budget_ms": 1000,
+  "original_concurrency": "8x16",
+  "identity": [
+    {
+      "pid": 47986,
+      "trace_unique_numeric_id": "1442220"
+    },
+    {
+      "pid": 47987,
+      "trace_unique_numeric_id": "1442221"
+    },
+    {
+      "pid": 47992,
+      "trace_unique_numeric_id": "1442226"
+    },
+    {
+      "pid": 47994,
+      "trace_unique_numeric_id": "1442228"
+    },
+    {
+      "pid": 47995,
+      "trace_unique_numeric_id": "1442229"
+    }
+  ],
+  "event_time_units": "trace-relative nanoseconds",
+  "summary": [
+    {
+      "pid": 47992,
+      "tid": 10137113,
+      "block_ns": 834061916,
+      "next_owned_dispatch_ns": 1833392500,
+      "block_to_dispatch_ns": 999330584,
+      "events": 39
+    },
+    {
+      "pid": 47994,
+      "tid": 10137114,
+      "block_ns": 834014250,
+      "next_owned_dispatch_ns": 1833359500,
+      "block_to_dispatch_ns": 999345250,
+      "events": 39
+    },
+    {
+      "pid": 47995,
+      "tid": 10137115,
+      "block_ns": 834007250,
+      "next_owned_dispatch_ns": 1833435750,
+      "block_to_dispatch_ns": 999428500,
+      "events": 38
+    }
+  ],
+  "failed_child_numeric_events": [
+    {
+      "pid": 47995,
+      "tid": 10137115,
+      "event-time": "833976583",
+      "core": "7",
+      "kdebug-class": "1",
+      "kdebug-subclass": "9",
+      "kdebug-code": "7",
+      "kdebug-func": "1"
+    },
+    {
+      "pid": 47995,
+      "tid": 10137115,
+      "event-time": "833976583",
+      "core": "7",
+      "kdebug-class": "1",
+      "kdebug-subclass": "9",
+      "kdebug-code": "7",
+      "kdebug-func": "2"
+    },
+    {
+      "pid": 47995,
+      "tid": 10137115,
+      "event-time": "833976625",
+      "core": "7",
+      "kdebug-class": "1",
+      "kdebug-subclass": "9",
+      "kdebug-code": "7",
+      "kdebug-func": "2"
+    },
+    {
+      "pid": 47995,
+      "tid": 10137115,
+      "event-time": "833976625",
+      "core": "7",
+      "kdebug-class": "1",
+      "kdebug-subclass": "9",
+      "kdebug-code": "7",
+      "kdebug-func": "1"
+    },
+    {
+      "pid": 47995,
+      "tid": 10137115,
+      "event-time": "833976666",
+      "core": "7",
+      "kdebug-class": "1",
+      "kdebug-subclass": "9",
+      "kdebug-code": "7",
+      "kdebug-func": "2"
+    },
+    {
+      "pid": 47995,
+      "tid": 10137115,
+      "event-time": "833976666",
+      "core": "7",
+      "kdebug-class": "1",
+      "kdebug-subclass": "9",
+      "kdebug-code": "7",
+      "kdebug-func": "2"
+    },
+    {
+      "pid": 47995,
+      "tid": 10137115,
+      "event-time": "833976666",
+      "core": "7",
+      "kdebug-class": "1",
+      "kdebug-subclass": "9",
+      "kdebug-code": "1",
+      "kdebug-func": "0"
+    },
+    {
+      "pid": 47994,
+      "tid": 10137114,
+      "event-time": "833987833",
+      "core": "4",
+      "kdebug-class": "1",
+      "kdebug-subclass": "9",
+      "kdebug-code": "7",
+      "kdebug-func": "1"
+    },
+    {
+      "pid": 47994,
+      "tid": 10137114,
+      "event-time": "833987875",
+      "core": "4",
+      "kdebug-class": "1",
+      "kdebug-subclass": "9",
+      "kdebug-code": "7",
+      "kdebug-func": "2"
+    },
+    {
+      "pid": 47994,
+      "tid": 10137114,
+      "event-time": "833987916",
+      "core": "4",
+      "kdebug-class": "1",
+      "kdebug-subclass": "9",
+      "kdebug-code": "7",
+      "kdebug-func": "2"
+    },
+    {
+      "pid": 47994,
+      "tid": 10137114,
+      "event-time": "833987958",
+      "core": "4",
+      "kdebug-class": "1",
+      "kdebug-subclass": "9",
+      "kdebug-code": "7",
+      "kdebug-func": "1"
+    },
+    {
+      "pid": 47994,
+      "tid": 10137114,
+      "event-time": "833988000",
+      "core": "4",
+      "kdebug-class": "1",
+      "kdebug-subclass": "9",
+      "kdebug-code": "7",
+      "kdebug-func": "2"
+    },
+    {
+      "pid": 47994,
+      "tid": 10137114,
+      "event-time": "833988041",
+      "core": "4",
+      "kdebug-class": "1",
+      "kdebug-subclass": "9",
+      "kdebug-code": "7",
+      "kdebug-func": "2"
+    },
+    {
+      "pid": 47994,
+      "tid": 10137114,
+      "event-time": "833988125",
+      "core": "4",
+      "kdebug-class": "1",
+      "kdebug-subclass": "9",
+      "kdebug-code": "1",
+      "kdebug-func": "0"
+    },
+    {
+      "pid": 47995,
+      "tid": 10137115,
+      "event-time": "833989666",
+      "core": "7",
+      "kdebug-class": "1",
+      "kdebug-subclass": "9",
+      "kdebug-code": "7",
+      "kdebug-func": "1"
+    },
+    {
+      "pid": 47995,
+      "tid": 10137115,
+      "event-time": "833989666",
+      "core": "7",
+      "kdebug-class": "1",
+      "kdebug-subclass": "9",
+      "kdebug-code": "7",
+      "kdebug-func": "2"
+    },
+    {
+      "pid": 47995,
+      "tid": 10137115,
+      "event-time": "833989666",
+      "core": "7",
+      "kdebug-class": "1",
+      "kdebug-subclass": "9",
+      "kdebug-code": "7",
+      "kdebug-func": "2"
+    },
+    {
+      "pid": 47995,
+      "tid": 10137115,
+      "event-time": "833989750",
+      "core": "7",
+      "kdebug-class": "1",
+      "kdebug-subclass": "9",
+      "kdebug-code": "7",
+      "kdebug-func": "1"
+    },
+    {
+      "pid": 47995,
+      "tid": 10137115,
+      "event-time": "833989750",
+      "core": "7",
+      "kdebug-class": "1",
+      "kdebug-subclass": "9",
+      "kdebug-code": "7",
+      "kdebug-func": "2"
+    },
+    {
+      "pid": 47995,
+      "tid": 10137115,
+      "event-time": "833989791",
+      "core": "7",
+      "kdebug-class": "1",
+      "kdebug-subclass": "9",
+      "kdebug-code": "7",
+      "kdebug-func": "2"
+    },
+    {
+      "pid": 47995,
+      "tid": 10137115,
+      "event-time": "833989791",
+      "core": "7",
+      "kdebug-class": "1",
+      "kdebug-subclass": "9",
+      "kdebug-code": "1",
+      "kdebug-func": "0"
+    },
+    {
+      "pid": 47994,
+      "tid": 10137114,
+      "event-time": "833999291",
+      "core": "8",
+      "kdebug-class": "1",
+      "kdebug-subclass": "9",
+      "kdebug-code": "7",
+      "kdebug-func": "1"
+    },
+    {
+      "pid": 47994,
+      "tid": 10137114,
+      "event-time": "833999291",
+      "core": "8",
+      "kdebug-class": "1",
+      "kdebug-subclass": "9",
+      "kdebug-code": "7",
+      "kdebug-func": "2"
+    },
+    {
+      "pid": 47994,
+      "tid": 10137114,
+      "event-time": "833999333",
+      "core": "8",
+      "kdebug-class": "1",
+      "kdebug-subclass": "9",
+      "kdebug-code": "7",
+      "kdebug-func": "2"
+    },
+    {
+      "pid": 47992,
+      "tid": 10137113,
+      "event-time": "834040125",
+      "core": "6",
+      "kdebug-class": "1",
+      "kdebug-subclass": "9",
+      "kdebug-code": "7",
+      "kdebug-func": "1"
+    },
+    {
+      "pid": 47992,
+      "tid": 10137113,
+      "event-time": "834040166",
+      "core": "6",
+      "kdebug-class": "1",
+      "kdebug-subclass": "9",
+      "kdebug-code": "7",
+      "kdebug-func": "2"
+    },
+    {
+      "pid": 47992,
+      "tid": 10137113,
+      "event-time": "834040166",
+      "core": "6",
+      "kdebug-class": "1",
+      "kdebug-subclass": "9",
+      "kdebug-code": "7",
+      "kdebug-func": "2"
+    },
+    {
+      "pid": 47992,
+      "tid": 10137113,
+      "event-time": "834040250",
+      "core": "6",
+      "kdebug-class": "1",
+      "kdebug-subclass": "9",
+      "kdebug-code": "7",
+      "kdebug-func": "1"
+    },
+    {
+      "pid": 47992,
+      "tid": 10137113,
+      "event-time": "834040250",
+      "core": "6",
+      "kdebug-class": "1",
+      "kdebug-subclass": "9",
+      "kdebug-code": "7",
+      "kdebug-func": "2"
+    },
+    {
+      "pid": 47992,
+      "tid": 10137113,
+      "event-time": "834040250",
+      "core": "6",
+      "kdebug-class": "1",
+      "kdebug-subclass": "9",
+      "kdebug-code": "7",
+      "kdebug-func": "2"
+    },
+    {
+      "pid": 47992,
+      "tid": 10137113,
+      "event-time": "834040291",
+      "core": "6",
+      "kdebug-class": "1",
+      "kdebug-subclass": "9",
+      "kdebug-code": "1",
+      "kdebug-func": "0"
+    },
+    {
+      "pid": 47992,
+      "tid": 10137113,
+      "event-time": "834050250",
+      "core": "6",
+      "kdebug-class": "1",
+      "kdebug-subclass": "9",
+      "kdebug-code": "7",
+      "kdebug-func": "1"
+    },
+    {
+      "pid": 47992,
+      "tid": 10137113,
+      "event-time": "834050291",
+      "core": "6",
+      "kdebug-class": "1",
+      "kdebug-subclass": "9",
+      "kdebug-code": "7",
+      "kdebug-func": "2"
+    },
+    {
+      "pid": 47992,
+      "tid": 10137113,
+      "event-time": "834050291",
+      "core": "6",
+      "kdebug-class": "1",
+      "kdebug-subclass": "9",
+      "kdebug-code": "7",
+      "kdebug-func": "2"
+    },
+    {
+      "pid": 47992,
+      "tid": 10137113,
+      "event-time": "834050291",
+      "core": "6",
+      "kdebug-class": "1",
+      "kdebug-subclass": "9",
+      "kdebug-code": "7",
+      "kdebug-func": "1"
+    },
+    {
+      "pid": 47992,
+      "tid": 10137113,
+      "event-time": "834050333",
+      "core": "6",
+      "kdebug-class": "1",
+      "kdebug-subclass": "9",
+      "kdebug-code": "7",
+      "kdebug-func": "2"
+    },
+    {
+      "pid": 47992,
+      "tid": 10137113,
+      "event-time": "834050333",
+      "core": "6",
+      "kdebug-class": "1",
+      "kdebug-subclass": "9",
+      "kdebug-code": "7",
+      "kdebug-func": "2"
+    },
+    {
+      "pid": 47992,
+      "tid": 10137113,
+      "event-time": "834050375",
+      "core": "6",
+      "kdebug-class": "1",
+      "kdebug-subclass": "9",
+      "kdebug-code": "1",
+      "kdebug-func": "0"
+    },
+    {
+      "pid": 47994,
+      "tid": 10137114,
+      "event-time": "1833359500",
+      "core": "8",
+      "kdebug-class": "1",
+      "kdebug-subclass": "9",
+      "kdebug-code": "7",
+      "kdebug-func": "1"
+    },
+    {
+      "pid": 47994,
+      "tid": 10137114,
+      "event-time": "1833359541",
+      "core": "8",
+      "kdebug-class": "1",
+      "kdebug-subclass": "9",
+      "kdebug-code": "7",
+      "kdebug-func": "2"
+    },
+    {
+      "pid": 47994,
+      "tid": 10137114,
+      "event-time": "1833359541",
+      "core": "8",
+      "kdebug-class": "1",
+      "kdebug-subclass": "9",
+      "kdebug-code": "7",
+      "kdebug-func": "2"
+    },
+    {
+      "pid": 47994,
+      "tid": 10137114,
+      "event-time": "1833359583",
+      "core": "8",
+      "kdebug-class": "1",
+      "kdebug-subclass": "9",
+      "kdebug-code": "7",
+      "kdebug-func": "1"
+    },
+    {
+      "pid": 47994,
+      "tid": 10137114,
+      "event-time": "1833359583",
+      "core": "8",
+      "kdebug-class": "1",
+      "kdebug-subclass": "9",
+      "kdebug-code": "7",
+      "kdebug-func": "2"
+    },
+    {
+      "pid": 47994,
+      "tid": 10137114,
+      "event-time": "1833359625",
+      "core": "8",
+      "kdebug-class": "1",
+      "kdebug-subclass": "9",
+      "kdebug-code": "7",
+      "kdebug-func": "2"
+    },
+    {
+      "pid": 47994,
+      "tid": 10137114,
+      "event-time": "1833359625",
+      "core": "8",
+      "kdebug-class": "1",
+      "kdebug-subclass": "9",
+      "kdebug-code": "1",
+      "kdebug-func": "0"
+    },
+    {
+      "pid": 47992,
+      "tid": 10137113,
+      "event-time": "1833392541",
+      "core": "6",
+      "kdebug-class": "1",
+      "kdebug-subclass": "9",
+      "kdebug-code": "7",
+      "kdebug-func": "1"
+    },
+    {
+      "pid": 47992,
+      "tid": 10137113,
+      "event-time": "1833392541",
+      "core": "6",
+      "kdebug-class": "1",
+      "kdebug-subclass": "9",
+      "kdebug-code": "7",
+      "kdebug-func": "2"
+    },
+    {
+      "pid": 47992,
+      "tid": 10137113,
+      "event-time": "1833392541",
+      "core": "6",
+      "kdebug-class": "1",
+      "kdebug-subclass": "9",
+      "kdebug-code": "7",
+      "kdebug-func": "2"
+    },
+    {
+      "pid": 47995,
+      "tid": 10137115,
+      "event-time": "1833435791",
+      "core": "7",
+      "kdebug-class": "1",
+      "kdebug-subclass": "9",
+      "kdebug-code": "7",
+      "kdebug-func": "1"
+    },
+    {
+      "pid": 47995,
+      "tid": 10137115,
+      "event-time": "1833435833",
+      "core": "7",
+      "kdebug-class": "1",
+      "kdebug-subclass": "9",
+      "kdebug-code": "7",
+      "kdebug-func": "2"
+    },
+    {
+      "pid": 47995,
+      "tid": 10137115,
+      "event-time": "1833435833",
+      "core": "7",
+      "kdebug-class": "1",
+      "kdebug-subclass": "9",
+      "kdebug-code": "7",
+      "kdebug-func": "2"
+    },
+    {
+      "pid": 47995,
+      "tid": 10137115,
+      "event-time": "833976583",
+      "core": "7",
+      "kdebug-class": "1",
+      "kdebug-subclass": "64",
+      "kdebug-code": "32",
+      "kdebug-func": "0"
+    },
+    {
+      "pid": 47995,
+      "tid": 10137115,
+      "event-time": "833977041",
+      "core": "7",
+      "kdebug-class": "1",
+      "kdebug-subclass": "64",
+      "kdebug-code": "15",
+      "kdebug-func": "0"
+    },
+    {
+      "pid": 47995,
+      "tid": 10137115,
+      "event-time": "833977041",
+      "core": "7",
+      "kdebug-class": "1",
+      "kdebug-subclass": "64",
+      "kdebug-code": "72",
+      "kdebug-func": "1"
+    },
+    {
+      "pid": 47995,
+      "tid": 10137115,
+      "event-time": "833978416",
+      "core": "7",
+      "kdebug-class": "1",
+      "kdebug-subclass": "64",
+      "kdebug-code": "72",
+      "kdebug-func": "2"
+    },
+    {
+      "pid": 47995,
+      "tid": 10137115,
+      "event-time": "833978666",
+      "core": "7",
+      "kdebug-class": "1",
+      "kdebug-subclass": "64",
+      "kdebug-code": "0",
+      "kdebug-func": "0"
+    },
+    {
+      "pid": 47995,
+      "tid": 10137115,
+      "event-time": "833978708",
+      "core": "7",
+      "kdebug-class": "1",
+      "kdebug-subclass": "64",
+      "kdebug-code": "11",
+      "kdebug-func": "0"
+    },
+    {
+      "pid": 47994,
+      "tid": 10137114,
+      "event-time": "833987708",
+      "core": "4",
+      "kdebug-class": "1",
+      "kdebug-subclass": "64",
+      "kdebug-code": "32",
+      "kdebug-func": "0"
+    },
+    {
+      "pid": 47994,
+      "tid": 10137114,
+      "event-time": "833989416",
+      "core": "4",
+      "kdebug-class": "1",
+      "kdebug-subclass": "64",
+      "kdebug-code": "15",
+      "kdebug-func": "0"
+    },
+    {
+      "pid": 47994,
+      "tid": 10137114,
+      "event-time": "833989458",
+      "core": "4",
+      "kdebug-class": "1",
+      "kdebug-subclass": "64",
+      "kdebug-code": "72",
+      "kdebug-func": "1"
+    },
+    {
+      "pid": 47995,
+      "tid": 10137115,
+      "event-time": "833989625",
+      "core": "7",
+      "kdebug-class": "1",
+      "kdebug-subclass": "64",
+      "kdebug-code": "32",
+      "kdebug-func": "0"
+    },
+    {
+      "pid": 47994,
+      "tid": 10137114,
+      "event-time": "833990208",
+      "core": "4",
+      "kdebug-class": "1",
+      "kdebug-subclass": "64",
+      "kdebug-code": "72",
+      "kdebug-func": "2"
+    },
+    {
+      "pid": 47994,
+      "tid": 10137114,
+      "event-time": "833990833",
+      "core": "4",
+      "kdebug-class": "1",
+      "kdebug-subclass": "64",
+      "kdebug-code": "0",
+      "kdebug-func": "0"
+    },
+    {
+      "pid": 47994,
+      "tid": 10137114,
+      "event-time": "833999250",
+      "core": "8",
+      "kdebug-class": "1",
+      "kdebug-subclass": "64",
+      "kdebug-code": "80",
+      "kdebug-func": "0"
+    },
+    {
+      "pid": 47994,
+      "tid": 10137114,
+      "event-time": "833999291",
+      "core": "8",
+      "kdebug-class": "1",
+      "kdebug-subclass": "64",
+      "kdebug-code": "32",
+      "kdebug-func": "0"
+    },
+    {
+      "pid": 47995,
+      "tid": 10137115,
+      "event-time": "834007083",
+      "core": "7",
+      "kdebug-class": "1",
+      "kdebug-subclass": "64",
+      "kdebug-code": "16",
+      "kdebug-func": "0"
+    },
+    {
+      "pid": 47995,
+      "tid": 10137115,
+      "event-time": "834007250",
+      "core": "7",
+      "kdebug-class": "1",
+      "kdebug-subclass": "64",
+      "kdebug-code": "15",
+      "kdebug-func": "0"
+    },
+    {
+      "pid": 47995,
+      "tid": 10137115,
+      "event-time": "834007291",
+      "core": "7",
+      "kdebug-class": "1",
+      "kdebug-subclass": "64",
+      "kdebug-code": "72",
+      "kdebug-func": "1"
+    },
+    {
+      "pid": 47995,
+      "tid": 10137115,
+      "event-time": "834007583",
+      "core": "7",
+      "kdebug-class": "1",
+      "kdebug-subclass": "64",
+      "kdebug-code": "72",
+      "kdebug-func": "2"
+    },
+    {
+      "pid": 47995,
+      "tid": 10137115,
+      "event-time": "834007666",
+      "core": "7",
+      "kdebug-class": "1",
+      "kdebug-subclass": "64",
+      "kdebug-code": "0",
+      "kdebug-func": "0"
+    },
+    {
+      "pid": 47994,
+      "tid": 10137114,
+      "event-time": "834014166",
+      "core": "8",
+      "kdebug-class": "1",
+      "kdebug-subclass": "64",
+      "kdebug-code": "16",
+      "kdebug-func": "0"
+    },
+    {
+      "pid": 47994,
+      "tid": 10137114,
+      "event-time": "834014250",
+      "core": "8",
+      "kdebug-class": "1",
+      "kdebug-subclass": "64",
+      "kdebug-code": "15",
+      "kdebug-func": "0"
+    },
+    {
+      "pid": 47994,
+      "tid": 10137114,
+      "event-time": "834014250",
+      "core": "8",
+      "kdebug-class": "1",
+      "kdebug-subclass": "64",
+      "kdebug-code": "72",
+      "kdebug-func": "1"
+    },
+    {
+      "pid": 47994,
+      "tid": 10137114,
+      "event-time": "834014958",
+      "core": "8",
+      "kdebug-class": "1",
+      "kdebug-subclass": "64",
+      "kdebug-code": "72",
+      "kdebug-func": "2"
+    },
+    {
+      "pid": 47994,
+      "tid": 10137114,
+      "event-time": "834015333",
+      "core": "8",
+      "kdebug-class": "1",
+      "kdebug-subclass": "64",
+      "kdebug-code": "0",
+      "kdebug-func": "0"
+    },
+    {
+      "pid": 47992,
+      "tid": 10137113,
+      "event-time": "834040125",
+      "core": "6",
+      "kdebug-class": "1",
+      "kdebug-subclass": "64",
+      "kdebug-code": "32",
+      "kdebug-func": "0"
+    },
+    {
+      "pid": 47992,
+      "tid": 10137113,
+      "event-time": "834040875",
+      "core": "6",
+      "kdebug-class": "1",
+      "kdebug-subclass": "64",
+      "kdebug-code": "15",
+      "kdebug-func": "0"
+    },
+    {
+      "pid": 47992,
+      "tid": 10137113,
+      "event-time": "834040875",
+      "core": "6",
+      "kdebug-class": "1",
+      "kdebug-subclass": "64",
+      "kdebug-code": "72",
+      "kdebug-func": "1"
+    },
+    {
+      "pid": 47992,
+      "tid": 10137113,
+      "event-time": "834041208",
+      "core": "6",
+      "kdebug-class": "1",
+      "kdebug-subclass": "64",
+      "kdebug-code": "72",
+      "kdebug-func": "2"
+    },
+    {
+      "pid": 47992,
+      "tid": 10137113,
+      "event-time": "834041375",
+      "core": "6",
+      "kdebug-class": "1",
+      "kdebug-subclass": "64",
+      "kdebug-code": "0",
+      "kdebug-func": "0"
+    },
+    {
+      "pid": 47992,
+      "tid": 10137113,
+      "event-time": "834050208",
+      "core": "6",
+      "kdebug-class": "1",
+      "kdebug-subclass": "64",
+      "kdebug-code": "32",
+      "kdebug-func": "0"
+    },
+    {
+      "pid": 47992,
+      "tid": 10137113,
+      "event-time": "834061875",
+      "core": "6",
+      "kdebug-class": "1",
+      "kdebug-subclass": "64",
+      "kdebug-code": "16",
+      "kdebug-func": "0"
+    },
+    {
+      "pid": 47992,
+      "tid": 10137113,
+      "event-time": "834061916",
+      "core": "6",
+      "kdebug-class": "1",
+      "kdebug-subclass": "64",
+      "kdebug-code": "15",
+      "kdebug-func": "0"
+    },
+    {
+      "pid": 47992,
+      "tid": 10137113,
+      "event-time": "834061958",
+      "core": "6",
+      "kdebug-class": "1",
+      "kdebug-subclass": "64",
+      "kdebug-code": "72",
+      "kdebug-func": "1"
+    },
+    {
+      "pid": 47992,
+      "tid": 10137113,
+      "event-time": "834062208",
+      "core": "6",
+      "kdebug-class": "1",
+      "kdebug-subclass": "64",
+      "kdebug-code": "72",
+      "kdebug-func": "2"
+    },
+    {
+      "pid": 47992,
+      "tid": 10137113,
+      "event-time": "834062333",
+      "core": "6",
+      "kdebug-class": "1",
+      "kdebug-subclass": "64",
+      "kdebug-code": "0",
+      "kdebug-func": "0"
+    },
+    {
+      "pid": 47994,
+      "tid": 10137114,
+      "event-time": "1833359500",
+      "core": "8",
+      "kdebug-class": "1",
+      "kdebug-subclass": "64",
+      "kdebug-code": "32",
+      "kdebug-func": "0"
+    },
+    {
+      "pid": 47992,
+      "tid": 10137113,
+      "event-time": "1833392375",
+      "core": "6",
+      "kdebug-class": "1",
+      "kdebug-subclass": "64",
+      "kdebug-code": "80",
+      "kdebug-func": "0"
+    },
+    {
+      "pid": 47992,
+      "tid": 10137113,
+      "event-time": "1833392500",
+      "core": "6",
+      "kdebug-class": "1",
+      "kdebug-subclass": "64",
+      "kdebug-code": "32",
+      "kdebug-func": "0"
+    },
+    {
+      "pid": 47994,
+      "tid": 10137114,
+      "event-time": "1833395416",
+      "core": "8",
+      "kdebug-class": "1",
+      "kdebug-subclass": "64",
+      "kdebug-code": "105",
+      "kdebug-func": "0"
+    },
+    {
+      "pid": 47994,
+      "tid": 10137114,
+      "event-time": "1833404250",
+      "core": "8",
+      "kdebug-class": "1",
+      "kdebug-subclass": "64",
+      "kdebug-code": "15",
+      "kdebug-func": "0"
+    },
+    {
+      "pid": 47994,
+      "tid": 10137114,
+      "event-time": "1833404250",
+      "core": "8",
+      "kdebug-class": "1",
+      "kdebug-subclass": "64",
+      "kdebug-code": "72",
+      "kdebug-func": "1"
+    },
+    {
+      "pid": 47994,
+      "tid": 10137114,
+      "event-time": "1833405083",
+      "core": "8",
+      "kdebug-class": "1",
+      "kdebug-subclass": "64",
+      "kdebug-code": "71",
+      "kdebug-func": "1"
+    },
+    {
+      "pid": 47994,
+      "tid": 10137114,
+      "event-time": "1833405291",
+      "core": "8",
+      "kdebug-class": "1",
+      "kdebug-subclass": "64",
+      "kdebug-code": "23",
+      "kdebug-func": "0"
+    },
+    {
+      "pid": 47994,
+      "tid": 10137114,
+      "event-time": "1833405333",
+      "core": "8",
+      "kdebug-class": "1",
+      "kdebug-subclass": "64",
+      "kdebug-code": "72",
+      "kdebug-func": "2"
+    },
+    {
+      "pid": 47994,
+      "tid": 10137114,
+      "event-time": "1833405666",
+      "core": "8",
+      "kdebug-class": "1",
+      "kdebug-subclass": "64",
+      "kdebug-code": "2",
+      "kdebug-func": "0"
+    },
+    {
+      "pid": 47992,
+      "tid": 10137113,
+      "event-time": "1833419666",
+      "core": "6",
+      "kdebug-class": "1",
+      "kdebug-subclass": "64",
+      "kdebug-code": "105",
+      "kdebug-func": "0"
+    },
+    {
+      "pid": 47992,
+      "tid": 10137113,
+      "event-time": "1833425791",
+      "core": "6",
+      "kdebug-class": "1",
+      "kdebug-subclass": "64",
+      "kdebug-code": "15",
+      "kdebug-func": "0"
+    },
+    {
+      "pid": 47992,
+      "tid": 10137113,
+      "event-time": "1833425791",
+      "core": "6",
+      "kdebug-class": "1",
+      "kdebug-subclass": "64",
+      "kdebug-code": "72",
+      "kdebug-func": "1"
+    },
+    {
+      "pid": 47992,
+      "tid": 10137113,
+      "event-time": "1833426666",
+      "core": "6",
+      "kdebug-class": "1",
+      "kdebug-subclass": "64",
+      "kdebug-code": "71",
+      "kdebug-func": "1"
+    },
+    {
+      "pid": 47992,
+      "tid": 10137113,
+      "event-time": "1833426833",
+      "core": "6",
+      "kdebug-class": "1",
+      "kdebug-subclass": "64",
+      "kdebug-code": "23",
+      "kdebug-func": "0"
+    },
+    {
+      "pid": 47992,
+      "tid": 10137113,
+      "event-time": "1833426875",
+      "core": "6",
+      "kdebug-class": "1",
+      "kdebug-subclass": "64",
+      "kdebug-code": "72",
+      "kdebug-func": "2"
+    },
+    {
+      "pid": 47992,
+      "tid": 10137113,
+      "event-time": "1833427166",
+      "core": "6",
+      "kdebug-class": "1",
+      "kdebug-subclass": "64",
+      "kdebug-code": "2",
+      "kdebug-func": "0"
+    },
+    {
+      "pid": 47995,
+      "tid": 10137115,
+      "event-time": "1833435666",
+      "core": "7",
+      "kdebug-class": "1",
+      "kdebug-subclass": "64",
+      "kdebug-code": "80",
+      "kdebug-func": "0"
+    },
+    {
+      "pid": 47995,
+      "tid": 10137115,
+      "event-time": "1833435750",
+      "core": "7",
+      "kdebug-class": "1",
+      "kdebug-subclass": "64",
+      "kdebug-code": "32",
+      "kdebug-func": "0"
+    },
+    {
+      "pid": 47995,
+      "tid": 10137115,
+      "event-time": "1833460791",
+      "core": "7",
+      "kdebug-class": "1",
+      "kdebug-subclass": "64",
+      "kdebug-code": "105",
+      "kdebug-func": "0"
+    },
+    {
+      "pid": 47995,
+      "tid": 10137115,
+      "event-time": "1833466250",
+      "core": "7",
+      "kdebug-class": "1",
+      "kdebug-subclass": "64",
+      "kdebug-code": "15",
+      "kdebug-func": "0"
+    },
+    {
+      "pid": 47995,
+      "tid": 10137115,
+      "event-time": "1833466291",
+      "core": "7",
+      "kdebug-class": "1",
+      "kdebug-subclass": "64",
+      "kdebug-code": "72",
+      "kdebug-func": "1"
+    },
+    {
+      "pid": 47995,
+      "tid": 10137115,
+      "event-time": "1833466666",
+      "core": "7",
+      "kdebug-class": "1",
+      "kdebug-subclass": "64",
+      "kdebug-code": "72",
+      "kdebug-func": "2"
+    },
+    {
+      "pid": 47995,
+      "tid": 10137115,
+      "event-time": "1833466833",
+      "core": "7",
+      "kdebug-class": "1",
+      "kdebug-subclass": "64",
+      "kdebug-code": "2",
+      "kdebug-func": "0"
+    },
+    {
+      "pid": 47995,
+      "tid": 10137115,
+      "event-time": "833970375",
+      "core": "6",
+      "kdebug-class": "7",
+      "kdebug-subclass": "0",
+      "kdebug-code": "2",
+      "kdebug-func": "0"
+    },
+    {
+      "pid": 47994,
+      "tid": 10137114,
+      "event-time": "833978041",
+      "core": "9",
+      "kdebug-class": "7",
+      "kdebug-subclass": "0",
+      "kdebug-code": "2",
+      "kdebug-func": "0"
+    },
+    {
+      "pid": 47992,
+      "tid": 10137113,
+      "event-time": "834034750",
+      "core": "9",
+      "kdebug-class": "7",
+      "kdebug-subclass": "0",
+      "kdebug-code": "2",
+      "kdebug-func": "0"
+    },
+    {
+      "pid": 47994,
+      "tid": 10137114,
+      "event-time": "1833395625",
+      "core": "8",
+      "kdebug-class": "7",
+      "kdebug-subclass": "0",
+      "kdebug-code": "4",
+      "kdebug-func": "0"
+    },
+    {
+      "pid": 47992,
+      "tid": 10137113,
+      "event-time": "1833419708",
+      "core": "6",
+      "kdebug-class": "7",
+      "kdebug-subclass": "0",
+      "kdebug-code": "4",
+      "kdebug-func": "0"
+    },
+    {
+      "pid": 47995,
+      "tid": 10137115,
+      "event-time": "1833460875",
+      "core": "7",
+      "kdebug-class": "7",
+      "kdebug-subclass": "0",
+      "kdebug-code": "4",
+      "kdebug-func": "0"
+    }
+  ],
+  "selected_pid_identity_limits": "Exactly one process-info row and one TID per failed PID in this trace; numeric unique IDs are retained, not claimed wall-clock birth times. No cross-run PID association.",
+  "detailed_target_tables": "thread-state/context-switch/syscall/ThreadActivity/thread-snapshot contain wrapper only; they do not provide failed-child wait stacks.",
+  "os_log_rows": 0,
+  "limits": "Block-to-next-owned-dispatch spans are observations, not exact wait durations: wakeups may be emitted by another process. No syscall/wait-channel attribution, service request binding, memory-cause exclusion or compiler duration established."
+}
