@@ -9,7 +9,7 @@ reorganization is now fixed in [closure plan](tasks/PCTX01-closure-plan.md) and
 progress and actual code/Git/jobs before resuming. Historical A/R and old next
 lists are bounded evidence, not alternate execution plans.
 
-Detail closure23/40; whole gates0/10. First whole-detail denominator40; previous
+Detail closure24/40; whole gates0/10. First whole-detail denominator40; previous
 whole gates10 remain10, help172/leaves140/Rgroups12 unchanged. R local12/12 is
 not all-local completion. Other official tasks remain inactive. Do not repeat
 this initial reorganization; execute fixed conditions to closure. PCTX01 done
@@ -17,41 +17,37 @@ then next official task's finite list within the same Goal.
 
 ## Current source and verification
 
-G05-D04 residual candidate repairs actual check-plan masking of trust storage7
-as successful owner_binding_required. Missing5/stale9 plan reasons unchanged.
-Final persisted target21 PASS; Adapter10, Filter8, Runner29 PASS; internal slot1
-PASS covers six phase×syntax/shape cases, no actual callback/child claim.
-Format/Clippy PASS; independent scoped review no blocker. Source hashes, exact
-scope and all initial/final failures: evidence/pctx01-storage-residual-
-verification.json. All48 frozen persisted sites mapped in residual-
-reconciliation.json. No heavy job live. Detail23/40, whole0/10 unchanged.
-Registry {} and [] remain valid defaults/missing6; null typed corruption7.
-Index/Schedule compare logical SQL/schema and non-DB files, not physical DB/WAL/
-SHM immutability; slot acknowledgement preserves prior intent publication.
+G05-D04 local common stored-error condition closed after final six Schedule
+proofs. All48 persisted sites +43 preserved dispositions reconciled; fixed40
+unchanged. Final persisted22 and private Schedule2 PASS; format/Clippy PASS;
+independent scoped closure accepted. Source/binary/result/limitations:
+evidence/pctx01-storage-schedule-verification.json. Test-only Schedule changes,
+no runtime modifications in final candidate. Prior Adapter10/Filter8/Runner29/
+slot1 proof on unchanged product code retained. All initial earlier failures
+preserved. Current detail24/40, whole0/10; no heavy job live.
 
-Prior runtime00df0e2 macOS full576 PASS/4 FAIL is historical source-bound only.
-Captured PATH, relative PATH/cwd, eight-worker1s and simultaneous streams remain
-original-budget product/common failures. Required §23 macOS arm64/x86_64,
-Linux x86_64 and Windows x86_64 qualification remains open; prior aarch64 Linux
-is supporting follow-up only. No Actions (3000min), Node24 pins retained.
+Common safe storage7, caller2, original expiry/deadline/replay/identity and
+accepted Values qualified. Logical SQL/schema+non-DB comparison does not claim
+physical DB/WAL/SHM immutability; pre-decode ack intent remains explicit.
+Actual callback faults G05-D02 and full producer recovery correctness separate.
+Prior macOS full576 PASS/4 FAIL is historical source bound: captured PATH,
+relative PATH/cwd, eight-worker1s and simultaneous streams remain original-
+budget product failures. Required macOS arm64/x86_64, Linux x86_64, Windows
+x86_64 G09 gates remain open; aarch64 Linux supports follow-up only.
 
 ## Next exact action and ownership
 
-Only PCTX01 active. Two-plan-check reconciliation performed before verification,
-no new IDs/denominator. Finish one remaining fixed G05-D04 Schedule batch:
-frozen520 decision action,706 mutation definition,761 reused occurrence,
-1893 installed metadata,2021 bridge binding,2492 recovery result. Preserve
-policy/identity/expiry/replay/intent and current absence/state errors; no repair
-of independent PCTX36 occurrence concurrency algorithm. Direct internal proof
-where public execution contains errors must not invent a top-level error claim.
-Then reconcile G05-D04 local closure against all48 sites and existing nonstored
-43 dispositions, retaining G09 platform and G05-D02 actual callback requirements.
-Other existing grouped candidate G02-D04/G03-D03/D04/G05-D06 remains next in
-fixed plan. Do not reopen closed rows without changed contract/new defect.
-PCTX01 whole completion requires every fixed item and mandatory platform before
-next official task. Normal main [skip ci] commit/push approved; no operational
-publish/install/account/model/schedule changes. PCTX36 failure retained, never
-report whole suite passing.
+Only PCTX01 active. G05-D04 closed, then next fixed grouped matrix:
+G02-D04 typed/missing/value/conflict parser; G03-D03 source-independent grammar/
+no-effect; G03-D04 explicit input/stdin schema/size/producer precedence;
+G05-D06 full stable error-to-exit matrix. Read frozen140 crosswalk and existing
+A/R/C evidence, execute remaining cases together; do not invent lookup grammar
+or new producer functionality. No new IDs/denominator. Continue fixed response/
+empty/control, original-clock/startup, candidate and required real-platform
+sequence after this grouped candidate. Only whole PCTX01 completion permits
+next official task. Preserve inactive PCTX36 concurrency failure and truthful
+whole-suite failure. Normal main [skip ci] commit/push approved; no Actions
+(3000min), Node24 pins retained; no operational publish/accounts/hooks/schedules.
 
 ## Environment and operating constraints
 

@@ -421,8 +421,8 @@
     {
       "id": "PCTX01-G05-D04",
       "gate": "G05",
-      "status": "open",
-      "local_implementation": "common decoder corrections and plan storage-error propagation implemented; six frozen Schedule runtime proofs remain",
+      "status": "closed",
+      "local_implementation": "implemented and bounded local common decode matrix qualified across frozen48 persisted sites;43 remaining dispositions preserved",
       "completion_condition": "One grouped persisted-data error matrix: known repaired Work/Adapter plus all frozen DB/artifact/credential decoders; caller/config2 versus storage7, original expiry, conflict9 and replay precedence; safe fixed errors/no corrupt bytes",
       "spec_sections": [
         "14",
@@ -438,15 +438,16 @@
         "pctx01-grouped-storage-classification.json",
         "pctx01-grouped-storage-verification.json",
         "pctx01-storage-residual-reconciliation.json",
-        "pctx01-storage-residual-verification.json"
+        "pctx01-storage-residual-verification.json",
+        "pctx01-storage-schedule-verification.json"
       ],
       "verification_environment": "Native macOS arm64 local common proof; all release platforms separately required by G09",
-      "macOS_arm64": "bounded persisted21, Adapter10, Filter8, Runner29 and slot1 PASS; six Schedule sites remaining",
+      "macOS_arm64": "local persisted22 and Schedule private2 PASS; prior unchanged-source Adapter10/Filter8/Runner29/slot1 evidence; whole required platform gate G09-D01 remains open",
       "macOS_x86_64": "unverified; G09-D02",
       "Linux_x86_64": "unverified; G09-D03",
       "Linux_aarch64": "prior fixed-source full only; inspect linked manifest per contract",
       "Windows_x86_64": "unverified; G09-D04",
-      "documentation_evidence": "all48 persisted-site reconciliation; initial/final results and fixed count retained"
+      "documentation_evidence": "final all48/43 source+runtime reconciliation; scoped independent closure review; safe error and state truth bounds retained"
     },
     {
       "id": "PCTX01-G05-D05",
@@ -977,11 +978,9 @@
       "documentation_evidence": "closure plan recorded; execution gaps retained"
     }
   ],
-  "closed_details": 23,
+  "closed_details": 24,
   "execution_order": [
-    "G10-D02/D03 closed; execute next grouped admission/error candidate",
-    "G10-D03",
-    "G02-D04 + G03-D03/D04 + G05-D04/D06 (one reviewed grouped admission/error candidate)",
+    "G02-D04 + G03-D03/D04 + G05-D06 (remaining grouped admission/error candidate; G05-D04 locally closed)",
     "G04-D03 + G06-D03 + G07-D03 (existing response matrix)",
     "G08-D04 + G05-D05 (remaining phase/startup conditions, original budgets)",
     "G10-D04 (candidate checks)",
@@ -997,5 +996,14 @@
   "closed_during_reorganization": [
     "PCTX01-G10-D02",
     "PCTX01-G10-D03"
-  ]
+  ],
+  "latest_condition_closure": {
+    "id": "PCTX01-G05-D04",
+    "detail_before": 23,
+    "detail_after": 24,
+    "denominator_before": 40,
+    "denominator_after": 40,
+    "scope": "local common decoder proof; required G09 platform gates remain open",
+    "independent_review": "/root/work_control; pctx01-storage-schedule-verification.json"
+  }
 }

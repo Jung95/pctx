@@ -16,40 +16,35 @@ Only PCTX01 is active. The user-requested one-time whole-G01–G10 reorganizatio
 is [PCTX01-closure-plan](tasks/PCTX01-closure-plan.md), with machine-readable
 states in tasks/PCTX01-closure-plan.json and complete static 140-leaf crosswalk
 in evidence/pctx01-closure-audit.json. Its fixed40 subconditions replace all
-historical incremental next-action lists below. Bounded detail closure23/40;
+historical incremental next-action lists below. Bounded detail closure24/40;
 whole gates0/10. This is the first whole-detail denominator, not a change to the
 10 gates/140 leaves/172 help paths/12 bounded R groups. R local12/12 is not
 whole-local PCTX01 completion. Implementation, evidence and platform waits are
 recorded separately; required §23 targets are macOS arm64/x86_64, Linux x86_64,
 Windows x86_64. Linux aarch64 is supporting follow-up evidence only.
 
-Current G05-D04 residual reconciliation maps all frozen48 persisted sites to
-bounded evidence or remaining runtime proof, without changing the fixed40
-conditions. A real check-plan defect masked trust storage failure as successful
-owner_binding_required; errors7 now propagate, preserving missing5/stale9 plan
-reasons. Final persisted target21 PASS; Adapter10, Filter8, Runner29 PASS; one
-library test covers six internal slot phase/shape cases. Format/Clippy PASS.
-Initial product and fixture failures remain recorded in
-[evidence](evidence/pctx01-storage-residual-verification.json). No heavy job live.
-Source/binary/scoped result identity and all48-site reconciliation are recorded.
+G05-D04 is **locally closed** for the common stored-data error contract. All48
+frozen persisted sites now have bounded source/runtime proof and the other43
+caller/external/internal/test/explicit-boundary dispositions are preserved. Final
+persisted target22 PASS and private Schedule2 PASS; format/Clippy PASS; independent
+closure review accepted the scope. The last six Schedule sites retain absence6,
+identity9/ownership10, original expiry/deadline, accepted JSON Values and truthful
+state. No runtime Schedule behavior changed in this final test-only candidate.
+Evidence: [G05-D04 closure](evidence/pctx01-storage-schedule-verification.json).
+Initial failures in earlier groups remain preserved and source bound.
 
-G05-D04 remains open: only frozen Schedule sites520/706/761/1893/2021/2492 still
-need bounded runtime proof (decision, mutation definition, occurrence,
-installation, binding, recovery result). This is one existing proof batch, no
-new ID/feature/denominator. Next execute that batch with original policy/state/
-expiry/intent precedence. The required two-plan-check reconciliation has been
-performed before resuming verification; do not repeat full discovery or invent
-another similar-path queue. Detail23/40 and whole0/10 unchanged. Registry
-accepted {} and [] still mean missing workspace6; null is typed corruption7.
-Index/Schedule comparisons assert logical SQL/schema plus non-DB files, not
-physical journal immutability. Acknowledgement retains prior intent publication;
-no universal rollback claim. Independent review found no scoped blocker.
+Detail closure **24/40** (previous23/40, denominator40 unchanged); whole0/10.
+No full PCTX01, callback-fault, scheduling-correctness or platform completion
+claim. Required G09 macOS arm64/x86_64, Linux x86_64 and Windows x86_64 remain
+open; four original macOS startup failures remain product failures. Independent
+PCTX36 Tick concurrency failure remains visible; never report whole suite green.
+No Actions, new full/platform run or active heavy job.
 
-Other fixed grouped candidates G02-D04/G03-D03/D04/G05-D06 remain open. Prior
-macOS576 PASS/4 startup FAIL is historical source-bound evidence; current
-required macOS arm64/x86_64, Linux x86_64 and Windows x86_64 qualification remains
-open. Independent PCTX36 Tick concurrency failure remains separately owned;
-never report whole suite passing. No Actions or new whole/platform run.
+Next within the fixed grouped candidate: **G02-D04/G03-D03/D04/G05-D06** remaining
+parser/admission/error matrix against frozen140 routes. Reuse closed A/R/C cases
+and source proof; no similar-path discovery queue, new IDs or independent
+producer features. PCTX01 remains the sole active official task until all40
+conditions and required platform evidence are complete.
 
 ## Development items
 

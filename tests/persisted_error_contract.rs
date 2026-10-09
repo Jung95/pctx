@@ -1720,3 +1720,123 @@ fn grouped_paired_index_cache_checkpoint_get_and_registry_shape_decoders() {
     f.assert_storage_refusal(&["status"]);
     fs::write(&registry, original).unwrap();
 }
+
+#[test]
+fn grouped_remaining_schedule_storage_branches_preserve_state_and_input_priority() {
+    let f = Fixture::new();
+    let file = f.base.join("remaining-schedule.json");
+    let definition = json!({"schema_version":1,"namespace":"remaining","id":"digest","timezone":"UTC","cadence":{"kind":"daily","at":"10:00"},"valid_from":"2024-01-01T00:00:00Z","job":"read_query","bridge":"manual","role":"assistant","recipient":"owner","topic":"digest","enabled":true,"misfire":"coalesce_latest"});
+    fs::write(&file, definition.to_string()).unwrap();
+    f.success(&[
+        "schedule",
+        "add",
+        "--from-file",
+        file.to_str().unwrap(),
+        "--idempotency-key",
+        "remaining-schedule",
+    ]);
+    let pause = [
+        "schedule",
+        "pause",
+        "--namespace",
+        "remaining",
+        "digest",
+        "--reason",
+        "fixture",
+        "--expect-revision",
+        "1",
+    ];
+    for raw in ["{PCTX_STORED_SENTINEL", "{}"] {
+        f.update("UPDATE schedule_definitions SET definition=?1", [raw])
+            .unwrap();
+        f.assert_storage_refusal_state(&pause, true);
+    }
+    f.update(
+        "UPDATE schedule_definitions SET definition=?1",
+        [definition.to_string()],
+    )
+    .unwrap();
+    let reconcile = [
+        "schedule",
+        "reconcile",
+        "--namespace",
+        "remaining",
+        "--at",
+        "2024-01-02T10:01:00Z",
+    ];
+    f.success(&reconcile);
+    let original: String = Connection::open(&f.db)
+        .unwrap()
+        .query_row("SELECT metadata FROM schedule_occurrences", [], |r| {
+            r.get(0)
+        })
+        .unwrap();
+    f.update(
+        "UPDATE schedule_occurrences SET metadata=?1",
+        ["{PCTX_STORED_SENTINEL"],
+    )
+    .unwrap();
+    f.assert_storage_refusal_state(&reconcile, true);
+    // Existing retained terminal occurrences accept arbitrary JSON Values; do not invent a schema.
+    for value in [json!(null), json!([]), json!({"synthetic":true})] {
+        f.update(
+            "UPDATE schedule_occurrences SET state='failed',metadata=?1",
+            [value.to_string()],
+        )
+        .unwrap();
+        assert_eq!(f.success(&reconcile)["schedules"][0]["occurrence"], value);
+    }
+    f.update(
+        "UPDATE schedule_occurrences SET state='planned',metadata=?1",
+        [original],
+    )
+    .unwrap();
+    let inspect = ["schedule", "inspect", "--namespace", "remaining", "digest"];
+    assert_safe_error(&f.run("json", &inspect), 6, "CAPABILITY_UNVERIFIED");
+    f.update("INSERT INTO schedule_installations VALUES('remaining','digest','synthetic','fixture','synthetic','synthetic','unknown_restored',?1,0)", ["{PCTX_STORED_SENTINEL"]).unwrap();
+    f.assert_storage_refusal_state(&inspect, true);
+    for value in [json!(null), json!([]), json!({"plan_hash":"synthetic"})] {
+        f.update(
+            "UPDATE schedule_installations SET metadata=?1",
+            [value.to_string()],
+        )
+        .unwrap();
+        let observed = f.success(&inspect);
+        assert_eq!(observed["stored_state"], "unknown_restored");
+        assert_eq!(observed["registration_performed"], false);
+        assert_eq!(observed["requires_reapproval"], true);
+    }
+    f.update("INSERT INTO schedule_runs(namespace,schedule,revision,occurrence,attempt,state,result,started) VALUES('remaining','digest',1,'synthetic',1,'running',?1,0)", ["{PCTX_STORED_SENTINEL"]).unwrap();
+    let recover = [
+        "schedule",
+        "recover",
+        "--namespace",
+        "remaining",
+        "digest",
+        "--revision",
+        "1",
+        "--occurrence",
+        "synthetic",
+        "--attempt",
+        "1",
+        "--reason",
+        "fixture",
+    ];
+    f.assert_storage_refusal_state(&recover, true);
+    for value in [json!(null), json!([]), json!({})] {
+        f.update("UPDATE schedule_runs SET result=?1", [value.to_string()])
+            .unwrap();
+        let before = f.control_rows();
+        assert_safe_error(&f.run("json", &recover), 10, "RESOURCE_OWNER_UNKNOWN");
+        assert_eq!(f.control_rows(), before);
+    }
+    // Pure required-reason validation wins before the malformed saved recovery result.
+    f.update(
+        "UPDATE schedule_runs SET result=?1",
+        ["{PCTX_STORED_SENTINEL"],
+    )
+    .unwrap();
+    let mut invalid = recover;
+    invalid[invalid.len() - 1] = "";
+    assert_safe_error(&f.run("json", &invalid), 2, "INVALID_ARGUMENT");
+}

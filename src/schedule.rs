@@ -2735,4 +2735,99 @@ mod deadline_tests {
         assert!(!p.control_db().exists());
         assert!(!p.data_dir.join("outputs").exists());
     }
+
+    #[test]
+    fn stored_schedule_decision_decode_retains_expiry_and_original_deadline_order() {
+        let (_temp, mut p) = fixture();
+        crate::operations::execute(
+            &p,
+            &crate::operations::OperationCommand::Owner {
+                command: crate::operations::OwnerCommand::Queue { limit: 1 },
+            },
+        )
+        .unwrap();
+        let db = connect(&p).unwrap();
+        let mut d = definition();
+        let action = json!({"schema_version":1,"kind":"local_modify","resource":"code.rs","environment":"development","scope":["code.rs"],"actor":"fixture","amount":0,"reversible":true,"cost_known":true});
+        d.action = Some(serde_json::from_value(action.clone()).unwrap());
+        d.decision_id = Some("DEC-fixture".into());
+        db.execute("INSERT INTO ops_decisions(id,fingerprint,action,policy,state,reason,request,expires_at,provenance,created) VALUES('DEC-fixture','fixture',?1,?2,'approved','fixture','{}',?3,'trusted_local_operator',0)", params![action.to_string(),p.policy_hash(),now()+3600]).unwrap();
+        assert!(grant_reason(&p, &db, &d, now()).unwrap().is_none());
+        db.execute("UPDATE ops_decisions SET expires_at=0", [])
+            .unwrap();
+        assert_eq!(
+            grant_reason(&p, &db, &d, now()).unwrap().as_deref(),
+            Some("operation_decision_stale_or_mismatched")
+        );
+        for raw in ["{PCTX_STORED_SENTINEL", "{}"] {
+            db.execute("UPDATE ops_decisions SET action=?1", [raw])
+                .unwrap();
+            let error = grant_reason(&p, &db, &d, now()).unwrap_err();
+            assert_eq!((error.code.as_str(), error.exit), ("DB_CORRUPT", 7));
+            assert!(!error.message.contains("PCTX_STORED_SENTINEL"));
+            assert_eq!(
+                db.query_row("SELECT action FROM ops_decisions", [], |r| r
+                    .get::<_, String>(0))
+                    .unwrap(),
+                raw
+            );
+        }
+        let original = crate::deadline::Deadline::from_millis(1).unwrap();
+        p.deadline = Some(original);
+        std::thread::sleep(StdDuration::from_millis(5));
+        let error = grant_reason(&p, &db, &d, now()).unwrap_err();
+        assert_eq!((error.code.as_str(), error.exit), ("TIMEOUT", 7));
+        assert_eq!(p.deadline.unwrap().instant(), original.instant());
+        assert_eq!(
+            db.query_row("SELECT count(*) FROM ops_events", [], |r| r
+                .get::<_, i64>(0))
+                .unwrap(),
+            0
+        );
+    }
+
+    #[test]
+    fn stored_schedule_bridge_decode_retains_absence_and_changed_binding_order() {
+        let (_temp, p) = fixture();
+        let mut db = connect(&p).unwrap();
+        upgrade(&mut db).unwrap();
+        let d = definition();
+        db.execute("INSERT INTO schedule_definitions(namespace,id,revision,workspace,definition,definition_hash,enabled,created,updated) VALUES('fixture','fixture',1,?1,?2,'synthetic',1,0,0)", params![p.workspace_id,serde_json::to_string(&d).unwrap()]).unwrap();
+        let mut stored = get(&db, "fixture", "fixture").unwrap();
+        // Direct common boundary proof only: no managed bridge or OS service is installed.
+        stored.definition.bridge = "fixture".into();
+        let error = execution_binding(&p, &db, &stored).unwrap_err();
+        assert_eq!(
+            (error.code.as_str(), error.exit),
+            ("CAPABILITY_UNVERIFIED", 6)
+        );
+        db.execute("INSERT INTO schedule_bindings VALUES('fixture','fixture',99,'other','other','synthetic',?1,0)", ["{PCTX_STORED_SENTINEL"]).unwrap();
+        let error = execution_binding(&p, &db, &stored).unwrap_err();
+        assert_eq!((error.code.as_str(), error.exit), ("DB_CORRUPT", 7));
+        assert!(!error.message.contains("PCTX_STORED_SENTINEL"));
+        // Value accepts these shapes; existing identity mismatch wins before reading plan fields.
+        for value in [json!(null), json!([]), json!({})] {
+            db.execute(
+                "UPDATE schedule_bindings SET profile=?1",
+                [value.to_string()],
+            )
+            .unwrap();
+            let error = execution_binding(&p, &db, &stored).unwrap_err();
+            assert_eq!((error.code.as_str(), error.exit), ("CONFIG_CHANGED", 9));
+            assert_eq!(
+                db.query_row("SELECT profile FROM schedule_bindings", [], |r| r
+                    .get::<_, String>(0))
+                    .unwrap(),
+                value.to_string()
+            );
+        }
+        assert_eq!(
+            db.query_row("SELECT count(*) FROM schedule_runs", [], |r| r
+                .get::<_, i64>(0))
+                .unwrap(),
+            0
+        );
+        assert!(!p.root.join(".pctx/schedule-bridge").exists());
+        assert!(!p.data_dir.join("outputs").exists());
+    }
 }

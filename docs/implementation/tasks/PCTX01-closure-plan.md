@@ -13,7 +13,7 @@ R01–R12 local12/12 qualifies only that pure-admission subset. Closed rows belo
 are deliberately bounded subconditions; G09 independently retains every required
 release-platform condition. A closed local row does not qualify an untested OS.
 
-Current bounded detail closure: **23/40**; whole gates **0/10**.
+Current bounded detail closure: **24/40**; whole gates **0/10**.
 
 | Fixed ID | State | Completion condition | Source | Spec | Evidence prefix |
 | --- | --- | --- | --- | --- | --- |
@@ -34,7 +34,7 @@ Current bounded detail closure: **23/40**; whole gates **0/10**.
 | PCTX01-G05-D01 | closed | Actual child0/1/2/signal and prelaunch/not-spawned truth stay distinct from PCTX status on native Unix | main.rs,output.rs,query_process.rs | §14/38 | pctx01-run-exit-verification.json |
 | PCTX01-G05-D02 | open | Complete native callback/post-spawn fault injection while retaining already observed capture/publication child outcome, artifact and no-rerun truth | main.rs,output.rs,runner.rs | §14/38 | pctx01-nested-execution-verification.json, pctx01-run-exit-verification.json |
 | PCTX01-G05-D03 | closed | Checked help/parser/stream/hook/response writes return IO7 on actual Unix closed delivery; failed metering preserves delivered outcome | main.rs,watch.rs,adapter.rs | §14/38 | pctx01-delivery-verification.json |
-| PCTX01-G05-D04 | open | One grouped persisted-data error matrix: known repaired Work/Adapter plus all frozen DB/artifact/credential decoders; caller/config2 versus storage7, original expiry, conflict9 and replay precedence; safe fixed errors/no corrupt bytes | domain.rs,work.rs,adapter.rs,quota.rs,session.rs,operations.rs,storage.rs,broker.rs,schedule.rs,output.rs,pack.rs,filters.rs,project.rs,runner.rs,windows_guardian.rs | §14/27/38 | pctx01-adapter-errors-verification.json, pctx01-persisted-errors-verification.json, pctx01-task-storage-verification.json, pctx01-grouped-storage-verification.json |
+| PCTX01-G05-D04 | closed | One grouped persisted-data error matrix: known repaired Work/Adapter plus all frozen DB/artifact/credential decoders; caller/config2 versus storage7, original expiry, conflict9 and replay precedence; safe fixed errors/no corrupt bytes | domain.rs,work.rs,adapter.rs,quota.rs,session.rs,operations.rs,storage.rs,broker.rs,schedule.rs,output.rs,pack.rs,filters.rs,project.rs,runner.rs,windows_guardian.rs | §14/27/38 | pctx01-adapter-errors-verification.json, pctx01-persisted-errors-verification.json, pctx01-task-storage-verification.json, pctx01-grouped-storage-verification.json, pctx01-storage-schedule-verification.json |
 | PCTX01-G05-D05 | product_failure | Resolve four original macOS query startup failures at original1s/8x16/stream/group conditions; direct reproduction is evidence, not exemption or root-cause proof | query_process.rs,project.rs; tests/project_deadline.rs | §14/38 | pctx01-startup-isolation-verification.json, pctx01-task-storage-verification.json |
 | PCTX01-G05-D06 | open | Finish one existing error-to-exit matrix (0,2,3,4,5,6,7,8,9,10,130 and child exception) across shared/frontend facades, including cancelled and source-dependent refusals | main.rs,domain.rs and producer facades | §14/27/38 | pctx01-adapter-errors-verification.json, pctx01-run-exit-verification.json |
 | PCTX01-G06-D01 | closed | Outline valid-empty0, wholly unsupported6, mixed/parse partial3 and refresh uncertainty preserve coverage in admitted representations | main.rs,search.rs | §8/14 | pctx01-outline-coverage-verification.json |
@@ -101,11 +101,11 @@ are optional when detection strength is unclear, not a per-change requirement.
 
 ## Current G05-D04 bounded evidence
 
-All48 persisted sites reconciled; fixed40 unchanged. Product check-plan trust
-storage masking repaired. Persisted21, Adapter10, Filter8, Runner29 and internal
-slot1 tests pass, format/Clippy pass. Initial failures retained. Only six frozen
-Schedule sites520/706/761/1893/2021/2492 remain common runtime proof. Execute
-that one batch next; no new producer features. See residual-reconciliation.json
-and residual-verification.json. No G05-D04 closure: detail23/40, whole0/10.
-Physical Index/Schedule DB/WAL/SHM and real callback/platform fault acceptance
-are not claimed by logical SQL or internal slot tests.
+G05-D04 local common decoder condition is closed. Frozen48 persisted sites and
+43 preserved source dispositions reconciled; no new ID/denominator. Final
+persisted22 and private Schedule2 tests pass, format/Clippy pass. Independent
+closure review accepted this bounded scope. Prior42 sites and safe errors,
+replay/identity/expiry and truthful effects remain linked; no universal rollback,
+post-spawn callback, scheduling algorithm or release-platform claim. Evidence:
+pctx01-storage-schedule-verification.json and residual-reconciliation.json.
+Detail24/40, whole0/10. Next fixed candidate: G02-D04/G03-D03/D04/G05-D06.

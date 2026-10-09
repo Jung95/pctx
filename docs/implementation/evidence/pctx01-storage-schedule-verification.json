@@ -1,0 +1,99 @@
+{
+  "task": "PCTX01",
+  "item": "PCTX01-G05-D04",
+  "status": "closed: bounded local common decoder condition",
+  "fixed_detail_closed": 24,
+  "fixed_detail_denominator": 40,
+  "whole_gates_closed": 0,
+  "whole_gates_denominator": 10,
+  "baseline_revision": "1c35512273406b80c07a8babdf42a658442b1991",
+  "scope": "Six final frozen Schedule sites plus all48 persisted origin /43 preserved disposition reconciliation. No independent schedule algorithm or release-platform qualification.",
+  "files_sha256": {
+    "src/schedule.rs": "838472dc80fe6da42777aaaefda2832fc98ad8a54ccef859fd7c475f5d2f352c",
+    "tests/persisted_error_contract.rs": "7201966e27ce4f33d68c4ab3230a9fe25e34ead1687dc1e2a3e325448035fc5e",
+    "src/domain.rs": "ebc5fb36aced808593a9df4606293e8900450c67f068de1574369c9c4b810c25",
+    "src/runner.rs": "600aaee24adb4cc7169bd17909a181bf73fabe4a19902a0387a7e507d80fd708"
+  },
+  "product_schedule_prefix_unchanged_from_baseline": true,
+  "product_schedule_prefix_sha256": "b59acb64051143530de84a5eec4049a6b22ca1ac0aa4c9dc46d2fd859d3125ff",
+  "binary_sha256": "d84a8e08602e6dccd573a2c78f22353df2e2a13c72a0c1dbca62ed83235ac1fc",
+  "environment": {
+    "system": "macOS-26.7.1-arm64-arm-64bit-Mach-O",
+    "architecture": "arm64",
+    "rust": "1.99.0",
+    "SDKROOT": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk"
+  },
+  "results": [
+    {
+      "job": "99989",
+      "exit": 0,
+      "passed": 1,
+      "failed": 0,
+      "log": "pctx01-storage-schedule-initial.log",
+      "scope": "Actual CLI final four Schedule storage branches; first run passed"
+    },
+    {
+      "job": "26219",
+      "exit": 0,
+      "passed": 2,
+      "failed": 0,
+      "log": "pctx01-storage-schedule-unit.log",
+      "scope": "Private grant/binding boundaries: original expiry/deadline, absence6, valid-Value identity9 and safe storage7"
+    },
+    {
+      "job": "11382",
+      "exit": 0,
+      "passed": 22,
+      "failed": 0,
+      "log": "pctx01-storage-schedule-contract-final.log",
+      "scope": "Complete current stored-error target, existing and new actual CLI/direct fixtures"
+    },
+    {
+      "exit": 0,
+      "log": "pctx01-storage-schedule-format-final.log",
+      "scope": "cargo fmt --all -- --check"
+    },
+    {
+      "job": "87098",
+      "exit": 0,
+      "log": "pctx01-storage-schedule-static-final.log",
+      "scope": "cargo clippy --locked --all-targets -- -D warnings"
+    }
+  ],
+  "logs_sha256": {
+    "pctx01-storage-schedule-contract-final.log": "6205b7216f8746f27b3e2f4b45f295d5d9d9a6f1c555329bae68d432bf19a5f3",
+    "pctx01-storage-schedule-format-final.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "pctx01-storage-schedule-initial.log": "ee4ae00de7b5a4726ef498fc316ab810f5ff479119ef90ba0c29b7b6ec688953",
+    "pctx01-storage-schedule-static-final.log": "2d1e9941299eeaf93776b91cfcbf6dd5ca710bd4501150f2db21d26c93349a6d",
+    "pctx01-storage-schedule-unit.log": "41a42e8f92ae1c185fa28aec211f95b447666cd2353ac12b73fc7531a275a9c4"
+  },
+  "reconciliation": "pctx01-storage-residual-reconciliation.json",
+  "reconciliation_sha256": "44bb62897556d6d1a18119fc094460d913347aafbaa288ddd66f3ce0a81c66cd",
+  "prior_evidence": [
+    "pctx01-grouped-storage-verification.json",
+    "pctx01-storage-residual-verification.json",
+    "pctx01-task-storage-verification.json",
+    "pctx01-adapter-errors-verification.json",
+    "pctx01-persisted-errors-verification.json"
+  ],
+  "completion_condition_evidence": {
+    "frozen_decoder_coverage": "All48 persisted sites have source origin and bounded common-runtime mappings; remaining43 retain caller/external/internal/test/explicit boundary dispositions",
+    "caller_configuration_vs_storage": "Shared generic caller INVALID_ARGUMENT2 retained; persisted syntax/typed-shape DB_CORRUPT7 tested; accepted Value/Registry defaults not made stricter",
+    "original_expiry_conflict_replay": "Earlier Work/Operations/Quota/Schedule replay/hash/lease proof preserved; final decision test covers expiry and same expired Instant before decode; Schedule decoding precedes existing state gates",
+    "safe_fixed_errors": "Sentinel never appears in error messages; private credential token suppression in prior batch; no raw corrupt bytes in common errors",
+    "effect_truth": "Prepared byte exact or all logical SQL/schema+nonDB files where SQLite physical lifecycle changes; ack existing prior publication remains explicit; no universal rollback claim"
+  },
+  "independent_review": {
+    "agent": "/root/work_control",
+    "scoped_blocker": false,
+    "closure_accepted": "All48 local common decoder sites plus43 unchanged dispositions; six Schedule sites now covered; no whole gate/platform/producer claim",
+    "no_edits_or_tests": true
+  },
+  "remaining_limits": [
+    "Actual post-spawn callback fault injection G05-D02 remains open",
+    "Four original-budget macOS startup failures G05-D05/G09-D01 remain product failures",
+    "Required macOS arm64/x86_64, Linux x86_64, Windows x86_64 integration gates remain open",
+    "PCTX36 concurrent occurrence claim failure remains independently owned; whole suite is not green",
+    "No Actions or full native platform rerun for test-only additions; earlier positive suites retained where product source unchanged"
+  ]
+}

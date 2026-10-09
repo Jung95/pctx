@@ -1,0 +1,10 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.16s
+     Running unittests src/lib.rs (target/debug/deps/pctx-ae897bec01e143c7)
+
+running 2 tests
+test schedule::deadline_tests::stored_schedule_bridge_decode_retains_absence_and_changed_binding_order ... ok
+test schedule::deadline_tests::stored_schedule_decision_decode_retains_expiry_and_original_deadline_order ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 40 filtered out; finished in 0.02s
+

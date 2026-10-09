@@ -1096,3 +1096,12 @@ do not claim physical DB/WAL/SHM immutability. Existing slot acknowledgement
 publishes intent before decoder failure; retain intent rather than manufacture
 rollback. Source and runtime residuals are in pctx01-storage-residual-
 reconciliation.json; no new fixed acceptance condition or platform exemption.
+
+## PCTX01 G05-D04 local closure (2026-10-09)
+
+Final six frozen Schedule storage boundaries have bounded runtime proof. Close
+only the local common decoder/error condition after independent all48/43 audit;
+release-platform qualification stays in G09, actual callback faults in G05-D02,
+and independent schedule/recovery correctness with its producer owner. The
+fixed40 denominator remains; detail count23 to24. No Schedule algorithm change,
+OS registration, stricter accepted JSON schema or discarded initial evidence.

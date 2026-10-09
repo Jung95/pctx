@@ -1,8 +1,8 @@
 {
   "task": "PCTX01",
   "item": "PCTX01-G05-D04",
-  "status": "open",
-  "fixed_detail_closed": 23,
+  "status": "locally qualified common decoder condition; release platforms separately open",
+  "fixed_detail_closed": 24,
   "fixed_detail_denominator": 40,
   "whole_gate_closed": 0,
   "whole_gate_denominator": 10,
@@ -272,24 +272,24 @@
       "frozen_path": "src/schedule.rs",
       "frozen_line": 520,
       "frozen_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
-      "state": "runtime_remaining",
-      "evidence": null,
+      "state": "bounded_common_decode_qualified",
+      "evidence": "schedule::deadline_tests::stored_schedule_decision_decode / stored_schedule_bridge_decode",
       "scope": "Common stored decode error/accepted-shape classification only; producer acceptance and release platforms separate"
     },
     {
       "frozen_path": "src/schedule.rs",
       "frozen_line": 706,
       "frozen_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
-      "state": "runtime_remaining",
-      "evidence": null,
+      "state": "bounded_common_decode_qualified",
+      "evidence": "persisted_error_contract::grouped_remaining_schedule_storage_branches_preserve_state_and_input_priority",
       "scope": "Common stored decode error/accepted-shape classification only; producer acceptance and release platforms separate"
     },
     {
       "frozen_path": "src/schedule.rs",
       "frozen_line": 761,
       "frozen_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
-      "state": "runtime_remaining",
-      "evidence": null,
+      "state": "bounded_common_decode_qualified",
+      "evidence": "persisted_error_contract::grouped_remaining_schedule_storage_branches_preserve_state_and_input_priority",
       "scope": "Common stored decode error/accepted-shape classification only; producer acceptance and release platforms separate"
     },
     {
@@ -304,24 +304,24 @@
       "frozen_path": "src/schedule.rs",
       "frozen_line": 1893,
       "frozen_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
-      "state": "runtime_remaining",
-      "evidence": null,
+      "state": "bounded_common_decode_qualified",
+      "evidence": "persisted_error_contract::grouped_remaining_schedule_storage_branches_preserve_state_and_input_priority",
       "scope": "Common stored decode error/accepted-shape classification only; producer acceptance and release platforms separate"
     },
     {
       "frozen_path": "src/schedule.rs",
       "frozen_line": 2021,
       "frozen_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
-      "state": "runtime_remaining",
-      "evidence": null,
+      "state": "bounded_common_decode_qualified",
+      "evidence": "schedule::deadline_tests::stored_schedule_decision_decode / stored_schedule_bridge_decode",
       "scope": "Common stored decode error/accepted-shape classification only; producer acceptance and release platforms separate"
     },
     {
       "frozen_path": "src/schedule.rs",
       "frozen_line": 2492,
       "frozen_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
-      "state": "runtime_remaining",
-      "evidence": null,
+      "state": "bounded_common_decode_qualified",
+      "evidence": "persisted_error_contract::grouped_remaining_schedule_storage_branches_preserve_state_and_input_priority",
       "scope": "Common stored decode error/accepted-shape classification only; producer acceptance and release platforms separate"
     },
     {
@@ -397,7 +397,24 @@
       "scope": "Common stored decode error/accepted-shape classification only; producer acceptance and release platforms separate"
     }
   ],
-  "remaining_frozen_sites": [
+  "remaining_frozen_sites": [],
+  "next_one_batch": "G05-D04 local condition closed; continue existing grouped parser/admission/error matrix within PCTX01",
+  "four_existing_proof_categories": {
+    "private_authority_metadata": "bounded local qualified; independent producer and release-platform acceptance separate",
+    "replay_and_prior_observation": "bounded local qualified; independent producer and release-platform acceptance separate",
+    "job_helper_schedule_metadata": "bounded local qualified; independent producer and release-platform acceptance separate",
+    "paired_decoder_branches": "bounded local qualified; independent producer and release-platform acceptance separate"
+  },
+  "ownership": "PCTX01 owns common error truth; independent scheduling correctness PCTX36 and process recovery/containment retain existing owners. Native callback faults G05-D02 and release platform G09 remain separate",
+  "known_dispositions": [
+    "Registry defaults accept {} and []; no root leads NOT_INITIALIZED6; null invalid typed value storage7",
+    "Credentials use Value; null/{} remain accepted JSON then capability mismatch5, not schema expansion",
+    "Runner plan missing5/stale9 remain blocked plan reasons; storage/timeout7 now propagate",
+    "Schedule/Index SQLite physical DB/WAL/SHM changes excluded only where all SQL/schema and non-DB content is compared",
+    "Slot acknowledgement publishes intent before decode; truthful intent retained, no universal rollback claim",
+    "Other43 frozen sites caller/internal/test/external/failclosed/explicit boundaries retain classification; no manufactured corruption obligation"
+  ],
+  "previous_remaining_frozen_sites": [
     {
       "path": "src/schedule.rs",
       "line": 520
@@ -423,20 +440,10 @@
       "line": 2492
     }
   ],
-  "next_one_batch": "Schedule stored mutation definition, decision action, reused occurrence, installation metadata, bridge binding, recovery result; syntax/accepted-shape/refusal-priority/intent-effect matrix only. No schedule algorithm expansion or Actions.",
-  "four_existing_proof_categories": {
-    "private_authority_metadata": "bounded local qualified",
-    "replay_and_prior_observation": "bounded local qualified",
-    "job_helper_schedule_metadata": "job/helper bounded qualified; six Schedule sites remain",
-    "paired_decoder_branches": "cache/checkpoint Get and registry accepted shape qualified; Schedule mutation decoder remains"
-  },
-  "ownership": "PCTX01 owns common error truth; independent scheduling correctness PCTX36 and process recovery/containment retain existing owners. Native callback faults G05-D02 and release platform G09 remain separate",
-  "known_dispositions": [
-    "Registry defaults accept {} and []; no root leads NOT_INITIALIZED6; null invalid typed value storage7",
-    "Credentials use Value; null/{} remain accepted JSON then capability mismatch5, not schema expansion",
-    "Runner plan missing5/stale9 remain blocked plan reasons; storage/timeout7 now propagate",
-    "Schedule/Index SQLite physical DB/WAL/SHM changes excluded only where all SQL/schema and non-DB content is compared",
-    "Slot acknowledgement publishes intent before decode; truthful intent retained, no universal rollback claim",
-    "Other43 frozen sites caller/internal/test/external/failclosed/explicit boundaries retain classification; no manufactured corruption obligation"
+  "closure_evidence": "pctx01-storage-schedule-verification.json",
+  "qualified_source_revisions": [
+    "696b4212b395445bf00329716d9716eec27f47a7",
+    "1c35512273406b80c07a8babdf42a658442b1991",
+    "current final candidate hashes in closure evidence"
   ]
 }
