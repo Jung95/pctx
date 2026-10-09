@@ -15,6 +15,21 @@ not all-local completion. Other official tasks remain inactive. Do not repeat
 this initial reorganization; execute fixed conditions to closure. PCTX01 done
 then next official task's finite list within the same Goal.
 
+## Publication boundary — current
+
+Verified Runner finalization changes are committed locally as
+`9e2e0b52fb71e2f238cc12fd8eb6e4d77829776e` with `[skip ci]`; working tree was
+clean after that commit. Source/binary/log hashes and the fixed40-item register
+were checked (29 closed, whole gates0/10). Normal push to the verified configured
+origin `https://github.com/Jung95/pctx.git`, branch `main`, was rejected by automatic
+approval review: explicit authorization for the destination/default-branch side
+effect was judged insufficient. No push occurred and no retry or workaround was
+attempted. `origin/main` remains `17298fcb4eed7af5ddab2dd5da81ac2800e085ee` locally.
+The objective file explicitly requests commit/push to this repository; publication
+now awaits the user's explicit approval for `main` to resolve the review boundary.
+No Actions were dispatched. PCTX01 remains the only active official task and is
+incomplete; G04-D03 remains next within that same task after this boundary.
+
 ## Current source and verification
 
 Only **PCTX01** is active, lowest incomplete official ID/no prerequisite. The
