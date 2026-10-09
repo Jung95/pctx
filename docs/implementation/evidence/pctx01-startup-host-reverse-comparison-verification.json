@@ -1,0 +1,42 @@
+{
+  "task": "PCTX01",
+  "condition": "PCTX01-G05-D05",
+  "status": "partial_terminal",
+  "frozen_inputs_match": true,
+  "source_revision": "b047613b1101400827ea801b834d1c062f824483",
+  "phase_B_closed": {
+    "pass": 4,
+    "fail": 0,
+    "concurrent_successes": 128
+  },
+  "phase_A_open": "not started",
+  "reason": "phase A not started by human declaration",
+  "protocol_evidence": "runner ends here only when response after reopening differs from exact OPEN;actual entered text was not stored",
+  "comparison_complete": false,
+  "known_owned_PID_state": {
+    "22067": "absent",
+    "22073": "absent",
+    "22075": "absent",
+    "22078": "absent",
+    "22207": "absent"
+  },
+  "cleanup_limit": "runner/four test parents only;all query children not inventoried",
+  "interpretation": "closed-first measured phase passes;weakens literal only-second-phase-passes claim,but inverse comparison remains incomplete and does not isolate cause or establish repair",
+  "session": "consumed;do not rerun command or delete marker",
+  "resume_limit": "old runner environment snapshot is gone;automatic continuation cannot assert same captured environment",
+  "acceptance": "G05-D05 product_failure;33/40details,0/10whole gates",
+  "authentication": 0,
+  "evidence_sha256": {
+    "pctx01-startup-host-reverse-comparison-B-0-result.json": "87e36f993cbdaf0c473c02d4d07c752af0d008fe7ada89b465f6aee8e53a0878",
+    "pctx01-startup-host-reverse-comparison-B-0-test.log": "628ac5b8a90602e98429434019d5f3736c404153b08605b8dca4064c3791e24d",
+    "pctx01-startup-host-reverse-comparison-B-1-result.json": "83349aba6e952adb358fd16de16355d43af0e38364d9a358f5e14d11f36c063e",
+    "pctx01-startup-host-reverse-comparison-B-1-test.log": "d3c30625f7a7a1cc94346b164ccfb77e7df44f86ab8fd68856db5e1668465358",
+    "pctx01-startup-host-reverse-comparison-B-2-result.json": "2f4624ce1cb2ff0d84f6a29c54ca8a4d5a6d0754219461666b58cc723bde3857",
+    "pctx01-startup-host-reverse-comparison-B-2-test.log": "e908f771ac17f282b31c75d38bbb5bba989cee3338180c6d8c7e0c654eb7e2ac",
+    "pctx01-startup-host-reverse-comparison-B-3-result.json": "0308b444d059937d014eddf74d6d4473767ac431a64f81df0e4e3ec72022abbf",
+    "pctx01-startup-host-reverse-comparison-B-3-test.log": "a7fc55fcbebc562335c1d3454ed3638a31f54aa71479d5400741a77c0c1be786",
+    "pctx01-startup-host-reverse-comparison-phase-B-complete.json": "9b2321afffc697b883e5498c6737b8ec7e833949d9d3518da1e7e61e6b8686e5",
+    "pctx01-startup-host-reverse-comparison-result.json": "e1b836db068db3f4ca6fda69068a9f53c79132aec05d73316740f634cf65e6cb"
+  },
+  "operator_report": "Korean input caused by keyboard language toggle at OPEN prompt;runner stopped"
+}

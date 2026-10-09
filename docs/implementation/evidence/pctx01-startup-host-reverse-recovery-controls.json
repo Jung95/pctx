@@ -1,0 +1,19 @@
+{
+  "task": "PCTX01",
+  "condition": "PCTX01-G05-D05",
+  "plan_only_exit": 0,
+  "non_tty_exit": 1,
+  "caller_cwd": "/Users/dev",
+  "exact_prompt_function_controls": [
+    "Korean typo followed by lowercase spaced open:reprompt then OPEN",
+    "explicit STOP:cancel",
+    "EOF:cancel"
+  ],
+  "input_reprompt_runs_tests": false,
+  "original_tests_executed": 0,
+  "session_empty": true,
+  "authentication": 0,
+  "product_source_binary_unchanged_from_prior_reverse": true,
+  "ready_sha256": "8536b07018fd9919ba67daacc25a1252c04a057d88dafc44ab417522f4c60cb4",
+  "independent_review": "work_control:no material blocker;input-only loop,no measured-test retry;both declarations before first test;OPEN before A;recovery separate from prior incomplete result"
+}

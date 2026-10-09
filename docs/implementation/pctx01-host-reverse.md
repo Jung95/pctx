@@ -1,5 +1,9 @@
 # PCTX01 reverse-order host control
 
+**Consumed partial run:** closed phase passed;open phase did not start after a
+keyboard-language error. Do not rerun this command. Use the separate
+[recovery procedure](pctx01-host-reverse-recovery.md).
+
 This is a single changed-order diagnostic, not a repair or acceptance exemption.
 It reverses the earlier open→closed order to closed→open, testing whether the later
 phase simply passes irrespective of host state. Both phases preserve the original

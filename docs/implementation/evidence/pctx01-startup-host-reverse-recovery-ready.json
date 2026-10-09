@@ -1,0 +1,18 @@
+{
+  "task": "PCTX01",
+  "condition": "PCTX01-G05-D05",
+  "status": "recovery prepared;not executed",
+  "revision": "b047613b1101400827ea801b834d1c062f824483",
+  "prepared": "/Users/dev/PCTX/docs/implementation/evidence/pctx01-startup-host-reverse-recovery-prepared.json",
+  "test_binary": "/private/tmp/pctx01-host-reverse-0wwokltp/target/debug/deps/project_deadline-f7e8b9d913251d84",
+  "files": {
+    "/Users/dev/PCTX/docs/implementation/evidence/pctx01-startup-host-reverse-recovery-prepared.json": "d73d48218396d95b9a613fe25141eefae7e88977b786f64cc21946f933d42b89",
+    "/private/tmp/pctx01-host-reverse-0wwokltp/target/debug/deps/project_deadline-f7e8b9d913251d84": "b879de4189027ae9ca489a1d0bd34bf7515a05958748593fcb4f69dccbe2a5f1",
+    "/Users/dev/PCTX/docs/implementation/evidence/pctx01-startup-host-reverse-recovery-run.py.txt": "3cea516fb8bf1cc3b3acbf3296397a3d6fa65a72653912cc42c1d7660be237ac"
+  },
+  "source_unchanged": true,
+  "build": "23760terminal0 locked/offline no-run",
+  "comparison_reason": "Prior reverse control stopped after B due to keyboard-language input error;recover full measured B/A once with input-reprompt protection. Retain prior partial result;not a pass retry.",
+  "limits": "human-declared host state;reopen workload/time/global-state/helper confounds;no product repair",
+  "runs_per_test_per_phase": 1
+}

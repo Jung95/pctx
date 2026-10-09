@@ -1,0 +1,75 @@
+{
+  "plan": {
+    "revision": "b047613b1101400827ea801b834d1c062f824483",
+    "binary_sha256": "b879de4189027ae9ca489a1d0bd34bf7515a05958748593fcb4f69dccbe2a5f1",
+    "tests": [
+      "query_program_resolution_uses_captured_command_path",
+      "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+      "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget",
+      "simultaneous_streams_are_collected_and_overflow_never_infers_success"
+    ],
+    "phases": [
+      "B-human-declared-host-closed",
+      "A-human-declared-host-open"
+    ],
+    "runs_per_test_per_phase": 1,
+    "administrator_authentication": false,
+    "app_automation": false,
+    "app_process_inventory": false,
+    "original_test_changes": false,
+    "same_runner_environment_and_cwd": true
+  },
+  "runs": [
+    {
+      "phase": "B",
+      "test": "query_program_resolution_uses_captured_command_path",
+      "parent_pid": 22073,
+      "uid": 502,
+      "test_exit": 0,
+      "runner_elapsed_seconds": 0.8148767079692334,
+      "runner_utc_start": "2026-10-09T09:48:27.386093+00:00",
+      "reported_timeout_pids": [],
+      "host_state": "human-declared-closed",
+      "host_process_absence_verified": false
+    },
+    {
+      "phase": "B",
+      "test": "relative_query_path_uses_child_cwd_and_skips_non_executable_path_entry",
+      "parent_pid": 22075,
+      "uid": 502,
+      "test_exit": 0,
+      "runner_elapsed_seconds": 0.33704354194924235,
+      "runner_utc_start": "2026-10-09T09:48:28.201709+00:00",
+      "reported_timeout_pids": [],
+      "host_state": "human-declared-closed",
+      "host_process_absence_verified": false
+    },
+    {
+      "phase": "B",
+      "test": "concurrent_query_startup_preserves_group_streams_and_original_one_second_budget",
+      "parent_pid": 22078,
+      "uid": 502,
+      "test_exit": 0,
+      "runner_elapsed_seconds": 1.071891583967954,
+      "runner_utc_start": "2026-10-09T09:48:28.539149+00:00",
+      "reported_timeout_pids": [],
+      "host_state": "human-declared-closed",
+      "host_process_absence_verified": false
+    },
+    {
+      "phase": "B",
+      "test": "simultaneous_streams_are_collected_and_overflow_never_infers_success",
+      "parent_pid": 22207,
+      "uid": 502,
+      "test_exit": 0,
+      "runner_elapsed_seconds": 0.6125181670067832,
+      "runner_utc_start": "2026-10-09T09:48:29.611467+00:00",
+      "reported_timeout_pids": [],
+      "host_state": "human-declared-closed",
+      "host_process_absence_verified": false
+    }
+  ],
+  "complete": false,
+  "reason": "phase A not started by human declaration",
+  "product_repair": false
+}

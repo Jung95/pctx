@@ -1,5 +1,25 @@
 # Implementation progress
 
+## Partial reverse result and input recovery — current, 2026-10-09
+
+[Partial verification](evidence/pctx01-startup-host-reverse-comparison-verification.json)
+binds frozen inputs and4Bclosed PASS,including128 concurrent successes. Aopen did
+not start:operator reports keyboard-language error at OPEN. Runner22067 and4test
+parents are absent;query-child inventory unavailable. Original session CONSUMED.
+Closed-first success is bounded evidence against a literal only-second-phase-passes
+story,not completed inverse comparison or repair;33/40,0/10 unchanged.
+
+[Recovery controls](evidence/pctx01-startup-host-reverse-recovery-controls.json) prepare
+one new Bclosed→Aopen comparison using the same frozen source/binary but fresh private
+session/prefix. Old runner exited and its captured environment cannot be recovered
+for the missing phase;prior partial logs remain. Invalid input now reprompts;case
+and whitespace normalize;STOP or EOF cancels. Only human input retries,never a test.
+Exact helper controls,home-cwd plan-only and nonTTY refusal pass;no test executed,
+no authentication/new build. [Recovery procedure](pctx01-host-reverse-recovery.md)
+is current;do not run the consumed older command. Every result retains fixed-order,
+time,reopen/helper confounds;no acceptance closure.
+
+
 ## Prepared reverse-order control — current next action, 2026-10-09
 
 [Readiness](evidence/pctx01-startup-host-reverse-batch-ready.json) and
