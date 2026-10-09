@@ -1,0 +1,169 @@
+/* Kernel-observer diagnostic variant; every child remains unreaped until wave-end; selected identity held until observer terminal after execution terminal. No product qualification.
+ * Owned-child diagnostic only: no task mutation, debugger attachment, OS policy
+ * changes, retries or production qualification. Original1000ms from pre-spawn.
+ * One128-attempt,8-worker/16-wave reused-path workload; first execution cold.
+ * Nonblocking pipes, unreaped PID/start identity, bounded cancellation/reaping. */
+#include <errno.h>
+#include <fcntl.h>
+#include <libproc.h>
+#include <mach/mach.h>
+#include <spawn.h>
+#include <signal.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/stat.h>
+#include <sys/wait.h>
+#include <time.h>
+#include <unistd.h>
+static unsigned long long us(void) { struct timespec t; clock_gettime(CLOCK_MONOTONIC,&t); return (unsigned long long)t.tv_sec*1000000+t.tv_nsec/1000; }
+struct child { pid_t pid; unsigned long long start,spawn,sec,usec; int out,err,done,probes; size_t ob,eb; };
+static struct child cs[8];
+static void cleanup_owned(void) {
+ for(int i=0;i<8;i++) {
+  struct child *c=&cs[i]; if(c->pid<=0||c->done)continue;
+  siginfo_t info={0};
+  if(waitid(P_PID,(id_t)c->pid,&info,WEXITED|WNOHANG|WNOWAIT)!=0)continue;
+  // Direct child remains unreaped, so its PID/group cannot be recycled here.
+  if(!info.si_pid)kill(-c->pid,SIGKILL);
+  unsigned long long end=us()+1000000;int status;
+  while(waitpid(c->pid,&status,WNOHANG)==0&&us()<end)usleep(1000);
+ }
+}
+static int owned(struct child *c, struct proc_bsdinfo *b) {
+ int n=proc_pidinfo(c->pid,PROC_PIDTBSDINFO,0,b,sizeof(*b));
+ return n==(int)sizeof(*b)&&b->pbi_pid==(unsigned)c->pid&&b->pbi_ppid==(unsigned)getpid()&&b->pbi_uid==getuid()&&b->pbi_start_tvsec==c->sec&&b->pbi_start_tvusec==c->usec;
+}
+static void snapshot(struct child *c,int worker,int wave) {
+ unsigned long long begin=us(); struct proc_bsdinfo b={0}; int identity=owned(c,&b);
+ if(!identity) { printf("{\"kind\":\"snapshot\",\"worker\":%d,\"wave\":%d,\"pid\":%d,\"identity\":false,\"at_us\":%llu}\n",worker,wave,c->pid,begin-c->start); return; }
+ struct proc_taskinfo ti={0}; int tn=proc_pidinfo(c->pid,PROC_PIDTASKINFO,0,&ti,sizeof(ti));
+ uint64_t ids[32]={0}; int ln=proc_pidinfo(c->pid,PROC_PIDLISTTHREADS,0,ids,sizeof(ids));
+ /* PROC_PIDLISTTHREADS returns pthread handles, so pair it with
+  * PROC_PIDTHREADINFO (not the unique thread-ID flavor).
+  * A name port is read-only. Failure is recorded; no control port, task suspend,
+  * task_for_pid escalation, entitlements or policy changes are attempted. */
+ mach_port_t name=MACH_PORT_NULL; kern_return_t nr=task_name_for_pid(mach_task_self(),c->pid,&name);
+ task_basic_info_data_t basic={0}; mach_msg_type_number_t cnt=TASK_BASIC_INFO_COUNT;
+ kern_return_t br=nr==KERN_SUCCESS?task_info(name,TASK_BASIC_INFO,(task_info_t)&basic,&cnt):nr;
+ if(name!=MACH_PORT_NULL) mach_port_deallocate(mach_task_self(),name);
+ char suspension[32];if(br==KERN_SUCCESS)snprintf(suspension,sizeof(suspension),"%d",basic.suspend_count);else strcpy(suspension,"null");
+ struct proc_threadinfo ths[32]={0};int thread_bytes[32]={0};
+ int threads=ln>0&&ln<(int)sizeof(ids)?ln/(int)sizeof(ids[0]):0;
+ for(int j=0;j<threads;j++)thread_bytes[j]=proc_pidinfo(c->pid,PROC_PIDTHREADINFO,ids[j],&ths[j],sizeof(ths[j]));
+ struct proc_bsdinfo after={0}; int final_identity=owned(c,&after);unsigned long long finish=us();
+ printf("{\"kind\":\"snapshot\",\"worker\":%d,\"wave\":%d,\"pid\":%d,\"start_sec\":%llu,\"start_usec\":%llu,\"origin_us\":%llu,\"identity\":%s,\"at_us\":%llu,\"end_us\":%llu,\"observer_us\":%llu,\"pre_expiry\":%s,\"status\":%u,\"flags\":%u,\"task_bytes\":%d,\"user_cpu\":%llu,\"system_cpu\":%llu,\"mach_calls\":%d,\"unix_calls\":%d,\"context_switches\":%d,\"thread_list_bytes\":%d,\"task_name_result\":%d,\"task_basic_result\":%d,\"task_suspend_count\":%s,\"threads\":[",worker,wave,c->pid,c->sec,c->usec,c->start,final_identity?"true":"false",begin-c->start,finish-c->start,finish-begin,finish-c->start<1000000?"true":"false",b.pbi_status,b.pbi_flags,tn,(unsigned long long)ti.pti_total_user,(unsigned long long)ti.pti_total_system,ti.pti_syscalls_mach,ti.pti_syscalls_unix,ti.pti_csw,ln,nr,br,suspension);
+ for(int j=0;j<threads;j++) {
+  struct proc_threadinfo th=ths[j]; int n=thread_bytes[j];
+  printf("%s{\"id\":%llu,\"bytes\":%d,\"run_state\":%d,\"flags\":%d,\"sleep_time\":%d,\"user_cpu\":%llu,\"system_cpu\":%llu}",j?",":"",(unsigned long long)ids[j],n,th.pth_run_state,th.pth_flags,th.pth_sleep_time,(unsigned long long)th.pth_user_time,(unsigned long long)th.pth_system_time);
+ }
+ puts("]}"); fflush(stdout);
+}
+static void drain(int fd,size_t *count) { char b[128]; ssize_t n; while((n=read(fd,b,sizeof(b)))>0)*count+=(size_t)n; }
+
+static int collect_one(const char *root,unsigned uid) {
+ int dirfd=open(root,O_RDONLY|O_DIRECTORY|O_NOFOLLOW|O_CLOEXEC);struct stat dir;
+ if(geteuid()!=0||dirfd<0||fstat(dirfd,&dir)||!S_ISDIR(dir.st_mode)||dir.st_uid!=uid||(dir.st_mode&077))return 20;
+ int fd=openat(dirfd,"collector-ready",O_WRONLY|O_CREAT|O_EXCL|O_NOFOLLOW|O_CLOEXEC,0600);if(fd<0)return 21;close(fd);
+ unsigned long long until=us()+60000000;
+ do{fd=openat(dirfd,"collector-request",O_RDONLY|O_NONBLOCK|O_NOFOLLOW|O_CLOEXEC);if(fd>=0)break;if(errno!=ENOENT)return 22;usleep(1000);}while(us()<until);
+ struct stat st;if(fd<0)return 22;
+ if(fstat(fd,&st)||!S_ISREG(st.st_mode)||st.st_uid!=uid||st.st_size<=0||st.st_size>200){close(fd);return 23;}
+ char bytes[201]={0};ssize_t n=read(fd,bytes,200);close(fd);if(n!=st.st_size)return 24;
+ int pid,ppid;unsigned long long sec,usec,start;char extra;
+ if(sscanf(bytes,"%d %d %llu %llu %llu %c",&pid,&ppid,&sec,&usec,&start,&extra)!=5||pid<=1||ppid<=1)return 25;
+ struct proc_bsdinfo info={0};n=proc_pidinfo(pid,PROC_PIDTBSDINFO,0,&info,sizeof(info));
+ unsigned long long before=us();
+ if(n!=(int)sizeof(info)||info.pbi_pid!=(unsigned)pid||info.pbi_ppid!=(unsigned)ppid||info.pbi_uid!=uid||info.pbi_start_tvsec!=sec||info.pbi_start_tvusec!=usec||before<start||before-start>=1000000)return 26;
+ /* Privileged tool output never targets a user-writable directory. */
+ char privileged[]="/private/tmp/pctx01-root-kernel-XXXXXX";if(!mkdtemp(privileged))return 30;
+ char trace[4096];snprintf(trace,sizeof(trace),"%s/kernel.txt",privileged);
+ struct proc_taskinfo task={0};if(proc_pidinfo(pid,PROC_PIDTASKINFO,0,&task,sizeof(task))!=(int)sizeof(task)||task.pti_threadnum<=0){rmdir(privileged);return 36;}
+ char pid_text[32];snprintf(pid_text,sizeof(pid_text),"%d",pid);
+ char *args[]={"/usr/sbin/spindump",pid_text,"1","5","-onlyTarget","-noBinary","-noIPC","-timelimit","2","-o",trace,NULL};char *env[]={"PATH=/usr/bin:/bin:/usr/sbin:/sbin","LC_ALL=C",NULL};pid_t tool;
+ before=us();if(before<start||before-start>=1000000){rmdir(privileged);return 26;}
+ int rc=posix_spawn(&tool,args[0],NULL,NULL,args,env);if(rc)return 27;
+ int status;pid_t got;do{got=waitpid(tool,&status,0);}while(got<0&&errno==EINTR);if(got!=tool)return 28;
+ int copied=0;fd=open(trace,O_RDONLY|O_NOFOLLOW|O_NONBLOCK|O_CLOEXEC);
+ if(fd>=0){
+  struct stat result;if(fstat(fd,&result)||!S_ISREG(result.st_mode)||result.st_uid!=0||result.st_size<0||result.st_size>16*1024*1024)return 31;
+  int destination=openat(dirfd,"kernel.txt",O_WRONLY|O_CREAT|O_EXCL|O_NOFOLLOW|O_CLOEXEC,0600);if(destination<0)return 32;
+  if(fchown(destination,uid,(gid_t)-1)||fchmod(destination,0600))return 33;
+  char chunk[8192];off_t total=0;
+  while(total<result.st_size){ssize_t amount=read(fd,chunk,sizeof(chunk));if(amount<0&&errno==EINTR)continue;if(amount<=0||total+amount>result.st_size)return 34;ssize_t offset=0;
+   while(offset<amount){ssize_t w=write(destination,chunk+offset,(size_t)(amount-offset));if(w<0&&errno==EINTR)continue;if(w<=0)return 35;offset+=w;}total+=amount;
+  }
+  close(destination);close(fd);copied=1;unlink(trace);
+ }
+ rmdir(privileged);close(dirfd);
+ printf("{\"kind\":\"collector\",\"pid\":%d,\"ppid\":%d,\"identity\":true,\"pre_launch_us\":%llu,\"tool_exit\":%d,\"tool_signal\":%d,\"trace_copied\":%s,\"observation_us\":%llu}\n",pid,ppid,before-start,WIFEXITED(status)?WEXITSTATUS(status):-1,WIFSIGNALED(status)?WTERMSIG(status):0,copied?"true":"false",us()-before);fflush(stdout);
+ return WIFEXITED(status)?WEXITSTATUS(status):29;
+}
+
+int main(int argc,char **argv) {
+ if(argc==4&&strcmp(argv[1],"--collect")==0)return collect_one(argv[2],(unsigned)atoi(argv[3]));
+ if(argc==8 && (strcmp(argv[1],"--verify")==0||strcmp(argv[1],"--live")==0)) {
+ struct proc_bsdinfo b={0}; int n=proc_pidinfo(atoi(argv[2]),PROC_PIDTBSDINFO,0,&b,sizeof(b));
+ struct proc_taskinfo task={0};int live=strcmp(argv[1],"--live")!=0||(proc_pidinfo(atoi(argv[2]),PROC_PIDTASKINFO,0,&task,sizeof(task))==(int)sizeof(task)&&task.pti_threadnum>0);
+ return !(live&&n==(int)sizeof(b)&&b.pbi_pid==(unsigned)atoi(argv[2])&&b.pbi_ppid==(unsigned)atoi(argv[3])&&b.pbi_uid==(unsigned)atoi(argv[6])&&b.pbi_start_tvsec==strtoull(argv[4],NULL,10)&&b.pbi_start_tvusec==strtoull(argv[5],NULL,10)&&strcmp(argv[7],"owned")==0);
+ }
+ if(argc!=2)return 2; atexit(cleanup_owned); char *root=argv[1]; mkdir(root,0700); char paths[8][4096];
+ for(int i=0;i<8;i++){snprintf(paths[i],sizeof(paths[i]),"%s/git-%d",root,i);FILE *f=fopen(paths[i],"w");if(!f)return 3;fputs("#!/bin/sh\nkill -0 -$$ || exit 47\nprintf stdout\nprintf stderr >&2\n",f);fclose(f);chmod(paths[i],0700);}
+ for(int wave=0;wave<16;wave++) {
+  memset(cs,0,sizeof(cs));
+  for(int i=0;i<8;i++) {
+   int op[2],ep[2];if(pipe(op)||pipe(ep))return 3;
+   posix_spawn_file_actions_t fa;posix_spawn_file_actions_init(&fa);
+   posix_spawn_file_actions_addopen(&fa,0,"/dev/null",O_RDONLY,0);
+   posix_spawn_file_actions_adddup2(&fa,op[1],1);posix_spawn_file_actions_adddup2(&fa,ep[1],2);
+   posix_spawn_file_actions_addclose(&fa,op[0]);posix_spawn_file_actions_addclose(&fa,ep[0]);
+   posix_spawn_file_actions_addclose(&fa,op[1]);posix_spawn_file_actions_addclose(&fa,ep[1]);
+   posix_spawnattr_t attr;posix_spawnattr_init(&attr);posix_spawnattr_setflags(&attr,POSIX_SPAWN_SETPGROUP|POSIX_SPAWN_CLOEXEC_DEFAULT);posix_spawnattr_setpgroup(&attr,0);
+   char *args[]={paths[i],"rev-parse","--is-inside-work-tree",NULL};char *env[]={"PATH=/usr/bin:/bin","LC_ALL=C",NULL};
+   cs[i].start=us();int rc=posix_spawn(&cs[i].pid,paths[i],&fa,&attr,args,env);cs[i].spawn=us()-cs[i].start;
+   posix_spawnattr_destroy(&attr);posix_spawn_file_actions_destroy(&fa);close(op[1]);close(ep[1]);if(rc)return 4;
+   cs[i].out=op[0];cs[i].err=ep[0];fcntl(op[0],F_SETFL,O_NONBLOCK);fcntl(ep[0],F_SETFL,O_NONBLOCK);
+   struct proc_bsdinfo b={0};int n=proc_pidinfo(cs[i].pid,PROC_PIDTBSDINFO,0,&b,sizeof(b));if(n!=(int)sizeof(b))return 5;cs[i].sec=b.pbi_start_tvsec;cs[i].usec=b.pbi_start_tvusec;
+  }
+  int done=0;while(done<8) {
+   for(int i=0;i<8;i++) {struct child *c=&cs[i];if(c->done)continue;drain(c->out,&c->ob);drain(c->err,&c->eb);
+    unsigned long long elapsed=us()-c->start;
+    siginfo_t info={0};int w=waitid(P_PID,(id_t)c->pid,&info,WEXITED|WNOHANG|WNOWAIT);if(w)return 6;
+    if(!info.si_pid&&elapsed<1000000&&((c->probes==0&&elapsed>=250000)||(c->probes==1&&elapsed>=750000))) {snapshot(c,i,wave);c->probes++;elapsed=us()-c->start;}
+    if(info.si_pid||elapsed>=1000000) {
+     int expired=elapsed>=1000000,krc=0,status=0,cleanup_failed=0;
+     unsigned long long at=elapsed,cleanup=us();struct proc_bsdinfo b={0};
+     if(expired&&!info.si_pid) {if(owned(c,&b))krc=kill(-c->pid,SIGKILL);else cleanup_failed=1;}
+     for(;;) {
+      siginfo_t terminal={0}; int rc=waitid(P_PID,(id_t)c->pid,&terminal,WEXITED|WNOHANG|WNOWAIT);
+      if(rc==0 && terminal.si_pid) {status=terminal.si_code==CLD_EXITED?terminal.si_status<<8:terminal.si_status&127;break;}
+      if(rc<0&&errno!=EINTR){cleanup_failed=1;break;}
+      if(us()-cleanup>=1000000){cleanup_failed=1;break;}usleep(1000);
+     }
+     drain(c->out,&c->ob);drain(c->err,&c->eb);close(c->out);close(c->err);
+     printf("{\"kind\":\"result\",\"worker\":%d,\"wave\":%d,\"pid\":%d,\"spawn_us\":%llu,\"observation_us\":%llu,\"expired\":%s,\"within_budget\":%s,\"stdout_bytes\":%zu,\"stderr_bytes\":%zu,\"actual_signal\":%d,\"exit_code\":%d,\"kill_rc\":%d,\"cleanup_us\":%llu,\"cleanup_failed\":%s,\"snapshots\":%d}\n",i,wave,c->pid,c->spawn,at,expired?"true":"false",!cleanup_failed&&!expired&&WIFEXITED(status)&&WEXITSTATUS(status)==0&&c->ob==6&&c->eb==6?"true":"false",c->ob,c->eb,WIFSIGNALED(status)?WTERMSIG(status):0,WIFEXITED(status)?WEXITSTATUS(status):-1,krc,us()-cleanup,cleanup_failed?"true":"false",c->probes);fflush(stdout);c->done=!cleanup_failed;done++;if(cleanup_failed)return 7;
+    }
+   }
+   /* Acknowledge during execution too, allowing genuinely pre-expiry samples. */
+   char live_target[4096],live_ack[4096];snprintf(live_target,sizeof(live_target),"%s/capture-target",root);snprintf(live_ack,sizeof(live_ack),"%s/capture-ack",root);
+   FILE *lf=fopen(live_target,"r");int lp=0;if(lf){if(fscanf(lf,"%d",&lp)!=1)lp=0;fclose(lf);}
+   for(int i=0;i<8;i++)if(cs[i].pid==lp&&access(live_ack,F_OK)!=0){siginfo_t li={0};if(waitid(P_PID,(id_t)lp,&li,WEXITED|WNOHANG|WNOWAIT)!=0||li.si_pid)continue;FILE *af=fopen(live_ack,"w");if(!af)return 9;fprintf(af,"%d\n",lp);fclose(af);}
+   usleep(1000);
+  }
+  /* Retain unreaped identities only after every child has reached its original
+   * execution deadline/exit. Observation never extends execution admission. */
+  char target_path[4096],done_path[4096]; snprintf(target_path,sizeof(target_path),"%s/capture-target",root);snprintf(done_path,sizeof(done_path),"%s/capture-done",root);
+  FILE *tf=fopen(target_path,"r"); int target=0;if(tf){if(fscanf(tf,"%d",&target)!=1)target=0;fclose(tf);}
+  int selected=0;for(int i=0;i<8;i++)if(cs[i].pid==target)selected=1;
+  unsigned long long hold=us();
+  if(selected){ /* Do not grant a new live acknowledgement after wave terminal. */
+   /* Observer must wait for this acknowledgement before any privileged launch.
+    * Never release identity while that observer is live. Auth wait is distinct
+    * from spindump's bounded2s native observation and original execution clock. */
+   while(access(done_path,F_OK)!=0)usleep(1000);
+  }
+  for(int i=0;i<8;i++){int status;pid_t got;do{got=waitpid(cs[i].pid,&status,WNOHANG);}while(got<0&&errno==EINTR);if(got!=cs[i].pid)return 8;}
+  printf("{\"kind\":\"identity_retention\",\"wave\":%d,\"target\":%d,\"selected\":%s,\"hold_us\":%llu,\"capture_done\":%s}\n",wave,target,selected?"true":"false",us()-hold,access(done_path,F_OK)==0?"true":"false");fflush(stdout);
+ }
+ for(int i=0;i<8;i++)unlink(paths[i]);rmdir(root);return 0;
+}

@@ -1,0 +1,27 @@
+{
+  "task": "PCTX01",
+  "condition": "PCTX01-G05-D05",
+  "base_revision": "2d6e151",
+  "session": 64348,
+  "status": "cancelled at user request to reduce repeated administrator prompts; product failure unresolved",
+  "collector_exit": -15,
+  "driver_started": false,
+  "kernel_capture": false,
+  "process_cleanup": {
+    "observer": 8186,
+    "wrapper": 8185,
+    "authorization_ui": 8187,
+    "all_absent_after_cancellation": true
+  },
+  "validation": "prior strict native compile, Python syntax and independent read-only protocol review; no workload ran in this session",
+  "files": {
+    "pctx01-startup-kernel-late.c.txt": "72f48e2aed8307602cdb88021e38465b2ef07891a7edd147252f9fc9979d14d3",
+    "pctx01-startup-kernel-late.py.txt": "91bedb0f278fb21f5d111b95db4a4583f813bee6baea615b8a9785f2c1054e87",
+    "pctx01-startup-kernel-late-result.json": "82a5ad921858f0426eec0b51282547f33cb9a0ba920d399a9aad346145c7aa32"
+  },
+  "limits": [
+    "No execution, timing, cause or repair evidence from this cancelled session.",
+    "No password, security-policy, sudoers or persistent privileged helper change."
+  ],
+  "next": "Ordinary-user development only; no automatic privileged wrapper relaunch or authentication retry."
+}

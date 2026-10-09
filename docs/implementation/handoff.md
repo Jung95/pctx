@@ -15,6 +15,29 @@ not all-local completion. Other official tasks remain inactive. Do not repeat
 this initial reorganization; execute fixed conditions to closure. PCTX01 done
 then next official task's finite list within the same Goal.
 
+## Administrator prompt policy — current, 2026-10-09
+
+The user requested an end to repeated administrator dialogs. Ordinary-user
+implementation, builds, tests, commits and pushes remain authorized and are the
+default. Do not relaunch privileged diagnostic wrappers, retry authentication,
+or infer permission for another OS prompt from the earlier broad development
+approval. Historical evidence scripts are archives, not the next execution step.
+If root-only observation becomes indispensable, prepare one finite batch with
+exact owned targets, limits and cleanup, then obtain a new explicit user request
+for that batch before opening an OS authentication dialog. Authenticate once for
+that bounded session; exit the collector afterward. Do not install a persistent
+root helper or modify sudoers, authentication cache, Gatekeeper or OS policy.
+
+Session64348 was cancelled before collector readiness or ordinary-user driver
+startup. Wrapper terminal1 / collector SIGTERM(-15), no capture; exact wrapper,
+observer and authorization UI PIDs8185/8186/8187 are absent. The late selector
+sources and cancellation result are retained in
+[the manifest](evidence/pctx01-startup-kernel-late-verification.json).
+This supplies no startup cause, repair or passing result. G05-D05 remains a
+product failure; only PCTX01 is active, details33/40 and whole gates0/10 unchanged.
+Next: continue from existing ordinary-user supervisor/code evidence; do not
+substitute more privileged sampling for implementation or weaken original tests.
+
 ## Late-startup target collector — terminal session99069
 
 [750ms manifest](evidence/pctx01-startup-kernel-ready-750-verification.json)
@@ -34,7 +57,7 @@ gather first-wave750ms snapshots over20ms without pausing driver/read drain;
 reverse observation order, validate current native identity/liveness and original
 age<1s, issue one request or abort. Identity-only verifier needs a live-task gate.
 No further execution yet.
-All jobs terminal. Main published through482aec5; current750 evidence local.
+This historical session is terminal; its750 evidence is now published through2d6e151. Current live job is recorded above.
 
 ## Single-authentication collector — terminal session91326
 

@@ -1,7 +1,10 @@
 # PCTX01-G05-D05: proposed privileged observation
 
-Status: authorization pending; no privileged sampling executed. PCTX01 remains
-implementing, G05-D05 product_failure, details33/40 and whole gates0/10.
+Status: historical proposal, superseded by the administrator prompt policy in
+[handoff](../handoff.md). Do not execute or relaunch it. Two subsequent captures
+observed successful targets only; the latest session was cancelled before workload
+startup at the user request to stop repeated prompts. PCTX01 remains implementing,
+G05-D05 product_failure, details33/40 and whole gates0/10.
 
 The completed owned-child diagnostic and independent review are in
 [pctx01-startup-thread-snapshot-verification.json](pctx01-startup-thread-snapshot-verification.json).

@@ -1,0 +1,60 @@
+import json,os,shlex,subprocess,tempfile,threading,time
+from pathlib import Path
+base=Path('/Users/dev/PCTX/docs/implementation/evidence')
+root=Path(tempfile.mkdtemp(prefix='pctx01-kernel-late-',dir='/private/tmp'))
+binary='/private/tmp/pctx01-startup-kernel-late'
+command=shlex.join([binary,'--collect',str(root),str(os.getuid())])
+script='do shell script '+json.dumps(command)+' with administrator privileges'
+auth=subprocess.Popen(['/usr/bin/osascript','-e',script],stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True)
+print(json.dumps({'kind':'authorization','pid':auth.pid,'root':str(root),'children_started':False}),flush=True)
+while not (root/'collector-ready').exists() and auth.poll() is None:time.sleep(.05)
+if auth.poll() is not None:
+    out,err=auth.communicate();result={'collector_exit':auth.returncode,'collector_stdout':out,'collector_stderr':err,'root':str(root),'driver_started':False}
+    (base/'pctx01-startup-kernel-late-result.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result));raise SystemExit(1)
+p=subprocess.Popen([binary,str(root)],stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True)
+print(json.dumps({'kind':'collector_ready','driver_started':True,'parent':p.pid}),flush=True)
+candidates=[];lock=threading.Lock();observer=None;records=[];selected=None
+def publish():
+    global selected
+    with lock:start=candidates[0][0]
+    remaining=(start+20000000-time.monotonic_ns())/1e9
+    if remaining>0:time.sleep(remaining)
+    with lock:batch=[row for arrival,row in candidates if start<=arrival<=start+20000000]
+    checks=[]
+    for row in reversed(batch):
+        age=time.monotonic_ns()//1000-row['origin_us']
+        if not 0<=age<1000000:checks.append({'pid':row['pid'],'age_us':age,'live_exit':'expired'});continue
+        verify=[binary,'--live',str(row['pid']),str(p.pid),str(row['start_sec']),str(row['start_usec']),str(os.getuid()),'owned']
+        v=subprocess.run(verify,capture_output=True,text=True)
+        checks.append({'pid':row['pid'],'age_us':age,'live_exit':v.returncode})
+        if v.returncode==0:selected=row;break
+    request=root/'request-staging';retained=False
+    if selected:
+        target=root/'target-staging';target.write_text(str(selected['pid'])+'\n');target.rename(root/'capture-target')
+        ack=root/'capture-ack';until=time.monotonic()+3
+        while not ack.exists() and time.monotonic()<until:time.sleep(.001)
+        retained=ack.exists() and ack.read_text().strip()==str(selected['pid'])
+        age=time.monotonic_ns()//1000-selected['origin_us']
+        again=subprocess.run([binary,'--live',str(selected['pid']),str(p.pid),str(selected['start_sec']),str(selected['start_usec']),str(os.getuid()),'owned'],capture_output=True,text=True)
+        if retained and again.returncode==0 and 0<=age<1000000:
+            request.write_text(f"{selected['pid']} {p.pid} {selected['start_sec']} {selected['start_usec']} {selected['origin_us']}\n")
+        else:request.write_text('selected no longer live/admitted\n')
+    else:request.write_text('no eligible candidate\n')
+    request.rename(root/'collector-request')
+    out,err=auth.communicate()
+    records.append({'window_start_monotonic_ns':start,'window_ms':20,'candidates':batch,'checks':checks,'selected':selected,'retention_ack':retained,'collector_exit':auth.returncode,'collector_stdout':out,'collector_stderr':err})
+    (root/'capture-done').write_text('collector terminal\n')
+with (base/'pctx01-startup-kernel-late.jsonl').open('w') as f:
+    for line in p.stdout:
+        f.write(line);f.flush();row=json.loads(line)
+        if row.get('kind')=='snapshot' and row.get('wave')==0 and row.get('identity') and row.get('pre_expiry') and row.get('at_us',0)>=750000:
+            with lock:candidates.append((time.monotonic_ns(),row))
+            if observer is None:observer=threading.Thread(target=publish);observer.start()
+    code=p.wait()
+if observer:observer.join()
+else:
+    (root/'collector-request').write_text('no first-wave750ms candidate\n');out,err=auth.communicate();records.append({'collector_exit':auth.returncode,'collector_stdout':out,'collector_stderr':err,'reason':'no eligible snapshot'})
+result={'driver_exit':code,'driver_stderr':p.stderr.read(),'root':str(root),'parent':p.pid,'selected':selected,'observers':records,'trace_exists':(root/'kernel.txt').exists(),'scope':'first-wave750ms20ms collection, reverse observed order, current live identity/original-clock validation, one target only'}
+(base/'pctx01-startup-kernel-late-result.json').write_text(json.dumps(result,indent=2)+'\n')
+if (root/'kernel.txt').exists():(base/'pctx01-startup-kernel-late-trace.txt').write_bytes((root/'kernel.txt').read_bytes())
+print(json.dumps(result),flush=True)
