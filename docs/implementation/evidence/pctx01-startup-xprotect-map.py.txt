@@ -1,0 +1,67 @@
+"""Bounded static installed-cache mapping; never invokes cached code or services."""
+from pathlib import Path
+import struct,json,hashlib,re
+F=Path('/System/Volumes/Preboot/Cryptexes/OS/System/Library/dyld')
+B=Path('/Users/dev/PCTX/docs/implementation/evidence')
+maps=[];slides=[]
+for p in F.glob('dyld_shared_cache_arm64e*'):
+ if p.suffix in ['.map','.atlas']:continue
+ with p.open('rb') as f:
+  h=f.read(400)
+  if not h.startswith(b'dyld_v1'):continue
+  off,n=struct.unpack_from('<II',h,16);assert n<100 and off<65536
+  f.seek(off);raw=f.read(n*32)
+  for i in range(n):
+   a,z,o,_,_=struct.unpack_from('<QQQII',raw,i*32);maps.append((a,z,o,p))
+  mo,mn=struct.unpack_from('<II',h,312)
+  if mo and mn:
+   assert mn<100 and mo<65536
+   f.seek(mo);r=f.read(mn*56)
+   for i in range(mn):
+    a,z,o,so,ss,fl,mp,ip=struct.unpack_from('<6Q2I',r,i*56)
+    if so and ss:
+     f.seek(so);version=struct.unpack('<I',f.read(4))[0];slides.append((a,z,version))
+with (F/'dyld_shared_cache_arm64e').open('rb') as f:
+ f.seek(224);cachebase=struct.unpack('<Q',f.read(8))[0]
+def rd(a,n):
+ assert 0<n<=80000
+ for low,size,off,p in maps:
+  if low<=a and a+n<=low+size:
+   with p.open('rb') as f:f.seek(off+a-low);return f.read(n)
+ raise ValueError(hex(a))
+def string(a):
+ raw=rd(a,512);assert b'\0' in raw
+ return raw.split(b'\0')[0].decode()
+text=(F/'dyld_shared_cache_arm64e.map').read_text()
+def image_text(path):
+ at=text.index(path+'\n');m=re.search(r'__TEXT (0x[0-9A-Fa-f]+) -> (0x[0-9A-Fa-f]+)',text[at:]);return int(m[1],16),int(m[2],16)
+def sections(base):
+ h=rd(base,32);nc,sz=struct.unpack_from('<II',h,16);assert sz<16000;h=rd(base,32+sz);o=32;rows={}
+ for _ in range(nc):
+  c,z=struct.unpack_from('<II',h,o)
+  if c==0x19:
+   n=struct.unpack_from('<I',h,o+64)[0]
+   for i in range(n):
+    q=o+72+i*80;name=h[q:q+16].split(b'\0')[0].decode();a,s=struct.unpack_from('<QQ',h,q+32);rows[name]=(a,s)
+  o+=z
+ return rows
+base,end=image_text('/System/Library/PrivateFrameworks/XprotectFramework.framework/Versions/A/XprotectFramework');sec=sections(base);objbase,_=image_text('/usr/lib/libobjc.A.dylib');optaddr,optsize=sections(objbase)['__objc_opt_ro'];opt=rd(optaddr,48);assert struct.unpack_from('<I',opt)[0]==16;selbase=optaddr+struct.unpack_from('<q',opt,40)[0]
+a,n=sec['__objc_methlist'];raw=rd(a,n);pos=0;methods=[];rejected=0;clow,csize=sec['__text']
+while pos+8<=len(raw):
+ flags,count=struct.unpack_from('<II',raw,pos);stride=flags&0xfffc
+ if stride!=12 or count>500 or flags!=0xc000000f:pos+=4;continue
+ for i in range(count):
+  q=pos+8+i*stride;no,to,io=struct.unpack_from('<iii',raw,q);imp=a+q+8+io
+  if clow<=imp<clow+csize:methods.append({'name':string(selbase+no),'implementation':hex(imp)})
+  else:rejected+=1
+ pos+=8+count*stride
+stubs=[]
+for a in [0x1c35b8aa0,0x1c35b8b60,0x1c35b8be0]:
+ w,ld=struct.unpack('<II',rd(a,8));assert w&0x9f00001f==0x90000001 and ld&0xffc003ff==0xf9400021
+ imm=((w>>5)&0x7ffff)*4+((w>>29)&3)
+ if imm&(1<<20):imm-=1<<21
+ slot=(a&~0xfff)+(imm<<12)+(((ld>>10)&0xfff)*8);ptr=struct.unpack('<Q',rd(slot,8))[0]
+ assert next(v for lo,sz,v in slides if lo<=slot<lo+sz)==5
+ assert not ptr>>63 and (ptr>>34)&255==0
+ name=string(cachebase+(ptr&((1<<34)-1)));stubs.append({'stub':hex(a),'selector':name,'slot':hex(slot),'packed_pointer':hex(ptr),'slide_version':5})
+p=B/'pctx01-startup-xprotect-static-observables.json';d=json.loads(p.read_text());assert hashlib.sha256(rd(base,end-base)).hexdigest()==d['evidence'][0]['range_sha256'];d['resolved_methods']=methods;d['rejected_non_code_method_candidates']=rejected;d['resolved_async_objc_stubs']=stubs;d['cache_shared_region_start']=hex(cachebase);d['method_list_limits']='Apple objc_opt_t version16 offset40 resolves optimized selectors; code-range filter excludes protocol/non-code entries; class ownership not inferred.';d['reproducer_sha256']=hashlib.sha256(Path(__file__).read_bytes()).hexdigest();p.write_text(json.dumps(d,indent=2)+'\n');print(json.dumps({'code_methods':len(methods),'stubs':stubs,'service_observation':False}))

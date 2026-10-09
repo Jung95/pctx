@@ -1,0 +1,995 @@
+{
+  "task": "PCTX01-G05-D05",
+  "framework": "/System/Library/PrivateFrameworks/XprotectFramework.framework/Versions/A/XprotectFramework",
+  "text_low": "0x1c35a6000",
+  "text_high": "0x1c35b9200",
+  "source": "Installed arm64e dyld cache map and mapping table; static file reads only",
+  "evidence": [
+    {
+      "cache_file": "dyld_shared_cache_arm64e.01",
+      "cache_mapping_address": "0x180088000",
+      "file_offset": 1129439232,
+      "range_bytes": 78336,
+      "range_sha256": "9190424e931205f6d2818a1b5c701131c2a645622ea9f241f47f007552819de7",
+      "selected_static_strings": [
+        "/Library/Apple/System/Library/CoreServices/XProtect.bundle/Contents/Resources/XProtect.yara",
+        "/Library/Apple/System/Library/CoreServices/XProtect.bundle/Contents/Resources/XProtect2.yara",
+        "/System/Library/CoreServices/XProtect.bundle/Contents/Resources/XProtect.yara",
+        "/System/Library/PrivateFrameworks/yara.framework/Versions/A/yara",
+        "/var/protected/xprotect/XProtect.bundle/Contents/Resources/XProtect.yara",
+        "<XProtectAnalysis: %@>",
+        "<XProtectScan: %@>",
+        "@\"NSObject<OS_dispatch_queue>\"",
+        "@\"YARARule\"",
+        "Added extra yara rules from: %@",
+        "Failed to read supplied YARA rules at:%@ error:%@",
+        "InstallationTime",
+        "No support for async inprocess scans",
+        "No usable yara rules available, failing",
+        "Performing interpreter scanning requires in-process scans",
+        "T@\"NSDate\",&,V_scanTime",
+        "T@\"YARARule\",&,V_matchedRule",
+        "TQ,R,V_scanVersion",
+        "This is a forced rules only scan",
+        "Ti,V_assessmentResult",
+        "XPUserInfoYARAScanErrorCode",
+        "XPUserInfoYARAScanErrorFileSHA256",
+        "XPUserInfoYARAScanErrorPath",
+        "XPUserInfoYARAScanErrorRule",
+        "XPUserInfoYARAScanErrorString",
+        "XProtect.yara",
+        "XProtectAnalysis",
+        "XProtectAnalysisError",
+        "XProtectScan",
+        "XProtectScan XPC connection interrupted",
+        "XProtectScan XPC connection invalidated",
+        "XProtectScan beginAnalysisWithFeedback continueOnError is set to %d",
+        "XProtectScan beginAnalysisWithResultsHandler continueOnError is set to %d",
+        "XProtectScanResult",
+        "XProtectShouldSkipAnalysis",
+        "YARA scan failed with error: %@",
+        "YARARule",
+        "YARAScanner",
+        "^{YR_SCAN_CONTEXT=QQiiQ^v^?^{YR_RULES}^{YR_STRING}^{YR_MEMORY_BLOCK_ITERATOR}^{_YR_HASH_TABLE}^{YR_NOTEBOOK}{_YR_STOPWATCH={mach_timebase_info=II}Q}{RE_FIBER_POOL=i{RE_FIBER_LIST=^{RE_FIBER}^{RE_FIBER}}}^Q^Q^Q^{YR_MATCHES}^{YR_MATCHES}^{YR_PROFILING_INFO}}",
+        "__oslogstring",
+        "_assesmentResult",
+        "_assessmentResult",
+        "_assessment_result",
+        "_evaluationQueue",
+        "_isDataScan",
+        "_isInterpreterScan",
+        "_matchQueues",
+        "_requestedInterpreterScriptScan",
+        "_result",
+        "_resultFound",
+        "_results",
+        "_resultsHandler",
+        "_ruleQueue",
+        "_scanStartTime",
+        "_scanTime",
+        "_scanVersion",
+        "_scan_time",
+        "_scanner",
+        "_system_update_queue",
+        "assessmentResult",
+        "assessmentResult: %d",
+        "beginAnalysisWithDelegate:didEndSelector:contextInfo:",
+        "beginAnalysisWithDelegate:didEndSelector:contextInfo:feedback:",
+        "beginAnalysisWithFeedback:",
+        "beginAnalysisWithHandler:contextInfo:",
+        "beginAnalysisWithHandler:contextInfo:feedback:",
+        "beginAnalysisWithResultsHandler:feedback:",
+        "com.apple.XProtect.assessmentResult2",
+        "com.apple.XprotectFramework.AnalysisService",
+        "com.apple.XprotectFramework.matchQueue",
+        "com.apple.XprotectFramework.ruleQueue",
+        "com.apple.XprotectFramework.syncQueue",
+        "didReceiveProgress:total:",
+        "getPriorityForYaraMatch:",
+        "globalQueue",
+        "initFromYARA:",
+        "initWithFileURL:assessmentResult:signatureVersion:signatureName:scanTime:",
+        "performAnalysisOnFile:withLSProperties:malwareScanOnly:withReply:continueOnError:forcedRulesOnly:",
+        "result",
+        "scanData:",
+        "scanTime",
+        "scanTime: %@",
+        "scanURL:",
+        "scanVersion",
+        "setAssessmentResult:",
+        "setScanTime:",
+        "signposts",
+        "stopScanning",
+        "supplementalYARAFilesInDirectory:",
+        "v16@?0@\"XProtectScanResult\"8",
+        "xp_yara_rule_is_forced:",
+        "xp_yara_rule_is_interpreter:",
+        "xp_yara_rule_is_open_scripting:"
+      ]
+    }
+  ],
+  "service_observation": false,
+  "test_execution": false,
+  "qualification": false,
+  "method_list_limits": "Apple objc_opt_t version16 offset40 resolves optimized selectors; code-range filter excludes protocol/non-code entries; class ownership not inferred.",
+  "text_literal_references": [
+    {
+      "instruction": "0x1c35a8e14",
+      "referenced_address": "0x1c35b3c55",
+      "static_string": "com.apple.XprotectFramework.syncQueue"
+    },
+    {
+      "instruction": "0x1c35a9548",
+      "referenced_address": "0x1c35b3c7b",
+      "static_string": "com.apple.XprotectFramework.matchQueue"
+    },
+    {
+      "instruction": "0x1c35a9588",
+      "referenced_address": "0x1c35b3ca2",
+      "static_string": "com.apple.XprotectFramework.ruleQueue"
+    },
+    {
+      "instruction": "0x1c35afc18",
+      "referenced_address": "0x1c35b4f71",
+      "static_string": "Performing interpreter scanning requires in-process scans"
+    },
+    {
+      "instruction": "0x1c35b0270",
+      "referenced_address": "0x1c35b5014",
+      "static_string": "XProtectScan beginAnalysisWithResultsHandler continueOnError is set to %d"
+    },
+    {
+      "instruction": "0x1c35b04d8",
+      "referenced_address": "0x1c35b4fef",
+      "static_string": "No support for async inprocess scans"
+    }
+  ],
+  "limits": [
+    "Installed static path candidates only; not proof of branch executed for failed owned process.",
+    "XPC service name is an internal endpoint string, not an admitted process identity. No service observation or endpoint invocation.",
+    "Potential inner framework instrumentation not fully enumerated; absence of textual marker not proof no observable exists."
+  ],
+  "syspolicyd_completion_fields": [
+    {
+      "call": "0x10005b438",
+      "selector": "deepPolicyMatch"
+    },
+    {
+      "call": "0x10005b444",
+      "selector": "topLevelPolicyMatch"
+    },
+    {
+      "call": "0x10005b454",
+      "selector": "xpResult"
+    }
+  ],
+  "whole_scan_signpost": {
+    "name": "GatekeeperScan",
+    "begin_emit": "0x10005ad58",
+    "end_emit": "0x10005b638",
+    "same_id_slot": "sp+0x50",
+    "limits": "Whole enclosing scan interval; no separate PolicyScanner/XP boundary established."
+  },
+  "telemetry": {
+    "interval_call": "0x10005b6cc",
+    "submit_call": "0x10005b6f4",
+    "selector": "sendGatekeeperScan:withXprotectResult:withXprotectVersion:withSoftwareCdhash:wasSuccess:isQuarantined:isLibraryLoad:isBundled:withTime:",
+    "limits": "Elapsed scan telemetry candidate, not an independently admitted historical record or phase split. No analytics database read."
+  },
+  "optimized_method_selector_base": {
+    "objc_opt_address": "0x1800d2d00",
+    "version": 16,
+    "relative_offset": 2056731376,
+    "selector_base": "0x1faa467f0",
+    "apple_source": "https://github.com/apple-oss-distributions/dyld/blob/main/include/objc-shared-cache.h"
+  },
+  "resolved_methods": [
+    {
+      "name": "globalQueue",
+      "implementation": "0x1c35a8d9c"
+    },
+    {
+      "name": "supportsSecureCoding",
+      "implementation": "0x1c35ab9e0"
+    },
+    {
+      "name": "supportsSecureCoding",
+      "implementation": "0x1c35b0cc4"
+    },
+    {
+      "name": "supportsSecureCoding",
+      "implementation": "0x1c35a7a88"
+    },
+    {
+      "name": "supportsSecureCoding",
+      "implementation": "0x1c35ae88c"
+    },
+    {
+      "name": "xp_yara_rule_is_open_scripting:",
+      "implementation": "0x1c35ae524"
+    },
+    {
+      "name": "getMatchTypeFromBitmask:",
+      "implementation": "0x1c35ae424"
+    },
+    {
+      "name": "getPriorityForYaraMatch:",
+      "implementation": "0x1c35ae404"
+    },
+    {
+      "name": "xp_yara_rule_is_forced:",
+      "implementation": "0x1c35ae444"
+    },
+    {
+      "name": "xp_yara_rule_is_interpreter:",
+      "implementation": "0x1c35ae4b4"
+    },
+    {
+      "name": "initWithURL:",
+      "implementation": "0x1c35a8590"
+    },
+    {
+      "name": ".cxx_destruct",
+      "implementation": "0x1c35a88d0"
+    },
+    {
+      "name": "nextObject",
+      "implementation": "0x1c35a87a0"
+    },
+    {
+      "name": "dealloc",
+      "implementation": "0x1c35a853c"
+    },
+    {
+      "name": "initWithURL:withErrorHandler:",
+      "implementation": "0x1c35a8598"
+    },
+    {
+      "name": "shouldContinueWith:withError:",
+      "implementation": "0x1c35a86b0"
+    },
+    {
+      "name": "begin",
+      "implementation": "0x1c35a8b28"
+    },
+    {
+      "name": ".cxx_destruct",
+      "implementation": "0x1c35a8cd4"
+    },
+    {
+      "name": "init",
+      "implementation": "0x1c35a8a74"
+    },
+    {
+      "name": "errors",
+      "implementation": "0x1c35a8cc0"
+    },
+    {
+      "name": "assessmentClass",
+      "implementation": "0x1c35a8ccc"
+    },
+    {
+      "name": "_doEvaluation",
+      "implementation": "0x1c35a8b20"
+    },
+    {
+      "name": "assessmentResult",
+      "implementation": "0x1c35a8bf8"
+    },
+    {
+      "name": "initWithPath:assessmentClass:",
+      "implementation": "0x1c35a8a68"
+    },
+    {
+      "name": "initWithPath:withData:assessmentClass:",
+      "implementation": "0x1c35a8924"
+    },
+    {
+      "name": ".cxx_destruct",
+      "implementation": "0x1c35ab3f8"
+    },
+    {
+      "name": "cancelRequested",
+      "implementation": "0x1c35ab3d4"
+    },
+    {
+      "name": "dealloc",
+      "implementation": "0x1c35a9f40"
+    },
+    {
+      "name": "forcedRulesOnly",
+      "implementation": "0x1c35ab3c0"
+    },
+    {
+      "name": "setMatchedRule:",
+      "implementation": "0x1c35ab398"
+    },
+    {
+      "name": "_doEvaluation",
+      "implementation": "0x1c35a9fac"
+    },
+    {
+      "name": "initWithData:assessmentClass:",
+      "implementation": "0x1c35a8e48"
+    },
+    {
+      "name": "initWithPath:assessmentClass:",
+      "implementation": "0x1c35a91c4"
+    },
+    {
+      "name": "initWithPath:assessmentClass:feedback:",
+      "implementation": "0x1c35a91dc"
+    },
+    {
+      "name": "initWithPath:withExtraRules:assessmentClass:",
+      "implementation": "0x1c35a91cc"
+    },
+    {
+      "name": "initWithPath:withExtraRules:forcedRulesOnly:assessmentClass:feedback:",
+      "implementation": "0x1c35a9274"
+    },
+    {
+      "name": "initWithRuleString:withExtraRules:withURL:withData:forcedRulesOnly:withAssessmentClass:feedback:",
+      "implementation": "0x1c35a93a4"
+    },
+    {
+      "name": "initWithRuleString:withExtraRules:withURL:withData:withAssessmentClass:feedback:",
+      "implementation": "0x1c35a9374"
+    },
+    {
+      "name": "initWithRuleString:withURL:withAssessmentClass:",
+      "implementation": "0x1c35a9340"
+    },
+    {
+      "name": "initWithRuleString:withURL:withAssessmentClass:feedback:",
+      "implementation": "0x1c35a9348"
+    },
+    {
+      "name": "initWithRuleString:withURL:withData:withAssessmentClass:feedback:",
+      "implementation": "0x1c35a9358"
+    },
+    {
+      "name": "matchedRule",
+      "implementation": "0x1c35ab388"
+    },
+    {
+      "name": "matchedURL",
+      "implementation": "0x1c35ab3a4"
+    },
+    {
+      "name": "scanVersion",
+      "implementation": "0x1c35ab378"
+    },
+    {
+      "name": "setCancelRequested:",
+      "implementation": "0x1c35ab3e8"
+    },
+    {
+      "name": "setMatchedURL:",
+      "implementation": "0x1c35ab3b4"
+    },
+    {
+      "name": ".cxx_destruct",
+      "implementation": "0x1c35a8d58"
+    },
+    {
+      "name": "eval",
+      "implementation": "0x1c35a8d30"
+    },
+    {
+      "name": "setEval:",
+      "implementation": "0x1c35a8d3c"
+    },
+    {
+      "name": "currentURL",
+      "implementation": "0x1c35a8d44"
+    },
+    {
+      "name": "setCurrentURL:",
+      "implementation": "0x1c35a8d50"
+    },
+    {
+      "name": "cdhash",
+      "implementation": "0x1c35abc40"
+    },
+    {
+      "name": ".cxx_destruct",
+      "implementation": "0x1c35abc68"
+    },
+    {
+      "name": "debugDescription",
+      "implementation": "0x1c35ab968"
+    },
+    {
+      "name": "description",
+      "implementation": "0x1c35ab898"
+    },
+    {
+      "name": "encodeWithCoder:",
+      "implementation": "0x1c35abb74"
+    },
+    {
+      "name": "redactedDescription",
+      "implementation": "0x1c35ab95c"
+    },
+    {
+      "name": "initWithCoder:",
+      "implementation": "0x1c35ab9e8"
+    },
+    {
+      "name": "team_identifier",
+      "implementation": "0x1c35abc58"
+    },
+    {
+      "name": "executable_url",
+      "implementation": "0x1c35abc38"
+    },
+    {
+      "name": "initWithPath:withCdhash:withSigningID:withTeamID:withSHA256Sum:withNotarization:",
+      "implementation": "0x1c35ab7b8"
+    },
+    {
+      "name": "initWithURL:withCdhash:withSigningID:withTeamID:withSHA256Sum:withNotarization:",
+      "implementation": "0x1c35ab680"
+    },
+    {
+      "name": "notarized",
+      "implementation": "0x1c35abc60"
+    },
+    {
+      "name": "sha256hash",
+      "implementation": "0x1c35abc48"
+    },
+    {
+      "name": "signing_identifier",
+      "implementation": "0x1c35abc50"
+    },
+    {
+      "name": "initWithURL:",
+      "implementation": "0x1c35aeb88"
+    },
+    {
+      "name": ".cxx_destruct",
+      "implementation": "0x1c35af788"
+    },
+    {
+      "name": "setFileURL:",
+      "implementation": "0x1c35af780"
+    },
+    {
+      "name": "fileURL",
+      "implementation": "0x1c35af774"
+    },
+    {
+      "name": "description",
+      "implementation": "0x1c35af6f8"
+    },
+    {
+      "name": "beginAnalysisWithDelegate:didEndSelector:contextInfo:",
+      "implementation": "0x1c35aef68"
+    },
+    {
+      "name": "beginAnalysisWithDelegate:didEndSelector:contextInfo:feedback:",
+      "implementation": "0x1c35aef70"
+    },
+    {
+      "name": "beginAnalysisWithHandler:contextInfo:",
+      "implementation": "0x1c35af138"
+    },
+    {
+      "name": "beginAnalysisWithHandler:contextInfo:feedback:",
+      "implementation": "0x1c35af140"
+    },
+    {
+      "name": "didReceiveFeedbackOfType:withInformation:",
+      "implementation": "0x1c35af540"
+    },
+    {
+      "name": "didReceiveProgress:total:",
+      "implementation": "0x1c35af6bc"
+    },
+    {
+      "name": "initWithURL:withProperties:",
+      "implementation": "0x1c35aeb90"
+    },
+    {
+      "name": "init",
+      "implementation": "0x1c35b1068"
+    },
+    {
+      "name": "reportBehavioralDetection:",
+      "implementation": "0x1c35b15e4"
+    },
+    {
+      "name": "reportEvent:withData:",
+      "implementation": "0x1c35b1d50"
+    },
+    {
+      "name": "reportGKAssessmentData:",
+      "implementation": "0x1c35b10a0"
+    },
+    {
+      "name": "initWithURL:",
+      "implementation": "0x1c35af828"
+    },
+    {
+      "name": ".cxx_destruct",
+      "implementation": "0x1c35b0ae8"
+    },
+    {
+      "name": "setFileURL:",
+      "implementation": "0x1c35b0aac"
+    },
+    {
+      "name": "fileURL",
+      "implementation": "0x1c35b0aa0"
+    },
+    {
+      "name": "description",
+      "implementation": "0x1c35b0a24"
+    },
+    {
+      "name": "initWithData:",
+      "implementation": "0x1c35afb4c"
+    },
+    {
+      "name": "init",
+      "implementation": "0x1c35af7f0"
+    },
+    {
+      "name": "continueOnError",
+      "implementation": "0x1c35b0ac4"
+    },
+    {
+      "name": "interpreterType",
+      "implementation": "0x1c35b0abc"
+    },
+    {
+      "name": "onlyForcedRules",
+      "implementation": "0x1c35b0ad8"
+    },
+    {
+      "name": "beginAnalysisWithFeedback:",
+      "implementation": "0x1c35afc3c"
+    },
+    {
+      "name": "beginAnalysisWithResultsHandler:feedback:",
+      "implementation": "0x1c35b0184"
+    },
+    {
+      "name": "didReceiveFeedbackOfType:withInformation:",
+      "implementation": "0x1c35b089c"
+    },
+    {
+      "name": "didReceiveProgress:total:",
+      "implementation": "0x1c35b08f0"
+    },
+    {
+      "name": "requireInProcess",
+      "implementation": "0x1c35b0ab4"
+    },
+    {
+      "name": "setContinueOnError:",
+      "implementation": "0x1c35b0ad0"
+    },
+    {
+      "name": "setInterpreterType:",
+      "implementation": "0x1c35afbb0"
+    },
+    {
+      "name": "setOnlyForcedRules:",
+      "implementation": "0x1c35b0ae0"
+    },
+    {
+      "name": "setRequireInProcess:",
+      "implementation": "0x1c35afbc4"
+    },
+    {
+      "name": ".cxx_destruct",
+      "implementation": "0x1c35b0ff4"
+    },
+    {
+      "name": "setFileURL:",
+      "implementation": "0x1c35b0f78"
+    },
+    {
+      "name": "fileURL",
+      "implementation": "0x1c35b0f6c"
+    },
+    {
+      "name": "setSignatureName:",
+      "implementation": "0x1c35b0fb0"
+    },
+    {
+      "name": "description",
+      "implementation": "0x1c35b0c70"
+    },
+    {
+      "name": "encodeWithCoder:",
+      "implementation": "0x1c35b0e94"
+    },
+    {
+      "name": "signatureName",
+      "implementation": "0x1c35b0fa4"
+    },
+    {
+      "name": "initWithCoder:",
+      "implementation": "0x1c35b0ccc"
+    },
+    {
+      "name": "errors",
+      "implementation": "0x1c35b0fe0"
+    },
+    {
+      "name": "setErrors:",
+      "implementation": "0x1c35b0fec"
+    },
+    {
+      "name": "scanTime",
+      "implementation": "0x1c35b0fb8"
+    },
+    {
+      "name": "setScanTime:",
+      "implementation": "0x1c35b0fc4"
+    },
+    {
+      "name": "signatureVersion",
+      "implementation": "0x1c35b0f90"
+    },
+    {
+      "name": "setMatchedRule:",
+      "implementation": "0x1c35b0fd8"
+    },
+    {
+      "name": "assessmentResult",
+      "implementation": "0x1c35b0f80"
+    },
+    {
+      "name": "initWithFileURL:assessmentResult:signatureVersion:signatureName:scanTime:",
+      "implementation": "0x1c35b0b68"
+    },
+    {
+      "name": "matchedRule",
+      "implementation": "0x1c35b0fcc"
+    },
+    {
+      "name": "setAssessmentResult:",
+      "implementation": "0x1c35b0f88"
+    },
+    {
+      "name": "setSignatureVersion:",
+      "implementation": "0x1c35b0f9c"
+    },
+    {
+      "name": ".cxx_destruct",
+      "implementation": "0x1c35ad260"
+    },
+    {
+      "name": "forceUpdate",
+      "implementation": "0x1c35ac8b4"
+    },
+    {
+      "name": "init",
+      "implementation": "0x1c35abd78"
+    },
+    {
+      "name": "doUpdate:",
+      "implementation": "0x1c35acde0"
+    },
+    {
+      "name": "doUpdate",
+      "implementation": "0x1c35ac8ac"
+    },
+    {
+      "name": "fetchAvailableUpdateInfo:",
+      "implementation": "0x1c35ac8bc"
+    },
+    {
+      "name": "prereleaseUpdate",
+      "implementation": "0x1c35ac490"
+    },
+    {
+      "name": "updateWithForceOnline:",
+      "implementation": "0x1c35abf7c"
+    },
+    {
+      "name": "initWithURL:",
+      "implementation": "0x1c35b1eb4"
+    },
+    {
+      "name": ".cxx_destruct",
+      "implementation": "0x1c35b2858"
+    },
+    {
+      "name": "description",
+      "implementation": "0x1c35b27d0"
+    },
+    {
+      "name": "version",
+      "implementation": "0x1c35b2848"
+    },
+    {
+      "name": "init",
+      "implementation": "0x1c35b1dd0"
+    },
+    {
+      "name": "url",
+      "implementation": "0x1c35b2840"
+    },
+    {
+      "name": "installationDate",
+      "implementation": "0x1c35b2850"
+    },
+    {
+      "name": "anyForcedRulesPresent",
+      "implementation": "0x1c35b26c4"
+    },
+    {
+      "name": "getResource:",
+      "implementation": "0x1c35b20e8"
+    },
+    {
+      "name": "getResourcesOfType:",
+      "implementation": "0x1c35b2168"
+    },
+    {
+      "name": "supplementalYARAFilesInDirectory:",
+      "implementation": "0x1c35b23b4"
+    },
+    {
+      "name": ".cxx_destruct",
+      "implementation": "0x1c35a7de0"
+    },
+    {
+      "name": "description",
+      "implementation": "0x1c35a7c70"
+    },
+    {
+      "name": "encodeWithCoder:",
+      "implementation": "0x1c35a7bd4"
+    },
+    {
+      "name": "version",
+      "implementation": "0x1c35a7cb0"
+    },
+    {
+      "name": "setDate:",
+      "implementation": "0x1c35a7d04"
+    },
+    {
+      "name": "setVersion:",
+      "implementation": "0x1c35a7cb8"
+    },
+    {
+      "name": "initWithCoder:",
+      "implementation": "0x1c35a7a90"
+    },
+    {
+      "name": "date",
+      "implementation": "0x1c35a7cfc"
+    },
+    {
+      "name": "previousVersion",
+      "implementation": "0x1c35a7d94"
+    },
+    {
+      "name": "setPreviousVersion:",
+      "implementation": "0x1c35a7d9c"
+    },
+    {
+      "name": "initWithVersion:andDate:",
+      "implementation": "0x1c35a78e0"
+    },
+    {
+      "name": "initWithVersion:andDate:andPreviousVersion:andSelectedSource:",
+      "implementation": "0x1c35a7988"
+    },
+    {
+      "name": "selectedSource",
+      "implementation": "0x1c35a7d48"
+    },
+    {
+      "name": "setSelectedSource:",
+      "implementation": "0x1c35a7d50"
+    },
+    {
+      "name": "stopScanning",
+      "implementation": "0x1c35ae87c"
+    },
+    {
+      "name": ".cxx_destruct",
+      "implementation": "0x1c35aeb2c"
+    },
+    {
+      "name": "encodeWithCoder:",
+      "implementation": "0x1c35aea14"
+    },
+    {
+      "name": "init",
+      "implementation": "0x1c35ae5a8"
+    },
+    {
+      "name": "initWithCoder:",
+      "implementation": "0x1c35ae894"
+    },
+    {
+      "name": "priority",
+      "implementation": "0x1c35aeaec"
+    },
+    {
+      "name": "matchType",
+      "implementation": "0x1c35aeaf4"
+    },
+    {
+      "name": "plugin",
+      "implementation": "0x1c35aeb1c"
+    },
+    {
+      "name": "samplingUUID",
+      "implementation": "0x1c35aeb24"
+    },
+    {
+      "name": "firstLaunchOnly",
+      "implementation": "0x1c35aeb04"
+    },
+    {
+      "name": "forcedRule",
+      "implementation": "0x1c35aeb0c"
+    },
+    {
+      "name": "initFromYARA:",
+      "implementation": "0x1c35ae5c4"
+    },
+    {
+      "name": "remediator",
+      "implementation": "0x1c35aeb14"
+    },
+    {
+      "name": "ruleName",
+      "implementation": "0x1c35aeafc"
+    },
+    {
+      "name": "dealloc",
+      "implementation": "0x1c35a7890"
+    },
+    {
+      "name": "initWithRules:withCallback:withData:",
+      "implementation": "0x1c35a71c8"
+    },
+    {
+      "name": "scanData:",
+      "implementation": "0x1c35a75e8"
+    },
+    {
+      "name": "scanURL:",
+      "implementation": "0x1c35a7264"
+    }
+  ],
+  "rejected_non_code_method_candidates": 13,
+  "resolved_async_objc_stubs": [
+    {
+      "stub": "0x1c35b8aa0",
+      "selector": "performAnalysisOnFile:withLSProperties:malwareScanOnly:withReply:continueOnError:forcedRulesOnly:",
+      "slot": "0x1e7cb4c18",
+      "packed_pointer": "0x1000007c9f2959",
+      "slide_version": 5
+    },
+    {
+      "stub": "0x1c35b8b60",
+      "selector": "remoteObjectProxy",
+      "slot": "0x1e7cb4c48",
+      "packed_pointer": "0x1000007b498df0",
+      "slide_version": 5
+    },
+    {
+      "stub": "0x1c35b8be0",
+      "selector": "resourceValuesForKeys:error:",
+      "slot": "0x1e7cb4c68",
+      "packed_pointer": "0x1000007ba4acf0",
+      "slide_version": 5
+    }
+  ],
+  "cache_shared_region_start": "0x180000000",
+  "reproducer_sha256": "75809d0fb9c198b36125fa44d150debd4e955e2a37dc4905d2395d2056ffdf15",
+  "async_path": {
+    "method": "beginAnalysisWithResultsHandler:feedback:",
+    "implementation": "0x1c35b0184",
+    "require_in_process_getter": "0x1c35b0ab4",
+    "field_offset": "0x42",
+    "true_branch": "0x1c35b01c8\u20130x1c35b01f4 rejects async and returns false",
+    "analysis_block": "0x1c35b07b0",
+    "remote_proxy_call": "0x1c35b07cc",
+    "analysis_request_call": "0x1c35b07f4",
+    "limits": "Statically admitted async path sends remote analysis request; no proof failed child followed it, remote process identity or delay."
+  },
+  "primary_format_sources": [
+    "https://github.com/apple-oss-distributions/dyld/blob/main/include/objc-shared-cache.h",
+    "https://github.com/apple-oss-distributions/dyld/blob/main/include/mach-o/fixup-chains.h"
+  ],
+  "static_launchd_endpoint_candidates": [
+    {
+      "plist": "/Library/Apple/System/Library/LaunchDaemons/com.apple.XprotectFramework.PluginService.plist",
+      "Label": "com.apple.XprotectFramework.PluginService",
+      "Program": "/Library/Apple/System/Library/CoreServices/XProtect.app/Contents/XPCServices/XProtectPluginService.xpc/Contents/MacOS/XProtectPluginService",
+      "ProgramArguments": null,
+      "MachServices": [
+        "com.apple.XprotectFramework.PluginService"
+      ]
+    },
+    {
+      "plist": "/System/Library/LaunchDaemons/com.apple.security.xprotectd.plist",
+      "Label": "com.apple.security.xprotectd",
+      "Program": "/usr/libexec/xprotectd",
+      "ProgramArguments": null,
+      "MachServices": []
+    },
+    {
+      "plist": "/System/Library/LaunchDaemons/com.apple.security.syspolicy.plist",
+      "Label": "com.apple.security.syspolicy",
+      "Program": null,
+      "ProgramArguments": [
+        "/usr/libexec/syspolicyd"
+      ],
+      "MachServices": [
+        "com.apple.security.AppleSystemPolicy.mig",
+        "com.apple.security.syspolicy.kext",
+        "com.apple.security.syspolicy.exec",
+        "com.apple.security.syspolicy"
+      ]
+    }
+  ],
+  "launchd_limits": "Static declared endpoint/program only, no launchctl/process inventory or admission of another live process.",
+  "bundled_analysis_endpoint": {
+    "bundle_id": "com.apple.XprotectFramework.AnalysisService",
+    "bundle_executable": "XprotectService",
+    "xpc_service": {
+      "ServiceType": "Application"
+    },
+    "binary": "/System/Library/PrivateFrameworks/XprotectFramework.framework/Versions/A/XPCServices/XprotectService.xpc/Contents/MacOS/XprotectService",
+    "binary_sha256": "d8cf6a1ac365a6c81ab695a6ec62ed914df54926497e8ea1b43315265ac7ba8c",
+    "selected_static_strings": [
+      "Error parsing Mach-O file %@ for dylib scan",
+      "Error performing analysis: %@",
+      "Failed to read supplied YARA rules at:%@ error:%@",
+      "No support for async inprocess scans",
+      "Performing interpreter scanning requires in-process scans",
+      "T@\"NSDate\",&,V_scanTime",
+      "XPAssessment performAnalysisOnFileImpl continueOnError: %d forcedRulesOnly: %d",
+      "XPUserInfoYARAScanErrorCode",
+      "XPUserInfoYARAScanErrorFileSHA256",
+      "XPUserInfoYARAScanErrorPath",
+      "XPUserInfoYARAScanErrorRule",
+      "XPUserInfoYARAScanErrorString",
+      "XProtectScan beginAnalysisWithFeedback continueOnError is set to %d",
+      "XProtectScan beginAnalysisWithResultsHandler continueOnError is set to %d",
+      "Xprotect is performing a direct malware and dylib scan: %@",
+      "YARA scan failed with error: %@",
+      "YARAScanError",
+      "^{YR_SCAN_CONTEXT=QQiiQ^v^?^{YR_RULES}^{YR_STRING}^{YR_MEMORY_BLOCK_ITERATOR}^{_YR_HASH_TABLE}^{YR_NOTEBOOK}{_YR_STOPWATCH={mach_timebase_info=II}Q}{RE_FIBER_POOL=i{RE_FIBER_LIST=^{RE_FIBER}^{RE_FIBER}}}^Q^Q^Q^{YR_MATCHES}^{YR_MATCHES}^{YR_PROFILING_INFO}}",
+      "_XPUserInfoYARAScanErrorCode",
+      "_XPUserInfoYARAScanErrorFileSHA256",
+      "_XPUserInfoYARAScanErrorPath",
+      "_XPUserInfoYARAScanErrorRule",
+      "_XPUserInfoYARAScanErrorString",
+      "_performAlwaysScanCheckWithCode:",
+      "_scanStartTime",
+      "_scanTime",
+      "_scan_time",
+      "_yr_scanner_last_error_rule",
+      "_yr_scanner_last_error_string",
+      "beginAnalysisWithDelegate:didEndSelector:contextInfo:",
+      "beginAnalysisWithDelegate:didEndSelector:contextInfo:feedback:",
+      "beginAnalysisWithFeedback:",
+      "beginAnalysisWithHandler:contextInfo:",
+      "beginAnalysisWithHandler:contextInfo:feedback:",
+      "beginAnalysisWithResultsHandler:feedback:",
+      "initWithFileURL:assessmentResult:signatureVersion:signatureName:scanTime:",
+      "performAnalysisOnFile:withLSProperties:malwareScanOnly:withReply:continueOnError:forcedRulesOnly:",
+      "performAnalysisOnFileImpl:withLSProperties:malwareScanOnly:withReply:continueOnError:forcedRulesOnly:",
+      "scanTime",
+      "scanTime: %@",
+      "setScanTime:"
+    ]
+  },
+  "bundled_analysis_endpoint_limit": "Identifier/path identified from static bundle metadata, not running PID/start identity or evidence request reached service."
+}

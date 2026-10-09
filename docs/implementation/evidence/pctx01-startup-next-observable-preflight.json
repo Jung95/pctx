@@ -1,0 +1,37 @@
+{
+  "task": "PCTX01-G05-D05",
+  "hypothesis": "Diagnostic driver repeats own-file preparation after listener readiness, reducing finite capture coverage. Measure only owned static file reads, no test/service.",
+  "measurements": [
+    {
+      "file": "src/query_process.rs",
+      "bytes": 42000,
+      "sha256": "bf661f4b8d0ed472585244ada4ac0e946221de364c100039cd20aee56fd8d0d2",
+      "elapsed_ns": 73417
+    },
+    {
+      "file": "tests/project_deadline.rs",
+      "bytes": 23128,
+      "sha256": "8b9fbc97fbd5acaf612b2d75b94cf810faa2b61614b654495082462b1941a8dc",
+      "elapsed_ns": 213750
+    },
+    {
+      "file": "Cargo.lock",
+      "bytes": 30874,
+      "sha256": "f96362897990caba560793601bc9fca08cef5c977907bb06889d5595d2acd7b0",
+      "elapsed_ns": 194292
+    },
+    {
+      "file": "/Users/dev/PCTX/target/debug/deps/project_deadline-f7e8b9d913251d84",
+      "bytes": 13963456,
+      "sha256": "291d55fbd512aa3155a53995b42394aad07b3badce20abbf76e85e1192fc56eb",
+      "elapsed_ns": 8733000
+    }
+  ],
+  "limits": [
+    "One warm-cache measurement cannot attribute previous4.7s prelaunch gap.",
+    "Prepared private source/build log removed; previous preparatory cost cannot be reproduced exactly."
+  ],
+  "service_observation": false,
+  "test_execution": false,
+  "qualification": false
+}

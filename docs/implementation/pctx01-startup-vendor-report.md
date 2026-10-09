@@ -1,5 +1,17 @@
 # macOS script startup: minimal evidence report
 
+## Internal observable review — current, 2026-10-09
+
+PCTX01-G05-D05 remains product_failure,33/40 details,0/10 gates. Static code
+confirms scan-complete numeric fields are results,not durations; GatekeeperScan
+and telemetry cover whole scans. Resolved installed XprotectFramework code maps async
+remoteObjectProxy→analysis request; bundled XprotectService endpoint ID matches.
+This remains static path evidence,not the failed child's executed-path proof.
+No test/service query/admin/security change; temporary static extracts removed.
+Next within G05-D05: map bundled analysis request/dispatch/reply implementation
+for inner observables; consumed operational scopes stay closed.
+[Findings and limits](evidence/pctx01-startup-next-observable-review.md).
+
 ## Live policy-stage capture — current, 2026-10-09
 
 PCTX01-G05-D05 remains product_failure; 33/40 details,0/10 whole gates.
