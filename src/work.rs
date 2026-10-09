@@ -406,12 +406,22 @@ fn conflict(code: &str, msg: &str) -> Error {
 fn invalid(msg: &str) -> Error {
     Error::new("INVALID_ARGUMENT", msg, 2)
 }
-fn parse_file<T: serde::de::DeserializeOwned>(p: &PathBuf) -> Result<T> {
+fn parse_file<T: serde::de::DeserializeOwned>(
+    p: &PathBuf,
+    deadline: Option<crate::deadline::Deadline>,
+) -> Result<T> {
     let m = std::fs::metadata(p)?;
     if m.len() > 1048576 {
         return Err(invalid("Input JSON exceeds one MiB"));
     }
-    let mut value: Value = serde_json::from_slice(&std::fs::read(p)?)?;
+    let bytes = crate::input::bounded_file_bytes(p, 1048576, deadline).map_err(|e| {
+        if e.code == "FILE_TOO_LARGE" {
+            invalid("Input JSON exceeds one MiB")
+        } else {
+            e
+        }
+    })?;
+    let mut value: Value = serde_json::from_slice(&bytes)?;
     sanitize(&mut value);
     Ok(serde_json::from_value(value)?)
 }
@@ -1022,7 +1032,7 @@ fn task_command(project: &Project, db: &Connection, command: &TaskCommand) -> Re
             from_file,
             idempotency_key,
         } => {
-            let d: TaskDefinition = parse_file(from_file)?;
+            let d: TaskDefinition = parse_file(from_file, project.deadline)?;
             validate(&d)?;
             let request = hash(serde_json::to_vec(&d)?);
             if let Some(key) = idempotency_key
@@ -1072,7 +1082,7 @@ fn task_command(project: &Project, db: &Connection, command: &TaskCommand) -> Re
         } => {
             let t = task(db, name)?;
             expect(&t, Some(*expect_revision))?;
-            let d: TaskDefinition = parse_file(from_file)?;
+            let d: TaskDefinition = parse_file(from_file, project.deadline)?;
             validate(&d)?;
             if t.state == "done" || t.state == "cancelled" {
                 return Err(conflict("REVISION_CONFLICT", "Reopen task before editing"));
@@ -1556,7 +1566,7 @@ fn check_command(project: &Project, db: &Connection, command: &CheckCommand) -> 
     match command {
  CheckCommand::Plan{..}|CheckCommand::Run{..}=>unreachable!("Runner dispatch precedes control transaction"),
  CheckCommand::Begin{task:name,key,run}=>{let t=task(db,name)?;let (run_task,_,_)=lease(db,run,None,project)?;if run_task!=t.id{return Err(conflict("LEASE_REVOKED","Run belongs to another task"));}let c=t.def.checks.iter().find(|c|&c.key==key).ok_or_else(||invalid("Check key not defined"))?;let target=fingerprint(project,&t.def,Some(c))?;let check=id("CHECK");db.execute("INSERT INTO checks VALUES(?1,?2,?3,?4,?5,?6,?7,'running',NULL,?8)",params![check,t.id,key,run,t.def_rev,target,project.policy_hash(),now()])?;let e=event(db,&t.id,"check_begun",&json!({"check_id":check,"key":key,"target":target}))?;Ok(json!({"check_id":check,"artifact_fingerprint":target,"event":e}))},
- CheckCommand::Record{check,from_file}=>{let report:CheckReport=parse_file(from_file)?;if report.source=="runner_observed"{return Err(invalid("External report cannot claim runner-observed provenance"));}record_check_report(project,db,check,report,false,None)},
+ CheckCommand::Record{check,from_file}=>{let report:CheckReport=parse_file(from_file,project.deadline)?;if report.source=="runner_observed"{return Err(invalid("External report cannot claim runner-observed provenance"));}record_check_report(project,db,check,report,false,None)},
  CheckCommand::List{task:name}=>{let task_id=name.as_ref().map(|name|task(db,name).map(|t|t.id)).transpose()?;let mut s=db.prepare("SELECT id,task,key,status,target,report FROM checks WHERE ?1 IS NULL OR task=?1 ORDER BY rowid")?;let checks=collect_rows(project, db, s.query_map([task_id],|r|Ok(json!({"check_id":r.get::<_,String>(0)?,"task_id":r.get::<_,String>(1)?,"key":r.get::<_,String>(2)?,"result":r.get::<_,String>(3)?,"target":r.get::<_,String>(4)?,"report":r.get::<_,Option<String>>(5)?})))?)?;Ok(json!({"checks":checks}))},
  CheckCommand::Show{check}=>db.query_row("SELECT id,task,key,status,target,report FROM checks WHERE id=?1",[check],|r|Ok(json!({"check_id":r.get::<_,String>(0)?,"task_id":r.get::<_,String>(1)?,"key":r.get::<_,String>(2)?,"result":r.get::<_,String>(3)?,"target":r.get::<_,String>(4)?,"report":r.get::<_,Option<String>>(5)?}))).optional()?.ok_or_else(||invalid("Check not found")),
 }
@@ -1764,7 +1774,15 @@ fn control_command(project: &Project, command: &ControlCommand) -> Result<Value>
             if std::fs::metadata(input)?.len() > 268435456 {
                 return Err(invalid("Control archive exceeds 256 MiB"));
             }
-            let archive: BackupArchive = serde_json::from_slice(&std::fs::read(input)?)?;
+            let bytes = crate::input::bounded_file_bytes(input, 268435456, project.deadline)
+                .map_err(|e| {
+                    if e.code == "FILE_TOO_LARGE" {
+                        invalid("Control archive exceeds 256 MiB")
+                    } else {
+                        e
+                    }
+                })?;
+            let archive: BackupArchive = serde_json::from_slice(&bytes)?;
             if archive.schema_version != 1
                 || archive.project_id != project.project_id
                 || archive.database_hash != hash(&archive.database)

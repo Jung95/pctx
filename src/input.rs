@@ -22,6 +22,71 @@ use std::{
 pub const MAX_TASK_BYTES: usize = 1024 * 1024;
 static STDIN_OWNER: Mutex<()> = Mutex::new(());
 
+/// Read an explicit regular file under its caller's byte cap and existing
+/// optional deadline. A metadata check alone cannot bound growth during reading.
+/// This treats '-' as a literal filename; stdin is a separate transport.
+pub fn bounded_file_bytes(
+    path: &Path,
+    limit: usize,
+    deadline: Option<Deadline>,
+) -> Result<Vec<u8>> {
+    bounded_file_bytes_observed(path, limit, deadline, || Ok(()))
+}
+fn bounded_file_bytes_observed(
+    path: &Path,
+    limit: usize,
+    deadline: Option<Deadline>,
+    observe: impl FnOnce() -> Result<()>,
+) -> Result<Vec<u8>> {
+    let check = || deadline.map_or(Ok(()), Deadline::check);
+    check()?;
+    let bound = limit
+        .checked_add(1)
+        .ok_or_else(|| Error::new("INVALID_ARGUMENT", "Input limit exceeds supported range", 2))?;
+    let mut options = fs::OpenOptions::new();
+    options.read(true);
+    #[cfg(unix)]
+    {
+        use std::os::unix::fs::OpenOptionsExt;
+        options.custom_flags(libc::O_NONBLOCK);
+    }
+    let mut file = options.open(path)?;
+    check()?;
+    let metadata = file.metadata()?;
+    check()?;
+    if !metadata.is_file() {
+        return Err(Error::new(
+            "INVALID_ARGUMENT",
+            "Input must be a regular file",
+            2,
+        ));
+    }
+    let overflow = || Error::new("FILE_TOO_LARGE", "Explicit input exceeds byte limit", 2);
+    if metadata.len() > limit as u64 {
+        return Err(overflow());
+    }
+    observe()?;
+    let mut bytes = Vec::new();
+    let mut chunk = [0; 8192];
+    loop {
+        check()?;
+        let capacity = chunk.len().min(bound - bytes.len());
+        let read = file.read(&mut chunk[..capacity]);
+        check()?;
+        match read {
+            Ok(0) => return Ok(bytes),
+            Ok(count) => {
+                bytes.extend_from_slice(&chunk[..count]);
+                if bytes.len() > limit {
+                    return Err(overflow());
+                }
+            }
+            Err(e) if e.kind() == std::io::ErrorKind::Interrupted => {}
+            Err(e) => return Err(e.into()),
+        }
+    }
+}
+
 fn too_large() -> Error {
     Error::new("FILE_TOO_LARGE", "Task document exceeds limit", 2)
 }
@@ -694,6 +759,81 @@ fn stdin_bytes(_: Deadline) -> Result<Vec<u8>> {
 mod identity_tests {
     use super::*;
     use crate::project::{Config, ProjectConfig};
+
+    #[test]
+    fn explicit_file_cap_detects_growth_after_metadata_at_each_caller_limit() {
+        for limit in [65536, 256 * 1024, 1024 * 1024] {
+            let temp = tempfile::tempdir().unwrap();
+            let path = temp.path().join("input");
+            fs::write(&path, vec![b'x'; limit]).unwrap();
+            assert_eq!(bounded_file_bytes(&path, limit, None).unwrap().len(), limit);
+            let error = bounded_file_bytes_observed(&path, limit, None, || {
+                use std::io::Write;
+                fs::OpenOptions::new()
+                    .append(true)
+                    .open(&path)?
+                    .write_all(b"growth")?;
+                Ok(())
+            })
+            .unwrap_err();
+            assert_eq!((error.code.as_str(), error.exit), ("FILE_TOO_LARGE", 2));
+            assert_eq!(fs::metadata(&path).unwrap().len(), (limit + 6) as u64);
+        }
+    }
+
+    #[test]
+    fn explicit_file_cap_rejects_large_archive_before_read_and_keeps_original_expiry() {
+        let temp = tempfile::tempdir().unwrap();
+        let path = temp.path().join("archive");
+        fs::File::create(&path).unwrap().set_len(268435457).unwrap();
+        let error = bounded_file_bytes_observed(&path, 268435456, None, || {
+            panic!("Oversize archive reached body")
+        })
+        .unwrap_err();
+        assert_eq!((error.code.as_str(), error.exit), ("FILE_TOO_LARGE", 2));
+        let expired = Deadline::from_instant(std::time::Instant::now() - Duration::from_secs(1));
+        let original = expired.instant();
+        let error = bounded_file_bytes(&temp.path().join("missing"), 1, Some(expired)).unwrap_err();
+        assert_eq!((error.code.as_str(), error.exit), ("TIMEOUT", 7));
+        assert_eq!(expired.instant(), original);
+        fs::write(&path, b"input").unwrap();
+        let deadline = Deadline::from_millis(1).unwrap();
+        let original = deadline.instant();
+        let error = bounded_file_bytes_observed(&path, 16, Some(deadline), || {
+            std::thread::sleep(Duration::from_millis(5));
+            Ok(())
+        })
+        .unwrap_err();
+        assert_eq!((error.code.as_str(), error.exit), ("TIMEOUT", 7));
+        assert_eq!(deadline.instant(), original);
+    }
+
+    #[test]
+    fn explicit_file_transport_preserves_literal_dash_and_regular_file_symlink_semantics() {
+        let temp = tempfile::tempdir().unwrap();
+        let path = temp.path().join("-");
+        fs::write(&path, b"literal filename").unwrap();
+        assert_eq!(
+            bounded_file_bytes(&path, 32, None).unwrap(),
+            b"literal filename"
+        );
+        let error = bounded_file_bytes(temp.path(), 32, None).unwrap_err();
+        assert_eq!((error.code.as_str(), error.exit), ("INVALID_ARGUMENT", 2));
+        #[cfg(unix)]
+        {
+            let alias = temp.path().join("alias");
+            std::os::unix::fs::symlink(&path, &alias).unwrap();
+            assert_eq!(
+                bounded_file_bytes(&alias, 32, None).unwrap(),
+                b"literal filename"
+            );
+            let fifo = temp.path().join("fifo");
+            let name = std::ffi::CString::new(fifo.as_os_str().as_encoded_bytes()).unwrap();
+            assert_eq!(unsafe { libc::mkfifo(name.as_ptr(), 0o600) }, 0);
+            let error = bounded_file_bytes(&fifo, 32, None).unwrap_err();
+            assert_eq!((error.code.as_str(), error.exit), ("INVALID_ARGUMENT", 2));
+        }
+    }
 
     #[test]
     fn project_read_identity_rejects_replace_and_restore_even_with_same_bytes() {

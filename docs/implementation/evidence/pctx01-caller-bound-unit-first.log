@@ -1,0 +1,12 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.84s
+     Running unittests src/lib.rs (target/debug/deps/pctx-ae897bec01e143c7)
+
+running 4 tests
+test input::identity_tests::explicit_file_transport_preserves_literal_dash_and_regular_file_symlink_semantics ... ok
+test input::identity_tests::explicit_file_cap_detects_growth_after_metadata_at_each_caller_limit ... ok
+test input::identity_tests::project_read_identity_rejects_replace_and_restore_even_with_same_bytes ... ok
+test input::identity_tests::explicit_file_cap_rejects_large_archive_before_read_and_keeps_original_expiry ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 41 filtered out; finished in 0.01s
+

@@ -1,0 +1,195 @@
+{
+  "task": "PCTX01",
+  "item": "PCTX01-G03-D04",
+  "status": "open; current bounded transport repair does not close full input matrix",
+  "fixed_detail_closed": 25,
+  "fixed_detail_denominator": 40,
+  "existing_caller_site_count": 18,
+  "groups_are_case_inventory_not_new_task_or_condition_ids": true,
+  "source_inventory": "pctx01-grouped-storage-classification.json",
+  "source_inventory_sha256": "fd5598182edd70c49746db997fe996dc0cfecc2a3ff4380680556f293f08a9f8",
+  "sites": [
+    {
+      "path": "src/adapter.rs",
+      "frozen_line": 363,
+      "frozen_text": "serde_json::from_slice(&bytes)",
+      "group": "adapter config/event/protocol/statusline",
+      "frozen_source_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "current_cap_candidate": false
+    },
+    {
+      "path": "src/adapter.rs",
+      "frozen_line": 443,
+      "frozen_text": "let raw: Value = serde_json::from_slice(bytes)",
+      "group": "adapter config/event/protocol/statusline",
+      "frozen_source_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "current_cap_candidate": false
+    },
+    {
+      "path": "src/adapter.rs",
+      "frozen_line": 504,
+      "frozen_text": "let raw: Value = serde_json::from_slice(&bytes)?;",
+      "group": "adapter config/event/protocol/statusline",
+      "frozen_source_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "current_cap_candidate": false
+    },
+    {
+      "path": "src/adapter.rs",
+      "frozen_line": 1193,
+      "frozen_text": "let raw: Value = serde_json::from_slice(&bounded(Some(path))?)",
+      "group": "adapter config/event/protocol/statusline",
+      "frozen_source_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "current_cap_candidate": false
+    },
+    {
+      "path": "src/filters.rs",
+      "frozen_line": 1084,
+      "frozen_text": "let suite: Suite = serde_json::from_str(&manifest.text)",
+      "group": "project/external authored artifacts",
+      "frozen_source_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "current_cap_candidate": false
+    },
+    {
+      "path": "src/inventory.rs",
+      "frozen_line": 246,
+      "frozen_text": "serde_json::from_str(text)",
+      "group": "project/external authored artifacts",
+      "frozen_source_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "current_cap_candidate": false
+    },
+    {
+      "path": "src/inventory.rs",
+      "frozen_line": 364,
+      "frozen_text": "serde_json::from_str(&file.text).map_err(|_| invalid(\"Invalid explicit profile schema\"))?;",
+      "group": "project/external authored artifacts",
+      "frozen_source_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "current_cap_candidate": false
+    },
+    {
+      "path": "src/inventory.rs",
+      "frozen_line": 1073,
+      "frozen_text": "let registry: Registry = serde_json::from_str(&file.text)",
+      "group": "project/external authored artifacts",
+      "frozen_source_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "current_cap_candidate": false
+    },
+    {
+      "path": "src/operations.rs",
+      "frozen_line": 292,
+      "frozen_text": "Ok(serde_json::from_str(&input_text(p, path)?)?)",
+      "group": "operations raw/sanitized JSON",
+      "frozen_source_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "current_cap_candidate": false
+    },
+    {
+      "path": "src/operations.rs",
+      "frozen_line": 295,
+      "frozen_text": "let mut v: Value = serde_json::from_str(&input_text(p, path)?)?;",
+      "group": "operations raw/sanitized JSON",
+      "frozen_source_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "current_cap_candidate": false
+    },
+    {
+      "path": "src/pack.rs",
+      "frozen_line": 1178,
+      "frozen_text": "serde_json::from_slice(bytes).map_err(Into::into)",
+      "group": "project/external authored artifacts",
+      "frozen_source_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "current_cap_candidate": false
+    },
+    {
+      "path": "src/quota.rs",
+      "frozen_line": 420,
+      "frozen_text": "let batch: UsageBatch = serde_json::from_slice(&std::fs::read(path)?)?;",
+      "group": "quota UsageBatch",
+      "frozen_source_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "current_cap_candidate": true
+    },
+    {
+      "path": "src/runner.rs",
+      "frozen_line": 1530,
+      "frozen_text": "let mut observation: MemoryObservation = serde_json::from_str(&f.text)?;",
+      "group": "project/external authored artifacts",
+      "frozen_source_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "current_cap_candidate": false
+    },
+    {
+      "path": "src/schedule.rs",
+      "frozen_line": 686,
+      "frozen_text": "let value: ScheduleDefinition = serde_json::from_slice(&std::fs::read(path)?)?;",
+      "group": "schedule definition/reviewed plan",
+      "frozen_source_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "current_cap_candidate": true
+    },
+    {
+      "path": "src/schedule.rs",
+      "frozen_line": 1513,
+      "frozen_text": "let value: Value = serde_json::from_slice(&fs::read(path)?)?;",
+      "group": "schedule definition/reviewed plan",
+      "frozen_source_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "current_cap_candidate": true
+    },
+    {
+      "path": "src/storage.rs",
+      "frozen_line": 548,
+      "frozen_text": "let meta: Value = serde_json::from_str(parts.get(1).unwrap_or(&\"\").trim())?;",
+      "group": "shared text/file/stdin and authored handoff metadata",
+      "frozen_source_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "current_cap_candidate": false
+    },
+    {
+      "path": "src/work.rs",
+      "frozen_line": 414,
+      "frozen_text": "let mut value: Value = serde_json::from_slice(&std::fs::read(p)?)?;",
+      "group": "work typed JSON/restore archive",
+      "frozen_source_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "current_cap_candidate": true
+    },
+    {
+      "path": "src/work.rs",
+      "frozen_line": 1766,
+      "frozen_text": "let archive: BackupArchive = serde_json::from_slice(&std::fs::read(input)?)?;",
+      "group": "work typed JSON/restore archive",
+      "frozen_source_revision": "00df0e2f3254f6697148e64a677a712d4c63ddd9",
+      "current_cap_candidate": true
+    }
+  ],
+  "groups": [
+    {
+      "group": "shared text/file/stdin and authored handoff metadata",
+      "prior": "pctx01-handoff-input-verification.json; tests/task_input_source.rs; tests/context_input_deadline.rs; tests/handoff_preflight.rs",
+      "remaining": "Explicit malformed authored metadata validation separated from permitted raw text storage; stdin remains consumer-specific"
+    },
+    {
+      "group": "work typed JSON/restore archive",
+      "current": "caller_input_contract three Work routes and Restore: syntax/typed top-level shape, caps and owner/revision order; current work_control11 PASS",
+      "remaining": "Reconcile authored schema controls with source/task/check/lease-dependent acceptance; retain archive checksum/project/state priorities"
+    },
+    {
+      "group": "operations raw/sanitized JSON",
+      "prior": "tests/operations.rs decision dedup/mailbox policy and control_preflight pure admission",
+      "remaining": "Shared raw/sanitized syntax/typed-shape/64KiB payload controls with prepared snapshots; metadata precheck means no invented universal stdin"
+    },
+    {
+      "group": "quota UsageBatch",
+      "current": "Caller syntax/shape, 1MiB exact/overflow, owner-first, current quota7 PASS",
+      "remaining": "Explicit schema/observation-count matrix and existing normalized replay/hash precedence"
+    },
+    {
+      "group": "schedule definition/reviewed plan",
+      "current": "Caller Add/Update/Install syntax/shape, 64KiB/256KiB exact/overflow, owner-first; current schedule17 PASS",
+      "remaining": "Authored schema and producer-dependent definition/plan identity/state acceptance; no installation algorithm expansion"
+    },
+    {
+      "group": "adapter config/event/protocol/statusline",
+      "prior": "tests/adapter_errors.rs cap/config2, unsupported6, policy5; adapter_preflight input-dependent Event key",
+      "remaining": "Malformed hook/statusline JSON and required-field shapes, PreToolUse key exemption and protocol6 retained"
+    },
+    {
+      "group": "project/external authored artifacts",
+      "prior": "tests/filters.rs, inventory.rs, pack_preflight.rs, runner.rs existing integrity/partial/policy proof",
+      "remaining": "Filter Suite JSON/schema/case-set before report publication; Profile/Audit syntax/shape; external Pack JSON syntax safe no-publication; Runner memory malformed/shape/4096byte cap without child/resource grant; discovered malformed configs remain truthful observations"
+    }
+  ],
+  "execution_rule": "Finish this finite caller matrix plus existing G03-D03/G05-D06 candidate; reuse qualified A/R/C/G02/G05 evidence, no independent producer features or new IDs"
+}

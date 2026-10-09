@@ -420,7 +420,14 @@ fn ingest(p: &Project, path: &PathBuf, key: &str) -> Result<Value> {
     if !metadata.is_file() || metadata.file_type().is_symlink() || metadata.len() > 1048576 {
         return Err(invalid("Usage import must be regular JSON at most one MiB"));
     }
-    let batch: UsageBatch = serde_json::from_slice(&std::fs::read(path)?)?;
+    let bytes = crate::input::bounded_file_bytes(path, 1048576, p.deadline).map_err(|e| {
+        if e.code == "FILE_TOO_LARGE" {
+            invalid("Usage import must be regular JSON at most one MiB")
+        } else {
+            e
+        }
+    })?;
+    let batch: UsageBatch = serde_json::from_slice(&bytes)?;
     if batch.schema_version != 1
         || batch.observations.is_empty()
         || batch.observations.len() > 10000

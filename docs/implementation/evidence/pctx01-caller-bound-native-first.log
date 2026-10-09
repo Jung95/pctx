@@ -1,0 +1,12 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.64s
+     Running tests/caller_input_contract.rs (target/debug/deps/caller_input_contract-08b980fca1808cc1)
+
+running 3 tests
+test caller_owner_and_task_revision_priorities_do_not_become_universal_input_first ... ok
+test exact_file_caps_reach_json_decoder_and_overflow_preserves_existing_input_errors ... ok
+Caller syntax/shape native combinations:80
+test caller_json_syntax_and_typed_shape_are_input_two_and_preserve_prepared_state ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.71s
+

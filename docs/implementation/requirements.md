@@ -14,34 +14,34 @@ Only **PCTX01** is active. It is the lowest-numbered incomplete official develop
 
 Only PCTX01 is active. The one-time whole-G01–G10 reorganization remains fixed
 in [PCTX01-closure-plan](tasks/PCTX01-closure-plan.md), its40-item register and
-the140-leaf crosswalk. Bounded detail closure **25/40** (previous24/40); whole
-gates **0/10**. No denominator change:140 leaves,172 help paths,12 historical
-bounded R groups retained. Required §23 macOS arm64/x86_64, Linux x86_64 and
-Windows x86_64 integration are separately open G09 conditions.
+140-leaf crosswalk. Detail **25/40**, whole gates **0/10**, unchanged this candidate.
+140 leaves/172 help paths/12 bounded R groups remain fixed. Required macOS
+arm64/x86_64, Linux x86_64 and Windows x86_64 integration are separately open G09.
 
-G02-D04 is **locally closed**. The real parser generates1855 cases on exactly140
-leaves:582 accepted parser-only controls and1273 refusals. Actual CLI10184 refusal
-combinations pass across missing/initialized project, JSON/compact and absent/
-existing output, with stdin held open and byte-exact fixture snapshots. All7
-authored conflicts/14 accepted alternatives, missing/value/typed/enum/flag/raw
-boundaries qualify. Saved matrix replay and related14 tests pass; format/Clippy
-pass. Independent scoped review accepted closure. Initial generator/harness
-failures are retained, corrected without product grammar changes. Evidence:
-[G02-D04 closure](evidence/pctx01-parser-verification.json). Runtime sources are
-unchanged; main only declares a test module. Accepted parsing does not qualify
-producer semantics or source-dependent input. No new task/ID/denominator.
+Current **G03-D04 is open**. A shared bounded explicit-file reader now repairs
+metadata-check/unbounded-read growth in five frozen caller sites/eight consumers:
+Work JSON/Restore, Quota Ingest and Schedule definition/reviewed plan. Prior caps,
+caller2 versus stored7, owner5/revision9, literal-dash and regular-file semantics
+remain. Original optional deadlines are preserved; no write-query clock invented.
+Unit4, native3 and focused related85 PASS; format/Clippy PASS. Prepared logical
+SQL/schema+non-DB state preserved; no physical WAL or first-use rollback claim.
+[Current cap evidence](evidence/pctx01-caller-bound-verification.json) and the
+[finite caller map](evidence/pctx01-caller-input-matrix.json) retain all18 caller
+sites in seven existing boundary groups, with actual remaining controls. This is
+implementation progress, not closure of the whole input condition or new scope.
 
-Prior G05-D04 common stored-error48-site closure remains qualified by
-[stored-error evidence](evidence/pctx01-storage-schedule-verification.json).
-Four original-budget macOS startup failures remain product failures, and inactive
-PCTX36 occurrence concurrency failure remains visible; whole suite is not green.
-No Actions, new full/platform run or active heavy job.
+Prior G02-D04 parser1855 cases/10184 native refusals and G05-D04 stored48-site
+closures remain qualified by their linked evidence. Current binary7 replays the
+saved parser matrix, and persisted22 regressions pass. Four original-budget
+macOS startup product failures remain. Current focused Tick passes once but its
+occurrence algorithm is unchanged; retained inactive PCTX36 failure is not erased.
+Whole suite is not green. No Actions, full/platform run or active heavy job.
 
-Next fixed candidate: **G03-D03/D04 + G05-D06** source-independent producer grammar,
-explicit input/stdin syntax/shape/size and policy/state precedence, stable exits.
-Reuse closed A/R/C/parser/storage evidence against frozen140 routes; no lookup
-grammar invention or independent producer expansion. PCTX01 stays active until
-all40 conditions and required platform evidence qualify; no next official task.
+Next fixed candidate: finish **G03-D03/D04 + G05-D06** using this finite input map
+and closed A/R/C/parser/storage evidence. Complete the remaining authored schema,
+input-size and producer-priority controls, then stable exits including cancellation.
+No lookup-grammar invention, independent producer expansion, new IDs or denominator.
+PCTX01 remains active until all40 conditions and required platforms qualify.
 
 ## Development items
 

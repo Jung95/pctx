@@ -680,12 +680,22 @@ fn due(d: &ScheduleDefinition, at: i64) -> Result<(Option<(String, i64)>, i64)> 
         }
     }
 }
-fn definition(path: &PathBuf) -> Result<ScheduleDefinition> {
+fn definition(
+    path: &PathBuf,
+    deadline: Option<crate::deadline::Deadline>,
+) -> Result<ScheduleDefinition> {
     let meta = std::fs::symlink_metadata(path)?;
     if !meta.is_file() || meta.file_type().is_symlink() || meta.len() > 65536 {
         return Err(invalid("Definition must be regular JSON at most 64 KiB"));
     }
-    let value: ScheduleDefinition = serde_json::from_slice(&std::fs::read(path)?)?;
+    let bytes = crate::input::bounded_file_bytes(path, 65536, deadline).map_err(|e| {
+        if e.code == "FILE_TOO_LARGE" {
+            invalid("Definition must be regular JSON at most 64 KiB")
+        } else {
+            e
+        }
+    })?;
+    let value: ScheduleDefinition = serde_json::from_slice(&bytes)?;
     Ok(value)
 }
 fn event(db: &Connection, d: &ScheduleDefinition, kind: &str, value: Value) -> Result<()> {
@@ -1110,7 +1120,7 @@ fn execute_inner(p: &Project, c: &ScheduleCommand) -> Result<Value> {
         } => {
             owner()?;
             label(idempotency_key)?;
-            let d = definition(from_file)?;
+            let d = definition(from_file, p.deadline)?;
             let mut db = connect(p)?;
             let tx = db.transaction_with_behavior(TransactionBehavior::Immediate)?;
             validate(p, &tx, &d)?;
@@ -1169,7 +1179,7 @@ fn execute_inner(p: &Project, c: &ScheduleCommand) -> Result<Value> {
             owner()?;
             label(namespace)?;
             label(id)?;
-            let d = definition(from_file)?;
+            let d = definition(from_file, p.deadline)?;
             if d.namespace != *namespace || d.id != *id {
                 return Err(invalid(
                     "Definition must match the explicit namespace and ID",
@@ -1513,12 +1523,19 @@ fn plan(p: &Project, namespace: &str, id: &str, provider: &str, root: &str) -> R
     p.check_deadline()?;
     Ok(proposal)
 }
-fn read_plan(path: &Path) -> Result<Value> {
+fn read_plan(path: &Path, deadline: Option<crate::deadline::Deadline>) -> Result<Value> {
     let meta = fs::symlink_metadata(path)?;
     if !meta.is_file() || meta.file_type().is_symlink() || meta.len() > 256 * 1024 {
         return Err(invalid("Reviewed plan must be bounded regular JSON"));
     }
-    let value: Value = serde_json::from_slice(&fs::read(path)?)?;
+    let bytes = crate::input::bounded_file_bytes(path, 256 * 1024, deadline).map_err(|e| {
+        if e.code == "FILE_TOO_LARGE" {
+            invalid("Reviewed plan must be bounded regular JSON")
+        } else {
+            e
+        }
+    })?;
+    let value: Value = serde_json::from_slice(&bytes)?;
     if !value.is_object() || reader::redact(&value.to_string()).1 {
         return Err(invalid("Invalid or sensitive bridge plan"));
     }
@@ -1778,7 +1795,7 @@ fn native_observation(p: &Project, v: &Value) -> Result<Value> {
 }
 fn install(p: &Project, path: &Path, expected: &str, apply_native: bool) -> Result<Value> {
     owner()?;
-    let v = exact_plan(p, &read_plan(path)?, expected)?;
+    let v = exact_plan(p, &read_plan(path, p.deadline)?, expected)?;
     let namespace = string(&v, "namespace")?;
     let id = string(&v, "schedule_id")?;
     if apply_native && string(&v, "provider")? == "fixture" {

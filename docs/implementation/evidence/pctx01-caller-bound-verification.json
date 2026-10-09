@@ -1,0 +1,102 @@
+{
+  "task": "PCTX01",
+  "item": "PCTX01-G03-D04",
+  "status": "implementing; bounded caller-file repair qualified, whole input condition open",
+  "fixed_detail_closed": 25,
+  "fixed_detail_denominator": 40,
+  "whole_gates_closed": 0,
+  "whole_gates_denominator": 10,
+  "baseline_revision": "0ba515bedb55c68e2ef86fa25e8c4e4ca285081e",
+  "scope": "Five frozen caller decoder sites, eight consumers: shared cap for Work Task Create/Edit, Check Record, Control Restore, Quota Ingest, Schedule Add/Update/Install. No producer functionality expanded.",
+  "defect": "metadata size check followed by unbounded fs::read allowed growth beyond admitted cap; shared bounded regular-file loop now reads at most limit+1 and refuses excess",
+  "paths_sha256": {
+    "src/input.rs": "fc3f17b70ee1485e6fa9ae9d18d408a9212e0c56831a86529e3fda2d52033dfb",
+    "src/work.rs": "a5c89c59fb012d871a9a9ea335d698b6b4fd05e4e549236c8b1a6835d4bd8170",
+    "src/quota.rs": "4ba68daf5ab85ab3c3676848646f05896f72c072581a8d3fefcee387ce737fe7",
+    "src/schedule.rs": "fdd6d8f8c1b34d51ab62ad6790270e9ef700b1f282d2eb48455092e5e569ca9f",
+    "tests/caller_input_contract.rs": "147ba5dfbcb59f89b4991cdb81876976d085780b3020f9cc317a0392df11fcc5"
+  },
+  "binary_sha256": "c72a89e7f1cfe1a801f84edbd4cc52ee42450342d6c2ac677d22330f1a90b225",
+  "environment": {
+    "system": "macOS-26.7.1-arm64-arm-64bit-Mach-O",
+    "architecture": "arm64",
+    "rust": "1.99.0",
+    "SDKROOT": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk"
+  },
+  "results": [
+    {
+      "job": "53731",
+      "exit": 0,
+      "passed": 4,
+      "failed": 0,
+      "log": "pctx01-caller-bound-unit-first.log",
+      "scope": "New cap growth/exact/expiry/transport3 + existing source identity1; first run PASS"
+    },
+    {
+      "job": "9158",
+      "exit": 0,
+      "passed": 3,
+      "failed": 0,
+      "log": "pctx01-caller-bound-native-first.log",
+      "scope": "80 syntax/typed top-level shape CLI combinations, eight overflow/seven exact-cap decoder controls and owner/state/IO priorities; first run PASS"
+    },
+    {
+      "job": "47587",
+      "exit": 0,
+      "passed": 85,
+      "failed": 0,
+      "log": "pctx01-caller-bound-related-final.log",
+      "scope": "binary7/caller3/control-preflight18/persisted22/quota7/schedule17/work_control11; focused matrix, not whole suite"
+    },
+    {
+      "exit": 0,
+      "log": "pctx01-caller-bound-format-final.log",
+      "scope": "cargo fmt --all -- --check"
+    },
+    {
+      "job": "97284",
+      "exit": 0,
+      "log": "pctx01-caller-bound-static-first.log",
+      "scope": "cargo clippy --locked --all-targets -- -D warnings"
+    }
+  ],
+  "nonqualifying_attempts": [
+    {
+      "log": "pctx01-caller-bound-related-first.log",
+      "exit": 101,
+      "reason": "Wrong test target work; no test executed; corrected target work_control"
+    }
+  ],
+  "logs_sha256": {
+    "pctx01-caller-bound-format-final.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "pctx01-caller-bound-native-first.log": "03c3ee3158cc4c0a3ed38150c5e20e1e85dc95489799c778f312fcec65338aec",
+    "pctx01-caller-bound-related-final.log": "a10678f2e7aa0d7df5e1fdefd7c9cf076e7d51599842fd4853ad37de414c4419",
+    "pctx01-caller-bound-related-first.log": "4f513fe74548902dc8d493db4b6b3c2a0d0441cab48d26d5070d1014c9c36505",
+    "pctx01-caller-bound-static-first.log": "e8ebfb98527ad29e9d551d1ae707b59c51f7456c91b47955aac3b524ad3ca2be",
+    "pctx01-caller-bound-unit-first.log": "27079f10777130733db3ca02e5a85d82586d76f8eb533c0278e6adb18a4ed7a2"
+  },
+  "completion_condition_evidence": {
+    "caps": "Work/Quota1MiB, Schedule definition64KiB/reviewed plan256KiB, Restore256MiB prior caps and overflow2 messages unchanged; growth after metadata proved at first three byte limits; archive oversize before body proved separately",
+    "clock": "Uses existing optional deadline, checks around disk reads, creates no budget for None, preserves same Instant; regular I/O remains cooperative",
+    "admission": "Owner5 before caller input where existing producer did so; Check Record retains input-first exception; Work Edit revision9 before parsing; missing admitted file IO7, malformed caller syntax/shape2 remains distinct from stored7",
+    "transport": "Literal - is a filename for these consumers; Work regular-file symlink following unchanged, Quota/Schedule prior metadata symlink denial unchanged; Unix FIFO rejects without waiting; no new authority/race guarantee",
+    "effects": "All logical SQL/schema and non-DB fixture bytes preserved for prepared invalid requests; no physical WAL/SHM immutability or first-use rollback claim",
+    "safe_output": "Both JSON/compact input errors are complete safe envelope with INVALID_ARGUMENT2; sentinel and raw invalid UTF8 not leaked"
+  },
+  "finite_remaining_matrix": "pctx01-caller-input-matrix.json",
+  "matrix_sha256": "73d2155c9d11e2c2d6257ea8de0aa5c545cf745e1426435a2050af3d938bd237",
+  "independent_review": {
+    "agent": "/root/work_control",
+    "no_edits_or_tests": true,
+    "scoped_blocker": false,
+    "conclusion": "Cap repair accepted; keep D04 open and25/40; archive exact-cap/growth at256MiB not exercised; no required-platform completion"
+  },
+  "remaining_limits": [
+    "G03-D04 seven-group whole matrix remains open; G03-D03 and G05-D06 remain fixed open conditions",
+    "256MiB archive tested oversize before body admission, not allocated exact-cap/growth; generic bounded loop proved at64KiB/256KiB/1MiB",
+    "No new symlink-replacement/identity guarantee; existing policy and input-growth/clock conditions mapped to fixed G08-D04",
+    "Native Windows filesystem/console and all G09 integration platforms remain unqualified",
+    "Four original macOS startup product failures remain; no full/platform run or Actions",
+    "Current focused Schedule concurrent Tick passed once; occurrence algorithm unchanged, retained PCTX36 failed observation is not resolved or erased"
+  ]
+}

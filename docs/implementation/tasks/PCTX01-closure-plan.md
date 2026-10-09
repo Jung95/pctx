@@ -110,7 +110,7 @@ post-spawn callback, scheduling algorithm or release-platform claim. Evidence:
 pctx01-storage-schedule-verification.json and residual-reconciliation.json.
 At that closure detail24/40, whole0/10; superseded current count below.
 
-## Current G02-D04 bounded evidence
+## Prior G02-D04 bounded evidence
 
 Real140-leaf parser1855 cases:582 accepted parser-only,1273 refused; native10184
 combinations PASS, saved replay/related14 PASS, format/Clippy PASS. Seven authored
@@ -121,3 +121,14 @@ failed generator/harness attempts retained. Independent scoped review accepted.
 Evidence: pctx01-parser-verification.json and parser-cases.json. Detail25/40,
 whole0/10, denominator unchanged. Next fixed G03-D03/D04 + G05-D06; required
 platform and original startup failures retained. No next official task.
+
+## Current G03-D04 input-cap candidate (condition open)
+
+Shared regular-file cap+1 reader repairs growth after metadata for Work JSON/
+Restore, Quota and Schedule inputs. Prior caps/error2/owner5/state9 and optional
+original clock preserved. Unit4/native3/related85 PASS, format/Clippy PASS; scoped
+review accepted the repair. Current seven-group/18-caller-site matrix records
+remaining payload controls without new IDs. Evidence: pctx01-caller-bound-
+verification.json and pctx01-caller-input-matrix.json. Detail25/40, whole0/10,
+unchanged; G03-D04 remains open. Current Tick incidental pass does not erase
+retained PCTX36 failure. Required platforms and original startup failures remain.

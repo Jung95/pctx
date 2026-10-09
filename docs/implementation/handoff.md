@@ -17,33 +17,38 @@ then next official task's finite list within the same Goal.
 
 ## Current source and verification
 
-Latest integration is G02-D04 local parser closure, test-only main module plus
-src/parser_contract_tests.rs and tests/parser_schema_cli.rs. Actual frozen140
-parser1855 cases:582 accepted controls,1273 refused. Native10184 combinations
-PASS (job29129); related14 including saved replay PASS (18846); fmt/Clippy PASS
-(57114). Independent scope accepted. Source/binary/logs/initial failures and
-limits: evidence/pctx01-parser-verification.json. No live job or product changes.
-All7 authored conflicts/14 accepted alternatives, optional Check-key replacement,
-Pack artifact destination distinction and raw argv preservation are explicit.
+Current G03-D04 cap repair is qualified, whole condition open. Runtime files:
+input.rs/work.rs/quota.rs/schedule.rs; tests/caller_input_contract.rs. Shared
+bounded_file_bytes limits regular reads to cap+1, uses the caller's optional
+original deadline, preserves prior cap/messages/admission and literal filenames.
+Five frozen caller sites/eight consumers covered; no producer expansion.
+Unit4 PASS53731, native3 PASS9158 (80 syntax/shape combinations plus cap/priority),
+related85 PASS47587, format/Clippy PASS97284. Independent scoped review accepted
+repair only. All jobs terminal. Evidence: pctx01-caller-bound-verification.json.
+Prepared logical SQL/schema+non-DB comparisons do not claim WAL byte immutability.
+Archive256MiB oversize-before-body proved; exact-cap/growth not allocated at256MiB.
+Windows hard I/O bounds unproved. No new symlink identity/race guarantee.
 
-G05-D04 remains closed for48 persisted sites and43 preserved dispositions. Four
-original-budget macOS startup product failures, inactive PCTX36 occurrence
-concurrency failure and all required release-platform G09 gaps remain open.
-Accepted parsing does not qualify producer semantics; whole suite is not green.
-Current detail25/40, whole0/10, fixed denominators unchanged.
+Prior G02-D04 and G05-D04 closures preserved; current saved parser replay7 and
+persisted22 pass. Detail25/40, whole0/10, unchanged. Four original macOS startup
+product failures retained. Focused Tick passed once, algorithm unchanged; old
+PCTX36 failure remains unresolved. No live job or whole/platform rerun.
 
 ## Next exact action and ownership
 
-Only PCTX01 active. Next fixed G03-D03/D04 + G05-D06: reuse frozen140 crosswalk
-and existing A/R/C, now parser and stored-error proofs to finish remaining pure
-producer grammar, explicit input/stdin syntax/shape/size with policy5/state9
-precedence and full stable exit classes including cancellation130/child exception.
-Do not repeat G02/G05 decoder audits or invent lookup constraints. No independent
-producer features/new IDs/denominator. After grouped admission/error closure,
-continue fixed response/empty/control, original-clock/startup, candidate and real
-platform sequence. Only whole PCTX01 completion permits next official task.
-Normal main [skip ci] commit/push authorized; no Actions (3000min), Node24 retained;
-no operational publish/accounts/hooks/schedules. Parent owns edits/builds.
+Only PCTX01. Read pctx01-caller-input-matrix.json: frozen18 caller sites in seven
+existing groups. Finish remaining authored-schema controls for Work/Restore,
+Quota batch schema/count, Schedule definition/reviewed plan; raw/sanitized
+Operations64KiB syntax/shape; Adapter hook/statusline shapes; FilterSuite,
+Inventory Profile/Audit, Pack external JSON, RunnerMemory4096byte and Handoff
+metadata controls, reusing explicitly named existing proofs. Literal '-' is
+consumer-specific; no universal stdin or input-first policy. No new IDs/denominator.
+G03-D03 pure grammar reuses A/R/C against140 routes; G05-D06 cancellation/exit
+matrix remains. Finish this existing grouped candidate, then fixed response/
+empty/control, phase/startup, candidate and required-platform sequence. Do not
+repeat whole-plan or closed parser/storage audits or grow independent producers.
+Only whole PCTX01 completion allows next official task. Normal main [skip ci]
+commit/push authorized; no Actions (3000min), Node24 retained; no operational effects.
 
 ## Environment and operating constraints
 

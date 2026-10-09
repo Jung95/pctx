@@ -1,0 +1,130 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.31s
+     Running unittests src/main.rs (target/debug/deps/pctx-5861ab217462b7f0)
+
+running 7 tests
+test finite_route_tests::renderer_refusal_keeps_typed_error_and_incomplete_coverage ... ok
+test cli_help::tests::every_declared_leaf_has_an_explicit_effect_contract ... ok
+test cli_args::tests::producer_repetition_and_literal_child_options_preserve_exact_values ... ok
+test cli_args::tests::pack_artifact_output_and_global_output_share_one_singular_binding ... ok
+test cli_args::tests::defaults_and_fresh_parses_do_not_count_as_duplicate_inputs ... ok
+test finite_route_tests::finite_work_quota_adapter_reads_do_not_time_execution ... ok
+test parser_contract_tests::frozen_visible_parser_schema_and_cases ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 6.35s
+
+     Running tests/caller_input_contract.rs (target/debug/deps/caller_input_contract-08b980fca1808cc1)
+
+running 3 tests
+test caller_owner_and_task_revision_priorities_do_not_become_universal_input_first ... ok
+test exact_file_caps_reach_json_decoder_and_overflow_preserves_existing_input_errors ... ok
+Caller syntax/shape native combinations:80
+test caller_json_syntax_and_typed_shape_are_input_two_and_preserve_prepared_state ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.46s
+
+     Running tests/control_preflight.rs (target/debug/deps/control_preflight-1104ac0ed832cb66)
+
+running 18 tests
+test report_session_ingest_direct_refusals_preserve_storage_and_original_expiry ... ok
+test operation_direct_refusals_preserve_state_and_original_expiry ... ok
+test direct_producers_refuse_before_database_and_preserve_original_expiry ... ok
+test runner_direct_pure_refusal_preserves_storage_and_original_expiry ... ok
+test runner_valid_boundaries_preserve_existing_non_owner_policy ... ok
+test role_pure_arguments_precede_project_and_response_effects ... ok
+test report_session_ingest_arguments_precede_project_and_response_effects ... ok
+test schedule_pure_arguments_precede_project_and_response_effects ... ok
+test valid_control_arguments_reach_existing_authorization_and_state_flows ... ok
+test operation_boundaries_aliases_and_valid_non_owner_policy_are_preserved ... ok
+test runner_pure_arguments_precede_project_and_response_effects ... ok
+test session_pure_arguments_precede_project_and_response_effects ... ok
+test report_and_session_accepted_boundaries_keep_replay_and_state_contracts ... ok
+test valid_grammar_does_not_bypass_non_owner_authority ... ok
+test quota_pure_arguments_precede_project_and_response_effects ... ok
+test operation_remaining_pure_arguments_precede_project_and_response_effects ... ok
+test work_pure_arguments_precede_project_and_response_effects ... ok
+test malformed_reviewed_schedule_provider_refuses_without_panic_or_installation ... ok
+
+test result: ok. 18 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.68s
+
+     Running tests/persisted_error_contract.rs (target/debug/deps/persisted_error_contract-257962e0e1215410)
+
+running 22 tests
+test caller_json_syntax_remains_input_error_without_storage_effects ... ok
+test corrupted_activity_syntax_is_storage_failure_on_every_existing_transport ... ok
+test grouped_index_metadata_and_checksum_matched_checkpoint_json_are_storage_errors ... ok
+test grouped_decision_payloads_preserve_caller_errors_and_safe_storage_refusal ... ok
+test grouped_paired_index_cache_checkpoint_get_and_registry_shape_decoders ... ok
+test grouped_broker_saved_snapshot_preserves_parser_priority ... ok
+test grouped_private_execution_trust_refuses_corruption_before_spawn ... ok
+test grouped_job_and_helper_consumers_refuse_corrupt_metadata_without_releasing_slots ... ok
+test grouped_context_selection_and_capsule_keep_identity_conflict_before_storage_decode ... ok
+test grouped_registry_pack_output_and_helper_metadata_refuse_without_publication ... ok
+test grouped_message_queue_payloads_and_receipts_keep_recipient_and_replay_priority ... ok
+test grouped_quota_observation_syntax_and_shape_are_storage_errors ... ok
+test grouped_quota_receipt_and_prior_observation_decoders_preserve_conflict ... ok
+test grouped_private_credentials_keep_missing_mismatch_and_revoked_priority ... ok
+test stored_create_receipt_preserves_replay_conflict_and_original_expiry ... ok
+test grouped_runner_trust_and_task_decode_do_not_mask_storage_failure_as_owner_permission ... ok
+test grouped_schedule_stored_definition_and_receipt_preserve_replay_conflict ... ok
+test stored_report_receipt_preserves_exact_replay_before_lease_and_hash_conflict_before_decode ... ok
+test grouped_remaining_schedule_storage_branches_preserve_state_and_input_priority ... ok
+test stored_task_fields_refuse_corruption_without_mutating_or_changing_input_errors ... ok
+test valid_stored_json_values_and_later_page_failure_preserve_events_and_cursors ... ok
+test busy_admission_is_retryable_but_original_request_expiry_is_not ... ok
+
+test result: ok. 22 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 10.29s
+
+     Running tests/quota.rs (target/debug/deps/quota-2eee6f0607f85593)
+
+running 7 tests
+test pools_are_isolated_and_manual_estimates_do_not_change_actual_usage ... ok
+test first_unknown_baseline_and_missing_provider_do_not_become_zero_or_normal ... ok
+test cumulative_counters_are_deltas_and_collector_sources_do_not_double_count ... ok
+test epochs_resets_and_stale_counters_are_not_inherited ... ok
+test quota_thresholds_reset_reobservation_and_persistent_pause_silence ... ok
+test reservations_share_pool_same_unit_and_are_soft_idempotent ... ok
+test restored_quota_requires_fresh_observation_and_event_ledgers_stay_immutable ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.19s
+
+     Running tests/schedule.rs (target/debug/deps/schedule-2917b2dde9bd7c95)
+
+running 17 tests
+test non_read_job_requires_matching_operation_decision ... ok
+test berlin_spring_gap_moves_to_next_valid_wall_time ... ok
+test elapsed_intervals_do_not_change_with_dst_and_missed_ticks_coalesce ... ok
+test project_private_bridge_staging_rejects_user_symlinks_without_changing_target ... ok
+test berlin_fall_back_occurs_once_per_local_date_and_restart_reuses_record ... ok
+test empty_readonly_tick_is_successful_without_notification_or_model_wake ... ok
+test namespaces_and_cas_pause_updates_are_independent ... ok
+test reconcile_singleflight_and_managed_bridge_never_claim_install_or_success ... ok
+test paused_role_blocks_actual_tick_and_loop_does_not_acquire_keep_awake ... ok
+test session_boundary_invalidates_binding_without_reinstall_or_epoch_inheritance ... ok
+test role_pause_topic_silence_do_not_reactivate ... ok
+test failed_attempt_is_recorded_and_retry_is_explicit_instead_of_synthetic_success ... ok
+test tick_executes_once_and_only_changed_results_queue_a_local_notice ... ok
+test running_owner_is_never_released_by_ttl_and_restored_binding_is_not_inherited ... ok
+test staged_bridge_uninstall_removes_only_owned_files_and_missing_manifest_can_be_repaired ... ok
+test managed_bridge_requires_current_reviewed_plan_and_preserves_user_changes ... ok
+test actual_cli_concurrent_ticks_claim_one_occurrence_and_fixture_bridge_invokes_tick ... ok
+
+test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 12.05s
+
+     Running tests/work_control.rs (target/debug/deps/work_control-8112bcadab3f8486)
+
+running 11 tests
+test database_rejects_event_modification_and_receipt_conflict ... ok
+test zero_minimum_cannot_make_zero_tests_pass ... ok
+test external_report_is_an_allowed_claim_without_native_environment_authority ... ok
+test legacy_native_pass_without_authoritative_binding_is_not_current_evidence ... ok
+test claims_reports_reassignment_and_cursor ... ok
+test current_source_change_blocks_completion ... ok
+test zero_tests_and_revision_conflict ... ok
+test evidence_gate_and_historical_completion ... ok
+test backup_restore_revokes_live_leases_and_preserves_pause ... ok
+test schedule_v2_backup_strips_local_binding_and_restore_revokes_running_authority ... ok
+test restore_preserves_session_history_without_ack_or_epoch_reuse ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.35s
+
