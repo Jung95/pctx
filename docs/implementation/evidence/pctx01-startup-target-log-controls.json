@@ -1,0 +1,12 @@
+{
+  "task": "PCTX01",
+  "selftest": {
+    "result": "PASS",
+    "controls": "known target/source/time admission,PID suffix refusal,unknown text suppression,event cap and no raw strings exported",
+    "log_query_executed": false
+  },
+  "AST": "PASS; parser executed",
+  "script_sha256": "b7f86ede45d9ea34f58b91a41dc0a1380fa3b2093810050760847aee02b524a9",
+  "plan_sha256": "92096e17a7a6889e9e5a802f8660ef7b57ca6d66bc733e7565ff5d88209c3a32",
+  "query_executed": false
+}

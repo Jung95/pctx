@@ -1,0 +1,27 @@
+{
+  "task": "PCTX01",
+  "condition": "PCTX01-G05-D05",
+  "uid": 502,
+  "log_pid": 26809,
+  "log_exit": 0,
+  "one_query": true,
+  "new_test": false,
+  "administrator_authentication": false,
+  "security_or_logging_changes": false,
+  "raw_saved_to_disk": false,
+  "raw_bytes": 2,
+  "plan_sha256": "92096e17a7a6889e9e5a802f8660ef7b57ca6d66bc733e7565ff5d88209c3a32",
+  "script_sha256": "b7f86ede45d9ea34f58b91a41dc0a1380fa3b2093810050760847aee02b524a9",
+  "scope": "2sUTC exact approved argv; no fallback or retry",
+  "error": null,
+  "limits": [
+    "Only default-existing masked target-filtered events. Empty/unknown/masked records cannot prove absent evaluation or successful launch.",
+    "PID/time log matching alone is not unique-id or causal attribution.",
+    "No private-data/debug activation,full archive or arbitrary raw message publication."
+  ],
+  "events": {
+    "filtered_events": 0,
+    "recognized_target_events": [],
+    "discarded_unrecognized_events": 0
+  }
+}

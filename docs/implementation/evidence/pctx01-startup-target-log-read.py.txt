@@ -1,0 +1,102 @@
+"""One approved bounded historical query; no tests or administrator authentication."""
+import argparse, datetime, hashlib, json, os, re, selectors, subprocess, time
+from pathlib import Path
+BASE=Path('/Users/dev/PCTX/docs/implementation/evidence')
+PLAN=BASE/'pctx01-startup-target-log-scope-plan.json'
+PREDICATE='((process == "syspolicyd" AND processID == 665) OR (process == "kernel" AND sender == "AppleSystemPolicy")) AND (eventMessage MATCHES[c] ".*(proc|process|pid)(:|[ ])+[ ]*(26165|26166)([^0-9].*|$)")'
+ARGV=['/usr/bin/log','show','--start','2026-10-09 10:33:11+0000','--end','2026-10-09 10:33:13+0000','--timezone','UTC','--style','json','--info','--no-debug','--no-pager','--predicate',PREDICATE]
+CATEGORIES={'Security policy would not allow':'policy_denial','Sleep interrupted':'sleep_interrupted','Could not find reference':'missing_reference','failed to call driver':'driver_call_failure','evaluateScanResult':'scan_result','evaluateScript':'script_evaluation','waitForEvaluation':'evaluation_wait','Terminating process due to':'policy_termination'}
+START=datetime.datetime(2026,10,9,10,33,11,tzinfo=datetime.timezone.utc)
+END=START+datetime.timedelta(seconds=2)
+
+def reduce_events(raw):
+    events=json.loads(raw)
+    if not isinstance(events,list) or len(events)>128:
+        raise ValueError('event limit or shape refused')
+    reduced=[]; discarded=0
+    for event in events:
+        if not isinstance(event,dict):discarded+=1;continue
+        message=event.get('eventMessage','')
+        if not isinstance(message,str):discarded+=1;continue
+        ids=set(re.findall(r'\b(?:proc|process|pid)(?::| )+ *(26165|26166)(?![0-9])',message,re.I))
+        process_path=event.get('processImagePath','');sender=event.get('senderImagePath','')
+        source=None
+        if event.get('processID')==665 and process_path=='/usr/libexec/syspolicyd':source='syspolicyd'
+        elif event.get('processID')==0 and isinstance(sender,str) and '/AppleSystemPolicy' in sender:source='kernel_AppleSystemPolicy'
+        if not ids or source is None:discarded+=1;continue
+        stamp=event.get('timestamp','')
+        try:
+            parsed=datetime.datetime.fromisoformat(stamp)
+            if parsed.tzinfo is None or not START<=parsed.astimezone(datetime.timezone.utc)<=END:raise ValueError()
+        except (TypeError,ValueError):discarded+=1;continue
+        categories=sorted({value for key,value in CATEGORIES.items() if key.lower() in message.lower()})
+        if not categories:discarded+=1;continue
+        codes=[]
+        for pattern in [r'failed to call driver:\s*(0x[0-9a-f]{1,8}|[0-9]{1,8})\b',r'evaluateScanResult:\s*([0-9]{1,2})\b']:
+            codes.extend(re.findall(pattern,message,re.I))
+        reduced.append({'timestamp_utc':parsed.astimezone(datetime.timezone.utc).isoformat(),'owned_target_pids':sorted(int(p) for p in ids),'source':source,'categories':categories,'numeric_codes':codes})
+    return {'filtered_events':len(events),'recognized_target_events':reduced,'discarded_unrecognized_events':discarded}
+
+def selftest():
+    event={'processID':665,'processImagePath':'/usr/libexec/syspolicyd','timestamp':'2026-10-09 10:33:12+00:00','eventMessage':'failed to call driver: 0x3 process: 26165 /Users/private SECRET_TOKEN https://private/key'}
+    data=[event,dict(event,eventMessage='pid 261650 failed to call driver: 0x3'),dict(event,processID=666),dict(event,timestamp='2026-10-09 10:33:15+00:00'),dict(event,eventMessage='pid26165 failed to call driver: 0x3'),dict(event,eventMessage='pid 26165 unrecognized SECRET')]
+    output=reduce_events(json.dumps(data));assert len(output['recognized_target_events'])==1 and output['discarded_unrecognized_events']==5
+    assert output['recognized_target_events'][0]['numeric_codes']==['0x3']
+    encoded=json.dumps(output)
+    for secret in ['SECRET','/Users','https','private']:assert secret not in encoded
+    for bad in ['{}',json.dumps([event]*129)]:
+        try:reduce_events(bad)
+        except ValueError:pass
+        else:raise AssertionError('unbounded or malformed shape admitted')
+    print(json.dumps({'result':'PASS','controls':'known target/source/time admission,PID suffix refusal,unknown text suppression,event cap and no raw strings exported','log_query_executed':False}))
+
+def execute():
+    if os.getuid()!=502 or os.geteuid()!=502:raise SystemExit('ordinary UID502 required')
+    plan=json.loads(PLAN.read_text())
+    if plan['argv']!=ARGV or plan.get('human_scope_approval')!='approved 2026-10-09':raise SystemExit('approved exact scope required')
+    claim=BASE/'pctx01-startup-target-log-consumed.json'
+    handle=os.open(str(claim),os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW,0o600)
+    with os.fdopen(handle,'w') as stream:json.dump({'driver_pid':os.getpid(),'single_query':True},stream)
+    selector=selectors.DefaultSelector()
+    process=subprocess.Popen(ARGV,stdin=subprocess.DEVNULL,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+    chunks={'out':bytearray(),'err':bytearray()}
+    until=time.monotonic()+30;failed=None
+    try:
+        for name,pipe in [('out',process.stdout),('err',process.stderr)]:
+            os.set_blocking(pipe.fileno(),False);selector.register(pipe,selectors.EVENT_READ,name)
+        while selector.get_map():
+            if time.monotonic()>=until:failed='cooperative_query_watchdog_expired';break
+            for key,_ in selector.select(timeout=min(.2,max(0,until-time.monotonic()))):
+                block=os.read(key.fileobj.fileno(),16384)
+                if not block:selector.unregister(key.fileobj);continue
+                if sum(len(v) for v in chunks.values())+len(block)>1024*1024:failed='raw_byte_cap_exceeded';break
+                chunks[key.data].extend(block)
+            if failed:break
+    except BaseException:
+        failed='query_pipe_processing_failure'
+    finally:
+        if not failed:
+            try:process.wait(timeout=max(0,until-time.monotonic()))
+            except subprocess.TimeoutExpired:failed='cooperative_query_watchdog_expired'
+        if process.poll() is None:
+            process.terminate()
+            try:process.wait(timeout=2)
+            except subprocess.TimeoutExpired:process.kill();process.wait()
+        selector.close();process.stdout.close();process.stderr.close()
+    code=process.wait()
+    result={'task':'PCTX01','condition':'PCTX01-G05-D05','uid':502,'log_pid':process.pid,'log_exit':code,'one_query':True,'new_test':False,'administrator_authentication':False,'security_or_logging_changes':False,'raw_saved_to_disk':False,'raw_bytes':sum(len(v) for v in chunks.values()),'plan_sha256':hashlib.sha256(PLAN.read_bytes()).hexdigest(),'script_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),'scope':'2sUTC exact approved argv; no fallback or retry','error':failed,'limits':['Only default-existing masked target-filtered events. Empty/unknown/masked records cannot prove absent evaluation or successful launch.','PID/time log matching alone is not unique-id or causal attribution.','No private-data/debug activation,full archive or arbitrary raw message publication.']}
+    if code==0 and failed is None:
+        try:result['events']=reduce_events(bytes(chunks['out']).decode('utf-8'))
+        except (ValueError,UnicodeError):result['error']='unrecognized_or_overlimit_log_format'
+    elif failed is None:
+        stderr=bytes(chunks['err']).lower()
+        result['error']='native_access_denied' if b'not permitted' in stderr or b'permission' in stderr else 'native_query_failed'
+    chunks.clear()
+    (BASE/'pctx01-startup-target-log-result.json').write_text(json.dumps(result,indent=2)+'\n')
+    print(json.dumps(result),flush=True)
+
+if __name__=='__main__':
+    parser=argparse.ArgumentParser();parser.add_argument('--self-test',action='store_true');parser.add_argument('--execute',action='store_true');args=parser.parse_args()
+    if args.self_test:selftest()
+    elif args.execute:execute()
+    else:parser.error('choose explicit mode')

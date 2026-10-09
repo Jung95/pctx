@@ -1,0 +1,28 @@
+{
+  "task": "PCTX01",
+  "condition": "PCTX01-G05-D05",
+  "status": "product_failure; approved historical query completed; no cause or fix established",
+  "result": "One ordinaryUID502 exact2sUTC query completed exit0; raw2bytes,JSONarray0events; no malformed/overlimit result.",
+  "authority": "Human approved this exact historical message-reading scope; no administrator authentication requested.",
+  "frozen_controls": "Script and plan hashes match synthetic controls and actual receipt. Native original startup test source remains unchanged.",
+  "effects": "No new test, broader query, retry,raw disk file,OS/service/security/logging configuration change.",
+  "cleanup": {
+    "26808": "absent",
+    "26809": "absent"
+  },
+  "interpretation": "No target-explicit existing default-masked event matched this exact predicate/time/source scope. Not proof of absent assessment,daemon inactivity,successful launch,environment exemption or repair. Logs could omit target PID,be masked/not retained,or use a format outside this intentionally strict query. No fallback is authorized/executed.",
+  "next": "No supported source correction established. A target-specific evaluation request/response mapping or documented applicable platform correction is still required; do not repeat consumed kernel/service/host/log diagnostics. Prepare a vendor-facing minimal evidence report; no external message/post without explicit authorization.",
+  "evidence_hashes": {
+    "pctx01-startup-target-log-result.json": "4a03b153e75a7ea44795c757221dc261fc14d20ba3b8e402e4153b20f7bb0ed5",
+    "pctx01-startup-target-log-controls.json": "293c72efd11a7613f3080bc694211b6d57300cdc14cfb08b63d5bf772532e62e",
+    "pctx01-startup-target-log-consumed.json": "fbd72591eeba7cb69f655bd6a00691d6ef35b82e7c4ccd73ba7d5477e6ffc2ae",
+    "pctx01-startup-target-log-scope-plan.json": "92096e17a7a6889e9e5a802f8660ef7b57ca6d66bc733e7565ff5d88209c3a32",
+    "pctx01-startup-target-log-read.py.txt": "b7f86ede45d9ea34f58b91a41dc0a1380fa3b2093810050760847aee02b524a9"
+  },
+  "original_test_source_hash": "8b9fbc97fbd5acaf612b2d75b94cf810faa2b61614b654495082462b1941a8dc",
+  "detail_closed": 33,
+  "detail_total": 40,
+  "whole_closed": 0,
+  "whole_total": 10,
+  "independent_review": "work_control inspected result,verification,controls,frozen plan and vendor draft: five evidence hashes and original test hash match; oneUID502 query/exit0/2raw bytes/empty array; no absent-policy,cause or repair inference. Cleanup statement narrowed to named processes/audited directories. Plan pre-execution status is historical."
+}

@@ -1,5 +1,21 @@
 # Implementation requirements
 
+## Historical target-log query completed — current, 2026-10-09
+
+[Verification](evidence/pctx01-startup-target-log-verification.json): human-approved
+single ordinaryUID502 query for the explicit two expired PIDs in the exact2sUTC
+window completed exit0 with0matching events. Script/plan/control hashes match.
+No administrator authentication,new test,retry,broader fallback,raw disk data or
+OS/service/security/logging change. Generated reader/log PIDs absent.
+
+Zero matching default-masked records are inconclusive: no cause,successful launch,
+policy exemption or correction follows. PCTX01-G05-D05 remains product_failure;
+33/40details,0/10whole gates. Only PCTX01 active;no live job or user action pending.
+All earlier authentication/log-approval instructions and commands are consumed.
+Next needs target-specific evaluation mapping or an applicable supported platform
+correction. Do not repeat unchanged diagnostics. A minimal vendor evidence report
+is prepared;external posting/messaging is not authorized or performed.
+
 ## Completed service-side diagnostic — current, 2026-10-09
 
 [Verification](evidence/pctx01-startup-service-verification.json): approved one-auth
