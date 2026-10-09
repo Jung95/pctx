@@ -1,6 +1,6 @@
 {
   "task": "PCTX01-G05-D05",
-  "status": "once-only approved capture consumed; exact-child policy wait identified; no product repair; private raw removed",
+  "status": "user-approved once-only all-process7s trace; executing",
   "human_scope_approval": "approved",
   "independent_review": "approved",
   "private_root": "/private/tmp/pctx01-system-trace-child-2d65t63g",

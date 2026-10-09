@@ -1,0 +1,121 @@
+"""Reduce existing private trace XML; no recording or system observation."""
+from pathlib import Path
+import argparse, collections, json, re, xml.etree.ElementTree as E
+
+
+def document(path):
+    root = E.parse(path).getroot()
+    ids = {e.get('id'): e for e in root.iter() if e.get('id')}
+
+    def resolve(e):
+        return ids.get(e.get('ref'), e)
+
+    def find(e, tag):
+        e = resolve(e)
+        if e.tag == tag:
+            return e.text
+        for child in e:
+            found = find(child, tag)
+            if found is not None:
+                return found
+        return None
+
+    def field(row, tag):
+        e = next((e for e in row if e.tag == tag), None)
+        return resolve(e).text if e is not None else None
+
+    def pid(row):
+        e = next((e for e in row if e.tag == 'process'), None)
+        if e is None:
+            e = next((e for e in row if e.tag == 'thread'), None)
+        value = find(e, 'pid') if e is not None else None
+        return int(value) if value is not None else None
+
+    return root, resolve, find, field, pid
+
+
+def reduce(private):
+    failed = set(json.loads((private / 'failed-pids.json').read_text()))
+    receipt = json.loads((private / 'target-result.json').read_text())
+    own = failed | {receipt['wrapper_pid'], receipt['test_root_pid']}
+    identities = []
+    tree, resolve, find, field, pid = document(private / 'process-info.xml')
+    for row in tree.iter('row'):
+        number = int(field(row, 'pid'))
+        if number in own:
+            item = {'pid': number, 'trace_unique_numeric_id': field(row, 'uint64')}
+            identities.append(item)
+    assert collections.Counter(x['pid'] for x in identities) == collections.Counter(own)
+    states = []
+    tree, resolve, find, field, pid = document(private / 'thread-state.xml')
+    for row in tree.iter('row'):
+        number = pid(row)
+        if number not in failed:
+            continue
+        thread = next(e for e in row if e.tag == 'thread')
+        states.append({'pid': number, 'tid': int(find(thread, 'tid')),
+                       'start_ns': int(field(row, 'start-time')),
+                       'duration_ns': int(field(row, 'duration')),
+                       'state': field(row, 'thread-state')})
+    blocked = [s for s in states if s['state'] == 'Blocked' and s['duration_ns'] > 500_000_000]
+    assert len(blocked) == len(failed) and {s['pid'] for s in blocked} == failed
+    owned_samples = []
+    allowed_symbols = ['lck_mtx_sleep', 'ASPEvaluationManager::waitOnEvaluation',
+                       'AppleSystemPolicy::waitForEvaluation', 'AppleSystemPolicy::evaluateScript',
+                       'AppleSystemPolicy::procNotifyExecComplete']
+    tree, resolve, find, field, pid = document(private / 'time-profile.xml')
+    for row in tree.iter('row'):
+        number = pid(row)
+        if number not in failed:
+            continue
+        when = int(field(row, 'sample-time'))
+        thread = next(e for e in row if e.tag == 'thread')
+        item = {'pid': number, 'tid': int(find(thread, 'tid')), 'sample_time_ns': when,
+                'state_label': field(row, 'thread-state'), 'weight_ns': field(row, 'weight'),
+                'frames': []}
+        for stack in row:
+            if stack.tag != 'tagged-backtrace':
+                continue
+            for frame in resolve(stack):
+                frame = resolve(frame)
+                binary = next((resolve(e) for e in frame if e.tag == 'binary'), None)
+                if binary is None:
+                    continue
+                symbol = frame.get('name', '')
+                allowed = any(symbol.startswith(s) for s in allowed_symbols)
+                try:
+                    offset = int(frame.get('addr'), 0) - int(binary.get('load-addr'), 0)
+                except (ValueError, TypeError):
+                    offset = None
+                normalized = {'image_uuid': binary.get('UUID'),
+                              'image_offset': hex(offset) if offset is not None and 0 <= offset < 2**30 else None}
+                if allowed:
+                    normalized['symbol'] = symbol
+                item['frames'].append(normalized)
+        owned_samples.append(item)
+    summary = []
+    for s in blocked:
+        matching = [x for x in owned_samples if x['pid'] == s['pid'] and x['tid'] == s['tid']
+                    and any(f.get('symbol', '').startswith('ASPEvaluationManager::waitOnEvaluation')
+                            for f in x['frames'])]
+        summary.append(dict(s, end_ns=s['start_ns'] + s['duration_ns'],
+                            policy_wait_stack_samples=len(matching)))
+    oslog_rows = len(list(E.parse(private / 'os-log.xml').getroot().iter('row')))
+    return {'task': 'PCTX01-G05-D05', 'qualification': False, 'test_exit': receipt['test_exit'],
+            'failed_pids': sorted(failed), 'original_budget_ms': 1000, 'concurrency': '8x16',
+            'identities': identities, 'failed_thread_states': states, 'blocked_summary': summary,
+            'failed_thread_samples': owned_samples, 'os_log_rows': oslog_rows,
+            'service_retention': 'No service rows retained: display-name admission alone was insufficient; raw deleted before exact current path/birth validation.',
+            'limits': 'Trace-local identities; process-info zero time is not birth. Long Blocked intervals are scheduler observations. Running sample labels and weights do not prove CPU or compiler duration. Policy wait stack ties an owned child to script-evaluation wait, not a service request ID or inner cause. No memory-pressure exclusion or product repair.'}
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--private', required=True)
+    parser.add_argument('--output', required=True)
+    args = parser.parse_args()
+    result = reduce(Path(args.private))
+    Path(args.output).write_text(json.dumps(result, indent=2) + '\n')
+    print(json.dumps({'blocked_summary': result['blocked_summary'],
+                      'owned_sample_count': len(result['failed_thread_samples']),
+                      'os_log_rows': result['os_log_rows'], 'qualification': False}))

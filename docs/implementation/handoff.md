@@ -1,6 +1,21 @@
 # Resume handoff
 
-## Child-inclusive trace preparation — current, 2026-10-09
+## Exact-child script-policy wait — current, 2026-10-09
+
+Only PCTX01-G05-D05 active/product_failure; PCTX01 stays33/40 details,0/10 gates.
+Approved once-only7s all-process trace recorder0/originaltest101,3TIMEOUT49083/49084/49086.
+Exact failed threads Blocked1000.066625–1000.103125ms; context-switch-associated
+stacks directly reach AppleSystemPolicy script-evaluation wait. This establishes
+child wait path, not internal service/compiler cause or assessment completion.
+Code correction: original fake_git creates fresh#!/bin/sh scripts via native OS spawn;
+prior “native fixture” wording was misleading, no fixture/contract change made.
+Independent timing caveats applied; unadmitted service rows removed; OSLog0rows.
+Known11PIDs absent/private raw removed; product/test/lock pins unchanged. Scope consumed.
+No product repair/qualification. Local vendor draft updated/unsubmitted. Next same D05:
+supported correction for this exact script-policy wait, then all four original contracts.
+[Evidence and limits](evidence/pctx01-startup-child-trace-review.md).
+
+## Child-inclusive trace preparation — historical, 2026-10-09
 
 Only PCTX01-G05-D05 active/product_failure; PCTX01 stays33/40 details,0/10 gates.
 Previous detailed tables tracked wrapper only. Prepared all-process7s/1GiB trace

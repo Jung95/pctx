@@ -1,0 +1,33 @@
+{
+  "task": "PCTX01-G05-D05",
+  "scope_consumed": true,
+  "failure": null,
+  "recorder_pid": 49069,
+  "recorder_exit": 0,
+  "recorder_reaped": true,
+  "target_wrapper_pid": 49081,
+  "target_wrapper_exit": 0,
+  "target_wrapper_reaped": true,
+  "notification_monotonic_ns": 354860149994416,
+  "target_launch_monotonic_ns": 354860149996166,
+  "readiness_proves": "matching unique notification, not child-stack coverage",
+  "listener_cleanup": {
+    "cancel_status": 0,
+    "cancel_owns_fd": true
+  },
+  "target": {
+    "wrapper_pid": 49081,
+    "test_root_pid": 49082,
+    "test_exit": 101,
+    "root_reaped": true,
+    "failure": null,
+    "elapsed_ns": 1044649375,
+    "qualification": false,
+    "limits": "Original root only; known query children require post-run numeric identity/liveness audit."
+  },
+  "observed_private_bytes": 280328211,
+  "cleanup_errors": [],
+  "private_root": "/private/tmp/pctx01-system-trace-child-2d65t63g",
+  "qualification": false,
+  "limits": "Actual trace coverage and exact owned child identities require reduction; unknown descendants remain unknown."
+}

@@ -1,14 +1,15 @@
-# macOS26.7.1(25G241): native fixture startup exceeds application deadline; request supported XProtect attribution
+# macOS26.7.1(25G241): fresh script startup waits in AppleSystemPolicy beyond application deadline
 
-Status: local draft only; no report submitted and no broad diagnostics collected.
+Status: local draft only; no report submitted; approved broad trace collected privately and deleted after numeric reduction.
 
 ## Reproduction and expected behavior
 
-Project: PCTX, https://github.com/Jung95/pctx, evidence baseline`d3bde8a`.
+Project: PCTX, https://github.com/Jung95/pctx, original source baseline`37e8d0e`.
 Host: macOS26.7.1 build25G241, native arm64. SIP enabled.
 Original integration test:
 `concurrent_query_startup_preserves_group_streams_and_original_one_second_budget`
-in `tests/project_deadline.rs`. Eight workers each plan16 native fixture executions.
+in `tests/project_deadline.rs`. Each of eight workers creates one fresh shebang script, then plans16 executions
+of that same path via native OS spawning.
 Every query has one1000ms deadline and must preserve child PGID=PID and collect
 both stdout/stderr. The generated fixture checks its process group and writes
 fixed synthetic output. The application deadline is our product contract, not an
@@ -27,7 +28,20 @@ native phase timings; it is not a qualification run or standalone OS reproducer.
 
 ## Observed evidence
 
-Latest preserved-condition diagnostic:2026-10-09T20:00:37.844719–20:00:43.892494UTC,
+Latest once-approved System Trace: recorder0, original1000ms/8x16 test101 with
+three reported failed roots49083/49084/49086. Each exact owned thread has a long
+Blocked interval1000.066625–1000.103125ms and a context-switch-associated kernel
+stack through AppleSystemPolicy::evaluateScript →waitForEvaluation →
+ASPEvaluationManager::waitOnEvaluation →lck_mtx_sleep. Stack samples occur just
+after blocked intervals end; cancellation may interrupt the wait, not complete
+assessment. Direct child-policy wait is established; internal service request ID,
+compiler duration and upstream cause remain unknown. All source/test pins unchanged.
+The fixture is a fresh#!/bin/sh script, not a Mach-O executable. The parent spawn
+observation rounds below1ms; no output/exit observed before deadline. Raw trace and
+exports removed; minimized numeric result is attached locally.
+
+
+Historical preserved-condition diagnostic:2026-10-09T20:00:37.844719–20:00:43.892494UTC,
 98 recorded outcomes:96OUTPUT,2TIMEOUT(PID45676/45677),30 planned outcomes censored.
 The Rust test-body time was1.05s; enclosing driver time6.047775s. Failed call spawn
 phases0.911/0.850ms, total entry-to-terminal999.933/999.930ms, no dropped trace points.
@@ -61,7 +75,9 @@ interpreter substitution or retry-to-pass is acceptable for this reproduction.
 
 ## Minimal evidence to review
 
-- `pctx01-startup-xpc-signpost-result-review.md`: latest failure and association limits.
+- `pctx01-startup-child-trace-review.md`: exact-owned child policy-wait evidence and limits.
+- `pctx01-startup-child-trace-numeric.json`: minimized PID/TID/UUID/offset/state observations.
+- `pctx01-startup-xpc-signpost-result-review.md`: historical failure and association limits.
 - `pctx01-startup-xpc-signpost-forward-result.json`: owned timing/outcome records.
 - `pctx01-startup-policy-forward-joined.json`: earlier owned request/policy timing.
 - `pctx01-startup-bundle-stack-review.md`: numeric service-frame evidence and limits.

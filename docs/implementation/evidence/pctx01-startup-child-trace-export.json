@@ -1,0 +1,89 @@
+{
+  "task": "PCTX01-G05-D05",
+  "existing_trace_only": true,
+  "toc_export": {
+    "pid": 49190,
+    "exit": 0,
+    "reaped": true,
+    "bytes": 75547,
+    "existing_trace_only": true
+  },
+  "exports": [
+    {
+      "schema": "process-info",
+      "pid": 49197,
+      "exit": 0,
+      "reaped": true,
+      "failure": null,
+      "bytes": 155907
+    },
+    {
+      "schema": "time-profile",
+      "pid": 49198,
+      "exit": 0,
+      "reaped": true,
+      "failure": null,
+      "bytes": 11609959
+    },
+    {
+      "schema": "thread-state",
+      "pid": 49202,
+      "exit": 0,
+      "reaped": true,
+      "failure": null,
+      "bytes": 122054409
+    },
+    {
+      "schema": "os-log",
+      "pid": 49274,
+      "exit": 0,
+      "reaped": true,
+      "failure": null,
+      "bytes": 1403
+    }
+  ],
+  "selected_schema_attributes": [
+    {
+      "schema": "syscall",
+      "target-pid": "ALL"
+    },
+    {
+      "schema": "context-switch",
+      "target-pid": "ALL"
+    },
+    {
+      "schema": "thread-snapshot"
+    },
+    {
+      "target-pid": "ALL",
+      "context-switch-sampling": "1",
+      "schema": "time-profile",
+      "record-waiting-threads": "1",
+      "needs-kernel-callstack": "1"
+    },
+    {
+      "target-pid": "ALL",
+      "context-switch-sampling": "0",
+      "schema": "time-profile",
+      "needs-kernel-callstack": "0",
+      "record-waiting-threads": "0"
+    },
+    {
+      "target-pid": "ALL",
+      "schema": "os-log"
+    },
+    {
+      "schema": "os-log",
+      "target-pid": "ALL"
+    },
+    {
+      "schema": "thread-state",
+      "target-pid": "ALL"
+    },
+    {
+      "schema": "process-info"
+    }
+  ],
+  "no_raw_metadata_retained": true,
+  "qualification": false
+}

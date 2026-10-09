@@ -1,0 +1,583 @@
+{
+  "task": "PCTX01-G05-D05",
+  "qualification": false,
+  "test_exit": 101,
+  "failed_pids": [
+    49083,
+    49084,
+    49086
+  ],
+  "original_budget_ms": 1000,
+  "concurrency": "8x16",
+  "identities": [
+    {
+      "pid": 49081,
+      "trace_unique_numeric_id": "1443315"
+    },
+    {
+      "pid": 49082,
+      "trace_unique_numeric_id": "1443316"
+    },
+    {
+      "pid": 49083,
+      "trace_unique_numeric_id": "1443317"
+    },
+    {
+      "pid": 49084,
+      "trace_unique_numeric_id": "1443318"
+    },
+    {
+      "pid": 49086,
+      "trace_unique_numeric_id": "1443320"
+    }
+  ],
+  "failed_thread_states": [
+    {
+      "pid": 49083,
+      "tid": 10147983,
+      "start_ns": 0,
+      "duration_ns": 826178166,
+      "state": "Unknown"
+    },
+    {
+      "pid": 49084,
+      "tid": 10147984,
+      "start_ns": 0,
+      "duration_ns": 826188041,
+      "state": "Unknown"
+    },
+    {
+      "pid": 49086,
+      "tid": 10147986,
+      "start_ns": 0,
+      "duration_ns": 826193666,
+      "state": "Unknown"
+    },
+    {
+      "pid": 49083,
+      "tid": 10147983,
+      "start_ns": 826178166,
+      "duration_ns": 126167,
+      "state": "Runnable"
+    },
+    {
+      "pid": 49084,
+      "tid": 10147984,
+      "start_ns": 826188041,
+      "duration_ns": 178917,
+      "state": "Runnable"
+    },
+    {
+      "pid": 49086,
+      "tid": 10147986,
+      "start_ns": 826193666,
+      "duration_ns": 115125,
+      "state": "Runnable"
+    },
+    {
+      "pid": 49083,
+      "tid": 10147983,
+      "start_ns": 826304333,
+      "duration_ns": 4458,
+      "state": "Running"
+    },
+    {
+      "pid": 49086,
+      "tid": 10147986,
+      "start_ns": 826308791,
+      "duration_ns": 4500,
+      "state": "Running"
+    },
+    {
+      "pid": 49083,
+      "tid": 10147983,
+      "start_ns": 826308791,
+      "duration_ns": 20709,
+      "state": "Blocked"
+    },
+    {
+      "pid": 49086,
+      "tid": 10147986,
+      "start_ns": 826313291,
+      "duration_ns": 17375,
+      "state": "Blocked"
+    },
+    {
+      "pid": 49083,
+      "tid": 10147983,
+      "start_ns": 826329500,
+      "duration_ns": 54250,
+      "state": "Runnable"
+    },
+    {
+      "pid": 49086,
+      "tid": 10147986,
+      "start_ns": 826330666,
+      "duration_ns": 83334,
+      "state": "Runnable"
+    },
+    {
+      "pid": 49084,
+      "tid": 10147984,
+      "start_ns": 826366958,
+      "duration_ns": 41583,
+      "state": "Running"
+    },
+    {
+      "pid": 49083,
+      "tid": 10147983,
+      "start_ns": 826383750,
+      "duration_ns": 30250,
+      "state": "Running"
+    },
+    {
+      "pid": 49084,
+      "tid": 10147984,
+      "start_ns": 826408541,
+      "duration_ns": 1000093209,
+      "state": "Blocked"
+    },
+    {
+      "pid": 49086,
+      "tid": 10147986,
+      "start_ns": 826414000,
+      "duration_ns": 21083,
+      "state": "Running"
+    },
+    {
+      "pid": 49083,
+      "tid": 10147983,
+      "start_ns": 826414000,
+      "duration_ns": 1000103125,
+      "state": "Blocked"
+    },
+    {
+      "pid": 49086,
+      "tid": 10147986,
+      "start_ns": 826435083,
+      "duration_ns": 1000066625,
+      "state": "Blocked"
+    },
+    {
+      "pid": 49086,
+      "tid": 10147986,
+      "start_ns": 1826501708,
+      "duration_ns": 3917,
+      "state": "Runnable"
+    },
+    {
+      "pid": 49084,
+      "tid": 10147984,
+      "start_ns": 1826501750,
+      "duration_ns": 7416,
+      "state": "Runnable"
+    },
+    {
+      "pid": 49086,
+      "tid": 10147986,
+      "start_ns": 1826505625,
+      "duration_ns": 63916,
+      "state": "Running"
+    },
+    {
+      "pid": 49084,
+      "tid": 10147984,
+      "start_ns": 1826509166,
+      "duration_ns": 60334,
+      "state": "Running"
+    },
+    {
+      "pid": 49083,
+      "tid": 10147983,
+      "start_ns": 1826517125,
+      "duration_ns": 4458,
+      "state": "Runnable"
+    },
+    {
+      "pid": 49083,
+      "tid": 10147983,
+      "start_ns": 1826521583,
+      "duration_ns": 48125,
+      "state": "Running"
+    },
+    {
+      "pid": 49084,
+      "tid": 10147984,
+      "start_ns": 1826569500,
+      "duration_ns": 875,
+      "state": "Blocked"
+    },
+    {
+      "pid": 49086,
+      "tid": 10147986,
+      "start_ns": 1826569541,
+      "duration_ns": 959,
+      "state": "Blocked"
+    },
+    {
+      "pid": 49083,
+      "tid": 10147983,
+      "start_ns": 1826569708,
+      "duration_ns": 875,
+      "state": "Blocked"
+    },
+    {
+      "pid": 49084,
+      "tid": 10147984,
+      "start_ns": 1826570375,
+      "duration_ns": 5922862665,
+      "state": "Terminated"
+    },
+    {
+      "pid": 49086,
+      "tid": 10147986,
+      "start_ns": 1826570500,
+      "duration_ns": 5922862540,
+      "state": "Terminated"
+    },
+    {
+      "pid": 49083,
+      "tid": 10147983,
+      "start_ns": 1826570583,
+      "duration_ns": 5922862457,
+      "state": "Terminated"
+    }
+  ],
+  "blocked_summary": [
+    {
+      "pid": 49084,
+      "tid": 10147984,
+      "start_ns": 826408541,
+      "duration_ns": 1000093209,
+      "state": "Blocked",
+      "end_ns": 1826501750,
+      "policy_wait_stack_samples": 1
+    },
+    {
+      "pid": 49083,
+      "tid": 10147983,
+      "start_ns": 826414000,
+      "duration_ns": 1000103125,
+      "state": "Blocked",
+      "end_ns": 1826517125,
+      "policy_wait_stack_samples": 1
+    },
+    {
+      "pid": 49086,
+      "tid": 10147986,
+      "start_ns": 826435083,
+      "duration_ns": 1000066625,
+      "state": "Blocked",
+      "end_ns": 1826501708,
+      "policy_wait_stack_samples": 1
+    }
+  ],
+  "failed_thread_samples": [
+    {
+      "pid": 49083,
+      "tid": 10147983,
+      "sample_time_ns": 826305125,
+      "state_label": "Running",
+      "weight_ns": "10000000",
+      "frames": [
+        {
+          "image_uuid": "94769496-091D-3DF1-84AB-5CAD0DB6A5D3",
+          "image_offset": "0x47d3411"
+        },
+        {
+          "image_uuid": "94769496-091D-3DF1-84AB-5CAD0DB6A5D3",
+          "image_offset": "0x47d340f"
+        }
+      ]
+    },
+    {
+      "pid": 49083,
+      "tid": 10147983,
+      "sample_time_ns": 826308791,
+      "state_label": null,
+      "weight_ns": "3666",
+      "frames": []
+    },
+    {
+      "pid": 49086,
+      "tid": 10147986,
+      "sample_time_ns": 826309791,
+      "state_label": "Running",
+      "weight_ns": "10000000",
+      "frames": [
+        {
+          "image_uuid": "94769496-091D-3DF1-84AB-5CAD0DB6A5D3",
+          "image_offset": "0x47d3411"
+        },
+        {
+          "image_uuid": "94769496-091D-3DF1-84AB-5CAD0DB6A5D3",
+          "image_offset": "0x47d340f"
+        }
+      ]
+    },
+    {
+      "pid": 49086,
+      "tid": 10147986,
+      "sample_time_ns": 826313291,
+      "state_label": null,
+      "weight_ns": "3500",
+      "frames": []
+    },
+    {
+      "pid": 49084,
+      "tid": 10147984,
+      "sample_time_ns": 826368666,
+      "state_label": "Running",
+      "weight_ns": "10000000",
+      "frames": [
+        {
+          "image_uuid": "94769496-091D-3DF1-84AB-5CAD0DB6A5D3",
+          "image_offset": "0x47d3411"
+        },
+        {
+          "image_uuid": "94769496-091D-3DF1-84AB-5CAD0DB6A5D3",
+          "image_offset": "0x47d340f"
+        }
+      ]
+    },
+    {
+      "pid": 49084,
+      "tid": 10147984,
+      "sample_time_ns": 826408541,
+      "state_label": null,
+      "weight_ns": "39875",
+      "frames": []
+    },
+    {
+      "pid": 49086,
+      "tid": 10147986,
+      "sample_time_ns": 1826507333,
+      "state_label": "Running",
+      "weight_ns": "1000072250",
+      "frames": [
+        {
+          "image_uuid": "94769496-091D-3DF1-84AB-5CAD0DB6A5D3",
+          "image_offset": "0x47bc131"
+        },
+        {
+          "image_uuid": "94769496-091D-3DF1-84AB-5CAD0DB6A5D3",
+          "image_offset": "0x47a1bcb",
+          "symbol": "lck_mtx_sleep"
+        },
+        {
+          "image_uuid": "8474AAC8-5327-3045-A969-9B20DBF588BD",
+          "image_offset": "0x249624b",
+          "symbol": "ASPEvaluationManager::waitOnEvaluation(syspolicyd_evaluation*)"
+        },
+        {
+          "image_uuid": "8474AAC8-5327-3045-A969-9B20DBF588BD",
+          "image_offset": "0x2499703",
+          "symbol": "AppleSystemPolicy::waitForEvaluation(syspolicyd_evaluation*, int, ASPEvaluationInfo*, vnode**, evaluation_results*, long long*, char const*)"
+        },
+        {
+          "image_uuid": "8474AAC8-5327-3045-A969-9B20DBF588BD",
+          "image_offset": "0x249a9b7",
+          "symbol": "AppleSystemPolicy::evaluateScript(ASPProcessInfo*, ASPScriptInfo*)"
+        },
+        {
+          "image_uuid": "8474AAC8-5327-3045-A969-9B20DBF588BD",
+          "image_offset": "0x249ae93",
+          "symbol": "AppleSystemPolicy::procNotifyExecComplete(proc*)"
+        },
+        {
+          "image_uuid": "94769496-091D-3DF1-84AB-5CAD0DB6A5D3",
+          "image_offset": "0x5065a4f"
+        },
+        {
+          "image_uuid": "94769496-091D-3DF1-84AB-5CAD0DB6A5D3",
+          "image_offset": "0x47d35af"
+        }
+      ]
+    },
+    {
+      "pid": 49084,
+      "tid": 10147984,
+      "sample_time_ns": 1826510458,
+      "state_label": "Running",
+      "weight_ns": "1000101917",
+      "frames": [
+        {
+          "image_uuid": "94769496-091D-3DF1-84AB-5CAD0DB6A5D3",
+          "image_offset": "0x47bc131"
+        },
+        {
+          "image_uuid": "94769496-091D-3DF1-84AB-5CAD0DB6A5D3",
+          "image_offset": "0x47a1bcb",
+          "symbol": "lck_mtx_sleep"
+        },
+        {
+          "image_uuid": "8474AAC8-5327-3045-A969-9B20DBF588BD",
+          "image_offset": "0x249624b",
+          "symbol": "ASPEvaluationManager::waitOnEvaluation(syspolicyd_evaluation*)"
+        },
+        {
+          "image_uuid": "8474AAC8-5327-3045-A969-9B20DBF588BD",
+          "image_offset": "0x2499703",
+          "symbol": "AppleSystemPolicy::waitForEvaluation(syspolicyd_evaluation*, int, ASPEvaluationInfo*, vnode**, evaluation_results*, long long*, char const*)"
+        },
+        {
+          "image_uuid": "8474AAC8-5327-3045-A969-9B20DBF588BD",
+          "image_offset": "0x249a9b7",
+          "symbol": "AppleSystemPolicy::evaluateScript(ASPProcessInfo*, ASPScriptInfo*)"
+        },
+        {
+          "image_uuid": "8474AAC8-5327-3045-A969-9B20DBF588BD",
+          "image_offset": "0x249ae93",
+          "symbol": "AppleSystemPolicy::procNotifyExecComplete(proc*)"
+        },
+        {
+          "image_uuid": "94769496-091D-3DF1-84AB-5CAD0DB6A5D3",
+          "image_offset": "0x5065a4f"
+        },
+        {
+          "image_uuid": "94769496-091D-3DF1-84AB-5CAD0DB6A5D3",
+          "image_offset": "0x47d35af"
+        }
+      ]
+    },
+    {
+      "pid": 49083,
+      "tid": 10147983,
+      "sample_time_ns": 1826522666,
+      "state_label": "Running",
+      "weight_ns": "1000108666",
+      "frames": [
+        {
+          "image_uuid": "94769496-091D-3DF1-84AB-5CAD0DB6A5D3",
+          "image_offset": "0x47bc131"
+        },
+        {
+          "image_uuid": "94769496-091D-3DF1-84AB-5CAD0DB6A5D3",
+          "image_offset": "0x47a1bcb",
+          "symbol": "lck_mtx_sleep"
+        },
+        {
+          "image_uuid": "8474AAC8-5327-3045-A969-9B20DBF588BD",
+          "image_offset": "0x249624b",
+          "symbol": "ASPEvaluationManager::waitOnEvaluation(syspolicyd_evaluation*)"
+        },
+        {
+          "image_uuid": "8474AAC8-5327-3045-A969-9B20DBF588BD",
+          "image_offset": "0x2499703",
+          "symbol": "AppleSystemPolicy::waitForEvaluation(syspolicyd_evaluation*, int, ASPEvaluationInfo*, vnode**, evaluation_results*, long long*, char const*)"
+        },
+        {
+          "image_uuid": "8474AAC8-5327-3045-A969-9B20DBF588BD",
+          "image_offset": "0x249a9b7",
+          "symbol": "AppleSystemPolicy::evaluateScript(ASPProcessInfo*, ASPScriptInfo*)"
+        },
+        {
+          "image_uuid": "8474AAC8-5327-3045-A969-9B20DBF588BD",
+          "image_offset": "0x249ae93",
+          "symbol": "AppleSystemPolicy::procNotifyExecComplete(proc*)"
+        },
+        {
+          "image_uuid": "94769496-091D-3DF1-84AB-5CAD0DB6A5D3",
+          "image_offset": "0x5065a4f"
+        },
+        {
+          "image_uuid": "94769496-091D-3DF1-84AB-5CAD0DB6A5D3",
+          "image_offset": "0x47d35af"
+        }
+      ]
+    },
+    {
+      "pid": 49084,
+      "tid": 10147984,
+      "sample_time_ns": 1826569500,
+      "state_label": null,
+      "weight_ns": "59042",
+      "frames": []
+    },
+    {
+      "pid": 49086,
+      "tid": 10147986,
+      "sample_time_ns": 1826569541,
+      "state_label": null,
+      "weight_ns": "62208",
+      "frames": []
+    },
+    {
+      "pid": 49083,
+      "tid": 10147983,
+      "sample_time_ns": 1826569708,
+      "state_label": null,
+      "weight_ns": "47042",
+      "frames": []
+    }
+  ],
+  "os_log_rows": 0,
+  "limits": "Trace-local identities; process-info zero time is not birth. Long Blocked intervals are scheduler observations. Running sample labels and weights do not prove CPU or compiler duration. Policy wait stack ties an owned child to script-evaluation wait, not a service request ID or inner cause. No memory-pressure exclusion or product repair.",
+  "original_test_timeout_observations": [
+    {
+      "elapsed_ms": 1000,
+      "spawn_ms": 0,
+      "iterations": 164,
+      "stdout_bytes": 0,
+      "stderr_bytes": 0,
+      "waitid_signo": 0,
+      "waitid_code": 0,
+      "group_probes": 0,
+      "root_pid": 49084,
+      "phase": "wait_next_observation",
+      "stdout_eof": "false",
+      "stderr_eof": "false",
+      "root_exit_observed": "false"
+    },
+    {
+      "elapsed_ms": 1000,
+      "spawn_ms": 0,
+      "iterations": 164,
+      "stdout_bytes": 0,
+      "stderr_bytes": 0,
+      "waitid_signo": 0,
+      "waitid_code": 0,
+      "group_probes": 0,
+      "root_pid": 49086,
+      "phase": "wait_next_observation",
+      "stdout_eof": "false",
+      "stderr_eof": "false",
+      "root_exit_observed": "false"
+    },
+    {
+      "elapsed_ms": 1000,
+      "spawn_ms": 0,
+      "iterations": 164,
+      "stdout_bytes": 0,
+      "stderr_bytes": 0,
+      "waitid_signo": 0,
+      "waitid_code": 0,
+      "group_probes": 0,
+      "root_pid": 49083,
+      "phase": "wait_next_observation",
+      "stdout_eof": "false",
+      "stderr_eof": "false",
+      "root_exit_observed": "false"
+    }
+  ],
+  "original_test_summary": {
+    "exit": 101,
+    "passed": 0,
+    "failed": 1,
+    "filtered": 13,
+    "body_seconds": 1.01,
+    "reported_timeout_count": 3,
+    "full_128_outcomes_proved": false
+  },
+  "fixture_code_correction": {
+    "path": "tests/project_deadline.rs",
+    "helper": "fake_git",
+    "line": 149,
+    "actual": "Fresh mode0700 file containing #!/bin/sh followed by script text; native OS spawn, not a Mach-O native executable fixture. No replacement or test change.",
+    "worker_lifetime": "Eight workers each create one fresh script before planning16 executions of that same path; not a new script per invocation."
+  },
+  "service_retention": "No service rows retained: display-name admission alone was insufficient; raw deleted before exact current path/birth validation.",
+  "stack_timing_caveat": "The policy-wait stacks are context-switch-associated samples just after the long Blocked intervals end, not repeated pre-deadline samples proving an unchanged stack throughout.",
+  "spawn_ms_caveat": "spawn_ms=0 is millisecond-rounded; it does not mean zero-cost spawn.",
+  "termination_caveat": "Blocked intervals end around the original deadline and the threads shortly terminate. This does not prove assessment completion; deadline cancellation may interrupt policy wait."
+}

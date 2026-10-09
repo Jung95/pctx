@@ -1,0 +1,59 @@
+{
+  "task": "PCTX01-G05-D05",
+  "known_owned_pid_checks": [
+    {
+      "pid": 49069,
+      "state": "absent"
+    },
+    {
+      "pid": 49081,
+      "state": "absent"
+    },
+    {
+      "pid": 49082,
+      "state": "absent"
+    },
+    {
+      "pid": 49083,
+      "state": "absent"
+    },
+    {
+      "pid": 49084,
+      "state": "absent"
+    },
+    {
+      "pid": 49086,
+      "state": "absent"
+    },
+    {
+      "pid": 49190,
+      "state": "absent"
+    },
+    {
+      "pid": 49197,
+      "state": "absent"
+    },
+    {
+      "pid": 49198,
+      "state": "absent"
+    },
+    {
+      "pid": 49202,
+      "state": "absent"
+    },
+    {
+      "pid": 49274,
+      "state": "absent"
+    }
+  ],
+  "known_pid_count": 11,
+  "private_raw_removed": true,
+  "removed_logical_bytes": 414231462,
+  "source_pins_unchanged": {
+    "src/query_process.rs": true,
+    "tests/project_deadline.rs": true,
+    "Cargo.lock": true
+  },
+  "limits": "Only recorder,wrapper,test root,three explicitly reported failed children and five exporters audited. Successful children/full descendant enumeration unproved. No unrelated process signalled; external Instruments caches not inspected/deleted.",
+  "qualification": false
+}
