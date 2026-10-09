@@ -1,0 +1,108 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.79s
+     Running unittests src/main.rs (target/debug/deps/pctx-5861ab217462b7f0)
+
+running 7 tests
+test finite_route_tests::renderer_refusal_keeps_typed_error_and_incomplete_coverage ... ok
+test cli_help::tests::every_declared_leaf_has_an_explicit_effect_contract ... ok
+test cli_args::tests::producer_repetition_and_literal_child_options_preserve_exact_values ... ok
+test cli_args::tests::pack_artifact_output_and_global_output_share_one_singular_binding ... ok
+test cli_args::tests::defaults_and_fresh_parses_do_not_count_as_duplicate_inputs ... ok
+test finite_route_tests::finite_work_quota_adapter_reads_do_not_time_execution ... ok
+test parser_contract_tests::frozen_visible_parser_schema_and_cases ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 6.36s
+
+     Running tests/cli_frontend.rs (target/debug/deps/cli_frontend-4948844b4d514170)
+
+running 24 tests
+test non_utf8_argument_returns_structured_error_without_panic_or_effect ... ok
+test help_and_version_are_successful_without_project_access ... ok
+test no_color_suppresses_help_on_a_real_terminal_including_nested_help ... ok
+test parser_diagnostics_mask_secrets_and_escape_control_characters ... ok
+test parser_errors_respect_actual_json_option_and_do_not_load_project ... ok
+test plain_parser_diagnostics_escape_bidi_c1_and_line_controls ... ok
+test parsed_run_preflight_refusals_attest_no_child_before_any_access ... ok
+test native_hook_invalid_transports_refuse_before_project_or_output_access ... ok
+test root_version_is_exact_and_ignores_project_output_and_query_options ... ok
+test semantic_refusals_are_one_safe_json_document_for_every_requested_format ... ok
+test partial_refresh_does_not_claim_the_requested_outline_is_wholly_unsupported ... ok
+test nested_global_positions_select_the_same_root_format_and_timeout ... ok
+test singular_global_duplicates_are_rejected_before_project_and_output_effects ... ok
+test undeliverable_parser_capacity_semantic_and_timeout_refusals_return_io_exit ... ok
+test invalid_strict_queries_preserve_generation_database_sources_and_output_path ... ok
+test undeliverable_plain_parser_diagnostic_returns_io_exit_without_panic ... ok
+test unsupported_ndjson_is_rejected_before_project_discovery_or_init ... ok
+test valid_minimum_capacity_bounds_semantic_and_timeout_refusals_without_writes ... ok
+test saved_output_invalid_arguments_refuse_before_project_and_response_access ... ok
+test unsupported_markdown_refuses_before_response_files_and_stream_dispatch ... ok
+test pack_artifact_output_is_required_once_and_works_at_every_command_depth ... ok
+test outline_empty_unsupported_and_partial_are_distinct_in_every_representation ... ok
+test read_final_document_budget_uses_emitted_format_and_preserves_excerpt_truth ... ok
+test every_visible_help_path_describes_schema_and_effects_without_project_access ... ok
+
+test result: ok. 24 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.57s
+
+     Running tests/cli_refusal_envelope.rs (target/debug/deps/cli_refusal_envelope-e0fa1efd013109e3)
+
+running 4 tests
+test semantic_and_representation_refusals_do_not_claim_completed_execution ... ok
+test install_required_and_duplicate_options_keep_parser_envelope_and_no_effects ... ok
+test admitted_install_failures_keep_state_classification_and_response_destination ... ok
+test all_visible_leaf_unknown_options_refuse_before_project_and_output ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.60s
+
+     Running tests/cli_run_exit.rs (target/debug/deps/cli_run_exit-6950b2b7b4cecebc)
+
+running 11 tests
+test missing_project_is_prelaunch_failure_in_both_modes_without_files ... ok
+test project_refusal_near_minimum_keeps_original_exit_and_fits ... ok
+test project_refusals_preserve_typed_exit_and_message_before_spawn ... ok
+test actual_prelaunch_refusal_has_no_child_outcome_or_invocation ... ok
+test admitted_small_run_budgets_preserve_prelaunch_truth_without_artifact ... ok
+test actual_spawn_failure_never_becomes_success_or_child_exit ... ok
+test incomplete_capture_is_partial_without_replacing_child_success ... ok
+test actual_execution_timeout_preserves_observation_but_returns_wrapper_error ... ok
+test publication_failure_preserves_child_outcome_and_never_retries ... ok
+test actual_child_codes_and_signal_are_distinct_from_wrapper_status ... ok
+test final_serialized_budget_preserves_actual_child_truth_and_full_reread ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.52s
+
+     Running tests/render.rs (target/debug/deps/render-cc917b0b7eea1064)
+
+running 11 tests
+test json_formats_are_one_minified_document_including_exact_final_newline ... ok
+test budget_fallback_keeps_nested_execution_truth_and_retrieval_kind ... ok
+test malicious_fences_and_controls_cannot_escape_literal_source_and_roundtrip_exactly ... ok
+test errors_partial_scope_and_negative_report_are_explicit_without_success_claim ... ok
+test budget_fallback_never_fabricates_child_truth_without_attestation ... ok
+test preexisting_masking_and_unicode_are_not_changed_or_inferred ... ok
+test signatures_and_outlines_are_visible_with_ranges_and_literal_control_escaping ... ok
+test terminal_hidden_unicode_is_json_escaped_without_changing_values ... ok
+test outline_and_handoff_display_source_provenance_and_keep_unknown_fields ... ok
+test support_is_exact_and_unsupported_markdown_returns_argument_error ... ok
+test renderer_never_enforces_or_silently_cuts_a_reported_budget ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/session_render_budget.rs (target/debug/deps/session_render_budget-2e37552a4a4fa12a)
+
+running 13 tests
+test task_file_inside_project_cannot_bypass_source_topic_delivery ... ok
+test managed_decision_topics_and_handoff_sources_are_not_packet_topic_overrides ... ok
+test source_topics_cannot_be_bypassed_by_public_packet_seed_or_pack_scope ... ok
+test task_input_provenance_distinguishes_relative_project_external_and_stdin ... ok
+test exact_final_budget_and_representation_receipts_require_explicit_ack ... ok
+test original_cli_budget_bounds_writer_admission_without_context_or_epoch_writes ... ok
+test terminal_escape_overflow_is_rejected_before_context_emission_or_event ... ok
+test adaptive_delta_resends_unreceived_body_and_reuses_acknowledged_receipts ... ok
+test registered_role_and_topic_controls_precede_context_and_resume_requires_fresh_baseline ... ok
+test supersession_links_invalidate_unchanged_source_without_reviving_it_on_replacement_cancellation ... ok
+test unchanged_git_does_not_hide_decision_or_memory_change_retirement_and_deletion ... ok
+test pack_consumer_binding_uses_actual_agent_lease_and_cannot_survive_policy_or_epoch_change ... ok
+test omitted_sources_are_not_acknowledged_and_later_delivery_is_explicit ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.41s
+

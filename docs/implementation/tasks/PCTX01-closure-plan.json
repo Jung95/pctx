@@ -310,7 +310,7 @@
       "id": "PCTX01-G04-D03",
       "gate": "G04",
       "status": "open",
-      "local_implementation": "remaining",
+      "local_implementation": "bounded Read final-document repair verified; fallback/destination matrix remaining",
       "completion_condition": "Complete success/partial/error envelope required fields and exact final bytes for all supported representation/destination classes; no interrupted JSON or fabricated omitted count",
       "spec_sections": [
         "8",
@@ -322,7 +322,8 @@
       "evidence": [
         "pctx01-run-final-bytes-verification.json",
         "pctx01-representation-admission-verification.json",
-        "pctx01-caller-schema-verification.json"
+        "pctx01-caller-schema-verification.json",
+        "pctx01-read-final-budget-verification.json"
       ],
       "verification_environment": "Native macOS arm64 local common proof; all release platforms separately required by G09",
       "macOS_arm64": "remaining",
@@ -330,7 +331,7 @@
       "Linux_x86_64": "unverified; G09-D03",
       "Linux_aarch64": "prior fixed-source full only; inspect linked manifest per contract",
       "Windows_x86_64": "unverified; G09-D04",
-      "documentation_evidence": "closure plan recorded; execution gaps retained"
+      "documentation_evidence": "Read24case/final70/static/read-only review qualified; G04-D03 still open, remaining fallback identity/truncation/destination conditions recorded"
     },
     {
       "id": "PCTX01-G04-D04",

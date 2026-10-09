@@ -1,0 +1,22 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.67s
+     Running tests/cli_frontend.rs (target/debug/deps/cli_frontend-4948844b4d514170)
+
+running 1 test
+test read_final_document_budget_uses_emitted_format_and_preserves_excerpt_truth ... FAILED
+
+failures:
+
+---- read_final_document_budget_uses_emitted_format_and_preserves_excerpt_truth stdout ----
+
+thread 'read_final_document_budget_uses_emitted_format_and_preserves_excerpt_truth' (9281617) panicked at tests/cli_frontend.rs:968:55:
+retained source excerpt
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    read_final_document_budget_uses_emitted_format_and_preserves_excerpt_truth
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 23 filtered out; finished in 0.83s
+
+error: test failed, to rerun pass `--test cli_frontend`

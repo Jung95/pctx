@@ -10,6 +10,32 @@ Logical module names below describe Application/Domain boundaries; current flat 
 
 Only **PCTX01** is active. It is the lowest-numbered incomplete official development item and has no prerequisites. All other incomplete rows are backlog status, not concurrent active work. D-series records describe historical implementation slices; they are not substitutes for whole official-task completion. Finish all PCTX01-owned required CLI/help/version/argument/envelope/error/budget/exit/common-timeout contracts and required platform qualification before selecting PCTX02. Shared acceptance IDs retain their full conditions; record which common contract PCTX01 owns and which independent feature belongs to a later task. Do not mark a whole shared AC verified from PCTX01-only proof.
 
+## Current G04-D03 Read boundary — 2026-10-09
+
+Only **PCTX01** is active; **G04-D03 remains open**. Detail29/40 and whole gates0/10
+are unchanged. [Read final-document evidence](evidence/pctx01-read-final-budget-verification.json)
+records actual Unicode/Markdown expansion losing a usable excerpt (initial0PASS/1FAIL),
+then the repair measuring the chosen final representation, newline and final
+truncation metadata after each UTF-8-safe body reduction. Source identity/hash and
+usable prefix excerpts survive; `--require-complete` returns PARTIAL_RESULT3 on
+presentation reduction rather than claiming a complete body.
+
+The24-case CLI matrix covers two bodies, three formats, stdout/response file and
+both completeness modes, with required envelope fields and exact65536-byte limit.
+Final product source70 related tests PASS (7binary/24frontend/4refusal/11Run/11render/
+13session); locked all-target Clippy and format PASS. Initial collapsible-if lint
+failure is retained, repaired without suppression. Independent read-only review
+found no blocker in this bounded repair; original range retention is source-reviewed,
+not explicitly asserted by the native control. No whole or additional platform run.
+
+Next **same-condition** work: preserve established identity/generation/validation
+through budget/render-error/final-timeout fallbacks; disclose presentation truncation
+and warning omissions; verify metadata-only fallback sizes and remaining destination
+classes against the existing140-leaf crosswalk. No producer expansion/new IDs.
+Original four macOS1s startup failures and inactive PCTX36/PCTX47 backlog remain.
+Main publication is still awaiting explicit user authorization after automatic
+review rejection; no push retry or Actions. All verification jobs are terminal.
+
 ## Current fixed PCTX01 execution register — 2026-10-09
 
 Only **PCTX01** is active, lowest incomplete official ID/no prerequisite. The

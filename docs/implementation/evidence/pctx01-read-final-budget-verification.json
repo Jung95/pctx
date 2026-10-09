@@ -1,0 +1,133 @@
+{
+  "task": "PCTX01",
+  "condition": "PCTX01-G04-D03",
+  "status": "implementing; bounded Read final-document repair verified; whole condition open",
+  "base_revision": "e2fcffc",
+  "environment": {
+    "system": "macOS-26.7.1-arm64-arm-64bit-Mach-O",
+    "architecture": "arm64",
+    "rust": "1.99.0"
+  },
+  "fixed_register": {
+    "closed_details": 29,
+    "detail_denominator": 40,
+    "closed_gates": 0,
+    "gate_denominator": 10,
+    "new_ids": []
+  },
+  "source_sha256": {
+    "src/main.rs": "33527003eee9ecf6c31653fe0522e199e1365db80cbd859c2dad925cd4916a14",
+    "src/domain.rs": "ebc5fb36aced808593a9df4606293e8900450c67f068de1574369c9c4b810c25",
+    "src/render.rs": "020c3e4303829c4ac12c2db85120e41d5b901422849d67513a78fce9608a5633",
+    "tests/cli_frontend.rs": "9d8c96106eb14ce4b5b6cd98e7fc653d23f40111d2b7c0ad45f40f3c9ca5bc6d",
+    "Cargo.toml": "179b02f69bdd7c61adc41ed5f71f8737ee692655b46b0bfeb9c1ffe165d8e97f",
+    "Cargo.lock": "f96362897990caba560793601bc9fca08cef5c977907bb06889d5595d2acd7b0"
+  },
+  "artifacts_sha256": {
+    "target/debug/pctx": "16db5b2c9ec3efebc039ada287a4fb713d1e9ca3234344f24be1d22593f6c769",
+    "target/debug/deps/cli_frontend-4948844b4d514170": "55b9f853a5bec06111856cc1883c3a5cbc48a80fb256ff475a03af8eddeafae0",
+    "target/debug/deps/pctx-5861ab217462b7f0": "1320ec193e471706327b21ff86eb6ed29ad346d6d9d4d0e638f6091ca647cb38"
+  },
+  "log_sha256": {
+    "pctx01-read-final-budget-clippy-initial.log": "b37a96f02f0473bdad258fcded4b8c697a9f65fe2d4b8d6b861da062645760ec",
+    "pctx01-read-final-budget-clippy.log": "435e264431c09bc8d5abf4a687e6433e74b0e9000cade279761a4b16918a49a8",
+    "pctx01-read-final-budget-fields.log": "68c827577efcc5f47c5ec9112b50db3d4c0c19a8c6d40e5dad55bf32fdac27c0",
+    "pctx01-read-final-budget-final.log": "ba91b2b529b4f16b3a66423357333e1fc6459c45105b81ac6449fde608869f2c",
+    "pctx01-read-final-budget-format.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "pctx01-read-final-budget-initial.log": "1e320f43ffc73b4b8154e8e3f44789cd3c8a81cdce7371a1e84428e37cd4d7f3",
+    "pctx01-read-final-budget-related.log": "da77c31ce9055192320aaa1575ac85a64ee67d78dd9e66097a33b6d74e338dd3",
+    "pctx01-read-final-budget-repaired.log": "2bdb1a3bdf14459e35853fdb3741e2ce0d56d3e32490001b39626b873513c05a"
+  },
+  "runs": [
+    {
+      "session": 33810,
+      "log": "pctx01-read-final-budget-initial.log",
+      "exit": 101,
+      "passed": 0,
+      "failed": 1,
+      "meaning": "Actual expanding-Unicode Read loses usable excerpt to budget fallback; retained original failure."
+    },
+    {
+      "session": 67473,
+      "log": "pctx01-read-final-budget-repaired.log",
+      "exit": 0,
+      "passed": 1,
+      "failed": 0,
+      "meaning": "24 actual CLI combinations before additional required-field assertions."
+    },
+    {
+      "session": 68093,
+      "log": "pctx01-read-final-budget-related.log",
+      "exit": 0,
+      "passed": 70,
+      "failed": 0
+    },
+    {
+      "session": 26550,
+      "log": "pctx01-read-final-budget-fields.log",
+      "exit": 0,
+      "passed": 1,
+      "failed": 0,
+      "meaning": "Strengthened required-field assertions across same24 native combinations."
+    },
+    {
+      "session": 75904,
+      "log": "pctx01-read-final-budget-clippy-initial.log",
+      "exit": 101,
+      "meaning": "Collapsible-if lint introduced when old size loop was removed; no diagnostic suppression."
+    },
+    {
+      "session": 64732,
+      "log": "pctx01-read-final-budget-final.log",
+      "exit": 0,
+      "passed": 70,
+      "failed": 0,
+      "suites": {
+        "binary": 7,
+        "cli_frontend": 24,
+        "cli_refusal_envelope": 4,
+        "cli_run_exit": 11,
+        "render": 11,
+        "session_render_budget": 13
+      }
+    },
+    {
+      "log": "pctx01-read-final-budget-clippy.log",
+      "exit": 0,
+      "meaning": "Locked all-target Clippy, warnings denied."
+    },
+    {
+      "log": "pctx01-read-final-budget-format.log",
+      "exit": 0,
+      "meaning": "Final format check."
+    }
+  ],
+  "qualified_controls": [
+    "2 real source bodies:12000 U+202E and48000 ASCII bytes; each crosses an emitted-format boundary where applicable",
+    "3 formats compact/json/Markdown x2 stdout/response-file destinations x2 require-complete modes =24 CLI observations",
+    "Exact delivered bytes including newline <=65536, required top-level envelope keys/types, stable source hash, nonempty prefix excerpt, project/workspace identity",
+    "Complete bodies succeed0; body reductions are partial3, require-complete reductions are PARTIAL_RESULT3/error; truncation and coverage explicitly incomplete",
+    "Markdown decoded from its complete JSON metadata appendix; file delivery has empty stdout/stderr and is inspected directly"
+  ],
+  "independent_review": {
+    "agent": "/root/work_control",
+    "mode": "read-only; no edits/builds/tests",
+    "result": "No blocker in bounded Read repair; final-byte/UTF8/completeness behavior accepted",
+    "limit": "Original range retention is source-reviewed and disclosed by returned_excerpt; native control does not explicitly assert original range."
+  },
+  "remaining": [
+    "Preserve established identity/generation/validation in budget/render-error/final-timeout fallback, rather than new default matched validation",
+    "Budget fallback must explicitly disclose presentation truncation and preserve/disclose warning significance without fabricated source-result counts",
+    "Metadata-only fallback and final response destination/existing-file/failure matrix across frozen representations; recheck exact fallback bytes",
+    "All other fixed PCTX01 phase/startup/platform/integration conditions"
+  ],
+  "retained_failures": [
+    "Original four macOS1s startup product failures",
+    "Inactive PCTX36 Schedule Tick failure",
+    "Prior Runner callback/capture/receipt/cancellation failure attempts"
+  ],
+  "platform_scope": "Focused native macOS arm64 only; required macOS x86_64/Linux x86_64/Windows x86_64 unverified; Linux aarch64 supporting only",
+  "whole_suite_green": false,
+  "github_actions_dispatched": false,
+  "push_state": "No push retry: automatic approval rejection of main publication remains awaiting explicit authorization."
+}

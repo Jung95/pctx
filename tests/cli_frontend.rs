@@ -942,6 +942,96 @@ fn outline_document(out: &Output, format: &str) -> Value {
 }
 
 #[test]
+fn read_final_document_budget_uses_emitted_format_and_preserves_excerpt_truth() {
+    for source in ["\u{202e}".repeat(12000), "a".repeat(48000)] {
+        let f = Fixture::new();
+        fs::write(f.temp.path().join("body.txt"), &source).unwrap();
+        assert!(f.run(&args(&["init"])).status.success());
+        for format in ["compact", "json", "markdown"] {
+            for (to_file, require_complete) in
+                [(false, false), (true, false), (false, true), (true, true)]
+            {
+                let destination = f.temp.path().join("response");
+                let mut request = args(&["--format", format, "read", "body.txt"]);
+                if require_complete {
+                    request.push(OsString::from("--require-complete"));
+                }
+                if to_file {
+                    request.extend([OsString::from("--output"), destination.clone().into()]);
+                }
+                let out = f.run(&request);
+                let bytes = if to_file {
+                    assert!(out.stdout.is_empty());
+                    fs::read(&destination).unwrap()
+                } else {
+                    out.stdout.clone()
+                };
+                assert!(out.stderr.is_empty(), "{out:?}");
+                assert!(bytes.len() <= 65536, "{format}: {}", bytes.len());
+                let delivered = Output {
+                    stdout: bytes,
+                    ..out
+                };
+                let v = outline_document(&delivered, format);
+                for field in [
+                    "schema_version",
+                    "command",
+                    "status",
+                    "project_id",
+                    "workspace_id",
+                    "generation_id",
+                    "validation",
+                    "coverage",
+                    "data",
+                    "truncation",
+                    "warnings",
+                    "errors",
+                ] {
+                    assert!(v.get(field).is_some(), "missing {field}: {v}");
+                }
+                assert_eq!(v["schema_version"], "1.0");
+                assert_eq!(v["command"], "read");
+                assert_eq!(v["validation"]["workspace_atomic"], false);
+                assert!(v["validation"]["scope"].is_array());
+                assert!(v["validation"]["checked_at"].is_string());
+                assert!(v["coverage"]["reasons"].is_array());
+                assert!(v["warnings"].is_array());
+                assert!(v["errors"].is_array());
+                let text = v["data"]["text"].as_str().expect("retained source excerpt");
+                assert!(!text.is_empty());
+                assert!(source.starts_with(text));
+                assert_eq!(
+                    v["data"]["file_hash"],
+                    pctx::domain::hash(source.as_bytes())
+                );
+                assert!(v["project_id"].is_string());
+                assert!(v["workspace_id"].is_string());
+                if text.len() < source.len() {
+                    assert_eq!(delivered.status.code(), Some(3), "{v}");
+                    assert_eq!(
+                        v["status"],
+                        if require_complete { "error" } else { "partial" }
+                    );
+                    if require_complete {
+                        assert_eq!(v["errors"][0]["code"], "PARTIAL_RESULT");
+                    }
+                    assert_eq!(v["data"]["returned_excerpt"], true);
+                    assert_eq!(v["data"]["truncated"], true);
+                    assert_eq!(v["coverage"]["status"], "partial");
+                    assert_eq!(v["truncation"]["truncated"], true);
+                } else {
+                    assert_eq!(delivered.status.code(), Some(0), "{v}");
+                    assert_eq!(v["status"], "ok");
+                }
+                if to_file {
+                    fs::remove_file(destination).unwrap();
+                }
+            }
+        }
+    }
+}
+
+#[test]
 fn outline_empty_unsupported_and_partial_are_distinct_in_every_representation() {
     let f = Fixture::new();
     fs::create_dir(f.temp.path().join("project")).unwrap();

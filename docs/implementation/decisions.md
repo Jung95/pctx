@@ -1268,3 +1268,16 @@ corrected without relaxed assertions. All seven original phase groups represente
 103 focused/static/review proof closes bounded local G05-D02, increasing28→29 of40.
 Platforms/general race/independent producer acceptance remain separately open; no
 whole PCTX01 completion or new ID/denominator. Next existing condition is G04-D03.
+
+## Read body capacity follows final presentation — PCTX01-G04-D03
+
+Specification §§8/14/38 applies capacity to the actual delivered document. Ordinary
+serde JSON length is insufficient for terminal-safe Unicode escaping or Markdown's
+complete metadata appendix. Reduce only the Read presentation body on UTF-8
+boundaries after measuring the chosen renderer, and remeasure all final metadata
+with the newline. Preserve independently established source identity and report
+returned_excerpt/truncation/partial coverage; require-complete is PARTIAL_RESULT3
+when presentation reduction occurs. Original range remains provenance for the
+selected source, not a new exact span for shortened masked text. Native24case and
+final70 related tests/static pass; independent bounded review accepts the repair.
+The whole fallback/provenance/truncation/destination condition stays open.

@@ -1,0 +1,28 @@
+    Checking pctx v0.1.0-dev (/Users/dev/PCTX)
+error: this `if` statement can be collapsed
+    --> src/main.rs:1143:5
+     |
+1143 | /     if matches!(&cli.command, Command::Read { .. }) {
+1144 | |         if response["data"]["truncated"] == true {
+1145 | |             response["truncation"] = json!({"truncated":true,"reasons":["body_limit"]});
+1146 | |             if response["status"] == "error" {
+...    |
+1154 | |     }
+     | |_____^
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#collapsible_if
+     = note: `-D clippy::collapsible-if` implied by `-D warnings`
+     = help: to override `-D warnings` add `#[allow(clippy::collapsible_if)]`
+help: collapse nested if block
+     |
+1143 ~     if matches!(&cli.command, Command::Read { .. })
+1144 ~         && response["data"]["truncated"] == true {
+1145 |             response["truncation"] = json!({"truncated":true,"reasons":["body_limit"]});
+ ...
+1152 |             }
+1153 ~         }
+     |
+
+error: could not compile `pctx` (bin "pctx") due to 1 previous error
+warning: build failed, waiting for other jobs to finish...
+error: could not compile `pctx` (bin "pctx" test) due to 1 previous error

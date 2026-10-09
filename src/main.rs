@@ -1140,33 +1140,14 @@ fn main() {
             _ => {}
         }
     }
-    if matches!(&cli.command, Command::Read { .. }) {
-        while serde_json::to_vec(&response).unwrap().len() + 1 > 65536 {
-            let Some(text) = response["data"]["text"].as_str() else {
-                break;
-            };
-            let mut cut = text.len() / 2;
-            while !text.is_char_boundary(cut) {
-                cut -= 1;
+    if matches!(&cli.command, Command::Read { .. }) && response["data"]["truncated"] == true {
+        response["truncation"] = json!({"truncated":true,"reasons":["body_limit"]});
+        if response["status"] == "error" {
+            if let Some(reasons) = response["coverage"]["reasons"].as_array_mut() {
+                reasons.push(json!("body_limit"));
             }
-            response["data"]["text"] = json!(&text[..cut]);
-            response["data"]["completeness"] = json!("partial");
-            response["data"]["truncated"] = json!(true);
-            response["data"]["returned_excerpt"] = json!(true);
-            if response["status"] != "error" {
-                response["status"] = json!("partial");
-                exit = 3;
-            }
-        }
-        if response["data"]["truncated"] == true {
-            response["truncation"] = json!({"truncated":true,"reasons":["body_limit"]});
-            if response["status"] == "error" {
-                if let Some(reasons) = response["coverage"]["reasons"].as_array_mut() {
-                    reasons.push(json!("body_limit"));
-                }
-            } else {
-                response["coverage"] = json!({"status":"partial","reasons":["body_limit"]});
-            }
+        } else {
+            response["coverage"] = json!({"status":"partial","reasons":["body_limit"]});
         }
     }
     if response["data"]["hook_transport"] == true
@@ -1200,6 +1181,51 @@ fn main() {
         cli.format.clone()
     };
     let mut bytes = encoded(&mut response, &render_format, &mut exit, deadline);
+    if let Command::Read {
+        require_complete, ..
+    } = &cli.command
+    {
+        // Measure the actual document, including terminal-safe escapes, Markdown's
+        // complete metadata appendix, the newline and truncation metadata itself.
+        while bytes.len() > 65536 {
+            let Some(text) = response["data"]["text"]
+                .as_str()
+                .filter(|text| !text.is_empty())
+            else {
+                break;
+            };
+            let mut cut = text.len() / 2;
+            while !text.is_char_boundary(cut) {
+                cut -= 1;
+            }
+            response["data"]["text"] = json!(&text[..cut]);
+            response["data"]["completeness"] = json!("partial");
+            response["data"]["truncated"] = json!(true);
+            response["data"]["returned_excerpt"] = json!(true);
+            response["truncation"] = json!({"truncated":true,"reasons":["body_limit"]});
+            if response["status"] != "error" {
+                exit = 3;
+                response["status"] = json!(if *require_complete {
+                    "error"
+                } else {
+                    "partial"
+                });
+                response["coverage"] = json!({"status":"partial","reasons":["body_limit"]});
+                if *require_complete {
+                    response["errors"] = json!([Error::new(
+                        "PARTIAL_RESULT",
+                        "Read document exceeds requested completeness limits",
+                        3
+                    )]);
+                }
+            } else if let Some(reasons) = response["coverage"]["reasons"].as_array_mut()
+                && !reasons.contains(&json!("body_limit"))
+            {
+                reasons.push(json!("body_limit"));
+            }
+            bytes = encoded(&mut response, &render_format, &mut exit, deadline);
+        }
+    }
     let usable_timeout_partial = matches!(&cli.command, Command::Find(_))
         && response["data"]["coverage"]["reasons"]
             .as_array()

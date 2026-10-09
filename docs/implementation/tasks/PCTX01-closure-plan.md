@@ -267,3 +267,14 @@ at its API boundary with a real completed child; actual backend wait/pipe/captur
 faults have independent controls. No whole-platform or general containment claim.
 Detail29/40, whole0/10, denominator unchanged. Next is existingG04-D03 full envelope
 and exact final bytes across fixed supported representation/destination classes.
+
+## G04-D03 current bounded Read repair
+
+Actual hidden-Unicode and Markdown final-document expansion is measured after
+rendering and each UTF-8-safe reduction, with final truncation metadata and newline.
+Usable excerpt/hash/identity survive; require-complete refuses3 on presentation
+reduction. Native24case matrix and final70 related tests/static/read-only review
+pass; initial lost-excerpt and Clippy failures retained. See
+[evidence](../evidence/pctx01-read-final-budget-verification.json).
+G04-D03 remains open for fixed fallback identity/validation, presentation omission
+and metadata-only/destination conditions. Detail29/40, whole0/10 unchanged.

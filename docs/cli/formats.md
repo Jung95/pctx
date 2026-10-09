@@ -195,3 +195,11 @@ rereads use the explicit provider workspace; caller-workspace metering may repor
 unknown without changing delivered outcome. Bounded callback/capture/receipt/Runner faults are locally qualified in the
 [postspawn manifest](../implementation/evidence/pctx01-postspawn-runner-verification.json).
 Broader phase races and native Windows console delivery remain unqualified. See the [shared exit matrix](../implementation/evidence/pctx01-exit-matrix-verification.json).
+
+Read measures its fixed65,536-byte bound on the final selected document, including
+terminal-safe escapes, Markdown's metadata appendix and the newline. If the body
+must shrink, it retains a UTF-8-safe excerpt, original source provenance and an
+explicit `returned_excerpt`/truncation/partial coverage receipt. `--require-complete`
+returns `PARTIAL_RESULT` (exit3) for this reduction. This bounded behavior is
+[verified locally](../implementation/evidence/pctx01-read-final-budget-verification.json);
+whole frontend/platform qualification remains open.
