@@ -1,0 +1,419 @@
+{
+  "task": "PCTX01",
+  "fixed_condition": "PCTX01-G05-D06",
+  "status": "closed",
+  "qualification": "bounded local shared exit classification; independent producer semantics, G05-D02 callbacks, G08 races and G09 platforms remain separate",
+  "base_revision": "d64f4c531ee21275ae2efd530d27d1bf7bfebcca",
+  "environment": {
+    "os": "macOS-26.7.1-arm64-arm-64bit-Mach-O",
+    "architecture": "arm64",
+    "rust": "1.99.0",
+    "execution": "native macOS arm64 temporary isolated projects/host slots; no Actions"
+  },
+  "detail_closure": {
+    "before": 27,
+    "after": 28,
+    "total": 40
+  },
+  "whole_gates": {
+    "closed": 0,
+    "total": 10
+  },
+  "counts_unchanged": {
+    "leaves": 140,
+    "help_paths": 172,
+    "R_groups": 12
+  },
+  "source_sha256": {
+    "Cargo.toml": "179b02f69bdd7c61adc41ed5f71f8737ee692655b46b0bfeb9c1ffe165d8e97f",
+    "Cargo.lock": "f96362897990caba560793601bc9fca08cef5c977907bb06889d5595d2acd7b0",
+    "src/main.rs": "1f8c0ec5227eb346494036e5e544e6baef250f543714eed8005f748c5d50b32a",
+    "src/domain.rs": "ebc5fb36aced808593a9df4606293e8900450c67f068de1574369c9c4b810c25",
+    "src/reader.rs": "8770ea1bf18a7439d0869d0d366cb3833b37ef1c8fb72c3ced6dba58cffe2281",
+    "src/search.rs": "15483186930d9c818e56ea96b15585e7912af4cb759850b7d1c766d86a1588a8",
+    "src/work.rs": "a5c89c59fb012d871a9a9ea335d698b6b4fd05e4e549236c8b1a6835d4bd8170",
+    "src/adapter.rs": "41f18fda7ee7f3852e5ad49e5d9098f21474d5a1915ba6d48db52cfbcabf9def",
+    "src/project.rs": "8e12777b3c7af0c439aaecdca645011bd316723cd35ccd17f014b7a19df2a727",
+    "src/deadline.rs": "acf760efe2ef92e058dbd3b16438acdee9c91fbdabe39e859cd75a835373ea17",
+    "src/output.rs": "8b9f62ef21d25d1325f4bd53c8a5267866ac3c580eed0715b0efff8dc63bab47",
+    "src/cancellation.rs": "4901638803bb82894b3211d0f9a8f9537850c4bfed3ac178489ec20780114d4f",
+    "src/runner.rs": "c55b5cdb20f0f82f73647a7afceda41ef2737c4601206c72691efbc7c5819db3",
+    "src/watch.rs": "caa0c72c871147551ff42dcf4c0a8876d014c33ed72f642c7fa5ede92c7e37ca",
+    "src/input.rs": "fc3f17b70ee1485e6fa9ae9d18d408a9212e0c56831a86529e3fda2d52033dfb",
+    "src/render.rs": "020c3e4303829c4ac12c2db85120e41d5b901422849d67513a78fce9608a5633",
+    "tests/cli_contract.rs": "9c03e771fcc87450b9cc8217dfacd7de4491b3f0e0b44e7212d5266997acfacc",
+    "tests/cli_refusal_envelope.rs": "a4be729788101a2d31248c4a495a7433feeb41360a086e5392d51d1cb1e8466d",
+    "tests/cli_run_exit.rs": "0cc85bdb016e6c655f18a4b1ce788530b2e2debcb42763e1afaea044fd55e8b2",
+    "tests/adapter_errors.rs": "e096d4cc1bbd16e83511fcb3cde5f18e4326525c7e8bc0bc1bb182eb0e186f21",
+    "tests/persisted_error_contract.rs": "7201966e27ce4f33d68c4ab3230a9fe25e34ead1687dc1e2a3e325448035fc5e",
+    "tests/query_deadline_cli.rs": "7b15c8b36ef5749c353e8b3139df55efd6c5c0d961a828b33ac2e8987fd872ae",
+    "tests/concurrency.rs": "5161d724019711001399b09f5b9181dabbba0f05be3ccb8907a5befed1f4fb79",
+    "tests/cli_cancellation.rs": "2e8ff249abd8b8c5ca7ec25a4600bbdd57ef7de7edc050b95aafe13093adab0c",
+    "tests/runner.rs": "5d02c744fc355dad69858eaff3a434236c71f38587dec0cd5c877864c110e0f8"
+  },
+  "binary": {
+    "path": "target/debug/pctx",
+    "sha256": "d1130fe64769114a4fa6e8c1b2ce42f53dfb613783a6dd663254acaf951df886"
+  },
+  "matrix": [
+    {
+      "exit": 0,
+      "contract": "Successful request, including permitted empty items",
+      "source_boundary": "main.rs::execute and successful envelope",
+      "proofs": [
+        {
+          "target": "cli_contract",
+          "test": "non_git_exploration_changes_and_idempotent_init",
+          "log": "pctx01-exit-matrix-native.log"
+        }
+      ]
+    },
+    {
+      "exit": 2,
+      "contract": "Caller/config/argument rejection before execution",
+      "source_boundary": "domain.rs::From<serde_json::Error>; frontend admission and producer config",
+      "proofs": [
+        {
+          "target": "cli_refusal_envelope",
+          "test": "semantic_and_representation_refusals_do_not_claim_completed_execution",
+          "log": "pctx01-exit-matrix-native.log"
+        },
+        {
+          "target": "cli_run_exit",
+          "test": "project_refusals_preserve_typed_exit_and_message_before_spawn",
+          "log": "pctx01-exit-matrix-native.log"
+        }
+      ]
+    },
+    {
+      "exit": 3,
+      "contract": "Incomplete actual source/capture, not unsupported capability",
+      "source_boundary": "main.rs partial source and execution capture classification",
+      "proofs": [
+        {
+          "target": "cli_contract",
+          "test": "strict_lookup_retains_available_evidence_and_reports_incomplete_refresh",
+          "log": "pctx01-exit-matrix-native.log"
+        },
+        {
+          "target": "cli_run_exit",
+          "test": "incomplete_capture_is_partial_without_replacing_child_success",
+          "log": "pctx01-exit-matrix-native.log"
+        }
+      ]
+    },
+    {
+      "exit": 4,
+      "contract": "Source no longer satisfies requested freshness/state",
+      "source_boundary": "search.rs stale Outline; frontend admitted state refusals",
+      "proofs": [
+        {
+          "target": "cli_contract",
+          "test": "non_git_exploration_changes_and_idempotent_init",
+          "log": "pctx01-exit-matrix-native.log"
+        },
+        {
+          "target": "cli_refusal_envelope",
+          "test": "admitted_install_failures_keep_state_classification_and_response_destination",
+          "log": "pctx01-exit-matrix-native.log"
+        }
+      ]
+    },
+    {
+      "exit": 5,
+      "contract": "Access/owner/policy rejection distinct from configuration/storage",
+      "source_boundary": "reader.rs access, output.rs execution authority and adapter owner",
+      "proofs": [
+        {
+          "target": "cli_contract",
+          "test": "security_applies_to_direct_reads_and_cached_metadata",
+          "log": "pctx01-exit-matrix-native.log"
+        },
+        {
+          "target": "cli_run_exit",
+          "test": "actual_prelaunch_refusal_has_no_child_outcome_or_invocation",
+          "log": "pctx01-exit-matrix-native.log"
+        },
+        {
+          "target": "adapter_errors",
+          "test": "native_adapter_owner_refusal_is_policy_five_in_both_formats",
+          "log": "pctx01-exit-matrix-native.log"
+        }
+      ]
+    },
+    {
+      "exit": 6,
+      "contract": "Missing resource/project or unsupported capability, never empty success",
+      "source_boundary": "main/source capability and adapter protocol facade",
+      "proofs": [
+        {
+          "target": "cli_run_exit",
+          "test": "missing_project_is_prelaunch_failure_in_both_modes_without_files",
+          "log": "pctx01-exit-matrix-native.log"
+        },
+        {
+          "target": "adapter_errors",
+          "test": "native_adapter_unsupported_protocol_is_capability_six",
+          "log": "pctx01-exit-matrix-native.log"
+        }
+      ]
+    },
+    {
+      "exit": 7,
+      "contract": "Storage/processing/timeout, with retained native child truth",
+      "source_boundary": "domain.rs IO/SQLite/stored JSON; execution_error and final output processing",
+      "proofs": [
+        {
+          "target": "persisted_error_contract",
+          "test": "busy_admission_is_retryable_but_original_request_expiry_is_not",
+          "log": "pctx01-exit-matrix-native.log"
+        },
+        {
+          "target": "query_deadline_cli",
+          "test": "doctor_contention_reports_timeout_with_original_budget_and_unchanged_database",
+          "log": "pctx01-exit-matrix-native.log"
+        },
+        {
+          "target": "cli_run_exit",
+          "test": "actual_spawn_failure_never_becomes_success_or_child_exit",
+          "log": "pctx01-exit-matrix-native.log"
+        },
+        {
+          "target": "cli_run_exit",
+          "test": "actual_execution_timeout_preserves_observation_but_returns_wrapper_error",
+          "log": "pctx01-exit-matrix-native.log"
+        },
+        {
+          "target": "cli_run_exit",
+          "test": "publication_failure_preserves_child_outcome_and_never_retries",
+          "log": "pctx01-exit-matrix-native.log"
+        },
+        {
+          "target": "cli_cancellation",
+          "test": "cancelled_run_with_failed_publication_keeps_processing_error_and_native_truth",
+          "log": "pctx01-exit-matrix-native.log"
+        },
+        {
+          "target": "runner",
+          "test": "ctrl_c_check_publication_failure_keeps_native_truth_and_released_capacity",
+          "log": "pctx01-exit-cancel-combinations-final.log"
+        }
+      ]
+    },
+    {
+      "exit": 8,
+      "contract": "Required context or operational execution metadata does not fit a valid capacity",
+      "source_boundary": "context and Run/Check/Helper capacity guards; frontend serialized budget fallback",
+      "proofs": [
+        {
+          "target": "cli_contract",
+          "test": "context_budget_is_exact_json_and_required_rules_are_not_cut",
+          "log": "pctx01-exit-matrix-native.log"
+        },
+        {
+          "target": "cli_run_exit",
+          "test": "admitted_small_run_budgets_preserve_prelaunch_truth_without_artifact",
+          "log": "pctx01-exit-matrix-native.log"
+        },
+        {
+          "target": "runner",
+          "test": "producer_capacity_guards_preserve_budget_eight_owner_priority_and_intent_exception",
+          "log": "pctx01-exit-capacity-native.log"
+        }
+      ]
+    },
+    {
+      "exit": 9,
+      "contract": "Revision/replay/identity/receipt conflict remains state error",
+      "source_boundary": "work.rs conflict and adapter receipt facades",
+      "proofs": [
+        {
+          "target": "concurrency",
+          "test": "report_replay_and_revision_conflict_are_visible_at_cli",
+          "log": "pctx01-exit-matrix-native.log"
+        },
+        {
+          "target": "adapter_errors",
+          "test": "direct_adapter_receipt_conflicts_and_reconciliation_retain_nine",
+          "log": "pctx01-exit-matrix-native.log"
+        }
+      ]
+    },
+    {
+      "exit": 10,
+      "contract": "Completion gate refusal is not a source/cache or storage error",
+      "source_boundary": "work.rs completion/acceptance gate",
+      "proofs": [
+        {
+          "target": "concurrency",
+          "test": "changed_source_and_definition_do_not_reuse_check_evidence",
+          "log": "pctx01-exit-matrix-native.log"
+        },
+        {
+          "target": "concurrency",
+          "test": "check_changed_during_external_execution_stays_stale",
+          "log": "pctx01-exit-matrix-native.log"
+        }
+      ]
+    },
+    {
+      "exit": 130,
+      "contract": "Observed user Ctrl-C cancellation; keep execution/native/ownership truth",
+      "source_boundary": "cancellation.rs latch, Deadline/Project checks, watch/output/main facade",
+      "proofs": [
+        {
+          "target": "cli_cancellation",
+          "test": "held_stdin_cancel_is_one_complete_json_and_creates_no_context",
+          "log": "pctx01-exit-matrix-native.log"
+        },
+        {
+          "target": "cli_cancellation",
+          "test": "watch_cancel_keeps_existing_ndjson_frames_and_reports_cancelled",
+          "log": "pctx01-exit-matrix-native.log"
+        },
+        {
+          "target": "cli_cancellation",
+          "test": "finite_query_cancel_reaps_owned_query_child_instead_of_waiting_for_timeout",
+          "log": "pctx01-exit-matrix-native.log"
+        },
+        {
+          "target": "cli_cancellation",
+          "test": "run_cancel_preserves_native_truth_artifact_and_one_execution_for_both_policies",
+          "log": "pctx01-exit-matrix-native.log"
+        },
+        {
+          "target": "runner",
+          "test": "ctrl_c_before_check_begin_releases_proven_unspawned_capacity",
+          "log": "pctx01-exit-cancel-combinations-final.log"
+        },
+        {
+          "target": "runner",
+          "test": "ctrl_c_reaps_registered_child_preserves_truth_and_releases_only_observed_slots",
+          "log": "pctx01-exit-cancel-combinations-final.log"
+        },
+        {
+          "target": "runner",
+          "test": "ctrl_c_local_helper_preserves_child_receipt_and_releases_observed_aux_capacity",
+          "log": "pctx01-exit-cancel-combinations-final.log"
+        },
+        {
+          "target": "runner",
+          "test": "ctrl_c_canonical_check_finishes_guardian_before_releasing_mutex",
+          "log": "pctx01-exit-cancel-combinations-final.log"
+        }
+      ]
+    },
+    {
+      "exit": "child_exception",
+      "contract": "Native child0/1/2/signal only when explicit child policy and wrapper success; processing/partial override native propagation",
+      "source_boundary": "main.rs Run child-exit exception",
+      "proofs": [
+        {
+          "target": "cli_run_exit",
+          "test": "actual_child_codes_and_signal_are_distinct_from_wrapper_status",
+          "log": "pctx01-exit-matrix-native.log"
+        },
+        {
+          "target": "cli_run_exit",
+          "test": "incomplete_capture_is_partial_without_replacing_child_success",
+          "log": "pctx01-exit-matrix-native.log"
+        },
+        {
+          "target": "cli_run_exit",
+          "test": "actual_execution_timeout_preserves_observation_but_returns_wrapper_error",
+          "log": "pctx01-exit-matrix-native.log"
+        }
+      ]
+    }
+  ],
+  "sessions": [
+    {
+      "id": 80098,
+      "log": "pctx01-exit-cancel-combinations-initial.log",
+      "exit": 101,
+      "results": "Runner3PASS2FAIL; actual missing-artifact/native-truth loss repaired; Helper asserted empty stderr but existing correct unknown-metering diagnostic was present"
+    },
+    {
+      "id": 91967,
+      "log": "pctx01-exit-cancel-combinations-final.log",
+      "exit": 0,
+      "results": "Runner5PASS; CLI target filtered0, not executed"
+    },
+    {
+      "id": 22790,
+      "log": "pctx01-exit-matrix-native.log",
+      "exit": 0,
+      "results": "84PASS (adapter10, cancellation5, contract14, refusal4, Run11, concurrency9, persisted22, deadline9)"
+    },
+    {
+      "id": 29460,
+      "log": "pctx01-exit-matrix-clippy.log",
+      "exit": 0,
+      "results": "locked all-target Clippy -D warnings PASS"
+    },
+    {
+      "log": "pctx01-exit-matrix-format.log",
+      "exit": 0,
+      "results": "format PASS"
+    },
+    {
+      "log": "pctx01-exit-capacity-native.log",
+      "exit": 0,
+      "results": "current producer capacity1PASS"
+    }
+  ],
+  "native_test_total": 90,
+  "whole_suite": "not_run; original failures retained",
+  "failure_repair": "Registered CheckRun previously reread an absent output after publication failed; an outer error discarded observed native truth and user cancellation masked the publication error. Known unavailable output now records non-gating supervision failure and returns the original execution data.",
+  "precedence": "Actual processing/publication failure7 takes precedence over cancellation130 and native shell propagation; retained termination cancelled and signal9 preserve the independent cause/native truth. Successful publication of a cancelled execution returns130.",
+  "helper_metering_backlog": {
+    "owner": "PCTX47 inactive",
+    "observation": "caller-workspace measurement tries provider-workspace artifact and reports OUTPUT_MEASUREMENT_UNRECORDED reason OUTPUT_EXPIRED; delivery_written true and measurement_recorded unknown; exit130 unchanged",
+    "proof": "actual provider-workspace reread returns cancelled/signal9 with one child invocation",
+    "impact_on_PCTX01": "none: existing checked metering diagnostic preserves delivered response/outcome; no claim of measurement success or mixed artifact contents"
+  },
+  "independent_review": {
+    "agent": "/root/work_control",
+    "mode": "read-only; no edits/tests/builds",
+    "result": "No remaining local classification blocker; conditional acceptance fulfilled by matrix/static pass; broader faults/races/native platforms kept separately"
+  },
+  "register_reconciliation": "Before this candidate item states counted27 but stale closed_details summary was25 and execution cursor named already-closed conditions. Correct to derived28 and next existing G05-D02; no new ID or denominator.",
+  "remaining_limits": [
+    "G05-D02 actual callback/postspawn faults remain open",
+    "G08-D04 remaining phase/race/deadline proof remains open",
+    "G05-D05 four original macOS startup product failures remain unresolved",
+    "G09 required native macOS x86_64/Linux x86_64/Windows x86_64 integration unverified; macOS arm64 whole remains failed",
+    "PCTX36 inactive historical Tick occurrence failure retained",
+    "Windows handler source implementation is not native console proof"
+  ],
+  "logs": {
+    "pctx01-exit-cancel-combinations-initial.log": {
+      "sha256": "8970973728831ba70640a598b06fcf45e875f379e94cbdce698c40b5d8c56dd6",
+      "bytes": 5185
+    },
+    "pctx01-exit-cancel-combinations-final.log": {
+      "sha256": "76f9b4accd5b09f11f448d2f5d4a973da20fd336b0839a00d6b46326654f91d0",
+      "bytes": 931
+    },
+    "pctx01-exit-matrix-native.log": {
+      "sha256": "6f4a3beaf0796741ec28e32090086cd9a4bda53ae7cf052cfb4635458f2e6357",
+      "bytes": 8341
+    },
+    "pctx01-exit-matrix-clippy.log": {
+      "sha256": "f231571afa1b11c286c75a4bac6d2c47553ac6b6b7f4fed7679beb1e458f79dd",
+      "bytes": 120
+    },
+    "pctx01-exit-matrix-format.log": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "pctx01-exit-capacity-native.log": {
+      "sha256": "9cd7bfc5103c770a0d83aa53e32163c62e447629a18f23d3be5cb83217a4539d",
+      "bytes": 354
+    }
+  },
+  "live_jobs": [],
+  "actions_dispatched": false,
+  "next_official_task": null,
+  "next_fixed_condition": "PCTX01-G05-D02"
+}

@@ -484,8 +484,8 @@
     {
       "id": "PCTX01-G05-D06",
       "gate": "G05",
-      "status": "open",
-      "local_implementation": "bounded_cancellation_qualified; remaining_shared_exit_matrix",
+      "status": "closed",
+      "local_implementation": "qualified_bounded_shared_exit_contract",
       "completion_condition": "Finish one existing error-to-exit matrix (0,2,3,4,5,6,7,8,9,10,130 and child exception) across shared/frontend facades, including cancelled and source-dependent refusals",
       "spec_sections": [
         "14",
@@ -497,15 +497,16 @@
       "evidence": [
         "pctx01-adapter-errors-verification.json",
         "pctx01-run-exit-verification.json",
-        "pctx01-cancellation-verification.json"
+        "pctx01-cancellation-verification.json",
+        "pctx01-exit-matrix-verification.json"
       ],
       "verification_environment": "Native macOS arm64 local common proof; all release platforms separately required by G09",
-      "macOS_arm64": "bounded_cancel_paths_verified; full_exit_matrix_remaining",
+      "macOS_arm64": "bounded_verified",
       "macOS_x86_64": "unverified; G09-D02",
       "Linux_x86_64": "unverified; G09-D03",
       "Linux_aarch64": "prior fixed-source full only; inspect linked manifest per contract",
       "Windows_x86_64": "unverified; G09-D04",
-      "documentation_evidence": "bounded cancellation proof and explicit remaining combinations"
+      "documentation_evidence": "12-category shared exit matrix, native90 PASS, static and independent review"
     },
     {
       "id": "PCTX01-G06-D01",
@@ -987,9 +988,9 @@
       "documentation_evidence": "closure plan recorded; execution gaps retained"
     }
   ],
-  "closed_details": 25,
+  "closed_details": 28,
   "execution_order": [
-    "G03-D03/D04 + G05-D06 (remaining grouped admission/error candidate; G02-D04 and G05-D04 locally closed)",
+    "G05-D02 (existing actual callback/postspawn fault truth; G03-D03/D04 and G05-D06 locally closed)",
     "G04-D03 + G06-D03 + G07-D03 (existing response matrix)",
     "G08-D04 + G05-D05 (remaining phase/startup conditions, original budgets)",
     "G10-D04 (candidate checks)",
@@ -1007,12 +1008,18 @@
     "PCTX01-G10-D03"
   ],
   "latest_condition_closure": {
-    "id": "PCTX01-G02-D04",
-    "detail_before": 24,
-    "detail_after": 25,
+    "id": "PCTX01-G05-D06",
+    "detail_before": 27,
+    "detail_after": 28,
     "denominator_before": 40,
     "denominator_after": 40,
-    "scope": "local parser condition; all G09 release-platform integration remains open",
-    "independent_review": "/root/work_control; pctx01-parser-verification.json"
+    "scope": "bounded local shared exit classification; independent producer semantics/G05-D02/G08/G09 stay separate",
+    "independent_review": "/root/work_control; pctx01-exit-matrix-verification.json"
+  },
+  "summary_reconciliation": {
+    "previous_summary": 25,
+    "authoritative_item_count_before": 27,
+    "derived_item_count_after": 28,
+    "reason": "stale summary/cursor corrected using item states and linked prior closures; unchanged40 denominator"
   }
 }

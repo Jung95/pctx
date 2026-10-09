@@ -60,8 +60,16 @@ fn non_git_exploration_changes_and_idempotent_init() {
     let cp = f.ok(&["checkpoint", "create", "--name", "before"]);
     assert!(cp["data"]["id"].is_string());
     fs::write(f.root.join("auth.ts"), "export function logout() {}\n").unwrap();
+    let source = fs::read(f.root.join("auth.ts")).unwrap();
+    let config = fs::read(f.root.join(".pctx/config.toml")).unwrap();
     let stale = f.run(&["outline", "auth.ts"]);
     assert_eq!(stale.status.code(), Some(4));
+    assert!(stale.stderr.is_empty(), "{stale:?}");
+    let refused: Value = serde_json::from_slice(&stale.stdout).unwrap();
+    assert_eq!(refused["status"], "error");
+    assert_eq!(refused["errors"][0]["code"], "STALE_INDEX");
+    assert_eq!(fs::read(f.root.join("auth.ts")).unwrap(), source);
+    assert_eq!(fs::read(f.root.join(".pctx/config.toml")).unwrap(), config);
     let changes = f.ok(&["changes", "--since", "before"]);
     assert!(
         changes["data"]["items"]

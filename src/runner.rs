@@ -1406,16 +1406,29 @@ fn execute_inner(p: &Project, command: &RunnerCommand) -> Result<Value> {
                 release(&dir, &mut job)?
             };
             let output_id = execution["output_id"].as_str();
-            let report = match output_id {
-                Some(output_id) => output::observed_report(p, output_id)?,
-                None => None,
-            };
-            let evidence = if let (Some(output_id), Some(_)) = (output_id, report) {
-                work::record_runner_report(p, &check_id, output_id)?
-            } else if let Some(output_id) = output_id {
-                work::record_runner_unverified(p, &check_id, output_id)?
+            let evidence = if execution["spawned"] == true && execution["raw_available"] == false {
+                // Publication already failed after an observed native execution.
+                // Do not reread the absent artifact and turn that completed
+                // outcome into an outer admission error without child truth.
+                work::record_runner_execution_error(
+                    p,
+                    &check_id,
+                    execution["pctx_error"]
+                        .as_str()
+                        .unwrap_or("OUTPUT_UNAVAILABLE"),
+                )?
             } else {
-                work::record_runner_not_started(p, &check_id, "SPAWN_FAILED_NO_OUTPUT")?
+                let report = match output_id {
+                    Some(output_id) => output::observed_report(p, output_id)?,
+                    None => None,
+                };
+                if let (Some(output_id), Some(_)) = (output_id, report) {
+                    work::record_runner_report(p, &check_id, output_id)?
+                } else if let Some(output_id) = output_id {
+                    work::record_runner_unverified(p, &check_id, output_id)?
+                } else {
+                    work::record_runner_not_started(p, &check_id, "SPAWN_FAILED_NO_OUTPUT")?
+                }
             };
             Ok(
                 json!({"job_id":job.job_id,"check_id":check_id,"execution":execution,"evidence":evidence,"memory_admission":memory,"memory_unknown_override":memory.available_bytes.is_none()&&b.profile.memory.unknown=="owner_override","resources_released":released,"resource_state":job.state,"host_permission":"separate_required"}),

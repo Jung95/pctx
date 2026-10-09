@@ -14,43 +14,46 @@ Only **PCTX01** is active. It is the lowest-numbered incomplete official develop
 
 Only PCTX01 is active. The one-time whole-G01–G10 reorganization remains fixed
 in [PCTX01-closure-plan](tasks/PCTX01-closure-plan.md), its40-item register and
-140-leaf crosswalk. Detail **27/40**, whole gates **0/10**, unchanged this candidate.
+140-leaf crosswalk. Detail **28/40**, whole gates **0/10**, unchanged denominator.
 140 leaves/172 help paths/12 bounded R groups remain fixed. Required macOS
 arm64/x86_64, Linux x86_64 and Windows x86_64 integration are separately open G09.
 
-Current **G05-D06 remains open**; its shared cancellation boundary is implemented
-and has bounded native macOS arm64 proof. Ctrl-C is latched by the CLI, checked at
-cooperative request boundaries and handled by normal cleanup, not inside a signal
-callback. Owned query/manual/registered children are reaped; native signal/status
-and durable output remain distinct from wrapper CANCELLED130. Registered cancelled
-artifacts produce cancelled check evidence. Proven-unspawned slots are released
-before fallible evidence recording; living/unknown groups never gain TTL release.
+Current **G05-D06 is closed as bounded local shared exit qualification**.
+The [exit matrix](evidence/pctx01-exit-matrix-verification.json) maps every fixed
+category0/2/3/4/5/6/7/8/9/10/130 plus the Run child exception to actual authored
+controls, source hashes and current native logs. Native matrix84, cancellation
+combinations5 and capacity1 PASS (**90 focused tests**). Format/locked all-target
+Clippy -D warnings PASS; independent review found no remaining local classification
+blocker. Broader producer acceptance and native platform integration are separate.
 
-Actual CLI cancellation4 and registered cancellation2 PASS cover held stdin,
-NDJSON watch, an owned finite query, both Run exit policies, CheckRun/check alias
-and an acquired/no-child request blocked at SQL CheckBegin. Existing Run exit11
-and non-cancellation Runner31 passed in the retained focused run, which also
-contains the then-failing new cancellation test; only changed cases were rerun
-and corrected. Earlier malformed fixture assertions, source-changing fixture
-staleness and the actual cancelled-as-failed defect remain in evidence. This is
-not a passing whole suite or complete shared exit/platform qualification.
-[Current evidence](evidence/pctx01-cancellation-verification.json).
-Final related24 PASS; format/locked all-target Clippy -D warnings PASS. Independent
-read-only review accepted this bounded candidate. All test jobs are terminal.
+Ctrl-C proof includes held stdin, NDJSON watch, owned finite queries, both Run exit
+policies, CheckRun/check alias, proven-unspawned SQL contention, local Helper and
+canonical guardian. A processing/publication error7 remains higher priority than
+wrapper cancellation130, while cancelled termination and actual native SIGKILL
+remain in execution data. Registered CheckRun now records non-gating supervision
+failure for known unpublished output instead of rereading an absent artifact and
+losing observed child truth. The initial3PASS2FAIL is retained alongside repairs;
+this is not a retry-only success claim or a passing whole suite.
 
-G03-D03/D04 and previous bounded parser/storage closures remain qualified;
-no new fixed ID or denominator. Detail **27/40**, whole gates **0/10**.
-The four original macOS startup failures remain product failures, not environment
-exemptions. Inactive PCTX36 Tick failure remains unresolved. Required macOS
-x86_64/Linux x86_64/Windows x86_64 still need real hosts; Windows console handler
-source is implemented, not native-verified. No Actions or whole/platform rerun.
+Helper's provider artifact is independently reread in its real workspace, without
+rerun. Caller-workspace metering still emits truthful OUTPUT_MEASUREMENT_UNRECORDED,
+delivery_written true/measurement_recorded unknown without replacing exit130.
+Actual metering routing remains inactive PCTX47 backlog; no mixed artifact contents,
+fabricated measurement or independent provider expansion is accepted.
 
-Next exact action is still **G05-D06**: finish the frozen shared exit matrix
-0/2/3/4/5/6/7/8/9/10/130 plus child exception, including cancellation/publication
-failure combinations and local Helper/guardian cancellation. Suppression covers
-only ownership attachment and finalization; it does not renew deadlines or imply
-hard cancellation of disk I/O/SQLite busy waits. After that follow remaining
-fixed PCTX01 conditions. No other official task is selected.
+Detail **28/40**, whole gates **0/10**, unchanged140 leaves/172 help paths/12 Rgroups.
+The register's stale summary25 was reconciled against its authoritative27 item
+states, then this closure added one. No denominator or fixed-ID change. Original
+four macOS startup product failures and inactive PCTX36 Tick failure remain open.
+Required native macOS x86_64/Linux x86_64/Windows x86_64 integration is unverified;
+Windows cancellation source is not native console proof. No whole/platform rerun
+or Actions. All candidate test jobs are terminal.
+
+Next exact action is **PCTX01-G05-D02**: finish existing native callback/postspawn
+fault controls with already-observed child/capture/artifact/no-rerun truth. Then
+complete the remaining frozen response, empty/control, phase/startup and integration
+conditions. PCTX01 remains the only active official task; no next official task is
+selected until every mandatory condition and required platform is qualified.
 
 ## Development items
 
@@ -102,7 +105,7 @@ fixed PCTX01 conditions. No other official task is selected.
 | PCTX44 | Adaptive representations and source invalidation | §43,45 | context | 12,29,43 | 76,77 | implementing | Shared adaptive Build/ContextGet selection and baseline-aware actual packet accounting: src/context.rs, src/session.rs; tests/context_adaptive.rs, tests/context_delivery_selection.rs and tests/session_render_budget.rs. Scope/mandatory preservation, signature-to-body delivery, omitted-source addition, tombstones, idempotent receipts and retained serializer history are covered. Full §43 ranking/error spans, invalidation variants and platform evidence remain unfinished. |
 | PCTX45 | Bounded static imports and graph traversal | §15,43,45 | graph | 07,38,44 | 75 | implementing | Partial implementation evidence: tests/graph.rs; integrated-macos-tests.log |
 | PCTX46 | Explicit source pack plan/create/inspect/verify | §44,45 | pack | 14,26,44 | 78,79,80 | implementing | Partial implementation evidence: tests/pack.rs; integrated-macos-tests.log |
-| PCTX47 | Savings observations and single-compressor integration | §31,36,40,41,45 | evaluation/savings | 31,37,40–42 | 70,81 | implementing | `src/output.rs`, `src/quota.rs`, `src/adapter.rs`, `scripts/benchmark.py`; `tests/output.rs`, `tests/quota.rs`, `tests/adapter.rs`, `docs/implementation/evidence/full-macos-validation.log`; repeated retrieval debug observations retain negative bytes; all delivery/compressor/provider attribution incomplete |
+| PCTX47 | Savings observations and single-compressor integration | §31,36,40,41,45 | evaluation/savings | 31,37,40–42 | 70,81 | implementing | `src/output.rs`, `src/quota.rs`, `src/adapter.rs`, `scripts/benchmark.py`; `tests/output.rs`, `tests/quota.rs`, `tests/adapter.rs`, `docs/implementation/evidence/full-macos-validation.log`; repeated retrieval debug observations retain negative bytes; all delivery/compressor/provider attribution incomplete; current isolated Helper cancellation retains its provider-workspace artifact but caller-workspace metering reports OUTPUT_EXPIRED/unknown (pctx01-exit-matrix-verification.json). Repair metering routing in this inactive producer task; shared delivered exit/error truth remains qualified in PCTX01 |
 | PCTX48 | Compression quality/cost ablation and adoption gates | §18,19,38,45 | evaluation | 17,39,41–44,47;45,46 for v0.2 | 82 | implementing | `scripts/benchmark.py`, `tests/evaluation/live-mission.json`, `docs/evaluation.md`; sealed offline mission and emitted-byte smoke only; no paid/model trials, paired quality interval or normative adoption gate evidence |
 
 PCTX13 requires an interface and truthful unsupported behavior; concrete tokenizer engines remain optional (§21). PCTX43 includes required v0.2 limited structural predicates. PCTX45 and PCTX46 are required v0.2 work. PCTX18 includes release preparation, not permission to publish packages or deploy operating projects.

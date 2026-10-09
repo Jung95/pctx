@@ -339,6 +339,182 @@ fn ctrl_c_before_check_begin_releases_proven_unspawned_capacity() {
     assert_eq!(job["state"], "not_started");
     assert!(job["pid"].is_null());
 }
+
+fn cancel_observed_parent(mut child: std::process::Child) -> Output {
+    assert_eq!(unsafe { libc::kill(child.id() as i32, libc::SIGINT) }, 0);
+    let end = Instant::now() + Duration::from_secs(5);
+    while child.try_wait().unwrap().is_none() {
+        if Instant::now() >= end {
+            let _ = child.kill();
+            let out = child.wait_with_output().unwrap();
+            panic!("observed cancellation did not finalize: {out:?}");
+        }
+        std::thread::sleep(Duration::from_millis(10));
+    }
+    child.wait_with_output().unwrap()
+}
+
+#[test]
+fn ctrl_c_local_helper_preserves_child_receipt_and_releases_observed_aux_capacity() {
+    let f = Fixture::new(
+        "printf 'one\\n' >> .pctx/invocations\nprintf '%s' \"$$\" > .pctx/child.pid\nexec /bin/sleep 30\n",
+        false,
+        None,
+    );
+    let target = linked_provider(&f);
+    f.trust();
+    let child = f
+        .command(&[
+            "runner",
+            "helper-request",
+            "--task-id",
+            &f.task,
+            "--key",
+            "unit",
+            "--run",
+            &f.run,
+        ])
+        .env_remove("PCTX_RUNNER_DIAGNOSTICS")
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped())
+        .spawn()
+        .unwrap();
+    wait_marker(&target.join(".pctx/child.pid"));
+    let pid: i32 = fs::read_to_string(target.join(".pctx/child.pid"))
+        .unwrap()
+        .parse()
+        .unwrap();
+    let slot = f.host.join("slots/aux-agent.json");
+    assert!(slot.exists());
+    let out = cancel_observed_parent(child);
+    assert_eq!(out.status.code(), Some(130), "{out:?}");
+    // The provider artifact belongs to its explicit workspace. Existing caller
+    // metering cannot confirm it; the diagnostic must not replace delivery/exit.
+    let warning: Value = serde_json::from_slice(&out.stderr).unwrap();
+    assert_eq!(warning["code"], "OUTPUT_MEASUREMENT_UNRECORDED");
+    assert_eq!(warning["delivery_written"], true);
+    assert_eq!(warning["measurement_recorded"], "unknown");
+    assert_eq!(warning["reason"], "OUTPUT_EXPIRED");
+    let v: Value = serde_json::from_slice(&out.stdout).unwrap();
+    assert_eq!(v["errors"][0]["code"], "CANCELLED");
+    assert_eq!(v["data"]["execution"]["termination"], "cancelled");
+    assert_eq!(v["data"]["execution"]["signal"], libc::SIGKILL);
+    assert_eq!(v["data"]["execution"]["raw_available"], true);
+    assert_eq!(v["data"]["helper"]["state"], "finished_observed");
+    assert_eq!(v["data"]["helper"]["started"], true);
+    assert_eq!(
+        v["data"]["helper"]["output_id"],
+        v["data"]["execution"]["output_id"]
+    );
+    assert_eq!(v["data"]["resources_released"], true);
+    assert!(!slot.exists());
+    assert_eq!(unsafe { libc::kill(pid, 0) }, -1);
+    assert_eq!(
+        fs::read_to_string(target.join(".pctx/invocations")).unwrap(),
+        "one\n"
+    );
+    let output_id = v["data"]["execution"]["output_id"].as_str().unwrap();
+    let reread = Command::new(env!("CARGO_BIN_EXE_pctx"))
+        .args([
+            "--root",
+            target.to_str().unwrap(),
+            "--format",
+            "json",
+            "output",
+            "show",
+            output_id,
+        ])
+        .env("PCTX_DATA_DIR", &f.data)
+        .env("GIT_CONFIG_GLOBAL", "/dev/null")
+        .env("GIT_CONFIG_SYSTEM", "/dev/null")
+        .output()
+        .unwrap();
+    assert!(reread.status.success(), "{reread:?}");
+    let reread: Value = serde_json::from_slice(&reread.stdout).unwrap();
+    assert_eq!(reread["data"]["termination"], "cancelled");
+    assert_eq!(reread["data"]["signal"], libc::SIGKILL);
+    assert_eq!(
+        fs::read_to_string(target.join(".pctx/invocations")).unwrap(),
+        "one\n"
+    );
+}
+
+#[test]
+fn ctrl_c_canonical_check_finishes_guardian_before_releasing_mutex() {
+    use fs2::FileExt;
+    let f = Fixture::new("exec /bin/sleep 30\n", true, None);
+    let canonical = bridge(&f);
+    f.trust();
+    let mut child = f
+        .command(&f.run_args())
+        .env_remove("PCTX_RUNNER_DIAGNOSTICS")
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped())
+        .spawn()
+        .unwrap();
+    let job = f.wait_child_process(&mut child);
+    let lock = fs::File::open(&canonical).unwrap();
+    assert!(lock.try_lock_exclusive().is_err());
+    let out = cancel_observed_parent(child);
+    assert_eq!(out.status.code(), Some(130), "{out:?}");
+    assert!(out.stderr.is_empty(), "{out:?}");
+    let v: Value = serde_json::from_slice(&out.stdout).unwrap();
+    assert_eq!(v["errors"][0]["code"], "CANCELLED");
+    assert_eq!(v["data"]["execution"]["termination"], "cancelled");
+    assert_eq!(v["data"]["execution"]["signal"], libc::SIGKILL);
+    assert_eq!(v["data"]["resources_released"], true);
+    assert_eq!(v["data"]["evidence"]["result"], "cancelled");
+    assert!(!f.slot().exists());
+    for key in ["pid", "guardian_pid"] {
+        let pid = job[key].as_i64().unwrap() as i32;
+        assert_eq!(unsafe { libc::kill(pid, 0) }, -1, "{key} survived");
+    }
+    lock.try_lock_exclusive().unwrap();
+    lock.unlock().unwrap();
+}
+
+#[test]
+fn ctrl_c_check_publication_failure_keeps_native_truth_and_released_capacity() {
+    use fs2::FileExt;
+    let f = Fixture::new(
+        "printf 'one\\n' >> .pctx/invocations\nprintf '%s' \"$$\" > .pctx/child.pid\nexec /bin/sleep 30\n",
+        true,
+        None,
+    );
+    f.trust();
+    let store = f.data.join("outputs");
+    fs::create_dir_all(&store).unwrap();
+    let lock = fs::File::create(store.join("store.lock")).unwrap();
+    lock.lock_exclusive().unwrap();
+    let child = f
+        .command(&f.run_args())
+        .env_remove("PCTX_RUNNER_DIAGNOSTICS")
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped())
+        .spawn()
+        .unwrap();
+    wait_marker(&f.root.join(".pctx/child.pid"));
+    let pid: i32 = fs::read_to_string(f.root.join(".pctx/child.pid"))
+        .unwrap()
+        .parse()
+        .unwrap();
+    let out = cancel_observed_parent(child);
+    let v: Value = serde_json::from_slice(&out.stdout).unwrap();
+    assert_eq!(out.status.code(), Some(7), "{out:?}");
+    assert_eq!(v["errors"][0]["code"], "RESOURCE_BUSY");
+    assert_eq!(v["data"]["execution"]["spawned"], true);
+    assert_eq!(v["data"]["execution"]["termination"], "cancelled");
+    assert_eq!(v["data"]["execution"]["signal"], libc::SIGKILL);
+    assert_eq!(v["data"]["execution"]["raw_available"], false);
+    assert_eq!(v["data"]["resources_released"], true);
+    assert_ne!(v["data"]["evidence"]["result"], "passed");
+    assert!(!f.slot().exists());
+    assert_eq!(unsafe { libc::kill(pid, 0) }, -1);
+    assert_eq!(
+        fs::read_to_string(f.root.join(".pctx/invocations")).unwrap(),
+        "one\n"
+    );
+}
 #[test]
 fn unknown_and_zero_tests_do_not_pass() {
     for script in ["printf 'all tests passed\\n'\n".to_string(), report(0)] {

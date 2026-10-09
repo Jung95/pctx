@@ -1156,3 +1156,31 @@ The fixed G05-D06 remains open for its full exit matrix, cancellation/publicatio
 races and Helper/guardian paths. Existing G05-D02 owns broader callback/storage
 fault truth; G08 owns phase/race/deadline completion. Counts27/40 and0/10 remain.
 Evidence: [cancellation verification](evidence/pctx01-cancellation-verification.json).
+
+## G05-D06 shared exit qualification and unpublished evidence (2026-10-09)
+
+Use one fixed category-to-authored-control matrix for exits0/2/3/4/5/6/7/8/9/10/130
+and the explicit Run child exception. Existing source-dependent representative
+controls and shared facade branches qualify classification; this does not acquire
+every independent producer's acceptance scope. Exit4 now proves STALE_INDEX/error
+and unchanged source/config, not merely process4. Current90 focused native tests
+and independent review qualify local G05-D06; G05-D02/G08/G09 remain open.
+
+A registered cancelled child with failed artifact publication previously lost its
+observed native result because the evidence facade reread the absent artifact.
+Known spawned/raw-unavailable execution now records a non-gating supervision error
+and returns the original execution truth. Publication/processing failure7 wins
+over wrapper cancellation130, while termination cancelled and native signal remain
+independent data; the original command is never repeated. Broader postspawn callback
+or evidence-DB failures still belong to G05-D02. No acceptance criterion is lowered.
+
+Actual Helper metering probes the caller workspace rather than the provider artifact
+workspace. Its explicit unknown-metering diagnostic preserves delivered exit130;
+provider-workspace reread proves artifact/native truth without rerun. This independent
+measurement routing defect is inactive PCTX47 backlog, not new PCTX01 producer scope.
+
+The fixed register summary was stale25 while authoritative item states and linked
+closed conditions proved27. Derive closed_details from item states, then add this
+one closure to28/40; correct its execution cursor to existing open G05-D02. Frozen
+IDs/denominator/help/leaves/Rgroups are unchanged. Evidence:
+[exit matrix](evidence/pctx01-exit-matrix-verification.json).

@@ -1,0 +1,34 @@
+   Compiling pctx v0.1.0-dev (/Users/dev/PCTX)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.60s
+     Running tests/runner.rs (target/debug/deps/runner-262d46ab6960599b)
+
+running 5 tests
+test ctrl_c_before_check_begin_releases_proven_unspawned_capacity ... ok
+test ctrl_c_canonical_check_finishes_guardian_before_releasing_mutex ... ok
+test ctrl_c_check_publication_failure_keeps_native_truth_and_released_capacity ... FAILED
+test ctrl_c_local_helper_preserves_child_receipt_and_releases_observed_aux_capacity ... FAILED
+test ctrl_c_reaps_registered_child_preserves_truth_and_releases_only_observed_slots ... ok
+
+failures:
+
+---- ctrl_c_check_publication_failure_keeps_native_truth_and_released_capacity stdout ----
+
+thread 'ctrl_c_check_publication_failure_keeps_native_truth_and_released_capacity' (9214613) panicked at tests/runner.rs:473:5:
+assertion `left == right` failed: Output { status: ExitStatus(unix_wait_status(33280)), stdout: "{\"command\":\"runner\",\"coverage\":{\"reasons\":[\"CANCELLED\"],\"status\":\"partial\"},\"data\":null,\"errors\":[{\"code\":\"CANCELLED\",\"message\":\"Request cancelled by user\",\"retryable\":false}],\"generation_id\":null,\"project_id\":null,\"schema_version\":\"1.0\",\"status\":\"error\",\"truncation\":{\"reasons\":[],\"truncated\":false},\"validation\":{\"checked_at\":\"2026-10-09T01:27:14.388Z\",\"mode\":\"matched\",\"scope\":[],\"workspace_atomic\":false},\"warnings\":[],\"workspace_id\":null}\n", stderr: "" }
+  left: Some(130)
+ right: Some(7)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- ctrl_c_local_helper_preserves_child_receipt_and_releases_observed_aux_capacity stdout ----
+
+thread 'ctrl_c_local_helper_preserves_child_receipt_and_releases_observed_aux_capacity' (9214634) panicked at tests/runner.rs:391:5:
+Output { status: ExitStatus(unix_wait_status(33280)), stdout: "{\"command\":\"runner\",\"coverage\":{\"reasons\":[\"CANCELLED\"],\"status\":\"partial\"},\"data\":{\"capabilities_granted\":[\"registered_argv_only\"],\"execution\":{\"baseline_completeness\":\"complete\",\"budget_bytes\":6692,\"capture_complete\":true,\"captured_bytes\":0,\"child_exit_code\":null,\"evidence_origin\":\"runner_observed\",\"execution_id\":\"EXEC-b85b7d70-a15c-45e2-8471-f827258b6196\",\"exit_policy\":\"pctx\",\"input_stage\":\"captured\",\"normalized_bytes\":0,\"omitted_bytes\":0,\"output_id\":\"OUT-f52988cc-c370-46cd-bd49-2f57019647dc\",\"parse_status\":\"unsupported\",\"pctx_error\":\"CANCELLED\",\"processing_error\":{\"code\":\"CANCELLED\",\"message\":\"Request cancelled by user\",\"retryable\":false},\"processing_exit\":130,\"protected_records\":0,\"query_ref\":\"pctx output show OUT-f52988cc-c370-46cd-bd49-2f57019647dc --view full\",\"raw_available\":true,\"raw_semantics\":\"redacted_uncompressed\",\"records\":[],\"records_included\":0,\"records_omitted\":0,\"redacted_bytes\":0,\"redaction_applied\":true,\"redaction_changed_content\":false,\"signal\":9,\"spawned\":true,\"task_completion\":\"not_evaluated\",\"termination\":\"cancelled\",\"test_result\":\"not_evaluated\"},\"helper\":{\"created_at\":1791509234,\"execution_workspace\":\"WS-1570af18-18fd-4794-a6ef-6fbf99a4e485\",\"helper_id\":\"HELP-2e6421e3-c97a-4100-8532-fc97dd22fc27\",\"job_id\":\"JOB-ca5cf43d-3f88-40a3-911f-60ec9a328843\",\"mode\":\"local\",\"output_id\":\"OUT-f52988cc-c370-46cd-bd49-2f57019647dc\",\"run_id\":\"RUN-c7f24039-a986-4b70-a77e-f7db659074ba\",\"schema_version\":1,\"scope\":[\"code.rs\"],\"started\":true,\"state\":\"finished_observed\",\"task_id\":\"TASK-59489c7a-bdfe-4d1f-9459-9a9257b2b9ce\",\"workspace\":\"WS-d4b614a6-b92a-498d-b808-2c2386e997ba\"},\"memory_admission\":{\"available_bytes\":4720689152,\"measurement\":\"macos_vm_stat_free_plus_inactive_reclaimable_estimate\",\"pressure\":\"reclaimable_estimate\",\"sampled_at\":1791509234,\"schema_version\":1,\"source\":\"native\"},\"memory_unknown_override\":false,\"model_start_status\":\"unknown_inside_registered_provider\",\"model_usage_observed\":false,\"provider_capability\":\"managed_local_process\",\"resources_released\":true,\"task_completion\":\"not_evaluated\"},\"errors\":[{\"code\":\"CANCELLED\",\"message\":\"Request cancelled by user\",\"retryable\":false}],\"generation_id\":null,\"project_id\":\"6a0b409b-e054-45c9-ba8a-728b374e8efe\",\"schema_version\":\"1.0\",\"status\":\"error\",\"truncation\":{\"reasons\":[],\"truncated\":false},\"validation\":{\"checked_at\":\"2026-10-09T01:27:14.801Z\",\"mode\":\"matched\",\"scope\":[],\"workspace_atomic\":false},\"warnings\":[],\"workspace_id\":\"WS-d4b614a6-b92a-498d-b808-2c2386e997ba\"}\n", stderr: "{\"code\":\"OUTPUT_MEASUREMENT_UNRECORDED\",\"delivery_written\":true,\"measurement_recorded\":\"unknown\",\"message\":\"Output was written; byte accounting could not be confirmed\",\"reason\":\"OUTPUT_EXPIRED\"}\n" }
+
+
+failures:
+    ctrl_c_check_publication_failure_keeps_native_truth_and_released_capacity
+    ctrl_c_local_helper_preserves_child_receipt_and_releases_observed_aux_capacity
+
+test result: FAILED. 3 passed; 2 failed; 0 ignored; 0 measured; 31 filtered out; finished in 17.17s
+
+error: test failed, to rerun pass `--test runner`

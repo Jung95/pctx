@@ -204,3 +204,71 @@ fn run_cancel_preserves_native_truth_artifact_and_one_execution_for_both_policie
         assert_eq!(fs::read_to_string(f.path("invocations")).unwrap(), "one\n");
     }
 }
+
+#[test]
+fn cancelled_run_with_failed_publication_keeps_processing_error_and_native_truth() {
+    use fs2::FileExt;
+    for policy in ["pctx", "child"] {
+        let f = Fixture::new();
+        let program = f.path("fixture");
+        fs::write(&program, "#!/bin/sh\nprintf 'one\\n' >> invocations\nprintf '%s' \"$$\" > child.pid\nexec /bin/sleep 30\n").unwrap();
+        fs::set_permissions(&program, fs::Permissions::from_mode(0o755)).unwrap();
+        let path = program.to_str().unwrap();
+        let plan = f.command(&["trust", "plan", "--", path]).output().unwrap();
+        assert!(plan.status.success(), "{plan:?}");
+        let plan: Value = serde_json::from_slice(&plan.stdout).unwrap();
+        let trust = f
+            .command(&[
+                "trust",
+                "add",
+                "--expect-hash",
+                plan["data"]["fingerprint"].as_str().unwrap(),
+                "--",
+                path,
+            ])
+            .output()
+            .unwrap();
+        assert!(trust.status.success(), "{trust:?}");
+        let store = f.path("data/outputs");
+        fs::create_dir_all(&store).unwrap();
+        let lock = fs::File::create(store.join("store.lock")).unwrap();
+        lock.lock_exclusive().unwrap();
+        let child = f
+            .command(&["run", "--exit-policy", policy, "--", path])
+            .stdout(Stdio::piped())
+            .stderr(Stdio::piped())
+            .spawn()
+            .unwrap();
+        wait_until(|| {
+            fs::read_to_string(f.path("child.pid")).is_ok_and(|p| p.parse::<i32>().is_ok())
+        });
+        let pid: i32 = fs::read_to_string(f.path("child.pid"))
+            .unwrap()
+            .parse()
+            .unwrap();
+        let out = cancel(child);
+        assert_eq!(out.status.code(), Some(7), "{out:?}");
+        let v: Value = serde_json::from_slice(&out.stdout).unwrap();
+        assert_eq!(v["status"], "error");
+        assert_eq!(v["errors"][0]["code"], "RESOURCE_BUSY");
+        assert_eq!(v["data"]["pctx_error"], "RESOURCE_BUSY");
+        assert_eq!(v["data"]["termination"], "cancelled");
+        assert_eq!(v["data"]["spawned"], true);
+        assert_eq!(v["data"]["signal"], libc::SIGKILL);
+        assert!(v["data"]["child_exit_code"].is_null());
+        assert_eq!(v["data"]["raw_available"], false);
+        assert!(out.stdout.len() <= 8192);
+        let warning: Value = serde_json::from_slice(&out.stderr).unwrap();
+        assert_eq!(warning["code"], "OUTPUT_MEASUREMENT_UNRECORDED");
+        assert_eq!(warning["delivery_written"], true);
+        assert_eq!(warning["measurement_recorded"], "unknown");
+        assert_eq!(unsafe { libc::kill(pid, 0) }, -1);
+        assert_eq!(fs::read_to_string(f.path("invocations")).unwrap(), "one\n");
+        let reread = f
+            .command(&["output", "show", v["data"]["output_id"].as_str().unwrap()])
+            .output()
+            .unwrap();
+        assert_eq!(reread.status.code(), Some(6), "{reread:?}");
+        assert_eq!(fs::read_to_string(f.path("invocations")).unwrap(), "one\n");
+    }
+}

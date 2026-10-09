@@ -156,7 +156,9 @@ After request admission the CLI handles Ctrl-C cooperatively. At observed reques
 boundaries it returns CANCELLED with exit130; JSON mode remains one complete error
 document. A cancelled child execution retains its actual native exit/signal and,
 when publication succeeds, its durable output handle. The PCTX cancellation code
-takes precedence over the Run child-exit policy. Registered cancelled execution
+takes precedence over the Run child-exit policy. If capture/publication processing
+itself fails, its processing error (for example storage7) wins while the independent
+cancelled termination/native status remain in execution data. Registered cancelled execution
 evidence cannot establish a passing check. Resource slots are released only when
 the existing owner checks prove the group ended, or when no child was spawned.
 
@@ -168,6 +170,9 @@ without re-entering cancellation; request deadlines and storage failures remain
 active. SIGTERM and Windows console closure are separate OS lifecycle events.
 
 The native proof currently covers macOS arm64 held stdin, continuous watch, owned
-finite queries, manual Run and direct registered CheckRun/check alias. Local Helper,
-canonical guardian cancellation, cancellation/publication races and native Windows
-console delivery remain unqualified. See the [current evidence](../implementation/evidence/pctx01-cancellation-verification.json).
+finite queries, manual Run, registered CheckRun/check alias, local Helper and canonical
+guardian cancellation. Manual/registered cancellation with unavailable artifact
+publication preserves processing failure, native truth and no rerun. Helper artifact
+rereads use the explicit provider workspace; caller-workspace metering may report
+unknown without changing delivered outcome. Broader callback fault/phase races and
+native Windows console delivery remain unqualified. See the [shared exit matrix](../implementation/evidence/pctx01-exit-matrix-verification.json).
