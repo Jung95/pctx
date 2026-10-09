@@ -1,0 +1,25 @@
+{
+  "task": "PCTX01-G05-D05",
+  "scope_consumed": true,
+  "administrator_wrapper_attempts": 1,
+  "original_test_runs": 0,
+  "test_started": false,
+  "authentication_readiness_confirmed": false,
+  "root_collector_terminal_confirmed": false,
+  "retained_service_samples": 0,
+  "ordinary_wrapper_reaped_absent": true,
+  "exact_generated_collector_pid_search": [],
+  "failure_class": "PrivilegedCleanupUnknown",
+  "prepared_root_retained": "/private/tmp/pctx01-pair-stack-forward-mo8_uv0j",
+  "source_hashes_unchanged": {
+    "src/query_process.rs": "bf661f4b8d0ed472585244ada4ac0e946221de364c100039cd20aee56fd8d0d2",
+    "tests/project_deadline.rs": "8b9fbc97fbd5acaf612b2d75b94cf810faa2b61614b654495082462b1941a8dc",
+    "Cargo.lock": "f96362897990caba560793601bc9fca08cef5c977907bb06889d5595d2acd7b0"
+  },
+  "limits": [
+    "No root-ready/terminal marker. Cannot prove whether system authentication displayed/completed or minimal target identity admission ran.",
+    "Ordinary process search visibility cannot prove absence of invisible root authorization-service jobs.",
+    "No retry or original acceptance result from this attempt."
+  ],
+  "qualification": false
+}

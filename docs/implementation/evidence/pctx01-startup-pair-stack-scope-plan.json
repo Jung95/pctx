@@ -1,7 +1,7 @@
 {
   "task": "PCTX01-G05-D05",
   "status": "prepared; not executed",
-  "human_scope_approval": "pending_target_extension",
+  "human_scope_approval": "approved",
   "administrator_work_authorization": "User now permits necessary administrator-authentication work; previous explicit requirement to separately approve changed operating-process scope retained.",
   "pre_execution_review": "approved",
   "targets": [
@@ -50,5 +50,6 @@
   "qualification": false,
   "trigger_admission": "One atomic numeric first-owned-child marker; exact parent binary/UID502/native birth and child PID/PPID/UID/birth,non-zombie live state; native tick age<=100ms and admission before earliest original deadline. No waiting or renewed deadline in product path.",
   "cleanup": "Stop/reap every generated sampler before raw-directory removal. If reap/removal cannot be proven, keep private directory recorded as cleanup-unknown, invalidate attribution. Coordinator cleanup branches are independent.",
-  "review_basis": "Independent passive review: cleanup-order,independent-cleanup,live-trigger freshness,atomic publication and8MiB file limit fixes accepted; no service/PID/test execution by reviewer."
+  "review_basis": "Independent passive review: cleanup-order,independent-cleanup,live-trigger freshness,atomic publication and8MiB file limit fixes accepted; no service/PID/test execution by reviewer.",
+  "approval_basis": "Human explicitly answered \uc2b9\uc778 to exact syspolicyd+XprotectService one-shot paired diagnostic scope."
 }

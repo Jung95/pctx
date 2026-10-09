@@ -1,0 +1,25 @@
+{
+  "task": "PCTX01-G05-D05",
+  "failure_class": "PrivilegedCleanupUnknown",
+  "test_started": false,
+  "collector_terminal": false,
+  "service_capture": null,
+  "ordinary_tool_cleanup": [
+    {
+      "role": "authentication_wrapper",
+      "pid": 40884,
+      "exit": -15,
+      "reaped": true
+    }
+  ],
+  "cleanup_errors": [],
+  "qualification": false,
+  "limits": [
+    "Diagnostic interference; test outcomes not qualification.",
+    "Known PID absence/root reap do not prove universal descendant cleanup.",
+    "Service pre/post admission retains narrow PID reuse race.",
+    "Any timeout/identity/parser/cleanup failure invalidates attribution, no fallback/retry.",
+    "Both services must exist at readiness; no endpoint invocation to warm or create service.",
+    "Unexpected root collector death requires minimal cleanup audit before reuse."
+  ]
+}

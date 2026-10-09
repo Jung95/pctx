@@ -1,0 +1,16 @@
+{
+  "task": "PCTX01-G05-D05",
+  "audit": "Exact generated encoded collector suffix only; matching PID numbers, no other command lines exported",
+  "matching_generated_collector_pids": [],
+  "discovery_exit": 1,
+  "authentication_wrapper_reaped_absent": true,
+  "ready_marker_present": false,
+  "root_terminal_marker_present": false,
+  "scope_consumed": true,
+  "test_started": false,
+  "limits": [
+    "Ordinary-user process-search visibility,not proof no invisible/root authorization-service job exists.",
+    "No operational-service observation performed by this cleanup audit."
+  ],
+  "qualification": false
+}
